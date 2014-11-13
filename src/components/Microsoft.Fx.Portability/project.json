@@ -3,7 +3,19 @@
     "dependencies": {
         "Newtonsoft.Json": "6.0.8"
     },
+    "exclude": [
+        "Resources\\LocalizedStrings.Designer.cs",
+        "Resources\\LocalizedStrings.resx"
+    ],
     "frameworks": {
+        "aspnet50": {
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0",
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
         "aspnetcore50": {
             "dependencies": {
                 "System.Runtime": "4.0.20-beta-22231",
