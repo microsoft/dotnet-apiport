@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private static string GetAssemblyIdentityWithoutCultureAndVersion(string assemblyIdentity)
         {
-            return new System.Reflection.AssemblyName(assemblyIdentity) { CultureInfo = null, Version = null }.ToString();
+            return new System.Reflection.AssemblyName(assemblyIdentity).ToString();
         }
 
         private static bool IsSupportedOnTarget(IApiCatalogLookup catalog, string memberDocId, FrameworkName target, out Version status)

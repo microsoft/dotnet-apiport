@@ -220,11 +220,11 @@
     <value>Resource was not found.</value>
   </data>
   <data name="ChangingFileExtension" xml:space="preserve">
-    <value>The given filename [{0}] has a different extension than the output format extension. Changed extension "{1}" to "{2}".</value>
+    <value>The given filename [{0}] has a different extension than the output format extension. Changed extension '{1}' to '{2}'.</value>
     <comment>Warning when we are changing the output file name.</comment>
   </data>
   <data name="OverwriteFile" xml:space="preserve">
-    <value>Replaced output file "{0}"</value>
+    <value>Replaced output file '{0}'</value>
     <comment>Displayed when a file exists and will be overwritten</comment>
   </data>
 </root>
