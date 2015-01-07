@@ -1,0 +1,23 @@
+syntax: glob
+*.user
+*.suo
+*.dbmdl
+Bin
+bin
+obj
+CustomTasks
+msbuild.log
+packages
+csx
+*.log
+*.jrs
+*.chk
+*.sln.ide
+*.coverage
+TestResults
+FakesAssemblies
+rcf
+*~
+*.sln.ide
+*.metaproj*
+*.swp

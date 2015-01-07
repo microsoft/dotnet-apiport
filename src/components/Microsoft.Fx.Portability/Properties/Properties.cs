@@ -1,0 +1,2 @@
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Microsoft.Fx.Portability.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Microsoft.Fx.Portability.Web.Service.Tests")]
