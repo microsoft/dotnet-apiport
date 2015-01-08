@@ -140,22 +140,33 @@ namespace Microsoft.Fx.Portability
                     if (includeVersion)
                         yield return group.Single().FullName;
                     else
-                        yield return GetAlias(group.Key);
+                        yield return group.Key;
                 }
                 else
                 {
                     foreach (var target in group)
                     {
                         // We need to reverse map the identifier from the service (if we have a map defined).
-                        yield return new FrameworkName(GetAlias(target.Identifier), target.Version).FullName;
+                        yield return new FrameworkName(target.Identifier, target.Version).FullName;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Performas name to alias mapping
+        /// Performs name to grouped-target (alias) mapping
         /// </summary>
+        /// <example>
+        /// If there are Grouped Targets, like:
+        /// Available Grouped Targets:
+        /// - Mobile (Windows, Windows Phone, Xamarin.Android, Xamarin.iOS)
+        /// 
+        /// Then:
+        /// GetAlias(".NET Framework") will return ".NET Framework"
+        /// GetAlias("Windows") will return "Mobile"
+        /// GetAlias("Windows Phone") will return "Mobile"
+        /// 
+        /// </example>
         /// <param name="targetName">Official target name</param>
         public string GetAlias(string targetName)
         {
