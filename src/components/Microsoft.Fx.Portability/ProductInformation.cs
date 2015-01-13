@@ -29,8 +29,8 @@ namespace Microsoft.Fx.Portability
 
         private static string GetVersionString()
         {
-            var entryAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-            var assemblyName = entryAssembly.GetName();
+            var assembly = typeof(ProductInformation).GetTypeInfo().Assembly;
+            var assemblyName = assembly.GetName();
             var assemblyVersion = assemblyName.Version;
 
             return assemblyVersion == null ? "unknown" : assemblyVersion.ToString();

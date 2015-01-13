@@ -91,6 +91,14 @@ namespace Microsoft.Fx.Portability
                     // update the value in the cache.
                     _lock.EnterWriteLock();
 
+                    // Dispose current object if possible 
+                    var disposable = _cachedObject as IDisposable;
+
+                    if (disposable != null)
+                    {
+                        disposable.Dispose();
+                    }
+
                     _cachedObject = updatedItem;
                     _timeStamp = lastModified;
 
