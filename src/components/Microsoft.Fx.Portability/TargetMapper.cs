@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Microsoft.Fx.Portability.Resources;
-using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability
 {
@@ -43,11 +44,14 @@ namespace Microsoft.Fx.Portability
 
         private IEnumerable<string> GetPossibleFileLocations(string path)
         {
+            yield return path;
+
+#if !ASPNETCORE50
             const string DefaultFileName = "TargetMap.xml";
 
-            yield return path;
             yield return Path.Combine(Path.GetDirectoryName(typeof(TargetMapper).Assembly.Location), DefaultFileName);
             yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DefaultFileName);
+#endif
         }
 
         public void Load(Stream stream)
@@ -61,10 +65,12 @@ namespace Microsoft.Fx.Portability
             {
                 var doc = XDocument.Load(stream);
 
+#if !ASPNETCORE50
                 // Validate against schema
                 var schemas = new XmlSchemaSet();
                 schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream(typeof(TargetMapper), "Targets.xsd")));
                 doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
+#endif
 
                 foreach (var item in doc.Descendants("Target"))
                 {
@@ -98,17 +104,17 @@ namespace Microsoft.Fx.Portability
 
             if (_map.TryGetValue(aliasName, out result))
             {
-                return result.ToList().AsReadOnly();
+                return new ReadOnlyCollection<string>(result.ToList());
             }
             else
             {
-                return new List<string> { aliasName }.AsReadOnly();
+                return new ReadOnlyCollection<string>(new List<string> { aliasName });
             }
         }
 
         public ICollection<string> Aliases
         {
-            get { return _map.Keys.ToList().AsReadOnly(); }
+            get { return new ReadOnlyCollection<string>(_map.Keys.ToList()); }
         }
 
         /// <summary>

@@ -1,0 +1,50 @@
+﻿{
+    "version": "1.0.0-*",
+    "dependencies": {
+        "Newtonsoft.Json": "6.0.8"
+    },
+    "exclude": [
+        "Resources\\LocalizedStrings.Designer.cs",
+        "Resources\\LocalizedStrings.resx"
+    ],
+    "frameworks": {
+        "aspnet50": {
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0",
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
+        "aspnetcore50": {
+            "dependencies": {
+                "System.Runtime": "4.0.20-beta-22231",
+                "System.Runtime.Serialization.Primitives": "4.0.0-beta-22231",
+                "System.Xml.ReaderWriter": "4.0.10-beta-22231",
+                "System.Xml.XDocument": "4.0.0-beta-22231",
+                "System.Net.Http": "4.0.0-beta-22231",
+                "System.Globalization": "4.0.10-beta-22231",
+                "System.Diagnostics.Debug": "4.0.10-beta-22231",
+                "System.Diagnostics.TraceSource": "4.0.0-beta-22231",
+                "System.Collections": "4.0.10-beta-22231",
+                "System.Linq": "4.0.0-beta-22231",
+                "System.Linq.Parallel": "4.0.0-beta-22231",
+                "System.Runtime.Extensions": "4.0.10-beta-22231",
+                "System.IO.Compression": "4.0.0-beta-22231",
+                "System.Reflection": "4.0.10-beta-22231",
+                "System.IO.FileSystem": "4.0.0-beta-22231",
+                "System.Threading.Thread": "4.0.0-beta-22231",
+                "System.Threading": "4.0.0-beta-22231",
+                "System.Reflection.Extensions": "4.0.0-beta-22231"
+            }
+        },
+        "net45": {
+            "frameworkAssemblies": {
+                "System.Net.Http": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0",
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        }
+    }
+}

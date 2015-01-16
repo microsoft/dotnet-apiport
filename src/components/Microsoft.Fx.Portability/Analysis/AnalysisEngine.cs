@@ -114,7 +114,15 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private static string GetAssemblyIdentityWithoutCultureAndVersion(string assemblyIdentity)
         {
-            return new System.Reflection.AssemblyName(assemblyIdentity) { CultureInfo = null, Version = null }.ToString();
+            var assemblyName = new System.Reflection.AssemblyName(assemblyIdentity) { Version = null };
+
+#if ASPNETCORE50
+            assemblyName.CultureName = null;
+#else
+            assemblyName.CultureInfo = null;
+#endif
+
+            return assemblyName.ToString();
         }
 
         private static bool IsSupportedOnTarget(IApiCatalogLookup catalog, string memberDocId, FrameworkName target, out Version status)

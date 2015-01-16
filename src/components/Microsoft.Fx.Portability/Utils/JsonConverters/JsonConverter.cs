@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Reflection;
 
 namespace Microsoft.Fx.Portability.Utils.JsonConverters
 {
@@ -7,7 +8,7 @@ namespace Microsoft.Fx.Portability.Utils.JsonConverters
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(T).IsAssignableFrom(objectType);
+            return typeof(T).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
         }
     }
 }

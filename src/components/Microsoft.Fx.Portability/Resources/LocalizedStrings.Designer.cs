@@ -88,7 +88,7 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The given filename [{0}] has a different extension than the output format extension. Changed extension &quot;{1}&quot; to &quot;{2}&quot;..
+        ///   Looks up a localized string similar to The given filename [{0}] has a different extension than the output format extension. Changed extension &apos;{1}&apos; to &apos;{2}&apos;..
         /// </summary>
         public static string ChangingFileExtension {
             get {
@@ -224,7 +224,7 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replaced output file &quot;{0}&quot;.
+        ///   Looks up a localized string similar to Replaced output file &apos;{0}&apos;.
         /// </summary>
         public static string OverwriteFile {
             get {
