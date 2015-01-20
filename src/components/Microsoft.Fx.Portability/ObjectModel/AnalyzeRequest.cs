@@ -16,10 +16,6 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public ICollection<string> UnresolvedAssemblies { get; set; }
 
-        /// <summary>
-        /// TODO: Remove JsonIgnore when we get LCA approval on this.
-        /// TODO: Find a way to remove this property since it contains user-defined assembly names.
-        /// </summary>
         [JsonIgnore]
         public IDictionary<string, ICollection<string>> UnresolvedAssembliesDictionary { get; set; }
 
