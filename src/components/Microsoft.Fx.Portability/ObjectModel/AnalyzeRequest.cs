@@ -1,11 +1,12 @@
-﻿using Microsoft.Fx.Portability.Reporting.ObjectModel;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Newtonsoft.Json;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public sealed class AnalyzeRequest 
+    public sealed class AnalyzeRequest
     {
         public const byte CurrentVersion = 2;
 
@@ -23,9 +24,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public IDictionary<string, ICollection<string>> UnresolvedAssembliesDictionary { get; set; }
 
         public ICollection<AssemblyInfo> UserAssemblies { get; set; }
-        
+
         public ICollection<string> AssembliesWithErrors { get; set; }
-        
+
         public ICollection<string> Targets { get; set; }
 
         public string ApplicationName { get; set; }

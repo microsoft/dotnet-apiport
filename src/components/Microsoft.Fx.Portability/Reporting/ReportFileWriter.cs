@@ -1,4 +1,7 @@
-﻿using Microsoft.Fx.Portability.Reporting.ObjectModel;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.IO;
@@ -88,7 +91,7 @@ namespace Microsoft.Fx.Portability.Reporting
 
             var fileNameFormatString = string.Concat(fileNameWithoutExtension, "{0}", extension);
             var uniqueName = string.Format(fileNameFormatString, string.Empty);
-            
+
             int i = 1;
 
             while (_fileSystem.FileExists(_fileSystem.CombinePaths(directory, uniqueName)))

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Utils.JsonConverters;
 using Newtonsoft.Json;
@@ -7,17 +10,17 @@ using System.Runtime.Versioning;
 
 #if !SILVERLIGHT
 using System.IO.Compression;
-#endif
 
+#endif
 namespace Microsoft.Fx.Portability
 {
     public static class DataExtensions
     {
         public static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
-            Converters = new JsonConverter[] 
-            { 
-                new JsonMultiDictionaryConverter<MemberInfo, AssemblyInfo>(), 
+            Converters = new JsonConverter[]
+            {
+                new JsonMultiDictionaryConverter<MemberInfo, AssemblyInfo>(),
                 new JsonToStringConverter<FrameworkName>(s => new FrameworkName(s)),
                 new JsonToStringConverter<Version>(s => new Version(s)),
             }

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,11 +44,11 @@ namespace Microsoft.Fx.Portability.Reporting
         {
             return File.Open(path, FileMode.Create, FileAccess.ReadWrite);
         }
-        
+
         public virtual IEnumerable<string> SearchPathForFile(string filename)
         {
             var pathDirs = (Environment.GetEnvironmentVariable("path") ?? string.Empty)
-                           .Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                           .Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             var hypotheticalPaths = from directory in pathDirs
                                     select Path.Combine(directory, filename);

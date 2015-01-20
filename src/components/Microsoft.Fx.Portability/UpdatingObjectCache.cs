@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +24,7 @@ namespace Microsoft.Fx.Portability
         private TObject _cachedObject;
         private DateTimeOffset _timeStamp;
 
-        bool disposed = false;
+        private bool _disposed = false;
 
         public UpdatingObjectCache(CancellationToken cancellationToken, TimeSpan cachePollInterval, string identifier)
         {
@@ -138,7 +141,7 @@ namespace Microsoft.Fx.Portability
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed)
+            if (_disposed)
                 return;
 
             if (disposing)
@@ -146,7 +149,7 @@ namespace Microsoft.Fx.Portability
                 _lock.Dispose();
             }
 
-            disposed = true;
+            _disposed = true;
         }
     }
 }
