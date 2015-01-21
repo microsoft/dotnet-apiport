@@ -1,9 +1,12 @@
-﻿using Microsoft.Fx.Portability.Resources;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.Resources;
 using System;
 
 namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
-    public class MissingInfo 
+    public class MissingInfo
     {
         public string DocId { get; set; }
         public string RecommendedChanges { get; protected set; }

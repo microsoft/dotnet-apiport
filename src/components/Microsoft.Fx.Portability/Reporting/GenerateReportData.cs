@@ -1,4 +1,7 @@
-﻿using Microsoft.Fx.Portability.Analyzer;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System;
@@ -9,7 +12,6 @@ using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Reporting
 {
-
 #if SILVERLIGHT
     public static class LinqExtensions
     {
@@ -189,11 +191,11 @@ namespace Microsoft.Fx.Portability.Reporting
             // 
             var mapAssemblyNameOccurences = assemblyUsage.GroupBy(asui => new System.Reflection.AssemblyName(asui.SourceAssembly.AssemblyIdentity).Name)
                                                 .SelectMany(assemblyNameGroup => assemblyNameGroup.Select(assemblyInfo => new
-            {
-                // If we have more than one assembly with the same name, use the fullassemblyidentity
-                Name = assemblyNameGroup.Count() > 1 ? assemblyInfo.SourceAssembly.GetFullAssemblyIdentity() : assemblyNameGroup.Key,
-                SourceAssembly = assemblyInfo.SourceAssembly
-            }))
+                                                {
+                                                    // If we have more than one assembly with the same name, use the fullassemblyidentity
+                                                    Name = assemblyNameGroup.Count() > 1 ? assemblyInfo.SourceAssembly.GetFullAssemblyIdentity() : assemblyNameGroup.Key,
+                                                    SourceAssembly = assemblyInfo.SourceAssembly
+                                                }))
                                                 .ToDictionary(key => key.SourceAssembly, value => value.Name);
 
             return mapAssemblyNameOccurences;

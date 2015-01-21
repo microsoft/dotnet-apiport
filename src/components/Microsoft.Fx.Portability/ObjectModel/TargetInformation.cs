@@ -1,4 +1,7 @@
-﻿using Microsoft.Fx.Portability.Resources;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,17 +11,17 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public class TargetInformation
     {
-        private static readonly ISet<string> EmptyTargets = new HashSet<string>();
-        private static readonly ICollection<TargetVersion> EmptyVersions = new List<TargetVersion>();
-        private static readonly string ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
+        private static readonly ISet<string> s_EmptyTargets = new HashSet<string>();
+        private static readonly ICollection<TargetVersion> s_EmptyVersions = new List<TargetVersion>();
+        private static readonly string s_ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
 
         private ISet<string> _expandedTargets;
         private ICollection<TargetVersion> _versions;
 
         public TargetInformation()
         {
-            _expandedTargets = EmptyTargets;
-            _versions = EmptyVersions;
+            _expandedTargets = s_EmptyTargets;
+            _versions = s_EmptyVersions;
         }
 
         public string Name { get; set; }
@@ -39,7 +42,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 if (value == null)
                 {
-                    _versions = EmptyVersions;
+                    _versions = s_EmptyVersions;
                 }
                 else
                 {
@@ -52,7 +55,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             if (ExpandedTargets.Any())
             {
-                return String.Format(LocalizedStrings.TargetInformationGroups, Name, String.Join(ListSeparator, ExpandedTargets));
+                return String.Format(LocalizedStrings.TargetInformationGroups, Name, String.Join(s_ListSeparator, ExpandedTargets));
             }
             else
             {
