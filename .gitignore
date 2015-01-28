@@ -21,3 +21,4 @@ rcf
 *.sln.ide
 *.metaproj*
 *.swp
+.vs
