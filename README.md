@@ -1,9 +1,9 @@
 # .NET API Port
 
-This repository contains the source code for APIPort client tools and dependencies. This 
-is a work in progress, and does not currently contain all of the components 
-that we plan on open sourcing. Make sure to watch this repository in order to 
-be notified as we make changes to and expand it.
+This repository contains the source code for .NET Portability Analyzer tools 
+and dependencies. This is a work in progress, and does not currently contain 
+all of the components that we plan on open sourcing. Make sure to watch this 
+repository in order to be notified as we make changes to and expand it.
 
 Today, the repository contains the following components:
 
@@ -20,11 +20,15 @@ More libraries are coming soon. Stay tuned!
     2. [K Version Manager (KVM)](https://github.com/aspnet/home#install-the-k-version-manager-kvm)
     3. [K Runtime (KRE)](https://github.com/aspnet/home#install-the-k-runtime-environment-kre)
 
-2. Add this feed to your NuGet package sources: https://www.myget.org/F/aspnetvnext/api/v2
-    * Wiki: [Configuring feeds used by KPM to Restore Packages](https://github.com/aspnet/Home/wiki/Configuring-the-feed-used-by-kpm-to-restore-packages)
-3. Open Microsoft.Fx.Portability.sln in Visual Studio 2015
-4. Build the solution
-5. The .nupkgs for each supported platform should be under the bin/Debug or bin/Release folder
+### Building from Commandline
+1. Go to `src\Microsoft.Fx.Portability`
+2. Run command: `kpm restore`
+3. Run command: `kpm build`
+    
+### Building from Visual Studio
+1. Open Microsoft.Fx.Portability.sln in Visual Studio 2015
+2. Build the solution
+3. The .nupkg should be under the bin/Debug or bin/Release folders
 
 ## How to Engage, Contribute and Provide Feedback
 
