@@ -1,27 +1,26 @@
 ﻿using Microsoft.Fx.Portability.Reporting.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel.Reporting
 {
-    [TestClass]
     public class ResultFormatToMIMETests
     {
-        [TestMethod]
+        [Fact]
         public void ExcelMime()
         {
-            Assert.AreEqual("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ResultFormat.Excel.GetMIMEType());
+            Assert.Equal("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ResultFormat.Excel.GetMIMEType());
         }
 
-        [TestMethod]
+        [Fact]
         public void JsonMime()
         {
-            Assert.AreEqual("application/json", ResultFormat.Json.GetMIMEType());
+            Assert.Equal("application/json", ResultFormat.Json.GetMIMEType());
         }
 
-        [TestMethod]
+        [Fact]
         public void HtmlMime()
         {
-            Assert.AreEqual("text/html", ResultFormat.HTML.GetMIMEType());
+            Assert.Equal("text/html", ResultFormat.HTML.GetMIMEType());
         }
     }
 }

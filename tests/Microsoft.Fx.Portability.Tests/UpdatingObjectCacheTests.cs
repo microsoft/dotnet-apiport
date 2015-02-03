@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using NSubstitute;
 using System;
 using System.Threading;
@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    [TestClass]
     public class UpdatingObjectCacheTests
     {
-        [TestMethod]
+        [Fact]
         public async Task InitialUpdateOccurs()
         {
             var dt = new DateTimeOffset(1234, TimeSpan.FromHours(0));
@@ -32,19 +31,19 @@ namespace Microsoft.Fx.Portability.Tests
 
             using (var cache = new UpdatingObjectCacheImpl<int>(methods, CancellationToken.None, TimeSpan.MaxValue, String.Empty))
             {
-                Assert.AreEqual(initialValue, cache.Value);
-                Assert.AreEqual(DateTimeOffset.MinValue, cache.LastUpdated);
+                Assert.Equal(initialValue, cache.Value);
+                Assert.Equal(DateTimeOffset.MinValue, cache.LastUpdated);
 
                 task.SetResult(true);
 
                 await cache.WaitForInitialLoadAsync();
 
-                Assert.AreEqual(updatedValue, cache.Value);
-                Assert.AreEqual(dt, cache.LastUpdated);
+                Assert.Equal(updatedValue, cache.Value);
+                Assert.Equal(dt, cache.LastUpdated);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SecondUpdateOccurs()
         {
             var dt1 = new DateTimeOffset(1234, TimeSpan.FromHours(0));
@@ -79,7 +78,7 @@ namespace Microsoft.Fx.Portability.Tests
 
                     await Task.Delay(10000);
 
-                    Assert.Fail("Should only wait for 1 update");
+                    Assert.True(false, "Should only wait for 1 update");
 
                     return default(DateTimeOffset);
                 }
@@ -103,7 +102,7 @@ namespace Microsoft.Fx.Portability.Tests
                 }
                 else
                 {
-                    Assert.Fail("Should only wait for 1 update");
+                    Assert.True(false, "Should only wait for 1 update");
 
                     return default(int);
                 }
@@ -113,15 +112,15 @@ namespace Microsoft.Fx.Portability.Tests
             {
                 await cache.WaitForInitialLoadAsync();
 
-                Assert.AreEqual(updatedValue1, cache.Value);
-                Assert.AreEqual(dt1, cache.LastUpdated);
+                Assert.Equal(updatedValue1, cache.Value);
+                Assert.Equal(dt1, cache.LastUpdated);
 
                 task.SetResult(true);
 
                 await completed.Task;
 
-                Assert.AreEqual(updatedValue2, cache.Value);
-                Assert.AreEqual(dt2, cache.LastUpdated);
+                Assert.Equal(updatedValue2, cache.Value);
+                Assert.Equal(dt2, cache.LastUpdated);
             }
         }
 
