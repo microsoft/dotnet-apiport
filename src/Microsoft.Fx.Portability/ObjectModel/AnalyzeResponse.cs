@@ -3,12 +3,13 @@
 
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public sealed class AnalyzeResponse
+    public sealed class AnalyzeResponse : IComparable
     {
         public AnalyzeResponse()
         {
@@ -27,5 +28,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         [JsonIgnore]
         public ReportingResult ReportingResult { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            var analyzeObject = obj as AnalyzeResponse;
+            return SubmissionId.CompareTo(analyzeObject.SubmissionId);
+        }
     }
 }
