@@ -2,11 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public sealed class AnalyzeRequest
+    public sealed class AnalyzeRequest : IComparable
     {
         public const byte CurrentVersion = 2;
 
@@ -28,5 +29,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public string ApplicationName { get; set; }
 
         public byte Version { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            var analyzeObject = obj as AnalyzeRequest;
+            return ApplicationName.CompareTo(analyzeObject.ApplicationName);
+        }
     }
 }
