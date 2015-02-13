@@ -10,9 +10,9 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
     public class MissingMemberInfo : MissingInfo
     {
-        public IEnumerable<AssemblyInfo> UsedIn { get { return _usedInAssemblies; } }
+        private readonly HashSet<AssemblyInfo> _usedInAssemblies;
 
-        private HashSet<AssemblyInfo> _usedInAssemblies;
+        public IEnumerable<AssemblyInfo> UsedIn { get { return _usedInAssemblies; } }
 
         public int Uses { get { return _usedInAssemblies.Count; } }
         public string MemberName { get; set; }

@@ -14,23 +14,23 @@ namespace Microsoft.Fx.Portability
 
         public string DocId
         {
-            get { return _docId ?? String.Empty; }
+            get { return _docId ?? string.Empty; }
             set { _docId = value; }
         }
         public string ReturnType
         {
-            get { return _returnType ?? String.Empty; }
+            get { return _returnType ?? string.Empty; }
             set { _returnType = value; }
         }
         public string Name
         {
-            get { return _name ?? String.Empty; }
+            get { return _name ?? string.Empty; }
             set { _name = value; }
         }
 
         public string FullName
         {
-            get { return _fullName ?? String.Empty; }
+            get { return _fullName ?? string.Empty; }
             set { _fullName = value; }
         }
 

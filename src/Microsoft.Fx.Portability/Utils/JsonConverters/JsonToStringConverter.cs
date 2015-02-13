@@ -20,7 +20,7 @@ namespace Microsoft.Fx.Portability.Utils.JsonConverters
         {
             var value = serializer.Deserialize<JToken>(reader).ToString();
 
-            return String.IsNullOrEmpty(value) ? default(T) : _factory(value);
+            return string.IsNullOrEmpty(value) ? default(T) : _factory(value);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

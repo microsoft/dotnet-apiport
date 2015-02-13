@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability
 
         public ApiInformation(string docId, IApiCatalogLookup catalog, IApiRecommendations recommendations)
         {
-            if (String.IsNullOrWhiteSpace(docId))
+            if (string.IsNullOrWhiteSpace(docId))
             {
                 throw new ArgumentNullException("docId");
             }
@@ -51,9 +51,9 @@ namespace Microsoft.Fx.Portability
             }
 
             return Equals(Definition, other.Definition)
-                && String.Equals(RecommendedChanges, other.RecommendedChanges, StringComparison.Ordinal)
-                && String.Equals(SourceCompatibleChanges, other.SourceCompatibleChanges, StringComparison.Ordinal)
-                && String.Equals(Component, other.Component, StringComparison.Ordinal);
+                && string.Equals(RecommendedChanges, other.RecommendedChanges, StringComparison.Ordinal)
+                && string.Equals(SourceCompatibleChanges, other.SourceCompatibleChanges, StringComparison.Ordinal)
+                && string.Equals(Component, other.Component, StringComparison.Ordinal);
         }
     }
 
@@ -71,7 +71,7 @@ namespace Microsoft.Fx.Portability
                 return -1;
             }
 
-            return String.CompareOrdinal(Title, other.Title);
+            return string.CompareOrdinal(Title, other.Title);
         }
     }
 }

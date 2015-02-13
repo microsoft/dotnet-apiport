@@ -205,7 +205,7 @@
   </data>
   <data name="HowToSpecifyVersion" xml:space="preserve">
     <value>In order to specify a version, please use the following format with the '-targets' option:
-	(Target Name), Version=(Version)</value>
+  (Target Name), Version=(Version)</value>
   </data>
   <data name="InvalidFileName" xml:space="preserve">
     <value>Invalid file name: '{0}'</value>

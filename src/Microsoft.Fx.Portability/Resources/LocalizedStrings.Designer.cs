@@ -134,7 +134,7 @@ namespace Microsoft.Fx.Portability.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to In order to specify a version, please use the following format with the &apos;-targets&apos; option:
-        ///	(Target Name), Version=(Version).
+        /// (Target Name), Version=(Version).
         /// </summary>
         public static string HowToSpecifyVersion {
             get {

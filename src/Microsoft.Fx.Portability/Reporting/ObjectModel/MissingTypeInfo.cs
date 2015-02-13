@@ -12,7 +12,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
     public class MissingTypeInfo : MissingInfo
     {
         private bool _isMissing;
-        private HashSet<AssemblyInfo> _usedInAssemblies;
+        private readonly HashSet<AssemblyInfo> _usedInAssemblies;
 
         public int UsageCount { get { return _usedInAssemblies.Count; } }
 
