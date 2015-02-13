@@ -13,10 +13,10 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
     [DataContract]
     public class ReportingResult
     {
-        private HashSet<MissingTypeInfo> _missingTypes = new HashSet<MissingTypeInfo>();
-        private Dictionary<string, ICollection<string>> _unresolvedUserAssemblies = new Dictionary<string, ICollection<string>>();
-        private HashSet<string> _assembliesWithError = new HashSet<string>();
-        private IList<FrameworkName> _targets;
+        private readonly HashSet<MissingTypeInfo> _missingTypes = new HashSet<MissingTypeInfo>();
+        private readonly Dictionary<string, ICollection<string>> _unresolvedUserAssemblies = new Dictionary<string, ICollection<string>>();
+        private readonly HashSet<string> _assembliesWithError = new HashSet<string>();
+        private readonly IList<FrameworkName> _targets;
         private List<AssemblyUsageInfo> _perAssemblyUsage;
         private Dictionary<AssemblyInfo, string> _assemblyNameMap;
 
