@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability
                 throw new InvalidOperationException("Cannot add to the path once a query has begun");
             }
 
-            var newUrl = String.Format("{0}/{1}", _url, Uri.EscapeDataString(path));
+            var newUrl = string.Format("{0}/{1}", _url, Uri.EscapeDataString(path));
 
             return new UrlBuilder(newUrl, false);
         }
@@ -77,7 +77,7 @@ namespace Microsoft.Fx.Portability
                 return this;
             }
 
-            var newUrl = String.Format(formatString, _url, _queryStarted ? '&' : '?', Uri.EscapeDataString(name), Uri.EscapeDataString(value.ToString()));
+            var newUrl = string.Format(formatString, _url, _queryStarted ? '&' : '?', Uri.EscapeDataString(name), Uri.EscapeDataString(value.ToString()));
 
             return new UrlBuilder(newUrl, true);
         }

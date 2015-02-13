@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability
                 return false;
             }
 
-            return String.Equals(Version, other.Version, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(Version, other.Version, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string ToString()

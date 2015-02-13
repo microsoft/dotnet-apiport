@@ -98,7 +98,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public string GetNameForAssemblyInfo(AssemblyInfo assembly)
         {
-            return _assemblyNameMap == null ? String.Empty : _assemblyNameMap[assembly];
+            return _assemblyNameMap == null ? string.Empty : _assemblyNameMap[assembly];
         }
 
         public void SetAssemblyNameMap(Dictionary<AssemblyInfo, string> assemblyNameMap)

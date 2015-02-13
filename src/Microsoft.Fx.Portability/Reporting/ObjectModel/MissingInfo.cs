@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
             }
             else
             {
-                return String.Format(LocalizedStrings.SupportedOn, version);
+                return string.Format(LocalizedStrings.SupportedOn, version);
             }
         }
     }

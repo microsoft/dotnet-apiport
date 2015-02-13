@@ -87,7 +87,7 @@ namespace Microsoft.Fx.Portability
             {
                 var message = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.Message);
 
-                if (!String.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty(path))
                 {
                     message = string.Format(CultureInfo.CurrentCulture, "{0} [{1}]", message, path);
                 }
@@ -219,7 +219,7 @@ namespace Microsoft.Fx.Portability
 
             if (validate && groups.Any(g => g.Length != 2))
             {
-                throw new ArgumentOutOfRangeException("aliasString", aliasString, String.Format("An alias should be separated from names by '{0}'", AliasTargetSeparator));
+                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format("An alias should be separated from names by '{0}'", AliasTargetSeparator));
             }
 
             foreach (var group in groups)

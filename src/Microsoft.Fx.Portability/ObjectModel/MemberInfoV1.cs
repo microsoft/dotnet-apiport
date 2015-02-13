@@ -39,7 +39,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
             else
             {
-                return String.Format(LocalizedStrings.SupportedOn, v);
+                return string.Format(LocalizedStrings.SupportedOn, v);
             }
         }
 

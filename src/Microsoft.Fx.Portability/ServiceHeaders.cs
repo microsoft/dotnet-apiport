@@ -78,7 +78,7 @@ namespace Microsoft.Fx.Portability
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(WebsiteEndpoint) && !String.IsNullOrWhiteSpace(ApiInfoUrl);
+                return !string.IsNullOrWhiteSpace(WebsiteEndpoint) && !string.IsNullOrWhiteSpace(ApiInfoUrl);
             }
         }
 
@@ -86,18 +86,18 @@ namespace Microsoft.Fx.Portability
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(WebsiteEndpoint) && !String.IsNullOrWhiteSpace(SubmissionUrl);
+                return !string.IsNullOrWhiteSpace(WebsiteEndpoint) && !string.IsNullOrWhiteSpace(SubmissionUrl);
             }
         }
 
         public Uri GetDocIdUrl(string docId)
         {
-            return new Uri(String.Format("{0}{1}{2}", WebsiteEndpoint, ApiInfoUrl, WebUtility.UrlEncode(docId)));
+            return new Uri(string.Format("{0}{1}{2}", WebsiteEndpoint, ApiInfoUrl, WebUtility.UrlEncode(docId)));
         }
 
         public Uri GetSubmissionUrl(string submissionId)
         {
-            return new Uri(String.Format("{0}{1}{2}", WebsiteEndpoint, SubmissionUrl, WebUtility.UrlEncode(submissionId)));
+            return new Uri(string.Format("{0}{1}{2}", WebsiteEndpoint, SubmissionUrl, WebUtility.UrlEncode(submissionId)));
         }
     }
 }

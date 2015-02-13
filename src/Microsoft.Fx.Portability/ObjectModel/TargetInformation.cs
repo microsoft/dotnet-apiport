@@ -55,7 +55,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             if (ExpandedTargets.Any())
             {
-                return String.Format(LocalizedStrings.TargetInformationGroups, Name, String.Join(s_ListSeparator, ExpandedTargets));
+                return string.Format(LocalizedStrings.TargetInformationGroups, Name, string.Join(s_ListSeparator, ExpandedTargets));
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
             if (other == null) return false;
 
-            return String.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
+            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
                 && _expandedTargets.SetEquals(other._expandedTargets);
         }
 
@@ -79,7 +79,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             const int HashMultiplier = 23;
 
             int hash = HashSeed;
-            hash = hash * HashMultiplier + (Name ?? String.Empty).GetHashCode();
+            hash = hash * HashMultiplier + (Name ?? string.Empty).GetHashCode();
 
             foreach (var target in ExpandedTargets)
             {
