@@ -61,7 +61,6 @@
     <Compile Include="MemberDependency.cs" />
     <Compile Include="MemberMetadataInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeDecoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

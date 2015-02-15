@@ -105,8 +105,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
 		private MemberDependency GetTypeReferenceMemberDependency(TypeReference typeReference)
 		{
-			TypeDecoder provider = new TypeDecoder(_reader);
-			MemberMetadataInfo typeRefinfo = provider.GetFullName(typeReference);
+			MemberMetadataInfo typeRefinfo = MemberMetadataInfo.GetFullName(typeReference, _reader);
 			return CreateMemberDependency(typeRefinfo);
 		}
 
@@ -128,8 +127,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 		private MemberDependency GetMemberReferenceMemberDependency(MemberReference memberReference)
 		{
 			MemberDependency dep = new MemberDependency();
-			TypeDecoder provider = new TypeDecoder(_reader);
-			MemberMetadataInfo memberRefInfo = provider.GetMemberRefInfo(memberReference);
+			MemberMetadataInfo memberRefInfo = MemberMetadataInfo.GetMemberRefInfo(memberReference, _reader);
 
 			if (memberRefInfo == null)
 				return null;
