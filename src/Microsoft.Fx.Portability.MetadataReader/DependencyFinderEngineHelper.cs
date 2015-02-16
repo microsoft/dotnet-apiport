@@ -116,8 +116,8 @@ namespace Microsoft.Fx.Portability.Analyzer
 
 			dep.MemberDocId = "T:" + type.ToString(); ;
 
-			if (type.assemblySet)
-				dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(type.assembly);
+			if (type.AssemblySet)
+				dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
 			else
 				dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
 
@@ -144,10 +144,10 @@ namespace Microsoft.Fx.Portability.Analyzer
 				kind = memberReference.GetKind().ToString();
 
 			dep.MemberDocId = kind + memberRefInfo.ToString();
-			dep.TypeDocId = "T:" + memberRefInfo.parentType.ToString();
+			dep.TypeDocId = "T:" + memberRefInfo.ParentType.ToString();
 
-			if (memberRefInfo.parentType.assemblySet)
-				dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(memberRefInfo.parentType.assembly);
+			if (memberRefInfo.ParentType.AssemblySet)
+				dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(memberRefInfo.ParentType.DefinedInAssembly);
 			else
 				dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
 

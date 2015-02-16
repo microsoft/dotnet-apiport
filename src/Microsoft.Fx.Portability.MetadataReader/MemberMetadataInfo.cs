@@ -13,12 +13,13 @@ namespace Microsoft.Fx.Portability.Analyzer
 		private string _name;
 		private string _nameSpace = null;
 		private List<string> _names = new List<string>();
-		public MemberMetadataInfo parentType = null;  //for memberRefs, the type is from the parent
-		public AssemblyReferenceHandle assembly;   //assembly where it is defined
-		public bool assemblySet = false;
-		public ModuleReferenceHandle module;
-		public bool moduleSet = false;
-		public Kind kind = Kind.Type;
+		private MethodSignature<MemberMetadataInfo> _methodSignature;
+		private MemberMetadataInfo _parentType = null;  //for memberRefs, the type is from the parent
+		private AssemblyReferenceHandle _assembly;	//assembly where it is defined
+		private bool _assemblySet = false;
+		private ModuleReferenceHandle _module;
+		private bool _moduleSet = false;
+		private Kind _kind = Kind.Type;
 		public enum Kind
 		{
 			Type,
@@ -27,17 +28,49 @@ namespace Microsoft.Fx.Portability.Analyzer
 			Unknown
 		}
 
+		public MemberMetadataInfo ParentType
+		{
+			get
+			{
+				return _parentType;
+            }
+		}
+
+		public AssemblyReferenceHandle DefinedInAssembly
+		{
+			get
+			{
+				return _assembly;
+			}
+		}
+
+		public bool AssemblySet
+		{
+			get
+			{
+				return _assemblySet;
+			}
+		}
+
+		public Kind ReferenceKind
+		{
+			get
+			{
+				return _kind;
+			}
+		}
+
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			if (kind == Kind.Method || kind == Kind.Field)
+			if (_kind == Kind.Method || _kind == Kind.Field)
 			{
 				_name = _name.Replace("<", "{").Replace(">", "}");
 				//get the full name from the type
-				sb.Append(parentType.ToString());
+				sb.Append(_parentType.ToString());
 				sb.Append(".");
 
-				if (kind == Kind.Method)
+				if (_kind == Kind.Method)
 				{
 					_name = _name.Replace(".", "#");	//expected output is #ctor instead of .ctor
 				}
@@ -77,10 +110,10 @@ namespace Microsoft.Fx.Portability.Analyzer
 			if (info2._nameSpace != null)
 				_nameSpace = info2._nameSpace;
 
-			if (info2.assemblySet)
+			if (info2._assemblySet)
 			{
-				assembly = info2.assembly;
-				assemblySet = true;
+				_assembly = info2._assembly;
+				_assemblySet = true;
 			}
 		}
 
@@ -125,15 +158,15 @@ namespace Microsoft.Fx.Portability.Analyzer
 				MemberMetadataInfo parentType = GetMemberParentInfo(memberReference);
 				if (parentType == null)
 					return null;
-				memberRefInfo.parentType = parentType;
+				memberRefInfo._parentType = parentType;
 
 				switch (memberReference.GetKind())
 				{
 				case MemberReferenceKind.Field:
-					memberRefInfo.kind = MemberMetadataInfo.Kind.Field;
+					memberRefInfo._kind = MemberMetadataInfo.Kind.Field;
 					break;
 				case MemberReferenceKind.Method:
-					memberRefInfo.kind = MemberMetadataInfo.Kind.Method;
+					memberRefInfo._kind = MemberMetadataInfo.Kind.Method;
 					//to do: get method signature
 					break;
 				default:
@@ -231,14 +264,14 @@ namespace Microsoft.Fx.Portability.Analyzer
 				{
 				case HandleKind.ModuleReference:
 					var moduleReference = (ModuleReferenceHandle)scope;
-					name.module = moduleReference;
-					name.moduleSet = true;
+					name._module = moduleReference;
+					name._moduleSet = true;
 					return name;
 
 				case HandleKind.AssemblyReference:
-					if (!name.assemblySet)
-						name.assemblySet = true;
-					name.assembly = (AssemblyReferenceHandle)(scope);
+					if (!name._assemblySet)
+						name._assemblySet = true;
+					name._assembly = (AssemblyReferenceHandle)(scope);
 					return name;
 
 				case HandleKind.TypeReference:
