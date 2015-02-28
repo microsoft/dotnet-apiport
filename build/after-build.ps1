@@ -50,17 +50,27 @@ function Get-ProjectName($ProjectOutputDirectory)
     return $uniqueNames[0].BaseName
 }
 
+# For each project we want to
+# 1) Unpack the .nupkg
+# 2) Merge the corresponding .nuspec with the .nuspec in the .nupkg
+# 3) Repack the .nupkg with the signed dlls
 foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsContainer }))
 {
-    $allNuGetPackages = Get-ChildItem $projectDirectory.FullName -Recurse | ? { $_.Extension -eq '.nupkg' -and !$_.Name.Contains("symbols") }
-    $nupkg = $allNuGetPackages | select -First 1
+    $allNupkgs = Get-ChildItem $projectDirectory.FullName -Recurse | ? { $_.Extension -eq '.nupkg' }
+    $excludingSymbolNupkgs = $allNupkgs | ? { !$_.Name.Contains("symbols") } 
+    $nupkg = $excludingSymbolNupkgs| select -First 1
 
-    if (@($allNuGetPackages).Count -gt 1)
+    if (@($excludingSymbolNupkgs).Count -gt 1)
     {
-        Write-Error "There should only be 1 nupkg for each project [$projectDirectory]. Actual [$allNuGetPackages]"
+        Write-Error "There should only be 1 nupkg for each project [$projectDirectory]. Actual [$excludingSymbolNupkgs]"
+        foreach ($pkg in $excludingSymbolNupkgs)
+        {
+            Write-Output "Package: $($pkg.FullName)"
+        }
+
         continue
     }
-    elseif (@($allNuGetPackages).Count -eq 0)
+    elseif (@($excludingSymbolNupkgs).Count -eq 0)
     {
         continue
     }
@@ -69,17 +79,18 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
     $tempDirectory = Join-Path $env:TEMP $(Get-Random)
     $zipFile = Join-Path $tempDirectory "$($nupkg.BaseName).zip"
 
-    # It needs to be a .zip file.
+    # Expand-ZipFile only works with .zip
     New-Item $tempDirectory -ItemType Directory | Out-Null
     Copy-Item $nupkg.FullName $zipFile
 
-    $resultingNuspecFile = Join-Path $($projectDirectory.FullName) "$projectName.nuspec"
+    $resultingNuspecFile = Join-Path $projectDirectory.FullName "$projectName.nuspec"
     $originalNuspec = Join-Path $PSScriptRoot "$projectName.nuspec"
     $unzippedDirectory = Join-Path $tempDirectory "Unzipped"
     
     Copy-Item $originalNuspec $resultingNuspecFile
     Expand-ZipFile $zipFile $unzippedDirectory -ErrorAction Stop
     
+    # Getting both .nuspec files, the template and the one from kpm build to merge.
     $sourceNuspecFile = Get-ChildItem $unzippedDirectory -Recurse -Include *.nuspec
     if (@($sourceNuspecFile).Count -ne 1)
     {
@@ -93,6 +104,16 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
 
     Join-XmlFile -SourceFile $sourceNuspecFile.FullName -TargetFile $resultingNuspecFile -ResultFile $resultingNuspecFile
 
+    # Move all of the original nupkgs into another folder.
+    $originalNupkgsDirectory = Join-Path $projectDirectory.FullName "originalnupkgs"
+    
+    New-Item $originalNupkgsDirectory -ItemType Directory | Out-Null
+    $allNupkgs | Move-Item -Destination $originalNupkgsDirectory
+
+    # Finally, repack all of the contents of the nupkg.
+    Invoke-Expression "$PSScriptRoot\nuget.exe pack $resultingNuspecFile -OutputDirectory $($projectDirectory.FullName) -Symbols" -ErrorAction Stop
+
     # Cleaning up after ourselves...
-    # Remove-Item $tempFolder -Recurse -Force
+    Remove-Item $resultingNuspecFile -Force
+    Remove-Item $tempDirectory -Recurse -Force
 }
