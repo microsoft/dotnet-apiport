@@ -61,3 +61,71 @@ function Add-VersionToNuspec([string]$Source, [string]$Version)
 
     $xml.Save($Source)
 }
+
+function Get-ProjectName($NuGetPackage)
+{
+    if ($NuGetPackage.BaseName -match '(?<projectname>[a-zA-Z\.]+)\.(?<version>[0-9\.]+(\-\w+)?)')
+    {
+        return $Matches['projectname']
+    }
+    else
+    {
+        Write-Error "[$($NuGetPackage.BaseName)] should have matched the Regex!"
+        return $null
+    }
+}
+
+function Expand-ZipFile([string]$Archive, [string]$Destination)
+{
+    if (Test-Path $Destination)
+    {
+        Remove-Item $Destination -Recurse -Force 
+    }
+
+    New-Item $Destination -ItemType Directory | Out-Null
+
+    $shell = New-Object -com shell.application
+    $zip = $shell.NameSpace($Archive)
+    
+    foreach($item in $zip.items())
+    {
+        $shell.Namespace($destination).copyhere($item)
+    }
+}
+
+function Set-VSEnvironment
+{
+    if (!(Test-Path Env:\VS140COMNTOOLS))
+    {
+        return
+    }
+
+    #Set environment variables for Visual Studio Command Prompt
+    $vcPath = Resolve-Path "$($env:VS140COMNTOOLS)\..\..\VC"
+
+    pushd $vcPath
+
+    cmd /c "vcvarsall.bat&set" |
+
+    foreach {
+      if ($_ -match "=") {
+        $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
+      }
+    }
+
+    popd
+}
+
+function Invoke-DownloadNuget([string]$OutputDirectory)
+{
+    if (!(Test-Path $OutputDirectory))
+    {
+        New-Item $OutputDirectory -ItemType Directory | Out-Null
+    }
+
+    $nugetExe = Join-Path $OutputDirectory "nuget.exe"
+
+    Invoke-WebRequest "http://www.nuget.org/nuget.exe" -OutFile $nugetExe -ErrorAction Stop
+
+    return $nugetExe
+}
