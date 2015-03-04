@@ -29,7 +29,7 @@ namespace Microsoft.Fx.Portability
         public bool LoadFromConfig(string path = null)
         {
             var configPath = GetPossibleFileLocations(path)
-                .Where(p => p != null && File.Exists(p))
+                .Where(p => IsValidPath(p) && File.Exists(p))
                 .FirstOrDefault();
 
             if (configPath == null)
@@ -45,6 +45,19 @@ namespace Microsoft.Fx.Portability
             }
         }
 
+        private bool IsValidPath(string path)
+        {
+            try
+            {
+                // This will throw if a path is invalid
+                return path != null && Path.GetFullPath(path) != null;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
         private IEnumerable<string> GetPossibleFileLocations(string path)
         {
             yield return path;
@@ -52,7 +65,13 @@ namespace Microsoft.Fx.Portability
 #if !ASPNETCORE50
             const string DefaultFileName = "TargetMap.xml";
 
-            yield return Path.Combine(Path.GetDirectoryName(typeof(TargetMapper).Assembly.Location), DefaultFileName);
+            var location = typeof(TargetMapper).Assembly.Location;
+
+            if (IsValidPath(location))
+            {
+                yield return Path.Combine(Path.GetDirectoryName(location), DefaultFileName);
+            }
+
             yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DefaultFileName);
 #endif
         }
@@ -66,10 +85,10 @@ namespace Microsoft.Fx.Portability
         {
             try
             {
-                var doc = XDocument.Load(stream);
+                var doc = XDocument.Load(XmlReader.Create(stream));
 
 #if !ASPNETCORE50
-                // Validate against schema
+               // Validate against schema
                 var schemas = new XmlSchemaSet();
                 schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream(typeof(TargetMapper), "Targets.xsd")));
                 doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
