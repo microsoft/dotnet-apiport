@@ -18,15 +18,17 @@ namespace Microsoft.Fx.Portability
         private readonly IProgressReporter _progressReport;
         private readonly ITargetMapper _targetMapper;
         private readonly IDependencyFinder _dependencyFinder;
+        private readonly IReportGenerator _reportGenerator;
 
         public ITargetMapper TargetMapper { get { return _targetMapper; } }
 
-        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder)
+        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator)
         {
             _apiPortService = apiPortService;
             _progressReport = progressReport;
             _targetMapper = targetMapper;
             _dependencyFinder = dependencyFinder;
+            _reportGenerator = reportGenerator;
         }
 
         public async Task<ReportingResult> AnalyzeAssemblies(IApiPortOptions options)
@@ -94,13 +96,24 @@ namespace Microsoft.Fx.Portability
         private async Task<ReportingResult> GetResultFromService(AnalyzeRequest request, IDependencyInfo dependencyFinder)
         {
             _progressReport.StartTask(LocalizedStrings.SendingDataToService);
-            var response = await _apiPortService.SendAnalysisAsync(request);
+            var fullResponse = await _apiPortService.SendAnalysisAsync(request);
             _progressReport.FinishTask();
 
-            CheckEndpointStatus(response.Headers.Status);
+            CheckEndpointStatus(fullResponse.Headers.Status);
 
             _progressReport.StartParallelTask(LocalizedStrings.ComputingReport, LocalizedStrings.ProcessedItems);
-            ReportingResult result = GenerateReportData.ComputeReport(response, dependencyFinder, _progressReport);
+
+            var response = fullResponse.Response;
+
+            var result = _reportGenerator.ComputeReport(
+                response.Targets,
+                response.SubmissionId,
+                 dependencyFinder?.Dependencies,
+                response.MissingDependencies,
+                dependencyFinder?.UnresolvedAssemblies,
+                response.UnresolvedUserAssemblies,
+                dependencyFinder?.AssembliesWithErrors
+            );
 
             _progressReport.FinishTask();
 

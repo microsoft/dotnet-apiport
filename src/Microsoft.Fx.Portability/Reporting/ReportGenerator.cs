@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System;
@@ -44,65 +43,48 @@ namespace Microsoft.Fx.Portability.Reporting
     }
 #endif
 
-    public class GenerateReportData
+    public class ReportGenerator : IReportGenerator
     {
-        public static ReportingResult ComputeReport(ServiceResponse<AnalyzeResponse> fullResponse, IDependencyInfo dependencyFinder, IProgressReporter progressReport)
-        {
-            var response = fullResponse.Response;
-            bool hasDependencyFinder = dependencyFinder != null;
-
-            return ComputeReport(
-                response.Targets,
-                response.SubmissionId,
-                fullResponse.Headers,
-                hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
-                response.MissingDependencies,
-                hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies
-                response.UnresolvedUserAssemblies,
-                hasDependencyFinder ? dependencyFinder.AssembliesWithErrors : null); //assembliesWithErrors
-        }
-
-        public static ReportingResult ComputeReport(
+        public ReportingResult ComputeReport(
             IList<FrameworkName> targets,
             string submissionId,
-            ServiceHeaders headers,
             IDictionary<MemberInfo, ICollection<AssemblyInfo>> allDependencies,
             IList<MemberInfo> missingDependencies,
             IDictionary<string, ICollection<string>> unresolvedAssemblies,
             IList<string> unresolvedUserAssemblies,
             IEnumerable<string> assembliesWithErrors)
         {
-            ReportingResult result = new ReportingResult(targets, submissionId, headers);
+            ReportingResult result = new ReportingResult(targets, submissionId);
 
             missingDependencies
-#if !SILVERLIGHT
-.AsParallel()
-#endif
-.ForAll((Action<MemberInfo>)((item) =>
-            {
-                // the calling assemblies are in Finder...
-                if (allDependencies == null)
+                #if !SILVERLIGHT
+                .AsParallel()
+                #endif
+                .ForAll((Action<MemberInfo>)((item) =>
                 {
-                    lock (result)
-                    {
-                        result.AddMissingDependency(null, item.MemberDocId, item.TypeDocId, item.TargetStatus, item.RecommendedChanges);
-                    }
-                }
-                else
-                {
-                    ICollection<AssemblyInfo> calledIn;
-                    if (!allDependencies.TryGetValue(item, out calledIn))
-                        return;
-
-                    foreach (var callingAsm in calledIn)
+                    // the calling assemblies are in Finder...
+                    if (allDependencies == null)
                     {
                         lock (result)
                         {
-                            result.AddMissingDependency(callingAsm, item.MemberDocId, item.TypeDocId, item.TargetStatus, item.RecommendedChanges);
+                            result.AddMissingDependency(null, item.MemberDocId, item.TypeDocId, item.TargetStatus, item.RecommendedChanges);
                         }
                     }
-                }
-            }));
+                    else
+                    {
+                        ICollection<AssemblyInfo> calledIn;
+                        if (!allDependencies.TryGetValue(item, out calledIn))
+                            return;
+
+                        foreach (var callingAsm in calledIn)
+                        {
+                            lock (result)
+                            {
+                                result.AddMissingDependency(callingAsm, item.MemberDocId, item.TypeDocId, item.TargetStatus, item.RecommendedChanges);
+                            }
+                        }
+                    }
+                }));
 
             if (assembliesWithErrors != null)
             {
@@ -145,37 +127,37 @@ namespace Microsoft.Fx.Portability.Reporting
 #endif
 
             allDependencies.Keys
-#if !SILVERLIGHT
-.AsParallel()
-#endif
-.ForAll((Action<MemberInfo>)(memberInfo =>
-            {
-                // This is declared here to minimize allocations
-                AssemblyUsageInfo currentAssembly;
-
-                ICollection<AssemblyInfo> usedIn;
-                if (!allDependencies.TryGetValue(memberInfo, out usedIn))
-                    return;
-
-                foreach (var file in usedIn)
+                #if !SILVERLIGHT
+                .AsParallel()
+                #endif
+                .ForAll((Action<MemberInfo>)(memberInfo =>
                 {
-                    // Add the current file to the dictionary
-                    currentAssembly = perAsmUsage.GetOrAdd(file, new Func<AssemblyInfo, AssemblyUsageInfo>(ai => new AssemblyUsageInfo(ai, targets.Count)));
+                    // This is declared here to minimize allocations
+                    AssemblyUsageInfo currentAssembly;
 
-                    for (int i = 0; i < targets.Count; i++)
+                    ICollection<AssemblyInfo> usedIn;
+                    if (!allDependencies.TryGetValue(memberInfo, out usedIn))
+                        return;
+
+                    foreach (var file in usedIn)
                     {
-                        if (missingDeps.ContainsKey(memberInfo) && (missingDeps[memberInfo].TargetStatus[i] == null || missingDeps[memberInfo].TargetStatus[i] > targets[i].Version))
+                        // Add the current file to the dictionary
+                        currentAssembly = perAsmUsage.GetOrAdd(file, new Func<AssemblyInfo, AssemblyUsageInfo>(ai => new AssemblyUsageInfo(ai, targets.Count)));
+
+                        for (int i = 0; i < targets.Count; i++)
                         {
-                            // If the dependency is missing, check to see if we know how to change the code for this API
-                            currentAssembly.UsageData[i].IncrementCallsToUnavailableApi();
-                        }
-                        else
-                        {
-                            currentAssembly.UsageData[i].IncrementCallsToAvailableApi();
+                            if (missingDeps.ContainsKey(memberInfo) && (missingDeps[memberInfo].TargetStatus[i] == null || missingDeps[memberInfo].TargetStatus[i] > targets[i].Version))
+                            {
+                                // If the dependency is missing, check to see if we know how to change the code for this API
+                                currentAssembly.UsageData[i].IncrementCallsToUnavailableApi();
+                            }
+                            else
+                            {
+                                currentAssembly.UsageData[i].IncrementCallsToAvailableApi();
+                            }
                         }
                     }
-                }
-            }));
+                }));
 
             return perAsmUsage.Values.ToList();
         }
