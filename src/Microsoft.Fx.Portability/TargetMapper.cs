@@ -87,7 +87,7 @@ namespace Microsoft.Fx.Portability
             {
                 var doc = XDocument.Load(XmlReader.Create(stream));
 
-#if !ASPNETCORE50
+#if !ASPNETCORE50 && HAS_RESOURCES
                // Validate against schema
                 var schemas = new XmlSchemaSet();
                 schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream(typeof(TargetMapper), "Targets.xsd")));

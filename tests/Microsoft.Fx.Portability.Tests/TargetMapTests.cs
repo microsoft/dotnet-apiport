@@ -188,7 +188,7 @@ namespace Microsoft.Fx.Portability.Tests
 
                 map.ParseAliasString(groupings, true);
             });
-            
+
         }
 
         [Fact]
@@ -275,7 +275,7 @@ namespace Microsoft.Fx.Portability.Tests
                 return;
             }
 
-            Assert.True(false,"Expected exception was not thrown");
+            Assert.True(false, "Expected exception was not thrown");
         }
 
         [Fact]
@@ -317,6 +317,7 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.True(false, "Expected exception was not thrown");
         }
 
+#if HAS_RESOURCES
         [Fact]
         public void XmlNotInSchema()
         {
@@ -339,6 +340,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             Assert.True(false, "Expected exception was not thrown");
         }
+#endif
 
         [Fact]
         public void XmlGetAlias()
@@ -402,7 +404,7 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = new List<FrameworkName> { netFramework4, windowsPhone, windows8 };
             var targetNames = mapper.GetTargetNames(targets, includeVersion: false).ToArray();
             var targetNamesWithVersions = mapper.GetTargetNames(targets, includeVersion: true).ToArray();
-            
+
             AreCollectionsEqual(new string[] { ".NET Framework", "Windows Phone", "Windows" }, targetNames);
             AreCollectionsEqual(new string[] { netFramework4.FullName, windowsPhone.FullName, windows8.FullName }, targetNamesWithVersions);
         }
@@ -425,18 +427,18 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = new List<FrameworkName> { netFramework4, windows81, netFramework451, windowsPhone, windows8 };
             var targetNames = mapper.GetTargetNames(targets, includeVersion: false).ToArray();
             var targetNamesWithVersions = mapper.GetTargetNames(targets, includeVersion: true).ToArray();
-            
+
             AreCollectionsEqual(
-                new string[] { 
-                    netFramework4.FullName, windows81.FullName, 
-                    netFramework451.FullName, "Windows Phone", 
-                    windows8.FullName }, 
+                new string[] {
+                    netFramework4.FullName, windows81.FullName,
+                    netFramework451.FullName, "Windows Phone",
+                    windows8.FullName },
                 targetNames);
-            
+
             AreCollectionsEqual(
-                new string[] { 
-                    netFramework4.FullName, windows81.FullName, 
-                    netFramework451.FullName, windowsPhone.FullName, 
+                new string[] {
+                    netFramework4.FullName, windows81.FullName,
+                    netFramework451.FullName, windowsPhone.FullName,
                     windows8.FullName },
                 targetNamesWithVersions);
         }
