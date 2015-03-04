@@ -1,12 +1,13 @@
 ﻿using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
-using Xunit;
+using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
@@ -26,11 +27,12 @@ namespace Microsoft.Fx.Portability.Tests
             var progressReporter = Substitute.For<IProgressReporter>();
             var targetMapper = Substitute.For<ITargetMapper>();
             var dependencyFinder = Substitute.For<IDependencyFinder>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
 
             var apiPortService = Substitute.For<IApiPortService>();
             apiPortService.GetTargetsAsync().Returns(CreateResponse<IEnumerable<AvailableTarget>>(targets.AsReadOnly()));
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder);
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator);
 
             var actualTargets = await client.ListTargets();
 
@@ -59,6 +61,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             var progressReporter = Substitute.For<IProgressReporter>();
             var targetMapper = Substitute.For<ITargetMapper>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
 
             var dependencyFinder = Substitute.For<IDependencyFinder>();
 
@@ -77,7 +80,7 @@ namespace Microsoft.Fx.Portability.Tests
                 return dependencies;
             });
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder);
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator);
 
             var options = Substitute.For<IApiPortOptions>();
 

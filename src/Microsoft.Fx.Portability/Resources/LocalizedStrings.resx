@@ -205,7 +205,7 @@
   </data>
   <data name="HowToSpecifyVersion" xml:space="preserve">
     <value>In order to specify a version, please use the following format with the '-targets' option:
-  (Target Name), Version=(Version)</value>
+	(Target Name), Version=(Version)</value>
   </data>
   <data name="InvalidFileName" xml:space="preserve">
     <value>Invalid file name: '{0}'</value>
@@ -226,5 +226,64 @@
   <data name="OverwriteFile" xml:space="preserve">
     <value>Replaced output file '{0}'</value>
     <comment>Displayed when a file exists and will be overwritten</comment>
+  </data>
+  <data name="AssemblyHeader" xml:space="preserve">
+    <value>Assembly</value>
+    <comment>Header for assembly name entries</comment>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Back to Summary</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DetailsPageTitle" xml:space="preserve">
+    <value>Details</value>
+    <comment>Title of worksheet for detailed Excel output</comment>
+  </data>
+  <data name="HowToReadTheExcelTable" xml:space="preserve">
+    <value>See 'http://go.microsoft.com/fwlink/?LinkId=397652' to learn how to read this table</value>
+  </data>
+  <data name="HtmlReportTitle" xml:space="preserve">
+    <value>.NET Portability Report</value>
+  </data>
+  <data name="InvalidAssembly" xml:space="preserve">
+    <value>{0} is an invalid assembly.</value>
+    <comment>HTML: An assembly used in the portability analysis that cannot be resolved</comment>
+  </data>
+  <data name="MissingAssembliesPageTitle" xml:space="preserve">
+    <value>Missing assemblies</value>
+  </data>
+  <data name="MissingAssemblyStatus" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="RecommendedChanges" xml:space="preserve">
+    <value>Recommended changes</value>
+  </data>
+  <data name="SubmissionId" xml:space="preserve">
+    <value>Submission Id</value>
+    <comment>Header for submission ID in Excel output</comment>
+  </data>
+  <data name="SummaryPageTitle" xml:space="preserve">
+    <value>Summary</value>
+    <comment>Title of worksheet for summary Excel output</comment>
+  </data>
+  <data name="TargetMemberHeader" xml:space="preserve">
+    <value>Target member</value>
+    <comment>Header for detailed output for target member</comment>
+  </data>
+  <data name="Targets" xml:space="preserve">
+    <value>Targets</value>
+  </data>
+  <data name="TargetTypeHeader" xml:space="preserve">
+    <value>Target type</value>
+    <comment>Header for detailed output for target type</comment>
+  </data>
+  <data name="UnresolvedUsedAssembly" xml:space="preserve">
+    <value>Unresolved assembly</value>
+    <comment>XLSX:An assembly used in the portability analysis that cannot be resolved</comment>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Used By</value>
   </data>
 </root>

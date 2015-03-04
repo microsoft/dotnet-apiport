@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reporting
 {
-    public class ReportFileWriter : IReportWriter
+    public class ReportFileWriter : IFileWriter
     {
         private readonly IFileSystem _fileSystem;
         private readonly IProgressReporter _progressReporter;

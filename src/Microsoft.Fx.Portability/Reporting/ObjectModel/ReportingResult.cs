@@ -22,13 +22,11 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public IList<FrameworkName> Targets { get { return _targets; } }
         public string SubmissionId { get; private set; }
-        public ServiceHeaders Headers { get; private set; }
 
-        public ReportingResult(IList<FrameworkName> targets, string submissionId, ServiceHeaders headers)
+        public ReportingResult(IList<FrameworkName> targets, string submissionId)
         {
             _targets = targets;
             SubmissionId = submissionId;
-            Headers = headers;
         }
 
         public IEnumerable<string> GetAssembliesWithError()
