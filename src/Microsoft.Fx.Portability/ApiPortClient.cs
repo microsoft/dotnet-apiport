@@ -95,29 +95,33 @@ namespace Microsoft.Fx.Portability
         /// <returns>Set of APIs/assemblies that are not portable/missing.</returns>
         private async Task<ReportingResult> GetResultFromService(AnalyzeRequest request, IDependencyInfo dependencyFinder)
         {
-            _progressReport.StartTask(LocalizedStrings.SendingDataToService);
-            var fullResponse = await _apiPortService.SendAnalysisAsync(request);
-            _progressReport.FinishTask();
+            var fullResponse = await RetrieveResultAsync(request);
 
             CheckEndpointStatus(fullResponse.Headers.Status);
 
-            _progressReport.StartParallelTask(LocalizedStrings.ComputingReport, LocalizedStrings.ProcessedItems);
+            using (_progressReport.StartParallelTask(LocalizedStrings.ComputingReport, LocalizedStrings.ProcessedItems))
+            {
+                var response = fullResponse.Response;
+                var hasDependencyFinder = dependencyFinder != null;
 
-            var response = fullResponse.Response;
+                return _reportGenerator.ComputeReport(
+                    response.Targets,
+                    response.SubmissionId,
+                    hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
+                    response.MissingDependencies,
+                    hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies
+                    response.UnresolvedUserAssemblies,
+                    hasDependencyFinder ? dependencyFinder.AssembliesWithErrors : null //assembliesWithErrors
+                );
+            }
+        }
 
-            var result = _reportGenerator.ComputeReport(
-                response.Targets,
-                response.SubmissionId,
-                 dependencyFinder?.Dependencies,
-                response.MissingDependencies,
-                dependencyFinder?.UnresolvedAssemblies,
-                response.UnresolvedUserAssemblies,
-                dependencyFinder?.AssembliesWithErrors
-            );
-
-            _progressReport.FinishTask();
-
-            return result;
+        private async Task<ServiceResponse<AnalyzeResponse>> RetrieveResultAsync(AnalyzeRequest request)
+        {
+            using (_progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            {
+                return await _apiPortService.SendAnalysisAsync(request);
+            }
         }
 
         /// <summary>
@@ -126,13 +130,14 @@ namespace Microsoft.Fx.Portability
         /// <returns>An array of bytes corresponding to the report.</returns>
         private async Task<byte[]> GetResultFromService(AnalyzeRequest request, ResultFormat format)
         {
-            _progressReport.StartTask(LocalizedStrings.SendingDataToService);
-            var response = await _apiPortService.SendAnalysisAsync(request, format);
-            _progressReport.FinishTask();
+            using (_progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            {
+                var response = await _apiPortService.SendAnalysisAsync(request, format);
 
-            CheckEndpointStatus(response.Headers.Status);
+                CheckEndpointStatus(response.Headers.Status);
 
-            return response.Response;
+                return response.Response;
+            }
         }
 
         /// <summary>
@@ -149,15 +154,14 @@ namespace Microsoft.Fx.Portability
 
         public async Task<IEnumerable<AvailableTarget>> ListTargets()
         {
-            _progressReport.StartTask(LocalizedStrings.RetrievingTargets);
+            using (_progressReport.StartTask(LocalizedStrings.RetrievingTargets))
+            {
+                var targets = await _apiPortService.GetTargetsAsync();
 
-            var targets = await _apiPortService.GetTargetsAsync();
+                CheckEndpointStatus(targets.Headers.Status);
 
-            _progressReport.FinishTask();
-
-            CheckEndpointStatus(targets.Headers.Status);
-
-            return targets.Response;
+                return targets.Response;
+            }
         }
     }
 }

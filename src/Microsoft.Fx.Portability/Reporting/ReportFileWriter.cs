@@ -84,7 +84,7 @@ namespace Microsoft.Fx.Portability.Reporting
 
             if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.CurrentCultureIgnoreCase))
             {
-                _progressReporter.ReportIssue(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension);
+                _progressReporter.ReportIssue(string.Format(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
             }
 
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
@@ -99,7 +99,7 @@ namespace Microsoft.Fx.Portability.Reporting
                 // This file exists already but since we don't care about uniqueness, we'll overwrite it.
                 if (!isUnique)
                 {
-                    _progressReporter.ReportIssue(LocalizedStrings.OverwriteFile, uniqueName);
+                    _progressReporter.ReportIssue(string.Format(LocalizedStrings.OverwriteFile, uniqueName));
                     return uniqueName;
                 }
 
