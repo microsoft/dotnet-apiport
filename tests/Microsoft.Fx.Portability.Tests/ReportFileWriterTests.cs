@@ -1,6 +1,6 @@
 ﻿using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using NSubstitute;
 using System.IO;
 using System.Text;
@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    [TestClass]
     public class ReportFileWriterTests
-    {
-        [TestMethod]
+    {   
+        [Fact]
         public void UniquelyNamedFileStream_FileExists_AppendsNumberToName()
         {
             var dir = "dir";
@@ -43,15 +42,15 @@ namespace Microsoft.Fx.Portability.Tests
             {
                 if (e != exception)
                 {
-                    Assert.Fail();
+                    Assert.True(false, "Fail");
                 }
             }
 
-            Assert.IsTrue(string.IsNullOrEmpty(reportPath));
+            Assert.True(string.IsNullOrEmpty(reportPath));
             fileSystem.Received().CreateFile(expectedResult);
         }
 
-        [TestMethod]
+        [Fact]
         public void UniquelyNamedFileStream_NumberedFileExists_IncrementsNumberInNewName()
         {
             var dir = "dir";
@@ -89,15 +88,15 @@ namespace Microsoft.Fx.Portability.Tests
             {
                 if (e != exception)
                 {
-                    Assert.Fail();
+                    Assert.True(false, "Fail");
                 }
             }
 
             fileSystem.Received().CreateFile(path);
-            Assert.IsTrue(string.IsNullOrEmpty(reportPath));
+            Assert.True(string.IsNullOrEmpty(reportPath));
         }
 
-        [TestMethod]
+        [Fact]
         public void VerifyReportHTMLContents()
         {
             var dir = "dir";
@@ -123,10 +122,10 @@ namespace Microsoft.Fx.Portability.Tests
             string reportPath = writer.WriteReportAsync(reportArray, format, dir, fileName, overwrite: false).Result;
 
             fileSystem.Received().CreateFile(expectedResult);
-            Assert.AreEqual(expectedResult, reportPath);
+            Assert.Equal(expectedResult, reportPath);
 
             byte[] writtenBytes = memoryStream.ToArray();
-            Assert.AreEqual(report, Encoding.UTF8.GetString(writtenBytes));
+            Assert.Equal(report, Encoding.UTF8.GetString(writtenBytes));
         }
     }
 }

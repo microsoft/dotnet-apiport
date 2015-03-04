@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.Fx.Portability.ObjectModel
 {
     [DataContract]
-    public sealed class MemberInfoV1
+    public sealed class MemberInfoV1 : IComparable
     {
         private bool _hashComputed;
         private int _hashCode;
@@ -108,6 +108,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashComputed = true;
             }
             return _hashCode;
+        }
+
+        public int CompareTo(object obj)
+        {
+            var obj2 = obj as MemberInfoV1;
+            return MemberDocId.CompareTo(obj2.MemberDocId);
         }
     }
 }

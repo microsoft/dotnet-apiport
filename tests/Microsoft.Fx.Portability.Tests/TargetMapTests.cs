@@ -1,5 +1,5 @@
 ﻿using Microsoft.Fx.Portability.Resources;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,18 +9,17 @@ using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    [TestClass]
     public class TargetMapTest
     {
-        [TestMethod]
+        [Fact]
         public void UnknownTarget()
         {
             var map = new TargetMapper();
 
-            Assert.AreEqual("Target", map.GetNames("Target").Single(), "Unknown name should return input");
+            Assert.Equal("Target", map.GetNames("Target").Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void TwoItems()
         {
             var map = new TargetMapper();
@@ -31,7 +30,7 @@ namespace Microsoft.Fx.Portability.Tests
             AreCollectionsEqual(new[] { "target1", "target2" }, map.GetNames("alias1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void AliasList()
         {
             var map = new TargetMapper();
@@ -43,7 +42,7 @@ namespace Microsoft.Fx.Portability.Tests
             AreCollectionsEqual(new[] { "alias1", "alias2" }, map.Aliases);
         }
 
-        [TestMethod]
+        [Fact]
         public void AliasEqualsTarget()
         {
             var map = new TargetMapper();
@@ -56,14 +55,14 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.AreEqual(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
-            Assert.Fail("Expected exception was not thrown");
+            Assert.True(false, "Expected exception was not thrown");
         }
 
-        [TestMethod]
+        [Fact]
         public void CaseInsensitiveAlias()
         {
             var map = new TargetMapper();
@@ -71,20 +70,20 @@ namespace Microsoft.Fx.Portability.Tests
             map.AddAlias("alias1", "target");
             map.AddAlias("Alias1", "target");
 
-            Assert.AreEqual("target", map.GetNames("Alias1").Single());
-            Assert.AreEqual("target", map.GetNames("alias1").Single());
+            Assert.Equal("target", map.GetNames("Alias1").Single());
+            Assert.Equal("target", map.GetNames("alias1").Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void UndefinedAlias()
         {
             var map = new TargetMapper();
             var alias = "alias";
 
-            Assert.AreEqual(alias, map.GetAlias(alias));
+            Assert.Equal(alias, map.GetAlias(alias));
         }
 
-        [TestMethod]
+        [Fact]
         public void CaseInsensitiveTarget()
         {
             var map = new TargetMapper();
@@ -92,22 +91,24 @@ namespace Microsoft.Fx.Portability.Tests
             map.AddAlias("alias1", "target1");
             map.AddAlias("alias1", "Target1");
 
-            Assert.AreEqual("target1", map.GetNames("alias1").Single());
+            Assert.Equal("target1", map.GetNames("alias1").Single());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(AliasMappedToMultipleNamesException))]
+        [Fact]
         public void VerifySingleAliasMapping()
         {
-            var map = new TargetMapper();
+            Assert.Throws(typeof(AliasMappedToMultipleNamesException), () =>
+            {
+                var map = new TargetMapper();
 
-            map.AddAlias("alias", "name1");
-            map.AddAlias("alias", "name2");
+                map.AddAlias("alias", "name1");
+                map.AddAlias("alias", "name2");
 
-            map.VerifySingleAlias();
+                map.VerifySingleAlias();
+            });
         }
 
-        [TestMethod]
+        [Fact]
         public void VerifySingleAliasMappingValid()
         {
             var map = new TargetMapper();
@@ -118,7 +119,7 @@ namespace Microsoft.Fx.Portability.Tests
             map.VerifySingleAlias();
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseGroupings1Group()
         {
             var map = new TargetMapper();
@@ -129,7 +130,7 @@ namespace Microsoft.Fx.Portability.Tests
             AreCollectionsEqual(new[] { "target1", "target2" }, map.GetNames("group1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseGroupings2Groups()
         {
             var map = new TargetMapper();
@@ -141,7 +142,7 @@ namespace Microsoft.Fx.Portability.Tests
             AreCollectionsEqual(new[] { "target1", "target3" }, map.GetNames("group2"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseGroupingsNull()
         {
             var map = new TargetMapper();
@@ -149,7 +150,7 @@ namespace Microsoft.Fx.Portability.Tests
             map.ParseAliasString(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseInvalidGroups()
         {
             var map = new TargetMapper();
@@ -157,11 +158,11 @@ namespace Microsoft.Fx.Portability.Tests
 
             map.ParseAliasString(groupings);
 
-            Assert.AreEqual("group1", map.GetNames("group1").Single());
+            Assert.Equal("group1", map.GetNames("group1").Single());
             AreCollectionsEqual(new[] { "target1", "target3" }, map.GetNames("group2"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseInvalidGroupsValidateAtomicOperation()
         {
             var map = new TargetMapper();
@@ -173,29 +174,32 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (ArgumentOutOfRangeException) { }
 
-            Assert.AreEqual("group1", map.GetNames("group1").Single());
-            Assert.AreEqual("group2", map.GetNames("group2").Single());
+            Assert.Equal("group1", map.GetNames("group1").Single());
+            Assert.Equal("group2", map.GetNames("group2").Single());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Fact]
         public void ParseInvalidGroupsValidate()
         {
-            var map = new TargetMapper();
-            var groupings = "group1 target1,target2; group2: target1, target3";
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () =>
+            {
+                var map = new TargetMapper();
+                var groupings = "group1 target1,target2; group2: target1, target3";
 
-            map.ParseAliasString(groupings, true);
+                map.ParseAliasString(groupings, true);
+            });
+
         }
 
-        [TestMethod]
+        [Fact]
         public void LoadXmlFromFile()
         {
             var map = new TargetMapper();
 
-            Assert.IsFalse(map.LoadFromConfig("doesnotexist.xml"));
+            Assert.False(map.LoadFromConfig("doesnotexist.xml"));
         }
 
-        [TestMethod]
+        [Fact]
         public void LoadXmlFromDefault()
         {
             var xml = @"<ApiTool>
@@ -215,8 +219,8 @@ namespace Microsoft.Fx.Portability.Tests
 
                 var map = new TargetMapper();
 
-                Assert.IsTrue(map.LoadFromConfig());
-                Assert.AreEqual("target1", map.GetNames("alias1").Single());
+                Assert.True(map.LoadFromConfig(String.Format(@"{0}\{1}", Environment.CurrentDirectory, "TargetMap.xml")));
+                Assert.Equal("target1", map.GetNames("alias1").Single());
             }
             finally
             {
@@ -224,7 +228,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlNoTargets()
         {
             var xml = @"<ApiTool>
@@ -234,10 +238,10 @@ namespace Microsoft.Fx.Portability.Tests
 
             var map = LoadXml(xml);
 
-            Assert.AreEqual("TestTarget", map.GetNames("TestTarget").Single());
+            Assert.Equal("TestTarget", map.GetNames("TestTarget").Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlWithAlias()
         {
             var xml = @"<ApiTool>
@@ -248,10 +252,10 @@ namespace Microsoft.Fx.Portability.Tests
 
             var map = LoadXml(xml);
 
-            Assert.AreEqual("TestTarget", map.GetNames("InternalProject").Single());
+            Assert.Equal("TestTarget", map.GetNames("InternalProject").Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlAliasSameAsName()
         {
             var xml = @"<ApiTool>
@@ -267,14 +271,14 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.AreEqual(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
-            Assert.Fail("Expected exception was not thrown");
+            Assert.True(false, "Expected exception was not thrown");
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlDuplicateAlias()
         {
             var xml = @"<ApiTool>
@@ -289,7 +293,7 @@ namespace Microsoft.Fx.Portability.Tests
             AreCollectionsEqual(new[] { "TestTarget1", "TestTarget2" }, map.GetNames("ProjectAlias"));
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlMalformedXml()
         {
             var xml = @"<ApiTool>
@@ -305,15 +309,16 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.IsNotNull(e.InnerException, "There should be an inner exception from the XML reader");
-                Assert.AreEqual(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.InnerException.Message), e.Message);
+                Assert.NotNull(e.InnerException);
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.InnerException.Message), e.Message);
                 return;
             }
 
-            Assert.Fail("Expected exception was not thrown");
+            Assert.True(false, "Expected exception was not thrown");
         }
 
-        [TestMethod]
+#if HAS_RESOURCES
+        [Fact]
         public void XmlNotInSchema()
         {
             var xml = @"<ApiTool>
@@ -328,15 +333,16 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.IsNotNull(e.InnerException, "There should be an inner exception from schema validation");
-                Assert.AreEqual(String.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
+                Assert.NotNull(e.InnerException);
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
                 return;
             }
 
-            Assert.Fail("Expected exception was not thrown");
+            Assert.True(false, "Expected exception was not thrown");
         }
+#endif
 
-        [TestMethod]
+        [Fact]
         public void XmlGetAlias()
         {
             var xml = @"<ApiTool>
@@ -348,10 +354,10 @@ namespace Microsoft.Fx.Portability.Tests
 
             var map = LoadXml(xml);
 
-            Assert.AreEqual("Alias1", map.GetAlias("TestTarget1"));
+            Assert.Equal("Alias1", map.GetAlias("TestTarget1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlGetAliasMultipleAliases()
         {
             var xml = @"<ApiTool>
@@ -363,10 +369,10 @@ namespace Microsoft.Fx.Portability.Tests
 
             var map = LoadXml(xml); ;
 
-            Assert.AreEqual("Alias1", map.GetAlias("TestTarget1"));
+            Assert.Equal("Alias1", map.GetAlias("TestTarget1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void XmlGetNameMultipleAliases()
         {
             var xml = @"<ApiTool>
@@ -378,11 +384,11 @@ namespace Microsoft.Fx.Portability.Tests
 
             var map = LoadXml(xml);
 
-            Assert.AreEqual("TestTarget1", map.GetNames("Alias1").Single());
-            Assert.AreEqual("TestTarget1", map.GetNames("Alias2").Single());
+            Assert.Equal("TestTarget1", map.GetNames("Alias1").Single());
+            Assert.Equal("TestTarget1", map.GetNames("Alias2").Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTargetNamesForDistinctTargets()
         {
             var mapper = new TargetMapper();
@@ -398,12 +404,12 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = new List<FrameworkName> { netFramework4, windowsPhone, windows8 };
             var targetNames = mapper.GetTargetNames(targets, includeVersion: false).ToArray();
             var targetNamesWithVersions = mapper.GetTargetNames(targets, includeVersion: true).ToArray();
-            
+
             AreCollectionsEqual(new string[] { ".NET Framework", "Windows Phone", "Windows" }, targetNames);
             AreCollectionsEqual(new string[] { netFramework4.FullName, windowsPhone.FullName, windows8.FullName }, targetNamesWithVersions);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTargetNamesForMultipleTargetVersions()
         {
             var mapper = new TargetMapper();
@@ -421,28 +427,28 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = new List<FrameworkName> { netFramework4, windows81, netFramework451, windowsPhone, windows8 };
             var targetNames = mapper.GetTargetNames(targets, includeVersion: false).ToArray();
             var targetNamesWithVersions = mapper.GetTargetNames(targets, includeVersion: true).ToArray();
-            
+
             AreCollectionsEqual(
-                new string[] { 
-                    netFramework4.FullName, windows81.FullName, 
-                    netFramework451.FullName, "Windows Phone", 
-                    windows8.FullName }, 
+                new string[] {
+                    netFramework4.FullName, windows81.FullName,
+                    netFramework451.FullName, "Windows Phone",
+                    windows8.FullName },
                 targetNames);
-            
+
             AreCollectionsEqual(
-                new string[] { 
-                    netFramework4.FullName, windows81.FullName, 
-                    netFramework451.FullName, windowsPhone.FullName, 
+                new string[] {
+                    netFramework4.FullName, windows81.FullName,
+                    netFramework451.FullName, windowsPhone.FullName,
                     windows8.FullName },
                 targetNamesWithVersions);
         }
 
         private void AreCollectionsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
-            var expectedList = expected.ToList();
-            var actualList = actual.ToList();
+            var expectedList = expected.OrderBy(k => k).ToList();
+            var actualList = actual.OrderBy(k => k).ToList();
 
-            CollectionAssert.AreEquivalent(expectedList, actualList);
+            Assert.Equal<List<T>>(expectedList, actualList);
         }
 
         private TargetMapper LoadXml(string config)

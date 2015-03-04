@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public class ProjectSubmission
+    public class ProjectSubmission : IComparable
     {
         public string Name { get; set; }
 
@@ -27,6 +27,23 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public override int GetHashCode()
         {
             return new { Name, SubmittedDate, Length }.GetHashCode();
+        }
+
+        public int CompareTo(object obj)
+        {
+            var objAsProj = obj as ProjectSubmission;
+            if (objAsProj.SubmittedDate == SubmittedDate)
+            {
+                return 0;
+            }
+            else if (objAsProj.SubmittedDate > SubmittedDate)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }

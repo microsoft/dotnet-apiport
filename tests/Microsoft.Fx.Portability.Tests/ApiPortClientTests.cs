@@ -1,6 +1,6 @@
 ﻿using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    [TestClass]
     public class ApiPortClientTests
     {
         private Task<ServiceResponse<T>> CreateResponse<T>(T result)
@@ -20,7 +19,7 @@ namespace Microsoft.Fx.Portability.Tests
             return Task.FromResult(response);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task ListTargetsTest()
         {
             var targets = new List<AvailableTarget> { new AvailableTarget { Name = "Target1" }, new AvailableTarget { Name = "Target2" } };
@@ -35,10 +34,10 @@ namespace Microsoft.Fx.Portability.Tests
 
             var actualTargets = await client.ListTargets();
 
-            CollectionAssert.AreEquivalent(actualTargets.ToArray(), targets.ToArray());
+            Assert.Equal<AvailableTarget[]>(actualTargets.OrderBy(k => k.Name).ToArray(), targets.OrderBy(k => k.Name).ToArray());
         }
 
-        [TestMethod]
+        [Fact]
         public async Task AnalyzeTest()
         {
             var dependencyResult = Enumerable.Range(0, 10).ToDictionary(
@@ -54,7 +53,7 @@ namespace Microsoft.Fx.Portability.Tests
 
                 var foundDocIds = a.Dependencies.Select(o => Tuple.Create(o.Key.MemberDocId, o.Value.Count)).ToList();
 
-                CollectionAssert.AreEquivalent(expectedResult, foundDocIds);
+                Assert.Equal<IEnumerable<Tuple<string, int>>>(expectedResult.OrderBy(k => k.Item1), foundDocIds.OrderBy(k => k.Item1));
                 return CreateResponse(new AnalyzeResponse());
             });
 
