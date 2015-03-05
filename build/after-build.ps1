@@ -1,7 +1,24 @@
 ﻿param(
     [Parameter(Mandatory=$true, Position = 0)][string]$BinariesDirectory,
+    [Parameter(Mandatory=$true, Position = 1)][string]$BuildVersion,
+    [Parameter(Mandatory=$true, Position = 2)][string]$BuildDefinitionName,
     [switch]$IsDebug
 )
+
+function Get-VersionNumber
+{
+    $versionSplit = $BuildVersion.Replace($BuildDefinitionName, "").Split("_", [System.StringSplitOptions]::RemoveEmptyEntries);
+    
+    if ($versionSplit.Count -eq 0)
+    {
+        return [string]::Empty
+    }
+    else
+    {
+        # Semantic Versioning in NuGet does not support a format of yymmdd.rr, so we remove the dot notation.
+        return $versionSplit[0].Replace(".","")
+    }
+}
 
 function Expand-ReplacementToken([string]$Contents, [string]$Token, [string]$ReplaceWith)
 {
@@ -49,6 +66,8 @@ function Get-ProjectName($ProjectOutputDirectory)
 
     return $uniqueNames[0].BaseName
 }
+
+$versionNumber = Get-VersionNumber
 
 # For each project we want to
 # 1) Unpack the .nupkg
@@ -101,6 +120,8 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
     $sourceNuspecFile = $sourceNuspecFile | select -First 1
 
     Replace-NuspecTokens $projectDirectory $resultingNuspecFile
+    
+    Add-VersionToNuspec $sourceNuspecFile.FullName $versionNumber
 
     Join-XmlFile -SourceFile $sourceNuspecFile.FullName -TargetFile $resultingNuspecFile -ResultFile $resultingNuspecFile
 
