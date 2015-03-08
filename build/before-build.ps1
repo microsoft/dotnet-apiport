@@ -3,6 +3,8 @@
     [switch]$IsDebug
 )
 
+Import-Module $(Join-Path $PSScriptRoot "build-utilities.psm1") -Verbose -ErrorAction Stop
+
 function Get-KREPath
 {
     $kreFolder = Join-Path $env:USERPROFILE ".k"

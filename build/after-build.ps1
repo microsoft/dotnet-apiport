@@ -4,7 +4,9 @@
     [Parameter(Mandatory=$true, Position = 2)][string]$BuildDefinitionName
 )
 
-function Get-VersionNumber
+Import-Module $(Join-Path $PSScriptRoot "build-utilities.psm1") -Verbose -ErrorAction Stop
+
+function Get-BuildVersionNumber
 {
     $versionSplit = $BuildVersion.Replace($BuildDefinitionName, "").Split("_", [System.StringSplitOptions]::RemoveEmptyEntries);
     
@@ -19,51 +21,14 @@ function Get-VersionNumber
     }
 }
 
-function Expand-ReplacementToken([string]$Contents, [string]$Token, [string]$ReplaceWith)
-{
-    $replaced = $Contents.Replace($Token, $ReplaceWith)
-    return $replaced
-}
-
-function Expand-ZipFile([string]$Archive, [string]$Destination)
-{
-    if (Test-Path $Destination)
-    {
-        Remove-Item $Destination -Recurse -Force 
-    }
-
-    New-Item $Destination -ItemType Directory | Out-Null
-
-    $shell = New-Object -com shell.application
-    $zip = $shell.NameSpace($Archive)
-    
-    foreach($item in $zip.items())
-    {
-        $shell.Namespace($destination).copyhere($item)
-    }
-}
-
 function Replace-NuspecTokens($ProjectOutputDirectory, $NuspecFile)
 {
     $buildConfiguration = $ProjectOutputDirectory.Name
     $fileContents = Get-Content $NuspecFile -ErrorAction Stop
     
-    $result = Expand-ReplacementToken $fileContents '$configuration$' $buildConfiguration
+    $result = $fileContents.Replace('$configuration$', $buildConfiguration)
 
     $result | Set-Content $NuspecFile
-}
-
-function Get-ProjectName($NuGetPackage)
-{
-    if ($NuGetPackage.BaseName -match '(?<projectname>[a-zA-Z\.]+)\.(?<version>[0-9\.]+(\-\w+)?)')
-    {
-        return $Matches['projectname']
-    }
-    else
-    {
-        Write-Error "[$($NuGetPackage.BaseName)] should have matched the Regex!"
-        return $null
-    }
 }
 
 function Invoke-DownloadNuget([string]$OutputDirectory)
@@ -80,7 +45,7 @@ function Invoke-DownloadNuget([string]$OutputDirectory)
     return $nugetExe
 }
 
-$versionNumber = Get-VersionNumber
+$versionNumber = Get-BuildVersionNumber
 
 $nugetDirectory = Join-Path $env:TEMP $(Get-Random)
 $nugetExe = Invoke-DownloadNuget $nugetDirectory
@@ -134,7 +99,7 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
 
         Join-XmlFiles -Source $sourceNuspecFile.FullName -Template $resultingNuspecFile -Result $resultingNuspecFile
 
-        # Move the original nupkgs and its symbol into another folder.
+        # Move the original nupkgs into another folder.
         $originalNupkgsDirectory = Join-Path $projectDirectory.FullName "originalnupkgs"
         
         if (!(Test-Path $originalNupkgsDirectory -PathType Container))
@@ -146,9 +111,6 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
         
         $nupkgSymbol = Join-Path $nupkg.Directory "$($nupkg.BaseName).symbols$($nupkg.Extension)"
         $nupkgSymbol | Move-Item -Destination $originalNupkgsDirectory
-
-        $symbolPackage = Join-Path $nupkg.Directory "$($nupkg.BaseName).symbols$($nupkg.Extension)"
-        $symbolPackage | Move-Item -Destination $originalNupkgsDirectory
 
         # Finally, repack all of the contents of the nupkg.
         Invoke-Expression "$nugetExe pack $resultingNuspecFile -OutputDirectory $($projectDirectory.FullName) -Symbols" -ErrorAction Stop
