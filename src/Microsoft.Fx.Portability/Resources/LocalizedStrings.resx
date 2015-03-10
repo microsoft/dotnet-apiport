@@ -264,8 +264,8 @@
     <value>Submission Id</value>
     <comment>Header for submission ID in Excel output</comment>
   </data>
-  <data name="SummaryPageTitle" xml:space="preserve">
-    <value>Summary</value>
+  <data name="PortabilitySummaryPageTitle" xml:space="preserve">
+    <value>Portability Summary</value>
     <comment>Title of worksheet for summary Excel output</comment>
   </data>
   <data name="TargetMemberHeader" xml:space="preserve">
@@ -291,5 +291,8 @@
   </data>
   <data name="ProgressReportFailed" xml:space="preserve">
     <value>[Failed]</value>
+  </data>
+  <data name="CompatibilityPageTitle" xml:space="preserve">
+    <value>Framework Compatibility</value>
   </data>
 </root>

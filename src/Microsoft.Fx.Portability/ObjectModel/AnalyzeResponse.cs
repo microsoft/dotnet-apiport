@@ -29,6 +29,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         [JsonIgnore]
         public ReportingResult ReportingResult { get; set; }
 
+        public IList<BreakingChangeDependency> BreakingChanges { get; set; }
+
         public int CompareTo(object obj)
         {
             var analyzeObject = obj as AnalyzeResponse;
