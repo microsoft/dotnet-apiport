@@ -1,5 +1,7 @@
 ﻿{
-    "version": "1.0.0-*",
+    "authors": [ "Microsoft" ],
+    "description": "Provides classes which allow developers to call the .NET Portability service.",
+    "version": "1.0.0-alpha",
     "dependencies": {
         "Newtonsoft.Json": "6.0.8"
     },

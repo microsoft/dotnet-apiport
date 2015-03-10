@@ -1,5 +1,7 @@
 {
-    "version": "1.0.0-*",
+    "authors": [ "Microsoft" ],
+    "description": "Tests for Microsoft.Fx.Portability library.",
+    "version": "1.0.0-alpha",
     "dependencies": {
         "NSubstitute": "1.8.1.0",
         "xunit.runners": "2.0.0.0-rc3-*",

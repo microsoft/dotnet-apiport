@@ -33,4 +33,9 @@
       <UserProperties project_1json__JSONSchema="http://www.asp.net/media/4878834/project.json" />
     </VisualStudio>
   </ProjectExtensions>
+  <ItemGroup>
+    <FilesToSign Include="$(OutDir)\$(Configuration)\aspnet50\Microsoft.Fx.Portability.dll;$(OutDir)\$(Configuration)\net45\Microsoft.Fx.Portability.dll;$(OutDir)\$(Configuration)\aspnetcore50\Microsoft.Fx.Portability.dll">
+        <Authenticode>Microsoft</Authenticode>
+    </FilesToSign>
+  </ItemGroup>
 </Project>
