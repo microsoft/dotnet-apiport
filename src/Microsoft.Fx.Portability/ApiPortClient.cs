@@ -68,7 +68,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        public async Task<IEnumerable<ResultFormat>> ListResultFormatsAsync()
+        public async Task<IEnumerable<string>> ListResultFormatsAsync()
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
             {
@@ -78,7 +78,7 @@ namespace Microsoft.Fx.Portability
 
                     CheckEndpointStatus(outputFormats.Headers.Status);
 
-                    return outputFormats.Response;
+                    return outputFormats.Response.Select(r => r.DisplayName).ToList();
                 }
                 catch (Exception)
                 {
@@ -165,7 +165,7 @@ namespace Microsoft.Fx.Portability
         /// Gets the Portability report for the request.
         /// </summary>
         /// <returns>An array of bytes corresponding to the report.</returns>
-        private async Task<byte[]> GetResultFromService(AnalyzeRequest request, ResultFormat format)
+        private async Task<byte[]> GetResultFromService(AnalyzeRequest request, string format)
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
             {

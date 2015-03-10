@@ -21,44 +21,32 @@ namespace Microsoft.Fx.Portability.Reporting
             _progressReporter = progressReporter;
         }
 
-        public async Task<string> WriteReportAsync(byte[] report, ResultFormat format, string outputDirectory, string reportFileName, bool overwrite)
+        public async Task<string> WriteReportAsync(byte[] report, string outputDirectory, string reportFileName, bool overwrite)
         {
             if (report == null || report.Length == 0)
                 return null;
 
-            var filename = GetFileName(outputDirectory, reportFileName, format, isUnique: !overwrite);
+            var filename = GetFileName(outputDirectory, reportFileName, isUnique: !overwrite);
 
             if (string.IsNullOrEmpty(filename))
                 return null;
 
             var filePath = _fileSystem.CombinePaths(outputDirectory, filename);
-            var isWritten = await TryWriteReportAsync(report, format, filePath);
+            var isWritten = await TryWriteReportAsync(report, filePath);
             if (isWritten)
                 return filePath;
 
             return null;
         }
 
-        private async Task<bool> TryWriteReportAsync(byte[] report, ResultFormat format, string filePath)
+        private async Task<bool> TryWriteReportAsync(byte[] report, string filePath)
         {
             try
             {
                 using (Stream destinationStream = _fileSystem.CreateFile(filePath))
+                using (var memoryStream = new MemoryStream(report))
                 {
-                    switch (format)
-                    {
-                        case ResultFormat.Excel:
-                            using (var memoryStream = new MemoryStream(report))
-                                await memoryStream.CopyToAsync(destinationStream);
-                            break;
-                        case ResultFormat.HTML:
-                            string html = Encoding.UTF8.GetString(report);
-                            using (StreamWriter writer = new StreamWriter(destinationStream))
-                                await writer.WriteAsync(html);
-                            break;
-                        default:
-                            throw new NotSupportedException("This format is not supported, yet: " + format);
-                    }
+                    await memoryStream.CopyToAsync(destinationStream);
                 }
             }
             catch (IOException)
@@ -73,20 +61,9 @@ namespace Microsoft.Fx.Portability.Reporting
             return true;
         }
 
-        private string GetFileName(string directory, string fileName, ResultFormat format, bool isUnique)
+        private string GetFileName(string directory, string fileName, bool isUnique)
         {
-            // We want to change the extension of the filename given regardless 
-            // of whether the user gave an extension or not. However, if they give
-            // us an extension and it doesn't match the expected one, we'll report
-            // the problem to them.
-            var originalExtension = Path.GetExtension(fileName);
-            var extension = format.GetFileExtension();
-
-            if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.CurrentCultureIgnoreCase))
-            {
-                _progressReporter.ReportIssue(string.Format(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
-            }
-
+            var extension = Path.GetExtension(fileName);
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
             var fileNameFormatString = string.Concat(fileNameWithoutExtension, "{0}", extension);

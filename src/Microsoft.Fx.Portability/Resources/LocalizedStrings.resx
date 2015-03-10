@@ -298,4 +298,7 @@
   <data name="RetrievingOutputFormats" xml:space="preserve">
     <value>Retrieving output formats.</value>
   </data>
+  <data name="UnknownResultFormat" xml:space="preserve">
+    <value>Unknown output format: '{0}'</value>
+  </data>
 </root>

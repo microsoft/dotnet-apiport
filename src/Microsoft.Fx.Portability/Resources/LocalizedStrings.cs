@@ -56,4 +56,5 @@ public static string ProgressReportDone { get { return @"[Done]"; } }
 public static string ProgressReportFailed { get { return @"[Failed]"; } }
 public static string CompatibilityPageTitle { get { return @"Framework Compatibility"; } }
 public static string RetrievingOutputFormats { get { return @"Retrieving output formats."; } }
+public static string UnknownResultFormat { get { return @"Unknown output format: '{0}'"; } }
 }}

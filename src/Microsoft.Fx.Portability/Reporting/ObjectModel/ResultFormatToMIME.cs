@@ -7,6 +7,15 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
     public static class ResultFormatToMIME
     {
+        public static ResultFormatInformation ToResultFormatInformation(this ResultFormat format)
+        {
+            return new ResultFormatInformation
+            {
+                DisplayName = format.ToString(),
+                MimeType = format.GetMIMEType()
+            };
+        }
+
         public static string GetMIMEType(this ResultFormat format)
         {
             switch (format)
