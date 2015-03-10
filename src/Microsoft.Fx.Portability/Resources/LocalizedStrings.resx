@@ -286,4 +286,10 @@
   <data name="UsedBy" xml:space="preserve">
     <value>Used By</value>
   </data>
+  <data name="ProgressReportDone" xml:space="preserve">
+    <value>[Done]</value>
+  </data>
+  <data name="ProgressReportFailed" xml:space="preserve">
+    <value>[Failed]</value>
+  </data>
 </root>

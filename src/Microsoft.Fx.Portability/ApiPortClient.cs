@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -99,28 +100,44 @@ namespace Microsoft.Fx.Portability
 
             CheckEndpointStatus(fullResponse.Headers.Status);
 
-            using (_progressReport.StartParallelTask(LocalizedStrings.ComputingReport, LocalizedStrings.ProcessedItems))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.ComputingReport))
             {
-                var response = fullResponse.Response;
-                var hasDependencyFinder = dependencyFinder != null;
+                try
+                {
+                    var response = fullResponse.Response;
+                    var hasDependencyFinder = dependencyFinder != null;
 
-                return _reportGenerator.ComputeReport(
-                    response.Targets,
-                    response.SubmissionId,
-                    hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
-                    response.MissingDependencies,
-                    hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies
-                    response.UnresolvedUserAssemblies,
-                    hasDependencyFinder ? dependencyFinder.AssembliesWithErrors : null //assembliesWithErrors
-                );
+                    return _reportGenerator.ComputeReport(
+                        response.Targets,
+                        response.SubmissionId,
+                        hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
+                        response.MissingDependencies,
+                        hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies
+                        response.UnresolvedUserAssemblies,
+                        hasDependencyFinder ? dependencyFinder.AssembliesWithErrors : null //assembliesWithErrors
+                    );
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
             }
         }
 
         private async Task<ServiceResponse<AnalyzeResponse>> RetrieveResultAsync(AnalyzeRequest request)
         {
-            using (_progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
             {
-                return await _apiPortService.SendAnalysisAsync(request);
+                try
+                {
+                    return await _apiPortService.SendAnalysisAsync(request);
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
             }
         }
 
@@ -130,13 +147,21 @@ namespace Microsoft.Fx.Portability
         /// <returns>An array of bytes corresponding to the report.</returns>
         private async Task<byte[]> GetResultFromService(AnalyzeRequest request, ResultFormat format)
         {
-            using (_progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
             {
-                var response = await _apiPortService.SendAnalysisAsync(request, format);
+                try
+                {
+                    var response = await _apiPortService.SendAnalysisAsync(request, format);
 
-                CheckEndpointStatus(response.Headers.Status);
+                    CheckEndpointStatus(response.Headers.Status);
 
-                return response.Response;
+                    return response.Response;
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
             }
         }
 
@@ -154,13 +179,21 @@ namespace Microsoft.Fx.Portability
 
         public async Task<IEnumerable<AvailableTarget>> ListTargets()
         {
-            using (_progressReport.StartTask(LocalizedStrings.RetrievingTargets))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingTargets))
             {
-                var targets = await _apiPortService.GetTargetsAsync();
+                try
+                {
+                    var targets = await _apiPortService.GetTargetsAsync();
 
-                CheckEndpointStatus(targets.Headers.Status);
+                    CheckEndpointStatus(targets.Headers.Status);
 
-                return targets.Response;
+                    return targets.Response;
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
             }
         }
     }

@@ -52,4 +52,6 @@ public static string Targets { get { return @"Targets"; } }
 public static string TargetTypeHeader { get { return @"Target type"; } }
 public static string UnresolvedUsedAssembly { get { return @"Unresolved assembly"; } }
 public static string UsedBy { get { return @"Used By"; } }
+public static string ProgressReportDone { get { return @"[Done]"; } }
+public static string ProgressReportFailed { get { return @"[Failed]"; } }
 }}
