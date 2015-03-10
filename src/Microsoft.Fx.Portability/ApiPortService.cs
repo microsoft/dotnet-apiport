@@ -19,6 +19,7 @@ namespace Microsoft.Fx.Portability
             internal const string UsedApi = "/api/usage";
             internal const string FxApi = "/api/fxapi";
             internal const string FxApiSearch = "/api/fxapi/search";
+            internal const string ResultFormat = "/api/resultformat";
         }
 
         private readonly CompressedHttpClient _client;
@@ -99,6 +100,13 @@ namespace Microsoft.Fx.Portability
                 .AddQuery("top", top);
 
             return await _client.CallAsync<IReadOnlyCollection<ApiDefinition>>(HttpMethod.Get, url.Url);
+        }
+
+        public async Task<ServiceResponse<IEnumerable<ResultFormat>>> GetResultFormatsAsync()
+        {
+            string url = _endpoint + Endpoints.ResultFormat;
+
+            return await _client.CallAsync<IEnumerable<ResultFormat>>(HttpMethod.Get, url);
         }
 
         public void Dispose()

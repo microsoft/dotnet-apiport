@@ -295,4 +295,7 @@
   <data name="CompatibilityPageTitle" xml:space="preserve">
     <value>Framework Compatibility</value>
   </data>
+  <data name="RetrievingOutputFormats" xml:space="preserve">
+    <value>Retrieving output formats.</value>
+  </data>
 </root>

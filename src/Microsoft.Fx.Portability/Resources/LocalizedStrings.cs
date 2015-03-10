@@ -55,4 +55,5 @@ public static string UsedBy { get { return @"Used By"; } }
 public static string ProgressReportDone { get { return @"[Done]"; } }
 public static string ProgressReportFailed { get { return @"[Failed]"; } }
 public static string CompatibilityPageTitle { get { return @"Framework Compatibility"; } }
+public static string RetrievingOutputFormats { get { return @"Retrieving output formats."; } }
 }}

@@ -68,6 +68,26 @@ namespace Microsoft.Fx.Portability
             }
         }
 
+        public async Task<IEnumerable<ResultFormat>> ListResultFormatsAsync()
+        {
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
+            {
+                try
+                {
+                    var outputFormats = await _apiPortService.GetResultFormatsAsync();
+
+                    CheckEndpointStatus(outputFormats.Headers.Status);
+
+                    return outputFormats.Response;
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
+        }
+
         private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyFinder)
         {
             AnalyzeRequest request = new AnalyzeRequest
