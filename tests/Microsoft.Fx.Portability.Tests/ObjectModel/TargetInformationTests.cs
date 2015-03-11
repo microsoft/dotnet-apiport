@@ -1,12 +1,11 @@
-﻿using Microsoft.Fx.Portability.ObjectModel;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
-using Xunit;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel
 {

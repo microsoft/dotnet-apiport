@@ -1,4 +1,7 @@
-﻿using Microsoft.Fx.Portability.Resources;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.Resources;
 using Xunit;
 using System;
 using System.Collections.Generic;
@@ -188,7 +191,6 @@ namespace Microsoft.Fx.Portability.Tests
 
                 map.ParseAliasString(groupings, true);
             });
-
         }
 
         [Fact]
@@ -463,7 +465,6 @@ namespace Microsoft.Fx.Portability.Tests
                 targetMapper.Load(ms);
                 return targetMapper;
             }
-
         }
     }
 }

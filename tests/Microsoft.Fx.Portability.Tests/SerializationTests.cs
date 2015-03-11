@@ -1,4 +1,7 @@
-﻿using Microsoft.Fx.Portability.ObjectModel;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.ObjectModel;
 using Xunit;
 using System;
 using System.Collections.Generic;
@@ -68,7 +71,6 @@ namespace Microsoft.Fx.Portability.Tests
 
             CompareAnalyzeResponseV1(v1, newtonsoft);
             CompareAnalyzeResponseV1(v1, dcjs);
-
         }
 
         [Fact]
