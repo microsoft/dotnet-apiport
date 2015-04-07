@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -27,18 +28,24 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Get the list of targets we should consider in the analysis
             var targets = _targetNameParser.MapTargetsToExplicitVersions(request.Targets.SelectMany(_targetMapper.GetNames)).ToList();
 
-            var notInAnyTarget = _analysisEngine.FindMembersNotInTargets(targets, request.Dependencies);
+            var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
+                ? _analysisEngine.FindMembersNotInTargets(targets, request.Dependencies)
+                : new List<MemberInfo>();
+
             var unresolvedAssemblies = request.UnresolvedAssembliesDictionary != null
                 ? request.UnresolvedAssembliesDictionary.Keys
                 : request.UnresolvedAssemblies;
 
             var missingUserAssemblies = _analysisEngine.FindUnreferencedAssemblies(unresolvedAssemblies, request.UserAssemblies).ToList();
 
-            var breakingChanges = _analysisEngine.FindBreakingChanges(request.Dependencies).ToList();
+            var breakingChanges = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
+                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies).ToList()
+                : new List<BreakingChangeDependency>();
 
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,
+                request.RequestFlags,
                 request.Dependencies,
                 notInAnyTarget,
                 request.UnresolvedAssembliesDictionary,
@@ -47,6 +54,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             return new AnalyzeResponse
             {
+                ApplicationName = request.ApplicationName,
                 MissingDependencies = notInAnyTarget,
                 UnresolvedUserAssemblies = missingUserAssemblies,
                 Targets = targets,

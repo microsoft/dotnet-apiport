@@ -8,7 +8,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
     [Flags]
     public enum AnalyzeRequestFlags
     {
-        None = 0x0,
-        NoTelemetry = 0x1
+        None = 0,
+        NoTelemetry = 1,
+        ShowNonPortableApis = 1 << 1,
+        ShowBreakingChanges = 1 << 2
     }
 }

@@ -48,13 +48,15 @@ namespace Microsoft.Fx.Portability.Reporting
         public ReportingResult ComputeReport(
             IList<FrameworkName> targets,
             string submissionId,
+            AnalyzeRequestFlags requestFlags,
             IDictionary<MemberInfo, ICollection<AssemblyInfo>> allDependencies,
             IList<MemberInfo> missingDependencies,
             IDictionary<string, ICollection<string>> unresolvedAssemblies,
             IList<string> unresolvedUserAssemblies,
             IEnumerable<string> assembliesWithErrors)
         {
-            ReportingResult result = new ReportingResult(targets, submissionId);
+            var types = allDependencies.Keys.Where(dep => dep.TypeDocId == null);
+            ReportingResult result = new ReportingResult(targets, types, submissionId, requestFlags);
 
             missingDependencies
                 #if !SILVERLIGHT
@@ -67,7 +69,7 @@ namespace Microsoft.Fx.Portability.Reporting
                     {
                         lock (result)
                         {
-                            result.AddMissingDependency(null, item.MemberDocId, item.TypeDocId, item.TargetStatus, item.RecommendedChanges);
+                            result.AddMissingDependency(null, item, item.RecommendedChanges);
                         }
                     }
                     else
@@ -80,7 +82,7 @@ namespace Microsoft.Fx.Portability.Reporting
                         {
                             lock (result)
                             {
-                                result.AddMissingDependency(callingAsm, item.MemberDocId, item.TypeDocId, item.TargetStatus, item.RecommendedChanges);
+                                result.AddMissingDependency(callingAsm, item, item.RecommendedChanges);
                             }
                         }
                     }

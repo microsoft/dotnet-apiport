@@ -32,6 +32,16 @@ namespace Microsoft.Fx.Portability
 
         public bool IsQuirked { get; set; }
 
+        public bool IsSourceAnalyzerAvailable { get; set; }
+
+        public bool IsRetargeting
+        {
+            get
+            {
+                return IsBuildTime || IsQuirked;
+            }
+        }
+
         public BreakingChangeImpact ImpactScope { get; set; }
 
         public int CompareTo(BreakingChange other)

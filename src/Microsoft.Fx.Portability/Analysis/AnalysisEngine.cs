@@ -12,6 +12,8 @@ namespace Microsoft.Fx.Portability.Analysis
 {
     public class AnalysisEngine : IAnalysisEngine
     {
+        internal const string FullFrameworkIdentifier = ".NET Framework";
+
         private readonly IApiCatalogLookup _catalog;
         private readonly IApiRecommendations _recommendations;
 
@@ -21,22 +23,61 @@ namespace Microsoft.Fx.Portability.Analysis
             _recommendations = recommendations;
         }
 
-        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
+            // Only proceed to find breaking changes for full .NET Framework (that's where they are applicable)
+            var fullFrameworkVersions = targets
+                .Where(t => string.Equals(t.Identifier, FullFrameworkIdentifier, StringComparison.OrdinalIgnoreCase))
+                .Select(t => t.Version)
+                .ToList();
+
+            if (!fullFrameworkVersions.Any())
+            {
+                yield break;
+            }
+
             foreach (var kvp in dependencies)
             {
                 if (MemberIsInFramework(kvp.Key))
                 {
                     var breakingChanges = _recommendations.GetBreakingChanges(kvp.Key.MemberDocId).Distinct();
-                    foreach (BreakingChange b in breakingChanges)
+                    foreach (var b in breakingChanges)
                     {
-                        foreach (BreakingChangeDependency bcd in kvp.Value.Select(a => new BreakingChangeDependency() { Break = b, DependantAssemblyName = a.AssemblyIdentity, Member = kvp.Key }))
+                        if (BreakingChangeIsInVersionRange(fullFrameworkVersions, b))
                         {
-                            yield return bcd;
+                            foreach (var a in kvp.Value)
+                            {
+                                yield return new BreakingChangeDependency
+                                {
+                                    Break = b,
+                                    DependantAssembly = a,
+                                    Member = kvp.Key
+                                };
+                            }
                         }
                     }
                 }
             }
+        }
+
+        private static bool BreakingChangeIsInVersionRange(IEnumerable<Version> targetVersions, BreakingChange breakingChange)
+        {
+            foreach (var targetVersion in targetVersions)
+            {
+                // Include breaking changes that were broken before a target version and fixed after it,
+                // and also breaking changes that were introduced in a targeted version, _even if they were fixed in that same version_
+                //
+                // Some breaking changes have VersionBroken==VersionFixed if the break was corrected in GDR-level servicing. We want to report those to
+                // users who are targeting that version so that they understand the importance of updating their NetFX via WU (or whatever
+                // enterprise-specific patch rollout system they have).
+                if (targetVersion == breakingChange.VersionBroken ||
+                    (targetVersion > breakingChange.VersionBroken && (breakingChange.VersionFixed == null || targetVersion < breakingChange.VersionFixed)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)

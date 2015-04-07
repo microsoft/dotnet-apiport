@@ -21,12 +21,12 @@ namespace Microsoft.Fx.Portability.Reporting
             _progressReporter = progressReporter;
         }
 
-        public async Task<string> WriteReportAsync(byte[] report, string outputDirectory, string reportFileName, bool overwrite)
+        public async Task<string> WriteReportAsync(byte[] report, string extension, string outputDirectory, string reportFileName, bool overwrite)
         {
             if (report == null || report.Length == 0)
                 return null;
 
-            var filename = GetFileName(outputDirectory, reportFileName, isUnique: !overwrite);
+            var filename = GetFileName(outputDirectory, reportFileName, extension, isUnique: !overwrite);
 
             if (string.IsNullOrEmpty(filename))
                 return null;
@@ -61,9 +61,20 @@ namespace Microsoft.Fx.Portability.Reporting
             return true;
         }
 
-        private string GetFileName(string directory, string fileName, bool isUnique)
+        private string GetFileName(string directory, string fileName, string inputExtension, bool isUnique)
         {
-            var extension = Path.GetExtension(fileName);
+            // We want to change the extension of the filename given regardless 
+            // of whether the user gave an extension or not. However, if they give
+            // us an extension and it doesn't match the expected one, we'll report
+            // the problem to them.
+            var originalExtension = Path.GetExtension(fileName);
+            var extension = string.IsNullOrWhiteSpace(inputExtension) ? originalExtension : inputExtension;
+
+            if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.OrdinalIgnoreCase))
+            {
+                _progressReporter.ReportIssue(string.Format(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
+            }
+
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
             var fileNameFormatString = string.Concat(fileNameWithoutExtension, "{0}", extension);

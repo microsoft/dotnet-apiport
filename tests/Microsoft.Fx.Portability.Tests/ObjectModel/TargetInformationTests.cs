@@ -3,9 +3,13 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
-using System;
-using System.Globalization;
 using Xunit;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel
 {

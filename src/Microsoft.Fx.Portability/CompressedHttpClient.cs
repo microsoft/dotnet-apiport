@@ -99,7 +99,14 @@ namespace Microsoft.Fx.Portability
 
         private async Task<ServiceResponse<TResponse>> CallInternalAsync<TResponse>(HttpRequestMessage request)
         {
-            var response = await CallInternalAsync(request, ResultFormat.Json.ToResultFormatInformation());
+            var json = new ResultFormatInformation
+            {
+                DisplayName = "Json",
+                MimeType = "application/json",
+                FileExtension = ".json"
+            }; ;
+
+            var response = await CallInternalAsync(request, json);
             var result = response.Response.Deserialize<TResponse>();
 
             return new ServiceResponse<TResponse>(result, response.Headers);

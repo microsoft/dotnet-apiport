@@ -50,7 +50,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        public async Task<byte[]> GetAnalysisReportAsync(IApiPortOptions options)
+        public async Task<IEnumerable<byte[]>> GetAnalysisReportAsync(IApiPortOptions options)
         {
             IDependencyInfo dependencyFinderEngine = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
@@ -58,14 +58,33 @@ namespace Microsoft.Fx.Portability
             {
                 AnalyzeRequest request = GenerateRequest(options, dependencyFinderEngine);
 
-                return await GetResultFromService(request, options.OutputFormat);
+                var tasks = options.OutputFormats
+                    .Select(f => GetResultFromService(request, f))
+                    .ToList();
+
+                await Task.WhenAll(tasks);
+
+                return tasks.Select(t => t.Result).ToList();
             }
             else
             {
                 _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
 
-                return null;
+                return Enumerable.Empty<byte[]>();
             }
+        }
+
+        public async Task<string> GetExtensionForFormat(string format)
+        {
+            var outputFormats = await _apiPortService.GetResultFormatsAsync();
+            var outputFormat = outputFormats.Response.FirstOrDefault(f => string.Equals(format, f.DisplayName, StringComparison.OrdinalIgnoreCase));
+
+            if (outputFormat == null)
+            {
+                throw new UnknownReportFormatException(format);
+            }
+
+            return outputFormat.FileExtension;
         }
 
         public async Task<IEnumerable<string>> ListResultFormatsAsync()
@@ -90,7 +109,7 @@ namespace Microsoft.Fx.Portability
 
         private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyFinder)
         {
-            AnalyzeRequest request = new AnalyzeRequest
+            return new AnalyzeRequest
             {
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
                 Dependencies = dependencyFinder.Dependencies,
@@ -100,14 +119,8 @@ namespace Microsoft.Fx.Portability
                 AssembliesWithErrors = dependencyFinder.AssembliesWithErrors.ToList(),
                 ApplicationName = options.Description,
                 Version = AnalyzeRequest.CurrentVersion,
+                RequestFlags = options.RequestFlags
             };
-
-            if (options.NoTelemetry)
-            {
-                request.RequestFlags |= AnalyzeRequestFlags.NoTelemetry;
-            }
-
-            return request;
         }
 
         /// <summary>
@@ -130,6 +143,7 @@ namespace Microsoft.Fx.Portability
                     return _reportGenerator.ComputeReport(
                         response.Targets,
                         response.SubmissionId,
+                        request.RequestFlags,
                         hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
                         response.MissingDependencies,
                         hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies

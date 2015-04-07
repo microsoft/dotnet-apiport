@@ -17,14 +17,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
             UnresolvedUserAssemblies = new List<string>();
             Targets = new List<FrameworkName>();
         }
+        
+        public string SubmissionId { get; set; }
+
+        public string ApplicationName { get; set; }
 
         public IList<MemberInfo> MissingDependencies { get; set; }
 
         public IList<string> UnresolvedUserAssemblies { get; set; }
 
         public IList<FrameworkName> Targets { get; set; }
-
-        public string SubmissionId { get; set; }
 
         [JsonIgnore]
         public ReportingResult ReportingResult { get; set; }

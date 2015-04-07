@@ -10,11 +10,11 @@ namespace Microsoft.Fx.Portability
     {
         public MemberInfo Member { get; set; }
         public BreakingChange Break { get; set; }
-        public string DependantAssemblyName { get; set; }
+        public AssemblyInfo DependantAssembly{ get; set; }
 
         public bool Equals(BreakingChangeDependency other)
         {
-            return (Member.Equals(other.Member) && (Break.CompareTo(other.Break) == 0) && DependantAssemblyName.Equals(other.DependantAssemblyName));
+            return (Member.Equals(other.Member) && (Break.CompareTo(other.Break) == 0) && DependantAssembly.Equals(other.DependantAssembly));
         }
     }
 }

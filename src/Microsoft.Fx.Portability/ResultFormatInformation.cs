@@ -9,6 +9,7 @@ namespace Microsoft.Fx.Portability
     {
         public string DisplayName { get; set; }
         public string MimeType { get; set; }
+        public string FileExtension { get; set; }
 
         public override bool Equals(object obj)
         {

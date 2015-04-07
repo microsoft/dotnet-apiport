@@ -12,6 +12,6 @@ namespace Microsoft.Fx.Portability
     {
         IEnumerable<string> FindUnreferencedAssemblies(IEnumerable<string> unreferencedAssemblies, IEnumerable<AssemblyInfo> specifiedUserAssemblies);
         IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies);
-        IEnumerable<BreakingChangeDependency> FindBreakingChanges(IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies);
+        IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies);
     }
 }

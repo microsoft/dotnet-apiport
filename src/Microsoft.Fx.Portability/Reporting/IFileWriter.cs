@@ -7,6 +7,6 @@ namespace Microsoft.Fx.Portability.Reporting
 {
     public interface IFileWriter
     {
-        Task<string> WriteReportAsync(byte[] report, string outputDirectory, string filename, bool overwrite);
+        Task<string> WriteReportAsync(byte[] report, string extension, string outputDirectory, string filename, bool overwrite);
     }
 }
