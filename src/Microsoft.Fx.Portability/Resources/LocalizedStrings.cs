@@ -46,10 +46,15 @@ public static string MissingAssembliesPageTitle { get { return @"Missing assembl
 public static string MissingAssemblyStatus { get { return @"Reason"; } }
 public static string RecommendedChanges { get { return @"Recommended changes"; } }
 public static string SubmissionId { get { return @"Submission Id"; } }
-public static string SummaryPageTitle { get { return @"Summary"; } }
+public static string PortabilitySummaryPageTitle { get { return @"Portability Summary"; } }
 public static string TargetMemberHeader { get { return @"Target member"; } }
 public static string Targets { get { return @"Targets"; } }
 public static string TargetTypeHeader { get { return @"Target type"; } }
 public static string UnresolvedUsedAssembly { get { return @"Unresolved assembly"; } }
 public static string UsedBy { get { return @"Used By"; } }
+public static string ProgressReportDone { get { return @"[Done]"; } }
+public static string ProgressReportFailed { get { return @"[Failed]"; } }
+public static string CompatibilityPageTitle { get { return @"Framework Compatibility"; } }
+public static string RetrievingOutputFormats { get { return @"Retrieving output formats."; } }
+public static string UnknownResultFormat { get { return @"Unknown output format: '{0}'"; } }
 }}

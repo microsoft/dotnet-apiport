@@ -8,7 +8,7 @@ namespace Microsoft.Fx.Portability
     public interface IProgressReporter
     {
         void ReportIssue(string issue);
-        IProgressTask StartParallelTask(string taskName, string details);
+        IProgressTask StartTask(string taskName, int totalUnits);
         IProgressTask StartTask(string taskName);
         IReadOnlyCollection<string> Issues { get; }
     }

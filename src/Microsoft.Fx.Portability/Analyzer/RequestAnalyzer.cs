@@ -34,6 +34,8 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             var missingUserAssemblies = _analysisEngine.FindUnreferencedAssemblies(unresolvedAssemblies, request.UserAssemblies).ToList();
 
+            var breakingChanges = _analysisEngine.FindBreakingChanges(request.Dependencies).ToList();
+
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,
@@ -50,6 +52,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 Targets = targets,
                 ReportingResult = reportingResult,
                 SubmissionId = submissionId,
+                BreakingChanges = breakingChanges
             };
         }
     }

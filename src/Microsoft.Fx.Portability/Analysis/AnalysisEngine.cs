@@ -21,6 +21,24 @@ namespace Microsoft.Fx.Portability.Analysis
             _recommendations = recommendations;
         }
 
+        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        {
+            foreach (var kvp in dependencies)
+            {
+                if (MemberIsInFramework(kvp.Key))
+                {
+                    var breakingChanges = _recommendations.GetBreakingChanges(kvp.Key.MemberDocId).Distinct();
+                    foreach (BreakingChange b in breakingChanges)
+                    {
+                        foreach (BreakingChangeDependency bcd in kvp.Value.Select(a => new BreakingChangeDependency() { Break = b, DependantAssemblyName = a.AssemblyIdentity, Member = kvp.Key }))
+                        {
+                            yield return bcd;
+                        }
+                    }
+                }
+            }
+        }
+
         public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
             Trace.TraceInformation("Computing members not in target");
@@ -38,7 +56,7 @@ namespace Microsoft.Fx.Portability.Analysis
             //  -- Keep only the members that are not supported on at least one of the targets.
 
             var missingMembers = dependencies.Keys
-                .Where(dep => _catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(dep.DefinedInAssemblyIdentity)) && _catalog.IsFrameworkMember(dep.MemberDocId))
+                .Where(MemberIsInFramework)
                 .AsParallel()
                 .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
                 .Where(memberInfo => !memberInfo.IsSupportedAcrossTargets)
@@ -48,6 +66,11 @@ namespace Microsoft.Fx.Portability.Analysis
             Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
 
             return missingMembers;
+        }
+
+        private bool MemberIsInFramework(MemberInfo dep)
+        {
+            return _catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(dep.DefinedInAssemblyIdentity)) && _catalog.IsFrameworkMember(dep.MemberDocId);
         }
 
         /// <summary>
@@ -146,6 +169,21 @@ namespace Microsoft.Fx.Portability.Analysis
             }
 
             return false;
+        }
+
+        private class MemberInfoBreakingChangeComparer : IEqualityComparer<Tuple<MemberInfo, BreakingChange>>
+        {
+            public static IEqualityComparer<Tuple<MemberInfo, BreakingChange>> Instance = new MemberInfoBreakingChangeComparer();
+
+            public bool Equals(Tuple<MemberInfo, BreakingChange> x, Tuple<MemberInfo, BreakingChange> y)
+            {
+                return x.Item1.Equals(y.Item1);
+            }
+
+            public int GetHashCode(Tuple<MemberInfo, BreakingChange> obj)
+            {
+                return obj.Item1.GetHashCode();
+            }
         }
     }
 }

@@ -5,14 +5,10 @@ namespace Microsoft.Fx.Portability
 {
     public enum BreakingChangeImpact
     {
-        Minor,
         Major,
+        Minor,
         Edge,
         Transparent,
-        RetargetingMinor,
-        RetargetingMajor,
         Unknown,
-        EdgeRetargeting,
-        MinorRetargeting
     }
 }

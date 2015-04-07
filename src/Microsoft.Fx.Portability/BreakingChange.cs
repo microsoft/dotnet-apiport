@@ -12,6 +12,12 @@ namespace Microsoft.Fx.Portability
 
         public string Title { get; set; }
 
+        public string Details { get; set; }
+
+        public string Suggestion { get; set; }
+
+        public string Link { get; set; }
+
         public string Markdown { get; set; }
 
         public IEnumerable<string> ApplicableApis { get; set; }
@@ -20,7 +26,11 @@ namespace Microsoft.Fx.Portability
 
         public Version VersionBroken { get; set; }
 
-        public bool Quirked { get; set; }
+        public Version VersionFixed { get; set; }
+
+        public bool IsBuildTime { get; set; }
+
+        public bool IsQuirked { get; set; }
 
         public BreakingChangeImpact ImpactScope { get; set; }
 
