@@ -7,9 +7,10 @@ repository in order to be notified as we make changes to and expand it.
 
 Today, the repository contains the following components:
 
-* **Microsoft.Fx.Portability**. Provides common types for API Port.
-
-* **Microsoft.Fx.Portability Tests**. Provides tests for Microsoft.Fx.Portability.
+* **src/ApiPort** Console tool to access portability webservice.  *Does not analyze assemblies yet.*
+* **src/Microsoft.Fx.Portability** Provides common types for API Port.
+* **src/Microsoft.Fx.Portability-net45** A project targeting .NET 4.5 of Microsoft.Fx.Portability to allow desktop apps to directly reference it.  *Currently a work-around for beta VS 2015 behavior.*
+* **tests/Microsoft.Fx.Portability** Provides tests for Microsoft.Fx.Portability.
 
 More libraries are coming soon. Stay tuned!
 
