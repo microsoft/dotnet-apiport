@@ -116,16 +116,14 @@ function Set-VSEnvironment
     popd
 }
 
-function Invoke-DownloadNuget([string]$OutputDirectory)
+# Download NuGet and stamp with date downloaded so subsequent calls won't download
+function Invoke-DownloadNuget()
 {
-    if (!(Test-Path $OutputDirectory))
-    {
-        New-Item $OutputDirectory -ItemType Directory | Out-Null
-    }
-
-    $nugetExe = Join-Path $OutputDirectory "nuget.exe"
-
-    Invoke-WebRequest "http://www.nuget.org/nuget.exe" -OutFile $nugetExe -ErrorAction Stop
-
+	$date = (Get-Date).ToString("MMddyyyy")
+    $nugetExe = Join-Path $env:TEMP nuget-$date.exe
+	
+	if(-NOT (Test-Path $nugetExe)){
+		Invoke-WebRequest "http://www.nuget.org/nuget.exe" -OutFile $nugetExe -ErrorAction Stop
+	}
     return $nugetExe
 }
