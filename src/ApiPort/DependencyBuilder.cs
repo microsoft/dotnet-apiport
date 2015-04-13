@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Practices.Unity;
 using System;
@@ -20,6 +21,7 @@ namespace ApiPort
             container.RegisterInstance(options);
             container.RegisterInstance<ITargetMapper>(targetMapper);
             container.RegisterInstance<IApiPortService>(new ApiPortService(options.ServiceEndpoint, productInformation));
+            container.RegisterType<IDependencyFinder, EmptyDependendencyFinder>(new ContainerControlledLifetimeManager());
             container.RegisterType<IReportGenerator, ReportGenerator>(new ContainerControlledLifetimeManager());
             container.RegisterType<ApiPortService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IFileSystem, WindowsFileSystem>(new ContainerControlledLifetimeManager());
