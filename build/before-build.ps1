@@ -88,3 +88,8 @@ foreach ($file in $(Get-ChildItem .\project.json -Recurse))
     Invoke-Expression "& $kreBin\kpm.cmd restore"
     popd
 }
+
+## Restore packages
+$nuget = Invoke-DownloadNuget
+
+& $nuget restore "$PSScriptRoot\..\Microsoft.Fx.Portability.sln"

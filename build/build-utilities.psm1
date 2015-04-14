@@ -117,13 +117,15 @@ function Set-VSEnvironment
 }
 
 # Download NuGet and stamp with date downloaded so subsequent calls won't download
-function Invoke-DownloadNuget()
+function Invoke-DownloadNuget
 {
 	$date = (Get-Date).ToString("MMddyyyy")
-    $nugetExe = Join-Path $env:TEMP nuget-$date.exe
+        $nugetExe = Join-Path $env:TEMP nuget-$date.exe
 	
-	if(-NOT (Test-Path $nugetExe)){
+	if(!(Test-Path $nugetExe))
+        {
 		Invoke-WebRequest "http://www.nuget.org/nuget.exe" -OutFile $nugetExe -ErrorAction Stop
 	}
-    return $nugetExe
+        
+        return $nugetExe
 }

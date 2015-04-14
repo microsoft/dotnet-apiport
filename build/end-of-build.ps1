@@ -38,8 +38,7 @@ function Test-NupkgIsSigned($Nupkg)
     return $isValid
 }
 
-$nugetDirectory = Join-Path $env:TEMP $(Get-Random)
-$nugetExe = Invoke-DownloadNuget $nugetDirectory
+$nugetExe = Invoke-DownloadNuget
 
 $releaseDirectory = Join-Path $BinariesDirectory "Release"
 $nupkgsToUpload = Get-ChildItem $releaseDirectory | ? { $_.Extension -eq '.nupkg' }
@@ -72,6 +71,3 @@ foreach ($package in $nupkgsToUpload)
         Invoke-Expression "$nugetExe push $($package.FullName) $APIAccessKey -Source $NuGetFeed"
     }
 }
-
-# Remove the downloaded nuget.exe
-Remove-Item $nugetDirectory -Recurse -Force

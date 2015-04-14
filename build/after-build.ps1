@@ -104,6 +104,3 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
         Remove-Item $tempDirectory -Recurse -Force
     }
 }
-
-# Remove the downloaded nuget.exe
-Remove-Item $nugetDirectory -Recurse -Force
