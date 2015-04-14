@@ -27,7 +27,7 @@ More libraries are coming soon. Stay tuned!
 3. Run command: `kpm pack`
     
 ### Building from Visual Studio
-1. Open Microsoft.Fx.Portability.sln in Visual Studio 2015
+1. Open PortabilityTools.sln in Visual Studio 2015
 2. Build the solution
 3. The .nupkg should be under the bin/Debug or bin/Release folders
 

@@ -92,4 +92,4 @@ foreach ($file in $(Get-ChildItem .\project.json -Recurse))
 ## Restore packages
 $nuget = Invoke-DownloadNuget
 
-& $nuget restore "$PSScriptRoot\..\Microsoft.Fx.Portability.sln"
+& $nuget restore "$PSScriptRoot\..\PortabilityTools.sln"
