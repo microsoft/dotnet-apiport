@@ -31,20 +31,6 @@ function Replace-NuspecTokens($ProjectOutputDirectory, $NuspecFile)
     $result | Set-Content $NuspecFile
 }
 
-function Invoke-DownloadNuget([string]$OutputDirectory)
-{
-    if (!(Test-Path $OutputDirectory))
-    {
-        New-Item $OutputDirectory -ItemType Directory | Out-Null
-    }
-
-    $nugetExe = Join-Path $OutputDirectory "nuget.exe"
-
-    Invoke-WebRequest "http://www.nuget.org/nuget.exe" -OutFile $nugetExe -ErrorAction Stop
-
-    return $nugetExe
-}
-
 $versionNumber = Get-BuildVersionNumber
 
 $nugetDirectory = Join-Path $env:TEMP $(Get-Random)
