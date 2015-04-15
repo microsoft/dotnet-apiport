@@ -1,0 +1,18 @@
+{
+  "authors": [ "Microsoft" ],
+  "description": "Tests for Microsoft.Fx.Portability library.",
+  "version": "1.0.0-alpha",
+  "dependencies": {
+    "NSubstitute": "1.8.1.0",
+    "Microsoft.Fx.Portability": "",
+    "xunit": "2.1.0-beta1-*",
+    "xunit.runner.aspnet": "2.1.0-beta1-*"
+  },
+  "commands": {
+    "test": "xunit.runner.aspnet"
+  },
+  "frameworks": {
+    "aspnet50": {
+    }
+  }
+}

@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public sealed class AssemblyInfo
+    public sealed class AssemblyInfo : IComparable
     {
         private bool _hashComputed;
         private int _hashCode;
@@ -73,6 +73,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public string GetFullAssemblyIdentity()
         {
             return string.Format(LocalizedStrings.FullAssemblyIdentity, AssemblyIdentity, FileVersion);
+        }
+
+        public int CompareTo(object obj)
+        {
+            var obj2 = obj as AssemblyInfo;
+            return AssemblyIdentity.CompareTo(obj2.AssemblyIdentity);
         }
     }
 }

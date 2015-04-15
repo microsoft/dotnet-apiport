@@ -12,6 +12,8 @@ namespace Microsoft.Fx.Portability.Analysis
 {
     public class AnalysisEngine : IAnalysisEngine
     {
+        internal const string FullFrameworkIdentifier = ".NET Framework";
+
         private readonly IApiCatalogLookup _catalog;
         private readonly IApiRecommendations _recommendations;
 
@@ -19,6 +21,63 @@ namespace Microsoft.Fx.Portability.Analysis
         {
             _catalog = catalog;
             _recommendations = recommendations;
+        }
+
+        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        {
+            // Only proceed to find breaking changes for full .NET Framework (that's where they are applicable)
+            var fullFrameworkVersions = targets
+                .Where(t => string.Equals(t.Identifier, FullFrameworkIdentifier, StringComparison.OrdinalIgnoreCase))
+                .Select(t => t.Version)
+                .ToList();
+
+            if (!fullFrameworkVersions.Any())
+            {
+                yield break;
+            }
+
+            foreach (var kvp in dependencies)
+            {
+                if (MemberIsInFramework(kvp.Key))
+                {
+                    var breakingChanges = _recommendations.GetBreakingChanges(kvp.Key.MemberDocId).Distinct();
+                    foreach (var b in breakingChanges)
+                    {
+                        if (BreakingChangeIsInVersionRange(fullFrameworkVersions, b))
+                        {
+                            foreach (var a in kvp.Value)
+                            {
+                                yield return new BreakingChangeDependency
+                                {
+                                    Break = b,
+                                    DependantAssembly = a,
+                                    Member = kvp.Key
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static bool BreakingChangeIsInVersionRange(IEnumerable<Version> targetVersions, BreakingChange breakingChange)
+        {
+            foreach (var targetVersion in targetVersions)
+            {
+                // Include breaking changes that were broken before a target version and fixed after it,
+                // and also breaking changes that were introduced in a targeted version, _even if they were fixed in that same version_
+                //
+                // Some breaking changes have VersionBroken==VersionFixed if the break was corrected in GDR-level servicing. We want to report those to
+                // users who are targeting that version so that they understand the importance of updating their NetFX via WU (or whatever
+                // enterprise-specific patch rollout system they have).
+                if (targetVersion == breakingChange.VersionBroken ||
+                    (targetVersion > breakingChange.VersionBroken && (breakingChange.VersionFixed == null || targetVersion < breakingChange.VersionFixed)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
@@ -38,7 +97,7 @@ namespace Microsoft.Fx.Portability.Analysis
             //  -- Keep only the members that are not supported on at least one of the targets.
 
             var missingMembers = dependencies.Keys
-                .Where(dep => _catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(dep.DefinedInAssemblyIdentity)) && _catalog.IsFrameworkMember(dep.MemberDocId))
+                .Where(MemberIsInFramework)
                 .AsParallel()
                 .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
                 .Where(memberInfo => !memberInfo.IsSupportedAcrossTargets)
@@ -48,6 +107,11 @@ namespace Microsoft.Fx.Portability.Analysis
             Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
 
             return missingMembers;
+        }
+
+        private bool MemberIsInFramework(MemberInfo dep)
+        {
+            return _catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(dep.DefinedInAssemblyIdentity)) && _catalog.IsFrameworkMember(dep.MemberDocId);
         }
 
         /// <summary>
@@ -146,6 +210,21 @@ namespace Microsoft.Fx.Portability.Analysis
             }
 
             return false;
+        }
+
+        private class MemberInfoBreakingChangeComparer : IEqualityComparer<Tuple<MemberInfo, BreakingChange>>
+        {
+            public static IEqualityComparer<Tuple<MemberInfo, BreakingChange>> Instance = new MemberInfoBreakingChangeComparer();
+
+            public bool Equals(Tuple<MemberInfo, BreakingChange> x, Tuple<MemberInfo, BreakingChange> y)
+            {
+                return x.Item1.Equals(y.Item1);
+            }
+
+            public int GetHashCode(Tuple<MemberInfo, BreakingChange> obj)
+            {
+                return obj.Item1.GetHashCode();
+            }
         }
     }
 }

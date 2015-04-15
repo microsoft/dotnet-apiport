@@ -18,6 +18,7 @@ namespace Microsoft.Fx.Portability
     {
         public static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
+            Formatting = Formatting.Indented,
             Converters = new JsonConverter[]
             {
                 new JsonMultiDictionaryConverter<MemberInfo, AssemblyInfo>(),

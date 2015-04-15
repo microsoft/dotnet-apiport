@@ -4,10 +4,8 @@
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,14 +34,14 @@ namespace Microsoft.Fx.Portability
             return await CallInternalAsync<TResponse>(request);
         }
 
-        public async Task<ServiceResponse<byte[]>> CallAsync(HttpMethod method, string requestUri, ResultFormat format)
+        public async Task<ServiceResponse<byte[]>> CallAsync(HttpMethod method, string requestUri, ResultFormatInformation format)
         {
             var request = new HttpRequestMessage(method, requestUri);
 
             return await CallInternalAsync(request, format);
         }
 
-        public async Task<ServiceResponse<byte[]>> CallAsync<TRequest>(HttpMethod method, string requestUri, TRequest requestData, ResultFormat format)
+        public async Task<ServiceResponse<byte[]>> CallAsync<TRequest>(HttpMethod method, string requestUri, TRequest requestData, ResultFormatInformation format)
         {
 #if SILVERLIGHT
             var content = requestData.Serialize();
@@ -101,13 +99,20 @@ namespace Microsoft.Fx.Portability
 
         private async Task<ServiceResponse<TResponse>> CallInternalAsync<TResponse>(HttpRequestMessage request)
         {
-            var response = await CallInternalAsync(request, ResultFormat.Json);
+            var json = new ResultFormatInformation
+            {
+                DisplayName = "Json",
+                MimeType = "application/json",
+                FileExtension = ".json"
+            }; ;
+
+            var response = await CallInternalAsync(request, json);
             var result = response.Response.Deserialize<TResponse>();
 
             return new ServiceResponse<TResponse>(result, response.Headers);
         }
 
-        private async Task<ServiceResponse<byte[]>> CallInternalAsync(HttpRequestMessage request, ResultFormat format)
+        private async Task<ServiceResponse<byte[]>> CallInternalAsync(HttpRequestMessage request, ResultFormatInformation format)
         {
             try
             {
@@ -116,7 +121,7 @@ namespace Microsoft.Fx.Portability
                     request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
 
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(format.GetMIMEType()));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(format.MimeType));
 
                 HttpResponseMessage response = await SendAsync(request);
 

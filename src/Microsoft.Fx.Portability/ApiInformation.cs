@@ -30,10 +30,15 @@ namespace Microsoft.Fx.Portability
         }
 
         public ApiDefinition Definition { get; set; }
+
         public IEnumerable<FrameworkName> Supported { get; set; }
+
         public IEnumerable<ApiNote> AdditionalInformation { get; set; }
+
         public string RecommendedChanges { get; set; }
+
         public string SourceCompatibleChanges { get; set; }
+
         public string Component { get; set; }
 
         public override int GetHashCode()
@@ -54,24 +59,6 @@ namespace Microsoft.Fx.Portability
                 && string.Equals(RecommendedChanges, other.RecommendedChanges, StringComparison.Ordinal)
                 && string.Equals(SourceCompatibleChanges, other.SourceCompatibleChanges, StringComparison.Ordinal)
                 && string.Equals(Component, other.Component, StringComparison.Ordinal);
-        }
-    }
-
-    public class ApiNote : IComparable<ApiNote>
-    {
-        public string Title { get; set; }
-        public string Html { get; set; }
-        public IEnumerable<string> ApplicableApis { get; set; }
-        public IEnumerable<string> RelatedNotes { get; set; }
-
-        public int CompareTo(ApiNote other)
-        {
-            if (other == null)
-            {
-                return -1;
-            }
-
-            return string.CompareOrdinal(Title, other.Title);
         }
     }
 }

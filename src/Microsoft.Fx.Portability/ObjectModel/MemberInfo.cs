@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public sealed class MemberInfo
+    public sealed class MemberInfo : IComparable
     {
         private bool _hashComputed;
         private int _hashCode;
@@ -80,6 +80,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashComputed = true;
             }
             return _hashCode;
+        }
+
+        public int CompareTo(object obj)
+        {
+            var obj2 = obj as MemberInfo;
+            return MemberDocId.CompareTo(obj2.MemberDocId);
         }
     }
 }

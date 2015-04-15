@@ -1,6 +1,9 @@
-﻿using Microsoft.Fx.Portability.ObjectModel;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,27 +13,26 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel
 {
-    [TestClass]
     public class TargetInformationTests
     {
-        [TestMethod]
+        [Fact]
         public void NotNullExpandedTargets()
         {
             var info = new TargetInformation();
 
-            Assert.IsNotNull(info.ExpandedTargets);
+            Assert.NotNull(info.ExpandedTargets);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToStringNoExpandedTargets()
         {
             const string name = "name";
             var info = new TargetInformation { Name = name };
 
-            Assert.AreEqual(name, info.ToString());
+            Assert.Equal(name, info.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void ToStringWithExpandedTargets()
         {
             const string group = "name";
@@ -41,7 +43,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
             var info = new TargetInformation { Name = group, ExpandedTargets = expandedTargets };
 
             var groupedToString = String.Format(LocalizedStrings.TargetInformationGroups, group, String.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ", expandedTargets));
-            Assert.AreEqual(groupedToString, info.ToString());
+            Assert.Equal(groupedToString, info.ToString());
         }
     }
 }

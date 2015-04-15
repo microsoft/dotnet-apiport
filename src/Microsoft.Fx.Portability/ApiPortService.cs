@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
-using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,6 +19,7 @@ namespace Microsoft.Fx.Portability
             internal const string UsedApi = "/api/usage";
             internal const string FxApi = "/api/fxapi";
             internal const string FxApiSearch = "/api/fxapi/search";
+            internal const string ResultFormat = "/api/resultformat";
         }
 
         private readonly CompressedHttpClient _client;
@@ -41,11 +42,12 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<AnalyzeRequest, AnalyzeResponse>(HttpMethod.Post, sendAnalysis, a);
         }
 
-        public async Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, ResultFormat format)
+        public async Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, string format)
         {
-            string sendAnalysis = _endpoint + Endpoints.Analyze;
+            var formatInformation = await GetResultFormat(format);
+            var sendAnalysis = _endpoint + Endpoints.Analyze;
 
-            return await _client.CallAsync(HttpMethod.Post, sendAnalysis, a, format);
+            return await _client.CallAsync(HttpMethod.Post, sendAnalysis, a, formatInformation);
         }
 
         public async Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
@@ -74,11 +76,12 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<AnalyzeResponse>(HttpMethod.Get, submissionUrl);
         }
 
-        public async Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, ResultFormat format)
+        public async Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
         {
+            var formatInformation = await GetResultFormat(format);
             var submissionUrl = UrlBuilder.Create(_endpoint + Endpoints.Analyze).AddPath(submissionId).Url;
 
-            return await _client.CallAsync(HttpMethod.Get, submissionUrl, format);
+            return await _client.CallAsync(HttpMethod.Get, submissionUrl, formatInformation);
         }
 
         public async Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId)
@@ -101,9 +104,29 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<IReadOnlyCollection<ApiDefinition>>(HttpMethod.Get, url.Url);
         }
 
+        public async Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
+        {
+            string url = _endpoint + Endpoints.ResultFormat;
+
+            return await _client.CallAsync<IEnumerable<ResultFormatInformation>>(HttpMethod.Get, url);
+        }
+
         public void Dispose()
         {
             _client.Dispose();
+        }
+
+        private async Task<ResultFormatInformation> GetResultFormat(string format)
+        {
+            var formats = await GetResultFormatsAsync();
+            var formatInformation = formats.Response.FirstOrDefault(r => string.Equals(r.DisplayName, format, StringComparison.OrdinalIgnoreCase));
+
+            if (formatInformation == null)
+            {
+                throw new UnknownReportFormatException(format);
+            }
+
+            return formatInformation;
         }
     }
 }

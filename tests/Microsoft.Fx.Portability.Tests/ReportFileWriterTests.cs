@@ -1,70 +1,60 @@
-﻿using Microsoft.Fx.Portability.Reporting;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    [TestClass]
     public class ReportFileWriterTests
     {
-        [TestMethod]
-        public void UniquelyNamedFileStream_FileExists_AppendsNumberToName()
+        [Fact]
+        public async Task UniquelyNamedFileStream_FileExists_AppendsNumberToName()
         {
             var dir = "dir";
             var fileName = "file";
-
-            var format = ResultFormat.HTML;
-            var extension = ".htm";
+            var extension = ".html";
 
             var path = Path.Combine(dir, Path.ChangeExtension(fileName, extension));
 
             var progressReporter = Substitute.For<IProgressReporter>();
             var fileSystem = Substitute.ForPartsOf<WindowsFileSystem>();
+
             fileSystem.FileExists(path).Returns(true);
+            fileSystem.CreateFile(Arg.Any<string>()).Returns(x => new MemoryStream());
 
             var expectedResult = Path.Combine(dir, string.Concat(fileName, "(1)", extension));
-
-            var exception = new IOException("this avoids having to fake more of the filesystem");
-            fileSystem.CreateFile(Arg.Any<string>()).Returns(x => { throw exception; });
-
             var writer = new ReportFileWriter(fileSystem, progressReporter);
             var report = Encoding.UTF8.GetBytes("This is a test report.");
 
-            string reportPath = null;
-            try
-            {
-                reportPath = writer.WriteReportAsync(report, format, dir, fileName, overwrite: false).Result;
-            }
-            catch (IOException e)
-            {
-                if (e != exception)
-                {
-                    Assert.Fail();
-                }
-            }
+            var reportPath = await writer.WriteReportAsync(report, extension, dir, fileName, overwrite: false);
 
-            Assert.IsTrue(string.IsNullOrEmpty(reportPath));
+            Assert.Equal(expectedResult, reportPath);
+
+            fileSystem.Received(1).CreateFile(Arg.Any<string>());
             fileSystem.Received().CreateFile(expectedResult);
         }
 
-        [TestMethod]
-        public void UniquelyNamedFileStream_NumberedFileExists_IncrementsNumberInNewName()
+        [Fact]
+        public async Task UniquelyNamedFileStream_NumberedFileExists_IncrementsNumberInNewName()
         {
+            const int FileExistsCount = 11;
             var dir = "dir";
             var fileName = "file";
             var fileNameFormat = fileName + "({0})";
-
-            var format = ResultFormat.Excel;
             var extension = ".xlsx";
             var path = Path.Combine(dir, Path.ChangeExtension(fileName, extension));
 
-
-            var fileSystem = Substitute.ForPartsOf<WindowsFileSystem>();
+            var fileSystem = Substitute.For<IFileSystem>();
             var progressReporter = Substitute.For<IProgressReporter>();
+
+            fileSystem.CombinePaths(Arg.Any<string[]>()).Returns(a => Path.Combine(a.Arg<string[]>()));
+            fileSystem.CreateFile(Arg.Any<string>()).Returns(x => new MemoryStream());
 
             int fileNumber = 1;
             do
@@ -72,39 +62,25 @@ namespace Microsoft.Fx.Portability.Tests
                 fileSystem.FileExists(path).Returns(true);
                 var nextFileName = string.Format(fileNameFormat, fileNumber);
                 path = Path.Combine(dir, Path.ChangeExtension(nextFileName, extension));
-            } while (fileNumber++ < 11);
-
-            var exception = new IOException("this avoids having to fake more of the filesystem");
-            fileSystem.CreateFile(Arg.Any<string>()).Returns(x => { throw exception; });
+            } while (fileNumber++ < FileExistsCount);
 
             var writer = new ReportFileWriter(fileSystem, progressReporter);
             var report = Encoding.UTF8.GetBytes("This is a test report.");
 
-            string reportPath = null;
-            try
-            {
-                reportPath = writer.WriteReportAsync(report, format, dir, fileName, overwrite: false).Result;
-            }
-            catch (IOException e)
-            {
-                if (e != exception)
-                {
-                    Assert.Fail();
-                }
-            }
+            var reportPath = await writer.WriteReportAsync(report, extension, dir, fileName, overwrite: false);
 
+            Assert.Equal(path, reportPath);
+
+            fileSystem.Received(1).CreateFile(Arg.Any<string>());
             fileSystem.Received().CreateFile(path);
-            Assert.IsTrue(string.IsNullOrEmpty(reportPath));
         }
 
-        [TestMethod]
-        public void VerifyReportHTMLContents()
+        [Fact]
+        public async Task VerifyReportHTMLContents()
         {
             var dir = "dir";
             var fileName = "file";
-
-            var format = ResultFormat.HTML;
-            var extension = ".htm";
+            var extension = ".html";
 
             var path = Path.Combine(dir, Path.ChangeExtension(fileName, extension));
 
@@ -120,13 +96,42 @@ namespace Microsoft.Fx.Portability.Tests
             var report = "This is a test report.";
             var reportArray = Encoding.UTF8.GetBytes(report);
 
-            string reportPath = writer.WriteReportAsync(reportArray, format, dir, fileName, overwrite: false).Result;
+            string reportPath = await writer.WriteReportAsync(reportArray, extension, dir, fileName, overwrite: false);
 
+            fileSystem.Received(1).CreateFile(Arg.Any<string>());
             fileSystem.Received().CreateFile(expectedResult);
-            Assert.AreEqual(expectedResult, reportPath);
+            Assert.Equal(expectedResult, reportPath);
 
             byte[] writtenBytes = memoryStream.ToArray();
-            Assert.AreEqual(report, Encoding.UTF8.GetString(writtenBytes));
+            Assert.Equal(report, Encoding.UTF8.GetString(writtenBytes));
+        }
+
+        [Fact]
+        public async Task DoNotUpdateExtensionIfInputExtensionIsEmpty()
+        {
+            var dir = "dir";
+            var fileName = "file.test";
+            var extension = string.Empty;
+
+            var path = Path.Combine(dir, fileName);
+
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var memoryStream = new MemoryStream();
+            var fileSystem = Substitute.ForPartsOf<WindowsFileSystem>();
+            fileSystem.CreateFile(Arg.Any<string>()).Returns(memoryStream);
+
+            var writer = new ReportFileWriter(fileSystem, progressReporter);
+            var report = "This is a test report.";
+            var reportArray = Encoding.UTF8.GetBytes(report);
+
+            string reportPath = await writer.WriteReportAsync(reportArray, extension, dir, fileName, overwrite: false);
+
+            fileSystem.Received(1).CreateFile(Arg.Any<string>());
+            fileSystem.Received().CreateFile(path);
+            Assert.Equal(path, reportPath);
+
+            byte[] writtenBytes = memoryStream.ToArray();
+            Assert.Equal(report, Encoding.UTF8.GetString(writtenBytes));
         }
     }
 }

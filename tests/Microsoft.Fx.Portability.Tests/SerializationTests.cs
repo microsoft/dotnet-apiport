@@ -1,5 +1,8 @@
-﻿using Microsoft.Fx.Portability.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability.ObjectModel;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,10 +12,9 @@ using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    [TestClass]
     public class SerializationTests
     {
-        [TestMethod]
+        [Fact]
         public void SerializeAnalyzeRequest()
         {
             var request = new AnalyzeRequest
@@ -32,7 +34,7 @@ namespace Microsoft.Fx.Portability.Tests
             CompareAnalyzeRequest(request, dcjs);
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializeAnalyzeResponse()
         {
             var response = new AnalyzeResponse
@@ -51,7 +53,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void SerializeAnalyzeV1Response()
         {
             var response = new AnalyzeResponse
@@ -69,10 +71,9 @@ namespace Microsoft.Fx.Portability.Tests
 
             CompareAnalyzeResponseV1(v1, newtonsoft);
             CompareAnalyzeResponseV1(v1, dcjs);
-
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializeProjectSubmission()
         {
             var submission1 = new ProjectSubmission { Name = "test1", Length = 10, SubmittedDate = new DateTime(10, 1, 4) };
@@ -87,7 +88,7 @@ namespace Microsoft.Fx.Portability.Tests
             CollectionAssertAreEquivalent(list, deserialized);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFrameworkNames()
         {
             VerifySerialization(new FrameworkName("name", new Version("1.2.3.4")));
@@ -98,7 +99,7 @@ namespace Microsoft.Fx.Portability.Tests
             VerifySerialization(new FrameworkName("name", new Version("1.0")));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestVersion()
         {
             VerifySerialization(new Version("1.2.3.4"));
@@ -109,7 +110,7 @@ namespace Microsoft.Fx.Portability.Tests
             VerifySerialization(new Version("1.0"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestEmptyValues()
         {
             VerifyEmptySerialized<AnalyzeRequest>();
@@ -130,7 +131,7 @@ namespace Microsoft.Fx.Portability.Tests
 
         private static void CollectionAssertAreEquivalent<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
-            CollectionAssert.AreEquivalent(expected.ToList(), actual.ToList());
+            Assert.Equal<IEnumerable<T>>(expected.ToList().OrderBy(k => k), actual.ToList().OrderBy(k => k));
         }
 
         private static byte[] SerializeDcjs<T>(T obj)
@@ -156,19 +157,19 @@ namespace Microsoft.Fx.Portability.Tests
         {
             var deserialized = "".Serialize().Deserialize<T>();
 
-            Assert.IsNull(deserialized, "Failed to deserialize empty: {0}", typeof(T).FullName);
+            Assert.Null(deserialized);
         }
 
         private static void VerifySerialization<T>(T o)
         {
             var deserialized = o.Serialize().Deserialize<T>();
 
-            Assert.AreEqual(o, deserialized);
+            Assert.Equal(o, deserialized);
         }
 
         private static void CompareAnalyzeRequest(AnalyzeRequest request, AnalyzeRequest deserialized)
         {
-            Assert.AreEqual(request.ApplicationName, deserialized.ApplicationName);
+            Assert.Equal(request.ApplicationName, deserialized.ApplicationName);
 
             // Verify dependencies
             CollectionAssertAreEquivalent(request.Dependencies.Keys, deserialized.Dependencies.Keys);
@@ -178,16 +179,16 @@ namespace Microsoft.Fx.Portability.Tests
                 CollectionAssertAreEquivalent(request.Dependencies[item], deserialized.Dependencies[item]);
             }
 
-            CollectionAssert.AreEquivalent(request.Targets.ToList(), deserialized.Targets.ToList());
-            CollectionAssert.AreEquivalent(request.UnresolvedAssemblies.ToList(), deserialized.UnresolvedAssemblies.ToList());
-            CollectionAssert.AreEquivalent(request.UserAssemblies.ToList(), deserialized.UserAssemblies.ToList());
-            Assert.AreEqual(request.Version, deserialized.Version);
+            Assert.Equal<List<string>>(request.Targets.OrderBy(k => k).ToList(), deserialized.Targets.OrderBy(k => k).ToList());
+            Assert.Equal<List<string>>(request.UnresolvedAssemblies.OrderBy(k => k).ToList(), deserialized.UnresolvedAssemblies.OrderBy(k => k).ToList());
+            Assert.Equal<List<AssemblyInfo>>(request.UserAssemblies.OrderBy(k => k.AssemblyIdentity).ToList(), deserialized.UserAssemblies.OrderBy(k => k.AssemblyIdentity).ToList());
+            Assert.Equal(request.Version, deserialized.Version);
         }
 
         private static void CompareAnalyzeResponse(AnalyzeResponse response, AnalyzeResponse deserialized)
         {
             CollectionAssertAreEquivalent(response.MissingDependencies, deserialized.MissingDependencies);
-            Assert.AreEqual(response.SubmissionId, deserialized.SubmissionId);
+            Assert.Equal(response.SubmissionId, deserialized.SubmissionId);
             CollectionAssertAreEquivalent(response.Targets, deserialized.Targets);
             CollectionAssertAreEquivalent(response.UnresolvedUserAssemblies, deserialized.UnresolvedUserAssemblies);
         }
@@ -195,7 +196,7 @@ namespace Microsoft.Fx.Portability.Tests
         private static void CompareAnalyzeResponseV1(AnalyzeResponseV1 response, AnalyzeResponseV1 deserialized)
         {
             CollectionAssertAreEquivalent(response.MissingDependencies, deserialized.MissingDependencies);
-            Assert.AreEqual(response.SubmissionId, deserialized.SubmissionId);
+            Assert.Equal(response.SubmissionId, deserialized.SubmissionId);
             CollectionAssertAreEquivalent(response.Targets, deserialized.Targets);
             CollectionAssertAreEquivalent(response.UnresolvedUserAssemblies, deserialized.UnresolvedUserAssemblies);
         }

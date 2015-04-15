@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,15 +19,17 @@ namespace Microsoft.Fx.Portability
         private readonly IProgressReporter _progressReport;
         private readonly ITargetMapper _targetMapper;
         private readonly IDependencyFinder _dependencyFinder;
+        private readonly IReportGenerator _reportGenerator;
 
         public ITargetMapper TargetMapper { get { return _targetMapper; } }
 
-        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder)
+        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator)
         {
             _apiPortService = apiPortService;
             _progressReport = progressReport;
             _targetMapper = targetMapper;
             _dependencyFinder = dependencyFinder;
+            _reportGenerator = reportGenerator;
         }
 
         public async Task<ReportingResult> AnalyzeAssemblies(IApiPortOptions options)
@@ -47,7 +50,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        public async Task<byte[]> GetAnalysisReportAsync(IApiPortOptions options)
+        public async Task<IEnumerable<byte[]>> GetAnalysisReportAsync(IApiPortOptions options)
         {
             IDependencyInfo dependencyFinderEngine = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
@@ -55,19 +58,58 @@ namespace Microsoft.Fx.Portability
             {
                 AnalyzeRequest request = GenerateRequest(options, dependencyFinderEngine);
 
-                return await GetResultFromService(request, options.OutputFormat);
+                var tasks = options.OutputFormats
+                    .Select(f => GetResultFromService(request, f))
+                    .ToList();
+
+                await Task.WhenAll(tasks);
+
+                return tasks.Select(t => t.Result).ToList();
             }
             else
             {
                 _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
 
-                return null;
+                return Enumerable.Empty<byte[]>();
+            }
+        }
+
+        public async Task<string> GetExtensionForFormat(string format)
+        {
+            var outputFormats = await _apiPortService.GetResultFormatsAsync();
+            var outputFormat = outputFormats.Response.FirstOrDefault(f => string.Equals(format, f.DisplayName, StringComparison.OrdinalIgnoreCase));
+
+            if (outputFormat == null)
+            {
+                throw new UnknownReportFormatException(format);
+            }
+
+            return outputFormat.FileExtension;
+        }
+
+        public async Task<IEnumerable<string>> ListResultFormatsAsync()
+        {
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
+            {
+                try
+                {
+                    var outputFormats = await _apiPortService.GetResultFormatsAsync();
+
+                    CheckEndpointStatus(outputFormats.Headers.Status);
+
+                    return outputFormats.Response.Select(r => r.DisplayName).ToList();
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
             }
         }
 
         private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyFinder)
         {
-            AnalyzeRequest request = new AnalyzeRequest
+            return new AnalyzeRequest
             {
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
                 Dependencies = dependencyFinder.Dependencies,
@@ -77,14 +119,8 @@ namespace Microsoft.Fx.Portability
                 AssembliesWithErrors = dependencyFinder.AssembliesWithErrors.ToList(),
                 ApplicationName = options.Description,
                 Version = AnalyzeRequest.CurrentVersion,
+                RequestFlags = options.RequestFlags
             };
-
-            if (options.NoTelemetry)
-            {
-                request.RequestFlags |= AnalyzeRequestFlags.NoTelemetry;
-            }
-
-            return request;
         }
 
         /// <summary>
@@ -93,33 +129,74 @@ namespace Microsoft.Fx.Portability
         /// <returns>Set of APIs/assemblies that are not portable/missing.</returns>
         private async Task<ReportingResult> GetResultFromService(AnalyzeRequest request, IDependencyInfo dependencyFinder)
         {
-            _progressReport.StartTask(LocalizedStrings.SendingDataToService);
-            var response = await _apiPortService.SendAnalysisAsync(request);
-            _progressReport.FinishTask();
+            var fullResponse = await RetrieveResultAsync(request);
 
-            CheckEndpointStatus(response.Headers.Status);
+            CheckEndpointStatus(fullResponse.Headers.Status);
 
-            _progressReport.StartParallelTask(LocalizedStrings.ComputingReport, LocalizedStrings.ProcessedItems);
-            ReportingResult result = GenerateReportData.ComputeReport(response, dependencyFinder, _progressReport);
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.ComputingReport))
+            {
+                try
+                {
+                    var response = fullResponse.Response;
+                    var hasDependencyFinder = dependencyFinder != null;
 
-            _progressReport.FinishTask();
+                    return _reportGenerator.ComputeReport(
+                        response.Targets,
+                        response.SubmissionId,
+                        request.RequestFlags,
+                        hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
+                        response.MissingDependencies,
+                        hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies
+                        response.UnresolvedUserAssemblies,
+                        hasDependencyFinder ? dependencyFinder.AssembliesWithErrors : null //assembliesWithErrors
+                    );
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
+        }
 
-            return result;
+        private async Task<ServiceResponse<AnalyzeResponse>> RetrieveResultAsync(AnalyzeRequest request)
+        {
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            {
+                try
+                {
+                    return await _apiPortService.SendAnalysisAsync(request);
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
         }
 
         /// <summary>
         /// Gets the Portability report for the request.
         /// </summary>
         /// <returns>An array of bytes corresponding to the report.</returns>
-        private async Task<byte[]> GetResultFromService(AnalyzeRequest request, ResultFormat format)
+        private async Task<byte[]> GetResultFromService(AnalyzeRequest request, string format)
         {
-            _progressReport.StartTask(LocalizedStrings.SendingDataToService);
-            var response = await _apiPortService.SendAnalysisAsync(request, format);
-            _progressReport.FinishTask();
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            {
+                try
+                {
+                    var response = await _apiPortService.SendAnalysisAsync(request, format);
 
-            CheckEndpointStatus(response.Headers.Status);
+                    CheckEndpointStatus(response.Headers.Status);
 
-            return response.Response;
+                    return response.Response;
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -136,15 +213,22 @@ namespace Microsoft.Fx.Portability
 
         public async Task<IEnumerable<AvailableTarget>> ListTargets()
         {
-            _progressReport.StartTask(LocalizedStrings.RetrievingTargets);
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingTargets))
+            {
+                try
+                {
+                    var targets = await _apiPortService.GetTargetsAsync();
 
-            var targets = await _apiPortService.GetTargetsAsync();
+                    CheckEndpointStatus(targets.Headers.Status);
 
-            _progressReport.FinishTask();
-
-            CheckEndpointStatus(targets.Headers.Status);
-
-            return targets.Response;
+                    return targets.Response;
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
         }
     }
 }

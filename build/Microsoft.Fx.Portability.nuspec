@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkId=329770</licenseUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+    <copyright>Copyright © Microsoft Corporation</copyright>
+    <tags>Microsoft</tags>
+  </metadata>
+  <files>
+    <file src="net45\Microsoft.Fx.Portability.dll" target="lib\net45" />
+    <file src="net45\Microsoft.Fx.Portability.pdb" target="lib\net45" />
+    <file src="net45\Microsoft.Fx.Portability.xml" target="lib\net45" />
+    
+    <file src="aspnet50\Microsoft.Fx.Portability.dll" target="lib\aspnet50" />
+    <file src="aspnet50\Microsoft.Fx.Portability.pdb" target="lib\aspnet50" />
+    <file src="aspnet50\Microsoft.Fx.Portability.xml" target="lib\aspnet50" />
+    
+    <file src="aspnetcore50\Microsoft.Fx.Portability.dll" target="lib\aspnetcore50" />
+    <file src="aspnetcore50\Microsoft.Fx.Portability.pdb" target="lib\aspnetcore50" />
+    <file src="aspnetcore50\Microsoft.Fx.Portability.xml" target="lib\aspnetcore50" />
+  </files>
+</package>
