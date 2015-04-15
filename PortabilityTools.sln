@@ -34,8 +34,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability-ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.MetadataReader", "src\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj", "{1D15D4CC-7BCA-4917-8160-8586B9F115F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.MetadataReader.Tests", "tests\Microsoft.Fx.Portability.MetadataReader.Tests\Microsoft.Fx.Portability.MetadataReader.Tests.csproj", "{B44085A7-0DCD-4CE2-BDD9-B2E5268DCCCC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,10 +64,6 @@ Global
 		{1D15D4CC-7BCA-4917-8160-8586B9F115F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D15D4CC-7BCA-4917-8160-8586B9F115F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D15D4CC-7BCA-4917-8160-8586B9F115F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B44085A7-0DCD-4CE2-BDD9-B2E5268DCCCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B44085A7-0DCD-4CE2-BDD9-B2E5268DCCCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B44085A7-0DCD-4CE2-BDD9-B2E5268DCCCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B44085A7-0DCD-4CE2-BDD9-B2E5268DCCCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +75,5 @@ Global
 		{5A2EAD0F-FF3E-4968-A865-7B29C4B10A72} = {6234AABE-C4F3-4094-9C0D-FFD589235DBE}
 		{FC1429E3-46C3-49ED-B99F-B45E1CCFB86B} = {6234AABE-C4F3-4094-9C0D-FFD589235DBE}
 		{1D15D4CC-7BCA-4917-8160-8586B9F115F8} = {6234AABE-C4F3-4094-9C0D-FFD589235DBE}
-		{B44085A7-0DCD-4CE2-BDD9-B2E5268DCCCC} = {7DC7AA2C-0401-495B-B42C-32F44085EBE6}
 	EndGlobalSection
 EndGlobal
