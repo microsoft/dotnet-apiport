@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Fx.Portability", "src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.kproj", "{C1E232EA-AC27-4D0B-9C71-7A24BE65636D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C991F5FC-04B5-420C-98A0-80974AA946F7}"
 	ProjectSection(SolutionItems) = preProject
 		CreateLocalizedStrings.ps1 = CreateLocalizedStrings.ps1
@@ -15,18 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global_1json__JSONSchema = http://json.schemastore.org/global
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Fx.Portability.Tests", "tests\Microsoft.Fx.Portability.Tests\Microsoft.Fx.Portability.Tests.kproj", "{6900A49C-D463-43E2-AB21-487E8B73EF5C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E232EA-AC27-4D0B-9C71-7A24BE65636D} = {C1E232EA-AC27-4D0B-9C71-7A24BE65636D}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6234AABE-C4F3-4094-9C0D-FFD589235DBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7DC7AA2C-0401-495B-B42C-32F44085EBE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F8292A68-AF7C-4B26-B1B8-B232548EF118}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SearchFxApi", "samples\SearchFxApi\SearchFxApi.kproj", "{C556C618-D062-4988-9379-99A716D8F2C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort", "src\ApiPort\ApiPort.csproj", "{5A2EAD0F-FF3E-4968-A865-7B29C4B10A72}"
 EndProject

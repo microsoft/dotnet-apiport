@@ -96,7 +96,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 _userAssemblies.Add(helper.CallingAssembly);
 
                 if (helper != null)
-                    return helper.memberDependency;
+                    return helper.MemberDependency;
                 else
                     return null;
             }

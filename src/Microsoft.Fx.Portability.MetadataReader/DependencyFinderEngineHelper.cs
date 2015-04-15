@@ -17,8 +17,6 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly MetadataReader _reader;
         private readonly string _assemblyLocation;
 
-        public AssemblyInfo CallingAssembly { get; private set; }
-        public List<MemberDependency> memberDependency = new List<MemberDependency>();
         private string _currentAssemblyInfo;
         private string _currentAssemblyName;
         private string _assemblyInfoForPrimitives = null;
@@ -27,33 +25,42 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             _reader = metadataReader;
             _assemblyLocation = assemblyPath;
+
+            MemberDependency = new List<MemberDependency>();
+            CallingAssembly = GetAssemblyInfo();
         }
+
+        public AssemblyInfo CallingAssembly { get; }
+
+        public IList<MemberDependency> MemberDependency { get; }
 
         public void ComputeData()
         {
-            //get assembly info
-            CallingAssembly = GetAssemblyInfo();
+            // Get assembly info
             _currentAssemblyInfo = GetCurrentAssemblyInfo();
 
-            //get type references
+            // Get type references
             foreach (var handle in _reader.TypeReferences)
             {
                 var entry = _reader.GetTypeReference(handle);
 
-                MemberDependency dep = GetTypeReferenceMemberDependency(entry);
-                if (dep != null)
-                    memberDependency.Add(dep);
+                var typeReferenceMemberDependency = GetTypeReferenceMemberDependency(entry);
+                if (typeReferenceMemberDependency != null)
+                {
+                    MemberDependency.Add(typeReferenceMemberDependency);
+                }
             }
 
-
-            //get member references
+            // Get member references
             foreach (var handle in _reader.MemberReferences)
             {
                 var entry = _reader.GetMemberReference(handle);
 
-                MemberDependency dep = GetMemberReferenceMemberDependency(entry);
-                if (dep != null)
-                    memberDependency.Add(dep);
+                var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry);
+                if (memberReferenceMemberDependency != null)
+                {
+                    this.MemberDependency.Add(memberReferenceMemberDependency);
+                }
             }
         }
 
@@ -92,7 +99,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                     for (int i = 0; i < attribute.ConstructorArguments.Count; i++)
                     {
                         if (i > 0)
+                        {
                             targetFramework += ", ";
+                        }
+
                         targetFramework += attribute.ConstructorArguments[i].ToString().Trim(new char[] { '\"' });
                     }
                     break;
@@ -110,8 +120,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private MemberDependency CreateMemberDependency(MemberMetadataInfo type)
         {
-            MemberDependency dep = new MemberDependency();
-            dep.CallingAssembly = CallingAssembly;
+            var memberDependency = new MemberDependency { CallingAssembly = CallingAssembly };
 
             if (type.IsPrimitiveType && _assemblyInfoForPrimitives == null)
             {
@@ -121,14 +130,18 @@ namespace Microsoft.Fx.Portability.Analyzer
                     _assemblyInfoForPrimitives = _currentAssemblyInfo;
             }
 
-            dep.MemberDocId = "T:" + type.ToString(); ;
+            memberDependency.MemberDocId = "T:" + type.ToString(); ;
 
             if (type.IsAssemblySet)
-                dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
+            {
+                memberDependency.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
+            }
             else
-                dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
+            {
+                memberDependency.DefinedInAssemblyIdentity = _currentAssemblyInfo;
+            }
 
-            return dep;
+            return memberDependency;
         }
 
         private MemberDependency GetMemberReferenceMemberDependency(MemberReference memberReference)
@@ -138,7 +151,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             //add the parent type to the types list (only needed when we want to report memberrefs defined in the current assembly)
             if (memberRefInfo.ParentType.IsTypeDef || (memberRefInfo.ParentType.IsPrimitiveType && _currentAssemblyName.Equals("mscorlib", StringComparison.InvariantCultureIgnoreCase)))
-                memberDependency.Add(CreateMemberDependency(memberRefInfo.ParentType));
+                MemberDependency.Add(CreateMemberDependency(memberRefInfo.ParentType));
 
             dep.CallingAssembly = CallingAssembly;
 
@@ -161,11 +174,17 @@ namespace Microsoft.Fx.Portability.Analyzer
             dep.TypeDocId = "T:" + memberRefInfo.ParentType.ToString();
 
             if (memberRefInfo.ParentType.IsAssemblySet)
+            {
                 dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(memberRefInfo.ParentType.DefinedInAssembly);
+            }
             else if (memberRefInfo.ParentType.IsPrimitiveType)  //if it is primitive type, the assembly is not set
+            {
                 dep.DefinedInAssemblyIdentity = _assemblyInfoForPrimitives;
+            }
             else
+            {
                 dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
+            }
 
             return dep;
         }
