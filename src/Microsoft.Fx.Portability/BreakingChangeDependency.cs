@@ -10,7 +10,7 @@ namespace Microsoft.Fx.Portability
     {
         public MemberInfo Member { get; set; }
         public BreakingChange Break { get; set; }
-        public AssemblyInfo DependantAssembly{ get; set; }
+        public AssemblyInfo DependantAssembly { get; set; }
 
         public bool Equals(BreakingChangeDependency other)
         {

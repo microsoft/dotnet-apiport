@@ -30,7 +30,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         public ReportingResult(IList<FrameworkName> targets, IEnumerable<MemberInfo> types, string submissionId, AnalyzeRequestFlags requestFlags)
         {
             _targets = targets;
-            _requestFlags = requestFlags; 
+            _requestFlags = requestFlags;
             SubmissionId = submissionId;
             _types = types.ToDictionary(key => Tuple.Create(key.DefinedInAssemblyIdentity, key.MemberDocId), value => value);
         }
@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
             }
             catch (KeyNotFoundException)
             {
-                typeInfo = new MissingTypeInfo(SourceAssembly, missingDependency.TypeDocId?? missingDependency.MemberDocId, missingDependency.TargetStatus, recommendedChanges);
+                typeInfo = new MissingTypeInfo(SourceAssembly, missingDependency.TypeDocId ?? missingDependency.MemberDocId, missingDependency.TargetStatus, recommendedChanges);
             }
 
             // If we already have an entry for this type, get it.
