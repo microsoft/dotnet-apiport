@@ -15,12 +15,14 @@ namespace Microsoft.Fx.Portability.Analyzer
     internal class DependencyFinderEngineHelper
     {
         private readonly MetadataReader _reader;
+        private readonly string _assemblyLocation;
+
         public AssemblyInfo CallingAssembly { get; private set; }
         public List<MemberDependency> memberDependency = new List<MemberDependency>();
         private string _currentAssemblyInfo;
         private string _currentAssemblyName;
         private string _assemblyInfoForPrimitives = null;
-        private string _assemblyLocation;
+
         public DependencyFinderEngineHelper(MetadataReader metadataReader, string assemblyPath)
         {
             _reader = metadataReader;
@@ -29,32 +31,29 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public void ComputeData()
         {
-            if (_reader != null)
+            //get assembly info
+            CallingAssembly = GetAssemblyInfo();
+            _currentAssemblyInfo = GetCurrentAssemblyInfo();
+
+            //get type references
+            foreach (var handle in _reader.TypeReferences)
             {
-                //get assembly info
-                CallingAssembly = GetAssemblyInfo();
-                _currentAssemblyInfo = GetCurrentAssemblyInfo();
+                var entry = _reader.GetTypeReference(handle);
 
-                //get type references
-                foreach (var handle in _reader.TypeReferences)
-                {
-                    var entry = _reader.GetTypeReference(handle);
-
-                    MemberDependency dep = GetTypeReferenceMemberDependency(entry);
-                    if (dep != null)
-                        memberDependency.Add(dep);
-                }
+                MemberDependency dep = GetTypeReferenceMemberDependency(entry);
+                if (dep != null)
+                    memberDependency.Add(dep);
+            }
 
 
-                //get member references
-                foreach (var handle in _reader.MemberReferences)
-                {
-                    var entry = _reader.GetMemberReference(handle);
+            //get member references
+            foreach (var handle in _reader.MemberReferences)
+            {
+                var entry = _reader.GetMemberReference(handle);
 
-                    MemberDependency dep = GetMemberReferenceMemberDependency(entry);
-                    if (dep != null)
-                        memberDependency.Add(dep);
-                }
+                MemberDependency dep = GetMemberReferenceMemberDependency(entry);
+                if (dep != null)
+                    memberDependency.Add(dep);
             }
         }
 
@@ -116,7 +115,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             if (type.IsPrimitiveType && _assemblyInfoForPrimitives == null)
             {
-                if (type.AssemblySet)
+                if (type.IsAssemblySet)
                     _assemblyInfoForPrimitives = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
                 else if (_currentAssemblyName.ToLower().CompareTo("mscorlib") == 0) //so that we can test on mscorlib
                     _assemblyInfoForPrimitives = _currentAssemblyInfo;
@@ -124,7 +123,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             dep.MemberDocId = "T:" + type.ToString(); ;
 
-            if (type.AssemblySet)
+            if (type.IsAssemblySet)
                 dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
             else
                 dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
@@ -147,21 +146,21 @@ namespace Microsoft.Fx.Portability.Analyzer
             string kind;
             switch (memberReference.GetKind())
             {
-            case MemberReferenceKind.Field:
-                kind = "F:";
-                break;
-            case MemberReferenceKind.Method:
-                kind = "M:";
-                break;
-            default:
-                kind = memberReference.GetKind().ToString();
-                break;
+                case MemberReferenceKind.Field:
+                    kind = "F:";
+                    break;
+                case MemberReferenceKind.Method:
+                    kind = "M:";
+                    break;
+                default:
+                    kind = memberReference.GetKind().ToString();
+                    break;
             }
 
             dep.MemberDocId = kind + memberRefInfo.ToString();
             dep.TypeDocId = "T:" + memberRefInfo.ParentType.ToString();
 
-            if (memberRefInfo.ParentType.AssemblySet)
+            if (memberRefInfo.ParentType.IsAssemblySet)
                 dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(memberRefInfo.ParentType.DefinedInAssembly);
             else if (memberRefInfo.ParentType.IsPrimitiveType)  //if it is primitive type, the assembly is not set
                 dep.DefinedInAssemblyIdentity = _assemblyInfoForPrimitives;

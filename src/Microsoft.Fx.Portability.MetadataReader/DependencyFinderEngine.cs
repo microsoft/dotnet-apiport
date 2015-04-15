@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -13,10 +14,10 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class DependencyFinderEngine : IDependencyInfo
     {
-        private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>();
-        private readonly HashSet<string> _assembliesWithError = new HashSet<string>();
+        private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
+        private readonly HashSet<string> _assembliesWithError = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<AssemblyInfo> _userAssemblies = new HashSet<AssemblyInfo>();
-        private ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies;
+        private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
         private readonly IEnumerable<string> _inputAssemblies;
 
         private DependencyFinderEngine(IEnumerable<string> inputAssemblies)
@@ -55,55 +56,50 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private void FindDependencies(IProgressReporter progressReport)
         {
-            var dependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
             _inputAssemblies.AsParallel().ForAll(filename =>
             {
-                IEnumerable<MemberDependency> MemberDependencyList = GetDependencies(filename);
-                foreach (var dep in MemberDependencyList)
+                foreach (var dependencies in GetDependencies(filename))
                 {
-                    MemberInfo m = new MemberInfo() { MemberDocId = dep.MemberDocId, TypeDocId = dep.TypeDocId, DefinedInAssemblyIdentity = dep.DefinedInAssemblyIdentity };
+                    var m = new MemberInfo
+                    {
+                        MemberDocId = dependencies.MemberDocId,
+                        TypeDocId = dependencies.TypeDocId,
+                        DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
+                    };
 
                     // Add this memberinfo
-                    HashSet<AssemblyInfo> newassembly = new HashSet<AssemblyInfo>();
-                    newassembly.Add(dep.CallingAssembly);
-                    ICollection<AssemblyInfo> assemblies = dependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
+                    var newassembly = new HashSet<AssemblyInfo> { dependencies.CallingAssembly };
+
+                    var assemblies = _cachedDependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
                     {
                         lock (existingSet)
                         {
-                            existingSet.Add(dep.CallingAssembly);
+                            existingSet.Add(dependencies.CallingAssembly);
                         }
                         return existingSet;
                     });
                 }
             });
-
-            _cachedDependencies = dependencies;
         }
-
-
 
         private IEnumerable<MemberDependency> GetDependencies(string assemblyLocation)
         {
-            DependencyFinderEngineHelper helper = null;
             using (var stream = File.OpenRead(assemblyLocation))
+            using (var peFile = new PEReader(stream))
             {
-                using (var peFile = new PEReader(stream))
-                {
-                    MetadataReader metadatareader = peFile.GetMetadataReader();
-                    helper = new DependencyFinderEngineHelper(metadatareader, assemblyLocation);
-                    helper.ComputeData();
-                }
+                var metadataReader = peFile.GetMetadataReader();
+
+                var helper = new DependencyFinderEngineHelper(metadataReader, assemblyLocation);
+                helper.ComputeData();
+
+                // Remember this assembly as a user assembly.
+                _userAssemblies.Add(helper.CallingAssembly);
+
+                if (helper != null)
+                    return helper.memberDependency;
+                else
+                    return null;
             }
-
-
-            // remember this assembly as a user assembly.
-            _userAssemblies.Add(helper.CallingAssembly);
-
-
-            if (helper != null)
-                return helper.memberDependency;
-            else
-                return null;
         }
     }
 }
