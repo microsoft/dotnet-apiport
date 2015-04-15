@@ -22,3 +22,4 @@ rcf
 *.metaproj*
 *.swp
 .vs
+project.lock.json
