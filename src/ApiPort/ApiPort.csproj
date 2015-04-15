@@ -88,6 +88,10 @@
       <Project>{fc1429e3-46c3-49ed-b99f-b45e1ccfb86b}</Project>
       <Name>Microsoft.Fx.Portability-net45</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj">
+      <Project>{1d15d4cc-7bca-4917-8160-8586b9f115f8}</Project>
+      <Name>Microsoft.Fx.Portability.MetadataReader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

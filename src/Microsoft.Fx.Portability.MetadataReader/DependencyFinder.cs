@@ -4,7 +4,6 @@
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -16,11 +15,19 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             var inputAssemblyPaths = inputAssemblies.Where(f => FilterValidFiles(f, _progressReporter)).Select(i => i.FullName).ToList();
 
-            _progressReporter.StartParallelTask(LocalizedStrings.DetectingAssemblyReferences, String.Format(CultureInfo.CurrentCulture, LocalizedStrings.ProcessedFiles, "{0}", inputAssemblyPaths.Count));
-            var computedDependencies = DependencyFinderEngine.ComputeDependencies(inputAssemblyPaths, _progressReporter);
-            _progressReporter.FinishTask();
+            using (var task = _progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences, inputAssemblyPaths.Count))
+            {
+                try
+                {
+                    return DependencyFinderEngine.ComputeDependencies(inputAssemblyPaths, _progressReporter);
+                }
+                catch (Exception e)
+                {
+                    task.Abort();
 
-            return computedDependencies;
+                    throw e;
+                }
+            }
         }
 
         private static bool FilterValidFiles(FileInfo file, IProgressReporter _progressReporter)
@@ -30,7 +37,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 return true;
             }
 
-            _progressReporter.ReportIssue(LocalizedStrings.UnknownFile, file.FullName);
+            _progressReporter.ReportIssue(string.Format(LocalizedStrings.UnknownFile, file.FullName));
 
             return false;
         }

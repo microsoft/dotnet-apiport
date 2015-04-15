@@ -75,7 +75,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                         return existingSet;
                     });
                 }
-                progressReport.ReportUnitComplete();
             });
 
             _cachedDependencies = dependencies;
