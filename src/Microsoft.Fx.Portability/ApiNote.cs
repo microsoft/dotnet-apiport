@@ -11,11 +11,11 @@ namespace Microsoft.Fx.Portability
         public string Id { get; set; }
 
         public string Title { get; set; }
-        
+
         public string Markdown { get; set; }
-        
+
         public IEnumerable<string> ApplicableApis { get; set; }
-        
+
         public IEnumerable<string> Related { get; set; }
 
         public int CompareTo(ApiNote other)

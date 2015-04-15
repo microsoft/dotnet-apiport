@@ -59,9 +59,9 @@ namespace Microsoft.Fx.Portability.Reporting
             ReportingResult result = new ReportingResult(targets, types, submissionId, requestFlags);
 
             missingDependencies
-                #if !SILVERLIGHT
+#if !SILVERLIGHT
                 .AsParallel()
-                #endif
+#endif
                 .ForAll((Action<MemberInfo>)((item) =>
                 {
                     // the calling assemblies are in Finder...
@@ -129,9 +129,9 @@ namespace Microsoft.Fx.Portability.Reporting
 #endif
 
             allDependencies.Keys
-                #if !SILVERLIGHT
+#if !SILVERLIGHT
                 .AsParallel()
-                #endif
+#endif
                 .ForAll((Action<MemberInfo>)(memberInfo =>
                 {
                     // This is declared here to minimize allocations

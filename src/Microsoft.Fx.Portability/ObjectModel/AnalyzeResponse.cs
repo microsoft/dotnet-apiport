@@ -17,7 +17,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             UnresolvedUserAssemblies = new List<string>();
             Targets = new List<FrameworkName>();
         }
-        
+
         public string SubmissionId { get; set; }
 
         public string ApplicationName { get; set; }
