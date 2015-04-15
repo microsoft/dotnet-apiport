@@ -49,8 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyFinder.cs" />
-    <Compile Include="DependencyFinderEngine.cs" />
+    <Compile Include="ReflectionMetadataDependencyFinder.cs" />
+    <Compile Include="ReflectionMetadataDependencyInfo.cs" />
     <Compile Include="DependencyFinderEngineHelper.cs" />
     <Compile Include="MemberDependency.cs" />
     <Compile Include="MemberKind.cs" />

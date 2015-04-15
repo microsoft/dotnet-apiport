@@ -12,7 +12,7 @@ using System.Reflection.PortableExecutable;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
-    internal class DependencyFinderEngine : IDependencyInfo
+    internal class ReflectionMetadataDependencyInfo : IDependencyInfo
     {
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
         private readonly HashSet<string> _assembliesWithError = new HashSet<string>(StringComparer.Ordinal);
@@ -20,14 +20,14 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
         private readonly IEnumerable<string> _inputAssemblies;
 
-        private DependencyFinderEngine(IEnumerable<string> inputAssemblies)
+        private ReflectionMetadataDependencyInfo(IEnumerable<string> inputAssemblies)
         {
             _inputAssemblies = inputAssemblies;
         }
 
-        public static DependencyFinderEngine ComputeDependencies(IEnumerable<string> inputAssemblies, IProgressReporter progressReport)
+        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<string> inputAssemblies, IProgressReporter progressReport)
         {
-            var engine = new DependencyFinderEngine(inputAssemblies);
+            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies);
 
             engine.FindDependencies(progressReport);
 

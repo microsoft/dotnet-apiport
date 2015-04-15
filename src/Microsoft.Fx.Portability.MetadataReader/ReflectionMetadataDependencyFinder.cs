@@ -19,7 +19,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 try
                 {
-                    return DependencyFinderEngine.ComputeDependencies(inputAssemblyPaths, _progressReporter);
+                    return ReflectionMetadataDependencyInfo.ComputeDependencies(inputAssemblyPaths, _progressReporter);
                 }
                 catch (Exception e)
                 {
