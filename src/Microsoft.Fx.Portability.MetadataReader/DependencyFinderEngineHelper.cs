@@ -66,50 +66,14 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private AssemblyInfo GetAssemblyInfo()
         {
-            AssemblyInfo assemblyInfo = new AssemblyInfo();
-            Assembly assembly = Assembly.ReflectionOnlyLoadFrom(_assemblyLocation);
+            var assemblyDef = _reader.GetAssemblyDefinition();
 
-            foreach (var referencedAssemblyName in assembly.GetReferencedAssemblies())
+            return new AssemblyInfo
             {
-                try
-                {
-                    Assembly.ReflectionOnlyLoad(referencedAssemblyName.FullName);
-                }
-                catch
-                {
-                    Assembly.ReflectionOnlyLoadFrom(Path.Combine(Path.GetDirectoryName(_assemblyLocation), referencedAssemblyName.Name + ".dll"));
-                }
-            }
-
-            AssemblyName assemblyName = assembly.GetName();
-
-            //get file version
-            FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(_assemblyLocation);
-            assemblyInfo.FileVersion = fileInfo.FileVersion;
-            assemblyInfo.AssemblyIdentity = assemblyName.ToString();
-
-            //get target framework from custom attributes
-            var customAttributes = assembly.CustomAttributes;
-            string targetFramework = "";
-            foreach (CustomAttributeData attribute in customAttributes)
-            {
-                string name = attribute.AttributeType.Name;
-                if (attribute.AttributeType.Name.Contains("TargetFrameworkAttribute"))
-                {
-                    for (int i = 0; i < attribute.ConstructorArguments.Count; i++)
-                    {
-                        if (i > 0)
-                        {
-                            targetFramework += ", ";
-                        }
-
-                        targetFramework += attribute.ConstructorArguments[i].ToString().Trim(new char[] { '\"' });
-                    }
-                    break;
-                }
-            }
-            assemblyInfo.TargetFrameworkMoniker = targetFramework;
-            return assemblyInfo;
+                AssemblyIdentity = _reader.GetString(assemblyDef.Name),
+                FileVersion = assemblyDef.Version.ToString(),
+                TargetFrameworkMoniker = string.Empty
+            };
         }
 
         private MemberDependency GetTypeReferenceMemberDependency(TypeReference typeReference)
