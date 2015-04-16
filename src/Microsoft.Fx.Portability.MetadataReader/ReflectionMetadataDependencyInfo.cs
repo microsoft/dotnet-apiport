@@ -58,26 +58,33 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             _inputAssemblies.AsParallel().ForAll(filename =>
             {
-                foreach (var dependencies in GetDependencies(filename))
+                try
                 {
-                    var m = new MemberInfo
+                    foreach (var dependencies in GetDependencies(filename))
                     {
-                        MemberDocId = dependencies.MemberDocId,
-                        TypeDocId = dependencies.TypeDocId,
-                        DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
-                    };
-
-                    // Add this memberinfo
-                    var newassembly = new HashSet<AssemblyInfo> { dependencies.CallingAssembly };
-
-                    var assemblies = _cachedDependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
-                    {
-                        lock (existingSet)
+                        var m = new MemberInfo
                         {
-                            existingSet.Add(dependencies.CallingAssembly);
-                        }
-                        return existingSet;
-                    });
+                            MemberDocId = dependencies.MemberDocId,
+                            TypeDocId = dependencies.TypeDocId,
+                            DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
+                        };
+
+                        // Add this memberinfo
+                        var newassembly = new HashSet<AssemblyInfo> { dependencies.CallingAssembly };
+
+                        var assemblies = _cachedDependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
+                        {
+                            lock (existingSet)
+                            {
+                                existingSet.Add(dependencies.CallingAssembly);
+                            }
+                            return existingSet;
+                        });
+                    }
+                }
+                catch (InvalidPEAssemblyException)
+                {
+                    _assembliesWithError.Add(filename);
                 }
             });
         }
@@ -87,7 +94,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             using (var stream = File.OpenRead(assemblyLocation))
             using (var peFile = new PEReader(stream))
             {
-                var metadataReader = peFile.GetMetadataReader();
+                var metadataReader = GetMetadataReader(peFile);
 
                 var helper = new DependencyFinderEngineHelper(metadataReader, assemblyLocation);
                 helper.ComputeData();
@@ -95,11 +102,33 @@ namespace Microsoft.Fx.Portability.Analyzer
                 // Remember this assembly as a user assembly.
                 _userAssemblies.Add(helper.CallingAssembly);
 
-                if (helper != null)
-                    return helper.MemberDependency;
-                else
-                    return null;
+                return helper.MemberDependency;
             }
+        }
+
+        /// <summary>
+        /// Attempt to get a MetadataReader.  Call this method instead of directly on PEReader so that
+        /// exceptions thrown by it are caught and propagated as a known InvalidPEAssemblyException
+        /// </summary>
+        /// <param name="peReader"></param>
+        /// <returns></returns>
+        private MetadataReader GetMetadataReader(PEReader peReader)
+        {
+            try
+            {
+                return peReader.GetMetadataReader();
+            }
+            catch (Exception e)
+            {
+                throw new InvalidPEAssemblyException(e);
+            }
+        }
+
+        private class InvalidPEAssemblyException : Exception
+        {
+            public InvalidPEAssemblyException(Exception inner)
+                : base("Not a valid assembly", inner)
+            { }
         }
     }
 }
