@@ -106,6 +106,25 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Multiple ignore files can be specified, separated by &apos;,&apos; or &apos;;&apos;.
+        ///Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
+        /// </summary>
+        public static string CmdHelpIgnoreAssembliesFile {
+            get {
+                return ResourceManager.GetString("CmdHelpIgnoreAssembliesFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json.
+        /// </summary>
+        public static string CmdHelpNoDefaultIgnoreFile {
+            get {
+                return ResourceManager.GetString("CmdHelpNoDefaultIgnoreFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate breaking changes on full .NET Framework.
         /// </summary>
         public static string CmdHelpShowBreakingChanges {
@@ -161,6 +180,16 @@ namespace ApiPort.Resources {
         public static string InvalidCommandLineArguments {
             get {
                 return ResourceManager.GetString("InvalidCommandLineArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to parse ignore file &apos;{0}&apos;. Error details:
+        ///{1}.
+        /// </summary>
+        public static string InvalidIgnoreFile {
+            get {
+                return ResourceManager.GetString("InvalidIgnoreFile", resourceCulture);
             }
         }
         

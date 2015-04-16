@@ -195,7 +195,6 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             TestBreakingChangeWithFixedEntry(Version.Parse("4.5"), false);
             TestBreakingChangeWithoutFixedEntry(Version.Parse("4.5"), false);
             TestBreakingChangeWithFixedInServicingEntry(Version.Parse("4.5"), false);
-
         }
 
         [Fact]
@@ -232,27 +231,86 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(".NET Core Framework,Version=4.5.1");
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, null).ToList();
 
             Assert.Empty(breakingChanges);
         }
 
+        [Fact]
+        public void BreakingChangesWithAssemblyIgnores()
+        {
+            TestBreakingChangeWithIgnoreList(Version.Parse("4.5"), false, Enumerable.Empty<AssemblyInfo>());
+            TestBreakingChangeWithIgnoreList(Version.Parse("4.5"), true, new AssemblyInfo[] { new AssemblyInfo() { AssemblyIdentity = "userAsm1, Version=1.0.0.0" } });
+            TestBreakingChangeWithIgnoreList(Version.Parse("4.5"), true, new AssemblyInfo[] { new AssemblyInfo() { AssemblyIdentity = "userAsm1, Version=1.0.0.0" }, new AssemblyInfo() { AssemblyIdentity = "userAsm2, Version=2.0.0.0" } });
+            TestBreakingChangeWithIgnoreList(Version.Parse("4.5"), false, new AssemblyInfo[] { new AssemblyInfo() { AssemblyIdentity = "userAsm2, Version=2.0.0.0" } });
+        }
+
+        [Fact]
+        public void BreakingChangeIgnoreSelection()
+        {
+            var catalog = Substitute.For<IApiCatalogLookup>();
+            var recommendations = GenerateTestRecommendationsWithFixedEntry();
+            var testData = GenerateTestData(catalog);
+            var engine = new AnalysisEngine(catalog, recommendations);
+
+            var framework = new FrameworkName(".NET Framework, Version = v4.5.1");
+            var framework2 = new FrameworkName(".NET Framework, Version = v4.5.2");
+
+            // Vanilla
+            var result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.1" }));
+            Assert.Equal(1, result.Count());
+            Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
+
+            // Empty ignore targets
+            result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new string[0]));
+            Assert.Equal(1, result.Count());
+            Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
+
+            // Empty ignore targets with multiple targets
+            result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework, framework2 }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new string[0]));
+            Assert.Equal(1, result.Count());
+            Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
+
+            // Ignore a different target
+            result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.2" }));
+            Assert.Equal(0, result.Count());
+
+            // Ignore some but not all targets
+            result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework, framework2 }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.1" }));
+            Assert.Equal(0, result.Count());
+
+            // Ignore all targets
+            result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework, framework2 }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.1", ".NET Framework,Version=v4.5.2" }));
+            Assert.Equal(1, result.Count());
+            Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
+
+            // Ignore different assembly
+            result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(true, new string[0]));
+            Assert.Equal(1, result.Count());
+            Assert.Equal("userAsm2, Version=2.0.0.0", result.FirstOrDefault().AssemblyIdentity);
+        }
+
         private static void TestBreakingChangeWithoutFixedEntry(Version version, bool noBreakingChangesExpected)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected);
+            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null);
         }
 
         private static void TestBreakingChangeWithFixedEntry(Version version, bool noBreakingChangesExpected)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithFixedEntry(), noBreakingChangesExpected);
+            TestBreakingChange(version, GenerateTestRecommendationsWithFixedEntry(), noBreakingChangesExpected, null);
         }
 
         private static void TestBreakingChangeWithFixedInServicingEntry(Version version, bool noBreakingChangesExpected)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithFixedInServicingEntry(), noBreakingChangesExpected);
+            TestBreakingChange(version, GenerateTestRecommendationsWithFixedInServicingEntry(), noBreakingChangesExpected, null);
         }
 
-        private static void TestBreakingChange(Version version, IApiRecommendations recommendations, bool noBreakingChangesExpected)
+        private static void TestBreakingChangeWithIgnoreList(Version version, bool noBreakingChangesExpected, IEnumerable<AssemblyInfo> assembliesToIgnore)
+        {
+            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, assembliesToIgnore);
+        }
+
+        private static void TestBreakingChange(Version version, IApiRecommendations recommendations, bool noBreakingChangesExpected, IEnumerable<AssemblyInfo> assembliesToIgnore)
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var testData = GenerateTestData(catalog);
@@ -260,7 +318,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(AnalysisEngine.FullFrameworkIdentifier + ",Version=" + version);
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore).ToList();
 
             if (noBreakingChangesExpected)
             {
@@ -327,6 +385,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
         private const string TestDocId1 = "T:System.Drawing.Color";
         private const string TestDocId2 = "T:System.Data.SqlTypes.SqlBoolean";
+
+        private static ICollection<IgnoreAssemblyInfo> GenerateIgnoreAssemblies(bool otherAssm, string[] targetFrameworks)
+        {
+            return new[] {
+                new IgnoreAssemblyInfo() { AssemblyIdentity = otherAssm? "userAsm2, Version=2.0.0.0" : "userAsm1, Version=1.0.0.0", TargetsIgnored = targetFrameworks }
+            };
+        }
 
         private static IDictionary<MemberInfo, ICollection<AssemblyInfo>> GenerateTestData(IApiCatalogLookup catalog)
         {

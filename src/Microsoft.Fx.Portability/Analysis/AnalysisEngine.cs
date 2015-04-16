@@ -23,7 +23,22 @@ namespace Microsoft.Fx.Portability.Analysis
             _recommendations = recommendations;
         }
 
-        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        public IEnumerable<AssemblyInfo> FindBreakingChangeSkippedAssemblies(IEnumerable<FrameworkName> targets, IEnumerable<AssemblyInfo> userAssemblies, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore)
+        {
+            foreach (AssemblyInfo a in userAssemblies)
+            {
+                if (assembliesToIgnore.Any(i =>
+                    i.AssemblyIdentity.Equals(a.AssemblyIdentity, StringComparison.OrdinalIgnoreCase) &&        // The assembly must be in assembliesToIgnore and 
+                    (i.IgnoreForAllTargets ||                                                                   // either be 'IgnoreForAllTargets' or
+                    targets.All(f => i.TargetsIgnored.Contains(f.FullName, StringComparer.OrdinalIgnoreCase)))  // all targeted Frameworks are in the ignore list for the assembly
+                ))
+                {
+                    yield return a;
+                }
+            }
+        }
+
+        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies, IEnumerable<AssemblyInfo> assembliesToIgnore)
         {
             // Only proceed to find breaking changes for full .NET Framework (that's where they are applicable)
             var fullFrameworkVersions = targets
@@ -47,6 +62,12 @@ namespace Microsoft.Fx.Portability.Analysis
                         {
                             foreach (var a in kvp.Value)
                             {
+                                // If the assembly referencing the broken API is on the ignore list, continue
+                                if (assembliesToIgnore != null && assembliesToIgnore.Contains(a))
+                                {
+                                    continue;
+                                }
+
                                 yield return new BreakingChangeDependency
                                 {
                                     Break = b,

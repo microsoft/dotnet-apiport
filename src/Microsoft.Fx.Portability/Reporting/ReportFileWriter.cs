@@ -70,7 +70,7 @@ namespace Microsoft.Fx.Portability.Reporting
             var originalExtension = Path.GetExtension(fileName);
             var extension = string.IsNullOrWhiteSpace(inputExtension) ? originalExtension : inputExtension;
 
-            if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.InvariantCultureIgnoreCase))
             {
                 _progressReporter.ReportIssue(string.Format(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
             }

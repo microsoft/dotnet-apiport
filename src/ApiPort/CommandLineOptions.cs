@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System;
 
 namespace ApiPort
 {
@@ -71,6 +72,14 @@ namespace ApiPort
         }
 
         public IEnumerable<string> Targets
+        {
+            get
+            {
+                return Enumerable.Empty<string>();
+            }
+        }
+
+        public IEnumerable<string> IgnoredAssemblyFiles
         {
             get
             {

@@ -11,6 +11,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         None = 0,
         NoTelemetry = 1,
         ShowNonPortableApis = 1 << 1,
-        ShowBreakingChanges = 1 << 2
+        ShowBreakingChanges = 1 << 2,
+        NoDefaultIgnoreFile = 1 << 3
     }
 }

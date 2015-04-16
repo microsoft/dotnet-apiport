@@ -3,9 +3,11 @@
 
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Practices.Unity;
 using System;
+using System.Collections.Generic;
 
 namespace ApiPort
 {
@@ -18,8 +20,11 @@ namespace ApiPort
             var targetMapper = new TargetMapper();
             targetMapper.LoadFromConfig();
 
+            var ignoreAssemblyList = new FileIgnoreAssemblyInfoList(options.RequestFlags.HasFlag(AnalyzeRequestFlags.NoDefaultIgnoreFile), options.IgnoredAssemblyFiles);
+
             container.RegisterInstance(options);
             container.RegisterInstance<ITargetMapper>(targetMapper);
+            container.RegisterInstance<IEnumerable<IgnoreAssemblyInfo>>(ignoreAssemblyList);
             container.RegisterInstance<IApiPortService>(new ApiPortService(options.ServiceEndpoint, productInformation));
             container.RegisterType<IDependencyFinder, ReflectionMetadataDependencyFinder>(new ContainerControlledLifetimeManager());
             container.RegisterType<IReportGenerator, ReportGenerator>(new ContainerControlledLifetimeManager());

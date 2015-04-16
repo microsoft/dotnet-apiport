@@ -221,4 +221,15 @@ To learn more about how this tool works, including the data we are collecting, g
   <data name="CmdHelpShowNonPortableApis" xml:space="preserve">
     <value>Calculate non-portable APIs</value>
   </data>
+  <data name="CmdHelpIgnoreAssembliesFile" xml:space="preserve">
+    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Multiple ignore files can be specified, separated by ',' or ';'.
+Note that, currently, this parameter only affects breaking change analysis; not portability analysis.</value>
+  </data>
+  <data name="InvalidIgnoreFile" xml:space="preserve">
+    <value>Unable to parse ignore file '{0}'. Error details:
+{1}</value>
+  </data>
+  <data name="CmdHelpNoDefaultIgnoreFile" xml:space="preserve">
+    <value>Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json</value>
+  </data>
 </root>

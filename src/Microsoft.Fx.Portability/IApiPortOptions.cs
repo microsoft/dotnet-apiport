@@ -11,6 +11,7 @@ namespace Microsoft.Fx.Portability
     {
         string Description { get; }
         IEnumerable<FileInfo> InputAssemblies { get; }
+        IEnumerable<string> IgnoredAssemblyFiles { get; }
         AnalyzeRequestFlags RequestFlags { get; }
         IEnumerable<string> Targets { get; }
         IEnumerable<string> OutputFormats { get; }

@@ -38,8 +38,12 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             var missingUserAssemblies = _analysisEngine.FindUnreferencedAssemblies(unresolvedAssemblies, request.UserAssemblies).ToList();
 
+            var breakingChangeSkippedAssemblies = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
+                ? _analysisEngine.FindBreakingChangeSkippedAssemblies(targets, request.UserAssemblies, request.AssembliesToIgnore).ToList()
+                : new List<AssemblyInfo>();
+
             var breakingChanges = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
-                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies).ToList()
+                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies).ToList()
                 : new List<BreakingChangeDependency>();
 
             var reportingResult = _reportGenerator.ComputeReport(
@@ -60,7 +64,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 Targets = targets,
                 ReportingResult = reportingResult,
                 SubmissionId = submissionId,
-                BreakingChanges = breakingChanges
+                BreakingChanges = breakingChanges,
+                BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies
             };
         }
     }

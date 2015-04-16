@@ -31,11 +31,12 @@ namespace Microsoft.Fx.Portability.Tests
             var targetMapper = Substitute.For<ITargetMapper>();
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
 
             var apiPortService = Substitute.For<IApiPortService>();
             apiPortService.GetTargetsAsync().Returns(CreateResponse<IEnumerable<AvailableTarget>>(targets.AsReadOnly()));
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator);
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList);
 
             var actualTargets = await client.ListTargets();
 
@@ -83,7 +84,9 @@ namespace Microsoft.Fx.Portability.Tests
                 return dependencies;
             });
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator);
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList);
 
             var options = Substitute.For<IApiPortOptions>();
 

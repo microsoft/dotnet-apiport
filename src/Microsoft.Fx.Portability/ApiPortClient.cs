@@ -20,16 +20,18 @@ namespace Microsoft.Fx.Portability
         private readonly ITargetMapper _targetMapper;
         private readonly IDependencyFinder _dependencyFinder;
         private readonly IReportGenerator _reportGenerator;
+        private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
 
         public ITargetMapper TargetMapper { get { return _targetMapper; } }
 
-        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator)
+        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore)
         {
             _apiPortService = apiPortService;
             _progressReport = progressReport;
             _targetMapper = targetMapper;
             _dependencyFinder = dependencyFinder;
             _reportGenerator = reportGenerator;
+            _assembliesToIgnore = assembliesToIgnore;
         }
 
         public async Task<ReportingResult> AnalyzeAssemblies(IApiPortOptions options)
@@ -113,6 +115,15 @@ namespace Microsoft.Fx.Portability
             {
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
                 Dependencies = dependencyFinder.Dependencies,
+                AssembliesToIgnore = _assembliesToIgnore,                 // We pass along assemblies to ignore instead of filtering them from Dependencies at this point
+                                                                          // because breaking change analysis and portability analysis will likely want to filter dependencies
+                                                                          // in different ways for ignored assemblies. 
+                                                                          // For breaking changes, we should show breaking changes for
+                                                                          // an assembly if it is un-ignored on any of the user-specified targets and we should hide breaking changes
+                                                                          // for an assembly if it ignored on all user-specified targets. 
+                                                                          // For portability analysis, on the other hand, we will want to show portability for precisely those targets
+                                                                          // that a user specifies that are not on the ignore list. In this case, some of the assembly's dependency
+                                                                          // information will be needed.
                 UnresolvedAssemblies = dependencyFinder.UnresolvedAssemblies.Keys.ToList(),
                 UnresolvedAssembliesDictionary = dependencyFinder.UnresolvedAssemblies,
                 UserAssemblies = dependencyFinder.UserAssemblies.ToList(),
