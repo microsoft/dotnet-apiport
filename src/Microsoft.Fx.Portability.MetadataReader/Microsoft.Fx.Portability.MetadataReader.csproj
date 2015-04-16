@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetadataReaderExtensions.cs" />
     <Compile Include="ReflectionMetadataDependencyFinder.cs" />
     <Compile Include="ReflectionMetadataDependencyInfo.cs" />
     <Compile Include="DependencyFinderEngineHelper.cs" />

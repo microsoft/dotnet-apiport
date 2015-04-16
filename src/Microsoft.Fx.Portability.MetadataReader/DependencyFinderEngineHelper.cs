@@ -4,11 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Reflection.Metadata;
-using System.Security.Cryptography;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -17,8 +13,10 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly MetadataReader _reader;
         private readonly string _assemblyLocation;
 
-        private string _currentAssemblyInfo;
-        private string _currentAssemblyName;
+        private readonly string _currentAssemblyInfo;
+        private readonly string _currentAssemblyName;
+
+        // TODO: Why is this not read-only?
         private string _assemblyInfoForPrimitives = null;
 
         public DependencyFinderEngineHelper(MetadataReader metadataReader, string assemblyPath)
@@ -27,7 +25,13 @@ namespace Microsoft.Fx.Portability.Analyzer
             _assemblyLocation = assemblyPath;
 
             MemberDependency = new List<MemberDependency>();
-            CallingAssembly = GetAssemblyInfo();
+            CallingAssembly = _reader.GetAssemblyInfo();
+
+            // Get assembly info
+            var assemblyDefinition = _reader.GetAssemblyDefinition();
+
+            _currentAssemblyInfo = _reader.FormatAssemblyInfo(assemblyDefinition);
+            _currentAssemblyName = _reader.GetString(assemblyDefinition.Name);
         }
 
         public AssemblyInfo CallingAssembly { get; }
@@ -36,9 +40,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public void ComputeData()
         {
-            // Get assembly info
-            _currentAssemblyInfo = GetCurrentAssemblyInfo();
-
             // Get type references
             foreach (var handle in _reader.TypeReferences)
             {
@@ -64,18 +65,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
-        private AssemblyInfo GetAssemblyInfo()
-        {
-            var assemblyDef = _reader.GetAssemblyDefinition();
-
-            return new AssemblyInfo
-            {
-                AssemblyIdentity = _reader.GetString(assemblyDef.Name),
-                FileVersion = assemblyDef.Version.ToString(),
-                TargetFrameworkMoniker = string.Empty
-            };
-        }
-
         private MemberDependency GetTypeReferenceMemberDependency(TypeReference typeReference)
         {
             MemberMetadataInfo typeRefinfo = MemberMetadataInfo.GetFullName(typeReference, _reader);
@@ -89,16 +78,20 @@ namespace Microsoft.Fx.Portability.Analyzer
             if (type.IsPrimitiveType && _assemblyInfoForPrimitives == null)
             {
                 if (type.IsAssemblySet)
-                    _assemblyInfoForPrimitives = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
-                else if (_currentAssemblyName.ToLower().CompareTo("mscorlib") == 0) //so that we can test on mscorlib
+                {
+                    _assemblyInfoForPrimitives = _reader.FormatAssemblyInfo(type.DefinedInAssembly);
+                }
+                else if (_currentAssemblyName.ToLower().CompareTo("mscorlib") == 0) // So that we can test on mscorlib
+                {
                     _assemblyInfoForPrimitives = _currentAssemblyInfo;
+                }
             }
 
             memberDependency.MemberDocId = "T:" + type.ToString(); ;
 
             if (type.IsAssemblySet)
             {
-                memberDependency.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(type.DefinedInAssembly);
+                memberDependency.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(type.DefinedInAssembly);
             }
             else
             {
@@ -139,7 +132,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             if (memberRefInfo.ParentType.IsAssemblySet)
             {
-                dep.DefinedInAssemblyIdentity = GetAssemblyInfoFromHandle(memberRefInfo.ParentType.DefinedInAssembly);
+                dep.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly);
             }
             else if (memberRefInfo.ParentType.IsPrimitiveType)  //if it is primitive type, the assembly is not set
             {
@@ -151,56 +144,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             return dep;
-        }
-
-        private string GetAssemblyInfoFromHandle(AssemblyReferenceHandle assemblyHandle)
-        {
-            AssemblyReference entry = _reader.GetAssemblyReference(assemblyHandle);
-            return FormatAssemblyInfo(_reader.GetString(entry.Name), entry.Culture, entry.PublicKeyOrToken, entry.Version);
-        }
-
-        private string GetCurrentAssemblyInfo()
-        {
-            AssemblyDefinition entry = _reader.GetAssemblyDefinition();
-            _currentAssemblyName = _reader.GetString(entry.Name);
-            return FormatAssemblyInfo(_currentAssemblyName, entry.Culture, entry.PublicKey, entry.Version);
-        }
-
-        private string FormatAssemblyInfo(string name, StringHandle cultureHandle, BlobHandle publicKeyTokenHandle, Version version)
-        {
-            string culture = "neutral";
-            if (!cultureHandle.IsNil)
-                culture = _reader.GetString(cultureHandle);
-
-            string publicKeyToken = "null";
-            if (!publicKeyTokenHandle.IsNil)
-                publicKeyToken = FormatPublicKeyToken(publicKeyTokenHandle);
-            return name + ", Version=" + version.Major + "." + version.Minor + "." + version.Build + "." + version.Revision + ", Culture=" + culture + ", PublicKeyToken=" + publicKeyToken;
-        }
-
-        private string FormatPublicKeyToken(BlobHandle handle)
-        {
-            byte[] bytes = _reader.GetBlobBytes(handle);
-            if (bytes == null || bytes.Length <= 0)
-                return "null";
-            if (bytes.Length > 8)  //strong named assembly
-            {
-                //get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key 
-                SHA1 sha1 = SHA1.Create();
-                byte[] token = sha1.ComputeHash(bytes);
-                bytes = new byte[8];
-                int count = 0;
-                for (int i = token.Length - 1; i >= token.Length - 8; i--)
-                {
-                    bytes[count] = token[i];
-                    count++;
-                }
-            }
-            string value = BitConverter.ToString(bytes);
-
-            //remove dashes
-            string removeDashesLowerCase = value.Replace("-", "").ToLowerInvariant();
-            return string.Format("{0:x}", removeDashesLowerCase);
         }
     }
 }

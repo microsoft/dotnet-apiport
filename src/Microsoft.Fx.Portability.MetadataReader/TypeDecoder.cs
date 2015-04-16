@@ -137,7 +137,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     if (!name.IsAssemblySet)
                     {
                         name.IsAssemblySet = true;
-                        name.DefinedInAssembly = (AssemblyReferenceHandle)(scope);
+                        name.DefinedInAssembly = Reader.GetAssemblyReference((AssemblyReferenceHandle)(scope));
                     }
                     return name;
 

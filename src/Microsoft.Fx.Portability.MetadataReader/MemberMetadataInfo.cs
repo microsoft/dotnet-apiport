@@ -46,7 +46,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo ParentType { get; set; }
 
-        public AssemblyReferenceHandle DefinedInAssembly { get; set; }
+        public AssemblyReference DefinedInAssembly { get; set; }
 
         public bool IsAssemblySet { get; set; }
 
