@@ -10,8 +10,11 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using Microsoft.Fx.Portability.Resources;
+
+#if DESKTOP
+using System.Xml.Schema;
+#endif
 
 namespace Microsoft.Fx.Portability
 {
@@ -62,7 +65,7 @@ namespace Microsoft.Fx.Portability
         {
             yield return path;
 
-#if !ASPNETCORE50
+#if DESKTOP
             const string DefaultFileName = "TargetMap.xml";
 
             var location = typeof(TargetMapper).Assembly.Location;
@@ -87,7 +90,7 @@ namespace Microsoft.Fx.Portability
             {
                 var doc = XDocument.Load(XmlReader.Create(stream));
 
-#if !ASPNETCORE50 && HAS_RESOURCES
+#if DESKTOP && HAS_RESOURCES
                // Validate against schema
                 var schemas = new XmlSchemaSet();
                 schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream(typeof(TargetMapper), "Targets.xsd")));

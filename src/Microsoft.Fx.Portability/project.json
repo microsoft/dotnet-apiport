@@ -1,58 +1,67 @@
 ﻿{
-    "authors": [ "Microsoft" ],
-    "description": "Provides classes which allow developers to call the .NET Portability service.",
-    "version": "1.0.0-alpha",
-    "dependencies": {
-        "Newtonsoft.Json": "6.0.8"
+  "authors": [ "Microsoft" ],
+  "description": "Provides classes which allow developers to call the .NET Portability service.",
+  "version": "1.0.0-alpha",
+  "dependencies": {
+    "Newtonsoft.Json": "6.0.8"
+  },
+  "exclude": [
+    "Resources\\LocalizedStrings.Designer.cs",
+    "Resources\\LocalizedStrings.resx"
+  ],
+  "scripts": {
+    "prebuild": [
+      "powershell -NoProfile -ExecutionPolicy unrestricted -file %project:Directory%\\..\\..\\CreateLocalizedStrings.ps1 %project:Directory%\\Resources"
+    ]
+  },
+  "frameworks": {
+    "aspnet50": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "",
+        "System.Runtime.Serialization": "4.0.0.0",
+        "System.Xml": "4.0.0.0",
+        "System.Xml.Linq": "4.0.0.0"
+      },
+      "compilationOptions": {
+        "define": [ "DESKTOP" ]
+      }
+
     },
-    "exclude": [
-        "Resources\\LocalizedStrings.Designer.cs",
-        "Resources\\LocalizedStrings.resx"
-    ],
-    "scripts": {
-        "prebuild": [
-            "powershell -NoProfile -ExecutionPolicy unrestricted -file %project:Directory%\\..\\..\\CreateLocalizedStrings.ps1 %project:Directory%\\Resources"
-        ]
+    "aspnetcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.20-beta-*",
+        "System.Runtime.Serialization.Primitives": "4.0.10-beta-*",
+        "System.Xml.XDocument": "4.0.10-beta-*",
+        "System.Net.Http": "4.0.0-beta-*",
+        "System.Globalization": "4.0.10-beta-*",
+        "System.Diagnostics.Debug": "4.0.10-beta-*",
+        "System.Diagnostics.TraceSource": "4.0.0-beta-*",
+        "System.Collections": "4.0.10-beta-*",
+        "System.Linq": "4.0.0-beta-*",
+        "System.Linq.Parallel": "4.0.0-beta-*",
+        "System.Runtime.Extensions": "4.0.10-beta-*",
+        "System.IO": "4.0.10-beta-*",
+        "System.IO.Compression": "4.0.0-beta-*",
+        "System.Reflection": "4.0.10-beta-*",
+        "System.IO.FileSystem": "4.0.0-beta-*",
+        "System.Threading.Thread": "4.0.0-beta-*",
+        "System.Threading": "4.0.10-beta-*",
+        "System.Reflection.Extensions": "4.0.0-beta-*"
+      },
+      "compilationOptions": {
+        "define": [ "CORECLR" ]
+      }
     },
-    "frameworks": {
-        "aspnet50": {
-            "frameworkAssemblies": {
-                "System.Net.Http": "",
-                "System.Runtime.Serialization": "4.0.0.0",
-                "System.Xml": "4.0.0.0",
-                "System.Xml.Linq": "4.0.0.0"
-            }
-        },
-        "aspnetcore50": {
-            "dependencies": {
-                "System.Runtime": "4.0.20-beta-*",
-                "System.Runtime.Serialization.Primitives": "4.0.0-beta-*",
-                "System.Xml.ReaderWriter": "4.0.10-beta-*",
-                "System.Xml.XDocument": "4.0.0-beta-*",
-                "System.Net.Http": "4.0.0-beta-*",
-                "System.Globalization": "4.0.10-beta-*",
-                "System.Diagnostics.Debug": "4.0.10-beta-*",
-                "System.Diagnostics.TraceSource": "4.0.0-beta-*",
-                "System.Collections": "4.0.10-beta-*",
-                "System.Linq": "4.0.0-beta-*",
-                "System.Linq.Parallel": "4.0.0-beta-*",
-                "System.Runtime.Extensions": "4.0.10-beta-*",
-                "System.IO": "4.0.10-beta-*",
-                "System.IO.Compression": "4.0.0-beta-*",
-                "System.Reflection": "4.0.10-beta-*",
-                "System.IO.FileSystem": "4.0.0-beta-*",
-                "System.Threading.Thread": "4.0.0-beta-*",
-                "System.Threading": "4.0.0-beta-*",
-                "System.Reflection.Extensions": "4.0.0-beta-*"
-            }
-        },
-        "net45": {
-            "frameworkAssemblies": {
-                "System.Net.Http": "4.0.0.0",
-                "System.Runtime.Serialization": "4.0.0.0",
-                "System.Xml": "4.0.0.0",
-                "System.Xml.Linq": "4.0.0.0"
-            }
-        }
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0",
+        "System.Runtime.Serialization": "4.0.0.0",
+        "System.Xml": "4.0.0.0",
+        "System.Xml.Linq": "4.0.0.0"
+      },
+      "compilationOptions": {
+        "define": [ "DESKTOP" ]
+      }
     }
+  }
 }

@@ -204,7 +204,7 @@ namespace Microsoft.Fx.Portability.Analysis
         {
             var assemblyName = new System.Reflection.AssemblyName(assemblyIdentity) { Version = null };
 
-#if ASPNETCORE50
+#if CORECLR
             assemblyName.CultureName = null;
 #else
             assemblyName.CultureInfo = null;

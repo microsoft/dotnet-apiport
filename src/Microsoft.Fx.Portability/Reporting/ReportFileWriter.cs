@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reporting
@@ -70,7 +68,7 @@ namespace Microsoft.Fx.Portability.Reporting
             var originalExtension = Path.GetExtension(fileName);
             var extension = string.IsNullOrWhiteSpace(inputExtension) ? originalExtension : inputExtension;
 
-            if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.OrdinalIgnoreCase))
             {
                 _progressReporter.ReportIssue(string.Format(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
             }
