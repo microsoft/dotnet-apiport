@@ -25,7 +25,12 @@ namespace ApiPort
             container.RegisterInstance(options);
             container.RegisterInstance<ITargetMapper>(targetMapper);
             container.RegisterInstance<IEnumerable<IgnoreAssemblyInfo>>(ignoreAssemblyList);
+
+            // For debug purposes, the FileOutputApiPortService helps as it serializes the request to json and opens it with the
+            // default json handler. To use this service, uncomment the the next line and comment the one after that.
+            //container.RegisterType<IApiPortService, FileOutputApiPortService>(new ContainerControlledLifetimeManager());
             container.RegisterInstance<IApiPortService>(new ApiPortService(options.ServiceEndpoint, productInformation));
+
             container.RegisterType<IDependencyFinder, ReflectionMetadataDependencyFinder>(new ContainerControlledLifetimeManager());
             container.RegisterType<IReportGenerator, ReportGenerator>(new ContainerControlledLifetimeManager());
             container.RegisterType<ApiPortService>(new ContainerControlledLifetimeManager());
