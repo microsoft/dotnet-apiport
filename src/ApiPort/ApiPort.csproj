@@ -11,7 +11,7 @@
     <AssemblyName>ApiPort</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +46,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -60,6 +63,9 @@
   <ItemGroup>
     <Compile Include="AppCommands.cs" />
     <Compile Include="CommandLineOptions.cs" />
+    <Compile Include="CommandLine\AnalyzeOptionSet.cs" />
+    <Compile Include="CommandLine\CommandLineOptionSet.cs" />
+    <Compile Include="CommandLine\ServiceEndpointOptionSet.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="EmptyDependencyFinder.cs" />
     <Compile Include="FileOutputApiPortService.cs" />
