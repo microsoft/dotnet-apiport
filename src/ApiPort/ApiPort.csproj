@@ -61,6 +61,7 @@
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="EmptyDependencyFinder.cs" />
+    <Compile Include="FileOutputApiPortService.cs" />
     <Compile Include="ICommandLineOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
