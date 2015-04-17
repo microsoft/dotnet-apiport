@@ -1,90 +1,60 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.ObjectModel;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using ApiPort.CommandLine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ApiPort
 {
-    internal class CommandLineOptions : ICommandLineOptions
+    internal class CommandLineOptions
     {
+        private static IDictionary<string, Func<string, CommandLineOptionSet>> s_possibleCommands = new Dictionary<string, Func<string, CommandLineOptionSet>>(StringComparer.OrdinalIgnoreCase)
+        {
+            {"analyze", name => new AnalyzeOptionSet(name) },
+            {"listOutputFormats", name => new  ServiceEndpointOptionSet(name, AppCommands.ListOutputFormats) },
+            {"listTargets", name => new  ServiceEndpointOptionSet(name, AppCommands.ListTargets) },
+        };
+
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
-            return new CommandLineOptions();
-        }
-
-        public AppCommands Command
-        {
-            get { return AppCommands.ListTargets; }
-        }
-
-        public string OutputFileName
-        {
-            get { return "ApiPort"; }
-        }
-
-        public IEnumerable<string> InvalidInputFiles
-        {
-            get
+            if (args.Length == 0)
             {
-                return Enumerable.Empty<string>();
+                return ShowHelp();
+            }
+
+            var inputCommand = args[0];
+
+            try
+            {
+                var option = s_possibleCommands.Single(c => c.Key.StartsWith(inputCommand, StringComparison.OrdinalIgnoreCase));
+                var parser = option.Value(option.Key);
+
+                return parser.Parse(args.Skip(1));
+            }
+            catch (InvalidOperationException)
+            {
+                return ShowHelp(args[0]);
             }
         }
 
-        public string Description
+        private static ICommandLineOptions ShowHelp(string suppliedCommand = null)
         {
-            get; set;
-        }
-
-        public IEnumerable<FileInfo> InputAssemblies
-        {
-            get
+            if (!string.IsNullOrEmpty(suppliedCommand))
             {
-                return Enumerable.Empty<FileInfo>();
+                Program.WriteColorLine($"Unknown command: {suppliedCommand}", ConsoleColor.Yellow);
+                Console.WriteLine();
             }
-        }
 
-        public IEnumerable<string> OutputFormats
-        {
-            get
-            {
-                return Enumerable.Empty<string>();
-            }
-        }
+            Console.WriteLine("Available Commands:");
 
-        public AnalyzeRequestFlags RequestFlags
-        {
-            get
+            foreach (var command in s_possibleCommands)
             {
-                return AnalyzeRequestFlags.None;
+                Console.WriteLine($"- {command.Key}");
             }
-        }
 
-        public string ServiceEndpoint
-        {
-            get
-            {
-                return "https://portability.cloudapp.net/";
-            }
-        }
-
-        public IEnumerable<string> Targets
-        {
-            get
-            {
-                return Enumerable.Empty<string>();
-            }
-        }
-
-        public IEnumerable<string> IgnoredAssemblyFiles
-        {
-            get
-            {
-                return Enumerable.Empty<string>();
-            }
+            return CommandLineOptionSet.ExitCommandLineOption;
         }
     }
 }

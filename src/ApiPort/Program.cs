@@ -104,7 +104,7 @@ namespace ApiPort
             }
         }
 
-        private static void WriteColorLine(string message, ConsoleColor color)
+        public static void WriteColorLine(string message, ConsoleColor color)
         {
             var previousColor = Console.ForegroundColor;
 

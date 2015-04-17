@@ -106,8 +106,7 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Multiple ignore files can be specified, separated by &apos;,&apos; or &apos;;&apos;.
-        ///Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
+        ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
         /// </summary>
         public static string CmdHelpIgnoreAssembliesFile {
             get {
@@ -194,7 +193,7 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of assemblies to analyze.
+        ///   Looks up a localized string similar to Path to assembly file or directory of assemblies..
         /// </summary>
         public static string ListOfAssembliesToAnalyze {
             get {
@@ -338,7 +337,7 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The targets you want to check against. To specify multiple targets separate them with &apos;;&apos;.
+        ///   Looks up a localized string similar to The target you want to check against..
         /// </summary>
         public static string TargetsToCheckAgainst {
             get {

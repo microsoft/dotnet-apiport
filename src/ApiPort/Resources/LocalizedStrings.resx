@@ -128,7 +128,7 @@ To learn more about how this tool works, including the data we are collecting, g
 </value>
   </data>
   <data name="ListOfAssembliesToAnalyze" xml:space="preserve">
-    <value>List of assemblies to analyze</value>
+    <value>Path to assembly file or directory of assemblies.</value>
   </data>
   <data name="ListTargets" xml:space="preserve">
     <value>Use to see the available targets against which you can validate your assemblies</value>
@@ -143,7 +143,7 @@ To learn more about how this tool works, including the data we are collecting, g
     <value>[Done]</value>
   </data>
   <data name="TargetsToCheckAgainst" xml:space="preserve">
-    <value>The targets you want to check against. To specify multiple targets separate them with ';'</value>
+    <value>The target you want to check against.</value>
   </data>
   <data name="WritingReport" xml:space="preserve">
     <value>Writing report</value>
@@ -222,8 +222,7 @@ To learn more about how this tool works, including the data we are collecting, g
     <value>Calculate non-portable APIs</value>
   </data>
   <data name="CmdHelpIgnoreAssembliesFile" xml:space="preserve">
-    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Multiple ignore files can be specified, separated by ',' or ';'.
-Note that, currently, this parameter only affects breaking change analysis; not portability analysis.</value>
+    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis.</value>
   </data>
   <data name="InvalidIgnoreFile" xml:space="preserve">
     <value>Unable to parse ignore file '{0}'. Error details:

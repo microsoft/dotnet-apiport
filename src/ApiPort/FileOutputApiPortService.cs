@@ -1,15 +1,19 @@
-﻿using Microsoft.Fx.Portability;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Fx.Portability.ObjectModel;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ApiPort
 {
+    /// <summary>
+    /// Use this service implementation to output analyze requests to a json file
+    /// </summary>
     internal class FileOutputApiPortService : IApiPortService
     {
         public Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
