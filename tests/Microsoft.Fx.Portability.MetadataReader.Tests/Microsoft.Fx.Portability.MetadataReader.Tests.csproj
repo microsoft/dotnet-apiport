@@ -78,6 +78,7 @@
     <Compile Include="ManagedMetadataReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAssembly.cs" />
+    <Compile Include="Tests\GenericClassMemberWithDifferentGeneric.cs" />
     <EmbeddedResource Include="Tests\EmptyProject.cs" />
     <EmbeddedResource Include="Tests\WithGenericsAndReference.cs" />
   </ItemGroup>
