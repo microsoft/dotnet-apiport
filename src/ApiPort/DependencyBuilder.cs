@@ -2,12 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 
 namespace ApiPort
 {
@@ -36,6 +40,9 @@ namespace ApiPort
             container.RegisterType<ApiPortService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IFileSystem, WindowsFileSystem>(new ContainerControlledLifetimeManager());
             container.RegisterType<IFileWriter, ReportFileWriter>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IRequestAnalyzer, RequestAnalyzer>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IAnalysisEngine, AnalysisEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ICollection<IReportWriter>>(new ContainerControlledLifetimeManager(), new InjectionFactory(WriterCollection));
 
             if (Console.IsOutputRedirected)
             {
@@ -46,7 +53,21 @@ namespace ApiPort
                 container.RegisterType<IProgressReporter, ConsoleProgressReporter>(new ContainerControlledLifetimeManager());
             }
 
-            return container;
+            // Load any customizations via Unity
+            var fileMap = new ExeConfigurationFileMap
+            {
+                ExeConfigFilename = "unity.config"
+            };
+
+            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            var unitySection = (UnityConfigurationSection)configuration.GetSection("unity");
+
+            return unitySection == null ? container : container.LoadConfiguration(unitySection);
+        }
+
+        private static object WriterCollection(IUnityContainer container)
+        {
+            return container.ResolveAll<IReportWriter>().ToList();
         }
     }
 }
