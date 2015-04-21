@@ -55,7 +55,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             StringBuilder sb = new StringBuilder();
             if (Kind == MemberKind.Method || Kind == MemberKind.Field)
             {
-                Name = Name.Replace("<", "{").Replace(">", "}");
                 //get the full name from the type
                 sb.Append(ParentType.ToString());
                 if (ParentType.IsArrayType)
@@ -64,18 +63,21 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
                 sb.Append(".");
 
+                string name = Name.Replace("<", "{").Replace(">", "}");
                 if (Kind == MemberKind.Method)
                 {
-                    Name = Name.Replace(".", "#");  //expected output is #ctor instead of .ctor
-                    if (MethodSignature.Header.IsGeneric)
+                    sb.Append(name.Replace(".", "#"));  // Expected output is '#ctor' instead of '.ctor'
+
+                    if (MethodSignature.GenericParameterCount > 0)
                     {
-                        if (MethodSignature.GenericParameterCount > 0)
-                        {
-                            Name += "``" + MethodSignature.GenericParameterCount;
-                        }
+                        sb.Append($"``{MethodSignature.GenericParameterCount}");
                     }
                 }
-                sb.Append(Name);
+                else
+                {
+                    sb.Append(name);
+                }
+
                 //add method signature 
                 if (Kind == MemberKind.Method)
                 {
