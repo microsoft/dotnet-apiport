@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
+using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 
@@ -10,13 +11,15 @@ namespace Microsoft.Fx.Portability
 {
     internal static class MetadataReaderExtensions
     {
-        public static AssemblyInfo GetAssemblyInfo(this MetadataReader metadataReader)
+        public static AssemblyInfo GetAssemblyInfo(this MetadataReader metadataReader, string filePath)
         {
-            // TODO: Find FileVersion and TFM of assembly
+            var fileInfo = FileVersionInfo.GetVersionInfo(filePath);
+
+            // TODO: Find TFM of assembly
             return new AssemblyInfo
             {
                 AssemblyIdentity = metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition()),
-                FileVersion = string.Empty,
+                FileVersion = fileInfo.FileVersion ?? string.Empty,
                 TargetFrameworkMoniker = string.Empty
             };
         }

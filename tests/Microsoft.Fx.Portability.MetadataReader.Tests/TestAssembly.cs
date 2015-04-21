@@ -42,14 +42,23 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.True(result.Success);
         }
 
-        public string path { get { return _path; } }
+        public string AssemblyPath { get { return _path; } }
 
         public static string EmptyProject
         {
             get
             {
                 var text = GetText("EmptyProject.cs");
-                return new TestAssembly("EmptyProject", text, new[] { mscorlib }).path;
+                return new TestAssembly("EmptyProject", text, new[] { mscorlib }).AssemblyPath;
+            }
+        }
+
+        public static string GenericClassWithGenericMethod
+        {
+            get
+            {
+                var text = GetText("GenericClassMemberWithDifferentGeneric.cs");
+                return new TestAssembly("GenericClassMemberWithDifferentGeneric", text, new[] { mscorlib }).AssemblyPath;
             }
         }
 
@@ -58,7 +67,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("WithGenericsAndReference.cs");
-                return new TestAssembly("WithGenericsAndReference", text, new[] { mscorlib, EmptyProject }).path;
+                return new TestAssembly("WithGenericsAndReference", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
             }
         }
 
