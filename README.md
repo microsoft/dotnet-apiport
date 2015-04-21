@@ -7,12 +7,12 @@ repository in order to be notified as we make changes to and expand it.
 
 Today, the repository contains the following components:
 
-* **src/ApiPort** Console tool to access portability webservice.  *Does not analyze assemblies yet.*
+* **src/ApiPort** Console tool to access portability webservice.
 * **src/Microsoft.Fx.Portability** Provides common types for API Port.
 * **src/Microsoft.Fx.Portability-net45** A project targeting .NET 4.5 of Microsoft.Fx.Portability to allow desktop apps to directly reference it.  *Currently a work-around for beta VS 2015 behavior.*
 * **src/Microsoft.Fx.Portability.MetadataReader** Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata)
 * **tests/Microsoft.Fx.Portability.Tests** Provides tests for Microsoft.Fx.Portability.
-* **tests/Microsoft.Fx.Portability.MetadataReader.Tests** Provides tests for Microsoft.Fx.Portability.MetadataReader.  *These are not included in the solution.  Roslyn and System.Reflection.Metadata both rely on System.Collections.ImmutableCollections, but are using different prerelease versions.  There are breaking API changes that don't allow both to be used at the same time.*
+* **tests/Microsoft.Fx.Portability.MetadataReader.Tests** Provides tests for Microsoft.Fx.Portability.MetadataReader.
 
 More libraries are coming soon. Stay tuned!
 
