@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             _assemblyLocation = assemblyPath;
 
             MemberDependency = new List<MemberDependency>();
-            CallingAssembly = _reader.GetAssemblyInfo();
+            CallingAssembly = _reader.GetAssemblyInfo(assemblyPath);
 
             // Get assembly info
             var assemblyDefinition = _reader.GetAssemblyDefinition();
