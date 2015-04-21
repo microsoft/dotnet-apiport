@@ -34,6 +34,10 @@ namespace Microsoft.Fx.Portability
 
         public bool IsSourceAnalyzerAvailable { get; set; }
 
+        public string BugLink { get; set; }
+
+        public string Notes { get; set; }
+
         public bool IsRetargeting
         {
             get
