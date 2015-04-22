@@ -3,8 +3,11 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection.Metadata;
+using System.Reflection.Metadata.Decoding;
 using System.Security.Cryptography;
 
 namespace Microsoft.Fx.Portability
@@ -15,12 +18,11 @@ namespace Microsoft.Fx.Portability
         {
             var fileInfo = FileVersionInfo.GetVersionInfo(filePath);
 
-            // TODO: Find TFM of assembly
             return new AssemblyInfo
             {
                 AssemblyIdentity = metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition()),
                 FileVersion = fileInfo.FileVersion ?? string.Empty,
-                TargetFrameworkMoniker = string.Empty
+                TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty
             };
         }
 
@@ -36,6 +38,41 @@ namespace Microsoft.Fx.Portability
             var name = metadataReader.GetString(assemblyDefinition.Name);
 
             return metadataReader.FormatAssemblyInfo(name, assemblyDefinition.Culture, assemblyDefinition.PublicKey, assemblyDefinition.Version);
+        }
+
+        public static string GetTargetFrameworkMoniker(this MetadataReader metadataReader)
+        {
+            var tfmAttributeHandle = metadataReader.CustomAttributes
+                            .Cast<CustomAttributeHandle>()
+                            .SingleOrDefault(metadataReader.IsTargetFrameworkMonikerAttribute);
+
+            if (tfmAttributeHandle.IsNil)
+            {
+                return null;
+            }
+
+            var parameters = metadataReader.GetParameterValues(metadataReader.GetCustomAttribute(tfmAttributeHandle));
+
+            return parameters.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// This method will return a list of parameter values for the custom attribute.
+        /// </summary>
+        /// <remarks>
+        /// Currently, this only works for string values
+        /// </remarks>
+        public static ImmutableArray<string> GetParameterValues(this MetadataReader metadataReader, CustomAttribute customAttribute)
+        {
+            if (customAttribute.Constructor.Kind != HandleKind.MemberReference)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var ctor = metadataReader.GetMemberReference((MemberReferenceHandle)customAttribute.Constructor);
+            var signature = SignatureDecoder.DecodeMethodSignature(ctor.Signature, new StringParameterValueTypeProvider(metadataReader, customAttribute.Value));
+
+            return signature.ParameterTypes;
         }
 
         private static string FormatAssemblyInfo(this MetadataReader metadataReader, string name, StringHandle cultureHandle, BlobHandle publicKeyTokenHandle, Version version)
@@ -91,6 +128,36 @@ namespace Microsoft.Fx.Portability
             return BitConverter.ToString(bytes)
                 .Replace("-", "")
                 .ToLowerInvariant();
+        }
+
+        private static bool IsTargetFrameworkMonikerAttribute(this MetadataReader metadataReader, CustomAttributeHandle handle)
+        {
+            if (handle.IsNil)
+            {
+                return false;
+            }
+
+            var customAttribute = metadataReader.GetCustomAttribute(handle);
+
+            if (customAttribute.Constructor.Kind != HandleKind.MemberReference)
+            {
+                return false;
+            }
+
+            var constructorRef = metadataReader.GetMemberReference((MemberReferenceHandle)customAttribute.Constructor);
+
+            if (constructorRef.Parent.Kind != HandleKind.TypeReference)
+            {
+                return false;
+            }
+
+            var typeRef = metadataReader.GetTypeReference((TypeReferenceHandle)constructorRef.Parent);
+
+            var typeRefName = metadataReader.GetString(typeRef.Name);
+            var typeRefNamespace = metadataReader.GetString(typeRef.Namespace);
+
+            return string.Equals(typeRefName, "TargetFrameworkAttribute", StringComparison.Ordinal)
+                && string.Equals(typeRefNamespace, "System.Runtime.Versioning", StringComparison.Ordinal);
         }
     }
 }
