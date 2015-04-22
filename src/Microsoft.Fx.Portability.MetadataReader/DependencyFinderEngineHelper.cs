@@ -67,14 +67,14 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private MemberDependency GetTypeReferenceMemberDependency(TypeReference typeReference)
         {
-            MemberMetadataInfo typeRefinfo = MemberMetadataInfo.GetFullName(typeReference, _reader);
-            return CreateMemberDependency(typeRefinfo);
+            var provider = new MemberMetadataInfoTypeProvider(_reader);
+            var typeInfo = provider.GetFullName(typeReference);
+
+            return CreateMemberDependency(typeInfo);
         }
 
         private MemberDependency CreateMemberDependency(MemberMetadataInfo type)
         {
-            var memberDependency = new MemberDependency { CallingAssembly = CallingAssembly };
-
             if (type.IsPrimitiveType && _assemblyInfoForPrimitives == null)
             {
                 if (type.IsAssemblySet)
@@ -87,54 +87,37 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
             }
 
-            memberDependency.MemberDocId = "T:" + type.ToString(); ;
-
-            if (type.IsAssemblySet)
+            return new MemberDependency
             {
-                memberDependency.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(type.DefinedInAssembly);
-            }
-            else
-            {
-                memberDependency.DefinedInAssemblyIdentity = _currentAssemblyInfo;
-            }
-
-            return memberDependency;
+                CallingAssembly = CallingAssembly,
+                MemberDocId = $"T:{type}",
+                DefinedInAssemblyIdentity = type.IsAssemblySet ? _reader.FormatAssemblyInfo(type.DefinedInAssembly) : _currentAssemblyInfo
+            };
         }
 
         private MemberDependency GetMemberReferenceMemberDependency(MemberReference memberReference)
         {
-            MemberDependency dep = new MemberDependency();
-            MemberMetadataInfo memberRefInfo = MemberMetadataInfo.GetMemberRefInfo(memberReference, _reader);
+            var provider = new MemberMetadataInfoTypeProvider(_reader);
+            var memberRefInfo = provider.GetMemberRefInfo(memberReference);
 
-            //add the parent type to the types list (only needed when we want to report memberrefs defined in the current assembly)
-            if (memberRefInfo.ParentType.IsTypeDef || (memberRefInfo.ParentType.IsPrimitiveType && _currentAssemblyName.Equals("mscorlib", StringComparison.InvariantCultureIgnoreCase)))
-                MemberDependency.Add(CreateMemberDependency(memberRefInfo.ParentType));
-
-            dep.CallingAssembly = CallingAssembly;
-
-            //MemberReferenceKind can be Method or Field
-            string kind;
-            switch (memberReference.GetKind())
+            // Add the parent type to the types list (only needed when we want to report memberrefs defined in the current assembly)
+            if (memberRefInfo.ParentType.IsTypeDef || (memberRefInfo.ParentType.IsPrimitiveType && _currentAssemblyName.Equals("mscorlib", StringComparison.OrdinalIgnoreCase)))
             {
-                case MemberReferenceKind.Field:
-                    kind = "F:";
-                    break;
-                case MemberReferenceKind.Method:
-                    kind = "M:";
-                    break;
-                default:
-                    kind = memberReference.GetKind().ToString();
-                    break;
+                MemberDependency.Add(CreateMemberDependency(memberRefInfo.ParentType));
             }
 
-            dep.MemberDocId = kind + memberRefInfo.ToString();
-            dep.TypeDocId = "T:" + memberRefInfo.ParentType.ToString();
+            var dep = new MemberDependency
+            {
+                CallingAssembly = CallingAssembly,
+                MemberDocId = $"{GetPrefix(memberReference)}:{memberRefInfo}",
+                TypeDocId = $"T:{memberRefInfo.ParentType}"
+            };
 
             if (memberRefInfo.ParentType.IsAssemblySet)
             {
                 dep.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly);
             }
-            else if (memberRefInfo.ParentType.IsPrimitiveType)  //if it is primitive type, the assembly is not set
+            else if (memberRefInfo.ParentType.IsPrimitiveType)  // If it is primitive type, the assembly is not set
             {
                 dep.DefinedInAssemblyIdentity = _assemblyInfoForPrimitives;
             }
@@ -144,6 +127,19 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             return dep;
+        }
+
+        private string GetPrefix(MemberReference memberReference)
+        {
+            switch (memberReference.GetKind())
+            {
+                case MemberReferenceKind.Field:
+                    return "F";
+                case MemberReferenceKind.Method:
+                    return "M";
+                default:
+                    return memberReference.GetKind().ToString();
+            }
         }
     }
 }
