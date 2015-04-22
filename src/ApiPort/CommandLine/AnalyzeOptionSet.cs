@@ -20,8 +20,8 @@ namespace ApiPort.CommandLine
             Add("p|showNonPortableApis", LocalizedStrings.CmdHelpShowNonPortableApis, e => { if (e != null) { RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis; } });
             Add("b|showBreakingChanges", LocalizedStrings.CmdHelpShowBreakingChanges, e => { if (e != null) { RequestFlags |= AnalyzeRequestFlags.ShowBreakingChanges; } });
             Add("noDefaultIgnoreFile", LocalizedStrings.CmdHelpNoDefaultIgnoreFile, e => { if (e != null) { RequestFlags |= AnalyzeRequestFlags.NoDefaultIgnoreFile; } });
-
             Add("i|ignoreAssemblyFile=", LocalizedStrings.CmdHelpIgnoreAssembliesFile, UpdateIgnoredAssemblyFiles);
+            Add("s|suppressBreakingChange=", LocalizedStrings.CmdHelpSuppressBreakingChange, UpdateBreakingChangeSuppressions);
         }
 
         protected override bool ValidateValues()

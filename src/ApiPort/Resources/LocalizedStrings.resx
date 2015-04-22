@@ -231,4 +231,7 @@ To learn more about how this tool works, including the data we are collecting, g
   <data name="CmdHelpNoDefaultIgnoreFile" xml:space="preserve">
     <value>Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json</value>
   </data>
+  <data name="CmdHelpSuppressBreakingChange" xml:space="preserve">
+    <value>Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported.</value>
+  </data>
 </root>
