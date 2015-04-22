@@ -22,35 +22,38 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo GetMemberRefInfo(MemberReference memberReference)
         {
-            string name = Reader.GetString(memberReference.Name);
+            var parentType = GetMemberParentInfo(memberReference);
 
-            MemberMetadataInfo memberRefInfo = new MemberMetadataInfo(name);
-
-            MemberMetadataInfo parentType = GetMemberParentInfo(memberReference);
             if (parentType == null)
+            {
                 return null;
-            memberRefInfo.ParentType = parentType;
+            }
 
             switch (memberReference.GetKind())
             {
                 case MemberReferenceKind.Field:
-                    memberRefInfo.Kind = MemberKind.Field;
-                    break;
+                    return new MemberMetadataInfo
+                    {
+                        Name = Reader.GetString(memberReference.Name),
+                        ParentType = parentType,
+                        Kind = MemberKind.Field
+                    };
                 case MemberReferenceKind.Method:
-                    memberRefInfo.Kind = MemberKind.Method;
-                    //get method signature
-                    memberRefInfo.MethodSignature = SignatureDecoder.DecodeMethodSignature<MemberMetadataInfo>(memberReference.Signature, this);
-                    foreach (MemberMetadataInfo mInfo in memberRefInfo.MethodSignature.ParameterTypes)
+                    var memberRefInfo = new MemberMetadataInfo
+                    {
+                        Name = Reader.GetString(memberReference.Name),
+                        ParentType = parentType,
+                        Kind = MemberKind.Method,
+                        MethodSignature = SignatureDecoder.DecodeMethodSignature(memberReference.Signature, this)
+                    };
+                    foreach (var mInfo in memberRefInfo.MethodSignature.ParameterTypes)
                     {
                         mInfo.IsEnclosedType = true;
                     }
-                    break;
+                    return memberRefInfo;
                 default:
-                    memberRefInfo = null;
-                    break;
+                    return null;
             }
-
-            return memberRefInfo;
         }
 
         public MemberMetadataInfo GetMemberParentInfo(MemberReference memberReference)
@@ -58,41 +61,37 @@ namespace Microsoft.Fx.Portability.Analyzer
             Handle parent = memberReference.Parent;
             switch (parent.Kind)
             {
-                case HandleKind.TypeReference: //get the typeref parent of memberRef
+                case HandleKind.TypeReference:
                     return GetFullName((TypeReferenceHandle)parent);
-                case HandleKind.TypeDefinition: //get the typedef parent of memberRef
-                    MemberMetadataInfo typeDefInfo = GetFullName((TypeDefinitionHandle)parent);
-                    typeDefInfo.IsTypeDef = true;
-                    return typeDefInfo;
-                case HandleKind.TypeSpecification:   //get the typeref parent of memberRef
+                case HandleKind.TypeDefinition:
+                    return new MemberMetadataInfo(GetFullName((TypeDefinitionHandle)parent))
+                    {
+                        IsTypeDef = true
+                    };
+                case HandleKind.TypeSpecification:
                     return SignatureDecoder.DecodeType(parent, this);
                 default:
-                    //Console.Error.WriteLine("MemberReference parent is of kind " + memberReference.Parent.Kind);
                     return null;
             }
         }
 
         private MemberMetadataInfo GetName(TypeDefinition type)
         {
-            string name = Reader.GetString(type.Name);
-            MemberMetadataInfo info = new MemberMetadataInfo(name);
-            info.IsTypeDef = true;
-            if (!type.Namespace.IsNil)
+            return new MemberMetadataInfo
             {
-                info.Namespace = Reader.GetString(type.Namespace);
-            }
-            return info;
+                Name = Reader.GetString(type.Name),
+                IsTypeDef = true,
+                Namespace = !type.Namespace.IsNil ? Reader.GetString(type.Namespace) : null
+            };
         }
 
         private MemberMetadataInfo GetName(TypeReference reference)
         {
-            string name = Reader.GetString(reference.Name);
-            MemberMetadataInfo info = new MemberMetadataInfo(name);
-            if (!reference.Namespace.IsNil)
+            return new MemberMetadataInfo
             {
-                info.Namespace = Reader.GetString(reference.Namespace);
-            }
-            return info;
+                Name = Reader.GetString(reference.Name),
+                Namespace = !reference.Namespace.IsNil ? Reader.GetString(reference.Namespace) : null
+            };
         }
 
         private MemberMetadataInfo GetFullName(TypeDefinitionHandle handle)
@@ -103,16 +102,17 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private MemberMetadataInfo GetFullName(TypeDefinition type)
         {
-            TypeDefinitionHandle declaringTypeHandle = type.GetDeclaringType();
+            var declaringTypeHandle = type.GetDeclaringType();
 
             if (declaringTypeHandle.IsNil)
             {
                 return GetName(type);
             }
+
             MemberMetadataInfo info1 = GetName(type);
             MemberMetadataInfo info2 = GetFullName(declaringTypeHandle);
-            info1.Join(info2);
-            return info1;
+
+            return new MemberMetadataInfo(info1, info2);
         }
 
         private MemberMetadataInfo GetFullName(TypeReferenceHandle handle)
@@ -130,21 +130,29 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 case HandleKind.ModuleReference:
                     var moduleReference = (ModuleReferenceHandle)scope;
-                    name.Module = moduleReference;
-                    return name;
+
+                    return new MemberMetadataInfo(name)
+                    {
+                        Module = moduleReference
+                    };
 
                 case HandleKind.AssemblyReference:
                     if (!name.IsAssemblySet)
                     {
-                        name.IsAssemblySet = true;
-                        name.DefinedInAssembly = Reader.GetAssemblyReference((AssemblyReferenceHandle)(scope));
+                        return new MemberMetadataInfo(name)
+                        {
+                            IsAssemblySet = true,
+                            DefinedInAssembly = Reader.GetAssemblyReference((AssemblyReferenceHandle)(scope))
+                        };
                     }
-                    return name;
+                    else
+                    {
+                        return name;
+                    }
 
                 case HandleKind.TypeReference:
                     MemberMetadataInfo info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)(scope)));
-                    name.Join(info2);
-                    return name;
+                    return new MemberMetadataInfo(name, info2);
 
                 default:
                     // These cases are rare. According to spec, nil means look 
@@ -239,11 +247,14 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                 default:
                     Debug.Assert(false);
-                    throw new ArgumentOutOfRangeException("typeCode");
+                    throw new ArgumentOutOfRangeException(nameof(typeCode));
             }
-            MemberMetadataInfo mInfo = new MemberMetadataInfo(name);
-            mInfo.IsPrimitiveType = true;
-            return mInfo;
+
+            return new MemberMetadataInfo
+            {
+                Name = name,
+                IsPrimitiveType = true
+            };
         }
 
         public MemberMetadataInfo GetTypeFromDefinition(TypeDefinitionHandle handle)
@@ -258,37 +269,47 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo GetSZArrayType(MemberMetadataInfo elementType)
         {
-            elementType.Name += "[]";
-            return elementType;
+            return new MemberMetadataInfo(elementType)
+            {
+                Name = $"{elementType.Name}[]"
+            };
         }
 
         public MemberMetadataInfo GetPointerType(MemberMetadataInfo elementType)
         {
-            elementType.Name += "*";
-            return elementType;
+            return new MemberMetadataInfo(elementType)
+            {
+                Name = $"{elementType.Name}*"
+            };
         }
-
 
         public MemberMetadataInfo GetByReferenceType(MemberMetadataInfo elementType)
         {
-            elementType.Name += "@";
-            return elementType;
+            return new MemberMetadataInfo(elementType)
+            {
+                Name = $"{elementType.Name}@"
+            };
         }
 
         public MemberMetadataInfo GetGenericMethodParameter(int index)
         {
-            // generic arguments on methods are prefixed with ``
-            // type generic arguments are prefixed with '
-            MemberMetadataInfo info = new MemberMetadataInfo("``" + index.ToString());
-            info.IsGenericInstance = true;
-            return info;
+            // Generic arguments on methods are prefixed with ``
+            // Type generic arguments are prefixed with `
+            return new MemberMetadataInfo
+            {
+                Name = $"``{index}",
+                IsGenericInstance = true
+            };
         }
 
         public MemberMetadataInfo GetGenericTypeParameter(int index)
         {
-            MemberMetadataInfo info = new MemberMetadataInfo("`" + index.ToString());
-            info.IsGenericInstance = true;
-            return info;
+            // Type generic arguments are prefixed with `
+            return new MemberMetadataInfo
+            {
+                Name = $"`{index}",
+                IsGenericInstance = true
+            };
         }
 
         public MemberMetadataInfo GetGenericInstance(MemberMetadataInfo genericType, ImmutableArray<MemberMetadataInfo> typeArguments)

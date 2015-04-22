@@ -12,11 +12,56 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class MemberMetadataInfo
     {
-        public MemberMetadataInfo(string name)
+        public MemberMetadataInfo()
         {
-            Name = name;
             Kind = MemberKind.Type;
             Names = new List<string>();
+        }
+
+        public MemberMetadataInfo(MemberMetadataInfo other)
+        {
+            Names = other.Names;
+            MethodSignature = other.MethodSignature;
+            Module = other.Module;
+            IsArrayType = other.IsArrayType;
+            ArrayTypeInfo = other.ArrayTypeInfo;
+            IsTypeDef = other.IsTypeDef;
+            IsPrimitiveType = other.IsPrimitiveType;
+            Kind = other.Kind;
+            IsGenericInstance = other.IsGenericInstance;
+            IsEnclosedType = other.IsEnclosedType;
+            Name = other.Name;
+            Namespace = other.Namespace;
+            DefinedInAssembly = other.DefinedInAssembly;
+            IsAssemblySet = other.IsAssemblySet;
+
+            if (other.ParentType != null)
+            {
+                ParentType = new MemberMetadataInfo(other.ParentType);
+            }
+
+            if (other.GenericTypeArgs != null)
+            {
+                GenericTypeArgs = other.GenericTypeArgs.Select(o => new MemberMetadataInfo(o)).ToList();
+            }
+        }
+
+        public MemberMetadataInfo(MemberMetadataInfo other1, MemberMetadataInfo other2)
+            : this(other1)
+        {
+            Names.AddRange(other2.Names);
+            Names.Add(other2.Name);
+
+            if (other2.Namespace != null)
+            {
+                Namespace = other2.Namespace;
+            }
+
+            if (other2.IsAssemblySet)
+            {
+                DefinedInAssembly = other2.DefinedInAssembly;
+                IsAssemblySet = true;
+            }
         }
 
         public List<string> Names { get; set; }
@@ -175,20 +220,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             return sb.ToString();
-        }
-
-        public void Join(MemberMetadataInfo info2)
-        {
-            Names.AddRange(info2.Names);
-            Names.Add(info2.Name);
-            if (info2.Namespace != null)
-                Namespace = info2.Namespace;
-
-            if (info2.IsAssemblySet)
-            {
-                DefinedInAssembly = info2.DefinedInAssembly;
-                IsAssemblySet = true;
-            }
         }
 
         public static MemberMetadataInfo GetFullName(TypeReference typeReference, MetadataReader reader)
