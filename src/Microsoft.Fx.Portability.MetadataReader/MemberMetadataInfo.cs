@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -52,112 +53,127 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
             if (Kind == MemberKind.Method || Kind == MemberKind.Field)
             {
-                //get the full name from the type
-                sb.Append(ParentType.ToString());
-                if (ParentType.IsArrayType)
-                {
-                    sb.Append(ParentType.ArrayTypeInfo);
-                }
+                return GenerateMemberDocId();
+            }
+            else
+            {
+                return GenerateTypeDocId();
+            }
+        }
+
+        private string GenerateTypeDocId()
+        {
+            var sb = new StringBuilder();
+
+            if (Namespace != null)
+            {
+                sb.Append(Namespace);
                 sb.Append(".");
+            }
 
-                string name = Name.Replace("<", "{").Replace(">", "}");
-                if (Kind == MemberKind.Method)
+            var combinedNames = new List<string>(Names) { Name };
+            var displayNames = IsGenericInstance && GenericTypeArgs != null && IsEnclosedType
+                ? GetGenericDisplayNames(combinedNames) : combinedNames;
+
+            sb.Append(string.Join(".", displayNames));
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Add the type arguments for generic instances. Go through all type names, and if it is generic, such 
+        /// as Hashtable`1, remove the `1. Look in the arguments list and put the list of arguments in between {}
+        ///
+        /// Example: Hashtable{`0}.KeyValuePair 
+        /// </summary>
+        private IEnumerable<string> GetGenericDisplayNames(IEnumerable<string> displayNames)
+        {
+            // The most outputs when run on mscorlib are under 50 bytes in length
+            const int SB_CAPACITY = 50;
+
+            int index = 0;
+            foreach (var displayName in displayNames)
+            {
+                int pos = displayName.IndexOf('`');
+                if (pos <= 0)
                 {
-                    sb.Append(name.Replace(".", "#"));  // Expected output is '#ctor' instead of '.ctor'
-
-                    if (MethodSignature.GenericParameterCount > 0)
-                    {
-                        sb.Append($"``{MethodSignature.GenericParameterCount}");
-                    }
+                    yield return displayName;
+                    continue;
                 }
-                else
+
+                int numGenericArgs;
+                // TODO: Fix this to work with >9 generic arguments 
+                if (!int.TryParse(displayName.Substring(pos + 1, 1), out numGenericArgs))
                 {
-                    sb.Append(name);
+                    yield return displayName;
+                    continue;
                 }
 
-                //add method signature 
-                if (Kind == MemberKind.Method)
-                {
-                    if (MethodSignature.ParameterTypes.Count() > 0)
-                    {
-                        sb.Append("(");
-                        MethodSignature.ParameterTypes[0].IsEnclosedType = true;
-                        sb.Append(MethodSignature.ParameterTypes[0].ToString());
+                Debug.Assert(index + numGenericArgs <= GenericTypeArgs.Count, "index + numGenericArgs is too large");
 
-                        for (int i = 1; i < MethodSignature.ParameterTypes.Count(); i++)
-                        {
-                            sb.Append(",");
-                            MethodSignature.ParameterTypes[i].IsEnclosedType = true;
-                            sb.Append(MethodSignature.ParameterTypes[i].ToString());
-                        }
-                        sb.Append(")");
-                    }
+                // Start with the name up to the generic parameter token
+                var sb = new StringBuilder(displayName, 0, pos, SB_CAPACITY);
+
+                // Add the generic parameters
+                sb.Append("{");
+                sb.Append(string.Join(",", GenericTypeArgs.GetRange(index, numGenericArgs)));
+                sb.Append("}");
+
+                // Add any part that was after the generic entry
+                if (displayName.Length > pos + 2)
+                {
+                    var start = pos + 2;
+                    var length = displayName.Length - start;
+
+                    sb.Append(displayName, start, length);
+                }
+
+                yield return sb.ToString();
+
+                // Advance the index in the args list
+                index += numGenericArgs;
+            }
+        }
+
+        private string GenerateMemberDocId()
+        {
+            var sb = new StringBuilder();
+
+            // Get the full name from the type
+            sb.Append(ParentType.ToString());
+
+            if (ParentType.IsArrayType)
+            {
+                sb.Append(ParentType.ArrayTypeInfo);
+            }
+
+            sb.Append(".");
+
+            string name = Name.Replace("<", "{").Replace(">", "}");
+            if (Kind == MemberKind.Method)
+            {
+                sb.Append(name.Replace(".", "#"));  // Expected output is '#ctor' instead of '.ctor'
+
+                if (MethodSignature.GenericParameterCount > 0)
+                {
+                    sb.Append($"``{MethodSignature.GenericParameterCount}");
                 }
             }
             else
             {
-                if (Namespace != null)
-                {
-                    sb.Append(Namespace);
-                    sb.Append(".");
-                }
-
-                List<string> displayNames = new List<string>(Names);
-                displayNames.Add(Name);
-
-                //add the type arguments for generic instances
-                //example output: Hashtable{`0}.KeyValuePair
-                //Go through all type names, if it is generic such as Hashtable`1 remove the '1 , look in the arguments list 
-                //and put the list of arguments in between {}
-                if (IsGenericInstance && GenericTypeArgs != null && IsEnclosedType)
-                {
-                    int index = 0;
-                    for (int i = 0; i < displayNames.Count; i++)
-                    {
-                        int pos = displayNames[i].IndexOf('`');
-                        if (pos > 0)
-                        {
-                            int numArgs;
-                            bool success = Int32.TryParse(displayNames[i].Substring(pos + 1, 1), out numArgs);
-
-                            if (success)
-                            {
-                                string substr1 = displayNames[i].Substring(0, pos);
-                                string substr2 = "";
-                                if (displayNames[i].Length > pos + 2)
-                                    substr2 = displayNames[i].Substring(pos + 2);
-
-                                displayNames[i] = substr1;
-                                if (index + numArgs <= GenericTypeArgs.Count)
-                                {
-                                    List<MemberMetadataInfo> args = GenericTypeArgs.GetRange(index, numArgs);
-                                    string argsList = "{" + String.Join(",", args) + "}";
-                                    displayNames[i] += argsList;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("error");
-                                }
-                                displayNames[i] += substr2;
-
-                                //advance the index in the args list
-                                index += numArgs;
-                            }
-                        }
-                    }
-                }
-
-
-                for (int i = 0; i < displayNames.Count; i++)
-                {
-                    if (i > 0)
-                        sb.Append(".");
-                    sb.Append(displayNames[i]);
-                }
+                sb.Append(name);
             }
+
+            // Add the method signature 
+            if (Kind == MemberKind.Method && MethodSignature.ParameterTypes.Count() > 0)
+            {
+                sb.Append("(");
+                sb.Append(string.Join(",", MethodSignature.ParameterTypes));
+                sb.Append(")");
+            }
+
             return sb.ToString();
         }
 
