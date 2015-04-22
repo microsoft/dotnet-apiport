@@ -224,13 +224,13 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public static MemberMetadataInfo GetFullName(TypeReference typeReference, MetadataReader reader)
         {
-            TypeDecoder provider = new TypeDecoder(reader);
+            MemberMetadataInfoTypeProvider provider = new MemberMetadataInfoTypeProvider(reader);
             return provider.GetFullName(typeReference);
         }
 
         public static MemberMetadataInfo GetMemberRefInfo(MemberReference memberReference, MetadataReader reader)
         {
-            TypeDecoder provider = new TypeDecoder(reader);
+            MemberMetadataInfoTypeProvider provider = new MemberMetadataInfoTypeProvider(reader);
             return provider.GetMemberRefInfo(memberReference);
         }
     }

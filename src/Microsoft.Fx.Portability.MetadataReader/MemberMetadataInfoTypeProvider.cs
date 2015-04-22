@@ -11,11 +11,11 @@ using System.Text;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
-    internal class TypeDecoder : ISignatureTypeProvider<MemberMetadataInfo>
+    internal class MemberMetadataInfoTypeProvider : ISignatureTypeProvider<MemberMetadataInfo>
     {
         public MetadataReader Reader { get; }
 
-        public TypeDecoder(MetadataReader reader)
+        public MemberMetadataInfoTypeProvider(MetadataReader reader)
         {
             Reader = reader;
         }
