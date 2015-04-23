@@ -21,9 +21,10 @@ namespace ApiPort.CommandLine
         private readonly ICollection<string> _invalidInputFiles = new SortedSet<string>(StringComparer.Ordinal);
         private readonly ICollection<string> _ignoredAssemblyFiles = new SortedSet<string>(StringComparer.Ordinal);
 
-        // Targets and output formats are not case sensitive
+        // Targets, breaking change IDs, and output formats are not case sensitive
         private readonly ICollection<string> _targets = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly ICollection<string> _outputFormats = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly ICollection<string> _breakingChangeSuppressions = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
 
         public CommandLineOptionSet(string name)
         {
@@ -71,6 +72,29 @@ namespace ApiPort.CommandLine
             return this;
         }
 
+        protected override bool Parse(string argument, OptionContext c)
+        {
+            string flag, name, sep, value;
+            if (GetOptionParts(argument, out flag, out name, out sep, out value))
+            {
+                name = GetCorrectOptionCasing(name);
+                return base.Parse(flag + name + sep + value, c);
+            }
+            return base.Parse(argument, c);
+        }
+
+        private string GetCorrectOptionCasing(string name)
+        {
+            foreach (string s in Dictionary.Keys)
+            {
+                if (s.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return s;
+                }
+            }
+            return name;
+        }
+
         /// <summary>
         /// Validate input values and check if okay to proceed
         /// </summary>
@@ -101,6 +125,8 @@ namespace ApiPort.CommandLine
 
         public IEnumerable<string> IgnoredAssemblyFiles { get { return _ignoredAssemblyFiles; } }
 
+        public IEnumerable<string> BreakingChangeSuppressions { get { return _breakingChangeSuppressions; } }
+
         protected void UpdateTargets(string target)
         {
             _targets.Add(target);
@@ -114,6 +140,15 @@ namespace ApiPort.CommandLine
         protected void UpdateIgnoredAssemblyFiles(string file)
         {
             _ignoredAssemblyFiles.Add(file);
+        }
+
+        protected void UpdateBreakingChangeSuppressions(string breakingChangeId)
+        {
+            // Since users might have a lot of breaking changes to ignore, allow them to specify multiple values delimited by , or ;
+            foreach (string s in breakingChangeId.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                _breakingChangeSuppressions.Add(s);
+            }
         }
 
         /// <summary>

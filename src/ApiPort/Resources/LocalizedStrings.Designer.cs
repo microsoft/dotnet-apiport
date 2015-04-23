@@ -142,6 +142,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported..
+        /// </summary>
+        public static string CmdHelpSuppressBreakingChange {
+            get {
+                return ResourceManager.GetString("CmdHelpSuppressBreakingChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

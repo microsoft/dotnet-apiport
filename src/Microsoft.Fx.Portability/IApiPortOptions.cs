@@ -15,5 +15,6 @@ namespace Microsoft.Fx.Portability
         AnalyzeRequestFlags RequestFlags { get; }
         IEnumerable<string> Targets { get; }
         IEnumerable<string> OutputFormats { get; }
+        IEnumerable<string> BreakingChangeSuppressions { get; }
     }
 }

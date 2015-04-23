@@ -43,7 +43,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 : new List<AssemblyInfo>();
 
             var breakingChanges = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
-                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies).ToList()
+                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress).ToList()
                 : new List<BreakingChangeDependency>();
 
             var reportingResult = _reportGenerator.ComputeReport(

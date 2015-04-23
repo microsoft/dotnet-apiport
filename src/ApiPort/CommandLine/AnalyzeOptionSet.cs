@@ -16,12 +16,12 @@ namespace ApiPort.CommandLine
             Add("o|out=", LocalizedStrings.OutputFileName, e => OutputFileName = e);
             Add("d|description=", LocalizedStrings.DescriptionHelp, e => Description = e);
             Add("t|target=", LocalizedStrings.TargetsToCheckAgainst, UpdateTargets);
-            Add("r|resultformat=", LocalizedStrings.ResultFormatHelp, UpdateOutputFormats);
+            Add("r|resultFormat=", LocalizedStrings.ResultFormatHelp, UpdateOutputFormats);
             Add("p|showNonPortableApis", LocalizedStrings.CmdHelpShowNonPortableApis, e => { if (e != null) { RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis; } });
             Add("b|showBreakingChanges", LocalizedStrings.CmdHelpShowBreakingChanges, e => { if (e != null) { RequestFlags |= AnalyzeRequestFlags.ShowBreakingChanges; } });
             Add("noDefaultIgnoreFile", LocalizedStrings.CmdHelpNoDefaultIgnoreFile, e => { if (e != null) { RequestFlags |= AnalyzeRequestFlags.NoDefaultIgnoreFile; } });
-
             Add("i|ignoreAssemblyFile=", LocalizedStrings.CmdHelpIgnoreAssembliesFile, UpdateIgnoredAssemblyFiles);
+            Add("s|suppressBreakingChange=", LocalizedStrings.CmdHelpSuppressBreakingChange, UpdateBreakingChangeSuppressions);
         }
 
         protected override bool ValidateValues()
@@ -34,7 +34,7 @@ namespace ApiPort.CommandLine
 
             // If no output formats have been supplied, default to Excel
             // TODO: Should probably get this from the service, not hard-coded
-            if(!OutputFormats.Any())
+            if (!OutputFormats.Any())
             {
                 UpdateOutputFormats("Excel");
             }

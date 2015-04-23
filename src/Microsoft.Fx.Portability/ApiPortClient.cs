@@ -130,7 +130,8 @@ namespace Microsoft.Fx.Portability
                 AssembliesWithErrors = dependencyFinder.AssembliesWithErrors.ToList(),
                 ApplicationName = options.Description,
                 Version = AnalyzeRequest.CurrentVersion,
-                RequestFlags = options.RequestFlags
+                RequestFlags = options.RequestFlags,
+                BreakingChangesToSuppress = options.BreakingChangeSuppressions
             };
         }
 
