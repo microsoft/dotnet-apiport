@@ -121,7 +121,11 @@ namespace ApiPort.CommandLine
 
         protected void UpdateBreakingChangeSuppressions(string breakingChangeId)
         {
-            _breakingChangeSuppressions.Add(breakingChangeId);
+            // Since users might have a lot of breaking changes to ignore, allow them to specify multiple values delimited by , or ;
+            foreach (string s in breakingChangeId.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                _breakingChangeSuppressions.Add(s);
+            }
         }
 
         /// <summary>
