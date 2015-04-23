@@ -246,6 +246,15 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
+        public void BreakingChangesWithSuppressions()
+        {
+            TestBreakingChangeWithSuppression(Version.Parse("4.5"), false, Enumerable.Empty<string>());
+            TestBreakingChangeWithSuppression(Version.Parse("4.5"), false, new[] { "15" });
+            TestBreakingChangeWithSuppression(Version.Parse("4.5"), true, new[] { "5" });
+            TestBreakingChangeWithSuppression(Version.Parse("4.5"), true, new[] { "6", "Foo", "5" });
+        }
+
+        [Fact]
         public void BreakingChangeIgnoreSelection()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
@@ -292,25 +301,30 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
         private static void TestBreakingChangeWithoutFixedEntry(Version version, bool noBreakingChangesExpected)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null);
+            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null, Enumerable.Empty<string>());
         }
 
         private static void TestBreakingChangeWithFixedEntry(Version version, bool noBreakingChangesExpected)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithFixedEntry(), noBreakingChangesExpected, null);
+            TestBreakingChange(version, GenerateTestRecommendationsWithFixedEntry(), noBreakingChangesExpected, null, Enumerable.Empty<string>());
         }
 
         private static void TestBreakingChangeWithFixedInServicingEntry(Version version, bool noBreakingChangesExpected)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithFixedInServicingEntry(), noBreakingChangesExpected, null);
+            TestBreakingChange(version, GenerateTestRecommendationsWithFixedInServicingEntry(), noBreakingChangesExpected, null, Enumerable.Empty<string>());
         }
 
         private static void TestBreakingChangeWithIgnoreList(Version version, bool noBreakingChangesExpected, IEnumerable<AssemblyInfo> assembliesToIgnore)
         {
-            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, assembliesToIgnore);
+            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, assembliesToIgnore, Enumerable.Empty<string>());
         }
 
-        private static void TestBreakingChange(Version version, IApiRecommendations recommendations, bool noBreakingChangesExpected, IEnumerable<AssemblyInfo> assembliesToIgnore)
+        private static void TestBreakingChangeWithSuppression(Version version, bool noBreakingChangesExpected, IEnumerable<string> suppressions)
+        {
+            TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null, suppressions);
+        }
+
+        private static void TestBreakingChange(Version version, IApiRecommendations recommendations, bool noBreakingChangesExpected, IEnumerable<AssemblyInfo> assembliesToIgnore, IEnumerable<string> breakingChangesToSuppress)
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var testData = GenerateTestData(catalog);
@@ -318,7 +332,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(AnalysisEngine.FullFrameworkIdentifier + ",Version=" + version);
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore, Enumerable.Empty<string>()).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore, breakingChangesToSuppress).ToList();
 
             if (noBreakingChangesExpected)
             {
