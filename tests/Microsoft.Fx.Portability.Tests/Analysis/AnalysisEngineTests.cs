@@ -231,7 +231,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(".NET Core Framework,Version=4.5.1");
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, null).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, null, null).ToList();
 
             Assert.Empty(breakingChanges);
         }
@@ -318,7 +318,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(AnalysisEngine.FullFrameworkIdentifier + ",Version=" + version);
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore, Enumerable.Empty<string>()).ToList();
 
             if (noBreakingChangesExpected)
             {

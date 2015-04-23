@@ -30,6 +30,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public byte Version { get; set; }
 
+        public IEnumerable<string> BreakingChangesToSuppress { get; set; }
+
         public IEnumerable<IgnoreAssemblyInfo> AssembliesToIgnore { get; set; }
 
         public int CompareTo(object obj)
