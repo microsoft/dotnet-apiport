@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.Analysis
                     var breakingChanges = _recommendations.GetBreakingChanges(kvp.Key.MemberDocId).Distinct();
                     foreach (var b in breakingChanges)
                     {
-                        if (BreakingChangeIsInVersionRange(fullFrameworkVersions, b) && !(breakingChangesToSuppress?.Contains(b.Id)??false))
+                        if (BreakingChangeIsInVersionRange(fullFrameworkVersions, b) && !(breakingChangesToSuppress?.Contains(b.Id) ?? false))
                         {
                             foreach (var a in kvp.Value)
                             {
