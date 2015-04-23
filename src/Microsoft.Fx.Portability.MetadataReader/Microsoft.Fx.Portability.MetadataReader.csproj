@@ -58,6 +58,7 @@
     <Compile Include="MemberMetadataInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemberMetadataInfoTypeProvider.cs" />
+    <Compile Include="StringParameterValueTypeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
