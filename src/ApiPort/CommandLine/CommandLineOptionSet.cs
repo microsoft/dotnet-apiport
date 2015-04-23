@@ -72,6 +72,29 @@ namespace ApiPort.CommandLine
             return this;
         }
 
+        protected override bool Parse(string argument, OptionContext c)
+        {
+            string flag, name, sep, value;
+            if (GetOptionParts(argument, out flag, out name, out sep, out value))
+            {
+                name = GetCorrectOptionCasing(name);
+                return base.Parse(flag + name + sep + value, c);
+            }
+            return base.Parse(argument, c);
+        }
+
+        private string GetCorrectOptionCasing(string name)
+        {
+            foreach (string s in Dictionary.Keys)
+            {
+                if (s.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return s;
+                }
+            }
+            return name;
+        }
+
         /// <summary>
         /// Validate input values and check if okay to proceed
         /// </summary>
