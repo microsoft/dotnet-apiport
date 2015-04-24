@@ -215,6 +215,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append(")");
             }
 
+            if (string.Equals(Name, "op_Implicit", StringComparison.Ordinal) || string.Equals(Name, "op_Explicit", StringComparison.Ordinal))
+            {
+                sb.Append("~");
+                sb.Append(MethodSignature.ReturnType);
+            }
+
             return sb.ToString();
         }
     }
