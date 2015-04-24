@@ -80,6 +80,8 @@
     <Compile Include="TestAssembly.cs" />
     <Compile Include="Tests\10-generic-params.cs" />
     <Compile Include="Tests\GenericClassMemberWithDifferentGeneric.cs" />
+    <Compile Include="Tests\OpExplicit.cs" />
+    <Compile Include="Tests\OpImplicit.cs" />
     <EmbeddedResource Include="Tests\EmptyProject.cs" />
     <EmbeddedResource Include="Tests\WithGenericsAndReference.cs" />
   </ItemGroup>
