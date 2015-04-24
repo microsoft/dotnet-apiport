@@ -65,6 +65,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                     };
                 case HandleKind.TypeSpecification:
                     return SignatureDecoder.DecodeType(parent, this);
+                case HandleKind.MethodDefinition:
+                    var method = Reader.GetMethodDefinition((MethodDefinitionHandle)parent);
+                    return new MemberMetadataInfo(GetFullName(method.GetDeclaringType()));
                 default:
                     return null;
             }
