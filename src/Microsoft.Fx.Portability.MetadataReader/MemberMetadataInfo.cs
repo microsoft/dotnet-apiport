@@ -148,13 +148,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                     continue;
                 }
 
-                int numGenericArgs;
-                // TODO: Fix this to work with >9 generic arguments 
-                if (!int.TryParse(displayName.Substring(pos + 1, 1), out numGenericArgs))
-                {
-                    yield return displayName;
-                    continue;
-                }
+                // Separate the name from the generic marker and the string after.
+                // The format is: 'StringBefore`10StringAfter'
+                var numGenericArgs = GenericTypeArgs.Count;
+                var offsetStringAfterGenericMarker = pos + numGenericArgs.ToString().Length + 1;
 
                 Debug.Assert(index + numGenericArgs <= GenericTypeArgs.Count, "index + numGenericArgs is too large");
 
@@ -166,13 +163,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append(string.Join(",", GenericTypeArgs.GetRange(index, numGenericArgs)));
                 sb.Append("}");
 
-                // Add any part that was after the generic entry
-                if (displayName.Length > pos + 2)
+                // Add any part that was after the generic entry 
+                if (displayName.Length > offsetStringAfterGenericMarker)
                 {
-                    var start = pos + 2;
-                    var length = displayName.Length - start;
+                    var length = displayName.Length - offsetStringAfterGenericMarker;
 
-                    sb.Append(displayName, start, length);
+                    sb.Append(displayName, offsetStringAfterGenericMarker, length);
                 }
 
                 yield return sb.ToString();
