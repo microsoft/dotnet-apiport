@@ -148,9 +148,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                     continue;
                 }
 
+                // Separate the name from the generic marker and the string after.
+                // The format is: 'StringBefore`10StringAfter'
                 int numGenericArgs;
-                // TODO: Fix this to work with >9 generic arguments 
-                if (!int.TryParse(displayName.Substring(pos + 1, 1), out numGenericArgs))
+                int offsetStringAfterGenericMarker;
+
+                if (!CalculateGenericArgsOffset(displayName, pos, out numGenericArgs, out offsetStringAfterGenericMarker))
                 {
                     yield return displayName;
                     continue;
@@ -166,13 +169,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append(string.Join(",", GenericTypeArgs.GetRange(index, numGenericArgs)));
                 sb.Append("}");
 
-                // Add any part that was after the generic entry
-                if (displayName.Length > pos + 2)
+                // Add any part that was after the generic entry 
+                if (displayName.Length > offsetStringAfterGenericMarker)
                 {
-                    var start = pos + 2;
-                    var length = displayName.Length - start;
+                    var length = displayName.Length - offsetStringAfterGenericMarker;
 
-                    sb.Append(displayName, start, length);
+                    sb.Append(displayName, offsetStringAfterGenericMarker, length);
                 }
 
                 yield return sb.ToString();
@@ -226,6 +228,20 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             return sb.ToString();
+        }
+
+        private bool CalculateGenericArgsOffset(string displayName, int pos, out int numGenericArgs, out int offsetStringAfterGenericMarker)
+        {
+            Debug.Assert(displayName[pos] == '`');
+
+            offsetStringAfterGenericMarker = ++pos;
+
+            while (offsetStringAfterGenericMarker < displayName.Length && char.IsDigit(displayName[offsetStringAfterGenericMarker]))
+            {
+                offsetStringAfterGenericMarker++;
+            }
+
+            return int.TryParse(displayName.Substring(pos, offsetStringAfterGenericMarker - pos), out numGenericArgs);
         }
     }
 }
