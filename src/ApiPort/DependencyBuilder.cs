@@ -11,6 +11,7 @@ using Microsoft.Practices.Unity.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace ApiPort
@@ -56,13 +57,18 @@ namespace ApiPort
             // Load any customizations via Unity
             var fileMap = new ExeConfigurationFileMap
             {
-                ExeConfigFilename = "unity.config"
+                ExeConfigFilename = Path.Combine(GetApplicationDirectory(), "unity.config")
             };
 
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             var unitySection = (UnityConfigurationSection)configuration.GetSection("unity");
 
             return unitySection == null ? container : container.LoadConfiguration(unitySection);
+        }
+
+        private static string GetApplicationDirectory()
+        {
+            return Path.GetDirectoryName(typeof(DependencyBuilder).Assembly.Location);
         }
 
         private static object WriterCollection(IUnityContainer container)

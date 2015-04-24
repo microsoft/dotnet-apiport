@@ -159,7 +159,7 @@ namespace ApiPort.CommandLine
         {
             if (Directory.Exists(path))
             {
-                foreach (var file in Directory.EnumerateFiles(path))
+                foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
                 {
                     UpdateInputAssemblies(file);
                 }
