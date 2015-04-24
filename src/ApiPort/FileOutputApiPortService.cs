@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPort
@@ -70,9 +71,29 @@ namespace ApiPort
 
         private void WriteOutput(AnalyzeRequest a)
         {
+            var sortedAnalyzeRequest = new AnalyzeRequest
+            {
+                RequestFlags = a.RequestFlags,
+                Dependencies = a.Dependencies
+                    .OrderBy(t => t.Key.MemberDocId)
+                    .ThenBy(t => t.Key.TypeDocId)
+                    .ToDictionary(t => t.Key, t => t.Value.OrderBy(tt => tt.AssemblyIdentity).ToList() as ICollection<AssemblyInfo>),
+                UnresolvedAssemblies = new SortedSet<string>(a.UnresolvedAssemblies, StringComparer.Ordinal),
+                UnresolvedAssembliesDictionary = a.UnresolvedAssembliesDictionary
+                    .OrderBy(t => t.Key)
+                    .ToDictionary(t => t.Key, t => new SortedSet<string>(t.Value) as ICollection<string>),
+                UserAssemblies = new SortedSet<AssemblyInfo>(a.UserAssemblies),
+                AssembliesWithErrors = new SortedSet<string>(a.AssembliesWithErrors, StringComparer.Ordinal),
+                Targets = new SortedSet<string>(a.Targets, StringComparer.Ordinal),
+                ApplicationName = a.ApplicationName,
+                Version = a.Version,
+                BreakingChangesToSuppress = new SortedSet<string>(a.BreakingChangesToSuppress, StringComparer.Ordinal),
+                AssembliesToIgnore = a.AssembliesToIgnore.OrderBy(i => i.AssemblyIdentity)
+            };
+
             var tmp = $"{Path.GetTempFileName()}.json";
 
-            using (var ms = new MemoryStream(a.Serialize()))
+            using (var ms = new MemoryStream(sortedAnalyzeRequest.Serialize()))
             using (var fs = File.OpenWrite(tmp))
             {
                 ms.CopyTo(fs);
