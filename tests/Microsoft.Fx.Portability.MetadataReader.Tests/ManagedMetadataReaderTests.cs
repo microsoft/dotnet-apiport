@@ -24,6 +24,28 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareDependencies(TestAssembly.GenericClassWithGenericMethod, GenericWithGenericMemberDocId());
         }
 
+       [Fact(Skip = SkipExplanation)]
+        public void MoreThan9GenericParams()
+        {
+            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params`10.InnerClass.#ctor(Microsoft.Fx.Portability.MetadataReader.Tests.Class{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9},`2)";
+
+            CompareSpecificDependency(TestAssembly.MoreThan9GenericParams, expected);
+        }
+
+        private void CompareSpecificDependency(string opImplicit, string v)
+        {
+            var dependencyFinder = new ReflectionMetadataDependencyFinder();
+            var assemblyToTestFileInfo = new FileInfo(TestAssembly.EmptyProject);
+            var progressReporter = Substitute.For<IProgressReporter>();
+
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+
+            var found = dependencies.Dependencies
+                .Any(d => string.Equals(d.Key.MemberDocId, v, StringComparison.Ordinal));
+
+            Assert.True(found, $"Could not find docid '{v}'");
+        }
+
         private void CompareDependencies(string path, IEnumerable<Tuple<string, int>> expected)
         {
             var dependencyFinder = new ReflectionMetadataDependencyFinder();
@@ -60,7 +82,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
         }
 
-        private static IEnumerable<Tuple<string,int>> GenericWithGenericMemberDocId()
+        private static IEnumerable<Tuple<string, int>> GenericWithGenericMemberDocId()
         {
             yield return Tuple.Create("M:System.Reflection.AssemblyConfigurationAttribute.#ctor(System.String)", 1);
             yield return Tuple.Create("T:System.Reflection.AssemblyProductAttribute", 1);
