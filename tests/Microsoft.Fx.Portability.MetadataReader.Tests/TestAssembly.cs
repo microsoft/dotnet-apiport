@@ -71,6 +71,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string MoreThan9GenericParams
+        {
+            get
+            {
+                var text = GetText("10-generic-params.cs");
+                return new TestAssembly("10-generic-params", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+            }
+        }
+
         private static string GetText(string fileName)
         {
             var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
