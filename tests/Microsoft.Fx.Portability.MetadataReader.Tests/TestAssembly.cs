@@ -80,6 +80,24 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string OpImplicit
+        {
+            get
+            {
+                var text = GetText("OpImplicit.cs");
+                return new TestAssembly("OpImplicit", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+            }
+        }
+
+        public static string OpExplicit
+        {
+            get
+            {
+                var text = GetText("OpExplicit.cs");
+                return new TestAssembly("OpExplicit", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+            }
+        }
+
         private static string GetText(string fileName)
         {
             var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));

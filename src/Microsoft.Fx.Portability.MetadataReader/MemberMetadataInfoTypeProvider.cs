@@ -39,18 +39,13 @@ namespace Microsoft.Fx.Portability.Analyzer
                         Kind = MemberKind.Field
                     };
                 case MemberReferenceKind.Method:
-                    var memberRefInfo = new MemberMetadataInfo
+                    return new MemberMetadataInfo
                     {
                         Name = Reader.GetString(memberReference.Name),
                         ParentType = parentType,
                         Kind = MemberKind.Method,
-                        MethodSignature = SignatureDecoder.DecodeMethodSignature(memberReference.Signature, this)
+                        MethodSignature = SignatureDecoder.DecodeMethodSignature(memberReference.Signature, this).MakeEnclosedType()
                     };
-                    foreach (var mInfo in memberRefInfo.MethodSignature.ParameterTypes)
-                    {
-                        mInfo.IsEnclosedType = true;
-                    }
-                    return memberRefInfo;
                 default:
                     return null;
             }
