@@ -144,6 +144,17 @@ namespace Microsoft.Fx.Portability
                 return false;
             }
 
+            // Managed C++ can build modules which are later linked together into an assembly by the linker.
+            // In such cases, there's no place to hang assembly-level attributes at compile-time, so the compiler
+            // attaches the attributes to specific typerefs which exists solely for this purpose, and the linker
+            // later picks them up from there and attaches them to the assembly. So, if we find assembly-level
+            // attributes on a type reference, we can safely ignore them (since they will be
+            // duplicated by what the linker propagates to the assembly level).
+            if (customAttribute.Parent.Kind == HandleKind.TypeReference)
+            {
+                return false;
+            }
+
             var constructorRef = metadataReader.GetMemberReference((MemberReferenceHandle)customAttribute.Constructor);
 
             if (constructorRef.Parent.Kind != HandleKind.TypeReference)
