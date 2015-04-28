@@ -20,13 +20,13 @@ More libraries are coming soon. Stay tuned!
 
 1. Install the following:
     1. [Visual Studio 2015](http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
-    2. [K Version Manager (KVM)](https://github.com/aspnet/home#install-the-k-version-manager-kvm)
-    3. [K Runtime (KRE)](https://github.com/aspnet/home#install-the-k-runtime-environment-kre)
+    2. [.NET Version Manager (DNVM)](https://github.com/aspnet/home#getting-started-with-aspnet-5-and-dnx)
+    3. [.NET Execution Environment (DNX)](https://github.com/aspnet/home#running-an-application)
 
 ### Building from Commandline
 1. Go to `src\Microsoft.Fx.Portability`
-2. Run command: `kpm restore`
-3. Run command: `kpm pack`
+2. Run command: `dnu restore`
+3. Run command: `dnu pack`
     
 ### Building from Visual Studio
 1. Open PortabilityTools.sln in Visual Studio 2015
@@ -35,8 +35,8 @@ More libraries are coming soon. Stay tuned!
 
 ### Running the Tests
 1. Go to `tests\Microsoft.Fx.Portability.Tests`
-2. Run command: `kpm restore`
-3. Run command: `k test`
+2. Run command: `dnu restore`
+3. Run command: `dnx . test`
 
 ## How to Engage, Contribute and Provide Feedback
 
