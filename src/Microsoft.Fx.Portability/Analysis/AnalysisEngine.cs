@@ -132,7 +132,11 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private bool MemberIsInFramework(MemberInfo dep)
         {
-            return _catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(dep.DefinedInAssemblyIdentity)) && _catalog.IsFrameworkMember(dep.MemberDocId);
+            // A null 'DefinedInAssemblyIdentity is indicative of a primitive
+            // type, which should always be considered within the Framework.
+            // For non-primitive types, consult the catalog to determine whether the
+            // assembly and API in question are part of the Framework.
+            return (dep.DefinedInAssemblyIdentity == null) || (_catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(dep.DefinedInAssemblyIdentity)) && _catalog.IsFrameworkMember(dep.MemberDocId));
         }
 
         /// <summary>

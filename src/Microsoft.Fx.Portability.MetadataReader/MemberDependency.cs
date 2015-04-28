@@ -14,6 +14,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private string _definedInAssemblyIdentity;
         private string _memberDocId;
         private string _typeDocId;
+        private bool _isPrimitive;
 
         /// <summary>
         /// This represents the assembly that is calling the member
@@ -29,6 +30,19 @@ namespace Microsoft.Fx.Portability.Analyzer
             set
             {
                 _definedInAssemblyIdentity = value;
+                _hashComputed = false;
+            }
+        }
+
+        /// <summary>
+        /// This indicates whether or not the dependency is a primitive type
+        /// </summary>
+        public bool IsPrimitive
+        {
+            get { return _isPrimitive; }
+            set
+            {
+                _isPrimitive = value;
                 _hashComputed = false;
             }
         }
@@ -66,14 +80,15 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             return StringComparer.Ordinal.Equals(MemberDocId, other.MemberDocId) &&
                     StringComparer.Ordinal.Equals(DefinedInAssemblyIdentity, other.DefinedInAssemblyIdentity) &&
-                    CallingAssembly.Equals(other.CallingAssembly);
+                    CallingAssembly.Equals(other.CallingAssembly) &&
+                    IsPrimitive == other.IsPrimitive;
         }
 
         public override int GetHashCode()
         {
             if (!_hashComputed)
             {
-                _hashCode = ((DefinedInAssemblyIdentity ?? string.Empty) + (MemberDocId ?? string.Empty)).GetHashCode() ^ CallingAssembly.GetHashCode();
+                _hashCode = ((DefinedInAssemblyIdentity ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString()).GetHashCode() ^ CallingAssembly.GetHashCode();
                 _hashComputed = true;
             }
             return _hashCode;
