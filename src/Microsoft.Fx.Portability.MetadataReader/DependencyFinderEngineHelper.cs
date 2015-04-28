@@ -15,10 +15,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private readonly string _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
-
-        // TODO: Why is this not read-only?
-        private string _assemblyInfoForPrimitives = null;
-
+        
         public DependencyFinderEngineHelper(MetadataReader metadataReader, string assemblyPath)
         {
             _reader = metadataReader;
@@ -75,18 +72,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private MemberDependency CreateMemberDependency(MemberMetadataInfo type)
         {
-            if (type.IsPrimitiveType && _assemblyInfoForPrimitives == null)
-            {
-                if (type.IsAssemblySet)
-                {
-                    _assemblyInfoForPrimitives = _reader.FormatAssemblyInfo(type.DefinedInAssembly);
-                }
-                else if (_currentAssemblyName.ToLower().CompareTo("mscorlib") == 0) // So that we can test on mscorlib
-                {
-                    _assemblyInfoForPrimitives = _currentAssemblyInfo;
-                }
-            }
-
             return new MemberDependency
             {
                 CallingAssembly = CallingAssembly,
@@ -110,18 +95,17 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 CallingAssembly = CallingAssembly,
                 MemberDocId = $"{GetPrefix(memberReference)}:{memberRefInfo}",
-                TypeDocId = $"T:{memberRefInfo.ParentType}"
+                TypeDocId = $"T:{memberRefInfo.ParentType}",
+                IsPrimitive = memberRefInfo.ParentType.IsPrimitiveType
             };
 
             if (memberRefInfo.ParentType.IsAssemblySet)
             {
                 dep.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly);
             }
-            else if (memberRefInfo.ParentType.IsPrimitiveType)  // If it is primitive type, the assembly is not set
-            {
-                dep.DefinedInAssemblyIdentity = _assemblyInfoForPrimitives;
-            }
-            else
+            // If no assembly is set, then the type is either a primitive type or it's in the current assembly.
+            // Mscorlib is special-cased for testing purposes.
+            else if (!memberRefInfo.ParentType.IsPrimitiveType || string.Equals(_currentAssemblyName, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {
                 dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
             }

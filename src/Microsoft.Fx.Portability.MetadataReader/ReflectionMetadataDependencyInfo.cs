@@ -69,6 +69,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                             DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
                         };
 
+                        if (m.DefinedInAssemblyIdentity == null && !dependencies.IsPrimitive)
+                        {
+                            throw new InvalidOperationException("All non-primitive types should be defined in an assembly");
+                        }
+
                         // Add this memberinfo
                         var newassembly = new HashSet<AssemblyInfo> { dependencies.CallingAssembly };
 
