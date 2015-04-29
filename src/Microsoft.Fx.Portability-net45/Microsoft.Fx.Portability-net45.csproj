@@ -48,9 +48,10 @@
     <Compile Include="..\Microsoft.Fx.Portability\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Microsoft.Fx.Portability\Targets.xsd">
+    <EmbeddedResource Include="..\Microsoft.Fx.Portability\Targets.xsd">
       <Link>Targets.xsd</Link>
-    </None>
+      <LogicalName>Targets.xsd</LogicalName>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

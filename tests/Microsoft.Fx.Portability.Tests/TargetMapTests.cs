@@ -319,7 +319,6 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.True(false, "Expected exception was not thrown");
         }
 
-#if HAS_RESOURCES
         [Fact]
         public void XmlNotInSchema()
         {
@@ -342,7 +341,6 @@ namespace Microsoft.Fx.Portability.Tests
 
             Assert.True(false, "Expected exception was not thrown");
         }
-#endif
 
         [Fact]
         public void XmlGetAlias()

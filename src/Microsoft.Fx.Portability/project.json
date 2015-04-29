@@ -9,6 +9,9 @@
     "Resources\\LocalizedStrings.Designer.cs",
     "Resources\\LocalizedStrings.resx"
   ],
+  "resource": [
+    "Targets.xsd"
+  ],
   "scripts": {
     "prebuild": [
       "powershell -NoProfile -ExecutionPolicy unrestricted -file %project:Directory%\\..\\..\\CreateLocalizedStrings.ps1 %project:Directory%\\Resources"
