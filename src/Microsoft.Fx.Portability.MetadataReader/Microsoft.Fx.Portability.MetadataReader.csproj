@@ -59,6 +59,11 @@
     <Compile Include="MemberMetadataInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemberMetadataInfoTypeProvider.cs" />
+    <Compile Include="Resources\LocalizedStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="StringParameterValueTypeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +74,13 @@
       <Project>{fc1429e3-46c3-49ed-b99f-b45e1ccfb86b}</Project>
       <Name>Microsoft.Fx.Portability-net45</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Microsoft.Fx.Portability.Analyzer.Resources</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
