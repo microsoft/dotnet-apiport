@@ -334,10 +334,18 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo GetFunctionPointerType(MethodSignature<MemberMetadataInfo> signature)
         {
-            //not sure of the format of the output here
-            //_isFunctionPointer = true;
-            //return "method " + signature.ReturnType + "*" + GetParameterList(signature) + ")";
-            throw new NotImplementedException("Function pointer");
+            StringBuilder nameSb = new StringBuilder("function ");
+            nameSb.Append(signature.ReturnType);
+            nameSb.Append(" (");
+            nameSb.Append(string.Join(",", signature.ParameterTypes));
+            nameSb.Append(")");
+            return new MemberMetadataInfo()
+            {
+                Name = nameSb.ToString(),
+                MethodSignature = signature,
+                IsFunctionPointer = true,
+                Kind = MemberKind.Type
+            };
         }
 
         public MemberMetadataInfo GetPinnedType(MemberMetadataInfo elementType)
