@@ -90,6 +90,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
                 catch (InvalidPEAssemblyException)
                 {
+                    // This often indicates a non-PE file
+                    _assembliesWithError.Add(filename);
+                }
+                catch (BadImageFormatException)
+                {
+                    // This often indicates a PE file with invalid contents (either because the assembly is protected or corrupted)
                     _assembliesWithError.Add(filename);
                 }
             });
@@ -117,7 +123,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
                 if (exc is InvalidPEAssemblyException) throw;
-
+                
                 // Other exceptions are unexpected, though, and wil benefit from
                 // more details on the scenario that hit them
                 throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, assemblyLocation), exc);
