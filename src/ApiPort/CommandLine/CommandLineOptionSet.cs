@@ -26,6 +26,15 @@ namespace ApiPort.CommandLine
         private readonly ICollection<string> _outputFormats = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly ICollection<string> _breakingChangeSuppressions = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly static string[] s_ValidExtensions = new string[]
+        {
+            ".dll",
+            ".exe",
+            ".winmd",
+            ".ilexe",
+            ".ildll"
+        };
+
         public CommandLineOptionSet(string name)
         {
             _name = name;
@@ -152,7 +161,7 @@ namespace ApiPort.CommandLine
         }
 
         /// <summary>
-        /// This will search the input given and find all paths (IL and non-IL)
+        /// This will search the input given and find all paths
         /// </summary>
         /// <param name="path">A file and directory path</param>
         protected void UpdateInputAssemblies(string path)
@@ -166,12 +175,22 @@ namespace ApiPort.CommandLine
             }
             else if (File.Exists(path))
             {
-                _inputAssemblies.Add(new FileInfo(path));
+                // Only add files with valid PE extensions to the list of
+                // assemblies to analyze since others are not valid assemblies
+                if (HasValidPEExtension(path))
+                {
+                    _inputAssemblies.Add(new FileInfo(path));
+                }
             }
             else
             {
                 _invalidInputFiles.Add(path);
             }
+        }
+
+        private bool HasValidPEExtension(string assemblyLocation)
+        {
+            return s_ValidExtensions.Contains(Path.GetExtension(assemblyLocation), StringComparer.OrdinalIgnoreCase);
         }
 
         private class FileInfoComparer : IComparer<FileInfo>
