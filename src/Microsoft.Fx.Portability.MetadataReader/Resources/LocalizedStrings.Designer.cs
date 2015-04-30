@@ -61,6 +61,15 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Two types are defined which serve as each others&apos; scope. This may be the result of assembly obfuscation..
+        /// </summary>
+        public static string InfiniteTypeParentingRecursion {
+            get {
+                return ResourceManager.GetString("InfiniteTypeParentingRecursion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unexpected error was encountered while parsing the metadata for the PE file located at {0}..
         /// </summary>
         public static string MetadataParsingExceptionMessage {

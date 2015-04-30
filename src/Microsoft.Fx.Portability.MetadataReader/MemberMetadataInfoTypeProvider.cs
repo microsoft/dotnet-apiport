@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Decoding;
 using System.Text;
+using Microsoft.Fx.Portability.Analyzer.Resources;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -119,7 +120,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             return GetFullName(reference);
         }
 
-        public MemberMetadataInfo GetFullName(TypeReference reference)
+        public MemberMetadataInfo GetFullName(TypeReference reference, TypeReference? child = null)
         {
             Handle scope = reference.ResolutionScope;
             MemberMetadataInfo name = GetName(reference);
@@ -149,7 +150,17 @@ namespace Microsoft.Fx.Portability.Analyzer
                     }
 
                 case HandleKind.TypeReference:
-                    MemberMetadataInfo info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)(scope)));
+                    if (child != null)
+                    {
+                        // Some obfuscators will inject impossible types that are each others' scopes
+                        // in order to foil decompilers. Check for that case so that we can fail reasonably
+                        // instead of stack overflowing.
+                        if (Reader.GetTypeReference((TypeReferenceHandle)(scope)).Equals(child.Value))
+                        {
+                            throw new BadImageFormatException(LocalizedStrings.InfiniteTypeParentingRecursion);
+                        }
+                    }
+                    MemberMetadataInfo info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)(scope)), reference);
                     return new MemberMetadataInfo(name, info2);
 
                 default:

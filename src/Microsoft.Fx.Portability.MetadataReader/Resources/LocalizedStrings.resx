@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InfiniteTypeParentingRecursion" xml:space="preserve">
+    <value>Two types are defined which serve as each others' scope. This may be the result of assembly obfuscation.</value>
+  </data>
   <data name="MetadataParsingExceptionMessage" xml:space="preserve">
     <value>An unexpected error was encountered while parsing the metadata for the PE file located at {0}.</value>
   </data>
