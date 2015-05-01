@@ -90,10 +90,10 @@ namespace Microsoft.Fx.Portability
             {
                 var doc = XDocument.Load(XmlReader.Create(stream));
 
-#if DESKTOP && HAS_RESOURCES
-               // Validate against schema
+#if DESKTOP
+                // Validate against schema
                 var schemas = new XmlSchemaSet();
-                schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream(typeof(TargetMapper), "Targets.xsd")));
+                schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream("Targets.xsd")));
                 doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
 #endif
 
