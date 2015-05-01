@@ -135,12 +135,22 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// as Hashtable`1, remove the `1. Look in the arguments list and put the list of arguments in between {}
         ///
         /// Example: Hashtable{`0}.KeyValuePair 
+        /// 
+        /// There are some interesting corner cases involving nested types -
+        /// First, generic argument indexes are counted over all types in the nested type hierarchy.
+        /// Therefore, OuterClass`2.InnerClass`2 should resolve as OuterClass{`0,`1}.InnerClass{`2,`3}.
+        /// 
+        /// Secondly, it is not required that all generic arguments be made concrete.
+        /// For example, it's possible in IL to define nested generic types OuterClass`2.InnerClass`2 and
+        /// then pass only two generic types in GenericTypeArgs. In such cases, the type should resolve
+        /// as OuterClass{`0,`1}.InnerClass`2.
         /// </summary>
         private IEnumerable<string> GetGenericDisplayNames(IEnumerable<string> displayNames)
         {
             // The most outputs when run on mscorlib are under 50 bytes in length
             const int SB_CAPACITY = 50;
 
+            // Index goes outside the for loop because it increments over all type names, not just a specific type name
             int index = 0;
             foreach (var displayName in displayNames)
             {
@@ -156,13 +166,21 @@ namespace Microsoft.Fx.Portability.Analyzer
                 int numGenericArgs;
                 int offsetStringAfterGenericMarker;
 
+                // This calculates the number of generic arguments in the specific displayName we're looking at in
+                // this iteration of the foreach loop.
                 if (!CalculateGenericArgsOffset(displayName, pos, out numGenericArgs, out offsetStringAfterGenericMarker))
                 {
                     yield return displayName;
                     continue;
                 }
 
-                Debug.Assert(index + numGenericArgs <= GenericTypeArgs.Count, "index + numGenericArgs is too large");
+                // It is possible (from IL) to only pass generic type arguments for the outer class in the case of nested generic classes.
+                // In such cases, once we run out of generic arguments, we just return the generic type names without resolving generic arguments.
+                if (index + numGenericArgs > GenericTypeArgs.Count)
+                {
+                    yield return displayName;
+                    continue;
+                }
 
                 // Start with the name up to the generic parameter token
                 var sb = new StringBuilder(displayName, 0, pos, SB_CAPACITY);
