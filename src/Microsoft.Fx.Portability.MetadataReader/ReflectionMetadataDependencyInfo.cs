@@ -99,6 +99,13 @@ namespace Microsoft.Fx.Portability.Analyzer
                     _assembliesWithError.Add(filename);
                 }
             });
+
+            // Clear out unresolved dependencies that were resolved during processing
+            ICollection<string> collection;
+            foreach (var assembly in _userAssemblies)
+            {
+                _unresolvedAssemblies.TryRemove(assembly.AssemblyIdentity, out collection);
+            }
         }
 
         private IEnumerable<MemberDependency> GetDependencies(string assemblyLocation)
@@ -109,6 +116,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 using (var peFile = new PEReader(stream))
                 {
                     var metadataReader = GetMetadataReader(peFile);
+
+                    AddReferencedAssemblies(metadataReader);
 
                     var helper = new DependencyFinderEngineHelper(metadataReader, assemblyLocation);
                     helper.ComputeData();
@@ -127,6 +136,37 @@ namespace Microsoft.Fx.Portability.Analyzer
                 // Other exceptions are unexpected, though, and wil benefit from
                 // more details on the scenario that hit them
                 throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, assemblyLocation), exc);
+            }
+        }
+
+        /// <summary>
+        /// Add all assemblies that were referenced to the referenced assembly dictionary.  By default, 
+        /// we add every referenced assembly and will remove the ones that are actually referenced when 
+        /// all submitted assemblies are processed.
+        /// </summary>
+        /// <param name="metadataReader"></param>
+        private void AddReferencedAssemblies(MetadataReader metadataReader)
+        {
+            var assemblyReferences = metadataReader.AssemblyReferences
+                                        .Select(metadataReader.GetAssemblyReference)
+                                        .Select(metadataReader.FormatAssemblyInfo);
+
+            var assemblyName = metadataReader.FormatAssemblyInfo();
+
+            foreach (var reference in assemblyReferences)
+            {
+                _unresolvedAssemblies.AddOrUpdate(
+                    reference,
+                    new HashSet<string>(StringComparer.Ordinal) { assemblyName },
+                    (key, existing) =>
+                    {
+                        lock (existing)
+                        {
+                            existing.Add(assemblyName);
+                        }
+
+                        return existing;
+                    });
             }
         }
 

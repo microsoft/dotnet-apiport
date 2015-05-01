@@ -20,10 +20,15 @@ namespace Microsoft.Fx.Portability
 
             return new AssemblyInfo
             {
-                AssemblyIdentity = metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition()),
+                AssemblyIdentity = metadataReader.FormatAssemblyInfo(),
                 FileVersion = fileInfo.FileVersion ?? string.Empty,
                 TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty
             };
+        }
+
+        public static string FormatAssemblyInfo(this MetadataReader metadataReader)
+        {
+            return metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition());
         }
 
         public static string FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyReference assemblyReference)
