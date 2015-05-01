@@ -40,24 +40,48 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Get type references
             foreach (var handle in _reader.TypeReferences)
             {
-                var entry = _reader.GetTypeReference(handle);
-
-                var typeReferenceMemberDependency = GetTypeReferenceMemberDependency(entry);
-                if (typeReferenceMemberDependency != null)
+                try
                 {
-                    MemberDependency.Add(typeReferenceMemberDependency);
+                    var entry = _reader.GetTypeReference(handle);
+
+                    var typeReferenceMemberDependency = GetTypeReferenceMemberDependency(entry);
+                    if (typeReferenceMemberDependency != null)
+                    {
+                        MemberDependency.Add(typeReferenceMemberDependency);
+                    }
+                }
+                catch (BadImageFormatException)
+                {
+                    // Some obfuscators will inject dead types that break decompilers
+                    // (for example, types that serve as each others' scopes).
+                    //
+                    // For portability/compatibility analysis purposes, though,
+                    // we can skip such malformed references and just analyze those
+                    // that we can successfully decode.
                 }
             }
 
             // Get member references
             foreach (var handle in _reader.MemberReferences)
             {
-                var entry = _reader.GetMemberReference(handle);
-
-                var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry);
-                if (memberReferenceMemberDependency != null)
+                try
                 {
-                    this.MemberDependency.Add(memberReferenceMemberDependency);
+                    var entry = _reader.GetMemberReference(handle);
+
+                    var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry);
+                    if (memberReferenceMemberDependency != null)
+                    {
+                        this.MemberDependency.Add(memberReferenceMemberDependency);
+                    }
+                }
+                catch (BadImageFormatException)
+                {
+                    // Some obfuscators will inject dead types that break decompilers
+                    // (for example, types that serve as each others' scopes).
+                    //
+                    // For portability/compatibility analysis purposes, though,
+                    // we can skip such malformed references and just analyze those
+                    // that we can successfully decode.
                 }
             }
         }

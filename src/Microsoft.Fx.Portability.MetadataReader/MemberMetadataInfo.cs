@@ -27,6 +27,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             ArrayTypeInfo = other.ArrayTypeInfo;
             IsTypeDef = other.IsTypeDef;
             IsPrimitiveType = other.IsPrimitiveType;
+            IsFunctionPointer = other.IsFunctionPointer;
             Kind = other.Kind;
             IsGenericInstance = other.IsGenericInstance;
             IsEnclosedType = other.IsEnclosedType;
@@ -79,6 +80,8 @@ namespace Microsoft.Fx.Portability.Analyzer
         public bool IsTypeDef { get; set; }
 
         public bool IsPrimitiveType { get; set; }
+
+        public bool IsFunctionPointer { get; set; }
 
         public MemberKind Kind { get; set; }
 

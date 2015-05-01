@@ -72,9 +72,12 @@ namespace ApiPort
                     Trace.TraceError(ex.ToString());
 
                     // If the exception is known, display the message as it has already been localized
-                    if (ex.InnerException is PortabilityAnalyzerException)
+                    if (GetRecursiveInnerExceptions(ex).Any(x => x is PortabilityAnalyzerException))
                     {
-                        WriteError(ex.InnerException.Message);
+                        foreach (PortabilityAnalyzerException portEx in GetRecursiveInnerExceptions(ex).Where(x => x is PortabilityAnalyzerException))
+                        {
+                            WriteError(portEx.Message);
+                        }
                     }
                     else if (!IsWebSecurityFailureOnMono(ex))
                     {
@@ -101,6 +104,33 @@ namespace ApiPort
                 }
 
                 return -1;
+            }
+        }
+
+        private static IEnumerable<Exception> GetRecursiveInnerExceptions(Exception ex)
+        {
+            if (ex is AggregateException) // AggregateExceptions can have multiple inner exceptions
+            {
+                foreach (var innerEx in (ex as AggregateException).InnerExceptions)
+                {
+                    yield return innerEx;
+                    foreach (var innerInnerEx in GetRecursiveInnerExceptions(innerEx))
+                    {
+                        yield return innerInnerEx;
+                    }
+
+                }
+            }
+            else // Other exceptions can have only one inner exception
+            {
+                if (ex.InnerException != null)
+                {
+                    yield return ex.InnerException;
+                    foreach (var innerInnerEx in GetRecursiveInnerExceptions(ex.InnerException))
+                    {
+                        yield return innerInnerEx;
+                    }
+                }
             }
         }
 

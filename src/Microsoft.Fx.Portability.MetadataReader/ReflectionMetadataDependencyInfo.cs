@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
+using Microsoft.Fx.Portability.Analyzer.Resources;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -89,6 +90,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
                 catch (InvalidPEAssemblyException)
                 {
+                    // This often indicates a non-PE file
+                    _assembliesWithError.Add(filename);
+                }
+                catch (BadImageFormatException)
+                {
+                    // This often indicates a PE file with invalid contents (either because the assembly is protected or corrupted)
                     _assembliesWithError.Add(filename);
                 }
             });
@@ -96,18 +103,30 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private IEnumerable<MemberDependency> GetDependencies(string assemblyLocation)
         {
-            using (var stream = File.OpenRead(assemblyLocation))
-            using (var peFile = new PEReader(stream))
+            try
             {
-                var metadataReader = GetMetadataReader(peFile);
+                using (var stream = File.OpenRead(assemblyLocation))
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = GetMetadataReader(peFile);
 
-                var helper = new DependencyFinderEngineHelper(metadataReader, assemblyLocation);
-                helper.ComputeData();
+                    var helper = new DependencyFinderEngineHelper(metadataReader, assemblyLocation);
+                    helper.ComputeData();
 
-                // Remember this assembly as a user assembly.
-                _userAssemblies.Add(helper.CallingAssembly);
+                    // Remember this assembly as a user assembly.
+                    _userAssemblies.Add(helper.CallingAssembly);
 
-                return helper.MemberDependency;
+                    return helper.MemberDependency;
+                }
+            }
+            catch (Exception exc)
+            {
+                // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
+                if (exc is InvalidPEAssemblyException) throw;
+                
+                // Other exceptions are unexpected, though, and wil benefit from
+                // more details on the scenario that hit them
+                throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, assemblyLocation), exc);
             }
         }
 
