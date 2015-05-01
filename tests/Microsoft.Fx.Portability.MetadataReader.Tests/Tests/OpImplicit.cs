@@ -1,8 +1,11 @@
-﻿namespace Microsoft.Fx.Portability.MetadataReader.Tests
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
-    class CallOtherClass_OpImplicit
+    internal class CallOtherClass_OpImplicit
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Class1_OpImplicit<int> list = new Class2_OpImplicit<int>();
         }

@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
@@ -8,9 +11,9 @@ using Xunit;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
-    class TestAssembly
+    internal class TestAssembly
     {
-        private static readonly string mscorlib = typeof(object).Assembly.Location;
+        private static readonly string s_mscorlib = typeof(object).Assembly.Location;
         private readonly string _path;
         private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
 
@@ -49,7 +52,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("EmptyProject.cs");
-                return new TestAssembly("EmptyProject", text, new[] { mscorlib }).AssemblyPath;
+                return new TestAssembly("EmptyProject", text, new[] { s_mscorlib }).AssemblyPath;
             }
         }
 
@@ -58,7 +61,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("GenericClassMemberWithDifferentGeneric.cs");
-                return new TestAssembly("GenericClassMemberWithDifferentGeneric", text, new[] { mscorlib }).AssemblyPath;
+                return new TestAssembly("GenericClassMemberWithDifferentGeneric", text, new[] { s_mscorlib }).AssemblyPath;
             }
         }
 
@@ -67,7 +70,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("WithGenericsAndReference.cs");
-                return new TestAssembly("WithGenericsAndReference", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+                return new TestAssembly("WithGenericsAndReference", text, new[] { s_mscorlib, EmptyProject }).AssemblyPath;
             }
         }
 
@@ -76,7 +79,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("10-generic-params.cs");
-                return new TestAssembly("10-generic-params", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+                return new TestAssembly("10-generic-params", text, new[] { s_mscorlib, EmptyProject }).AssemblyPath;
             }
         }
 
@@ -85,7 +88,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("OpImplicit.cs");
-                return new TestAssembly("OpImplicit", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+                return new TestAssembly("OpImplicit", text, new[] { s_mscorlib, EmptyProject }).AssemblyPath;
             }
         }
 
@@ -94,7 +97,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             get
             {
                 var text = GetText("OpExplicit.cs");
-                return new TestAssembly("OpExplicit", text, new[] { mscorlib, EmptyProject }).AssemblyPath;
+                return new TestAssembly("OpExplicit", text, new[] { s_mscorlib, EmptyProject }).AssemblyPath;
             }
         }
 
