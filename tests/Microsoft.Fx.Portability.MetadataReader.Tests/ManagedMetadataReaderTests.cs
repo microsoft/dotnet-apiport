@@ -13,21 +13,19 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
     public class ManagedMetadataReaderTests
     {
-        private const string SkipExplanation = "System.Collections.Immutable is in flux and Roslyn and System.Reflection.Metadata use different versions.";
-
-        [Fact(Skip = SkipExplanation)]
+        [Fact]
         public void EmptyProject()
         {
             CompareDependencies(TestAssembly.EmptyProject, EmptyProjectMemberDocId());
         }
 
-        [Fact(Skip = SkipExplanation)]
+        [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void GenericWithGenericMember()
         {
             CompareDependencies(TestAssembly.GenericClassWithGenericMethod, GenericWithGenericMemberDocId());
         }
 
-        [Fact(Skip = SkipExplanation)]
+        [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void MoreThan9GenericParams()
         {
             const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params`10.InnerClass.#ctor(Microsoft.Fx.Portability.MetadataReader.Tests.Class{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9},`2)";
@@ -35,7 +33,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareSpecificDependency(TestAssembly.MoreThan9GenericParams, expected);
         }
 
-        [Fact(Skip = SkipExplanation)]
+        [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void OpImplicit()
         {
             const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpImplicit`1.op_Implicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpImplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpImplicit{`0}";
@@ -43,7 +41,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareSpecificDependency(TestAssembly.OpImplicit, expected);
         }
 
-        [Fact(Skip = SkipExplanation)]
+        [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void OpExplicit()
         {
             const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit`1.op_Explicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpExplicit{`0}";
