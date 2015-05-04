@@ -12,12 +12,12 @@
     <file src="net45\Microsoft.Fx.Portability.pdb" target="lib\net45" />
     <file src="net45\Microsoft.Fx.Portability.xml" target="lib\net45" />
     
-    <file src="aspnet50\Microsoft.Fx.Portability.dll" target="lib\aspnet50" />
-    <file src="aspnet50\Microsoft.Fx.Portability.pdb" target="lib\aspnet50" />
-    <file src="aspnet50\Microsoft.Fx.Portability.xml" target="lib\aspnet50" />
+    <file src="dnx451\Microsoft.Fx.Portability.dll" target="lib\dnx451" />
+    <file src="dnx451\Microsoft.Fx.Portability.pdb" target="lib\dnx451" />
+    <file src="dnx451\Microsoft.Fx.Portability.xml" target="lib\dnx451" />
     
-    <file src="aspnetcore50\Microsoft.Fx.Portability.dll" target="lib\aspnetcore50" />
-    <file src="aspnetcore50\Microsoft.Fx.Portability.pdb" target="lib\aspnetcore50" />
-    <file src="aspnetcore50\Microsoft.Fx.Portability.xml" target="lib\aspnetcore50" />
+    <file src="dnxcore50\Microsoft.Fx.Portability.dll" target="lib\dnxcore50" />
+    <file src="dnxcore50\Microsoft.Fx.Portability.pdb" target="lib\dnxcore50" />
+    <file src="dnxcore50\Microsoft.Fx.Portability.xml" target="lib\dnxcore50" />
   </files>
 </package>
