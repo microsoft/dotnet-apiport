@@ -32,7 +32,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <ItemGroup>
-    <FilesToSign Include="$(OutDir)\$(Configuration)\aspnet50\Microsoft.Fx.Portability.dll;$(OutDir)\$(Configuration)\net45\Microsoft.Fx.Portability.dll;$(OutDir)\$(Configuration)\aspnetcore50\Microsoft.Fx.Portability.dll">
+    <FilesToSign Include="$(OutDir)\$(Configuration)\dnx451\Microsoft.Fx.Portability.dll;$(OutDir)\$(Configuration)\net45\Microsoft.Fx.Portability.dll;$(OutDir)\$(Configuration)\dnxcore50\Microsoft.Fx.Portability.dll">
       <Authenticode>Microsoft</Authenticode>
     </FilesToSign>
   </ItemGroup>

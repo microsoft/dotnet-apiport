@@ -67,7 +67,7 @@ foreach ($projectDirectory in $(Get-ChildItem $BinariesDirectory | ? { $_.PSIsCo
 
         Expand-ZipFile $zipFile $unzippedDirectory -ErrorAction Stop
     
-        # Getting both .nuspec files, the template and the one from kpm build to merge.
+        # Getting both .nuspec files, the template and the one from dnvm build to merge.
         $sourceNuspecFile = Get-ChildItem $unzippedDirectory -Recurse -Include *.nuspec
         if (@($sourceNuspecFile).Count -ne 1)
         {
