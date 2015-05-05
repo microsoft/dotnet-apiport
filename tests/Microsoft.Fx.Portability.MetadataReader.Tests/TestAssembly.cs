@@ -87,6 +87,24 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string NestedGenericTypes
+        {
+            get
+            {
+                var text = GetText("NestedGenericTypes.cs");
+                return new TestAssembly("NestedGenericTypes", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
+        public static string NestedGenericTypesFromIL
+        {
+            get
+            {
+                var bytes = GetBytes("NestedGenericTypes.dll");
+                return new TestAssembly("NestedGenericTypes.dll", bytes).AssemblyPath;
+            }
+        }
+
         public static string GenericClassWithGenericMethod
         {
             get
@@ -140,6 +158,17 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
+            }
+        }
+
+        private static byte[] GetBytes(string fileName)
+        {
+            var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+            using (var stream = typeof(TestAssembly).Assembly.GetManifestResourceStream(name))
+            {
+                var ret = new byte[stream.Length];
+                stream.Read(ret, 0, ret.Length);
+                return ret;
             }
         }
     }

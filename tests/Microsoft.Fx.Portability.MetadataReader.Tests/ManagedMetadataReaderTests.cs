@@ -19,6 +19,20 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareDependencies(TestAssembly.EmptyProject, EmptyProjectMemberDocId());
         }
 
+        [Fact]
+        public void NestedGenericTypes()
+        {
+            CompareDependencies(TestAssembly.NestedGenericTypes, NestedGenericTypesMemberDocId());
+        }
+
+        [Fact]
+        // The IL version of this test includes a nested generic type in which the outer type is closed by the inner one is open
+        // This is not possible to construct in C#, but was being encoded incorrectly by the metadata reader parser.
+        public void NestedGenericTypesFromIL()
+        {
+            CompareDependencies(TestAssembly.NestedGenericTypesFromIL, NestedGenericTypesFromILMemberDocId());
+        }
+
         [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void GenericWithGenericMember()
         {
@@ -82,6 +96,36 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 .ToList();
 
             Assert.Equal(expectedOrdered, foundDocIds);
+        }
+
+        private static IEnumerable<Tuple<string, int>> NestedGenericTypesFromILMemberDocId()
+        {
+            yield return Tuple.Create("M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)", 1);
+            yield return Tuple.Create("M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})", 1);
+            yield return Tuple.Create("T:OuterClass`2", 1);
+            yield return Tuple.Create("T:OuterClass`2.InnerClass`2", 1);
+            yield return Tuple.Create("T:System.Object", 1);
+        }
+
+        private static IEnumerable<Tuple<string, int>> NestedGenericTypesMemberDocId()
+        {
+            yield return Tuple.Create("M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)", 1);
+            yield return Tuple.Create("M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})", 1);
+            yield return Tuple.Create("M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})", 1);
+            yield return Tuple.Create("M:System.Diagnostics.DebuggableAttribute.#ctor(System.Diagnostics.DebuggableAttribute.DebuggingModes)", 1);
+            yield return Tuple.Create("M:System.Object.#ctor", 1);
+            yield return Tuple.Create("M:System.Runtime.CompilerServices.CompilationRelaxationsAttribute.#ctor(System.Int32)", 1);
+            yield return Tuple.Create("M:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute.#ctor", 1);
+            yield return Tuple.Create("M:System.Runtime.Versioning.TargetFrameworkAttribute.#ctor(System.String)", 1);
+            yield return Tuple.Create("T:OuterClass`2", 1);
+            yield return Tuple.Create("T:OuterClass`2.InnerClass`2", 1);
+            yield return Tuple.Create("T:OuterClass`2.InnerClass`2.InnerInnerClass", 1);
+            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute", 1);
+            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute.DebuggingModes", 1);
+            yield return Tuple.Create("T:System.Object", 1);
+            yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilationRelaxationsAttribute", 1);
+            yield return Tuple.Create("T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute", 1);
+            yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
         }
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
