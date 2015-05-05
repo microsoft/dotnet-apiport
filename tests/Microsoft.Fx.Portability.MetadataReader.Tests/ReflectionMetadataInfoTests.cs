@@ -46,7 +46,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "Microsoft.Fx.Portability, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
             "xunit.core, Version=2.1.0.2945, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+            "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+            "System.Collections.Immutable, Version=1.1.33.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
         }.OrderBy(o => o);
     }
 }
