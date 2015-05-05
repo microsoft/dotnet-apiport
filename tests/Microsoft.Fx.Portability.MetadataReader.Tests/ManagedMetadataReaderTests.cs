@@ -66,7 +66,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         private void CompareDependencies(string path, IEnumerable<Tuple<string, int>> expected)
         {
             var dependencyFinder = new ReflectionMetadataDependencyFinder();
-            var assemblyToTestFileInfo = new FileInfo(TestAssembly.EmptyProject);
+            var assemblyToTestFileInfo = new FileInfo(path);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
