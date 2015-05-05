@@ -22,6 +22,13 @@
         "Comment": "If an assembly isn't ignored on all targets, a comment will typically indicate why. In this case, this is just a sample entry showing all fields since this is the first real entry in the file."
     },
     {
+        "AssemblyIdentity": "log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821",
+        "TargetsIgnored": [
+            ".NET Framework,Version=v4.5"
+        ],
+        "Comment": "Omitting >4.5 because it's unclear whether some edge cases will be affected by 4.5.1 ADO.NET connection resiliency"
+    },
+    {
         "AssemblyIdentity": "log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a",
         "TargetsIgnored": [
             ".NET Framework,Version=v4.5"

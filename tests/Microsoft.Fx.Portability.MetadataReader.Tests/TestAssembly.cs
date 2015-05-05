@@ -42,7 +42,38 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references);
             var result = compilation.Emit(path.FullName);
 
-            Assert.True(result.Success);
+            if (!result.Success && path.Exists)
+            {
+                path.Delete();
+            }
+
+            Assert.True(result.Success, string.Join("\n", result.Diagnostics
+                                                        .Where(d => d.Severity == DiagnosticSeverity.Error)
+                                                        .Select(d => d.GetMessage())));
+        }
+
+        private TestAssembly(string assemblyName, byte[] assembly)
+        {
+            var path = new FileInfo(Path.Combine(System.IO.Path.GetTempPath(), assemblyName));
+            _path = path.FullName;
+
+            if (path.Exists)
+            {
+                // Don't regenerate if already created for this test run
+                if (path.LastWriteTime < DateTime.Now.AddMinutes(-1))
+                {
+                    path.Delete();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            using (var fs = path.OpenWrite())
+            {
+                fs.Write(assembly, 0, assembly.Length);
+            }
         }
 
         public string AssemblyPath { get { return _path; } }
@@ -53,6 +84,24 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             {
                 var text = GetText("EmptyProject.cs");
                 return new TestAssembly("EmptyProject", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
+        public static string NestedGenericTypes
+        {
+            get
+            {
+                var text = GetText("NestedGenericTypes.cs");
+                return new TestAssembly("NestedGenericTypes", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
+        public static string NestedGenericTypesFromIL
+        {
+            get
+            {
+                var bytes = GetBytes("NestedGenericTypes.dll");
+                return new TestAssembly("NestedGenericTypes.dll", bytes).AssemblyPath;
             }
         }
 
@@ -109,6 +158,17 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
+            }
+        }
+
+        private static byte[] GetBytes(string fileName)
+        {
+            var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+            using (var stream = typeof(TestAssembly).Assembly.GetManifestResourceStream(name))
+            {
+                var ret = new byte[stream.Length];
+                stream.Read(ret, 0, ret.Length);
+                return ret;
             }
         }
     }

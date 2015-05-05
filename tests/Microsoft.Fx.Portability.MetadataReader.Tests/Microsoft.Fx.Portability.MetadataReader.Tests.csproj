@@ -85,6 +85,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionMetadataInfoTests.cs" />
     <Compile Include="TestAssembly.cs" />
+    <EmbeddedResource Include="Tests\NestedGenericTypes.cs" />
+    <EmbeddedResource Include="Tests\NestedGenericTypes.dll" />
+    <EmbeddedResource Include="Tests\NestedGenericTypes.il" />
     <EmbeddedResource Include="Tests\10-generic-params.cs" />
     <EmbeddedResource Include="Tests\GenericClassMemberWithDifferentGeneric.cs" />
     <EmbeddedResource Include="Tests\OpExplicit.cs" />
