@@ -85,6 +85,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionMetadataInfoTests.cs" />
     <Compile Include="TestAssembly.cs" />
+    <EmbeddedResource Include="Tests\modopt.dll" />
+    <EmbeddedResource Include="Tests\modopt.il" />
     <EmbeddedResource Include="Tests\NestedGenericTypes.cs" />
     <EmbeddedResource Include="Tests\NestedGenericTypes.dll" />
     <EmbeddedResource Include="Tests\NestedGenericTypes.il" />
