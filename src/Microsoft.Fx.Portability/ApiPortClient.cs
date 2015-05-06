@@ -36,13 +36,13 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ReportingResult> AnalyzeAssemblies(IApiPortOptions options)
         {
-            IDependencyInfo dependencyFinderEngine = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
+            var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
-            if (dependencyFinderEngine.UserAssemblies.Any())
+            if (dependencyInfo.UserAssemblies.Any())
             {
-                AnalyzeRequest request = GenerateRequest(options, dependencyFinderEngine);
+                AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
 
-                return await GetResultFromService(request, dependencyFinderEngine);
+                return await GetResultFromServiceAsync(request, dependencyInfo);
             }
             else
             {
@@ -54,14 +54,14 @@ namespace Microsoft.Fx.Portability
 
         public async Task<IEnumerable<byte[]>> GetAnalysisReportAsync(IApiPortOptions options)
         {
-            IDependencyInfo dependencyFinderEngine = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
+            var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
-            if (dependencyFinderEngine.UserAssemblies.Any())
+            if (dependencyInfo.UserAssemblies.Any())
             {
-                AnalyzeRequest request = GenerateRequest(options, dependencyFinderEngine);
+                AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
 
                 var tasks = options.OutputFormats
-                    .Select(f => GetResultFromService(request, f))
+                    .Select(f => GetResultFromServiceAsync(request, f))
                     .ToList();
 
                 await Task.WhenAll(tasks);
@@ -109,12 +109,12 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyFinder)
+        public AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyInfo)
         {
             return new AnalyzeRequest
             {
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
-                Dependencies = dependencyFinder.Dependencies,
+                Dependencies = dependencyInfo.Dependencies,
                 AssembliesToIgnore = _assembliesToIgnore,                 // We pass along assemblies to ignore instead of filtering them from Dependencies at this point
                                                                           // because breaking change analysis and portability analysis will likely want to filter dependencies
                                                                           // in different ways for ignored assemblies. 
@@ -124,10 +124,10 @@ namespace Microsoft.Fx.Portability
                                                                           // For portability analysis, on the other hand, we will want to show portability for precisely those targets
                                                                           // that a user specifies that are not on the ignore list. In this case, some of the assembly's dependency
                                                                           // information will be needed.
-                UnresolvedAssemblies = dependencyFinder.UnresolvedAssemblies.Keys.ToList(),
-                UnresolvedAssembliesDictionary = dependencyFinder.UnresolvedAssemblies,
-                UserAssemblies = dependencyFinder.UserAssemblies.ToList(),
-                AssembliesWithErrors = dependencyFinder.AssembliesWithErrors.ToList(),
+                UnresolvedAssemblies = dependencyInfo.UnresolvedAssemblies.Keys.ToList(),
+                UnresolvedAssembliesDictionary = dependencyInfo.UnresolvedAssemblies,
+                UserAssemblies = dependencyInfo.UserAssemblies.ToList(),
+                AssembliesWithErrors = dependencyInfo.AssembliesWithErrors.ToList(),
                 ApplicationName = options.Description,
                 Version = AnalyzeRequest.CurrentVersion,
                 RequestFlags = options.RequestFlags,
@@ -139,7 +139,7 @@ namespace Microsoft.Fx.Portability
         /// Gets the Portability of an application as a ReportingResult.
         /// </summary>
         /// <returns>Set of APIs/assemblies that are not portable/missing.</returns>
-        private async Task<ReportingResult> GetResultFromService(AnalyzeRequest request, IDependencyInfo dependencyFinder)
+        private async Task<ReportingResult> GetResultFromServiceAsync(AnalyzeRequest request, IDependencyInfo dependencyInfo)
         {
             var fullResponse = await RetrieveResultAsync(request);
 
@@ -150,17 +150,16 @@ namespace Microsoft.Fx.Portability
                 try
                 {
                     var response = fullResponse.Response;
-                    var hasDependencyFinder = dependencyFinder != null;
 
                     return _reportGenerator.ComputeReport(
                         response.Targets,
                         response.SubmissionId,
                         request.RequestFlags,
-                        hasDependencyFinder ? dependencyFinder.Dependencies : null, //allDependencies
+                        dependencyInfo?.Dependencies,
                         response.MissingDependencies,
-                        hasDependencyFinder ? dependencyFinder.UnresolvedAssemblies : null, //unresolvedAssemblies
+                        dependencyInfo?.UnresolvedAssemblies,
                         response.UnresolvedUserAssemblies,
-                        hasDependencyFinder ? dependencyFinder.AssembliesWithErrors : null //assembliesWithErrors
+                        dependencyInfo?.AssembliesWithErrors
                     );
                 }
                 catch (Exception)
@@ -191,7 +190,7 @@ namespace Microsoft.Fx.Portability
         /// Gets the Portability report for the request.
         /// </summary>
         /// <returns>An array of bytes corresponding to the report.</returns>
-        private async Task<byte[]> GetResultFromService(AnalyzeRequest request, string format)
+        private async Task<byte[]> GetResultFromServiceAsync(AnalyzeRequest request, string format)
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
             {
