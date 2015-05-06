@@ -91,6 +91,8 @@
     <EmbeddedResource Include="Tests\NestedGenericTypes.cs" />
     <EmbeddedResource Include="Tests\NestedGenericTypes.dll" />
     <EmbeddedResource Include="Tests\NestedGenericTypes.il" />
+    <EmbeddedResource Include="Tests\NonGenericTypesWithGenericParameters.dll" />
+    <EmbeddedResource Include="Tests\NonGenericTypesWithGenericParameters.il" />
     <EmbeddedResource Include="Tests\10-generic-params.cs" />
     <EmbeddedResource Include="Tests\GenericClassMemberWithDifferentGeneric.cs" />
     <EmbeddedResource Include="Tests\OpExplicit.cs" />

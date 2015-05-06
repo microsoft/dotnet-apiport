@@ -145,19 +145,35 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// then pass only two generic types in GenericTypeArgs. In such cases, the type should resolve
         /// as OuterClass{`0,`1}.InnerClass`2.
         /// </summary>
-        private IEnumerable<string> GetGenericDisplayNames(IEnumerable<string> displayNames)
+        private IEnumerable<string> GetGenericDisplayNames(IList<string> displayNames)
         {
             // The most outputs when run on mscorlib are under 50 bytes in length
             const int SB_CAPACITY = 50;
 
             // Index goes outside the for loop because it increments over all type names, not just a specific type name
             int index = 0;
-            foreach (var displayName in displayNames)
+            for (int i = 0; i < displayNames.Count; i++)
             {
+                var displayName = displayNames[i];
+
                 int pos = displayName.IndexOf('`');
                 if (pos <= 0)
                 {
-                    yield return displayName;
+                    StringBuilder returnName = new StringBuilder(displayName, SB_CAPACITY);
+
+                    if (i == displayNames.Count - 1 && GenericTypeArgs.Count > index)
+                    {
+                        // Even though this is not a generic type, if it's the last type in the displayNames list and
+                        // there are left-over generic arguments, we should append them to this name.
+                        // This is because it's possible (from IL) to define a non-generic type that accepts generic arguments.
+                        // This construction is used by some obfuscators.
+                        returnName.Append("{");
+                        returnName.Append(string.Join(",", GenericTypeArgs.GetRange(index, GenericTypeArgs.Count - index)));
+                        returnName.Append("}");
+                        index = GenericTypeArgs.Count;
+                    }
+
+                    yield return returnName.ToString();
                     continue;
                 }
 
