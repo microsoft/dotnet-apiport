@@ -42,6 +42,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareSpecificDependency(TestAssembly.ModsFromIL, expected2);
         }
 
+        [Fact]
+        public void Arglist()
+        {
+            const string expected = "M:TestClass.ArglistMethod(System.Int32,__arglist)";
+            const string expected2 = "M:TestClass.ArglistMethod2(__arglist)";
+            CompareSpecificDependency(TestAssembly.Arglist, expected);
+            CompareSpecificDependency(TestAssembly.Arglist, expected2);
+        }
+
         [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void GenericWithGenericMember()
         {
