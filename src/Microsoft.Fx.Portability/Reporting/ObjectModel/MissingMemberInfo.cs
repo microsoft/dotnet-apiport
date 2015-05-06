@@ -28,8 +28,8 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         {
             RecommendedChanges = recommendedChanges;
             MemberName = DocId;
-            TargetStatus = targetStatus.Select(GenerateTargetStatusMessage).ToList();
-            TargetVersionStatus = new List<Version>(targetStatus);
+            TargetStatus = targetStatus?.Select(GenerateTargetStatusMessage).ToList() ?? Enumerable.Empty<string>();
+            TargetVersionStatus = new List<Version>(targetStatus ?? Enumerable.Empty<Version>());
 
             _usedInAssemblies = new HashSet<AssemblyInfo>();
 

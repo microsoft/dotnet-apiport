@@ -60,8 +60,8 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
             TypeName = DocId.Substring(pos);
             MissingMembers = new HashSet<MissingMemberInfo>();
-            TargetStatus = targetStatus.Select(GenerateTargetStatusMessage).ToList();
-            TargetVersionStatus = new List<Version>(targetStatus);
+            TargetStatus = targetStatus?.Select(GenerateTargetStatusMessage).ToList() ?? Enumerable.Empty<string>();
+            TargetVersionStatus = new List<Version>(targetStatus ?? Enumerable.Empty<Version>());
 
             RecommendedChanges = recommendedChanges;
             _usedInAssemblies = new HashSet<AssemblyInfo>();
