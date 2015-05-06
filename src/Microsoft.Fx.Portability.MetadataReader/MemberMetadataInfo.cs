@@ -238,8 +238,22 @@ namespace Microsoft.Fx.Portability.Analyzer
             if (Kind == MemberKind.Method && MethodSignature.ParameterTypes.Count() > 0)
             {
                 sb.Append("(");
-                sb.Append(string.Join(",", MethodSignature.ParameterTypes));
+
+                // Only required parameters should be listed explicitly
+                Debug.Assert(MethodSignature.ParameterTypes.Count() >= MethodSignature.RequiredParameterCount, "More parameters were required than are available");
+                sb.Append(string.Join(",", MethodSignature.ParameterTypes.Select(m => m.ToString()).ToArray(), 0, MethodSignature.RequiredParameterCount));
+                
+                // If the method is a varargs method, it should add an '__arglist' parameter
+                if (MethodSignature.Header.CallingConvention.HasFlag(SignatureCallingConvention.VarArgs))
+                {
+                    sb.Append(",__arglist");
+                }
                 sb.Append(")");
+            }
+            else if (Kind == MemberKind.Method && MethodSignature.Header.CallingConvention.HasFlag(SignatureCallingConvention.VarArgs))
+            {
+                // It's possible to have an __arglist without anything being passed to it
+                sb.Append("(__arglist)");
             }
 
             if (string.Equals(Name, "op_Implicit", StringComparison.Ordinal) || string.Equals(Name, "op_Explicit", StringComparison.Ordinal))

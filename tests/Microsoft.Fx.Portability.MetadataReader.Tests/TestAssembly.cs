@@ -78,6 +78,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         public string AssemblyPath { get { return _path; } }
 
+        public static string Arglist
+        {
+            get
+            {
+                var text = GetText("Arglist.cs");
+                return new TestAssembly("Arglist", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
         public static string EmptyProject
         {
             get
