@@ -96,6 +96,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string ModsFromIL
+        {
+            get
+            {
+                var bytes = GetBytes("modopt.dll");
+                return new TestAssembly("ModOpt.dll", bytes).AssemblyPath;
+            }
+        }
+
         public static string NestedGenericTypesFromIL
         {
             get

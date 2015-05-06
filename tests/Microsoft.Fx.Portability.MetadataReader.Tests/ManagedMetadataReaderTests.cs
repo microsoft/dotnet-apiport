@@ -34,6 +34,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
+        public void ModsFromIL()
+        {
+            const string expected1 = "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)";
+            const string expected2 = "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)";
+            CompareSpecificDependency(TestAssembly.ModsFromIL, expected1);
+            CompareSpecificDependency(TestAssembly.ModsFromIL, expected2);
+        }
+
+        [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void GenericWithGenericMember()
         {
             CompareDependencies(TestAssembly.GenericClassWithGenericMethod, GenericWithGenericMemberDocId());
@@ -63,10 +72,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareSpecificDependency(TestAssembly.OpExplicit, expected);
         }
 
-        private void CompareSpecificDependency(string opImplicit, string v)
+        private void CompareSpecificDependency(string path, string v)
         {
             var dependencyFinder = new ReflectionMetadataDependencyFinder();
-            var assemblyToTestFileInfo = new FileInfo(TestAssembly.EmptyProject);
+            var assemblyToTestFileInfo = new FileInfo(path);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);

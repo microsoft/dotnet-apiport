@@ -389,14 +389,12 @@ namespace Microsoft.Fx.Portability.Analyzer
         public MemberMetadataInfo GetModifiedType(MemberMetadataInfo unmodifiedType, ImmutableArray<CustomModifier<MemberMetadataInfo>> modifiers)
         {
             var builder = new StringBuilder();
-            builder.Append('~');
             builder.Append(unmodifiedType.Name);
 
             foreach (var modifier in modifiers)
             {
-                builder.Append(modifier.IsRequired ? "modreq(" : "modopt(");
+                builder.Append(modifier.IsRequired ? " reqmod " : " optmod ");
                 builder.Append(modifier.Type);
-                builder.Append(')');
             }
 
             unmodifiedType.Name = builder.ToString();
