@@ -123,6 +123,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string NonGenericTypesWithGenericParametersFromIL
+        {
+            get
+            {
+                var bytes = GetBytes("NonGenericTypesWithGenericParameters.dll");
+                return new TestAssembly("NonGenericTypesWithGenericParameters.dll", bytes).AssemblyPath;
+            }
+        }
+
         public static string GenericClassWithGenericMethod
         {
             get

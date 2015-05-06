@@ -33,6 +33,13 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareDependencies(TestAssembly.NestedGenericTypesFromIL, NestedGenericTypesFromILMemberDocId());
         }
 
+        [Fact]
+        // IL can, bizarrely, define non-generic types that take generic paratmers
+        public void NonGenericTypesWithGenericParametersFromIL()
+        {
+            CompareDependencies(TestAssembly.NonGenericTypesWithGenericParametersFromIL, NonGenericTypesWithGenericParametersFromILLMemberDocId());
+        }
+
         [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void ModsFromIL()
         {
@@ -114,6 +121,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 .ToList();
 
             Assert.Equal(expectedOrdered, foundDocIds);
+        }
+
+        private static IEnumerable<Tuple<string, int>> NonGenericTypesWithGenericParametersFromILLMemberDocId()
+        {
+            yield return Tuple.Create("M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})", 1);
+            yield return Tuple.Create("M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})", 1);
+            yield return Tuple.Create("T:OuterClass", 1);
+            yield return Tuple.Create("T:OuterClass.InnerClass", 1);
+            yield return Tuple.Create("T:System.Object", 1);
         }
 
         private static IEnumerable<Tuple<string, int>> NestedGenericTypesFromILMemberDocId()
