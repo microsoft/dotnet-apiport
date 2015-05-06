@@ -85,6 +85,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionMetadataInfoTests.cs" />
     <Compile Include="TestAssembly.cs" />
+    <EmbeddedResource Include="Tests\OpImplicitMethod2Parameter.cs" />
+    <EmbeddedResource Include="Tests\OpImplicitMethod.cs" />
     <EmbeddedResource Include="Tests\Arglist.cs" />
     <EmbeddedResource Include="Tests\modopt.dll" />
     <EmbeddedResource Include="Tests\modopt.il" />
