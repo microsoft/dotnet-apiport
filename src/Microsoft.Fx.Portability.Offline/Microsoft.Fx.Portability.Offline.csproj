@@ -67,7 +67,9 @@
   <ItemGroup>
     <EmbeddedResource Include="$(CatalogDataFile)" />
     <None Include="download.ps1" />
-    <None Include="unity.config" />
+    <None Include="unity.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
