@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability.Tests
             bc.VersionBroken = null;
             bc.ImpactScope = BreakingChangeImpact.Unknown;
             bc.IsQuirked = false;
-            bc.ApplicableApis = bc.ApplicableApis.Concat(new string[] { "##" });
+            bc.ApplicableApis = bc.ApplicableApis.Concat(new[] { "##" });
             bc.Suggestion = "\\0\0\0\0\0" + bc.Suggestion + "\u0001\u0002";
             ValidateParse(GetBreakingChangeMarkdown("CorruptData.md"), bc);
         }
@@ -68,7 +68,7 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public void PartialData()
         {
-            BreakingChange bc = new BreakingChange()
+            BreakingChange bc = new BreakingChange
             {
                 Id = ListTBC.Id,
                 Title = ListTBC.Title,
@@ -79,7 +79,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             ValidateParse(GetBreakingChangeMarkdown("PartialData.md"), bc);
         }
-        
+
         [Fact]
         public void Empty()
         {
@@ -89,7 +89,7 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public void RandomText()
         {
-            BreakingChange bc = new BreakingChange() { Title = "Chapter 2. The Mail" };
+            BreakingChange bc = new BreakingChange { Title = "Chapter 2. The Mail" };
             ValidateParse(GetBreakingChangeMarkdown("RandomText.md"), bc);
 
             ValidateParse(GetBreakingChangeMarkdown("RandomText2.md"), new BreakingChange[0]);
@@ -160,7 +160,7 @@ namespace Microsoft.Fx.Portability.Tests
 
 
         #region Expected Breaking Changes
-        public static BreakingChange TemplateBC = new BreakingChange()
+        public static BreakingChange TemplateBC = new BreakingChange
         {
             Id = "ID",
             Title = "Breaking Change Title",
@@ -172,13 +172,13 @@ namespace Microsoft.Fx.Portability.Tests
             IsBuildTime = false,
             IsSourceAnalyzerAvailable = false,
             Suggestion = "Suggested steps if user is affected (such as work arounds or code fixes) go here.",
-            ApplicableApis = new string[] { "Not detectable via API analysis" },
+            ApplicableApis = new[] { "Not detectable via API analysis" },
             Link = "LinkForMoreInformation",
             BugLink = "Bug link goes here",
             Notes = "Source analyzer status: Not usefully detectable with an analyzer"
         };
 
-        public static BreakingChange ListTBC = new BreakingChange()
+        public static BreakingChange ListTBC = new BreakingChange
         {
             Id = "5",
             Title = "List<T>.ForEach",
@@ -189,12 +189,12 @@ namespace Microsoft.Fx.Portability.Tests
             IsBuildTime = false,
             IsSourceAnalyzerAvailable = true,
             Suggestion = "Ideally, code should be fixed such that Lists are not modifed while enumerating their elements, as that is never a safe operation. To revert to the previous behavior, though, an app may target .NET 4.0.",
-            ApplicableApis = new string[] { "M:System.Collections.Generic.List`1.ForEach(System.Action{`0})" },
+            ApplicableApis = new[] { "M:System.Collections.Generic.List`1.ForEach(System.Action{`0})" },
             Link = "https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#core",
             Notes = "This introduces an exception, but requires retargeting\nSource analyzer status: Pri 1, source and binary done (MikeRou)"
         };
 
-        public static BreakingChange UriBC = new BreakingChange()
+        public static BreakingChange UriBC = new BreakingChange
         {
             Id = "6",
             Title = "System.Uri",
@@ -205,7 +205,7 @@ namespace Microsoft.Fx.Portability.Tests
             IsBuildTime = false,
             IsSourceAnalyzerAvailable = true,
             Suggestion = "If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.",
-            ApplicableApis = new string[] {
+            ApplicableApis = new[] {
                 "M:System.Uri.#ctor(System.String)",
                 "M:System.Uri.#ctor(System.String,System.Boolean)",
                 "M:System.Uri.#ctor(System.String,System.UriKind)",

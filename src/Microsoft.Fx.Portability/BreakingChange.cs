@@ -11,7 +11,7 @@ namespace Microsoft.Fx.Portability
     {
         public BreakingChange DeepCopy()
         {
-            return new BreakingChange()
+            return new BreakingChange
             {
                 Id = this.Id,
                 Title = this.Title,
@@ -21,8 +21,8 @@ namespace Microsoft.Fx.Portability
                 Markdown = this.Markdown,
                 ApplicableApis = this.ApplicableApis?.ToList(),
                 Related = this.Related?.ToList(),
-                VersionBroken = this.VersionBroken == null ? null : new Version(this.VersionBroken.ToString()),
-                VersionFixed = this.VersionFixed == null ? null : new Version(this.VersionFixed.ToString()),
+                VersionBroken = this.VersionBroken,
+                VersionFixed = this.VersionFixed,
                 IsBuildTime = this.IsBuildTime,
                 IsQuirked = this.IsQuirked,
                 IsSourceAnalyzerAvailable = this.IsSourceAnalyzerAvailable,
