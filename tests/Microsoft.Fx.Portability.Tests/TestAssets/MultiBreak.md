@@ -1,0 +1,67 @@
+## 5: List<T>.ForEach
+
+### Scope
+Minor
+
+### Version Introduced
+4.5
+
+### Change Description
+Beginning in .NET 4.5, a List&lt;T&gt;.ForEach enumerator will throw an InvalidOperationException exception if an element in the calling collection is modified. Previously, this would not throw an exception but could lead to race conditions.
+
+- [x] Quirked
+- [ ] Build-time break
+- [x] Source analyzer available
+
+### Recommended Action
+Ideally, code should be fixed such that Lists are not modifed while enumerating their elements, as that is never a safe operation. To revert to the previous behavior, though, an app may target .NET 4.0.
+
+### Affected APIs
+* M:System.Collections.Generic.List`1.ForEach(System.Action{`0})
+
+[More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
+
+<!--
+    ### Notes
+    This introduces an exception, but requires retargeting
+    Source analyzer status: Pri 1, source and binary done (MikeRou)
+-->
+
+## 6: System.Uri
+
+### Scope
+Major
+
+### Version Introduced
+4.5
+
+### Change Description
+
+URI parsing has changed in several ways in .NET 4.5. Note, however, that these changes only affect code targeting .NET 4.5. If a binary targets .NET 4.0, the old behavior will be observed.  
+Changes to URI parsing in .NET 4.5 include:<ul><li>URI parsing will perform normalization and character checking according to the latest IRI rules in RFC 3987</li><li>Unicode normalization form C will only be performed on the host portion of the URI</li><li>Invalid mailto: URIs will now cause an exception</li><li>Trailing dots at the end of a path segment are now preserved</li><li>file:// URIs do not escape the '?' character</li><li>Unicode control characters U+0080 through U+009F are not supported</li><li>Comma characters (',' %2c) are not automatically unescaped</li></ul>
+
+- [x] Quirked
+- [ ] Build-time break
+- [x] Source analyzer available
+
+### Recommended Action
+If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.
+
+### Affected APIs
+* M:System.Uri.#ctor(System.String)
+* M:System.Uri.#ctor(System.String,System.Boolean)
+* M:System.Uri.#ctor(System.String,System.UriKind)
+* M:System.Uri.#ctor(System.Uri,System.String)
+* M:System.Uri.TryCreate(System.String,System.UriKind,System.Uri@)
+* M:System.Uri.TryCreate(System.Uri,System.String,System.Uri@)
+* M:System.Uri.TryCreate(System.Uri,System.Uri,System.Uri@)
+
+[More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
+
+<!--
+    ### Notes
+    Changes IRI parsing, requires access to parameters to detect
+    Source analyzer status: Pri 1, source done (AlPopa)
+-->
+
+

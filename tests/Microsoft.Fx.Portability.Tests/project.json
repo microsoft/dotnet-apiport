@@ -1,18 +1,19 @@
 {
-  "authors": [ "Microsoft" ],
-  "description": "Tests for Microsoft.Fx.Portability library.",
-  "version": "1.0.0-alpha",
-  "dependencies": {
-    "NSubstitute": "1.8.1.0",
-    "Microsoft.Fx.Portability": "",
-    "xunit": "2.1.0-*",
-    "xunit.runner.dnx": "2.1.0-*"
-  },
-  "commands": {
-    "test": "xunit.runner.dnx"
-  },
-  "frameworks": {
-    "dnx451": {
-    }
-  }
+    "authors": [ "Microsoft" ],
+    "description": "Tests for Microsoft.Fx.Portability library.",
+    "version": "1.0.0-alpha",
+    "dependencies": {
+        "NSubstitute": "1.8.1.0",
+        "Microsoft.Fx.Portability": "",
+        "xunit": "2.1.0-*",
+        "xunit.runner.dnx": "2.1.0-*"
+    },
+    "commands": {
+        "test": "xunit.runner.dnx"
+    },
+    "frameworks": {
+        "dnx451": {
+        }
+    },
+    "resources": ["TestAssets/**"]
 }

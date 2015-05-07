@@ -3,11 +3,35 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Fx.Portability
 {
     public class BreakingChange : IComparable<BreakingChange>
     {
+        public BreakingChange DeepCopy()
+        {
+            return new BreakingChange
+            {
+                Id = this.Id,
+                Title = this.Title,
+                Details = this.Details,
+                Suggestion = this.Suggestion,
+                Link = this.Link,
+                Markdown = this.Markdown,
+                ApplicableApis = this.ApplicableApis?.ToList(),
+                Related = this.Related?.ToList(),
+                VersionBroken = this.VersionBroken,
+                VersionFixed = this.VersionFixed,
+                IsBuildTime = this.IsBuildTime,
+                IsQuirked = this.IsQuirked,
+                IsSourceAnalyzerAvailable = this.IsSourceAnalyzerAvailable,
+                BugLink = this.BugLink,
+                Notes = this.Notes,
+                ImpactScope = this.ImpactScope
+            };
+        }
+
         public string Id { get; set; }
 
         public string Title { get; set; }
