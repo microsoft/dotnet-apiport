@@ -258,12 +258,13 @@ namespace Microsoft.Fx.Portability.Analyzer
                 // Only required parameters should be listed explicitly
                 Debug.Assert(MethodSignature.ParameterTypes.Count() >= MethodSignature.RequiredParameterCount, "More parameters were required than are available");
                 sb.Append(string.Join(",", MethodSignature.ParameterTypes.Select(m => m.ToString()).ToArray(), 0, MethodSignature.RequiredParameterCount));
-                
+
                 // If the method is a varargs method, it should add an '__arglist' parameter
                 if (MethodSignature.Header.CallingConvention.HasFlag(SignatureCallingConvention.VarArgs))
                 {
                     sb.Append(",__arglist");
                 }
+
                 sb.Append(")");
             }
             else if (Kind == MemberKind.Method && MethodSignature.Header.CallingConvention.HasFlag(SignatureCallingConvention.VarArgs))
@@ -272,7 +273,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append("(__arglist)");
             }
 
-            if (string.Equals(Name, "op_Implicit", StringComparison.Ordinal) || string.Equals(Name, "op_Explicit", StringComparison.Ordinal))
+            // Technically, we want to verify that these are marked as a special name along with the names op_Implicit or op_Explicit.  However, 
+            // since we are just using member references, we don't have enought information to know if it is.  For now, we will assume that it is 
+            // a special name if it only has one input parameter
+            if (MethodSignature.ParameterTypes.Length == 1 &&
+                (string.Equals(Name, "op_Implicit", StringComparison.Ordinal) || string.Equals(Name, "op_Explicit", StringComparison.Ordinal)))
             {
                 sb.Append("~");
                 sb.Append(MethodSignature.ReturnType);

@@ -80,6 +80,23 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareSpecificDependency(TestAssembly.OpImplicit, expected);
         }
 
+        [Fact]
+        public void OpImplicitMethod()
+        {
+            // This is case where we mark it as a special name when it really isn't. Don't have the info to fix with just member refs
+            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method`1.op_Implicit(`0)~System.Int32";
+
+            CompareSpecificDependency(TestAssembly.OpImplicitMethod, expected);
+        }
+
+        [Fact]
+        public void OpImplicitMethod2Parameter()
+        {
+            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method_2Parameter`1.op_Implicit(`0,`0)";
+
+            CompareSpecificDependency(TestAssembly.OpImplicitMethod2Parameter, expected);
+        }
+
         [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void OpExplicit()
         {

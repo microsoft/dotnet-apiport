@@ -168,6 +168,24 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string OpImplicitMethod
+        {
+            get
+            {
+                var text = GetText("OpImplicitMethod.cs");
+                return new TestAssembly("OpImplicitMethod", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
+        public static string OpImplicitMethod2Parameter
+        {
+            get
+            {
+                var text = GetText("OpImplicitMethod2Parameter.cs");
+                return new TestAssembly("OpImplicitMethod2Parameter", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
         public static string OpExplicit
         {
             get
