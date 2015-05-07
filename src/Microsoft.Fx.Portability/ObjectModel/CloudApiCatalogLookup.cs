@@ -171,19 +171,5 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             return _publicTargets.Where(t => IsMemberInTarget(docId, t)).ToList();
         }
-
-        public static async Task<IApiCatalogLookup> LoadFromAzure()
-        {
-            // This is a SAS key that is read only.  The AccessPolicy is 'ReadCatalog'
-            const string url = @"https://portabilitystorage.blob.core.windows.net/catalog/catalog.bin?sr=b&sv=2014-02-14&si=ReadCatalog&sig=VrfftSLKvWIzJtI2dXSRzVLxKP6Vy79U75axlbUmxY4%3D";
-
-            using (var client = new HttpClient())
-            using (var data = await client.GetStreamAsync(url))
-            {
-                var catalog = data.DecompressToObject<DotNetCatalog>();
-
-                return new CloudApiCatalogLookup(catalog);
-            }
-        }
     }
 }
