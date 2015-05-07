@@ -61,7 +61,7 @@ namespace Microsoft.Fx.Portability.Tests
             bc.ImpactScope = BreakingChangeImpact.Unknown;
             bc.IsQuirked = false;
             bc.ApplicableApis = bc.ApplicableApis.Concat(new string[] { "##" });
-            bc.Suggestion = "\\0" + bc.Suggestion;
+            bc.Suggestion = "\\0\0\0\0\0" + bc.Suggestion + "\u0001\u0002";
             ValidateParse(GetBreakingChangeMarkdown("CorruptData.md"), bc);
         }
 
