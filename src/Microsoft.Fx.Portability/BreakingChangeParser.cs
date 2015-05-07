@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability
                     currentLine = currentLine.Trim();
 
                     // New breaking change
-                    if (currentLine.StartsWith("## "))
+                    if (currentLine.StartsWith("## ", StringComparison.Ordinal))
                     {
                         // Save previous breaking change and reset currentBreak
                         if (currentBreak != null)
@@ -68,89 +68,92 @@ namespace Microsoft.Fx.Portability
                         // Clear state
                         state = ParseState.None;
                     }
-
-                    // State changes
-                    else if (currentLine.StartsWith("###"))
+                    else if (currentBreak != null) // Only parse breaking change if we've seeng a breaking change header ("## ...")
                     {
-                        switch (currentLine.Substring("###".Length).Trim().ToLowerInvariant())
+                        // State changes
+                        if (currentLine.StartsWith("###", StringComparison.Ordinal))
                         {
-                            case "scope":
-                                state = ParseState.Scope;
-                                break;
-                            case "version introduced":
-                            case "version broken":
-                                state = ParseState.VersionBroken;
-                                break;
-                            case "version reverted":
-                            case "version fixed":
-                                state = ParseState.VersionFixed;
-                                break;
-                            case "change description":
-                            case "details":
-                                state = ParseState.Details;
-                                break;
-                            case "recommended action":
-                            case "suggestion":
-                                state = ParseState.Suggestion;
-                                break;
-                            case "affected apis":
-                            case "applicableapis":
-                                state = ParseState.AffectedAPIs;
-                                break;
-                            case "original bug":
-                            case "buglink":
-                            case "bug":
-                                state = ParseState.OriginalBug;
-                                break;
-                            case "notes":
-                                state = ParseState.Notes;
-                                break;
-                            default:
-                                ParseNonStateChange(currentBreak, state, currentLine);
-                                break;
+                            switch (currentLine.Substring("###".Length).Trim().ToLowerInvariant())
+                            {
+                                case "scope":
+                                    state = ParseState.Scope;
+                                    break;
+                                case "version introduced":
+                                case "version broken":
+                                    state = ParseState.VersionBroken;
+                                    break;
+                                case "version reverted":
+                                case "version fixed":
+                                    state = ParseState.VersionFixed;
+                                    break;
+                                case "change description":
+                                case "details":
+                                    state = ParseState.Details;
+                                    break;
+                                case "recommended action":
+                                case "suggestion":
+                                    state = ParseState.Suggestion;
+                                    break;
+                                case "affected apis":
+                                case "applicableapis":
+                                    state = ParseState.AffectedAPIs;
+                                    break;
+                                case "original bug":
+                                case "buglink":
+                                case "bug":
+                                    state = ParseState.OriginalBug;
+                                    break;
+                                case "notes":
+                                    state = ParseState.Notes;
+                                    break;
+                                default:
+                                    ParseNonStateChange(currentBreak, state, currentLine);
+                                    break;
+                            }
                         }
-                    }
 
-                    // Bool properties
-                    else if (currentLine.StartsWith("- ["))
-                    {
-                        bool isChecked = currentLine.StartsWith("- [x]", StringComparison.OrdinalIgnoreCase);
-                        switch (currentLine.Substring("- [x]".Length).Trim().ToLowerInvariant())
+                        // Bool properties
+                        else if (currentLine.StartsWith("- [ ]", StringComparison.Ordinal) || 
+                                 currentLine.StartsWith("- [x]", StringComparison.OrdinalIgnoreCase))
                         {
-                            case "quirked":
-                            case "isquirked":
-                                currentBreak.IsQuirked = isChecked;
-                                state = ParseState.None;
-                                break;
-                            case "build-time break":
-                            case "isbuildtime":
-                                currentBreak.IsBuildTime = isChecked;
-                                state = ParseState.None;
-                                break;
-                            case "source analyzer available":
-                            case "issourceanalyzeravailable":
-                                currentBreak.IsSourceAnalyzerAvailable = isChecked;
-                                state = ParseState.None;
-                                break;
-                            default:
-                                ParseNonStateChange(currentBreak, state, currentLine);
-                                break;
+                            bool isChecked = currentLine.StartsWith("- [x]", StringComparison.OrdinalIgnoreCase);
+                            switch (currentLine.Substring("- [x]".Length).Trim().ToLowerInvariant())
+                            {
+                                case "quirked":
+                                case "isquirked":
+                                    currentBreak.IsQuirked = isChecked;
+                                    state = ParseState.None;
+                                    break;
+                                case "build-time break":
+                                case "isbuildtime":
+                                    currentBreak.IsBuildTime = isChecked;
+                                    state = ParseState.None;
+                                    break;
+                                case "source analyzer available":
+                                case "issourceanalyzeravailable":
+                                    currentBreak.IsSourceAnalyzerAvailable = isChecked;
+                                    state = ParseState.None;
+                                    break;
+                                default:
+                                    ParseNonStateChange(currentBreak, state, currentLine);
+                                    break;
+                            }
                         }
-                    }
 
-                    // More info link
-                    else if (currentLine.StartsWith("[More information]", StringComparison.OrdinalIgnoreCase))
-                    {
-                        currentBreak.Link = currentLine.Substring("[More information]".Length)
-                            .Trim(' ', '(', ')', '[', ']', '\t', '\n', '\r')      // Remove markdown link enclosures
-                            .Replace("\\(", "(").Replace("\\)", ")");             // Unescape parens in link
-                        state = ParseState.None;
-                    }
+                        // More info link
+                        else if (currentLine.StartsWith("[More information]", StringComparison.OrdinalIgnoreCase))
+                        {
+                            currentBreak.Link = currentLine.Substring("[More information]".Length)
+                                .Trim(' ', '(', ')', '[', ']', '\t', '\n', '\r')      // Remove markdown link enclosures
+                                .Replace("\\(", "(").Replace("\\)", ")");             // Unescape parens in link
+                            state = ParseState.None;
+                        }
 
-                    // Otherwise, process according to our current state
-                    else
-                    {
-                        ParseNonStateChange(currentBreak, state, currentLine);
+                        // Otherwise, process according to our current state
+                        else
+                        {
+                            ParseNonStateChange(currentBreak, state, currentLine);
+                        }
                     }
                 }
 

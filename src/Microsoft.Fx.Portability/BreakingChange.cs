@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Fx.Portability
 {
@@ -18,8 +19,8 @@ namespace Microsoft.Fx.Portability
                 Suggestion = this.Suggestion,
                 Link = this.Link,
                 Markdown = this.Markdown,
-                ApplicableApis = this.ApplicableApis == null ? null : new List<string>(this.ApplicableApis),
-                Related = this.Related == null ? null : new List<string>(this.Related),
+                ApplicableApis = this.ApplicableApis?.ToList(),
+                Related = this.Related?.ToList(),
                 VersionBroken = this.VersionBroken == null ? null : new Version(this.VersionBroken.ToString()),
                 VersionFixed = this.VersionFixed == null ? null : new Version(this.VersionFixed.ToString()),
                 IsBuildTime = this.IsBuildTime,

@@ -5,10 +5,10 @@ namespace Microsoft.Fx.Portability
 {
     public enum BreakingChangeImpact
     {
+        Unknown,
         Major,
         Minor,
         Edge,
         Transparent,
-        Unknown,
     }
 }
