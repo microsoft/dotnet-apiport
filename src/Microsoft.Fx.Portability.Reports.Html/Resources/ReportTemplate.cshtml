@@ -1,0 +1,89 @@
+﻿/*
+   Copyright (c) Microsoft. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+*/
+
+@model Microsoft.Fx.Portability.Reports.RazorHtmlObject
+
+@using Microsoft.Fx.Portability
+@using Microsoft.Fx.Portability.Reporting.ObjectModel
+@using Microsoft.Fx.Portability.Resources
+@using System.IO
+@using System.Linq
+@using System.Runtime.Versioning
+
+@{
+    ViewBag.Title = LocalizedStrings.HtmlReportTitle;
+    var submissionId = Model.ReportingResult.SubmissionId;
+    var includeBreakingChanges = Model.RequestFlags.HasFlag(Microsoft.Fx.Portability.ObjectModel.AnalyzeRequestFlags.ShowBreakingChanges);
+    var includePortabilityReport = Model.RequestFlags.HasFlag(Microsoft.Fx.Portability.ObjectModel.AnalyzeRequestFlags.ShowNonPortableApis);
+}
+
+<!DOCTYPE html>
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+    <meta content="en-us" http-equiv="Content-Language" />
+    <meta content="text/html; charset=utf-16" http-equiv="Content-Type" />
+    <title _locid="PortabilityAnalysis0">@LocalizedStrings.HtmlReportTitle</title>
+    @Html.Partial("_Styles")
+</head>
+<body>
+    <h1 _locid="PortabilityReport">@LocalizedStrings.HtmlReportTitle</h1>
+    <div id="content">
+        <div id="submissionHeader" style="font-size:8pt;">
+            <p>
+                <i>
+                    @LocalizedStrings.SubmissionId&nbsp;
+                    @submissionId
+
+                    @* TODO: Add back in logic to create URIs when finished abstracting IReportWriter. *@
+                    @*
+                        @if (reportingResult.Headers.HasSubmissionEndpoint)
+                        {
+                            <a href="@reportingResult.Headers.GetSubmissionUrl(@submissionId)">@submissionId</a>
+                        }
+                        else
+                        {
+                            @submissionId
+                        }
+                    *@
+                </i>
+            </p>
+
+            <div id="toc">
+                <h2>Contents</h2>
+                <ul>
+                    @if (includeBreakingChanges)
+                    {
+                        <li>
+                            <span class="tocItem"><a href="#@LocalizedStrings.CompatibilityPageTitle">@LocalizedStrings.CompatibilityPageTitle</a></span>
+                        </li>
+                    }
+                    @if (includePortabilityReport)
+                    {
+                        <li>
+                            <span class="tocItem"><a href="#@LocalizedStrings.PortabilitySummaryPageTitle">@LocalizedStrings.PortabilitySummaryPageTitle</a></span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        @if (includeBreakingChanges)
+        {
+            <div id="breakingChangesReport">
+                @Html.Partial("_BreakingChangesReport", Model)
+            </div>
+        }
+
+        @if (includePortabilityReport)
+        {
+            <div id="portabilityReport">
+                @Html.Partial("_PortabilityReport", Model)
+            </div>
+        }
+    </div>
+
+    @Html.Partial("_Scripts")
+</body>
+</html>
