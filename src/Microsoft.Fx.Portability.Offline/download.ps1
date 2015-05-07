@@ -29,34 +29,22 @@ function DownloadFile($url, $outputPath) {
 	}
 }
 
-function ExtractBreakingChanges( $zipfilename, $destination )
+function DownloadBreakingChangeFile($destination, $fileName)
 {
-	# Only bother extracting if the BreakingChanges folder doesn't exist yet
-	if (Test-Path $destination\BreakingChanges) {
-		return;
-	}
-
-	# Create the output directory
-	[System.IO.Directory]::CreateDirectory($destination + "\\BreakingChanges")
-
-	# Open the archive
-	[System.Reflection.Assembly]::LoadWithPartialName("System.IO.Compression") | Out-Null
-	[System.Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") | Out-Null
-	$archiveMode = [System.IO.Compression.ZipArchiveMode]::Read
-	$archive = [System.IO.Compression.ZipFile]::Open($zipfilename, $archiveMode)
-
-	# Find markdown files from the BreakingChanges directory and extract them
-	Foreach ($entry in $archive.Entries) {
-		if ($entry.Name -ne "" -And 
-		[System.IO.Path]::GetDirectoryName($entry.FullName).Contains("BreakingChanges") -And
-		[System.IO.Path]::GetExtension($entry.FullName).ToLowerInvariant().Equals(".md")) {
-			[System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination + "\\BreakingChanges\\" + $entry.Name)
-		}
-	}
-
-	$archive.Dispose()
+	$url = "https://raw.githubusercontent.com/Microsoft/dotnet-apiport/master/Documentation/BreakingChanges/" + $fileName
+	$outputPath = $destination + $fileName
+	DownloadFile $url $outputPath
 }
 
 DownloadFile "TBD" $catalogPath
-DownloadFile "TBD" $breakingChangePath\Recommendations.zip
-ExtractBreakingChanges "$breakingChangePath\Recommendations.zip" "$breakingChangePath"
+
+# Unfortunately, it's not possible to download a specific directory from a Github repo (only the entire repo)
+# Rather than download the entire ApiPort repo at build-time, list the individual breaking change files to download
+DownloadBreakingChangeFile $breakingChangePath "! Template.md"
+DownloadBreakingChangeFile $breakingChangePath "001- SoapFormatter cannot deserialize Hashtable and sim.md"
+DownloadBreakingChangeFile $breakingChangePath "003- WPF DataTemplate elements are now visible to UIA.md"
+DownloadBreakingChangeFile $breakingChangePath "004- WPF TextBox selected text appears a different colo.md"
+DownloadBreakingChangeFile $breakingChangePath "005- ListT.ForEach.md"
+DownloadBreakingChangeFile $breakingChangePath "006- System.Uri.md"
+DownloadBreakingChangeFile $breakingChangePath "010- System.Uri escaping now supports RFC 3986 (http.md"
+DownloadBreakingChangeFile $breakingChangePath "026- Task.WaitAll methods with time-out arguments.md"
