@@ -276,7 +276,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Technically, we want to verify that these are marked as a special name along with the names op_Implicit or op_Explicit.  However, 
             // since we are just using member references, we don't have enought information to know if it is.  For now, we will assume that it is 
             // a special name if it only has one input parameter
-            if (MethodSignature.ParameterTypes.Length == 1 &&
+            if (Kind == MemberKind.Method && MethodSignature.ParameterTypes.Length == 1 &&
                 (string.Equals(Name, "op_Implicit", StringComparison.Ordinal) || string.Equals(Name, "op_Explicit", StringComparison.Ordinal)))
             {
                 sb.Append("~");
