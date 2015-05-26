@@ -15,5 +15,5 @@
         "dnx451": {
         }
     },
-    "resources": ["TestAssets/**"]
+    "resource": ["TestAssets/**"]
 }
