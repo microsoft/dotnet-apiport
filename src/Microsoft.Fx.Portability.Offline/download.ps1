@@ -36,7 +36,7 @@ function DownloadBreakingChangeFile($destination, $fileName)
 	DownloadFile $url $outputPath
 }
 
-DownloadFile "TBD" $catalogPath
+DownloadFile "https://portabilitystorage.blob.core.windows.net/data/public%2Fcatalog.bin?sr=b&sv=2015-02-21&si=ReadPublicCatalog&sig=r0Q61Nm4ZAqXYbWIg76%2BYw4VGsw9%2BdWuN%2FeHJYHJguw%3D" $catalogPath
 
 # Unfortunately, it's not possible to download a specific directory from a Github repo (only the entire repo)
 # Rather than download the entire ApiPort repo at build-time, list the individual breaking change files to download
