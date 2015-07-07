@@ -77,11 +77,15 @@
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
     <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile) $(BreakingChangePath)" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+  <!-- Copy breaking changes for use by Microsoft.FX.Portability.Offline at runtime -->
+    <ItemGroup>
+      <BreakingChanges Include="
+        $(DataPath)BreakingChanges\*.md;
+      " />
+    </ItemGroup>
+    <Copy SourceFiles="@(BreakingChanges)" DestinationFolder="$(OutputPath)\BreakingChanges" SkipUnchangedFiles="true" />
   </Target>
-  -->
 </Project>
