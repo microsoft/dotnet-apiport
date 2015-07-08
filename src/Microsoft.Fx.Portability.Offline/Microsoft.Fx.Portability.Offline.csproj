@@ -62,7 +62,7 @@
   </ItemGroup>
   <PropertyGroup>
     <DataPath>$(MSBuildThisFileDirectory)data\</DataPath>
-    <BreakingChangePath>$(DataPath)BreakingChanges\</BreakingChangePath>
+    <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\Documentation\BreakingChanges\</BreakingChangePath>
     <CatalogDataFile>$(DataPath)catalog.bin</CatalogDataFile>
   </PropertyGroup>
   <ItemGroup>
@@ -75,7 +75,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
-    <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile) $(BreakingChangePath)" />
+    <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile)" />
   </Target>
   <Target Name="BeforeBuild">
   </Target>
@@ -83,7 +83,7 @@
   <!-- Copy breaking changes for use by Microsoft.FX.Portability.Offline at runtime -->
     <ItemGroup>
       <BreakingChanges Include="
-        $(DataPath)BreakingChanges\*.md;
+        $(BreakingChangePath)*.md;
       " />
     </ItemGroup>
     <Copy SourceFiles="@(BreakingChanges)" DestinationFolder="$(OutputPath)\BreakingChanges" SkipUnchangedFiles="true" />
