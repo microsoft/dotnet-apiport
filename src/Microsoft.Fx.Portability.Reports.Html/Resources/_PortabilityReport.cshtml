@@ -1,0 +1,189 @@
+﻿/*
+   Copyright (c) Microsoft. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+*/
+
+@model Microsoft.Fx.Portability.Reports.RazorHtmlObject
+
+@using Microsoft.Fx.Portability
+@using Microsoft.Fx.Portability.Reporting.ObjectModel
+@using Microsoft.Fx.Portability.Resources
+@using System.IO
+@using System.Linq
+@using System.Runtime.Versioning
+
+@{
+    var reportingResult = Model.ReportingResult;
+}
+
+@helper WriteTableDataStringWithStyle(string docId, string data, string cellStyle)
+{
+    <td style="@cellStyle">@data</td>
+    @* TODO: Add back in logic to create URIs when finished abstracting IReportWriter. *@
+    @*
+        var serviceHeaders = Model.ReportingResult.Headers;
+        <td style="@cellStyle">
+            @if (serviceHeaders.HasApiEndpoint)
+            {
+                <a href="@serviceHeaders.GetDocIdUrl(docId).AbsoluteUri">@data</a>
+            }
+            else
+            {
+                @data
+            }
+        </td>
+    *@
+}
+
+@helper WriteTableDataString(string docId, string data)
+{
+    <td>@data</td>
+    @* TODO: Add back in logic to create URIs when finished abstracting IReportWriter. *@
+    @*
+        var serviceHeaders = Model.ReportingResult.Headers;
+        <td>
+            @if (serviceHeaders.HasApiEndpoint)
+            {
+                <a href="@serviceHeaders.GetDocIdUrl(docId).AbsoluteUri">@data</a>
+            }
+            else
+            {
+                @data
+            }
+        </td>*@
+}
+
+@helper WriteTableVersionsRow(IEnumerable<Version> usedVersions)
+{
+    foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(usedVersions))
+    {
+        var className = version.SupportedIn == null || version.Target.Version < version.SupportedIn ? "IconErrorEncoded" : "IconSuccessEncoded";
+        <td class="@className"></td>
+    }
+}
+
+@helper WriteAssembly(Microsoft.Fx.Portability.ObjectModel.AssemblyInfo assembly)
+{
+    <span class="assembly-name">@assembly</span>
+    if (!string.IsNullOrEmpty(assembly.TargetFrameworkMoniker))
+    {
+        <span class="assembly-tfm">(@assembly.TargetFrameworkMoniker)</span>
+    }
+}
+
+<h2 _locid="SummaryTitle">
+    <a name="@LocalizedStrings.PortabilitySummaryPageTitle"></a>@LocalizedStrings.PortabilitySummaryPageTitle
+</h2>
+<table>
+    <tbody>
+        <tr>
+            <th>@LocalizedStrings.AssemblyHeader</th>
+            @foreach (var target in Model.TargetHeaders)
+            {
+                <th>@target</th>
+            }
+        </tr>
+
+        @*Writing the summary body information here.*@
+        @foreach (var assembly in Model.OrderedAssembliesByIdentity)
+        {
+            <tr>
+                <td><strong><a href="#@assembly.SourceAssembly">@WriteAssembly(assembly.SourceAssembly)</a></strong></td>
+                @foreach (var usageData in @assembly.UsageData)
+                {
+                    <td class="text-center">@usageData.PortabilityIndex.ToString("P2")</td>
+                }
+            </tr>
+        }
+        @foreach (var invalidAssembly in reportingResult.GetAssembliesWithError())
+        {
+            var fileName = Path.GetFileName(invalidAssembly);
+            var message = string.Format("{0} is an invalid assembly.", fileName);
+            <tr>
+                <td>@message</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="details">
+    @foreach (var assembly in Model.OrderedAssembliesByIdentity)
+    {
+        // avoid writing blank details tables (happens if a non-.NET assembly is analyzed)
+        bool isDotNETAssembly = false;
+        foreach (var type in Model.MissingTypes)
+        {
+            if (type.UsedIn.Contains(assembly.SourceAssembly))
+            {
+                isDotNETAssembly = true;
+                break;
+            }
+        }
+        if (!isDotNETAssembly)
+        {
+            continue;
+        }
+
+        var assemblyName = reportingResult.GetNameForAssemblyInfo(assembly.SourceAssembly);
+        <a name="#@assembly.SourceAssembly"><h3>@WriteAssembly(assembly.SourceAssembly)</h3></a>
+        var usedUnresolvedAssembly = Model.GetUnresolvedAssemblies(assembly);
+        if (usedUnresolvedAssembly.Count > 0)
+        {
+            <table>
+                <tbody>
+                    <tr><th>Missing Assemblies</th></tr>
+                    @foreach (var name in usedUnresolvedAssembly)
+                    {
+                        <tr><td>@name</td></tr>
+                    }
+                </tbody>
+            </table>
+            <a>&nbsp;</a> @*insert a blank line for readability*@
+        }
+
+        var detailColumnHeaders = new List<string>();
+        detailColumnHeaders.Add(LocalizedStrings.TargetTypeHeader);
+        detailColumnHeaders.AddRange(Model.TargetHeaders);
+        detailColumnHeaders.Add(LocalizedStrings.RecommendedChanges);
+        <table>
+            <tbody>
+                <tr>
+                    @foreach (var header in detailColumnHeaders)
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+                @*  IsMissing  => the type is entirely unsupported
+                    !IsMissing => only some members are unsupported *@
+                @foreach (var type in Model.MatchingMissingTypes(assembly))
+                {
+                    var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);
+                    <tr>
+                        @WriteTableDataString(type.TypeName, name)
+                        @WriteTableVersionsRow(type.TargetVersionStatus)
+                        <td>@type.RecommendedChanges</td>
+                    </tr>
+                    @*write a row for each of the type's missing members*@
+                    foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
+                    {
+                        var formattedName = member.MemberName.Substring(type.TypeName.Length + 1);
+                        <tr>
+                            @WriteTableDataStringWithStyle(member.DocId, formattedName, "padding-left:2em")
+                            @WriteTableVersionsRow(member.TargetVersionStatus)
+                            <td>@member.RecommendedChanges</td>
+                        </tr>
+                    }
+                    <tr>
+                        @foreach (var column in detailColumnHeaders)
+                        {
+                            <td>&nbsp;</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <p>
+            <a href="#@LocalizedStrings.PortabilitySummaryPageTitle">@LocalizedStrings.BackToSummary</a>
+        </p>
+    }
+</div>
