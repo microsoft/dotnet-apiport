@@ -45,6 +45,9 @@ namespace ApiPort
             container.RegisterType<IAnalysisEngine, AnalysisEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICollection<IReportWriter>>(new ContainerControlledLifetimeManager(), new InjectionFactory(WriterCollection));
 
+            // Register the default output format name
+            container.RegisterInstance("DefaultOutputFormat", "Excel");
+
             if (Console.IsOutputRedirected)
             {
                 container.RegisterInstance<IProgressReporter>(new TextWriterProgressReporter(Console.Out));

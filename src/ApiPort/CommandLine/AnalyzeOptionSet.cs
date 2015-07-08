@@ -32,13 +32,6 @@ namespace ApiPort.CommandLine
                 RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
             }
 
-            // If no output formats have been supplied, default to Excel
-            // TODO: Should probably get this from the service, not hard-coded
-            if (!OutputFormats.Any())
-            {
-                UpdateOutputFormats("Excel");
-            }
-
             return InputAssemblies.Any();
         }
     }
