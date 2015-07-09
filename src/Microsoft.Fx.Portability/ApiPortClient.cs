@@ -52,7 +52,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        public async Task<IEnumerable<byte[]>> GetAnalysisReportAsync(IApiPortOptions options)
+        public async Task<IEnumerable<byte[]>> GetAnalysisReportAsync(IApiPortOptions options, IEnumerable<string> outputFormats)
         {
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability
             {
                 AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
 
-                var tasks = options.OutputFormats
+                var tasks = outputFormats
                     .Select(f => GetResultFromServiceAsync(request, f))
                     .ToList();
 

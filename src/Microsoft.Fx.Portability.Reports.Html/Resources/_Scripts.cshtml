@@ -1,0 +1,43 @@
+﻿<!--
+   Copyright (c) Microsoft. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+-->
+
+<script>
+    // Toggle the element controlled by a toggle button on or off
+    function toggle(caller) {
+        var elementName = this.id.substr(6);
+        var element = document.getElementById(elementName);
+        var currentClass = element.getAttribute('class');
+        if (currentClass === null) {
+            // If the element has no class, then it's on. Turn it off.
+            element.setAttribute('class', 'ToggledOff');
+            this.innerHTML = '+';
+        }
+        else if (currentClass.search(/\bToggledOff\b/) > -1) {
+            // If it has ToggledOff as a class, then it's off. Turn it on.
+            element.setAttribute('class', currentClass.replace(/\bToggledOff\b/, '').trim());
+            this.innerHTML = '&#8212';
+        }
+        else {
+            // If it doesn't have ToggledOff as a class, then it's on. Turn it off.
+            element.setAttribute('class', currentClass.concat(' ToggledOff').trim());
+            this.innerHTML = '+';
+        }
+    }
+
+    // Hook up toggle buttons' click events
+    var toggleButtons = document.getElementsByClassName('ToggleButton');
+    for (var i = 0; i < toggleButtons.length; i++) {
+        toggleButtons[i].addEventListener('click', toggle);
+    }
+
+    // Turn off any elements that should begin collapsed. Note that this is done with the extra
+    // BeginToggledOff class instead of applying ToggledOff directly to these elements because they should be
+    // visible if javascript is unavailable for some reason.
+    var beginCollapsed = document.getElementsByClassName('BeginToggledOff');
+    for (var i = 0; i < beginCollapsed.length; i++) {
+        var currentClass = beginCollapsed[i].getAttribute('class');
+        beginCollapsed[i].setAttribute('class', currentClass.concat(' ToggledOff').trim());
+    }
+</script>

@@ -1,0 +1,240 @@
+﻿<!--
+   Copyright (c) Microsoft. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+-->
+
+@model Microsoft.Fx.Portability.Reports.RazorHtmlObject
+
+@using Microsoft.Fx.Portability
+@using Microsoft.Fx.Portability.ObjectModel
+@using Microsoft.Fx.Portability.Reporting.ObjectModel
+@using Microsoft.Fx.Portability.Resources
+@using System.IO
+@using System.Linq
+@using System.Runtime.Versioning
+
+@{
+    var reportingResult = Model.ReportingResult;
+}
+
+@helper WriteStyledBreakingChangeCount(IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> breaks, int warningThreshold, int errorThreshold)
+{
+    var count = breaks.Count();
+    var colorClass = count <= warningThreshold ? "NoBreakingChanges" : (count <= errorThreshold ? "FewBreakingChanges" : "ManyBreakingChanges");
+    <span class="@colorClass">@count</span>
+}
+
+@helper WriteAssembly(AssemblyInfo assembly, string friendlyName = null)
+{
+    var nameToDisplay = friendlyName ?? assembly.ToString();
+    <span class="assembly-name">@nameToDisplay</span>
+    if (!string.IsNullOrEmpty(assembly.TargetFrameworkMoniker))
+    {
+        <span class="assembly-tfm">(@assembly.TargetFrameworkMoniker)</span>
+    }
+}
+
+@helper WriteCompatibilityResults(string name, string description, IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> breaks, int warningThreshold, int errorThreshold)
+{
+    <h4><abbr title="@description">@name</abbr> - @WriteStyledBreakingChangeCount(breaks, warningThreshold, errorThreshold)</h4>
+    <div id="BreakDetails" class="BreakDetails">
+        @if (breaks.Count() > 0)
+        {
+            <table>
+                <colgroup>
+                    <col span="1" class="BreakingChangeID">
+                    <col span="1" class="APIColumn">
+                    <col span="2" class="LongDescriptionColumn">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>API</th>
+                        <th>Details</th>
+                        <th>Recommendation</th>
+                        <th class="NarrowHeader"><div>Quirked</div></th>
+                        <th class="NarrowHeader"><div>Version Introduced</div></th>
+                        <th class="NarrowHeader"><div>Version Reverted</div></th>
+                        <th class="NarrowHeader"><div>Analyzer Available</div></th>
+                        <th class="NarrowHeader"><div>Link</div></th>
+                    </tr>
+                    @foreach (KeyValuePair<BreakingChange, IEnumerable<MemberInfo>> b in breaks)
+                    {
+                        <tr>
+                            <td>@b.Key.Id</td>
+                            <td class="MemberNames">
+                                <ul>
+                                    @foreach (string member in @b.Value.Select(m => m.ToString()).Distinct().OrderBy(s => s)) // Distinct because the members can appear multiple times if they exist in multiple referenced assemblies
+                                    {
+                                        // Remove the docid member/type prefix
+                                        var index = member.IndexOf(":");
+                                        var fixedName = index > -1 ? member.Substring(index + 1) : member;
+                                        <li>@fixedName</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Details));}</td>
+                            <td>@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Suggestion));}</td>
+                            <td>@b.Key.IsQuirked</td>
+                            <td>@b.Key.VersionBroken</td>
+                            <td>@b.Key.VersionFixed</td>
+                            @{
+                                var analyzerText = b.Key.IsSourceAnalyzerAvailable ? "Yes" : string.Empty;
+                            }
+                            <td>@analyzerText</td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(b.Key.Link))
+                                {
+                                    <a href="@b.Key.Link">More info</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="CompatMessage GoodMessage">No @name.ToLowerInvariant() detected.</p>
+        }
+    </div>
+}
+
+@helper WriteCompatSummary(IDictionary<BreakingChange, IEnumerable<MemberInfo>> breaks, AssemblyInfo assembly, ReportingResult reportingResult, int loopCounter)
+{
+    var majorIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Major && !b.Key.IsRetargeting);
+    var minorIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && !b.Key.IsRetargeting);
+    var edgeIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && !b.Key.IsRetargeting);
+    var totalCompatIssues = majorIssues.Count() + minorIssues.Count() + edgeIssues.Count();
+    var majorRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Major && b.Key.IsRetargeting);
+    var minorRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && b.Key.IsRetargeting);
+    var edgeRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && b.Key.IsRetargeting);
+    var totalRetargetingIssues = majorRetargetingIssues.Count() + minorRetargetingIssues.Count() + edgeRetargetingIssues.Count();
+
+    // Don't bother writing details for assemblies without issues
+    if (totalCompatIssues + totalRetargetingIssues == 0)
+    {
+        return;
+    }
+
+    var runtimeIssuesDivName = "RuntimeIssues" + loopCounter.ToString();
+    var retargetingIssuesDivName = "RetargetingIssues" + loopCounter.ToString();
+    var runtimeIssuesButtonName = "Toggle" + runtimeIssuesDivName;
+    var retargetingIssuesButtonName = "Toggle" + retargetingIssuesDivName;
+
+    <div id="assemblyCompatDetails">
+        @if (assembly != null)
+        {
+            <h3><a name="Compat-@assembly">@WriteAssembly(assembly, reportingResult.GetNameForAssemblyInfo(assembly))</a></h3>
+        }
+        <h3>Runtime Compatibility Issues (@totalCompatIssues) <button class="ToggleButton" id="@runtimeIssuesButtonName">&#8212</button></h3>
+        <div id="@runtimeIssuesDivName">
+            <p>@LocalizedStrings.RuntimeCompatIssueDescription</p>
+            @WriteCompatibilityResults("Major Compatibility Issues", LocalizedStrings.MajorCompatIssueDescription, majorIssues, 0, 2)
+            @WriteCompatibilityResults("Minor Compatibility Issues", LocalizedStrings.MinorCompatIssueDescription, minorIssues, 0, 3)
+            @WriteCompatibilityResults("Edge Compatibility Issues", LocalizedStrings.EdgeCompatIssueDescription, edgeIssues, 0, 100)
+        </div>
+        <h3>Retargeting Compatibility Issues (@totalRetargetingIssues) <button class="ToggleButton" id="@retargetingIssuesButtonName">+</button></h3>
+        <div class="BeginToggledOff" id="@retargetingIssuesDivName">
+            <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart1)</p>
+            <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart2)</p>
+            @WriteCompatibilityResults("Major Retargeting Issues", LocalizedStrings.MajorCompatIssueDescription, majorRetargetingIssues, 0, 2)
+            @WriteCompatibilityResults("Minor Retargeting Issues", LocalizedStrings.MinorCompatIssueDescription, minorRetargetingIssues, 0, 3)
+            @WriteCompatibilityResults("Edge Retargeting Issues", LocalizedStrings.EdgeCompatIssueDescription, edgeRetargetingIssues, 0, 100)
+        </div>
+    </div>
+    <p>
+        <a href="#@LocalizedStrings.CompatibilityPageTitle">@LocalizedStrings.BackToSummary</a>
+    </p>
+    <br />
+}
+
+<h2>
+    <a name="@LocalizedStrings.CompatibilityPageTitle"></a>@LocalizedStrings.CompatibilityPageTitle
+</h2>
+<div id="summary-compat-byassembly">
+    <h3 class="compat-subheader">Per Assembly Overview:</h3>
+    <table>
+        <tbody>
+            <tr>
+                <th rowspan="2">@LocalizedStrings.AssemblyHeader</th>
+                <th colspan="3" class="textCentered"><abbr title="@LocalizedStrings.RuntimeCompatIssueDescription">Runtime Issues</abbr></th>
+                <th colspan="3" class="textCentered"><abbr title="@LocalizedStrings.RetargetingCompatIssueDescriptionPlainText">Retargeting Issues</abbr></th>
+            </tr>
+            <tr>
+                <th><abbr title="@LocalizedStrings.MajorCompatIssueDescription">Major</abbr></th>
+                <th><abbr title="@LocalizedStrings.MinorCompatIssueDescription">Minor</abbr></th>
+                <th><abbr title="@LocalizedStrings.EdgeCompatIssueDescription">Edge</abbr></th>
+                <th><abbr title="@LocalizedStrings.MajorCompatIssueDescription">Major</abbr></th>
+                <th><abbr title="@LocalizedStrings.MinorCompatIssueDescription">Minor</abbr></th>
+                <th><abbr title="@LocalizedStrings.EdgeCompatIssueDescription">Edge</abbr></th>
+            </tr>
+
+            @*Writing the summary body information here.*@
+            @foreach (var kvp in Model.OrderedBreakingChangesByAssembly)
+            {
+                var assm = kvp.Key;
+                if (!Model.OrderedBreakingChangeSkippedAssemblies.Contains(assm))
+                {
+                    var breaks = kvp.Value;
+                    var majorIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Major && !b.Key.IsRetargeting);
+                    var minorIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && !b.Key.IsRetargeting);
+                    var edgeIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && !b.Key.IsRetargeting);
+                    var majorRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Major && b.Key.IsRetargeting);
+                    var minorRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && b.Key.IsRetargeting);
+                    var edgeRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && b.Key.IsRetargeting);
+
+                    // Determine if the row is important or not (based on issue counts)
+                    var rowClass = (majorIssues.Count() > 0 || minorIssues.Count() > 0) ? string.Empty : "lowPriRow";
+
+                    // Create a link to compat details if they will exist
+                    var link = (majorIssues.Count() + minorIssues.Count() + edgeIssues.Count() + majorRetargetingIssues.Count() + minorRetargetingIssues.Count() + edgeRetargetingIssues.Count()) > 0 ?
+                                "#Compat-" + assm :
+                                "#" + LocalizedStrings.CompatibilityPageTitle;
+                    <tr class="@rowClass">
+                        <td><strong><a href="@link">@WriteAssembly(assm, reportingResult.GetNameForAssemblyInfo(assm))</a></strong></td>
+                        <td class="textCentered">@WriteStyledBreakingChangeCount(majorIssues, 0, 2)</td>
+                        <td class="textCentered">@WriteStyledBreakingChangeCount(minorIssues, 0, 3)</td>
+                        <td class="textCentered">@WriteStyledBreakingChangeCount(edgeIssues, 0, 100)</td>
+                        <td class="textCentered">@WriteStyledBreakingChangeCount(majorRetargetingIssues, 0, 2)</td>
+                        <td class="textCentered">@WriteStyledBreakingChangeCount(minorRetargetingIssues, 0, 3)</td>
+                        <td class="textCentered">@WriteStyledBreakingChangeCount(edgeRetargetingIssues, 0, 100)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <p>@LocalizedStrings.BreakingChangeDisclaimer</p>
+</div>
+@if (Model.OrderedBreakingChangeSkippedAssemblies.Count() > 0)
+{
+    <div id="summary-compat-skippedassemblies">
+        <h3 class="compat-subheader">Ignored Assemblies:</h3>
+        <table>
+            <tr>
+                <th>Assembly</th>
+            </tr>
+            @foreach(AssemblyInfo a in Model.OrderedBreakingChangeSkippedAssemblies)
+            {
+                <tr>
+                    <td>@WriteAssembly(a)</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+<div id="summary-compat-bybreakingchange">
+    <h3 class="compat-subheader">Submission Overview:</h3>
+
+    @WriteCompatSummary(Model.BreakingChangesSummary, null, null, 0)
+</div>
+<div id="CompatDetails">
+    @{
+        var loopCounter = 1;
+
+        foreach (var kvp in Model.OrderedBreakingChangesByAssembly)
+        {
+            @WriteCompatSummary(kvp.Value, kvp.Key, reportingResult, loopCounter++)
+        }
+    }
+</div>
