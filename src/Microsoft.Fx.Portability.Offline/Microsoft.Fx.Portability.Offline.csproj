@@ -67,6 +67,10 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(CatalogDataFile)" />
+    <EmbeddedResource Include="$(BreakingChangePath)*.md" >
+      <Link>data\%(Filename)%(Extension)</Link>
+      <BreakingChange>true</BreakingChange>
+    </EmbeddedResource>
     <None Include="download.ps1" />
     <None Include="unity.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -82,9 +86,7 @@
   <Target Name="AfterBuild">
   <!-- Copy breaking changes for use by Microsoft.FX.Portability.Offline at runtime -->
     <ItemGroup>
-      <BreakingChanges Include="
-        $(BreakingChangePath)*.md;
-      " />
+      <BreakingChanges Include="@(EmbeddedResource)" Condition="'%(EmbeddedResource.BreakingChange)'=='true'" />
     </ItemGroup>
     <Copy SourceFiles="@(BreakingChanges)" DestinationFolder="$(OutputPath)\BreakingChanges" SkipUnchangedFiles="true" />
   </Target>

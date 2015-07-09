@@ -36,22 +36,29 @@ namespace Microsoft.Fx.Portability
 
                 return breakingChanges;
             }
-            // If no BreakingChanges folder exists, then we'll fall back to the old model of looking for
-            // BreakingChanges.json either next to the assembly or, if not there, embedded as a resource
+            // If no BreakingChanges folder exists, then we'll fall back to loading embedded breaking changes
             else
             {
-                using (var stream = OpenFileOrResource("BreakingChanges.json"))
+                var breakingChanges = new List<BreakingChange>();
+                // Breaking changes will be serialized as either md or (less commonly now) json files
+                foreach (var file in typeof(Data).Assembly.GetManifestResourceNames().Where(s => s.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || s.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var breakingChanges = stream.Deserialize<IEnumerable<BreakingChange>>();
-
-                    if (breakingChanges == null)
+                    using (var stream = typeof(Data).Assembly.GetManifestResourceStream(file))
                     {
-                        Trace.WriteLine("No data was found in 'BreakingChanges.json'");
-                        return Enumerable.Empty<BreakingChange>();
-                    }
+                        var fileBreakingChanges = ParseBreakingChange(stream, Path.GetExtension(file));
 
-                    return breakingChanges;
+                        if (fileBreakingChanges == null)
+                        {
+                            Trace.WriteLine("No data was found in '" + file + "'");
+                        }
+                        else
+                        {
+                            breakingChanges.AddRange(fileBreakingChanges);
+                        }
+                    }
                 }
+
+                return breakingChanges;
             }
         }
 
