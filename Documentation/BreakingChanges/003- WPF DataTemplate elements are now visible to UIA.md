@@ -24,8 +24,8 @@ UI Auomation tests for this app may need updated to account for the UIA tree now
 
 <!--
     ### Notes
-    Who knows if they're using UIA, but we probably ought to give informational issue if they have DataTemplates
-    Source analyzer status: Pri 1, source done 
+    Who knows if they're using UIA's, but we probably ought to give informational issue if they have DataTemplates
+    Source analyzer status: Pri 1, Done
 -->
 
 

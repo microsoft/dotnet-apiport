@@ -24,7 +24,7 @@ Previous (.NET 4.0) behavior may be restored by setting the <a href="https://msd
 <!--
     ### Notes
     May as well give an informational issue about this since it's so easy to detect and has a workaround
-    Source analyzer status: Pri 1, source done
+    Source analyzer status: Pri 1, Done
 -->
 
 
