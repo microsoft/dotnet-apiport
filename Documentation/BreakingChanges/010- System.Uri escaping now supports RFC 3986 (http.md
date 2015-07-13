@@ -27,7 +27,7 @@ URI escaping has changed in .NET 4.5 to support <a href="http://tools.ietf.org/h
 <!--
     ### Notes
     Escaping behavior has changed. EscapeUriString does not escape reserved characters, EscapeDataString escapes reserved characters, and UnescapeDataString no longer throws on invalid escape sequences. See http://tools.ietf.org/html/rfc3986 for more information on reserved characters. Difficult to detect because of the dependency on input parameters.
-    Source analyzer status: Pri 1, source done 
+    Source analyzer status: Pri 1, Done
 -->
 
 
