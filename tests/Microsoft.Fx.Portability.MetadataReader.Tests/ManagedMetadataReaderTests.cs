@@ -61,7 +61,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void GenericWithGenericMember()
         {
-            const string expected = "M:ConsoleApplication2.GenericClass`1.MemberWithDifferentGeneric``1(``0)";
+            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.GenericClass`1.MemberWithDifferentGeneric``1(``0)";
 
             CompareSpecificDependency(TestAssembly.GenericClassWithGenericMethod, expected);
         }
@@ -69,7 +69,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void MoreThan9GenericParams()
         {
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params`10.InnerClass.#ctor(Microsoft.Fx.Portability.MetadataReader.Tests.Class{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9},`2)";
+            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params`10.InnerClass.#ctor(Microsoft.Fx.Portability.MetadataReader.Tests.Tests.Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9},`2)";
 
             CompareSpecificDependency(TestAssembly.MoreThan9GenericParams, expected);
         }
@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
-
+            
             foreach (var dependency in dependencies.Dependencies)
             {
                 if (string.Equals(dependency.Key.MemberDocId, v, StringComparison.Ordinal))
