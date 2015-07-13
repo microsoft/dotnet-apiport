@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
     public class BaselineTests
     {
-        [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
+        [Fact]
         public void MscorlibTest()
         {
             var mscorlib = typeof(object).Assembly.Location;
