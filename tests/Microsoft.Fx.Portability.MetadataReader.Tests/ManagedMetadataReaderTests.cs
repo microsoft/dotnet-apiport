@@ -26,6 +26,12 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         [Fact]
+        public void NestedGenericTypesWithInvalidNames()
+        {
+            CompareDependencies(TestAssembly.NestedGenericTypesWithInvalidNames, NestedGenericTypesWithInvalidNamesDocId());
+        }
+
+        [Fact]
         // The IL version of this test includes a nested generic type in which the outer type is closed by the inner one is open
         // This is not possible to construct in C#, but was being encoded incorrectly by the metadata reader parser.
         public void NestedGenericTypesFromIL()
@@ -114,7 +120,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
-            
+
             foreach (var dependency in dependencies.Dependencies)
             {
                 if (string.Equals(dependency.Key.MemberDocId, v, StringComparison.Ordinal))
@@ -143,6 +149,13 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var expectedOrdered = expected
                 .OrderBy(o => o.Item1, StringComparer.Ordinal)
                 .ToList();
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            foreach (var item in foundDocIds)
+            {
+                sb.AppendLine(string.Format("yield return Tuple.Create(\"{0}\", 1);", item.Item1));
+            }
+
 
             Assert.Equal(expectedOrdered.Count, foundDocIds.Count);
 
@@ -194,6 +207,52 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             yield return Tuple.Create("T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute", 1);
             yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
         }
+
+        private static IEnumerable<Tuple<string, int>> NestedGenericTypesWithInvalidNamesDocId()
+        {
+            yield return Tuple.Create("F:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.{}1__state", 1);
+            yield return Tuple.Create("F:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.{}2__current", 1);
+            yield return Tuple.Create("F:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.{}l__initialThreadId", 1);
+            yield return Tuple.Create("M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.#ctor(System.Int32)", 1);
+            yield return Tuple.Create("M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator", 1);
+            yield return Tuple.Create("M:System.Collections.Generic.IEnumerable`1.GetEnumerator", 1);
+            yield return Tuple.Create("M:System.Collections.Generic.IEnumerator`1.get_Current", 1);
+            yield return Tuple.Create("M:System.Collections.IEnumerable.GetEnumerator", 1);
+            yield return Tuple.Create("M:System.Collections.IEnumerator.MoveNext", 1);
+            yield return Tuple.Create("M:System.Collections.IEnumerator.Reset", 1);
+            yield return Tuple.Create("M:System.Collections.IEnumerator.get_Current", 1);
+            yield return Tuple.Create("M:System.Diagnostics.DebuggableAttribute.#ctor(System.Diagnostics.DebuggableAttribute.DebuggingModes)", 1);
+            yield return Tuple.Create("M:System.Diagnostics.DebuggerHiddenAttribute.#ctor", 1);
+            yield return Tuple.Create("M:System.Environment.get_CurrentManagedThreadId", 1);
+            yield return Tuple.Create("M:System.IDisposable.Dispose", 1);
+            yield return Tuple.Create("M:System.NotSupportedException.#ctor", 1);
+            yield return Tuple.Create("M:System.Object.#ctor", 1);
+            yield return Tuple.Create("M:System.Runtime.CompilerServices.CompilationRelaxationsAttribute.#ctor(System.Int32)", 1);
+            yield return Tuple.Create("M:System.Runtime.CompilerServices.CompilerGeneratedAttribute.#ctor", 1);
+            yield return Tuple.Create("M:System.Runtime.CompilerServices.IteratorStateMachineAttribute.#ctor(System.Type)", 1);
+            yield return Tuple.Create("M:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute.#ctor", 1);
+            yield return Tuple.Create("M:System.Runtime.Versioning.TargetFrameworkAttribute.#ctor(System.String)", 1);
+            yield return Tuple.Create("T:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1", 1);
+            yield return Tuple.Create("T:System.Collections.Generic.IEnumerable`1", 1);
+            yield return Tuple.Create("T:System.Collections.Generic.IEnumerator`1", 1);
+            yield return Tuple.Create("T:System.Collections.IEnumerable", 1);
+            yield return Tuple.Create("T:System.Collections.IEnumerator", 1);
+            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute", 1);
+            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute.DebuggingModes", 1);
+            yield return Tuple.Create("T:System.Diagnostics.DebuggerHiddenAttribute", 1);
+            yield return Tuple.Create("T:System.Environment", 1);
+            yield return Tuple.Create("T:System.IDisposable", 1);
+            yield return Tuple.Create("T:System.NotSupportedException", 1);
+            yield return Tuple.Create("T:System.Object", 1);
+            yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilationRelaxationsAttribute", 1);
+            yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilerGeneratedAttribute", 1);
+            yield return Tuple.Create("T:System.Runtime.CompilerServices.IteratorStateMachineAttribute", 1);
+            yield return Tuple.Create("T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute", 1);
+            yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
+            yield return Tuple.Create("T:System.Tuple`2", 1);
+            yield return Tuple.Create("T:System.Type", 1);
+        }
+
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
         {
