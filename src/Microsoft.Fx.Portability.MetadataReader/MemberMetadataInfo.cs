@@ -221,6 +221,26 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
+        /// <summary>
+        /// Replace the non-safe characters (<>.,) in a method name with safe ones ({}#@)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private string GetDocIdSafeMemberName(string name)
+        {
+            char[] newName = new char[name.Length];
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (name[i] == '<') newName[i] = '{';
+                else if (name[i] == '>') newName[i] = '}';
+                else if (name[i] == '.') newName[i] = '#';
+                else if (name[i] == ',') newName[i] = '@';
+                else newName[i] = name[i];
+
+            }
+            return new string(newName);
+        }
+
         private string GenerateMemberDocId()
         {
             var sb = new StringBuilder();
@@ -234,20 +254,16 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             sb.Append(".");
+            
+            // Make sure that the member name is safe by replacing the unwanted characters.
+            sb.Append(GetDocIdSafeMemberName(Name));
 
-            string name = Name.Replace("<", "{").Replace(">", "}");
             if (Kind == MemberKind.Method)
             {
-                sb.Append(name.Replace(".", "#"));  // Expected output is '#ctor' instead of '.ctor'
-
                 if (MethodSignature.GenericParameterCount > 0)
                 {
                     sb.Append($"``{MethodSignature.GenericParameterCount}");
                 }
-            }
-            else
-            {
-                sb.Append(name);
             }
 
             // Add the method signature 
