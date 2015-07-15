@@ -105,6 +105,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        public static string NestedGenericTypesWithInvalidNames
+        {
+            get
+            {
+                var text = GetText("NestedGenericTypesWithInvalidNames.cs");
+                return new TestAssembly("NestedGenericTypesWithInvalidNames", text, new[] { s_mscorlib }).AssemblyPath;
+            }
+        }
+
         public static string ModsFromIL
         {
             get

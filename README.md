@@ -10,7 +10,7 @@ Today, the repository contains the following components:
 * **src/ApiPort** Console tool to access portability webservice.
 * **src/Microsoft.Fx.Portability** Provides common types for API Port.
 * **src/Microsoft.Fx.Portability-net45** A project targeting .NET 4.5 of Microsoft.Fx.Portability to allow desktop apps to directly reference it.  *Currently a work-around for beta VS 2015 behavior.*
-* **src/Microsoft.Fx.Portability.MetadataReader** Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata)
+* **src/Microsoft.Fx.Portability.MetadataReader** Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata). The library will generate DocIds that conform to [these specifications](https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx).
 * **tests/Microsoft.Fx.Portability.Tests** Provides tests for Microsoft.Fx.Portability.
 * **tests/Microsoft.Fx.Portability.MetadataReader.Tests** Provides tests for Microsoft.Fx.Portability.MetadataReader.
 
