@@ -43,40 +43,28 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<byte[]>> CallAsync<TRequest>(HttpMethod method, string requestUri, TRequest requestData, ResultFormatInformation format)
         {
-#if SILVERLIGHT
-            var content = requestData.Serialize();
-#else
             var content = requestData.Serialize().Compress();
-#endif
 
             var request = new HttpRequestMessage(method, requestUri)
             {
                 Content = new ByteArrayContent(content)
             };
 
-#if !SILVERLIGHT
             request.Content.Headers.ContentEncoding.Add("gzip");
-#endif
 
             return await CallInternalAsync(request, format);
         }
 
         public async Task<ServiceResponse<TResponse>> CallAsync<TRequest, TResponse>(HttpMethod method, string requestUri, TRequest requestData)
         {
-#if SILVERLIGHT
-            var content = requestData.Serialize();
-#else
             var content = requestData.Serialize().Compress();
-#endif
 
             var request = new HttpRequestMessage(method, requestUri)
             {
                 Content = new ByteArrayContent(content)
             };
 
-#if !SILVERLIGHT
             request.Content.Headers.ContentEncoding.Add("gzip");
-#endif
 
             return await CallInternalAsync<TResponse>(request);
         }
@@ -90,9 +78,7 @@ namespace Microsoft.Fx.Portability
                 throw new UnknownTargetException(content);
             }
 
-#if !SILVERLIGHT
             Trace.TraceError(string.Format("Unknown HttpStatusCode.BadRequest: {0} [{1}]", response.ReasonPhrase, content));
-#endif
 
             throw new PortabilityAnalyzerException(LocalizedStrings.UnknownBadRequestMessage);
         }

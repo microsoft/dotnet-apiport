@@ -11,38 +11,6 @@ using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Reporting
 {
-#if SILVERLIGHT
-    public static class LinqExtensions
-    {
-        public static void ForAll<T>(this IEnumerable<T> collection, Action<T> action)
-        {
-            foreach (var item in collection)
-            {
-                action(item);
-            }
-        }
-
-        /// <summary>
-        /// A workaround for ConcurrentDictionary.GetOrAdd as Silverlight does not support this.
-        /// 
-        /// This method is NOT thread safe.
-        /// </summary>
-        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueFactory)
-        {
-            if (dictionary.ContainsKey(key))
-            {
-                return dictionary[key];
-            }
-
-            var newValue = valueFactory(key);
-
-            dictionary.Add(key, newValue);
-
-            return newValue;
-        }
-    }
-#endif
-
     public class ReportGenerator : IReportGenerator
     {
         public ReportingResult ComputeReport(
@@ -59,9 +27,7 @@ namespace Microsoft.Fx.Portability.Reporting
             ReportingResult result = new ReportingResult(targets, types, submissionId, requestFlags);
 
             missingDependencies
-#if !SILVERLIGHT
                 .AsParallel()
-#endif
                 .ForAll((Action<MemberInfo>)((item) =>
                 {
                     // the calling assemblies are in Finder...
@@ -122,16 +88,10 @@ namespace Microsoft.Fx.Portability.Reporting
         {
             Dictionary<MemberInfo, MemberInfo> missingDeps = missingDependencies.ToDictionary(key => key, value => value);
 
-#if SILVERLIGHT
-            var perAsmUsage = new Dictionary<AssemblyInfo, AssemblyUsageInfo>();
-#else
             var perAsmUsage = new ConcurrentDictionary<AssemblyInfo, AssemblyUsageInfo>();
-#endif
 
             allDependencies.Keys
-#if !SILVERLIGHT
                 .AsParallel()
-#endif
                 .ForAll((Action<MemberInfo>)(memberInfo =>
                 {
                     // This is declared here to minimize allocations
