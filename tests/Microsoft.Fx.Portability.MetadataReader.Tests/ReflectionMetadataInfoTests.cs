@@ -44,17 +44,16 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private IEnumerable<string> _expectedResult = new[]
         {
-            "xunit.assert, Version=2.1.0.2945, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
-            "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
             "Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+            "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
             "Microsoft.Fx.Portability, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-            "xunit.core, Version=2.1.0.2945, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            "System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+            "NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
+            "System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+            "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+            "xunit.assert, Version=2.1.0.3029, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
+            "xunit.core, Version=2.1.0.3029, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
         }.OrderBy(o => o);
     }
 }

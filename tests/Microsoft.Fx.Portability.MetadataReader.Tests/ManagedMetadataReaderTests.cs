@@ -13,123 +13,84 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
     public class ManagedMetadataReaderTests
     {
-        [Fact]
-        public void EmptyProject()
-        {
-            CompareDependencies(TestAssembly.EmptyProject, EmptyProjectMemberDocId());
-        }
+        [InlineData("Arglist.cs", "M:TestClass.ArglistMethod(System.Int32,__arglist)")]
+        [InlineData("Arglist.cs", "M:TestClass.ArglistMethod2(__arglist)")]
+        [InlineData("GenericClassMemberWithDifferentGeneric.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.GenericClass`1.MemberWithDifferentGeneric``1(``0)")]
+        [InlineData("10-generic-params.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params`10.InnerClass.#ctor(Microsoft.Fx.Portability.MetadataReader.Tests.Tests.Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9},`2)")]
+        [InlineData("OpImplicit.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpImplicit`1.op_Implicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpImplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpImplicit{`0}")]
+        [InlineData("OpImplicitMethod.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method`1.op_Implicit(`0)~System.Int32")]
+        [InlineData("OpImplicitMethod2Parameter.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method_2Parameter`1.op_Implicit(`0,`0)")]
+        [InlineData("OpExplicit.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit`1.op_Explicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpExplicit{`0}")]
+        [InlineData("NestedGenericTypesWithInvalidNames.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator")]
+        [InlineData("modopt.dll", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
+        [InlineData("modopt.dll", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
+        [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)")]
+        [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})")]
+        [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
 
-        [Fact]
-        public void NestedGenericTypes()
-        {
-            CompareDependencies(TestAssembly.NestedGenericTypes, NestedGenericTypesMemberDocId());
-        }
+        // IL can, bizarrely, define non-generic types that take generic paratmers
+        [InlineData("NonGenericTypesWithGenericParameters.dll", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
+        [InlineData("NonGenericTypesWithGenericParameters.dll", "M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})")]
 
-        [Fact]
-        public void NestedGenericTypesWithInvalidNames()
-        {
-            CompareDependencies(TestAssembly.NestedGenericTypesWithInvalidNames, NestedGenericTypesWithInvalidNamesDocId());
-        }
-
-        [Fact]
         // The IL version of this test includes a nested generic type in which the outer type is closed by the inner one is open
         // This is not possible to construct in C#, but was being encoded incorrectly by the metadata reader parser.
-        public void NestedGenericTypesFromIL()
+        [InlineData("NestedGenericTypes.dll", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)")]
+        [InlineData("NestedGenericTypes.dll", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
+
+        [Theory]
+        public void TestForDocId(string source, string docid)
         {
-            CompareDependencies(TestAssembly.NestedGenericTypesFromIL, NestedGenericTypesFromILMemberDocId());
+            TestForDocId(source, docid, false);
         }
 
-        [Fact]
-        // IL can, bizarrely, define non-generic types that take generic paratmers
-        public void NonGenericTypesWithGenericParametersFromIL()
+        [InlineData("Spec.cs", "T:N.X`1")]
+        [InlineData("Spec.cs", "M:N.X`1.#ctor")]
+        [InlineData("Spec.cs", "M:N.X`1.#ctor(System.Int32)")]
+        [InlineData("Spec.cs", "F:N.X`1.q")]
+        [InlineData("Spec.cs", "F:N.X`1.PI")] // Failing, tracked with https://github.com/Microsoft/dotnet-apiport/issues/95
+        [InlineData("Spec.cs", "M:N.X`1.f")]
+        [InlineData("Spec.cs", "M:N.X`1.bb(System.String,System.Int32@,System.Void*)")]
+        [InlineData("Spec.cs", "M:N.X`1.gg(System.Int16[],System.Int32[0:,0:])")] // Failing, tracked with https://github.com/Microsoft/dotnet-apiport/issues/96
+        [InlineData("Spec.cs", "M:N.X`1.op_Addition(N.X{`0},N.X{`0})")]
+        [InlineData("Spec.cs", "M:N.X`1.get_prop")]
+        [InlineData("Spec.cs", "M:N.X`1.set_prop(System.Int32)")]
+        [InlineData("Spec.cs", "E:N.X`1.d")] // Failing, tracked with https://github.com/Microsoft/dotnet-apiport/issues/94
+        [InlineData("Spec.cs", "M:N.X`1.get_Item(System.String)")]
+        [InlineData("Spec.cs", "T:N.X`1.Nested")]
+        [InlineData("Spec.cs", "T:N.X`1.D")]
+        [InlineData("Spec.cs", "M:N.X`1.op_Explicit(N.X{`0})~System.Int32")]
+        [Theory]
+        public void TestForDocIdUnsafe(string source, string docid)
         {
-            CompareDependencies(TestAssembly.NonGenericTypesWithGenericParametersFromIL, NonGenericTypesWithGenericParametersFromILLMemberDocId());
+            TestForDocId(source, docid, true);
         }
 
-        [Fact]
-        public void ModsFromIL()
+        private void TestForDocId(string source, string docid, bool allowUnsafe)
         {
-            const string expected1 = "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)";
-            const string expected2 = "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)";
-            CompareSpecificDependency(TestAssembly.ModsFromIL, expected1);
-            CompareSpecificDependency(TestAssembly.ModsFromIL, expected2);
-        }
+            var assembly = TestAssembly.Create(source, allowUnsafe);
 
-        [Fact]
-        public void Arglist()
-        {
-            const string expected = "M:TestClass.ArglistMethod(System.Int32,__arglist)";
-            const string expected2 = "M:TestClass.ArglistMethod2(__arglist)";
-            CompareSpecificDependency(TestAssembly.Arglist, expected);
-            CompareSpecificDependency(TestAssembly.Arglist, expected2);
-        }
-
-        [Fact]
-        public void GenericWithGenericMember()
-        {
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.GenericClass`1.MemberWithDifferentGeneric``1(``0)";
-
-            CompareSpecificDependency(TestAssembly.GenericClassWithGenericMethod, expected);
-        }
-
-        [Fact]
-        public void MoreThan9GenericParams()
-        {
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params`10.InnerClass.#ctor(Microsoft.Fx.Portability.MetadataReader.Tests.Tests.Microsoft.Fx.Portability.MetadataReader.Tests.Class_10_generic_params{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9},`2)";
-
-            CompareSpecificDependency(TestAssembly.MoreThan9GenericParams, expected);
-        }
-
-        [Fact]
-        public void OpImplicit()
-        {
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpImplicit`1.op_Implicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpImplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpImplicit{`0}";
-
-            CompareSpecificDependency(TestAssembly.OpImplicit, expected);
-        }
-
-        [Fact]
-        public void OpImplicitMethod()
-        {
-            // This is case where we mark it as a special name when it really isn't. Don't have the info to fix with just member refs
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method`1.op_Implicit(`0)~System.Int32";
-
-            CompareSpecificDependency(TestAssembly.OpImplicitMethod, expected);
-        }
-
-        [Fact]
-        public void OpImplicitMethod2Parameter()
-        {
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method_2Parameter`1.op_Implicit(`0,`0)";
-
-            CompareSpecificDependency(TestAssembly.OpImplicitMethod2Parameter, expected);
-        }
-
-        [Fact]
-        public void OpExplicit()
-        {
-            const string expected = "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit`1.op_Explicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpExplicit{`0}";
-
-            CompareSpecificDependency(TestAssembly.OpExplicit, expected);
-        }
-
-        private void CompareSpecificDependency(string path, string v)
-        {
             var dependencyFinder = new ReflectionMetadataDependencyFinder();
-            var assemblyToTestFileInfo = new FileInfo(path);
+            var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
 
             foreach (var dependency in dependencies.Dependencies)
             {
-                if (string.Equals(dependency.Key.MemberDocId, v, StringComparison.Ordinal))
+                if (string.Equals(dependency.Key.MemberDocId, docid, StringComparison.Ordinal))
                 {
                     return;
                 }
             }
 
-            Assert.True(false, $"Could not find docid '{v}'");
+            Assert.True(false, $"Could not find docid '{docid}'");
+        }
+
+        [Fact]
+        public void EmptyProject()
+        {
+            var test = TestAssembly.Create("EmptyProject.cs");
+            CompareDependencies(test.AssemblyPath, EmptyProjectMemberDocId());
         }
 
         private void CompareDependencies(string path, IEnumerable<Tuple<string, int>> expected)
@@ -156,7 +117,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 sb.AppendLine(string.Format("yield return Tuple.Create(\"{0}\", 1);", item.Item1));
             }
 
-
             Assert.Equal(expectedOrdered.Count, foundDocIds.Count);
 
             foreach (var combined in expectedOrdered.Zip(foundDocIds, Tuple.Create))
@@ -168,91 +128,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 Assert.Equal(expectedItem.Item2, actualItem.Item2);
             }
         }
-
-        private static IEnumerable<Tuple<string, int>> NonGenericTypesWithGenericParametersFromILLMemberDocId()
-        {
-            yield return Tuple.Create("M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})", 1);
-            yield return Tuple.Create("M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})", 1);
-            yield return Tuple.Create("T:OuterClass", 1);
-            yield return Tuple.Create("T:OuterClass.InnerClass", 1);
-            yield return Tuple.Create("T:System.Object", 1);
-        }
-
-        private static IEnumerable<Tuple<string, int>> NestedGenericTypesFromILMemberDocId()
-        {
-            yield return Tuple.Create("M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)", 1);
-            yield return Tuple.Create("M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})", 1);
-            yield return Tuple.Create("T:OuterClass`2", 1);
-            yield return Tuple.Create("T:OuterClass`2.InnerClass`2", 1);
-            yield return Tuple.Create("T:System.Object", 1);
-        }
-
-        private static IEnumerable<Tuple<string, int>> NestedGenericTypesMemberDocId()
-        {
-            yield return Tuple.Create("M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)", 1);
-            yield return Tuple.Create("M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})", 1);
-            yield return Tuple.Create("M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})", 1);
-            yield return Tuple.Create("M:System.Diagnostics.DebuggableAttribute.#ctor(System.Diagnostics.DebuggableAttribute.DebuggingModes)", 1);
-            yield return Tuple.Create("M:System.Object.#ctor", 1);
-            yield return Tuple.Create("M:System.Runtime.CompilerServices.CompilationRelaxationsAttribute.#ctor(System.Int32)", 1);
-            yield return Tuple.Create("M:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute.#ctor", 1);
-            yield return Tuple.Create("M:System.Runtime.Versioning.TargetFrameworkAttribute.#ctor(System.String)", 1);
-            yield return Tuple.Create("T:OuterClass`2", 1);
-            yield return Tuple.Create("T:OuterClass`2.InnerClass`2", 1);
-            yield return Tuple.Create("T:OuterClass`2.InnerClass`2.InnerInnerClass", 1);
-            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute", 1);
-            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute.DebuggingModes", 1);
-            yield return Tuple.Create("T:System.Object", 1);
-            yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilationRelaxationsAttribute", 1);
-            yield return Tuple.Create("T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute", 1);
-            yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
-        }
-
-        private static IEnumerable<Tuple<string, int>> NestedGenericTypesWithInvalidNamesDocId()
-        {
-            yield return Tuple.Create("F:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.{}1__state", 1);
-            yield return Tuple.Create("F:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.{}2__current", 1);
-            yield return Tuple.Create("F:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.{}l__initialThreadId", 1);
-            yield return Tuple.Create("M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.#ctor(System.Int32)", 1);
-            yield return Tuple.Create("M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator", 1);
-            yield return Tuple.Create("M:System.Collections.Generic.IEnumerable`1.GetEnumerator", 1);
-            yield return Tuple.Create("M:System.Collections.Generic.IEnumerator`1.get_Current", 1);
-            yield return Tuple.Create("M:System.Collections.IEnumerable.GetEnumerator", 1);
-            yield return Tuple.Create("M:System.Collections.IEnumerator.MoveNext", 1);
-            yield return Tuple.Create("M:System.Collections.IEnumerator.Reset", 1);
-            yield return Tuple.Create("M:System.Collections.IEnumerator.get_Current", 1);
-            yield return Tuple.Create("M:System.Diagnostics.DebuggableAttribute.#ctor(System.Diagnostics.DebuggableAttribute.DebuggingModes)", 1);
-            yield return Tuple.Create("M:System.Diagnostics.DebuggerHiddenAttribute.#ctor", 1);
-            yield return Tuple.Create("M:System.Environment.get_CurrentManagedThreadId", 1);
-            yield return Tuple.Create("M:System.IDisposable.Dispose", 1);
-            yield return Tuple.Create("M:System.NotSupportedException.#ctor", 1);
-            yield return Tuple.Create("M:System.Object.#ctor", 1);
-            yield return Tuple.Create("M:System.Runtime.CompilerServices.CompilationRelaxationsAttribute.#ctor(System.Int32)", 1);
-            yield return Tuple.Create("M:System.Runtime.CompilerServices.CompilerGeneratedAttribute.#ctor", 1);
-            yield return Tuple.Create("M:System.Runtime.CompilerServices.IteratorStateMachineAttribute.#ctor(System.Type)", 1);
-            yield return Tuple.Create("M:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute.#ctor", 1);
-            yield return Tuple.Create("M:System.Runtime.Versioning.TargetFrameworkAttribute.#ctor(System.String)", 1);
-            yield return Tuple.Create("T:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1", 1);
-            yield return Tuple.Create("T:System.Collections.Generic.IEnumerable`1", 1);
-            yield return Tuple.Create("T:System.Collections.Generic.IEnumerator`1", 1);
-            yield return Tuple.Create("T:System.Collections.IEnumerable", 1);
-            yield return Tuple.Create("T:System.Collections.IEnumerator", 1);
-            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute", 1);
-            yield return Tuple.Create("T:System.Diagnostics.DebuggableAttribute.DebuggingModes", 1);
-            yield return Tuple.Create("T:System.Diagnostics.DebuggerHiddenAttribute", 1);
-            yield return Tuple.Create("T:System.Environment", 1);
-            yield return Tuple.Create("T:System.IDisposable", 1);
-            yield return Tuple.Create("T:System.NotSupportedException", 1);
-            yield return Tuple.Create("T:System.Object", 1);
-            yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilationRelaxationsAttribute", 1);
-            yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilerGeneratedAttribute", 1);
-            yield return Tuple.Create("T:System.Runtime.CompilerServices.IteratorStateMachineAttribute", 1);
-            yield return Tuple.Create("T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute", 1);
-            yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
-            yield return Tuple.Create("T:System.Tuple`2", 1);
-            yield return Tuple.Create("T:System.Type", 1);
-        }
-
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
         {
