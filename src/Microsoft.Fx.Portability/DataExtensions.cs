@@ -6,12 +6,9 @@ using Microsoft.Fx.Portability.Utils.JsonConverters;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.Versioning;
 
-#if !SILVERLIGHT
-using System.IO.Compression;
-
-#endif
 namespace Microsoft.Fx.Portability
 {
     public static class DataExtensions
@@ -58,7 +55,6 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-#if !SILVERLIGHT
         public static byte[] Compress(this byte[] data)
         {
             using (var outputStream = new MemoryStream())
@@ -87,6 +83,5 @@ namespace Microsoft.Fx.Portability
                 return dataStream.DecompressToObject<T>();
             }
         }
-#endif
     }
 }
