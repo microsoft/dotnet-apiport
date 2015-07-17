@@ -43,6 +43,28 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             TestForDocId(source, docid, false);
         }
 
+        [InlineData("Spec.cs", "T:N.X`1")]
+        [InlineData("Spec.cs", "M:N.X`1.#ctor")]
+        [InlineData("Spec.cs", "M:N.X`1.#ctor(System.Int32)")]
+        [InlineData("Spec.cs", "F:N.X`1.q")]
+        [InlineData("Spec.cs", "F:N.X`1.PI")]
+        [InlineData("Spec.cs", "M:N.X`1.f")]
+        [InlineData("Spec.cs", "M:N.X`1.bb(System.String,System.Int32@,System.Void*)")]
+        [InlineData("Spec.cs", "M:N.X`1.gg(System.Int16[],System.Int32[0:,0:])")]
+        [InlineData("Spec.cs", "M:N.X`1.op_Addition(N.X{`0},N.X{`0})")]
+        [InlineData("Spec.cs", "M:N.X`1.get_prop")]
+        [InlineData("Spec.cs", "M:N.X`1.set_prop(System.Int32)")]
+        [InlineData("Spec.cs", "E:N.X`1.d")]
+        [InlineData("Spec.cs", "M:N.X`1.get_Item(System.String)")]
+        [InlineData("Spec.cs", "T:N.X`1.Nested")]
+        [InlineData("Spec.cs", "T:N.X`1.D")]
+        [InlineData("Spec.cs", "M:N.X`1.op_Explicit(N.X{`0})~System.Int32")]
+        [Theory]
+        public void TestForDocIdUnsafe(string source, string docid)
+        {
+            TestForDocId(source, docid, true);
+        }
+
         private void TestForDocId(string source, string docid, bool allowUnsafe)
         {
             var assembly = TestAssembly.Create(source, allowUnsafe);
