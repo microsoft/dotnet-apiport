@@ -71,7 +71,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaselineTests.cs" />
     <Compile Include="ManagedMetadataReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionMetadataInfoTests.cs" />
@@ -96,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="Data\mscorlib_4.6.79.0.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
