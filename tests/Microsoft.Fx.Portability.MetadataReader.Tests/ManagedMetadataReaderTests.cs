@@ -47,14 +47,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("Spec.cs", "M:N.X`1.#ctor")]
         [InlineData("Spec.cs", "M:N.X`1.#ctor(System.Int32)")]
         [InlineData("Spec.cs", "F:N.X`1.q")]
-        [InlineData("Spec.cs", "F:N.X`1.PI")]
+        [InlineData("Spec.cs", "F:N.X`1.PI")] // Failing, tracked with https://github.com/Microsoft/dotnet-apiport/issues/95
         [InlineData("Spec.cs", "M:N.X`1.f")]
         [InlineData("Spec.cs", "M:N.X`1.bb(System.String,System.Int32@,System.Void*)")]
-        [InlineData("Spec.cs", "M:N.X`1.gg(System.Int16[],System.Int32[0:,0:])")]
+        [InlineData("Spec.cs", "M:N.X`1.gg(System.Int16[],System.Int32[0:,0:])")] // Failing, tracked with https://github.com/Microsoft/dotnet-apiport/issues/96
         [InlineData("Spec.cs", "M:N.X`1.op_Addition(N.X{`0},N.X{`0})")]
         [InlineData("Spec.cs", "M:N.X`1.get_prop")]
         [InlineData("Spec.cs", "M:N.X`1.set_prop(System.Int32)")]
-        [InlineData("Spec.cs", "E:N.X`1.d")]
+        [InlineData("Spec.cs", "E:N.X`1.d")] // Failing, tracked with https://github.com/Microsoft/dotnet-apiport/issues/94
         [InlineData("Spec.cs", "M:N.X`1.get_Item(System.String)")]
         [InlineData("Spec.cs", "T:N.X`1.Nested")]
         [InlineData("Spec.cs", "T:N.X`1.D")]
