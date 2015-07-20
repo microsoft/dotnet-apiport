@@ -1,8 +1,10 @@
 # .NET API Portability
 
-This repository contains the source code for .NET Portability Analyzer tools 
-and dependencies. This is a work in progress, and does not currently contain 
-all of the components that we plan on open sourcing. Make sure to watch this 
+Latest build: [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.svg)](https://www.myget.org/gallery/dotnet-apiport)
+
+This repository contains the source code for .NET Portability Analyzer tools
+and dependencies. This is a work in progress, and does not currently contain
+all of the components that we plan on open sourcing. Make sure to watch this
 repository in order to be notified as we make changes to and expand it.
 
 Today, the repository contains the following components:
@@ -27,7 +29,7 @@ More libraries are coming soon. Stay tuned!
 1. Go to `src\Microsoft.Fx.Portability`
 2. Run command: `dnu restore`
 3. Run command: `dnu pack`
-    
+
 ### Building from Visual Studio
 1. Open PortabilityTools.sln in Visual Studio 2015
 2. Build the solution
@@ -40,7 +42,7 @@ More libraries are coming soon. Stay tuned!
 
 ## How to Engage, Contribute and Provide Feedback
 
-Some of the best ways to contribute are to try things out, file bugs, and join in design conversations. 
+Some of the best ways to contribute are to try things out, file bugs, and join in design conversations.
 
 Want to get more familiar with what's going on in the code?
 
