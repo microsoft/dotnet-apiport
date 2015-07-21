@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability
         {
             var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
 
-            var writer = _reportWriters.FirstOrDefault(w => string.Equals(w.Format.DisplayName, format, StringComparison.InvariantCultureIgnoreCase));
+            var writer = _reportWriters.FirstOrDefault(w => string.Equals(w.Format.DisplayName, format, StringComparison.OrdinalIgnoreCase));
 
             if (writer == null)
             {

@@ -1,8 +1,8 @@
 ﻿{
   "supports": {
-    "net46.app": { },
-    "uwp.10.0.app": { },
-    "dnxcore50.app": { }
+    "net46.app": {},
+    "uwp.10.0.app": {},
+    "dnxcore50.app": {}
   },
   "dependencies": {
     "Microsoft.NETCore": "5.0.0",

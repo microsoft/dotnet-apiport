@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8D84EC23-9977-4CC8-B649-035FFAE9664C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Fx.Portability</RootNamespace>
+    <AssemblyName>Microsoft.Fx.Portability</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="project.json" />
+    <EmbeddedResource Include="Targets.xsd" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AliasMappedToMultipleNamesException.cs" />
+    <Compile Include="Analysis\AnalysisEngine.cs" />
+    <Compile Include="Analysis\TargetNameParser.cs" />
+    <Compile Include="Analyzer\IDependencyFinder.cs" />
+    <Compile Include="Analyzer\IDependencyInfo.cs" />
+    <Compile Include="Analyzer\IRequestAnalyzer.cs" />
+    <Compile Include="Analyzer\RequestAnalyzer.cs" />
+    <Compile Include="ApiDefinition.cs" />
+    <Compile Include="ApiInformation.cs" />
+    <Compile Include="ApiNote.cs" />
+    <Compile Include="ApiPortClient.cs" />
+    <Compile Include="ApiPortService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BreakingChange.cs" />
+    <Compile Include="BreakingChangeDependency.cs" />
+    <Compile Include="BreakingChangeImpact.cs" />
+    <Compile Include="BreakingChangeParser.cs" />
+    <Compile Include="CompressedHttpClient.cs" />
+    <Compile Include="DataExtensions.cs" />
+    <Compile Include="EndpointStatus.cs" />
+    <Compile Include="IAnalysisEngine.cs" />
+    <Compile Include="IApiPortOptions.cs" />
+    <Compile Include="IApiPortService.cs" />
+    <Compile Include="IAuthenticationService.cs" />
+    <Compile Include="IObjectCache.cs" />
+    <Compile Include="IProgressReporter.cs" />
+    <Compile Include="IProgressTask.cs" />
+    <Compile Include="ISearcher.cs" />
+    <Compile Include="ITargetMapper.cs" />
+    <Compile Include="ITargetNameParser.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\ITimedEvent.cs" />
+    <Compile Include="MovedPermanentlyException.cs" />
+    <Compile Include="NotFoundException.cs" />
+    <Compile Include="ObjectModel\AnalyzeRequest.cs" />
+    <Compile Include="ObjectModel\AnalyzeRequestFlags.cs" />
+    <Compile Include="ObjectModel\AnalyzeResponse.cs" />
+    <Compile Include="ObjectModel\ApiInfoStorage.cs" />
+    <Compile Include="ObjectModel\ApiMetadataStorage.cs" />
+    <Compile Include="ObjectModel\AssemblyInfo.cs" />
+    <Compile Include="ObjectModel\AvailableTarget.cs" />
+    <Compile Include="ObjectModel\CloudApiCatalogLookup.cs" />
+    <Compile Include="ObjectModel\DotNetCatalog.cs" />
+    <Compile Include="ObjectModel\FileIgnoreAssemblyInfoList.cs" />
+    <Compile Include="ObjectModel\IAnalyzeRequest.cs" />
+    <Compile Include="ObjectModel\IApiCatalogLookup.cs" />
+    <Compile Include="ObjectModel\IApiRecommendations.cs" />
+    <Compile Include="ObjectModel\IgnoreAssemblyInfo.cs" />
+    <Compile Include="ObjectModel\IgnoreAssemblyInfoList.cs" />
+    <Compile Include="ObjectModel\IStorage.cs" />
+    <Compile Include="ObjectModel\MemberInfo.cs" />
+    <Compile Include="ObjectModel\ProjectSubmission.cs" />
+    <Compile Include="ObjectModel\TargetInfo.cs" />
+    <Compile Include="ObjectModel\TargetInformation.cs" />
+    <Compile Include="ObjectModel\UsageData.cs" />
+    <Compile Include="ObjectModel\UsageDataCollection.cs" />
+    <Compile Include="PortabilityAnalyzerException.cs" />
+    <Compile Include="ProductInformation.cs" />
+    <Compile Include="Reporting\IFileSystem.cs" />
+    <Compile Include="Reporting\IFileWriter.cs" />
+    <Compile Include="Reporting\IReportGenerator.cs" />
+    <Compile Include="Reporting\IReportWriter.cs" />
+    <Compile Include="Reporting\ObjectModel\AssemblyUsageInfo.cs" />
+    <Compile Include="Reporting\ObjectModel\MissingInfo.cs" />
+    <Compile Include="Reporting\ObjectModel\MissingMemberInfo.cs" />
+    <Compile Include="Reporting\ObjectModel\MissingTypeInfo.cs" />
+    <Compile Include="Reporting\ObjectModel\PlatformUsageInfo.cs" />
+    <Compile Include="Reporting\ObjectModel\ReportingResult.cs" />
+    <Compile Include="Reporting\ReportFileWriter.cs" />
+    <Compile Include="Reporting\ReportGenerator.cs" />
+    <Compile Include="Reporting\WindowsFileSystem.cs" />
+    <Compile Include="Resources\LocalizedStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResultFormatInformation.cs" />
+    <Compile Include="ServiceHeaders.cs" />
+    <Compile Include="ServiceResponse.cs" />
+    <Compile Include="StringContainsSearcher.cs" />
+    <Compile Include="TargetMapper.cs" />
+    <Compile Include="TargetMapperException.cs" />
+    <Compile Include="TargetVersion.cs" />
+    <Compile Include="TextWriterProgressReporter.cs" />
+    <Compile Include="UnauthorizedEndpointException.cs" />
+    <Compile Include="UnknownReportFormatException.cs" />
+    <Compile Include="UnknownTargetException.cs" />
+    <Compile Include="UpdatingObjectCache.cs" />
+    <Compile Include="UrlBlobCache.cs" />
+    <Compile Include="UrlBuilder.cs" />
+    <Compile Include="Utils\JsonConverters\JsonConverter.cs" />
+    <Compile Include="Utils\JsonConverters\JsonMultiDictionaryConverter.cs" />
+    <Compile Include="Utils\JsonConverters\JsonToStringConverter.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

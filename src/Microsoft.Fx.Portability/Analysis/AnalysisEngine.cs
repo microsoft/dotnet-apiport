@@ -103,7 +103,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
         public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
-            Trace.TraceInformation("Computing members not in target");
+            //Trace.TraceInformation("Computing members not in target");
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -125,7 +125,7 @@ namespace Microsoft.Fx.Portability.Analysis
                 .ToList();
 
             sw.Stop();
-            Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
+            //Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
 
             return missingMembers;
         }
@@ -206,15 +206,11 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private static string GetAssemblyIdentityWithoutCultureAndVersion(string assemblyIdentity)
         {
-            var assemblyName = new System.Reflection.AssemblyName(assemblyIdentity) { Version = null };
-
-#if CORECLR
-            assemblyName.CultureName = null;
-#else
-            assemblyName.CultureInfo = null;
-#endif
-
-            return assemblyName.ToString();
+            return new System.Reflection.AssemblyName(assemblyIdentity)
+            {
+                Version = null,
+                CultureName = null
+            }.ToString();
         }
 
         private static bool IsSupportedOnTarget(IApiCatalogLookup catalog, string memberDocId, FrameworkName target, out Version status)

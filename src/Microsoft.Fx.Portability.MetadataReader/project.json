@@ -1,0 +1,17 @@
+﻿{
+  "supports": {
+    "net46.app": {}
+  },
+  "dependencies": {
+    "Microsoft.NETCore": "5.0.0",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.0",
+    "System.Diagnostics.FileVersionInfo": "4.0.0-beta-23123",
+    "System.Reflection.Metadata": "1.1.0-alpha-00008",
+    "System.Security.Cryptography.Hashing.Algorithms": "4.0.0-beta-23123"
+  },
+  "frameworks": {
+    "dotnet": {
+      "imports": "portable-net45+win8"
+    }
+  }
+}

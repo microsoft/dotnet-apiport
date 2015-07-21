@@ -9,8 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Fx.Portability</RootNamespace>
     <AssemblyName>Microsoft.Fx.Portability.Offline</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,27 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability-net45\Microsoft.Fx.Portability-net45.csproj">
-      <Project>{fc1429e3-46c3-49ed-b99f-b45e1ccfb86b}</Project>
-      <Name>Microsoft.Fx.Portability-net45</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Data.cs" />
     <Compile Include="OfflineApiCatalogLookup.cs" />
     <Compile Include="OfflineApiPortService.cs" />
@@ -67,24 +48,30 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(CatalogDataFile)" />
-    <EmbeddedResource Include="$(BreakingChangePath)*.md" >
+    <EmbeddedResource Include="$(BreakingChangePath)*.md">
       <Link>data\%(Filename)%(Extension)</Link>
       <BreakingChange>true</BreakingChange>
     </EmbeddedResource>
     <None Include="download.ps1" />
+    <None Include="project.json" />
     <None Include="unity.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
+      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
+      <Name>Microsoft.Fx.Portability</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
     <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile)" />
   </Target>
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-  <!-- Copy breaking changes for use by Microsoft.FX.Portability.Offline at runtime -->
+    <!-- Copy breaking changes for use by Microsoft.FX.Portability.Offline at runtime -->
     <ItemGroup>
       <BreakingChanges Include="@(EmbeddedResource)" Condition="'%(EmbeddedResource.BreakingChange)'=='true'" />
     </ItemGroup>

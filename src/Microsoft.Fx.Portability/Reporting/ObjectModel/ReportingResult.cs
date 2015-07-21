@@ -5,12 +5,10 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
-    [DataContract]
     public class ReportingResult
     {
         private readonly AnalyzeRequestFlags _requestFlags;
