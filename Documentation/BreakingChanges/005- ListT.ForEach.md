@@ -23,7 +23,6 @@ Ideally, code should be fixed to not modify lists while enumerating their elemen
 
 <!--
     ### Notes
-    This introduces an exception, but requires retargeting
     Source analyzer status: Pri 1, Done
 -->
 

@@ -30,7 +30,6 @@ If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), the
 
 <!--
     ### Notes
-    Changes IRI parsing, requires access to parameters to detect
     Source analyzer status: Pri 1, Done
 -->
 
