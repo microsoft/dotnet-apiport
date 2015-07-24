@@ -27,8 +27,7 @@ If an AggregateException was being caught as a means of detecting a task that wa
 
 <!--
     ### Notes
-    Check for try/catch block with WaitAll in it
-    Source analyzer status: Pri 2, In progress (ChLowe)
+    Source analyzer status: Pri 2, Done
 -->
 
 

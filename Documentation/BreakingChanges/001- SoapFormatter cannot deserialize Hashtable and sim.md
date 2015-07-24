@@ -27,7 +27,6 @@ SoapFormatter serialization should be replaced with BinaryFormatter serializatio
 
 <!--
     ### Notes
-    Somewhat expensive to detect given the need to figure out the returned type. We should probably identify this one liberally since it has been an issue for Morgan Stanley, already.
     Source analyzer status: Pri 1, Done
 -->
 
