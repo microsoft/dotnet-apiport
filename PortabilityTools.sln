@@ -36,6 +36,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchFxApi", "samples\Sear
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Reports.Json", "src\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj", "{28D8D77D-E68D-4EBC-9150-F7C433D63BFA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FEEF35CB-3AC4-40C5-9CB0-85E52E38D5C6}"
+	ProjectSection(SolutionItems) = preProject
+		build\build.ps1 = build\build.ps1
+		build\Microsoft.Fx.Portability.MetadataReader.nuspec = build\Microsoft.Fx.Portability.MetadataReader.nuspec
+		build\Microsoft.Fx.Portability.nuspec = build\Microsoft.Fx.Portability.nuspec
+		build\Microsoft.Fx.Portability.Offline.nuspec = build\Microsoft.Fx.Portability.Offline.nuspec
+		build\Microsoft.Fx.Portability.Reports.Html.nuspec = build\Microsoft.Fx.Portability.Reports.Html.nuspec
+		build\Microsoft.Fx.Portability.Reports.Json.nuspec = build\Microsoft.Fx.Portability.Reports.Json.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,5 +102,6 @@ Global
 		{36E8F09A-D3CA-405B-B515-9206F85B432C} = {7DC7AA2C-0401-495B-B42C-32F44085EBE6}
 		{16815A46-F1CA-4D56-80C8-54C4DFB8C1BC} = {F8292A68-AF7C-4B26-B1B8-B232548EF118}
 		{28D8D77D-E68D-4EBC-9150-F7C433D63BFA} = {6234AABE-C4F3-4094-9C0D-FFD589235DBE}
+		{FEEF35CB-3AC4-40C5-9CB0-85E52E38D5C6} = {C991F5FC-04B5-420C-98A0-80974AA946F7}
 	EndGlobalSection
 EndGlobal

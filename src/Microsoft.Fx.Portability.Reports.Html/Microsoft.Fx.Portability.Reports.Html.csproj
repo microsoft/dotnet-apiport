@@ -17,24 +17,25 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\net46\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\net46\Microsoft.Fx.Portability.Reports.Html.xml</DocumentationFile>
+    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\net46\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\net46\Microsoft.Fx.Portability.Reports.Html.xml</DocumentationFile>
+    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Fx.Portability">
-      <HintPath>..\Microsoft.Fx.Portability\bin\Debug\Microsoft.Fx.Portability.dll</HintPath>
-    </Reference>
     <Reference Include="MarkdownDeep">
       <HintPath>..\..\packages\MarkdownDeep.NET-Signed.1.5\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
     </Reference>
@@ -86,6 +87,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
+      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
+      <Name>Microsoft.Fx.Portability</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
