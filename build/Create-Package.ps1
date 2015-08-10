@@ -1,6 +1,8 @@
 [CmdletBinding()] # Needed to support -Verbose
 param(
 	[string][ValidateSet("Release","Debug")]$flavor = "Release",
+	[string]$feedUrl,
+	[string]$apiKey,
 	[string]$outdir = "$PSScriptRoot\..\nupkg"
 )
 
@@ -13,7 +15,7 @@ $nuget = Join-Path ([System.IO.Path]::GetTempPath()) "nuget-$guid.exe"
 Write-Verbose "Downloading nuget to $nuget"
 Invoke-WebRequest "http://nuget.org/nuget.exe" -OutFile $nuget
 
-Remove-Item $outdir -Recurse -Force
+Remove-Item $outdir -Recurse -Force -ErrorAction Ignore | Out-Null
 New-Item $outdir -ItemType Directory | Out-Null
 
 [object[]]$nuspecs = Get-ChildItem $root -Filter *.nuspec `
@@ -38,9 +40,19 @@ foreach($nuspec in $nuspecs)
 	
 	if($output -Match "Attempting to build package from '(.*)'. Successfully created package '(.*)'.")
 	{
-		$item = New-Object PSObject -Property @{"Name" = $matches[1]; "Path" = $matches[2]}
+		$item = New-Object PSObject -Property @{"Package" = [System.IO.Path]::GetFileName($matches[2]); "Nuspec" = $matches[1]; "Path" = $matches[2]; "Pushed" = $false}
 		
 		Copy-Item "$($item.Path)" $outdir -Force
+
+		if($feedUrl)
+		{
+			$pushedOutput = & $nuget push $item.Path $apiKey -Source $feedUrl
+
+			if($pushedOutput -match "Your package was pushed.")
+			{
+				$item.Pushed = $true;
+			}
+		}
 		
 		$item
 	}
