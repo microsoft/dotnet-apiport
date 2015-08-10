@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\xunit.runner.visualstudio.2.1.0-beta4-build1109\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.1.0-beta4-build1109\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="..\..\packages\xunit.core.2.1.0-beta4-build3109\build\portable-net45+netcore45+wp8+wpa81\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.1.0-beta4-build3109\build\portable-net45+netcore45+wp8+wpa81\xunit.core.props')" />
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,6 +42,10 @@
     <None Include="..\..\PortabilityTools.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
@@ -95,18 +99,18 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="TestAssets\005- ListT.ForEach.md" />
-    <None Include="TestAssets\006- System.Uri.md" />
-    <None Include="TestAssets\CorruptData.md" />
-    <None Include="TestAssets\DupSections.md" />
-    <None Include="TestAssets\Empty.md" />
-    <None Include="TestAssets\MissingApis.md" />
-    <None Include="TestAssets\MissingData.md" />
-    <None Include="TestAssets\MultiBreak.md" />
-    <None Include="TestAssets\PartialData.md" />
-    <None Include="TestAssets\RandomText.md" />
-    <None Include="TestAssets\RandomText2.md" />
-    <None Include="TestAssets\Template.md" />
+    <EmbeddedResource Include="TestAssets\005- ListT.ForEach.md" />
+    <EmbeddedResource Include="TestAssets\006- System.Uri.md" />
+    <EmbeddedResource Include="TestAssets\CorruptData.md" />
+    <EmbeddedResource Include="TestAssets\DupSections.md" />
+    <EmbeddedResource Include="TestAssets\Empty.md" />
+    <EmbeddedResource Include="TestAssets\MissingApis.md" />
+    <EmbeddedResource Include="TestAssets\MissingData.md" />
+    <EmbeddedResource Include="TestAssets\MultiBreak.md" />
+    <EmbeddedResource Include="TestAssets\PartialData.md" />
+    <EmbeddedResource Include="TestAssets\RandomText.md" />
+    <EmbeddedResource Include="TestAssets\RandomText2.md" />
+    <EmbeddedResource Include="TestAssets\Template.md" />
     <None Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -125,8 +129,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.1.0-beta4-build3109\build\portable-net45+netcore45+wp8+wpa81\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.1.0-beta4-build3109\build\portable-net45+netcore45+wp8+wpa81\xunit.core.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.1.0-beta4-build1109\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.1.0-beta4-build1109\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
 
             Assert.True(dependencies.UnresolvedAssemblies.All(o => o.Value.Count == 1));
-            Assert.True(dependencies.UnresolvedAssemblies.All(o => string.Equals(o.Value.First(), "Microsoft.Fx.Portability.MetadataReader.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", StringComparison.Ordinal)));
+            Assert.True(dependencies.UnresolvedAssemblies.All(o => string.Equals(o.Value.First(), "Microsoft.Fx.Portability.MetadataReader.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69", StringComparison.Ordinal)));
 
             // Make sure no issues were found
             progressReport.Received(0).ReportIssue(Arg.Any<string>());
@@ -46,14 +46,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             "Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
             "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "Microsoft.Fx.Portability, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Microsoft.Fx.Portability, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
+            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
             "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
-            "System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+            "System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            "xunit.assert, Version=2.1.0.3029, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "xunit.core, Version=2.1.0.3029, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
+            "xunit.assert, Version=2.1.0.3109, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
+            "xunit.core, Version=2.1.0.3109, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
         }.OrderBy(o => o);
     }
 }

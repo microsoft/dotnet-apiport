@@ -90,7 +90,7 @@ namespace Microsoft.Fx.Portability
             {
                 var doc = XDocument.Load(XmlReader.Create(stream));
 
-#if DESKTOP
+#if XML_SCHEMA_SUPPORT
                 // Validate against schema
                 var schemas = new XmlSchemaSet();
                 schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Targets.xsd")));
@@ -99,8 +99,16 @@ namespace Microsoft.Fx.Portability
 
                 foreach (var item in doc.Descendants("Target"))
                 {
-                    var alias = item.Attribute("Alias").Value;
-                    var name = item.Attribute("Name").Value;
+                    var alias = (string)item.Attribute("Alias");
+                    var name = (string)item.Attribute("Name");
+
+#if !XML_SCHEMA_SUPPORT
+                    // We must manually check this now that schema validation is not available
+                    if (alias == null || name == null)
+                    {
+                        throw new TargetMapperException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, path));
+                    }
+#endif
 
                     AddAlias(alias, name);
                 }
