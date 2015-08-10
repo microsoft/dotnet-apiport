@@ -334,8 +334,12 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
+#if XML_SCHEMA_SUPPORT
                 Assert.NotNull(e.InnerException);
                 Assert.Equal(String.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
+#else
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, string.Empty), e.Message);
+#endif
                 return;
             }
 
