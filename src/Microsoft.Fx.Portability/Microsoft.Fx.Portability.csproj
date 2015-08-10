@@ -38,7 +38,16 @@
     <DocumentationFile>bin\Release\dotnet\Microsoft.Fx.Portability.xml</DocumentationFile>
     <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
+    <None Include="..\..\PortabilityTools.snk" />
+	</ItemGroup>
+	<ItemGroup>
     <None Include="project.json" />
     <EmbeddedResource Include="Targets.xsd" />
     <!-- A reference to the entire .NET Framework is automatically included -->
