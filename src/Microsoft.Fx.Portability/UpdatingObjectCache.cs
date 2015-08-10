@@ -85,7 +85,7 @@ namespace Microsoft.Fx.Portability
 
             if (lastModified > _timeStamp)
             {
-                Trace.TraceInformation("A newer version of '{0}' exists!", _identifier);
+                //Trace.TraceInformation("A newer version of '{0}' exists!", _identifier);
 
                 try
                 {
@@ -105,12 +105,13 @@ namespace Microsoft.Fx.Portability
                     _cachedObject = updatedItem;
                     _timeStamp = lastModified;
 
-                    Trace.TraceInformation("Object from '{0}' updated to modified date: {1}", _identifier, _timeStamp);
+                    //Trace.TraceInformation("Object from '{0}' updated to modified date: {1}", _identifier, _timeStamp);
                 }
-                catch (Exception ex)
+                //catch (Exception ex)
+                catch(Exception)
                 {
                     // We catch all exceptions so that we don't crash when trying to update the catalog.
-                    Trace.TraceError("An error occured while updating the cached value: {0}", ex);
+                    //Trace.TraceError("An error occured while updating the cached value: {0}", ex);
                 }
                 finally
                 {

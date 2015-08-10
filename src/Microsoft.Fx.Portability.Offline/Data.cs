@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Fx.Portability
 {
@@ -41,15 +42,15 @@ namespace Microsoft.Fx.Portability
             {
                 var breakingChanges = new List<BreakingChange>();
                 // Breaking changes will be serialized as either md or (less commonly now) json files
-                foreach (var file in typeof(Data).Assembly.GetManifestResourceNames().Where(s => s.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || s.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
+                foreach (var file in typeof(Data).GetTypeInfo().Assembly.GetManifestResourceNames().Where(s => s.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || s.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
                 {
-                    using (var stream = typeof(Data).Assembly.GetManifestResourceStream(file))
+                    using (var stream = typeof(Data).GetTypeInfo().Assembly.GetManifestResourceStream(file))
                     {
                         var fileBreakingChanges = ParseBreakingChange(stream, Path.GetExtension(file));
 
                         if (fileBreakingChanges == null)
                         {
-                            Trace.WriteLine("No data was found in '" + file + "'");
+                            //Trace.WriteLine("No data was found in '" + file + "'");
                         }
                         else
                         {
@@ -72,7 +73,7 @@ namespace Microsoft.Fx.Portability
             }
             else
             {
-                var stream = typeof(Data).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.data." + path);
+                var stream = typeof(Data).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.data." + path);
 
                 if (stream == null)
                 {
@@ -85,7 +86,7 @@ namespace Microsoft.Fx.Portability
 
         private static string GetCurrentDirectoryName()
         {
-            return Path.GetDirectoryName(typeof(Data).Assembly.Location);
+            return Path.GetDirectoryName(AppContext.BaseDirectory);
         }
 
         private static IEnumerable<BreakingChange> ParseBreakingChange(Stream stream, string extension)

@@ -11,8 +11,10 @@ Today, the repository contains the following components:
 
 * **src/ApiPort** Console tool to access portability webservice.
 * **src/Microsoft.Fx.Portability** Provides common types for API Port.
-* **src/Microsoft.Fx.Portability-net45** A project targeting .NET 4.5 of Microsoft.Fx.Portability to allow desktop apps to directly reference it.  *Currently a work-around for beta VS 2015 behavior.*
 * **src/Microsoft.Fx.Portability.MetadataReader** Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata). The library will generate DocIds that conform to [these specifications](https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx).
+* **src/Microsoft.Fx.Portability.Offline** Provides access to data in an offline setting so network calls are not needed
+* **src/Microsoft.Fx.Portability.Reporting.Html** Provides an HTML report for ApiPort (used in offline mode)
+* **src/Microsoft.Fx.Portability.Reporting.Json** Provides a JSON reporter for ApiPort (used in offline mode)
 * **tests/Microsoft.Fx.Portability.Tests** Provides tests for Microsoft.Fx.Portability.
 * **tests/Microsoft.Fx.Portability.MetadataReader.Tests** Provides tests for Microsoft.Fx.Portability.MetadataReader.
 
@@ -20,25 +22,7 @@ More libraries are coming soon. Stay tuned!
 
 ## Using this Repository
 
-1. Install the following:
-    1. [Visual Studio 2015](http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
-    2. [.NET Version Manager (DNVM)](https://github.com/aspnet/home#getting-started-with-aspnet-5-and-dnx)
-    3. [.NET Execution Environment (DNX)](https://github.com/aspnet/home#running-an-application)
-
-### Building from Commandline
-1. Go to `src\Microsoft.Fx.Portability`
-2. Run command: `dnu restore`
-3. Run command: `dnu pack`
-
-### Building from Visual Studio
-1. Open PortabilityTools.sln in Visual Studio 2015
-2. Build the solution
-3. The .nupkg should be under the bin/Debug or bin/Release folders
-
-### Running the Tests
-1. Go to `tests\Microsoft.Fx.Portability.Tests`
-2. Run command: `dnu restore`
-3. Run command: `dnx . test`
+* **Required** Install [Visual Studio 2015](http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
 
 ## How to Engage, Contribute and Provide Feedback
 

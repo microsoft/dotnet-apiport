@@ -2,13 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
-using Xunit;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Runtime.Versioning;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
@@ -28,10 +26,8 @@ namespace Microsoft.Fx.Portability.Tests
             };
 
             var newtonsoft = request.Serialize().Deserialize<AnalyzeRequest>();
-            var dcjs = DeserializeObjectDcjs<AnalyzeRequest>(SerializeDcjs(request));
 
             CompareAnalyzeRequest(request, newtonsoft);
-            CompareAnalyzeRequest(request, dcjs);
         }
 
         [Fact]
@@ -46,31 +42,8 @@ namespace Microsoft.Fx.Portability.Tests
             };
 
             var newtonsoft = response.Serialize().Deserialize<AnalyzeResponse>();
-            var dcjs = DeserializeObjectDcjs<AnalyzeResponse>(SerializeDcjs(response));
 
             CompareAnalyzeResponse(response, newtonsoft);
-            CompareAnalyzeResponse(response, dcjs);
-        }
-
-
-        [Fact]
-        public void SerializeAnalyzeV1Response()
-        {
-            var response = new AnalyzeResponse
-            {
-                MissingDependencies = new List<MemberInfo> { new MemberInfo { MemberDocId = "doc1" }, new MemberInfo { MemberDocId = "doc2" } },
-                SubmissionId = Guid.NewGuid().ToString(),
-                Targets = new List<FrameworkName> { new FrameworkName("target1", Version.Parse("1.0.0.0")) },
-                UnresolvedUserAssemblies = new List<string> { "assembly1", "assembly2", "assembly3" },
-            };
-
-            var v1 = new AnalyzeResponseV1(response);
-
-            var newtonsoft = v1.Serialize().Deserialize<AnalyzeResponseV1>();
-            var dcjs = DeserializeObjectDcjs<AnalyzeResponseV1>(SerializeDcjs(v1));
-
-            CompareAnalyzeResponseV1(v1, newtonsoft);
-            CompareAnalyzeResponseV1(v1, dcjs);
         }
 
         [Fact]
@@ -134,25 +107,6 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Equal<IEnumerable<T>>(expected.ToList().OrderBy(k => k), actual.ToList().OrderBy(k => k));
         }
 
-        private static byte[] SerializeDcjs<T>(T obj)
-        {
-            using (var ms = new MemoryStream())
-            {
-                var dcjs = new DataContractJsonSerializer(typeof(T));
-                dcjs.WriteObject(ms, obj);
-                return ms.ToArray();
-            }
-        }
-
-        private static T DeserializeObjectDcjs<T>(byte[] data)
-        {
-            using (var ms = new MemoryStream(data))
-            {
-                var dcjs = new DataContractJsonSerializer(typeof(T));
-                return (T)dcjs.ReadObject(ms);
-            }
-        }
-
         private static void VerifyEmptySerialized<T>()
         {
             var deserialized = "".Serialize().Deserialize<T>();
@@ -186,14 +140,6 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         private static void CompareAnalyzeResponse(AnalyzeResponse response, AnalyzeResponse deserialized)
-        {
-            CollectionAssertAreEquivalent(response.MissingDependencies, deserialized.MissingDependencies);
-            Assert.Equal(response.SubmissionId, deserialized.SubmissionId);
-            CollectionAssertAreEquivalent(response.Targets, deserialized.Targets);
-            CollectionAssertAreEquivalent(response.UnresolvedUserAssemblies, deserialized.UnresolvedUserAssemblies);
-        }
-
-        private static void CompareAnalyzeResponseV1(AnalyzeResponseV1 response, AnalyzeResponseV1 deserialized)
         {
             CollectionAssertAreEquivalent(response.MissingDependencies, deserialized.MissingDependencies);
             Assert.Equal(response.SubmissionId, deserialized.SubmissionId);
