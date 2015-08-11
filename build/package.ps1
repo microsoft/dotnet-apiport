@@ -1,8 +1,9 @@
 [CmdletBinding()] # Needed to support -Verbose
 param(
-	[string][ValidateSet("Release","Debug")]$flavor = "Release",
+	[string][ValidateSet("Release","Debug")]$configuration = "Release",
 	[string]$feedUrl,
 	[string]$apiKey,
+	[string]$buildNumber,
 	[string]$outdir = "$PSScriptRoot\..\nupkg"
 )
 
@@ -20,7 +21,7 @@ $count = 0
 foreach($nuspec in $nuspecs)
 {
 	Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$($nuspec.Name)" -PercentComplete ($count / $nuspecs.Count * 100)
-	$bin = [System.IO.Path]::Combine($src, $nuspec.Name, "bin", $flavor)
+	$bin = [System.IO.Path]::Combine($src, $nuspec.Name, "bin", $configuration)
 	
 	if(!(Test-Path $bin))
 	{
@@ -30,6 +31,15 @@ foreach($nuspec in $nuspecs)
 	
 	Copy-Item $nuspec.Path $bin
 	Push-Location $bin
+		
+	if($buildNumber)
+	{
+		$nuspecName = "$bin\$($nuspec.Name).nuspec"
+		$number = $env:TF_BUILD_BUILDNUMBER.Split('_')[1].Replace(".","")
+		[xml]$nuspecData = Get-Content $nuspecName
+		$nuspecData.package.metadata.version += "-$number"
+		$nuspecData.Save($nuspecName)
+	}
 	
 	[string]$output = & $nuget pack
 	
