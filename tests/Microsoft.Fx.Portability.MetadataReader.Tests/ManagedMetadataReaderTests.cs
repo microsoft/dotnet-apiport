@@ -8,11 +8,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
     public class ManagedMetadataReaderTests
     {
+        private readonly ITestOutputHelper _output;
+
+        public ManagedMetadataReaderTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [InlineData("Arglist.cs", "M:TestClass.ArglistMethod(System.Int32,__arglist)")]
         [InlineData("Arglist.cs", "M:TestClass.ArglistMethod2(__arglist)")]
         [InlineData("GenericClassMemberWithDifferentGeneric.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Tests.GenericClass`1.MemberWithDifferentGeneric``1(``0)")]
@@ -82,6 +90,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     return;
                 }
             }
+
+            _output.WriteLine("Found docids:");
+            _output.WriteLine(string.Join(Environment.NewLine, dependencies.Dependencies.Select(o => o.Key.MemberDocId).OrderBy(o => o)));
 
             Assert.True(false, $"Could not find docid '{docid}'");
         }
