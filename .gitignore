@@ -25,3 +25,4 @@ rcf
 project.lock.json
 src/Microsoft.Fx.Portability.Offline/data/
 /nupkg
+.tools/

@@ -8,12 +8,7 @@ param(
 
 $root = $PSScriptRoot
 $src = "$root\..\src"
-
-# Download a unique nuget
-$guid = [System.Guid]::NewGuid()
-$nuget = Join-Path ([System.IO.Path]::GetTempPath()) "nuget-$guid.exe"
-Write-Verbose "Downloading nuget to $nuget"
-Invoke-WebRequest "http://nuget.org/nuget.exe" -OutFile $nuget
+$nuget = & "$root\Get-Nuget.ps1"
 
 Remove-Item $outdir -Recurse -Force -ErrorAction Ignore | Out-Null
 New-Item $outdir -ItemType Directory | Out-Null
@@ -66,5 +61,3 @@ foreach($nuspec in $nuspecs)
 }
 
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
-
-Remove-Item $nuget
