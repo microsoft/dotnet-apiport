@@ -136,11 +136,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                     };
 
                 case HandleKind.AssemblyReference:
-                    if (!name.IsAssemblySet)
+                    if (!name.DefinedInAssembly.HasValue)
                     {
                         return new MemberMetadataInfo(name)
                         {
-                            IsAssemblySet = true,
                             DefinedInAssembly = Reader.GetAssemblyReference((AssemblyReferenceHandle)(scope))
                         };
                     }
@@ -334,16 +333,17 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo GetFunctionPointerType(MethodSignature<MemberMetadataInfo> signature)
         {
-            StringBuilder nameSb = new StringBuilder("function ");
-            nameSb.Append(signature.ReturnType);
-            nameSb.Append(" (");
-            nameSb.Append(string.Join(",", signature.ParameterTypes));
-            nameSb.Append(")");
+            var pointerName = new StringBuilder("function ")
+                .Append(signature.ReturnType)
+                .Append(" (")
+                .Append(string.Join(",", signature.ParameterTypes))
+                .Append(")")
+                .ToString();
+
             return new MemberMetadataInfo()
             {
-                Name = nameSb.ToString(),
+                Name = pointerName,
                 MethodSignature = signature,
-                IsFunctionPointer = true,
                 Kind = MemberKind.Type
             };
         }
@@ -356,7 +356,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo GetArrayType(MemberMetadataInfo elementType, ArrayShape shape)
         {
-            elementType.IsArrayType = true;
             var builder = new StringBuilder("[");
 
             for (int i = 0; i < shape.Rank; i++)
