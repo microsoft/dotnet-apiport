@@ -100,7 +100,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 CallingAssembly = CallingAssembly,
                 MemberDocId = $"T:{type}",
-                DefinedInAssemblyIdentity = type.IsAssemblySet ? _reader.FormatAssemblyInfo(type.DefinedInAssembly) : _currentAssemblyInfo
+                DefinedInAssemblyIdentity = type.DefinedInAssembly.HasValue ? _reader.FormatAssemblyInfo(type.DefinedInAssembly.Value) : _currentAssemblyInfo
             };
         }
 
@@ -123,9 +123,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                 IsPrimitive = memberRefInfo.ParentType.IsPrimitiveType
             };
 
-            if (memberRefInfo.ParentType.IsAssemblySet)
+            if (memberRefInfo.ParentType.DefinedInAssembly.HasValue)
             {
-                dep.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly);
+                dep.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly.Value);
             }
             // If no assembly is set, then the type is either a primitive type or it's in the current assembly.
             // Mscorlib is special-cased for testing purposes.

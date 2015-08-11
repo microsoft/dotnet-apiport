@@ -23,18 +23,15 @@ namespace Microsoft.Fx.Portability.Analyzer
             Names = other.Names;
             MethodSignature = other.MethodSignature;
             Module = other.Module;
-            IsArrayType = other.IsArrayType;
             ArrayTypeInfo = other.ArrayTypeInfo;
             IsTypeDef = other.IsTypeDef;
             IsPrimitiveType = other.IsPrimitiveType;
-            IsFunctionPointer = other.IsFunctionPointer;
             Kind = other.Kind;
             IsGenericInstance = other.IsGenericInstance;
             IsEnclosedType = other.IsEnclosedType;
             Name = other.Name;
             Namespace = other.Namespace;
             DefinedInAssembly = other.DefinedInAssembly;
-            IsAssemblySet = other.IsAssemblySet;
 
             if (other.ParentType != null)
             {
@@ -58,10 +55,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                 Namespace = other2.Namespace;
             }
 
-            if (other2.IsAssemblySet)
+            if (other2.DefinedInAssembly.HasValue)
             {
                 DefinedInAssembly = other2.DefinedInAssembly;
-                IsAssemblySet = true;
             }
         }
 
@@ -73,15 +69,13 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public List<MemberMetadataInfo> GenericTypeArgs { get; set; }
 
-        public bool IsArrayType { get; set; }
+        public bool IsArrayType => !string.IsNullOrEmpty(ArrayTypeInfo);
 
         public string ArrayTypeInfo { get; set; }
 
         public bool IsTypeDef { get; set; }
 
         public bool IsPrimitiveType { get; set; }
-
-        public bool IsFunctionPointer { get; set; }
 
         public MemberKind Kind { get; set; }
 
@@ -95,9 +89,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo ParentType { get; set; }
 
-        public AssemblyReference DefinedInAssembly { get; set; }
-
-        public bool IsAssemblySet { get; set; }
+        public AssemblyReference? DefinedInAssembly { get; set; }
 
         public override string ToString()
         {
