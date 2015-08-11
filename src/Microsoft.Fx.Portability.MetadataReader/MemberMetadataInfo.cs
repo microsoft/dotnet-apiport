@@ -127,6 +127,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             sb.Append(string.Join(".", displayNames));
 
+            if (IsArrayType)
+            {
+                sb.Append(ArrayTypeInfo);
+            }
+
             return sb.ToString();
         }
 
