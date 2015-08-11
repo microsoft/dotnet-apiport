@@ -18,6 +18,7 @@ New-Item $outdir -ItemType Directory | Out-Null
 			| % { New-Object PSObject -Property @{"Name" = [System.IO.Path]::GetFileNameWithoutExtension($_.Name); "Path" = $_.FullName } }
 
 $count = 0
+
 foreach($nuspec in $nuspecs)
 {
 	Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$($nuspec.Name)" -PercentComplete ($count / $nuspecs.Count * 100)
@@ -31,16 +32,18 @@ foreach($nuspec in $nuspecs)
 	
 	Copy-Item $nuspec.Path $bin
 	Push-Location $bin
-		
-	if($buildNumber)
-	{
-		$nuspecName = "$bin\$($nuspec.Name).nuspec"
-		$number = $env:TF_BUILD_BUILDNUMBER.Split('_')[1].Replace(".","")
-		[xml]$nuspecData = Get-Content $nuspecName
-		$nuspecData.package.metadata.version += "-$number"
-		$nuspecData.Save($nuspecName)
-	}
-	
+
+	# Update version based on compiled version
+	$nuspecName = "$bin\$($nuspec.Name).nuspec"
+	[xml]$nuspecData = Get-Content $nuspecName
+	$version = $nuspecData.package.files.file `
+				| where {$_.src.EndsWith("$($nuspec.Name).dll")} `
+				| % { Get-ChildItem "$bin\$($_.src)" } `
+				| % { $_.VersionInfo.ProductVersion } `
+				| Select -First 1
+	$nuspecData.package.metadata.version = "$version"
+	$nuspecData.Save($nuspecName)
+
 	[string]$output = & $nuget pack
 	
 	if($output -Match "Attempting to build package from '(.*)'. Successfully created package '(.*)'.")

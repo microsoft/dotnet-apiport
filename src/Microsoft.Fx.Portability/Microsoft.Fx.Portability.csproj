@@ -47,8 +47,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\PortabilityTools.snk" />
-	</ItemGroup>
-	<ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="project.json" />
     <EmbeddedResource Include="Targets.xsd" />
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -148,7 +148,9 @@
     <Compile Include="Utils\JsonConverters\JsonMultiDictionaryConverter.cs" />
     <Compile Include="Utils\JsonConverters\JsonToStringConverter.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Properties\version.txt" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\LocalizedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -163,5 +165,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->  
+  -->
 </Project>

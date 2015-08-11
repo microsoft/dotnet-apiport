@@ -50,9 +50,7 @@
     <Compile Include="OfflineApiRecommendations.cs" />
     <Compile Include="OfflineBreakingChanges.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <DataPath>$(MSBuildThisFileDirectory)data\</DataPath>
     <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\Documentation\BreakingChanges\</BreakingChangePath>
@@ -75,6 +73,9 @@
       <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
       <Name>Microsoft.Fx.Portability</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\version.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), PortabilityTools.sln))\build\ci-build.targets" />
