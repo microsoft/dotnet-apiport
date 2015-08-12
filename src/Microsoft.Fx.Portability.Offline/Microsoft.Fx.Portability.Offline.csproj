@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), PortabilityTools.sln))\build\ci-build.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -49,9 +50,7 @@
     <Compile Include="OfflineApiRecommendations.cs" />
     <Compile Include="OfflineBreakingChanges.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <DataPath>$(MSBuildThisFileDirectory)data\</DataPath>
     <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\Documentation\BreakingChanges\</BreakingChangePath>
@@ -75,7 +74,11 @@
       <Name>Microsoft.Fx.Portability</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\version.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), PortabilityTools.sln))\build\ci-build.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
     <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile)" />
   </Target>

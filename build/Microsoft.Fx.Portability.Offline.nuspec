@@ -2,7 +2,7 @@
 <package>
   <metadata minClientVersion="3.0">
     <id>Microsoft.Fx.Portability.Offline</id>
-    <version>1.0.0-alpha</version>
+    <version></version>
     <title>Microsoft.Fx.Portability.Offline</title>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
