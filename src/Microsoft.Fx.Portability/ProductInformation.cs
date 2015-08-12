@@ -9,34 +9,34 @@ namespace Microsoft.Fx.Portability
 {
     public class ProductInformation
     {
-        private readonly string _name;
-        private readonly string _version;
-
         public ProductInformation(string name)
         {
-            var version = GetVersionString();
+            var version = GetVersionString().Replace("-", ".");
 
             if (!IsValid(name))
             {
-                throw new ArgumentOutOfRangeException("name", LocalizedStrings.ProductInformationInvalidArgument);
+                throw new ArgumentOutOfRangeException(nameof(name), LocalizedStrings.ProductInformationInvalidArgument);
             }
 
             if (!IsValid(version))
             {
-                throw new ArgumentOutOfRangeException("version", LocalizedStrings.ProductInformationInvalidArgument);
+                throw new ArgumentOutOfRangeException(nameof(version), LocalizedStrings.ProductInformationInvalidArgument);
             }
 
-            _name = name;
-            _version = version;
+            Name = name;
+            Version = version;
         }
+
+        public string Name { get; }
+
+        public string Version { get; }
 
         private static string GetVersionString()
         {
             var assembly = typeof(ProductInformation).GetTypeInfo().Assembly;
-            var assemblyName = assembly.GetName();
-            var assemblyVersion = assemblyName.Version;
+            var info = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 
-            return assemblyVersion == null ? "unknown" : assemblyVersion.ToString();
+            return info?.InformationalVersion ?? "unknown";
         }
 
         /// <summary>
@@ -54,8 +54,5 @@ namespace Microsoft.Fx.Portability
 
             return true;
         }
-
-        public string Name { get { return _name; } }
-        public string Version { get { return _version; } }
     }
 }
