@@ -1,28 +1,35 @@
 # .NET API Portability
 
-Latest build: [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.svg)](https://www.myget.org/gallery/dotnet-apiport)
-
 This repository contains the source code for .NET Portability Analyzer tools
 and dependencies. This is a work in progress, and does not currently contain
 all of the components that we plan on open sourcing. Make sure to watch this
 repository in order to be notified as we make changes to and expand it.
 
+## Projects
+
 Today, the repository contains the following components:
 
-* **src/ApiPort** Console tool to access portability webservice.
-* **src/Microsoft.Fx.Portability** Provides common types for API Port.
-* **src/Microsoft.Fx.Portability.MetadataReader** Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata). The library will generate DocIds that conform to [these specifications](https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx).
-* **src/Microsoft.Fx.Portability.Offline** Provides access to data in an offline setting so network calls are not needed
-* **src/Microsoft.Fx.Portability.Reporting.Html** Provides an HTML report for ApiPort (used in offline mode)
-* **src/Microsoft.Fx.Portability.Reporting.Json** Provides a JSON reporter for ApiPort (used in offline mode)
-* **tests/Microsoft.Fx.Portability.Tests** Provides tests for Microsoft.Fx.Portability.
-* **tests/Microsoft.Fx.Portability.MetadataReader.Tests** Provides tests for Microsoft.Fx.Portability.MetadataReader.
+### Tools
 
-More libraries are coming soon. Stay tuned!
+| Project | Description |
+| ------- | ----------- |
+| ApiPort | Console tool to access portability webservice | 
+
+### Libraries
+
+| Project | Description |
+| ------- | ----------- |
+| Microsoft.Fx.Portability [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.svg)](https://www.myget.org/gallery/dotnet-apiport) | Provides common types for API Port |
+| Microsoft.Fx.Portability.MetadataReader [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.MetadataReader.svg)](https://www.myget.org/gallery/dotnet-apiport) | Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata). The library will generate DocIds that conform to [these specifications](https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx). |
+| Microsoft.Fx.Portability.Offline [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.Offline.svg)](https://www.myget.org/gallery/dotnet-apiport) | Provides access to data in an offline setting so network calls are not needed |
+| Microsoft.Fx.Portability.Reporting.Html [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.Reports.Html.svg)](https://www.myget.org/gallery/dotnet-apiport) | Provides an HTML report for ApiPort (used in offline mode) |
+| Microsoft.Fx.Portability.Reporting.Json [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.Reports.Json.svg)](https://www.myget.org/gallery/dotnet-apiport) | Provides a JSON reporter for ApiPort (used in offline mode) |
+
+More projects are coming soon. Stay tuned!
 
 ## Using this Repository
 
-* **Required** Install [Visual Studio 2015](http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
+* **Required** Install [Visual Studio 2015](http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx).  Make sure to install the Windows 10 Tools (otherwise the new style PCL format will not work)
 
 ## How to Engage, Contribute and Provide Feedback
 
