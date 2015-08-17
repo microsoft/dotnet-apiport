@@ -36,8 +36,13 @@ namespace Microsoft.Fx.Portability
             _assembliesToIgnore = assembliesToIgnore;
             _writer = writer;
         }
-
-        public async Task<ReportingResult> AnalyzeAssemblies(IApiPortOptions options)
+        
+        /// <summary>
+        /// Analyzes assemblies provided by options
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns>A reporting result for the supplied assemblies</returns>
+        public async Task<ReportingResult> AnalyzeAssembliesAsync(IApiPortOptions options)
         {
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
@@ -52,6 +57,30 @@ namespace Microsoft.Fx.Portability
                 _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
 
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieve a list of targets available from the service
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
+        {
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingTargets))
+            {
+                try
+                {
+                    var targets = await _apiPortService.GetTargetsAsync();
+
+                    CheckEndpointStatus(targets.Headers.Status);
+
+                    return targets.Response;
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
             }
         }
 
@@ -79,6 +108,26 @@ namespace Microsoft.Fx.Portability
 
             return outputPaths;
         }
+        
+        public async Task<IEnumerable<string>> GetResultFormatsAsync()
+        {
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
+            {
+                try
+                {
+                    var outputFormats = await _apiPortService.GetResultFormatsAsync();
+
+                    CheckEndpointStatus(outputFormats.Headers.Status);
+
+                    return outputFormats.Response.Select(r => r.DisplayName).ToList();
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
+        }
 
         private async Task<string> CreateReport(byte[] result, string suppliedOutputFileName, string outputFormat)
         {
@@ -101,13 +150,13 @@ namespace Microsoft.Fx.Portability
                 }
             }
         }
-
+        
         /// <summary>
         /// Gets an analysis report based on the options supplied
         /// </summary>
         /// <param name="options">Options to generate report</param>
         /// <returns>A collection of reports</returns>
-        public async Task<IEnumerable<byte[]>> GetAnalysisResultAsync(IApiPortOptions options)
+        private async Task<IEnumerable<byte[]>> GetAnalysisResultAsync(IApiPortOptions options)
         {
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
@@ -131,7 +180,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        public async Task<string> GetExtensionForFormat(string format)
+        private async Task<string> GetExtensionForFormat(string format)
         {
             var outputFormats = await _apiPortService.GetResultFormatsAsync();
             var outputFormat = outputFormats.Response.FirstOrDefault(f => string.Equals(format, f.DisplayName, StringComparison.OrdinalIgnoreCase));
@@ -144,27 +193,7 @@ namespace Microsoft.Fx.Portability
             return outputFormat.FileExtension;
         }
 
-        public async Task<IEnumerable<string>> ListResultFormatsAsync()
-        {
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
-            {
-                try
-                {
-                    var outputFormats = await _apiPortService.GetResultFormatsAsync();
-
-                    CheckEndpointStatus(outputFormats.Headers.Status);
-
-                    return outputFormats.Response.Select(r => r.DisplayName).ToList();
-                }
-                catch (Exception)
-                {
-                    progressTask.Abort();
-                    throw;
-                }
-            }
-        }
-
-        public AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyInfo)
+        private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyInfo)
         {
             return new AnalyzeRequest
             {
@@ -274,26 +303,6 @@ namespace Microsoft.Fx.Portability
             if (status == EndpointStatus.Deprecated)
             {
                 _progressReport.ReportIssue(LocalizedStrings.ServerEndpointDeprecated);
-            }
-        }
-
-        public async Task<IEnumerable<AvailableTarget>> ListTargets()
-        {
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingTargets))
-            {
-                try
-                {
-                    var targets = await _apiPortService.GetTargetsAsync();
-
-                    CheckEndpointStatus(targets.Headers.Status);
-
-                    return targets.Response;
-                }
-                catch (Exception)
-                {
-                    progressTask.Abort();
-                    throw;
-                }
             }
         }
     }

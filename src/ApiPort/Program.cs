@@ -3,13 +3,11 @@
 
 using ApiPort.Resources;
 using Microsoft.Fx.Portability;
-using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -185,7 +183,7 @@ namespace ApiPort
 
         private static async Task ListOutputFormats(ApiPortClient apiPortClient)
         {
-            var outputFormats = await apiPortClient.ListResultFormatsAsync();
+            var outputFormats = await apiPortClient.GetResultFormatsAsync();
 
             if (outputFormats.Any())
             {
@@ -203,7 +201,7 @@ namespace ApiPort
         {
             const string SelectedMarker = "*";
 
-            var targets = await apiPortClient.ListTargets();
+            var targets = await apiPortClient.GetTargetsAsync();
 
             if (targets.Any())
             {
