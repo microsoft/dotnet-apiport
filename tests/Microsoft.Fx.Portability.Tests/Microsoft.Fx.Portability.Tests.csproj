@@ -83,6 +83,7 @@
     <Compile Include="BreakingChangeParserTests.cs" />
     <Compile Include="ObjectModel\IgnoreAssemblyInfoTests.cs" />
     <Compile Include="ObjectModel\TargetInformationTests.cs" />
+    <Compile Include="ReadWriteApiPortOptionsTests.cs" />
     <Compile Include="ReportFileWriterTests.cs" />
     <Compile Include="ReportingResultTests.cs" />
     <Compile Include="SerializationTests.cs" />

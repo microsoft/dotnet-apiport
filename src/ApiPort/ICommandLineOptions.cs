@@ -8,9 +8,6 @@ namespace ApiPort
 {
     public interface ICommandLineOptions : IApiPortOptions
     {
-        string ServiceEndpoint { get; }
-        string OutputFileName { get; }
         AppCommands Command { get; }
-        IEnumerable<string> InvalidInputFiles { get; }
     }
 }

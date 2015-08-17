@@ -32,13 +32,14 @@ namespace Microsoft.Fx.Portability.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var writer = Substitute.For<IFileWriter>();
 
             var apiPortService = Substitute.For<IApiPortService>();
             apiPortService.GetTargetsAsync().Returns(CreateResponse<IEnumerable<AvailableTarget>>(targets.AsReadOnly()));
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList);
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
 
-            var actualTargets = await client.ListTargets();
+            var actualTargets = await client.GetTargetsAsync();
 
             Assert.Equal<AvailableTarget[]>(actualTargets.OrderBy(k => k.Name).ToArray(), targets.OrderBy(k => k.Name).ToArray());
         }
@@ -66,6 +67,7 @@ namespace Microsoft.Fx.Portability.Tests
             var progressReporter = Substitute.For<IProgressReporter>();
             var targetMapper = Substitute.For<ITargetMapper>();
             var reportGenerator = Substitute.For<IReportGenerator>();
+            var writer = Substitute.For<IFileWriter>();
 
             var dependencyFinder = Substitute.For<IDependencyFinder>();
 
@@ -86,14 +88,14 @@ namespace Microsoft.Fx.Portability.Tests
 
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList);
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
 
             var options = Substitute.For<IApiPortOptions>();
 
             options.Targets.Returns(Enumerable.Empty<string>());
             options.InputAssemblies.Returns(Enumerable.Empty<FileInfo>());
 
-            var result = await client.AnalyzeAssemblies(options);
+            var result = await client.AnalyzeAssembliesAsync(options);
         }
     }
 }

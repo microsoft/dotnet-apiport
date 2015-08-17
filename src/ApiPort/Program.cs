@@ -3,15 +3,11 @@
 
 using ApiPort.Resources;
 using Microsoft.Fx.Portability;
-using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApiPort
 {
@@ -37,15 +33,15 @@ namespace ApiPort
 
                 try
                 {
-                    var apiPortClient = container.Resolve<ApiPortClient>();
+                    var client = container.Resolve<ConsoleApiPort>();
 
                     switch (options.Command)
                     {
                         case AppCommands.ListTargets:
-                            ListTargets(apiPortClient, container.Resolve<ITargetMapper>()).Wait();
+                            client.ListTargetsAsync().Wait();
                             break;
                         case AppCommands.AnalyzeAssemblies:
-                            AnalyzeAssembliesAsync(apiPortClient, options, progressReport, container.Resolve<IFileWriter>(), container.Resolve<string>("DefaultOutputFormat")).Wait();
+                            client.AnalyzeAssembliesAsync().Wait();
                             break;
 #if DOCID_SEARCH
                         case AppCommands.DocIdSearch:
@@ -54,7 +50,7 @@ namespace ApiPort
                             break;
 #endif
                         case AppCommands.ListOutputFormats:
-                            ListOutputFormats(apiPortClient).Wait();
+                            client.ListOutputFormatsAsync().Wait();
                             break;
                     }
 
@@ -181,122 +177,6 @@ namespace ApiPort
             }
 
             return false;
-        }
-
-        private static async Task ListOutputFormats(ApiPortClient apiPortClient)
-        {
-            var outputFormats = await apiPortClient.ListResultFormatsAsync();
-
-            if (outputFormats.Any())
-            {
-                Console.WriteLine();
-                Console.WriteLine(LocalizedStrings.AvailableOutputFormats);
-
-                foreach (var outputFormat in outputFormats)
-                {
-                    Console.WriteLine(string.Format(LocalizedStrings.TargetsListNoVersion, outputFormat));
-                }
-            }
-        }
-
-        private static async Task ListTargets(ApiPortClient apiPortClient, ITargetMapper targetMapper)
-        {
-            const string SelectedMarker = "*";
-
-            var targets = await apiPortClient.ListTargets();
-
-            if (targets.Any())
-            {
-                Console.WriteLine();
-                Console.WriteLine(LocalizedStrings.AvailableTargets);
-
-                var expandableTargets = targets.Where(target => target.ExpandedTargets.Any());
-                var groupedTargets = targets.Where(target => !target.ExpandedTargets.Any()).GroupBy(target => target.Name);
-
-                foreach (var item in groupedTargets)
-                {
-                    Console.WriteLine(LocalizedStrings.TargetsList, item.Key, String.Join(LocalizedStrings.VersionListJoin, item.Select(v => v.Version.ToString() + (v.IsSet ? SelectedMarker : String.Empty))));
-                }
-
-                if (expandableTargets.Any())
-                {
-                    Console.WriteLine();
-                    Console.WriteLine(Microsoft.Fx.Portability.Resources.LocalizedStrings.AvailableGroupedTargets);
-
-                    foreach (var item in expandableTargets)
-                    {
-                        Console.WriteLine(LocalizedStrings.TargetsListGrouped, item.Name, String.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ", item.ExpandedTargets));
-                    }
-                }
-            }
-
-            if (targetMapper.Aliases.Any())
-            {
-                Console.WriteLine();
-                Console.WriteLine(LocalizedStrings.AvailableAliases);
-
-                foreach (var alias in targetMapper.Aliases)
-                {
-                    Console.WriteLine(LocalizedStrings.TargetsListNoVersion, alias);
-                }
-            }
-
-            Console.WriteLine();
-            Console.WriteLine(LocalizedStrings.NotesOnUsage);
-            Console.WriteLine(LocalizedStrings.TargetsListNoVersion, Microsoft.Fx.Portability.Resources.LocalizedStrings.HowToSpecifyVersion);
-            Console.WriteLine();
-            Console.WriteLine(LocalizedStrings.TargetsListNoVersion, LocalizedStrings.WhatAsteriskMeans);
-        }
-
-        private static async Task AnalyzeAssembliesAsync(ApiPortClient apiPort, ICommandLineOptions options, IProgressReporter progressReport, IFileWriter writer, string defaultOutputFormat)
-        {
-            foreach (var errorInput in options.InvalidInputFiles)
-            {
-                progressReport.ReportIssue(string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidFileName, errorInput));
-            }
-
-            // If no output formats were specified, use the default
-            var outputFormats = options.OutputFormats.Any() ? options.OutputFormats : new[] { defaultOutputFormat };
-
-            var results = await apiPort.GetAnalysisReportAsync(options, outputFormats);
-            var outputPaths = new List<string>();
-
-            foreach (var resultAndFormat in results.Zip(outputFormats, (r, f) => new { Result = r, Format = f }))
-            {
-                var outputPath = await CreateReport(resultAndFormat.Result, apiPort, options.OutputFileName, resultAndFormat.Format, progressReport, writer);
-
-                outputPaths.Add(outputPath);
-            }
-
-            Console.WriteLine();
-            Console.WriteLine(LocalizedStrings.OutputWrittenTo);
-
-            foreach (var outputPath in outputPaths)
-            {
-                Console.WriteLine(outputPath);
-            }
-        }
-
-        private static async Task<string> CreateReport(byte[] result, ApiPortClient apiPort, string suppliedOutputFileName, string outputFormat, IProgressReporter progressReport, IFileWriter writer)
-        {
-            var filePath = Path.GetFullPath(suppliedOutputFileName);
-            var outputDirectory = Path.GetDirectoryName(filePath);
-            var outputFileName = Path.GetFileName(filePath);
-
-            using (var progressTask = progressReport.StartTask(LocalizedStrings.WritingReport))
-            {
-                try
-                {
-                    var extension = await apiPort.GetExtensionForFormat(outputFormat);
-
-                    return await writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwrite: false);
-                }
-                catch (Exception)
-                {
-                    progressTask.Abort();
-                    throw;
-                }
-            }
         }
     }
 }

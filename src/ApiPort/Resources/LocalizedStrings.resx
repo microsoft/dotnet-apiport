@@ -145,9 +145,6 @@ To learn more about how this tool works, including the data we are collecting, g
   <data name="TargetsToCheckAgainst" xml:space="preserve">
     <value>The target you want to check against.</value>
   </data>
-  <data name="WritingReport" xml:space="preserve">
-    <value>Writing report</value>
-  </data>
   <data name="OutputWrittenTo" xml:space="preserve">
     <value>Wrote output to file:</value>
   </data>

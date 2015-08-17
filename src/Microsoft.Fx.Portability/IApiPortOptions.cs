@@ -16,5 +16,8 @@ namespace Microsoft.Fx.Portability
         IEnumerable<string> Targets { get; }
         IEnumerable<string> OutputFormats { get; }
         IEnumerable<string> BreakingChangeSuppressions { get; }
+        string ServiceEndpoint { get; }
+        string OutputFileName { get; }
+        IEnumerable<string> InvalidInputFiles { get; }
     }
 }

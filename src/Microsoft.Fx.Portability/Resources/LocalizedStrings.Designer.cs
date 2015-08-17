@@ -11,8 +11,8 @@
 namespace Microsoft.Fx.Portability.Resources {
     using System;
     using System.Reflection;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -626,6 +626,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string UsedBy {
             get {
                 return ResourceManager.GetString("UsedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing report.
+        /// </summary>
+        public static string WritingReport {
+            get {
+                return ResourceManager.GetString("WritingReport", resourceCulture);
             }
         }
     }

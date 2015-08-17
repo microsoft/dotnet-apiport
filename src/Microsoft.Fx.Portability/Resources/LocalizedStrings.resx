@@ -325,4 +325,7 @@
   <data name="BreakingChangeDisclaimer" xml:space="preserve">
     <value>Note that simply using a potentially broken API does not mean the app will necessarily suffer from the indicated breaking change. Many breaking changes are scoped to narrow corner-cases, and apps are only affected if they use the API in a very particular way. Breaking changes below have been grouped by scope (major, minor, or edge) depending on how likely the changes are to actually break user code in cases where the given API is used. Please read the 'details' column to understand the particular circumstances in which each of the listed APIs may fail.</value>
   </data>
+  <data name="WritingReport" xml:space="preserve">
+    <value>Writing report</value>
+  </data>
 </root>
