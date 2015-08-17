@@ -45,7 +45,7 @@ namespace ApiPort
                             ListTargets(apiPortClient, container.Resolve<ITargetMapper>()).Wait();
                             break;
                         case AppCommands.AnalyzeAssemblies:
-                            AnalyzeAssembliesAsync(apiPortClient, options, progressReport, container.Resolve<IFileWriter>(), container.Resolve<string>("DefaultOutputFormat")).Wait();
+                            AnalyzeAssembliesAsync(apiPortClient, container.Resolve<IApiPortOptions>(), progressReport, container.Resolve<IFileWriter>()).Wait();
                             break;
 #if DOCID_SEARCH
                         case AppCommands.DocIdSearch:
@@ -248,20 +248,17 @@ namespace ApiPort
             Console.WriteLine(LocalizedStrings.TargetsListNoVersion, LocalizedStrings.WhatAsteriskMeans);
         }
 
-        private static async Task AnalyzeAssembliesAsync(ApiPortClient apiPort, ICommandLineOptions options, IProgressReporter progressReport, IFileWriter writer, string defaultOutputFormat)
+        private static async Task AnalyzeAssembliesAsync(ApiPortClient apiPort, IApiPortOptions options, IProgressReporter progressReport, IFileWriter writer)
         {
             foreach (var errorInput in options.InvalidInputFiles)
             {
                 progressReport.ReportIssue(string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidFileName, errorInput));
             }
 
-            // If no output formats were specified, use the default
-            var outputFormats = options.OutputFormats.Any() ? options.OutputFormats : new[] { defaultOutputFormat };
-
-            var results = await apiPort.GetAnalysisReportAsync(options, outputFormats);
+            var results = await apiPort.GetAnalysisReportAsync(options);
             var outputPaths = new List<string>();
 
-            foreach (var resultAndFormat in results.Zip(outputFormats, (r, f) => new { Result = r, Format = f }))
+            foreach (var resultAndFormat in results.Zip(options.OutputFormats, (r, f) => new { Result = r, Format = f }))
             {
                 var outputPath = await CreateReport(resultAndFormat.Result, apiPort, options.OutputFileName, resultAndFormat.Format, progressReport, writer);
 

@@ -18,6 +18,8 @@ namespace ApiPort
 {
     internal static class DependencyBuilder
     {
+        private const string DefaultOutputFormatInstanceName = "DefaultOutputFormat";
+
         public static IUnityContainer Build(ICommandLineOptions options, ProductInformation productInformation)
         {
             var container = new UnityContainer();
@@ -27,7 +29,7 @@ namespace ApiPort
 
             var ignoreAssemblyList = new FileIgnoreAssemblyInfoList(options.RequestFlags.HasFlag(AnalyzeRequestFlags.NoDefaultIgnoreFile), options.IgnoredAssemblyFiles);
 
-            container.RegisterInstance(options);
+            container.RegisterInstance<ICommandLineOptions>(options);
             container.RegisterInstance<ITargetMapper>(targetMapper);
             container.RegisterInstance<IEnumerable<IgnoreAssemblyInfo>>(ignoreAssemblyList);
 
@@ -44,9 +46,10 @@ namespace ApiPort
             container.RegisterType<IRequestAnalyzer, RequestAnalyzer>(new ContainerControlledLifetimeManager());
             container.RegisterType<IAnalysisEngine, AnalysisEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICollection<IReportWriter>>(new ContainerControlledLifetimeManager(), new InjectionFactory(WriterCollection));
+            container.RegisterType<IApiPortOptions>(new ContainerControlledLifetimeManager(), new InjectionFactory(GetOptions));
 
             // Register the default output format name
-            container.RegisterInstance("DefaultOutputFormat", "Excel");
+            container.RegisterInstance(DefaultOutputFormatInstanceName, "Excel");
 
             if (Console.IsOutputRedirected)
             {
@@ -67,6 +70,21 @@ namespace ApiPort
             var unitySection = (UnityConfigurationSection)configuration.GetSection("unity");
 
             return unitySection == null ? container : container.LoadConfiguration(unitySection);
+        }
+
+        private static object GetOptions(IUnityContainer container)
+        {
+            var options = container.Resolve<ICommandLineOptions>();
+
+            if (options.OutputFormats.Any())
+            {
+                return options;
+            }
+
+            return new ReadWriteApiPortOptions(options)
+            {
+                OutputFormats = new[] { container.Resolve<string>(DefaultOutputFormatInstanceName) }
+            };
         }
 
         private static string GetApplicationDirectory()

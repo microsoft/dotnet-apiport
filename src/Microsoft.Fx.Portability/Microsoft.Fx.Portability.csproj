@@ -103,6 +103,7 @@
     <Compile Include="ObjectModel\UsageDataCollection.cs" />
     <Compile Include="PortabilityAnalyzerException.cs" />
     <Compile Include="ProductInformation.cs" />
+    <Compile Include="ReadWriteApiPortOptions.cs" />
     <Compile Include="Reporting\IFileSystem.cs" />
     <Compile Include="Reporting\IFileWriter.cs" />
     <Compile Include="Reporting\IReportGenerator.cs" />
