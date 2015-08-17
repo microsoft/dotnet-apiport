@@ -2,18 +2,19 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- When building from a dev machine, the BuildNumber won't be set, so set it to 0.1 to indicate this is a private build -->
-	<BuildVersion>0</BuildVersion>
-	
-	<!-- Get build number from TFS if in automated build -->
-	<BuildVersion Condition=" '$(TF_BUILD_BUILDNUMBER)' != '' ">$(TF_BUILD_BUILDNUMBER.Split('.')[1].TrimStart('0'))</BuildVersion>
-	
-	<!-- Get version info from file -->
-	<VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
-    <VersionData>$([System.IO.File]::ReadAllText($(VersionFile)))</VersionData>
-	
-	<!-- Set informational version -->
+    <BuildVersion>0</BuildVersion>
+
+    <!-- Get build number from TFS if in automated build -->
+    <BuildVersion Condition=" '$(TF_BUILD_BUILDNUMBER)' != '' ">$(TF_BUILD_BUILDNUMBER.Split('.')[1].TrimStart('0'))</BuildVersion>
+
+    <!-- Get version info from file -->
+    <VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
+    <VersionData>1.0.0</VersionData>
+    <VersionData Condition="Exists('$(VersionFile)')">$([System.IO.File]::ReadAllText($(VersionFile)))</VersionData>
+
+    <!-- Set informational version -->
     <InformationVersion>$(VersionData)</InformationVersion>
-	<InformationVersion Condition=" '$(VersionSuffix)' != '' ">$(InformationVersion)-$(VersionSuffix)-$(BuildVersion)</InformationVersion>
+    <InformationVersion Condition=" '$(VersionSuffix)' != '' ">$(InformationVersion)-$(VersionSuffix)-$(BuildVersion)</InformationVersion>
   </PropertyGroup>
 
   <ItemGroup>
