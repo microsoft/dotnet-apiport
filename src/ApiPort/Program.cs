@@ -45,7 +45,7 @@ namespace ApiPort
                             ListTargets(apiPortClient, container.Resolve<ITargetMapper>()).Wait();
                             break;
                         case AppCommands.AnalyzeAssemblies:
-                            AnalyzeAssembliesAsync(apiPortClient, container.Resolve<IApiPortOptions>(), progressReport, container.Resolve<IFileWriter>()).Wait();
+                            AnalyzeAssembliesAsync(apiPortClient, container.Resolve<IApiPortOptions>()).Wait();
                             break;
 #if DOCID_SEARCH
                         case AppCommands.DocIdSearch:
@@ -248,22 +248,9 @@ namespace ApiPort
             Console.WriteLine(LocalizedStrings.TargetsListNoVersion, LocalizedStrings.WhatAsteriskMeans);
         }
 
-        private static async Task AnalyzeAssembliesAsync(ApiPortClient apiPort, IApiPortOptions options, IProgressReporter progressReport, IFileWriter writer)
+        private static async Task AnalyzeAssembliesAsync(ApiPortClient apiPort, IApiPortOptions options)
         {
-            foreach (var errorInput in options.InvalidInputFiles)
-            {
-                progressReport.ReportIssue(string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidFileName, errorInput));
-            }
-
-            var results = await apiPort.GetAnalysisReportAsync(options);
-            var outputPaths = new List<string>();
-
-            foreach (var resultAndFormat in results.Zip(options.OutputFormats, (r, f) => new { Result = r, Format = f }))
-            {
-                var outputPath = await CreateReport(resultAndFormat.Result, apiPort, options.OutputFileName, resultAndFormat.Format, progressReport, writer);
-
-                outputPaths.Add(outputPath);
-            }
+            var outputPaths = await apiPort.WriteAnalysisReportsAsync(options);
 
             Console.WriteLine();
             Console.WriteLine(LocalizedStrings.OutputWrittenTo);
@@ -271,28 +258,6 @@ namespace ApiPort
             foreach (var outputPath in outputPaths)
             {
                 Console.WriteLine(outputPath);
-            }
-        }
-
-        private static async Task<string> CreateReport(byte[] result, ApiPortClient apiPort, string suppliedOutputFileName, string outputFormat, IProgressReporter progressReport, IFileWriter writer)
-        {
-            var filePath = Path.GetFullPath(suppliedOutputFileName);
-            var outputDirectory = Path.GetDirectoryName(filePath);
-            var outputFileName = Path.GetFileName(filePath);
-
-            using (var progressTask = progressReport.StartTask(LocalizedStrings.WritingReport))
-            {
-                try
-                {
-                    var extension = await apiPort.GetExtensionForFormat(outputFormat);
-
-                    return await writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwrite: false);
-                }
-                catch (Exception)
-                {
-                    progressTask.Abort();
-                    throw;
-                }
             }
         }
     }

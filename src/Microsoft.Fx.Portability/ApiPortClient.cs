@@ -8,6 +8,7 @@ using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,10 +22,11 @@ namespace Microsoft.Fx.Portability
         private readonly IDependencyFinder _dependencyFinder;
         private readonly IReportGenerator _reportGenerator;
         private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
+        private readonly IFileWriter _writer;
 
         public ITargetMapper TargetMapper { get { return _targetMapper; } }
 
-        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore)
+        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore, IFileWriter writer)
         {
             _apiPortService = apiPortService;
             _progressReport = progressReport;
@@ -32,6 +34,7 @@ namespace Microsoft.Fx.Portability
             _dependencyFinder = dependencyFinder;
             _reportGenerator = reportGenerator;
             _assembliesToIgnore = assembliesToIgnore;
+            _writer = writer;
         }
 
         public async Task<ReportingResult> AnalyzeAssemblies(IApiPortOptions options)
@@ -53,11 +56,58 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
+        /// Writes analysis reports to path supplied by options
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns>Output paths</returns>
+        public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
+        {
+            foreach (var errorInput in options.InvalidInputFiles)
+            {
+                _progressReport.ReportIssue(string.Format(LocalizedStrings.InvalidFileName, errorInput));
+            }
+
+            var results = await GetAnalysisResultAsync(options);
+            var outputPaths = new List<string>();
+
+            foreach (var resultAndFormat in results.Zip(options.OutputFormats, (r, f) => new { Result = r, Format = f }))
+            {
+                var outputPath = await CreateReport(resultAndFormat.Result, options.OutputFileName, resultAndFormat.Format);
+
+                outputPaths.Add(outputPath);
+            }
+
+            return outputPaths;
+        }
+
+        private async Task<string> CreateReport(byte[] result, string suppliedOutputFileName, string outputFormat)
+        {
+            var filePath = Path.GetFullPath(suppliedOutputFileName);
+            var outputDirectory = Path.GetDirectoryName(filePath);
+            var outputFileName = Path.GetFileName(filePath);
+
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.WritingReport))
+            {
+                try
+                {
+                    var extension = await GetExtensionForFormat(outputFormat);
+
+                    return await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwrite: false);
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets an analysis report based on the options supplied
         /// </summary>
         /// <param name="options">Options to generate report</param>
         /// <returns>A collection of reports</returns>
-        public async Task<IEnumerable<byte[]>> GetAnalysisReportAsync(IApiPortOptions options)
+        public async Task<IEnumerable<byte[]>> GetAnalysisResultAsync(IApiPortOptions options)
         {
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
