@@ -45,6 +45,7 @@ namespace ApiPort
             container.RegisterType<IFileWriter, ReportFileWriter>(new ContainerControlledLifetimeManager());
             container.RegisterType<IRequestAnalyzer, RequestAnalyzer>(new ContainerControlledLifetimeManager());
             container.RegisterType<IAnalysisEngine, AnalysisEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ConsoleApiPort>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICollection<IReportWriter>>(new ContainerControlledLifetimeManager(), new InjectionFactory(WriterCollection));
             container.RegisterType<IApiPortOptions>(new ContainerControlledLifetimeManager(), new InjectionFactory(GetOptions));
 

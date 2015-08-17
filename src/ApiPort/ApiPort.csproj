@@ -104,6 +104,7 @@
     <Compile Include="CommandLine\AnalyzeOptionSet.cs" />
     <Compile Include="CommandLine\CommandLineOptionSet.cs" />
     <Compile Include="CommandLine\ServiceEndpointOptionSet.cs" />
+    <Compile Include="ConsoleApiPort.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="EmptyDependencyFinder.cs" />
     <Compile Include="FileOutputApiPortService.cs" />
