@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -31,6 +32,26 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             _currentAssemblyInfo = _reader.FormatAssemblyInfo(assemblyDefinition);
             _currentAssemblyName = _reader.GetString(assemblyDefinition.Name);
+        }
+
+        public DependencyFinderEngineHelper(MetadataReader metadataReader, byte[] file)
+        {
+            _reader = metadataReader;
+            MemberDependency = new List<MemberDependency>();
+
+            CallingAssembly = new AssemblyInfo
+            {
+                AssemblyIdentity = metadataReader.FormatAssemblyInfo(),
+                FileVersion = string.Empty,
+                TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty
+            };
+
+            // Get assembly info
+            var assemblyDefinition = _reader.GetAssemblyDefinition();
+
+            _currentAssemblyInfo = _reader.FormatAssemblyInfo(assemblyDefinition);
+            _currentAssemblyName = _reader.GetString(assemblyDefinition.Name);
+
         }
 
         public AssemblyInfo CallingAssembly { get; }
