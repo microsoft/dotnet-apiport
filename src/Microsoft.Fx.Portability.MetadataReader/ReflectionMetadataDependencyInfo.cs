@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using Microsoft.Fx.Portability.Analyzer.Resources;
+using System.Collections.Immutable;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -20,10 +21,16 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly HashSet<AssemblyInfo> _userAssemblies = new HashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
         private readonly IEnumerable<string> _inputAssemblies;
+        private readonly byte[] _file;
 
         private ReflectionMetadataDependencyInfo(IEnumerable<string> inputAssemblies)
         {
             _inputAssemblies = inputAssemblies;
+        }
+
+        private ReflectionMetadataDependencyInfo(byte[] file)
+        {
+            _file = file;
         }
 
         public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<string> inputAssemblies, IProgressReporter progressReport)
@@ -32,6 +39,13 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             engine.FindDependencies(progressReport);
 
+            return engine;
+        }
+
+        public static ReflectionMetadataDependencyInfo ComputeDependencies(byte[] file, IProgressReporter progressReport)
+        {
+            var engine = new ReflectionMetadataDependencyInfo(file);
+            engine.FindDependencies(file, progressReport);
             return engine;
         }
 
@@ -63,29 +77,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 {
                     foreach (var dependencies in GetDependencies(filename))
                     {
-                        var m = new MemberInfo
-                        {
-                            MemberDocId = dependencies.MemberDocId,
-                            TypeDocId = dependencies.TypeDocId,
-                            DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
-                        };
-
-                        if (m.DefinedInAssemblyIdentity == null && !dependencies.IsPrimitive)
-                        {
-                            throw new InvalidOperationException("All non-primitive types should be defined in an assembly");
-                        }
-
-                        // Add this memberinfo
-                        var newassembly = new HashSet<AssemblyInfo> { dependencies.CallingAssembly };
-
-                        var assemblies = _cachedDependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
-                        {
-                            lock (existingSet)
-                            {
-                                existingSet.Add(dependencies.CallingAssembly);
-                            }
-                            return existingSet;
-                        });
+                        SubDependencyFinder(dependencies);
                     }
                 }
                 catch (InvalidPEAssemblyException)
@@ -101,6 +93,63 @@ namespace Microsoft.Fx.Portability.Analyzer
             });
 
             // Clear out unresolved dependencies that were resolved during processing
+            ClearUnresolvedDependencies();
+        }
+
+        private void FindDependencies(byte[] file, IProgressReporter progressReport)
+        {
+                try
+                {
+                    foreach (var dependencies in GetDependencies(file))
+                    {
+                        SubDependencyFinder(dependencies);
+                    }
+                }
+                catch (InvalidPEAssemblyException)
+                {
+                // This often indicates a non-PE file
+                    _assembliesWithError.Add("This assembly is not a PE");
+                }
+                catch (BadImageFormatException)
+                {
+                    // This often indicates a PE file with invalid contents (either because the assembly is protected or corrupted)
+                    _assembliesWithError.Add("This file had invalid contents");
+                }
+
+
+            // Clear out unresolved dependencies that were resolved during processing
+            ClearUnresolvedDependencies();
+        }
+
+        private void SubDependencyFinder(MemberDependency dependencies)
+        {
+            var m = new MemberInfo
+            {
+                MemberDocId = dependencies.MemberDocId,
+                TypeDocId = dependencies.TypeDocId,
+                DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
+            };
+
+            if (m.DefinedInAssemblyIdentity == null && !dependencies.IsPrimitive)
+            {
+                throw new InvalidOperationException("All non-primitive types should be defined in an assembly");
+            }
+
+            // Add this memberinfo
+            var newassembly = new HashSet<AssemblyInfo> { dependencies.CallingAssembly };
+
+            var assemblies = _cachedDependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
+            {
+                lock (existingSet)
+                {
+                    existingSet.Add(dependencies.CallingAssembly);
+                }
+                return existingSet;
+            });
+        }
+
+        private void ClearUnresolvedDependencies()
+        {
             ICollection<string> collection;
             foreach (var assembly in _userAssemblies)
             {
@@ -136,6 +185,36 @@ namespace Microsoft.Fx.Portability.Analyzer
                 // Other exceptions are unexpected, though, and wil benefit from
                 // more details on the scenario that hit them
                 throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, assemblyLocation), exc);
+            }
+        }
+
+        private IEnumerable<MemberDependency> GetDependencies(byte[] file)
+        {
+            try
+            {
+                using (var peFile = new PEReader(ImmutableArray.Create<byte>(file)))
+                {
+                    var metadataReader = GetMetadataReader(peFile);
+
+                    AddReferencedAssemblies(metadataReader);
+
+                    var helper = new DependencyFinderEngineHelper(metadataReader, file);
+                    helper.ComputeData();
+
+                    // Remember this assembly as a user assembly.
+                    _userAssemblies.Add(helper.CallingAssembly);
+
+                    return helper.MemberDependency;
+                }
+            }
+            catch (Exception exc)
+            {
+                // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
+                if (exc is InvalidPEAssemblyException) throw;
+
+                // Other exceptions are unexpected, though, and wil benefit from
+                // more details on the scenario that hit them
+                throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage), exc);
             }
         }
 

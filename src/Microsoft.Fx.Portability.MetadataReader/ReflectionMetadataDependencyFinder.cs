@@ -30,6 +30,23 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
+        public IDependencyInfo FindDependencies(byte[] file, IProgressReporter _progressReporter)
+        {
+            using (var task = _progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences))
+            {
+                try
+                {
+                    return ReflectionMetadataDependencyInfo.ComputeDependencies(file, _progressReporter);
+                }
+                catch(Exception e)
+                {
+                    task.Abort();
+
+                    throw e;
+                }
+            }
+        }
+
         private static bool FilterValidFiles(FileInfo file, IProgressReporter _progressReporter)
         {
             if (file.Exists)

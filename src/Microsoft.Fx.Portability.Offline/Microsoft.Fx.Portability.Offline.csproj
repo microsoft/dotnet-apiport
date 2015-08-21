@@ -73,7 +73,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
-    <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile)" />
+    <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file &quot;$(MSBuildThisFileDirectory)download.ps1&quot; &quot;$(CatalogDataFile)&quot;" />
   </Target>
   <Target Name="BeforeBuild">
   </Target>
