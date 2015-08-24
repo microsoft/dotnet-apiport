@@ -12,22 +12,21 @@ Note that if the serialized data is both serialized and deserialized with the sa
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
+- [x] Source analyzer available
 
 ### Recommended Action
 SoapFormatter serialization should be replaced with BinaryFormatter serialization or NetDataContractSerialization to be resilient to .NET Framework changes.
 
 ### Affected APIs
-* M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Serialize(System.IO.Stream,System.Object)
-* M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Serialize(System.IO.Stream,System.Object,System.Runtime.Remoting.Messaging.Header[])
-* M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Deserialize(System.IO.Stream)
-* M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Deserialize(System.IO.Stream,System.Runtime.Remoting.Messaging.HeaderHandler)
+* `M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Serialize(System.IO.Stream,System.Object)`
+* `M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Serialize(System.IO.Stream,System.Object,System.Runtime.Remoting.Messaging.Header[])`
+* `M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Deserialize(System.IO.Stream)`
+* `M:System.Runtime.Serialization.Formatters.Soap.SoapFormatter.Deserialize(System.IO.Stream,System.Runtime.Remoting.Messaging.HeaderHandler)`
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
 
 <!--
     ### Notes
-    Source analyzer status: Pri 1, Done
 -->
 
 
