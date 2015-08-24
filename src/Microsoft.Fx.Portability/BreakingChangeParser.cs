@@ -113,7 +113,7 @@ namespace Microsoft.Fx.Portability
                         }
 
                         // Bool properties
-                        else if (currentLine.StartsWith("- [ ]", StringComparison.Ordinal) || 
+                        else if (currentLine.StartsWith("- [ ]", StringComparison.Ordinal) ||
                                  currentLine.StartsWith("- [x]", StringComparison.OrdinalIgnoreCase))
                         {
                             bool isChecked = currentLine.StartsWith("- [x]", StringComparison.OrdinalIgnoreCase);
@@ -198,8 +198,8 @@ namespace Microsoft.Fx.Portability
                     }
                     break;
                 case ParseState.AffectedAPIs:
-                    // Trim md list markers, as well as comment tags (in case the affected APIs section is followed by a comment)
-                    string api = currentLine.Trim().TrimStart('*', '-', ' ', '\t', '<', '!', '-');
+                    // Trim md list and code markers, as well as comment tags (in case the affected APIs section is followed by a comment)
+                    string api = currentLine.Trim().TrimStart('*', '-', '`', ' ', '\t', '<', '!', '-').TrimEnd('`');
                     if (string.IsNullOrWhiteSpace(api)) return;
                     if (currentBreak.ApplicableApis == null)
                     {

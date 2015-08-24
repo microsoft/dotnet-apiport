@@ -19,7 +19,7 @@ Changes to URI parsing in .NET 4.5 include:<ul><li>URI parsing will perform norm
 If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.
 
 ### Affected APIs
-* M:System.Uri.#ctor(System.String)
+* `M:System.Uri.#ctor(System.String)`
 * M:System.Uri.#ctor(System.String,System.Boolean)
 * M:System.Uri.#ctor(System.String,System.UriKind)
 * M:System.Uri.#ctor(System.Uri,System.String)
