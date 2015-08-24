@@ -46,7 +46,7 @@
   <ItemGroup />
   <PropertyGroup>
     <DataPath>$(MSBuildThisFileDirectory)data\</DataPath>
-    <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\Documentation\BreakingChanges\</BreakingChangePath>
+    <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\docs\BreakingChanges\</BreakingChangePath>
     <CatalogDataFile>$(DataPath)catalog.bin</CatalogDataFile>
   </PropertyGroup>
   <ItemGroup>
