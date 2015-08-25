@@ -20,9 +20,3 @@ If looser, .NET Framework 4.0 validation is needed, the validating application c
 * Not detectable via API analysis
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx)
-
-<!--
-    ### Notes
--->
-
-
