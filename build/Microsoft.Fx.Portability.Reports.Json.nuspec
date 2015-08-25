@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata minClientVersion="3.0">
     <id>Microsoft.Fx.Portability.Reports.Json</id>
@@ -14,8 +14,12 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
-      <dependency id="Microsoft.Fx.Portability" version="1.0.0-alpha" />
-      <dependency id="Newtonsoft.Json" version="6.0.8" />
+      <group targetFramework="dotnet">
+		<dependency id="Microsoft.Fx.Portability" version="1.0.0-alpha" />
+        <dependency id="Newtonsoft.Json" version="6.0.8" />
+        <dependency id="System.IO" version="4.0.10" />
+        <dependency id="System.Runtime" version="4.0.20" />
+      </group>
     </dependencies>
   </metadata>
   <files>
