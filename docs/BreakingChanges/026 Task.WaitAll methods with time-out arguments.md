@@ -19,15 +19,8 @@ In the .NET Framework 4, these methods behaved inconsistently. When the time-out
 If an AggregateException was being caught as a means of detecting a task that was cancelled prior to the WaitAll call being invoked, that code should instead do the same detection via the IsCanceled property (for example: .Any(t =&gt; t.IsCanceled)) since .NET 4.6 will only throw in that case if all awaited tasks are completed prior to the timeout.
 
 ### Affected APIs
-* M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.Int32)
-* M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.Int32,System.Threading.CancellationToken)
-* M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.TimeSpan)
+* `M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.Int32)`
+* `M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.Int32,System.Threading.CancellationToken)`
+* `M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.TimeSpan)`
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
-
-<!--
-    ### Notes
-    Source analyzer status: Pri 2, Done
--->
-
-

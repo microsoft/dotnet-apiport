@@ -18,15 +18,8 @@ URI escaping has changed in .NET 4.5 to support <a href="http://tools.ietf.org/h
 * Similarly, expect that Escaped and Unescaped URI and Data strings may vary from .NET 4.0 and .NET 4.5 and should not be compared across .NET versions directly. Instead, they should be parsed and normalized in a single .NET version before any comparisons are made.
 
 ### Affected APIs
-* M:System.Uri.EscapeDataString(System.String)
-* M:System.Uri.EscapeUriString(System.String)
-* M:System.Uri.UnescapeDataString(System.String)
+* `M:System.Uri.EscapeDataString(System.String)`
+* `M:System.Uri.EscapeUriString(System.String)`
+* `M:System.Uri.UnescapeDataString(System.String)`
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
-
-<!--
-    ### Notes
-    Source analyzer status: Pri 1, Done
--->
-
-

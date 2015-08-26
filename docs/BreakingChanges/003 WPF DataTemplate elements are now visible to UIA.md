@@ -17,14 +17,7 @@ Previously, DataTemplate elements were invisible to UI Automation. Beginning in 
 UI Auomation tests for this app may need updated to account for the UIA tree now including previously invisible DataTemplate elements. For example, tests that expect some elements to be next to each other may now need to expect previously invisible UIA elements in between. Or tests that rely on certain counts or indexes for UIA elements may need updated with new values.
 
 ### Affected APIs
-* M:System.Windows.DataTemplate.#ctor
-* M:System.Windows.DataTemplate.#ctor(System.Object)
+* `M:System.Windows.DataTemplate.#ctor`
+* `M:System.Windows.DataTemplate.#ctor(System.Object)`
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#wpf)
-
-<!--
-    ### Notes
-    Source analyzer status: Pri 1, Done
--->
-
-

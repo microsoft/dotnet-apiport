@@ -18,19 +18,12 @@ Changes to URI parsing in .NET 4.5 include:<ul><li>URI parsing will perform norm
 If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.
 
 ### Affected APIs
-* M:System.Uri.#ctor(System.String)
-* M:System.Uri.#ctor(System.String,System.Boolean)
-* M:System.Uri.#ctor(System.String,System.UriKind)
-* M:System.Uri.#ctor(System.Uri,System.String)
-* M:System.Uri.TryCreate(System.String,System.UriKind,System.Uri@)
-* M:System.Uri.TryCreate(System.Uri,System.String,System.Uri@)
-* M:System.Uri.TryCreate(System.Uri,System.Uri,System.Uri@)
+* `M:System.Uri.#ctor(System.String)`
+* `M:System.Uri.#ctor(System.String,System.Boolean)`
+* `M:System.Uri.#ctor(System.String,System.UriKind)`
+* `M:System.Uri.#ctor(System.Uri,System.String)`
+* `M:System.Uri.TryCreate(System.String,System.UriKind,System.Uri@)`
+* `M:System.Uri.TryCreate(System.Uri,System.String,System.Uri@)`
+* `M:System.Uri.TryCreate(System.Uri,System.Uri,System.Uri@)`
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
-
-<!--
-    ### Notes
-    Source analyzer status: Pri 1, Done
--->
-
-
