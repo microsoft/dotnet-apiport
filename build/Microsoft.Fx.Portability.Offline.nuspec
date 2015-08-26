@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata minClientVersion="3.0">
     <id>Microsoft.Fx.Portability.Offline</id>
@@ -14,7 +14,19 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
-      <dependency id="Microsoft.Fx.Portability" version="1.0.0-alpha" />
+      <group targetFramework="dotnet">
+        <dependency id="Microsoft.Fx.Portability" version="1.0.0-alpha" />
+        <dependency id="System.AppContext" version="4.0.0" />
+        <dependency id="System.Collections" version="4.0.10" />
+        <dependency id="System.IO" version="4.0.10" />
+        <dependency id="System.IO.FileSystem" version="4.0.0" />
+        <dependency id="System.IO.FileSystem.Primitives" version="4.0.0" />
+        <dependency id="System.Linq" version="4.0.0" />
+        <dependency id="System.Reflection" version="4.0.10" />
+        <dependency id="System.Runtime" version="4.0.20" />
+        <dependency id="System.Runtime.Extensions" version="4.0.10" />
+        <dependency id="System.Threading.Tasks" version="4.0.10" />
+      </group>
     </dependencies>
   </metadata>
   <files>

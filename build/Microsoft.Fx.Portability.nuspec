@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata minClientVersion="3.0">
     <id>Microsoft.Fx.Portability</id>
@@ -14,7 +14,31 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="6.0.8" />
+      <group targetFramework="dotnet">
+        <dependency id="Newtonsoft.Json" version="6.0.8" />
+        <dependency id="System.Collections" version="4.0.10" />
+        <dependency id="System.Collections.Concurrent" version="4.0.10" />
+        <dependency id="System.Diagnostics.Debug" version="4.0.10" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
+        <dependency id="System.Globalization" version="4.0.10" />
+        <dependency id="System.IO" version="4.0.10" />
+        <dependency id="System.IO.Compression" version="4.0.0" />
+        <dependency id="System.IO.FileSystem" version="4.0.0" />
+        <dependency id="System.IO.FileSystem.Primitives" version="4.0.0" />
+        <dependency id="System.Linq" version="4.0.0" />
+        <dependency id="System.Linq.Parallel" version="4.0.0" />
+        <dependency id="System.Net.Http" version="4.0.0" />
+        <dependency id="System.Net.Primitives" version="4.0.10" />
+        <dependency id="System.Reflection" version="4.0.10" />
+        <dependency id="System.Reflection.Extensions" version="4.0.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.0" />
+        <dependency id="System.Runtime" version="4.0.20" />
+        <dependency id="System.Runtime.Extensions" version="4.0.10" />
+        <dependency id="System.Threading" version="4.0.10" />
+        <dependency id="System.Threading.Tasks" version="4.0.10" />
+        <dependency id="System.Xml.ReaderWriter" version="4.0.10" />
+        <dependency id="System.Xml.XDocument" version="4.0.10" />
+      </group>
     </dependencies>
   </metadata>
   <files>
