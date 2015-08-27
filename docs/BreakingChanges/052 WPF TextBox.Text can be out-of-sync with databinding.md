@@ -1,0 +1,24 @@
+## 52: WPF TextBox.Text can be out-of-sync with databinding.
+
+### Scope
+Edge
+
+### Version Introduced
+4.5
+
+### Change Description
+In some cases, the TextBox.Text property reflects a previous value of the databound property value if the property is modified during a databinding write operation.
+
+- [x] Quirked
+- [ ] Build-time break
+- [x] Source analyzer planned
+
+### Recommended Action
+This should have no negative impact. However, you can restore the previous behavior by setting the [FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty](https://msdn.microsoft.com/en-us/library/system.windows.frameworkcompatibilitypreferences.keeptextboxdisplaysynchronizedwithtextproperty(v=vs.110).aspx) property to false.
+
+### Affected APIs
+* `M:System.Windows.Controls.TextBox.get_Text`
+* `M:System.Windows.Controls.TextBox.set_Text(System.String)`
+* `P:System.Windows.Controls.TextBox.Text`
+
+[More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wpf)
