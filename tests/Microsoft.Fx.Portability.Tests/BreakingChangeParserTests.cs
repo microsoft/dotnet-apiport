@@ -40,6 +40,7 @@ namespace Microsoft.Fx.Portability.Tests
         {
             BreakingChange bc = ListTBC.DeepCopy();
             bc.ImpactScope = BreakingChangeImpact.Unknown;
+            bc.SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Unknown;
             bc.VersionBroken = null;
             bc.ApplicableApis = null;
             ValidateParse(GetBreakingChangeMarkdown("MissingData.md"), bc);
@@ -59,6 +60,7 @@ namespace Microsoft.Fx.Portability.Tests
             BreakingChange bc = UriBC.DeepCopy();
             bc.VersionBroken = null;
             bc.ImpactScope = BreakingChangeImpact.Unknown;
+            bc.SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Unknown;
             bc.IsQuirked = false;
             bc.ApplicableApis = bc.ApplicableApis.Concat(new[] { "##" });
             bc.Suggestion = "\\0\0\0\0\0" + bc.Suggestion + "\u0001\u0002";
@@ -146,7 +148,7 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Equal(expected.VersionFixed, actual.VersionFixed);
             Assert.Equal(expected.IsBuildTime, actual.IsBuildTime);
             Assert.Equal(expected.IsQuirked, actual.IsQuirked);
-            Assert.Equal(expected.IsSourceAnalyzerAvailable, actual.IsSourceAnalyzerAvailable);
+            Assert.Equal(expected.SourceAnalyzerStatus, actual.SourceAnalyzerStatus);
             Assert.Equal(expected.ImpactScope, actual.ImpactScope);
         }
 
@@ -170,7 +172,7 @@ namespace Microsoft.Fx.Portability.Tests
             Details = "Description goes here.",
             IsQuirked = false,
             IsBuildTime = false,
-            IsSourceAnalyzerAvailable = false,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
             Suggestion = "Suggested steps if user is affected (such as work arounds or code fixes) go here.",
             ApplicableApis = new[] { "Not detectable via API analysis" },
             Link = "LinkForMoreInformation",
@@ -187,7 +189,7 @@ namespace Microsoft.Fx.Portability.Tests
             Details = "Beginning in .NET 4.5, a List&lt;T&gt;.ForEach enumerator will throw an InvalidOperationException exception if an element in the calling collection is modified. Previously, this would not throw an exception but could lead to race conditions.",
             IsQuirked = true,
             IsBuildTime = false,
-            IsSourceAnalyzerAvailable = true,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Available,
             Suggestion = "Ideally, code should be fixed such that Lists are not modifed while enumerating their elements, as that is never a safe operation. To revert to the previous behavior, though, an app may target .NET 4.0.",
             ApplicableApis = new[] { "M:System.Collections.Generic.List`1.ForEach(System.Action{`0})" },
             Link = "https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#core",
@@ -203,7 +205,7 @@ namespace Microsoft.Fx.Portability.Tests
             Details = "URI parsing has changed in several ways in .NET 4.5. Note, however, that these changes only affect code targeting .NET 4.5. If a binary targets .NET 4.0, the old behavior will be observed.\nChanges to URI parsing in .NET 4.5 include:<ul><li>URI parsing will perform normalization and character checking according to the latest IRI rules in RFC 3987</li><li>Unicode normalization form C will only be performed on the host portion of the URI</li><li>Invalid mailto: URIs will now cause an exception</li><li>Trailing dots at the end of a path segment are now preserved</li><li>file:// URIs do not escape the '?' character</li><li>Unicode control characters U+0080 through U+009F are not supported</li><li>Comma characters (',' %2c) are not automatically unescaped</li></ul>",
             IsQuirked = true,
             IsBuildTime = false,
-            IsSourceAnalyzerAvailable = true,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Available,
             Suggestion = "If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.",
             ApplicableApis = new[] {
                 "M:System.Uri.#ctor(System.String)",

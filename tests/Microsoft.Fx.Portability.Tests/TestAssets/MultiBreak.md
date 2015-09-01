@@ -5,13 +5,15 @@ Minor
 
 ### Version Introduced
 4.5
+    
+### Source Analyzer Status
+Available
 
 ### Change Description
 Beginning in .NET 4.5, a List&lt;T&gt;.ForEach enumerator will throw an InvalidOperationException exception if an element in the calling collection is modified. Previously, this would not throw an exception but could lead to race conditions.
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 Ideally, code should be fixed such that Lists are not modifed while enumerating their elements, as that is never a safe operation. To revert to the previous behavior, though, an app may target .NET 4.0.
@@ -34,6 +36,9 @@ Major
 
 ### Version Introduced
 4.5
+    
+### Source Analyzer Status
+Available
 
 ### Change Description
 
@@ -42,7 +47,6 @@ Changes to URI parsing in .NET 4.5 include:<ul><li>URI parsing will perform norm
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.

@@ -19,7 +19,8 @@ namespace Microsoft.Fx.Portability
             Suggestion,
             AffectedAPIs,
             OriginalBug,
-            Notes
+            Notes,
+            SourceAnalyzerStatus
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Microsoft.Fx.Portability
                         // Clear state
                         state = ParseState.None;
                     }
-                    else if (currentBreak != null) // Only parse breaking change if we've seeng a breaking change header ("## ...")
+                    else if (currentBreak != null) // Only parse breaking change if we've seen a breaking change header ("## ...")
                     {
                         // State changes
                         if (currentLine.StartsWith("###", StringComparison.Ordinal))
@@ -106,6 +107,9 @@ namespace Microsoft.Fx.Portability
                                 case "notes":
                                     state = ParseState.Notes;
                                     break;
+                                case "source analyzer status":
+                                    state = ParseState.SourceAnalyzerStatus;
+                                    break;
                                 default:
                                     ParseNonStateChange(currentBreak, state, currentLine);
                                     break;
@@ -127,11 +131,6 @@ namespace Microsoft.Fx.Portability
                                 case "build-time break":
                                 case "isbuildtime":
                                     currentBreak.IsBuildTime = isChecked;
-                                    state = ParseState.None;
-                                    break;
-                                case "source analyzer available":
-                                case "issourceanalyzeravailable":
-                                    currentBreak.IsSourceAnalyzerAvailable = isChecked;
                                     state = ParseState.None;
                                     break;
                                 default:
@@ -237,6 +236,13 @@ namespace Microsoft.Fx.Portability
                     else
                     {
                         currentBreak.Notes += ("\n" + currentLine);
+                    }
+                    break;
+                case ParseState.SourceAnalyzerStatus:
+                    BreakingChangeAnalyzerStatus status;
+                    if (Enum.TryParse<BreakingChangeAnalyzerStatus>(currentLine.Trim().Replace(" ", ""), true, out status))
+                    {
+                        currentBreak.SourceAnalyzerStatus = status;
                     }
                     break;
                 default:

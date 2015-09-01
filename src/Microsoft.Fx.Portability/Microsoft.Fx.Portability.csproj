@@ -57,6 +57,7 @@
     <Compile Include="ApiNote.cs" />
     <Compile Include="ApiPortClient.cs" />
     <Compile Include="ApiPortService.cs" />
+    <Compile Include="BreakingChangeAnalyzerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BreakingChange.cs" />
     <Compile Include="BreakingChangeDependency.cs" />

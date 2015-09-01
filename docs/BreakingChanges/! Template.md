@@ -10,7 +10,7 @@ Major
 4.6
 
 ### Source Analyzer Status
-Unknown
+Available
 
 ### Change Description
 Description goes here.
