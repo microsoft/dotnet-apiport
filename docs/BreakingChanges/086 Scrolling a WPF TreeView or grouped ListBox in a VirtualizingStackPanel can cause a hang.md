@@ -9,12 +9,14 @@ Major
 ### Version Reverted
 4.5.1
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 In the .NET Framework v4.5, scrolling a WPF TreeView or grouped ListBox in a virtualized stack panel can caused hangs if there are margins in the viewport (between the items in the TreeView or ListBox, for example, or on an ItemsPresenter element). Additionally, in some cases, different sized items in the view can cause instability even if there are no margins.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This bug can be avoided by upgrading to .NET Framework 4.5.1. Alternatively, margins can be removed from view collections (like TreeViews) within virtualized stack panels if all contained items are the same size.

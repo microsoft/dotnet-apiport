@@ -24,4 +24,3 @@ Ideally, code should be fixed such that Lists are not modifed while enumerating 
     Source analyzer status: Pri 1, source and binary done (MikeRou)
 
 
-	 - [x] Source analyzer available

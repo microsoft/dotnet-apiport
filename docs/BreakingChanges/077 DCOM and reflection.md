@@ -6,6 +6,9 @@ Minor
 ### Version Introduced
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 Reflection objects can no longer be passed from managed code to out-of-process DCOM clients. The following types are affected: 
 
@@ -19,7 +22,6 @@ Calls to `IMarshal` for the object return `E_NOINTERFACE`.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 Update marshaling code to work with non-reflection objects

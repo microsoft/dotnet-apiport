@@ -6,6 +6,9 @@ Major
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 
 URI parsing has changed in several ways in .NET 4.5. Note, however, that these changes only affect code targeting .NET 4.5. If a binary targets .NET 4.0, the old behavior will be observed.  
@@ -13,7 +16,6 @@ Changes to URI parsing in .NET 4.5 include:<ul><li>URI parsing will perform norm
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.

@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 For apps that target the .NET Framework 4.5.2 or previous versions, writing an invalid surrogate pair using exception fallback handling does not always throw an exception. For apps that target the .NET Framework 4.6, attempting to write an invalid surrogate pair throws an `ArgumentException`.
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 If necessary, this break can be avoided by targeting the .NET Framework 4.5.2 or earlier. Alternatively, invalid surrogate pairs can be pre-processed into valid xml prior to writing them.

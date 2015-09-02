@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability
                 VersionFixed = this.VersionFixed,
                 IsBuildTime = this.IsBuildTime,
                 IsQuirked = this.IsQuirked,
-                IsSourceAnalyzerAvailable = this.IsSourceAnalyzerAvailable,
+                SourceAnalyzerStatus = this.SourceAnalyzerStatus,
                 BugLink = this.BugLink,
                 Notes = this.Notes,
                 ImpactScope = this.ImpactScope
@@ -56,7 +56,7 @@ namespace Microsoft.Fx.Portability
 
         public bool IsQuirked { get; set; }
 
-        public bool IsSourceAnalyzerAvailable { get; set; }
+        public BreakingChangeAnalyzerStatus SourceAnalyzerStatus { get; set; }
 
         public string BugLink { get; set; }
 

@@ -9,12 +9,14 @@ Major
 ### Version Reverted
 4.6
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 Description goes here.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 Suggested steps if user is affected (such as work arounds or code fixes) go here.

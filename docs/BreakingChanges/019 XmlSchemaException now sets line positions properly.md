@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 If the LoadOptions.SetLineInfo value is passed to the Load method and a validation error occurs, the XmlSchemaException.LineNumber and XmlSchemaException.LinePosition properties now contain line information.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 Exception-handling code that assumes XmlSchemaException.LineNumber and XmlSchemaException.LinePosition will not be set should be updated since these properties will now be set properly when SetLineInfo is used while loading XML.

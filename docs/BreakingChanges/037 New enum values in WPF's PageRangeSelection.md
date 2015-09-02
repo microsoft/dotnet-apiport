@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 Two new members (CurrentPage and SelectedPage) have been added to the <a href="https://msdn.microsoft.com/en-us/library/system.windows.controls.pagerangeselection(v=vs.110).aspx">PageRangeSelection</a> enum.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 In most cases, these changes won't impact user code. Code that depends on a particular number of elements existing in Enum.GetNames or Enum.GetValues calls on the PageRangeSelection type should be modified, though.

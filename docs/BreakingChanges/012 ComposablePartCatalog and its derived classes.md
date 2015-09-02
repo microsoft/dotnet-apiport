@@ -6,12 +6,14 @@ Major
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 Starting with the .NET Framework 4.5, MEF catalogs implement IEnumerable and therefore can no longer be used to create a serializer (XmlSerializer object). Trying to serialize a MEF catalog throws an exception.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 TODO

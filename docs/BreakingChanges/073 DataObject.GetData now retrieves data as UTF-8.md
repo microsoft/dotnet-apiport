@@ -6,6 +6,9 @@ Edge
 ### Version Introduced
 4.5.2
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 For apps that target the .NET Framework 4 or that run on the .NET Framework 4.5.1 or earlier versions, DataObject.GetData retrieves HTML-formatted data as an ASCII string. As a result, non-ASCII characters (characters whose ASCII codes are greater than 0x7F) are represented by two random characters.
 
@@ -13,7 +16,6 @@ For apps that target the .NET Framework 4.5 or later and run on the .NET Framewo
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 If you implemented a workaround for the encoding problem with HTML-formatted strings (for example, by explicitly encoding the HTML string retrieved from the Clipboard by passing it to the UTF8Encoding.GetString method) and you're retargeting your app from version 4 to 4.5, that workaround should be removed.

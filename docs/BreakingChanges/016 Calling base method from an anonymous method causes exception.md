@@ -3,12 +3,14 @@
 ### Scope
 Minor
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 TODO
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 TODO

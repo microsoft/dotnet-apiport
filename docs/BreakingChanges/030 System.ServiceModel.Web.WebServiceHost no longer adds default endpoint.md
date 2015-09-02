@@ -6,12 +6,14 @@ Minor
 ### Version Introduced
 4.5
  
+### Source Analyzer Status
+Planned
+
 ### Change Description
 The System.ServiceModel.Web.WebServiceHost object no longer adds a default endpoint if an explicit endpoint has been added by application code.
  
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
  
 ### Recommended Action
 If users will expect to be able to connect to a default endpoint and other explicit endpoints have been added to the WebServiceHost, default endpoints should also be added explicitly (using AddDefaultEndpoints).

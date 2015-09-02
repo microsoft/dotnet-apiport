@@ -6,12 +6,14 @@ Minor
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 This WorkFlow Drag/Drop API is obsolete and will cause compiler warnings if the app is rebuilt against 4.5.
 
 - [ ] Quirked
 - [x] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 New [DragDropHelper](https://msdn.microsoft.com/en-us/library/system.activities.presentation.dragdrophelper(v=vs.110).aspx) APIs that support operations with multiple objects should be used instead. Alternatively, the build warnings can be suppressed or they can be avoided by using an older compiler. The APIs are still supported.

@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5.1
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 When you create a Windows Metadata library (.winmd file), the ObsoleteAttribute attribute is exported as both ObsoleteAttribute and Windows.Foundation.DeprecatedAttribute.
 
 - [ ] Quirked
 - [x] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 Recompilation of existing source code that uses the ObsoleteAttribute attribute may generate warnings when consuming that code from C++/CX or JavaScript. 

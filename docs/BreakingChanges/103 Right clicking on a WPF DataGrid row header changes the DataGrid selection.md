@@ -9,12 +9,14 @@ Edge
 ### Version Reverted
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 Right-clicking a selected DataGrid row header while multiple rows are selected results in the DataGrid's selection changing to only that row.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This issue has been fixed in the .NET Framework 4.6 and may be addressed by upgrading to that version of the .NET Framework.

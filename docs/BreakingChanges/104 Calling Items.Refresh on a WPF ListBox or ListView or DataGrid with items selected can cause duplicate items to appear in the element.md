@@ -9,12 +9,14 @@ Minor
 ### Version Reverted
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 In the .NET Framework 4.5, calling ListBox.Items.Refresh from code while items are selected in a ListBox can cause the selected items to be duplicated in the list. A similar issue occurs with ListView and DataGrid. This is fixed in the .NET Framework 4.6.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This issue may be worked around by programatically unselecting items before Refresh is called and then re-selecting them after the call is completed. Alternatively, this issue has been fixed in the .NET Framework 4.6 and may be addressed by upgrading to that version of the .NET Framework.

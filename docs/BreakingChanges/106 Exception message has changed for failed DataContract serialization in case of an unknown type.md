@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 Beginning in the .NET Framework 4.6, the exception message given if a DataContractSerializer or DataContractJsonSerializer fails to serialize or deserialize due to missing 'known types' has been clarified.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 Apps should not depend on specific exception messages. If an app depending on this message, please either update it to expect the new message or (preferably) change it to depend only on the exception type

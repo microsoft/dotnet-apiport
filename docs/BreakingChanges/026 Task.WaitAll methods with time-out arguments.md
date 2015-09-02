@@ -6,6 +6,9 @@ Minor
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 Task.WaitAll behavior was made more consistent in .NET 4.5. 
 
@@ -13,7 +16,6 @@ In the .NET Framework 4, these methods behaved inconsistently. When the time-out
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 If an AggregateException was being caught as a means of detecting a task that was cancelled prior to the WaitAll call being invoked, that code should instead do the same detection via the IsCanceled property (for example: .Any(t =&gt; t.IsCanceled)) since .NET 4.6 will only throw in that case if all awaited tasks are completed prior to the timeout.

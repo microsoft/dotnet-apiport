@@ -9,12 +9,14 @@ Edge
 ### Version Reverted
 4.5.1
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 In the .NET Framework 4.5, a small number of .NET methods began throwing first chance EntryPointNotFoundExceptions. These exceptions were handled within the .Net Framework, but could break test automation that did not expect the first chance exceptions. These same APIs break some ApiVerifier scenarios when HighVersionLie is enabled.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This bug can be avoided by upgrading to .NET Framework 4.5.1. Alternatively, test automation can be updated to not break on first-chance EntryPointNotFoundExceptions.

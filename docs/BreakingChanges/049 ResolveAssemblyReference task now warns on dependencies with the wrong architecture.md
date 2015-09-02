@@ -6,13 +6,14 @@ Minor
 ### Version Introduced
 4.5.1
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 The task emits a warning, MSB3270, which indicates that a reference or any of its dependencies does not match the app's architecture. For example, this occurs if an app that was compiled with the anycpu option includes an x86 reference. Such a scenario could result in an app failure at run time (in this case, if the app is deployed as an x64 process). 
 
 - [ ] Quirked
 - [x] Build-time break
-- [ ] Source analyzer available
-- [x] Source analyzer planned
 
 ### Recommended Action
 There are two areas of impact:

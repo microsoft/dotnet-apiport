@@ -6,6 +6,9 @@ Minor
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 The .NET Framework 4.5 adds new overloads to Dispatcher.Invoke that include a parameter of type System.Action. When existing code is recompiled, compilers may resolve calls to Dispatcher.Invoke methods that have a Delegate parameter as calls to Dispatcher.Invoke methods with an System.Action parameter. If a call to a Dispatcher.Invoke overload with a Delegate parameter is resolved as a call to a Dispatcher.Invoke overload with an System.Action parameter, the following differences in behavior may occur:
 
@@ -14,7 +17,6 @@ The .NET Framework 4.5 adds new overloads to Dispatcher.Invoke that include a pa
 
 - [ ] Quirked
 - [x] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 To avoid ambiguity (and potential differences in exception handling or blocking behaviors), code calling Dispatcher.Invoke can pass an empty object[] as a second parameter to the Invoke call to be sure of resolving to the .NET 4.0 method overload.

@@ -9,12 +9,14 @@ Minor
 ### Version Reverted
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 In the .NET Framework 4.5, if multiple items are placed in the same TableLayoutPanel cell, they may be displayed in a different order than they were in the .NET Framework 4.0.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This behavior was reverted in a servicing update for the .NET Framework 4.5. Please update the .NET Framework 4.5, or upgrade to .NET Framework 4.5.1 or later, to fix this issue. Alternatively, avoid the ambiguous case of multiple items in the same TableLayourPanel cell.
