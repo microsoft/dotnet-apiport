@@ -1,4 +1,4 @@
-## 5: List<T>.ForEach
+## 5: `List<T>.ForEach`
 
 ### Scope
 Edge
@@ -10,7 +10,7 @@ Edge
 Available
 
 ### Change Description
-Beginning in .NET 4.5, a List&lt;T&gt;.ForEach enumerator will throw an InvalidOperationException exception if an element in the calling collection is modified. Previously, this would not throw an exception but could lead to race conditions.
+Beginning in .NET 4.5, a `List<T>.ForEach` enumerator will throw an InvalidOperationException exception if an element in the calling collection is modified. Previously, this would not throw an exception but could lead to race conditions.
 
 - [x] Quirked
 - [ ] Build-time break

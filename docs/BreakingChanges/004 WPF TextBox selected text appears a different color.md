@@ -16,9 +16,9 @@ In .NET 4.5, when a WPF text box control is inactive (it doesn't have focus), th
 - [ ] Build-time break
 
 ### Recommended Action
-Previous (.NET 4.0) behavior may be restored by setting the <a href="https://msdn.microsoft.com/en-us/library/system.windows.frameworkcompatibilitypreferences.areinactiveselectionhighlightbrushkeyssupported(v=vs.110).aspx">FrameworkCompatibilityPreferences.AreInactiveSelectionHighlightBrushKeysSupported</a> property to false.
+Previous (.NET 4.0) behavior may be restored by setting the [FrameworkCompatibilityPreferences.AreInactiveSelectionHighlightBrushKeysSupported](https://msdn.microsoft.com/en-us/library/system.windows.frameworkcompatibilitypreferences.areinactiveselectionhighlightbrushkeyssupported(v=vs.110).aspx) property to false.
 
 ### Affected APIs
 * `T:System.Windows.Controls.TextBox`
 
-[More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#wpf)
+[More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wpf)
