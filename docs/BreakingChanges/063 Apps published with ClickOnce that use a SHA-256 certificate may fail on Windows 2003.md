@@ -9,6 +9,9 @@ Edge
 ### Version Reverted
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 The executable is signed with SHA256. Previously, it was signed with SHA1 regardless of whether the code-signing certificate was SHA-1 or SHA-256. This applies to: 
 
@@ -19,7 +22,6 @@ In addition, if the .NET Framework 4.5 or later is present, the ClickOnce manife
 
 - [ ] Quirked
 - [x] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 The change in signing the ClickOnce executable affects only Windows Server 2003 systems; they require that KB 938397 be installed. 

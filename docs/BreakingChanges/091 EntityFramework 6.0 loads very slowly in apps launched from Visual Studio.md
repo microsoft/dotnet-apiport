@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 Launching an app from Visual Studio 2013 that uses EntityFramework 6.0 can be very slow.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 This issue is fixed in EntityFramework 6.0.2. Please update EntityFramework to avoid the performance issue.

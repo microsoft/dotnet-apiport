@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5.1
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 EventListener truncates strings with embedded nulls. Null characters are not supported by the EventSource class. The change only affects apps that use EventListener to read EventSource data in process and that use null characters as delimiters.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 EventSource data should be updated, if possible, to not use embedded null characters.

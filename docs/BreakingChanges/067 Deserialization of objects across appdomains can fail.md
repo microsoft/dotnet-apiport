@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5.1
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 In some cases, when an app uses two or more app domains with different application bases, trying to deserialize objects in the logical call context across app domains throws an exception. 
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer planned
 
 ### Recommended Action
 See [Mitigation: Deserialization of Objects Across App Domains](https://msdn.microsoft.com/en-us/library/dn458353(v=vs.110).aspx)

@@ -6,12 +6,14 @@ Minor
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 If an assembly of compiled regular expressions is built with the .NET Framework 4.5 but targets the .NET Framework 4, attempting to use one of the regular expressions in that assembly on a system with .NET Framework 4 installed throws an exception.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 To work around this problem, you can do either of the following:

@@ -9,12 +9,14 @@ Major
 ### Version Reverted
 4.5.1
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 In some multi-threaded scenarios, `ConcurentQueue<T>.TryPeek` can return true, but populate the out parameter with a null value (instead of the correct, peeked value).
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 This issue is fixed in the .NET Framework 4.5.1. Upgrading to that Framework will solve the issue.

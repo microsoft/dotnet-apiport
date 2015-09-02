@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 The associated [ValueSerializer](https://msdn.microsoft.com/en-us/library/system.windows.markup.valueserializer(v=vs.110).aspx) object will convert a DateTime or DateTimeOffset object whose Second and Millisecond components are non-zero and (for a DateTime value) whose DateTime.Kind property is not Unspecified to property element syntax instead of a string. This change allows DateTime and DateTimeOffset values to be round-tripped. Custom XAML parsers that assume that input XAML is in the attribute syntax will not function correctly.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 This change allows DateTime and DateTimeOffset values to be round-tripped. Custom XAML parsers that assume that input XAML is in the attribute syntax will not function correctly.
@@ -24,5 +26,4 @@ This change allows DateTime and DateTimeOffset values to be round-tripped. Custo
 <!--
     ### Notes
     Will need to dig in a bit to figure out exactly what a repro for this looks like. Probably, identifying Literal<DateTime>/Literal<DateTimeOffset> usage will be sufficient to give an informational diagnostic.
-    Source analyzer status: Pri 3, Planned
 -->

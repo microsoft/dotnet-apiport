@@ -6,6 +6,9 @@ Minor
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 The behavior of DDL APIs when AttachDBFilename is specified has changed as follows: 
 * Connection strings need not specify an Initial Catalog value. Previously, both AttatchDBFilename and Initial Catalog were required.
@@ -15,7 +18,6 @@ The behavior of DDL APIs when AttachDBFilename is specified has changed as follo
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer available
 
 ### Recommended Action
 These changes make it easier to build tools and applications that use the DDL APIs. These changes can affect application compatibility in the following scenarios:

@@ -9,12 +9,14 @@ Major
 ### Version Reverted
 4.5
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 Changes in the XmlSerializer in .NET Framework 4.5 caused fields to be formatted differently in the serialized XML.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer planned
 
 ### Recommended Action
 This behavior was corrected in a servicing update of .NET Framework 4.5. Please update the .NET Framework 4.5, or upgrade to .NET Framework 4.5.1 or later, to fix this issue. Alternatively, the following config setting will revert to 4.0 XmlSerializer behavior:

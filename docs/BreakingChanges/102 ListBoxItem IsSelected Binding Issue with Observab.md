@@ -9,12 +9,14 @@ Minor
 ### Version Reverted
 4.6
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 Calling `ObservableCollection<T>.Move` on a collection bound to a ListBox with items selected can lead to erratic behavior with future selection or unselection of ListBox items
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 Calling `ObservableCollection<T>.Remove` and `ObservableCollection<T>.Insert` instead of `ObservableCollection<T>.Move` will work around this issue. Alternatively, this issue has been fixed in the .NET Framework 4.6 and may be addressed by upgrading to that version of the .NET Framework.

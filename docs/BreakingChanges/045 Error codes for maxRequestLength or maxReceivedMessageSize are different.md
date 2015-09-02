@@ -6,6 +6,9 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 Messages in WCF web services hosted in Internet Information Services (IIS) or ASP.NET Development Server that exceed maxRequestLength (in ASP.NET) or maxReceivedMessageSize (in WCF) have different error code
 
@@ -13,7 +16,6 @@ The HTTP status code has changed from 400 (Bad Request) to 413 (Request Entity T
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer planned
 
 ### Recommended Action
 This change facilitates debugging in cases where the message length exceeds the limits allowed by ASP.NET or WCF.

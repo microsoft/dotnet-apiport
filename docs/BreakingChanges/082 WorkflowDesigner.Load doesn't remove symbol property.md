@@ -9,12 +9,14 @@ Major
 ### Version Reverted
 4.5.2
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 When targeting the .NET Framework 4.5 in the workflow designer, and loading a re-hosted 3.5 workflow with the WorkflowDesigner.Load() method, a XamlDuplicateMemberException is thrown while saving the workflow.
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This bug only manifests when targeting .NET Framework 4.5 in the workflow designer, so it can be worked around by setting the `WorkflowDesignier.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName` to the 4.0 .NET Framework.

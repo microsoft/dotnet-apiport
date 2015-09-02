@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 For applications that target the .NET Framework 4.5, characters that are outside the Basic Multilingual Plane (BMP) round-trip correctly when they are passed to the WebUtility.HtmlDecode method.
 
 - [x] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This change should have no effect on current applications, but to restore the original behavior, set the targetFramework attribute of the `<httpRuntime>` element to a string other than "4.5". You can also set the `unicodeEncodingConformance` and `unicodeDecodingConformance` attributes of the `<webUtility>` configuration element to control this behavior independently of the targeted version of the .NET Framework.

@@ -9,12 +9,14 @@ Minor
 ### Version Reverted
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 In the .NET Framework 4.5, Type.IsAssignableFrom will incorrectly return `false` in all cases for some generic types with constraints.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This issue was fixed in a servicing update. Please update the .NET Framework 4.5, or upgrade to .NET Framework 4.5.1 or later, to fix this issue. Alternatively, avoid using IsAssignableFrom with generic types that have constraints on generic parameters. Reflection APIs can be used as a work-around.

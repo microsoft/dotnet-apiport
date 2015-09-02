@@ -6,12 +6,14 @@ Transparent
 ### Version Introduced
 4.5.1
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 In Windows Store apps, Windows Runtime stream adapters no longer call the FlushAsync method from the Dispose method. 
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer planned
 
 ### Recommended Action
 This change should be transparent. Developers can restore the previous behavior by writing code like this:

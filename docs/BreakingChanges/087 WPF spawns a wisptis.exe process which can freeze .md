@@ -9,12 +9,14 @@ Major
 ### Version Reverted
 4.6
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 An issue was introduced in 4.5.2 that causes `wisptis.exe` to be spawned that can freeze mouse input.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer planned
 
 ### Recommended Action
 A fix for this issue is available in a servicing release of the .NET Framework 4.5.2 (hotfix rollup 3026376), or by upgrading to the .NET Framework 4.6

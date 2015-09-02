@@ -9,12 +9,14 @@ Minor
 ### Version Reverted
 4.5
 
+### Source Analyzer Status
+Not planned
+
 ### Change Description
 Linq queries or enumerables that call 'Join' on Entity Framework entities can cause an `ArgumentOutOfRangeException` in .NET Framework 4.5
 
 - [ ] Quirked
 - [ ] Build-time break
-- [ ] Source analyzer planned
 
 ### Recommended Action
 This issue was fixed in a servicing update. Please update the .NET Framework 4.5, or upgrade to .NET Framework 4.5.1 or later, to fix this issue.

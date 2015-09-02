@@ -6,6 +6,9 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 The `Page.LoadComplete` event no longer causes the System.Web.UI.WebControls.EntityDataSource control to invoke data binding for changes to create/update/delete parameters. 
 This change eliminates an extraneous trip to the database, prevents the values of controls from being reset, and produces behavior that is consistent with other data controls, such as SqlDataSource and ObjectDataSource. 
@@ -13,7 +16,6 @@ This change produces different behavior in the unlikely event that applications 
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 TODO

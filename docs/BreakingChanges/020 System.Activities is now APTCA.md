@@ -6,12 +6,14 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 The assembly is marked with the AllowPartiallyTrustedCallersAttribute attribute.
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 Derived classes cannot be marked with the SecurityCriticalAttribute. Previously, derived types had to be marked with the SecurityCriticalAttribute. However, this change should have no real impact.

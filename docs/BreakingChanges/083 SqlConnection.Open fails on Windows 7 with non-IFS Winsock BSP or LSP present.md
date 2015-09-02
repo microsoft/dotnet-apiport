@@ -9,6 +9,9 @@ Minor
 ### Version Reverted
 4.5.2
 
+### Source Analyzer Status
+Planned
+
 ### Change Description
 SqlConneciton.Open and OpenAsync fail in the .NET Framework 4.5 if running on a Windows 7 machine with a non-IFS Winsock BSP or LSP are present on the computer.
 
@@ -16,7 +19,6 @@ To determine whether a non-IFS BSP or LSP is installed, use the `netsh WinSock S
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer planned
 
 ### Recommended Action
 This bug has been fixed in the .NET Framework 4.5.2, so it can be avoided by upgrading the .NET Framework. Alternatively, it can be avoided by removing any installed non-IFS Winsock LSPs.

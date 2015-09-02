@@ -6,6 +6,9 @@ Edge
 ### Version Introduced
 4.5
 
+### Source Analyzer Status
+Available
+
 ### Change Description
 Beginning in .NET 4.5, `Enumerable.Empty` always returns a cached internal instance `IEnumerable<T>`. 
 
@@ -13,7 +16,6 @@ Previously, `Enumerable.Empty` would cache an empty `IEnumerable<T>` at the time
 
 - [ ] Quirked
 - [ ] Build-time break
-- [x] Source analyzer available
 
 ### Recommended Action
 Because the previous behavior was non-deterministic, code is unlikely to depend on it. However, in the unlikely case that empty enumerables are being compared and expected to sometimes be unequal, explicit empty arrays should be created (`new T[0]`) instead of using `Enumerable.Empty`.
