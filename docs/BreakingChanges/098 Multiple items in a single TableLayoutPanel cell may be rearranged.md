@@ -10,7 +10,7 @@ Minor
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 In the .NET Framework 4.5, if multiple items are placed in the same TableLayoutPanel cell, they may be displayed in a different order than they were in the .NET Framework 4.0.
