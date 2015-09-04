@@ -27,6 +27,6 @@ Calls to `IMarshal` for the object return `E_NOINTERFACE`.
 Update marshaling code to work with non-reflection objects
 
 ### Affected APIs
-* TBD: Can we detect this?
+* Investigate applicable APIs
 
 [More information](https://msdn.microsoft.com/en-us/library/dn833125(v=vs.110).aspx#Core)

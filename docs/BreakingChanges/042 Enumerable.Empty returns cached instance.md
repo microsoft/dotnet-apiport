@@ -21,6 +21,6 @@ Previously, `Enumerable.Empty` would cache an empty `IEnumerable<T>` at the time
 Because the previous behavior was non-deterministic, code is unlikely to depend on it. However, in the unlikely case that empty enumerables are being compared and expected to sometimes be unequal, explicit empty arrays should be created (`new T[0]`) instead of using `Enumerable.Empty`.
 
 ### Affected APIs
-* ``M:System.Linq.Enumerable.Empty`1``
+* ```M:System.Linq.Enumerable.Empty``1```
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#sql)
