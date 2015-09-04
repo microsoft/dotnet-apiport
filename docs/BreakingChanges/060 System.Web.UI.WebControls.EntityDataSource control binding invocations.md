@@ -21,7 +21,7 @@ This change produces different behavior in the unlikely event that applications 
 TODO
 
 ### Affected APIs
-* Not detectable via API analysis - API NOT IN DATABASE
+* Investigate applicable APIs
 
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#asp)
 

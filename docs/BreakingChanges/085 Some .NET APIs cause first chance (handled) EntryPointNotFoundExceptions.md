@@ -27,6 +27,6 @@ This bug can be avoided by upgrading to .NET Framework 4.5.1. Alternatively, tes
 * `M:System.Diagnostics.Debug.Assert(System.Boolean,System.String,System.String)`
 * `M:System.Diagnostics.Debug.Assert(System.Boolean,System.String,System.String,System.Object[])`
 * `M:System.Xml.Serialization.XmlSerializer.#ctor(System.Type)`
-* TBD: Are there more?
+* Investigate applicable APIs
 
 [More information](https://connect.microsoft.com/VisualStudio/feedback/details/732334/unable-to-find-an-entry-point-named-getcurrentpackageid-in-dll-kernel32-dll)
