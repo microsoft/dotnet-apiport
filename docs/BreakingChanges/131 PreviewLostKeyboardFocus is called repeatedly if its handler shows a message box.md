@@ -7,7 +7,7 @@ Edge
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 Beginning in the .NET Framework 4.5, calling `System.Windows.Forms.MessageBox.Show` from a `UIElement.PreviewLostKeyboardFocus`

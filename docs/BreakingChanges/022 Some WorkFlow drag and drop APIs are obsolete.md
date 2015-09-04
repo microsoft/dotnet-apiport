@@ -7,7 +7,7 @@ Minor
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 This WorkFlow Drag/Drop API is obsolete and will cause compiler warnings if the app is rebuilt against 4.5.
