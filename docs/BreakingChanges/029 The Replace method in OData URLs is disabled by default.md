@@ -7,7 +7,7 @@ Edge
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 Beginning in the .NET Framework 4.5, the Replace method in OData URLs is disabled by default. When OData Replace is disabled (now by default), any user requests including replace functions (which are uncommon) will fail.
@@ -21,4 +21,4 @@ If the replace method is required (which is uncommon), it can be re-enabled thro
 ### Affected APIs
 * ``T:System.Data.Services.DataService`1``
 
-[More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#wcf)
+[More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wcf)
