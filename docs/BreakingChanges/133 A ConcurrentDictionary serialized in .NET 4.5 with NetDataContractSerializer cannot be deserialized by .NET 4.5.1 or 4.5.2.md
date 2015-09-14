@@ -10,7 +10,7 @@ Minor
 4.6
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 Due to internal changes to the type, `System.Collections.Concurrent.ConcurrentDictionary` objects that are serialized with the .NET Framework 4.5
