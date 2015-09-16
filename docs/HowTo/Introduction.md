@@ -77,7 +77,7 @@ look [here](BreakingChanges.md).
 For example, to analyze `foo.dll` against `.NET Core` to get an HTML report, the following command would be run:
 
 ```
-ApiPort.exe analyze -f foo.dll -t ".NET CORE, Version=5.0 -r HTML"
+ApiPort.exe analyze -f foo.dll -t ".NET CORE, Version=5.0" -r HTML
 ```
 
 ### List targets
