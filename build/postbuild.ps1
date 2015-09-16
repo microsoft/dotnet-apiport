@@ -11,7 +11,7 @@ $nuget = & "$root\Get-Nuget.ps1"
 
 if(!$src)
 {
-	$src = "$root\..\bin"
+	$src = "$root\..\bin\$configuration"
 }
 
 [object[]]$nuspecs = Get-ChildItem $root -Filter *.nuspec `
@@ -22,7 +22,7 @@ $count = 0
 foreach($nuspec in $nuspecs)
 {
 	Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$($nuspec.Name)" -PercentComplete ($count / $nuspecs.Count * 100)
-	$bin = [System.IO.Path]::Combine($src, $configuration, $nuspec.Name)
+	$bin = Join-Path $src $nuspec.Name
 	
 	if(!(Test-Path $bin))
 	{
