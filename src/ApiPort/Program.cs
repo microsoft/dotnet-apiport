@@ -27,6 +27,8 @@ namespace ApiPort
                 return -1;
             }
 
+            Console.WriteLine();
+
             using (var container = DependencyBuilder.Build(options, productInformation))
             {
                 var progressReport = container.Resolve<IProgressReporter>();
