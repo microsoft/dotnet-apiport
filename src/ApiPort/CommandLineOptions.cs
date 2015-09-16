@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPort.CommandLine;
+using ApiPort.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace ApiPort
         private static IDictionary<string, Func<string, CommandLineOptionSet>> s_possibleCommands = new Dictionary<string, Func<string, CommandLineOptionSet>>(StringComparer.OrdinalIgnoreCase)
         {
             {"analyze", name => new AnalyzeOptionSet(name) },
-            {"listOutputFormats", name => new  ServiceEndpointOptionSet(name, AppCommands.ListOutputFormats) },
-            {"listTargets", name => new  ServiceEndpointOptionSet(name, AppCommands.ListTargets) },
+            {"listOutputFormats", name => new  ServiceEndpointOptionSet(name, AppCommands.ListOutputFormats, LocalizedStrings.CmdListOutputFormats) },
+            {"listTargets", name => new  ServiceEndpointOptionSet(name, AppCommands.ListTargets, LocalizedStrings.CmdListTargets) },
         };
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
@@ -47,11 +48,11 @@ namespace ApiPort
                 Console.WriteLine();
             }
 
-            Console.WriteLine("Available Commands:");
-
             foreach (var command in s_possibleCommands)
             {
-                Console.WriteLine($"- {command.Key}");
+                Console.WriteLine();
+                Console.WriteLine(new string('=', Math.Min(Console.WindowWidth, 100)));
+                command.Value(command.Key).Parse(new[] { "-?" });
             }
 
             return CommandLineOptionSet.ExitCommandLineOption;

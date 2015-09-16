@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace ApiPort.CommandLine
 {
@@ -35,15 +36,18 @@ namespace ApiPort.CommandLine
             ".ildll"
         };
 
-        public CommandLineOptionSet(string name)
+        public CommandLineOptionSet(string name, string summaryMessage)
         {
             _name = name;
 
+            SummaryMessage = summaryMessage;
             ServiceEndpoint = "http://portability.cloudapp.net";
             Description = string.Empty;
             OutputFileName = "ApiPortAnalysis";
             RequestFlags = AnalyzeRequestFlags.None;
         }
+
+        public string SummaryMessage { get; }
 
         public void Add(string prototype, string description, Action<string> action, bool isRequired)
         {
@@ -70,7 +74,12 @@ namespace ApiPort.CommandLine
 
             if (ShowHelp || !ValidateValues())
             {
-                Console.WriteLine($"Available options for {_name}:");
+                var codebase = new Uri(this.GetType().GetTypeInfo().Assembly.CodeBase);
+                var path = Path.GetFileName(codebase.AbsolutePath);
+
+                Console.WriteLine($"{path} {_name} [options]");
+                Console.WriteLine();
+                Console.WriteLine(SummaryMessage);
                 Console.WriteLine();
 
                 WriteOptionDescriptions(Console.Out);

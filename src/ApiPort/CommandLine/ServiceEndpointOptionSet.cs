@@ -5,8 +5,8 @@ namespace ApiPort.CommandLine
 {
     internal class ServiceEndpointOptionSet : CommandLineOptionSet
     {
-        public ServiceEndpointOptionSet(string name, AppCommands appCommand)
-            : base(name)
+        public ServiceEndpointOptionSet(string name, AppCommands appCommand, string summaryMessage)
+            : base(name, summaryMessage)
         {
             Command = appCommand;
 
