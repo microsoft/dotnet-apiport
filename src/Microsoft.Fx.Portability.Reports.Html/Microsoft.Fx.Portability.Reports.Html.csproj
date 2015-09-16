@@ -18,22 +18,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\net46\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\net46\Microsoft.Fx.Portability.Reports.Html.xml</DocumentationFile>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\net46\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\net46\Microsoft.Fx.Portability.Reports.Html.xml</DocumentationFile>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+	<NugetTarget>net46</NugetTarget>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

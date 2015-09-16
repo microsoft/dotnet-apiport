@@ -22,22 +22,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\dotnet</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\dotnet\Microsoft.Fx.Portability.xml</DocumentationFile>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\dotnet</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\dotnet\Microsoft.Fx.Portability.xml</DocumentationFile>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+	<NugetTarget>dotnet</NugetTarget>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
