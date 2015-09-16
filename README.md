@@ -5,6 +5,9 @@ and dependencies. This is a work in progress, and does not currently contain
 all of the components that we plan on open sourcing. Make sure to watch this
 repository in order to be notified as we make changes to and expand it.
 
+## Usage
+To use this tool, please refer to the [documentation](docs/HowTo/Introduction.md).
+
 ## Projects
 
 Today, the repository contains the following components:
