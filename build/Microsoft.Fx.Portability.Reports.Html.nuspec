@@ -14,7 +14,7 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
-      <dependency id="Microsoft.Fx.Portability" version="1.0.0-alpha" />
+      <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
       <dependency id="MarkdownDeep.NET-Signed" version="1.5" />
       <dependency id="RazorEngine" version="3.6.1" />
     </dependencies>
