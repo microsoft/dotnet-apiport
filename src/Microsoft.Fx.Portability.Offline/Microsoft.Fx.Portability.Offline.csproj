@@ -78,9 +78,11 @@
   </Target>
   <Target Name="AfterBuild">
     <!-- Copy breaking changes for use by Microsoft.FX.Portability.Offline at runtime -->
-    <ItemGroup>
+    <!-- Disable due to long path issues for now
+	<ItemGroup>
       <BreakingChanges Include="@(EmbeddedResource)" Condition="'%(EmbeddedResource.BreakingChange)'=='true'" />
     </ItemGroup>
     <Copy SourceFiles="@(BreakingChanges)" DestinationFolder="$(OutputPath)\BreakingChanges" SkipUnchangedFiles="true" />
+	-->
   </Target>
 </Project>
