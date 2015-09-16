@@ -10,7 +10,7 @@ namespace ApiPort.CommandLine
     internal class AnalyzeOptionSet : ServiceEndpointOptionSet
     {
         public AnalyzeOptionSet(string name)
-            : base(name, AppCommands.AnalyzeAssemblies)
+            : base(name, AppCommands.AnalyzeAssemblies, LocalizedStrings.CmdAnalyzeHelp)
         {
             Add("f|file=", LocalizedStrings.ListOfAssembliesToAnalyze, UpdateInputAssemblies, true);
             Add("o|out=", LocalizedStrings.OutputFileName, e => OutputFileName = e);

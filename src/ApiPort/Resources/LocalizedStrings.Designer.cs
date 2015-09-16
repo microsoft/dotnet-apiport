@@ -106,6 +106,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed for portability concerns or known breaking changes (depending on input parameters) and returns a report that gives a summary of issues and possible steps forward..
+        /// </summary>
+        public static string CmdAnalyzeHelp {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
         /// </summary>
         public static string CmdHelpIgnoreAssembliesFile {
@@ -151,6 +160,24 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retrieves a list of output formats that are available in which to receive reports.
+        /// </summary>
+        public static string CmdListOutputFormats {
+            get {
+                return ResourceManager.GetString("CmdListOutputFormats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retrieves a list of targets available to analyze assemblies against.
+        /// </summary>
+        public static string CmdListTargets {
+            get {
+                return ResourceManager.GetString("CmdListTargets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {
@@ -172,8 +199,9 @@ namespace ApiPort.Resources {
         ///   Looks up a localized string similar to Microsoft (R) {0} v{1}
         ///Copyright (C) Microsoft Corporation. All rights reserved.
         ///
-        ///To learn more about how this tool works, including the data we are collecting, go here - http://go.microsoft.com/fwlink/?LinkId=397652
-        ///.
+        ///This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
+        ///
+        ///To learn more about how this tool works, including the data we are collecting, go here - http://go.microsoft.com/fwlink/?LinkId=397652.
         /// </summary>
         public static string Header {
             get {
