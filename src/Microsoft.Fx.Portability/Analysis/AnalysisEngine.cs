@@ -209,7 +209,11 @@ namespace Microsoft.Fx.Portability.Analysis
             return new System.Reflection.AssemblyName(assemblyIdentity)
             {
                 Version = null,
+#if NET45
+                CultureInfo = null
+#else
                 CultureName = null
+#endif
             }.ToString();
         }
 

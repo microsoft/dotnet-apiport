@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Fx.Portability.Reports</RootNamespace>
     <AssemblyName>Microsoft.Fx.Portability.Reports.Html</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -18,22 +18,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\net46\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\net46\Microsoft.Fx.Portability.Reports.Html.xml</DocumentationFile>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\net46\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\net46\Microsoft.Fx.Portability.Reports.Html.xml</DocumentationFile>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NugetTarget>net45</NugetTarget>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -86,11 +85,10 @@
     <EmbeddedResource Include="Resources\_Styles.cshtml" />
     <EmbeddedResource Include="Resources\_BreakingChangesReport.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
-      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
-      <Name>Microsoft.Fx.Portability</Name>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.NET45\Microsoft.Fx.Portability.NET45.csproj">
+      <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
+      <Name>Microsoft.Fx.Portability.NET45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

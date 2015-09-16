@@ -14,6 +14,9 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
+      <group targetFramework="net45">
+        <dependency id="Newtonsoft.Json" version="6.0.8" />
+      </group>
       <group targetFramework="dotnet">
         <dependency id="Newtonsoft.Json" version="6.0.8" />
         <dependency id="System.Collections" version="4.0.10" />
@@ -45,5 +48,8 @@
     <file src="dotnet\Microsoft.Fx.Portability.dll" target="lib\dotnet" />
     <file src="dotnet\Microsoft.Fx.Portability.pdb" target="lib\dotnet" />
     <file src="dotnet\Microsoft.Fx.Portability.xml" target="lib\dotnet" />
+    <file src="net45\Microsoft.Fx.Portability.dll" target="lib\net45" />
+    <file src="net45\Microsoft.Fx.Portability.pdb" target="lib\net45" />
+    <file src="net45\Microsoft.Fx.Portability.xml" target="lib\net45" />
   </files>
 </package>

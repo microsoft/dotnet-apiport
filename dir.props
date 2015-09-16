@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+	<OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
+	<OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)\bin\$(Configuration)\</OutputDrop>
+    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+	<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup Condition="'$(OutputType)' == 'Exe'">
     <FilesToSign Include="$(OutDir)\$(AssemblyName).exe">
