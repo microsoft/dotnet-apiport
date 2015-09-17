@@ -11,5 +11,7 @@ namespace ApiPort
 #if DOCID_SEARCH
         DocIdSearch
 #endif
+        Help,
+        Exit
     }
 }

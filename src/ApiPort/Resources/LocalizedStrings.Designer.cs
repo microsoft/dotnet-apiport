@@ -106,7 +106,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed for portability concerns or known breaking changes (depending on input parameters) and returns a report that gives a summary of issues and possible steps forward..
+        ///   Looks up a localized string similar to Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed 
+        ///for portability concerns or known breaking changes (depending on input parameters) and returns a report that 
+        ///gives a summary of issues and possible steps forward.
+        ///
+        ///  -e, --endpoint=VALUE       Service endpoint
+        ///  -f, --file=VALUE           [Required] Path to assembly file or directory of
+        ///                               assemblies.
+        ///  -o, --out=VALUE            Output file name
+        ///  -d, --descr [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CmdAnalyzeHelp {
             get {
@@ -160,7 +168,10 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retrieves a list of output formats that are available in which to receive reports.
+        ///   Looks up a localized string similar to Retrieves a list of output formats that are available in which to receive reports
+        ///
+        ///  -e, --endpoint=VALUE       Service endpoint
+        ///  -h, -?, --help             Show help.
         /// </summary>
         public static string CmdListOutputFormats {
             get {
@@ -169,7 +180,10 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retrieves a list of targets available to analyze assemblies against.
+        ///   Looks up a localized string similar to Retrieves a list of targets available to analyze assemblies against
+        ///
+        ///  -e, --endpoint=VALUE       Service endpoint
+        ///  -h, -?, --help             Show help.
         /// </summary>
         public static string CmdListTargets {
             get {
@@ -199,9 +213,11 @@ namespace ApiPort.Resources {
         ///   Looks up a localized string similar to Microsoft (R) {0} v{1}
         ///Copyright (C) Microsoft Corporation. All rights reserved.
         ///
-        ///This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
+        ///This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as
+        ///Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
         ///
-        ///To learn more about how this tool works, including the data we are collecting, go here - http://go.microsoft.com/fwlink/?LinkId=397652.
+        ///To learn more about how this tool works, including the data we are collecting, 
+        ///go here - http://go.microsoft.com/fwlink/?LinkId=397652.
         /// </summary>
         public static string Header {
             get {

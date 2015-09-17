@@ -75,7 +75,7 @@ namespace ApiPort
         {
             var options = container.Resolve<ICommandLineOptions>();
 
-            if (options.OutputFormats.Any())
+            if (options.OutputFormats?.Any() == true)
             {
                 return options;
             }

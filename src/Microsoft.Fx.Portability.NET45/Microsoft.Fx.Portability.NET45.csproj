@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Microsoft.Fx.Portability\Targets.xsd" />
+    <EmbeddedResource Include="..\Microsoft.Fx.Portability\Targets.xsd">
+	  <Link>Targets.xsd</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Microsoft.Fx.Portability\AliasMappedToMultipleNamesException.cs" />
@@ -123,11 +125,7 @@
     <Compile Include="..\Microsoft.Fx.Portability\Reporting\ReportFileWriter.cs" />
     <Compile Include="..\Microsoft.Fx.Portability\Reporting\ReportGenerator.cs" />
     <Compile Include="..\Microsoft.Fx.Portability\Reporting\WindowsFileSystem.cs" />
-    <Compile Include="..\Microsoft.Fx.Portability\Resources\LocalizedStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LocalizedStrings.resx</DependentUpon>
-    </Compile>
+    <Compile Include="..\Microsoft.Fx.Portability\Resources\LocalizedStrings.Designer.cs" />
     <Compile Include="..\Microsoft.Fx.Portability\ResultFormatInformation.cs" />
     <Compile Include="..\Microsoft.Fx.Portability\ServiceHeaders.cs" />
     <Compile Include="..\Microsoft.Fx.Portability\ServiceResponse.cs" />
@@ -152,8 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Microsoft.Fx.Portability\Resources\LocalizedStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+	  <Link>Resources\LocalizedStrings.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
