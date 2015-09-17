@@ -21,9 +21,8 @@ namespace ApiPort
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            if (options == null)
+            if (options.Command == AppCommands.Exit)
             {
-                // we could not parse the options. nothing to do.
                 return -1;
             }
 

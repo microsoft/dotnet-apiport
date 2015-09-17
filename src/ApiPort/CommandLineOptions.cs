@@ -2,21 +2,25 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPort.CommandLine;
-using ApiPort.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace ApiPort
 {
-    internal class CommandLineOptions
+    internal abstract class CommandLineOptions
     {
-        private static IDictionary<string, Func<string, CommandLineOptionSet>> s_possibleCommands = new Dictionary<string, Func<string, CommandLineOptionSet>>(StringComparer.OrdinalIgnoreCase)
-        {
-            {"analyze", name => new AnalyzeOptionSet(name) },
-            {"listOutputFormats", name => new  ServiceEndpointOptionSet(name, AppCommands.ListOutputFormats, LocalizedStrings.CmdListOutputFormats) },
-            {"listTargets", name => new  ServiceEndpointOptionSet(name, AppCommands.ListTargets, LocalizedStrings.CmdListTargets) },
-        };
+        public abstract string Name { get; }
+
+        public abstract string HelpMessage { get; }
+
+        public abstract ICommandLineOptions Parse(IEnumerable<string> args);
+
+        private static IDictionary<string, CommandLineOptions> s_possibleCommands =
+            new CommandLineOptions[] { new AnalyzeOptions(), new ListTargetsOptions(), new ListOutputFormatOptions() }
+            .ToDictionary(o => o.Name, o => o, StringComparer.OrdinalIgnoreCase);
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
@@ -30,32 +34,57 @@ namespace ApiPort
             try
             {
                 var option = s_possibleCommands.Single(c => c.Key.StartsWith(inputCommand, StringComparison.OrdinalIgnoreCase));
-                var parser = option.Value(option.Key);
+                var output = option.Value.Parse(args.Skip(1));
 
-                return parser.Parse(args.Skip(1));
+                if (output.Command == AppCommands.Help)
+                {
+                    ShowHelp(inputCommand);
+
+                    return CommonCommands.Exit;
+                }
+
+                return output;
+            }
+            catch (FormatException)
+            {
+                return ShowHelp(inputCommand, true);
             }
             catch (InvalidOperationException)
             {
-                return ShowHelp(args[0]);
+                return ShowHelp(inputCommand, true);
             }
         }
 
-        private static ICommandLineOptions ShowHelp(string suppliedCommand = null)
+        private static ICommandLineOptions ShowHelp(string suppliedCommand = null, bool error = false)
         {
-            if (!string.IsNullOrEmpty(suppliedCommand))
+            var command = s_possibleCommands.Select(c => c.Value).FirstOrDefault(c => string.Equals(c.Name, suppliedCommand, StringComparison.OrdinalIgnoreCase));
+
+            if (command == null)
             {
-                Program.WriteColorLine($"Unknown command: {suppliedCommand}", ConsoleColor.Yellow);
                 Console.WriteLine();
+                Program.WriteColorLine($"Unknown command: {suppliedCommand}", ConsoleColor.Red);
+            }
+            else if (error)
+            {
+                Console.WriteLine();
+                // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
+                Program.WriteColorLine($"Invalid parameter passed to {suppliedCommand}", ConsoleColor.Red);
             }
 
-            foreach (var command in s_possibleCommands)
+            var codebase = new Uri(typeof(CommandLineOptions).GetTypeInfo().Assembly.CodeBase);
+            var path = Path.GetFileName(codebase.AbsolutePath);
+
+            var displayCommands = command == null ? s_possibleCommands.Select(c => c.Value) : new[] { command };
+            foreach (var displayCommand in displayCommands)
             {
                 Console.WriteLine();
                 Console.WriteLine(new string('=', Math.Min(Console.WindowWidth, 100)));
-                command.Value(command.Key).Parse(new[] { "-?" });
+                Program.WriteColorLine($"{path} {displayCommand.Name} [options]", ConsoleColor.Yellow);
+                Console.WriteLine();
+                Console.WriteLine(displayCommand.HelpMessage);
             }
 
-            return CommandLineOptionSet.ExitCommandLineOption;
+            return CommonCommands.Exit;
         }
-    }
+   }
 }
