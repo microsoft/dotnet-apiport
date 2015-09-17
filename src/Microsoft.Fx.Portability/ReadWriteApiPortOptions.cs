@@ -28,24 +28,24 @@ namespace Microsoft.Fx.Portability
             OutputFileName = other.OutputFileName;
         }
 
-        public IEnumerable<string> BreakingChangeSuppressions { get; set; }
+        public virtual IEnumerable<string> BreakingChangeSuppressions { get; set; }
 
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
-        public IEnumerable<string> IgnoredAssemblyFiles { get; set; }
+        public virtual IEnumerable<string> IgnoredAssemblyFiles { get; set; }
 
-        public IEnumerable<FileInfo> InputAssemblies { get; set; }
+        public virtual IEnumerable<FileInfo> InputAssemblies { get; set; }
 
-        public IEnumerable<string> InvalidInputFiles { get; set; }
+        public virtual IEnumerable<string> InvalidInputFiles { get; set; }
 
-        public string OutputFileName { get; set; }
+        public virtual string OutputFileName { get; set; }
 
-        public IEnumerable<string> OutputFormats { get; set; }
+        public virtual IEnumerable<string> OutputFormats { get; set; }
 
-        public AnalyzeRequestFlags RequestFlags { get; set; }
+        public virtual AnalyzeRequestFlags RequestFlags { get; set; }
 
-        public string ServiceEndpoint { get; set; }
+        public virtual string ServiceEndpoint { get; set; }
 
-        public IEnumerable<string> Targets { get; set; }
+        public virtual IEnumerable<string> Targets { get; set; }
     }
 }
