@@ -59,7 +59,7 @@ namespace ApiPort
         {
             var command = s_possibleCommands.Select(c => c.Value).FirstOrDefault(c => string.Equals(c.Name, suppliedCommand, StringComparison.OrdinalIgnoreCase));
 
-            if (command == null)
+            if (!string.IsNullOrEmpty(suppliedCommand) && command == null)
             {
                 Console.WriteLine();
                 Program.WriteColorLine($"Unknown command: {suppliedCommand}", ConsoleColor.Red);

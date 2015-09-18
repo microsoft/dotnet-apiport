@@ -42,7 +42,7 @@ namespace ApiPort.CommandLine
         private class Options
         {
             public string Endpoint { get; set; }
-            public List<string> File { get; set; }
+            public List<string> File { get; set; } = new List<string>();
             public string Out { get; set; }
             public string Description { get; set; }
             public List<string> Target { get; set; }
