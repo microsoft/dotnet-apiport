@@ -44,12 +44,14 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <DataPath>$(MSBuildThisFileDirectory)data\</DataPath>
+    <DataPath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\.data\</DataPath>
     <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\docs\BreakingChanges\</BreakingChangePath>
     <CatalogDataFile>$(DataPath)catalog.bin</CatalogDataFile>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(CatalogDataFile)" />
+    <EmbeddedResource Include="$(CatalogDataFile)" Condition="Exists($(CatalogDataFile))">
+	  <Link>data\catalog.bin</Link>
+	</EmbeddedResource>
     <EmbeddedResource Include="$(BreakingChangePath)*.md">
       <Link>data\%(Filename)%(Extension)</Link>
       <BreakingChange>true</BreakingChange>
@@ -72,7 +74,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
-    <Exec Command="powershell.exe -noprofile -noninteractive -ExecutionPolicy unrestricted -file $(MSBuildThisFileDirectory)download.ps1 $(CatalogDataFile)" />
+	<Warning Text="Could not find catalog.bin. Please run build\restore.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
   </Target>
   <Target Name="BeforeBuild">
   </Target>
