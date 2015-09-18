@@ -86,7 +86,11 @@ namespace Microsoft.Fx.Portability
 
         private static string GetCurrentDirectoryName()
         {
+#if NET45
+            return Path.GetDirectoryName(typeof(Data).Assembly.Location);
+#else
             return Path.GetDirectoryName(AppContext.BaseDirectory);
+#endif
         }
 
         private static IEnumerable<BreakingChange> ParseBreakingChange(Stream stream, string extension)

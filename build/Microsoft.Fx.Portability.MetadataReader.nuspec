@@ -14,6 +14,12 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
+      <group targetFramework="net45">
+        <dependency id="Newtonsoft.Json" version="6.0.8" />
+        <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
+        <dependency id="System.Reflection.Metadata" version="1.1.0-alpha-00008" />
+        <dependency id="System.Collections.Immutable" version="1.1.37" />
+      </group>
       <group targetFramework="dotnet">
         <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
         <dependency id="System.Collections" version="4.0.10" />
@@ -42,5 +48,8 @@
     <file src="dotnet\Microsoft.Fx.Portability.MetadataReader.dll" target="lib\dotnet" />
     <file src="dotnet\Microsoft.Fx.Portability.MetadataReader.pdb" target="lib\dotnet" />
     <file src="dotnet\Microsoft.Fx.Portability.MetadataReader.xml" target="lib\dotnet" />
+    <file src="net45\Microsoft.Fx.Portability.MetadataReader.dll" target="lib\net45" />
+    <file src="net45\Microsoft.Fx.Portability.MetadataReader.pdb" target="lib\net45" />
+    <file src="net45\Microsoft.Fx.Portability.MetadataReader.xml" target="lib\net45" />
   </files>
 </package>
