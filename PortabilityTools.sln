@@ -55,7 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FEEF35CB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microsoft.Fx.Portability", "Microsoft.Fx.Portability", "{B9904E6F-3852-4657-8415-AEEA9CAAF1CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.NET45", "src\Microsoft.Fx.Portability.NET45\Microsoft.Fx.Portability.NET45.csproj", "{18419457-1176-4989-8358-2024AB5B7085}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.NET45", "src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj", "{18419457-1176-4989-8358-2024AB5B7085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
