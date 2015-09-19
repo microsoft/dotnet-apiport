@@ -1,0 +1,8 @@
+﻿{
+  "dependencies": {
+    "Newtonsoft.Json": "6.0.8"
+  },
+  "frameworks": {
+    "net45": { }
+  }
+}

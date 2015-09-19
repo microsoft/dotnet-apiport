@@ -1,22 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A2EAD0F-FF3E-4968-A865-7B29C4B10A72}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C14486AC-22BE-480C-8235-2479C6C8F3FF}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ApiPort</RootNamespace>
-    <AssemblyName>ApiPort</AssemblyName>
+    <RootNamespace>Microsoft.Fx.Portability.MetadataReader</RootNamespace>
+    <AssemblyName>Microsoft.Fx.Portability.MetadataReader</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,82 +23,71 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)</OutputPath>
+    <NugetTarget>net45</NugetTarget>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCommands.cs" />
-    <Compile Include="CommandLineOptions.cs" />
-    <Compile Include="CommandLine\AnalyzeOptions.cs" />
-    <Compile Include="CommandLine\ApiPortConfiguration.cs" />
-    <Compile Include="CommandLine\CommonCommands.cs" />
-    <Compile Include="CommandLine\ConsoleDefaultApiPortOptions.cs" />
-    <Compile Include="CommandLine\ServiceEndpointOptions.cs" />
-    <Compile Include="ConsoleApiPort.cs" />
-    <Compile Include="DependencyBuilder.cs" />
-    <Compile Include="EmptyDependencyFinder.cs" />
-    <Compile Include="FileOutputApiPortService.cs" />
-    <Compile Include="ICommandLineOptions.cs" />
-    <Compile Include="Program.cs" />
+    <None Include="Microsoft.Fx.Portability.MetadataReader.NET45.project.json" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MetadataReaderExtensions.cs" />
+    <Compile Include="MethodSignatureExtensions.cs" />
+    <Compile Include="ReflectionMetadataDependencyFinder.cs" />
+    <Compile Include="ReflectionMetadataDependencyInfo.cs" />
+    <Compile Include="DependencyFinderEngineHelper.cs" />
+    <Compile Include="MemberDependency.cs" />
+    <Compile Include="MemberKind.cs" />
+    <Compile Include="MemberMetadataInfo.cs" />
+    <Compile Include="MemberMetadataInfoTypeProvider.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LocalizedStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="ConsoleProgressReporter.cs" />
+    <Compile Include="StringParameterValueTypeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.NET45.csproj">
-      <Project>{c14486ac-22be-480c-8235-2479c6c8f3ff}</Project>
-      <Name>Microsoft.Fx.Portability.MetadataReader.NET45</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Microsoft.Fx.Portability.Analyzer.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
       <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
       <Name>Microsoft.Fx.Portability.NET45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <BinPlaceContent Include=".\Assets\KnownSafeBreaks.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Properties\version.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
   </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

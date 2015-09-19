@@ -33,7 +33,7 @@ More projects are coming soon. Stay tuned!
 ## Using this Repository
 
 * **Required** Install [Visual Studio 2015](http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
-* **Required** Windows 10 Tools (install via the Visual Studio 2015 installer). The [new style PCL format](http://blog.nuget.org/20150729/Introducing-nuget-uwp.html) will not work without this
+* **Required** Windows 10 Tools 1.1 (install via the Visual Studio 2015 installer). The [new style PCL format](http://blog.nuget.org/20150729/Introducing-nuget-uwp.html) will not work without this. [v3.2 of NuGet](https://docs.nuget.org/release-notes/nuget-3.2) is required.
 
 ## How to Engage, Contribute and Provide Feedback
 

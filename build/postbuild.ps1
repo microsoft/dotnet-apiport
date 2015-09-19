@@ -72,3 +72,5 @@ foreach($nuspec in $nuspecs)
 }
 
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
+
+Copy-Item "$PSScriptRoot\..\.data" "$src\data" -Recurse -Force
