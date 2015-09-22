@@ -31,6 +31,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <NugetTarget>net45</NugetTarget>
+	<IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>

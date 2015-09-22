@@ -35,6 +35,7 @@
   </PropertyGroup>
   <PropertyGroup>
 	<NugetTarget>dotnet</NugetTarget>
+	<IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
