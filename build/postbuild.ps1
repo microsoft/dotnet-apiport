@@ -6,12 +6,12 @@ param(
 )
 
 $root = $PSScriptRoot
-$src = $env:TF_BUILD_BINARIESDIRECTORY 
+$drop = $env:TF_BUILD_BINARIESDIRECTORY 
 $nuget = & "$root\Get-Nuget.ps1"
 
-if(!$src)
+if(!$drop)
 {
-	$src = "$root\..\bin\$configuration"
+	$drop = "$root\..\bin\$configuration"
 }
 
 [object[]]$nuspecs = Get-ChildItem $root -Filter *.nuspec `
@@ -22,7 +22,7 @@ $count = 0
 foreach($nuspec in $nuspecs)
 {
 	Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$($nuspec.Name)" -PercentComplete ($count / $nuspecs.Count * 100)
-	$bin = Join-Path $src $nuspec.Name
+	$bin = Join-Path $drop $nuspec.Name
 	
 	if(!(Test-Path $bin))
 	{
@@ -71,6 +71,19 @@ foreach($nuspec in $nuspecs)
 	$count++
 }
 
+function CopyOfflineMode()
+{
+	$offlineDrop = "$drop\ApiPort.Offline"
+	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
+	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
+
+	copy $drop\ApiPort\* $offlineDrop
+	copy $drop\Microsoft.Fx.Portability.Offline\net45\* $offlineDrop
+	copy $drop\Microsoft.Fx.Portability.Reports.Json\net45\* $offlineDrop
+	copy $drop\Microsoft.Fx.Portability.Reports.Html\net45\* $offlineDrop
+}
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
 
-Copy-Item "$PSScriptRoot\..\.data" "$src\data" -Recurse -Force
+Copy-Item "$PSScriptRoot\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Offline -Recurse -Force
+
+CopyOfflineMode
