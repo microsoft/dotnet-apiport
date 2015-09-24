@@ -29,4 +29,4 @@ function DownloadFile($url, $outputPath) {
 	}
 }
 
-DownloadFile "https://portabilitystorage.blob.core.windows.net/data/public%2Fcatalog.bin?sr=b&sv=2015-02-21&si=ReadPublicCatalog&sig=r0Q61Nm4ZAqXYbWIg76%2BYw4VGsw9%2BdWuN%2FeHJYHJguw%3D" $catalogPath
+DownloadFile "https://portabilitystorage.blob.core.windows.net/catalog/catalog.bin?sr=c&sv=2015-02-21&si=ReadCatalog&sig=8tOHoX2ZvcSFLol0GI6lxmydNPJbnJdHNLKr06aD7t4%3D" $catalogPath
