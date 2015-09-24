@@ -60,8 +60,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             "Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
             "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "Microsoft.Fx.Portability, Version=1.1.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
-            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
+            "Microsoft.Fx.Portability, Version=1.1.1.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
+            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.1.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
             "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
             "System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
