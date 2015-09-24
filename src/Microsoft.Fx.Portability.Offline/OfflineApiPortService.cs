@@ -34,7 +34,8 @@ namespace Microsoft.Fx.Portability
         {
             var targets = _lookup
                 .GetPublicTargets()
-                .Select(target => new AvailableTarget { Name = target.Identifier, Version = target.Version, IsSet = _defaultTargets.Contains(target) });
+                .Select(target => new AvailableTarget { Name = target.Identifier, Version = target.Version, IsSet = _defaultTargets.Contains(target) })
+				.OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase);
 
             var response = new ServiceResponse<IEnumerable<AvailableTarget>>(targets);
 
