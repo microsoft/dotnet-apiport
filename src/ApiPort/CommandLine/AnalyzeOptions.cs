@@ -30,6 +30,7 @@ namespace ApiPort.CommandLine
                 { "-r", "resultFormat" },
                 { "-p", "showNonPortableApis" },
                 { "-b", "showBreakingChanges" },
+                { "-u", "showRetargettingIssues" },
                 { "-i", "ignoreAssemblyFile" },
                 { "-s", "suppressBreakingChange" },
             };
@@ -49,6 +50,7 @@ namespace ApiPort.CommandLine
             public List<string> ResultFormat { get; set; }
             public bool ShowNonPortableApis { get; set; }
             public bool ShowBreakingChanges { get; set; }
+            public bool ShowRetargettingIssues { get; set; }
             public bool NoDefaultIgnoreFile { get; set; }
             public string IgnoreAssemblyFile { get; set; }
             public List<string> SuppressBreakingChange { get; set; }
@@ -114,6 +116,12 @@ namespace ApiPort.CommandLine
             {
                 if (options.ShowBreakingChanges)
                 {
+                    RequestFlags |= AnalyzeRequestFlags.ShowBreakingChanges;
+                }
+
+                if (options.ShowRetargettingIssues)
+                {
+                    RequestFlags |= AnalyzeRequestFlags.ShowRetargettingIssues;
                     RequestFlags |= AnalyzeRequestFlags.ShowBreakingChanges;
                 }
 
