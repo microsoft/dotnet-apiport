@@ -7,7 +7,7 @@ Minor
 4.5.1
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
  DbParameter.Precision and DbParameter.Scale are implemented as public virtual properties. They replace the corresponding explicit interface implementations, DbParameter.IDbDataParameter.Precision and DbParameter.IDbDataParameter.Scale.

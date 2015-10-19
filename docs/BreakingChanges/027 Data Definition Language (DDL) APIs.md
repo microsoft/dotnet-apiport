@@ -7,7 +7,7 @@ Minor
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 The behavior of DDL APIs when AttachDBFilename is specified has changed as follows: 

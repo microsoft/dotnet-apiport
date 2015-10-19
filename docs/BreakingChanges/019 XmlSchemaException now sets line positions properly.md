@@ -7,7 +7,7 @@ Edge
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 If the LoadOptions.SetLineInfo value is passed to the Load method and a validation error occurs, the XmlSchemaException.LineNumber and XmlSchemaException.LinePosition properties now contain line information.

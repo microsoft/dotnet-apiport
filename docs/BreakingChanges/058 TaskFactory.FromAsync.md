@@ -7,7 +7,7 @@ Edge
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 When calling TaskFactory.FromAsync, the implementation of the IAsyncResult.CompletedSynchronously property must be correct for the resulting task to complete. That is, the property must return true if, and only if, the implementation completed synchronously. Previously, the property was not checked.

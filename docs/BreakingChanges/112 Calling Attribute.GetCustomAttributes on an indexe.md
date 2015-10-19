@@ -7,7 +7,7 @@ Edge
 4.6
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 Prior to the .NET Framework 4.6, calling `GetCustomAttribute(s)` on an indexer property which differed from another property only by the type of the index would result in an `AmbiguousMatchException`. Beginning in the .NET Framework 4.6, the property's attributes will be correctly returned.
