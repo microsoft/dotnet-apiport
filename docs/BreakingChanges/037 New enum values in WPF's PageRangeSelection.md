@@ -7,7 +7,7 @@ Edge
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 Two new members (CurrentPage and SelectedPage) have been added to the <a href="https://msdn.microsoft.com/en-us/library/system.windows.controls.pagerangeselection(v=vs.110).aspx">PageRangeSelection</a> enum.

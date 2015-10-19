@@ -10,7 +10,7 @@ Minor
 4.5.2
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 In some instances, a bug in the .NET Framework 4.5 is causing ItemsControls (like ListBox, ComboBox, DataGrid, etc.) to not scroll to their bottom item when using custom DataTemplates. If the scrolling is attempted a second time (after scrolling back up), it will work then.

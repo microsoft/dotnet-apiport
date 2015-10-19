@@ -10,7 +10,7 @@ Edge
 4.6
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 The executable is signed with SHA256. Previously, it was signed with SHA1 regardless of whether the code-signing certificate was SHA-1 or SHA-256. This applies to: 
