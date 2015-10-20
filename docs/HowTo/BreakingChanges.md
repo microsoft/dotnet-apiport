@@ -38,8 +38,7 @@ Quirks can come in a few different forms:
 - Certain configuration values
 - Certain registry settings
 
-## Target Framework Moniker
-An assembly can be compiled for a specific framework. This can help ensure that it will only run on later versions; i.e., if you compile
+The most common quirks are dependent on the framework an assembly is compiled for. This can help ensure that it will only run on later versions; i.e., if you compile
 against 4.5, you cannot add this to a 4.0 project.  However, you may add it to any version greater than or equal to 4.5.  This is one of the simplest
 ways to opt into a quirk, and, if compiling with msbuild, this is done automatically. If msbuild is not being used to compile the assembly, then a one line
 global assembly attribute will add it manually.
@@ -54,12 +53,27 @@ using System.Reflection;
 [assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]
 ```
 
-## Source analyzers
-The .NET team is working on a set of Roslyn-based analyzers that will better determine possible breaking changes in code based on APIs like ApiPort,
-but also semantics of the actual code. These are much more targeted and will provide better information as to what should be done. ApiPort lets you
-know which issues have source analyzers available, but they are currently not released. Please watch for updates regarding this in the near future.
+## Known Issues
+This tool does not catch all known issues of breaking changes. ApiPort is restricted to catching only breaks introduced for a specific API, not breaks due to patterns that may be used. To see
+the full list of issues, please review those listed [here](/docs/BreakingChanges). 
+
+In addition to this tool, there is work being done on a set of Roslyn-based analyzers that will better determine 
+possible breaking changes that also include specific programming patterns. These are much more targeted and will provide better information as to what should be done. ApiPort lets you know which issues 
+have source analyzers available, but they are currently not released. Please watch for updates regarding this in the near future.
 
 # Find Breaking Changes with ApiPort
+
+To obtain ApiPort, download it [here](https://github.com/Microsoft/dotnet-apiport/releases). Finding breaking changes with ApiPort is done by running the following command:
+
+```cmd
+ApiPort.exe analyze -b -f [assembly] 
+```
+
+This can be customized by various inputs which are described by running `ApiPort.exe help`. For detailed descriptions, please see [here](/docs/HowTo/Introduction.md#analyze).
+
+## Walkthrough
+
+As an example of determining breaking changes, consider the following code fragment:
 
 ```csharp
 using System;
@@ -94,7 +108,7 @@ scanned. This list is sorted by number of issues, categorized by runtime and ret
 Looking at this report, it is clear that there are two APIs present in the assembly that may affect its ability to move to a newer framework version. 
 As discussed earlier, the most important issue to address are the runtime issues.
 
-## Step 1: Runtime issues
+### Step 1: Runtime issues
 
 Only one runtime issue was found, so we first take a look at that. It is categorized as a minor issue; however, there are ways to customize the reporting as the impact of a specific issue may be more serious for certain scenarios. 
 The report shows the following information for this issue:
@@ -117,7 +131,11 @@ be focused to ensure that the updated behavior works with the modifications.
 
 After the issue has been addressed and tested, the runtime issues for this assembly has been addressed. Keep in mind that the number of call sites is not reflected in the report, just the presence of a call.
 
-## Step 2: Retargeting Issue
+### Step 2: Retargeting Issue
+
+*Note: This section is only needed when retargeting. If no retargeting will occur (i.e. running the same binary on .NET 4.0
+and 4.6 without changing the target framework), these issues can be ignored*
+
 The retargeting issue for this one should be addressed after the runtime issue has been addressed and when the assembly is being retargeted to a newer version, most likely to take advantage of new functionality. The report for this retargeting issue is a major issue, although, again, the severity of these changes are customizable as it is not a one-size-fit-all.
 
 | Field | Value |
