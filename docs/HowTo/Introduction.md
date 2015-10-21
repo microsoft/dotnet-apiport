@@ -5,7 +5,7 @@ has grown, there has been a number of pain points in moving between supported pl
 tools is to help identify possible problem areas in an assembly and help direct targeted testing, by identifying APIs that:
 
 1. Are not portable to specific platforms
-2. May be problematic when moving to different versions
+2. Have breaking changes between 4.x versions
 
 ## Platform Portability
 
@@ -16,7 +16,7 @@ types (such as some Reflection APIs). Sometimes, the fix is relatively simple, s
 information to help guide a developer to rework or rewrite certain parts of an assembly to be more portable and resilient
 to version changes. For details, please see [here](PlatformPortability.md).
 
-## Problematic APIs
+## Breaking Changes between .NET 4.x versions
 
 Another goal of the tool is to provide guidance and insight into possible breaking changes on the .NET Framework that may
 apply to a given assembly. This functionality is currently restricted to .NET Framework 4.x given that it is updated in-place
@@ -28,7 +28,7 @@ for another. For details, please see [here](BreakingChanges.md).
 
 The tools are available as a command line tool, a VS plugin, as well as a collection of libraries. The VS plugin is updated at
 a slower pace than the command line tool (for instance, it currently does not support the breaking change functionality). The
-command line tool is available at [github](http://github.com/microsoft/dotnet-apiport/releases), and requires .NET 4.6 or Mono 
+command line tool is available at [github](http://github.com/microsoft/dotnet-apiport/releases), and requires .NET 4.5 or Mono 
 (there is a [work item](https://github.com/Microsoft/dotnet-apiport/issues/117) to convert this to a DNX application).
 
 The tool understands three commands:
