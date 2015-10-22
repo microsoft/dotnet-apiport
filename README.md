@@ -15,13 +15,13 @@ Today, the repository contains the following components:
 ### Tools
 
 | Project | Description |
-| ------- | ----------- |
+| :------- | :----------- |
 | ApiPort | Console tool to access portability webservice | 
 
 ### Libraries
 
 | Project | Description |
-| ------- | ----------- |
+| :------- | :----------- |
 | Microsoft.Fx.Portability [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.svg)](https://www.myget.org/gallery/dotnet-apiport) | Provides common types for API Port |
 | Microsoft.Fx.Portability.MetadataReader [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.MetadataReader.svg)](https://www.myget.org/gallery/dotnet-apiport) | Implements a dependency finder based off of [System.Reflection.Metadata](https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata). The library will generate DocIds that conform to [these specifications](https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx). |
 | Microsoft.Fx.Portability.Offline [![version](https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.Offline.svg)](https://www.myget.org/gallery/dotnet-apiport) | Provides access to data in an offline setting so network calls are not needed |

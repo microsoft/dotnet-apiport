@@ -12,17 +12,17 @@ tools is to help identify possible problem areas in an assembly and help direct 
 The first goal of these tools are to help identify APIs that are not portable among the various .NET Platforms. These 
 include Microsoft supported platforms (Windows, Windows apps, DNX) as well as other implementations, such as Mono and 
 Xamarin.  Some APIs may be removed on certain platforms (such as AppDomains, File I/O, etc), or refactored into other
-types (such as some Reflection APIs). Sometimes, the fix is relatively simple, sometimes not as simple. This tool provides
-information to help guide a developer to rework or rewrite certain parts of an assembly to be more portable and resilient
-to version changes. For details, please see [here](PlatformPortability.md).
+types (such as some Reflection APIs). Sometimes the fix will be relatively simple while other times it may be more involved. 
+This tool provides information to help guide a developer to rework or rewrite certain parts of an assembly to be more portable
+ and resilient to version changes. For details please see [here](PlatformPortability.md).
 
 ## Breaking Changes between .NET 4.x versions
 
-Another goal of the tool is to provide guidance and insight into possible breaking changes on the .NET Framework that may
+Another goal of the tools is to provide guidance and insight into possible breaking changes on the .NET Framework that may
 apply to a given assembly. This functionality is currently restricted to .NET Framework 4.x given that it is updated in-place
 with no side-by-side support for alternative versions.  Most of these are considered benign changes that shouldn't affect
-most applications. However, we understand that what may be low impact for one scenario may be very impactful breaking change
-for another. For details, please see [here](BreakingChanges.md).
+most applications; however, we understand that what may be low impact for one scenario may be a very impactful breaking change
+for another. For details please see [here](BreakingChanges.md).
 
 # Usage
 
@@ -71,7 +71,7 @@ The current options are:
   -h, -?, --help             Show help
 ```
 
-For more details on analysis for portability, look [here](PlatformPortability.md) and for breaking change analysis, please
+For more details on analysis for portability look [here](PlatformPortability.md). For breaking change analysis please
 look [here](BreakingChanges.md).
 
 For example, to analyze `foo.dll` against `.NET Core` to get an HTML report, the following command would be run:
