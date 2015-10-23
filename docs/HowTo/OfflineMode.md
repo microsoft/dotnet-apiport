@@ -1,6 +1,6 @@
 # Offline Mode
 
-There are times when using the web service is not ideal (extremely large data sets, limited network connectivity, privacy concerns)and
+There are times when using the web service is not ideal (extremely large data sets, limited network connectivity, privacy concerns) and
 there is a mode that can enable offline analysis of projects. This is not listed on the release downloads, but can be built manually. 
 The steps to do this:
 

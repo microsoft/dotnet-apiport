@@ -3,9 +3,9 @@
 Platform portability refers to identifying APIs that are not portable among the various .NET Platforms. These include 
 Microsoft supported platforms (Windows, Windows apps, DNX) as well as other implementations, such as Mono and Xamarin.
 Some APIs may be removed on certain platforms (such as AppDomains, File I/O, etc), or refactored into other
-types (such as some Reflection APIs). Sometimes, the fix is relatively simple, sometimes not as simple. This tool provides
-information to help guide a developer to rework or rewrite certain parts of an assembly to be more portable and resilient
-to version changes.
+types (such as some Reflection APIs). Sometimes the fix is relatively simple while other times it may be more involved. 
+This tool provides information to help guide a developer to rework or rewrite certain parts of an assembly to be more portable 
+and resilient to version changes.
 
 ## Reports
 
@@ -53,7 +53,7 @@ If we run it through the tool with `ApiPort.exe analyze -f foo.dll`, we will get
 |----------|------------------|-----------|---------|----------------|---------------|
 | foo.dll  |.NETFramework,Version=v4.5 | 94.44 | 94.44 | 100 | 94.44 |
 
-This says that it is 100% portable to the .NET Framework which we expect because it is compiled for the .NET Framework. However,
+This says that it is 100% portable to the .NET Framework which we expect because it is compiled for the .NET Framework; however,
 we see that porting it to Windows, Windows Phone, and ASP.NET 5 are all about 94%. If we dive into the details section of the
 report, we see where the issues are:
 
@@ -65,8 +65,8 @@ report, we see where the issues are:
 There is a column at the end that is called `Recommended changes`.  These are small hints as to what should be done with certain APIs
 that have known issues or are no longer supported.  These recommendations are indicating that serialization of exceptions is no long supported,
 and implementing them are no longer necessary.  These recommendations are geared for moving forward to the .NET Core based platforms, of which
-ASP.NET 5 and Windows are a part.  However, if you want to continue to also target .NET Framework, you'll probably want to continue using
-this design as it is supported on that platform.  So, a way to accomplish this would be to use a compiler `#if/def`:
+ASP.NET 5 and Windows are a part; however, if you want to continue to also target .NET Framework, you'll probably want to continue using
+this design as it is supported on that platform.  A way to accomplish this would be to use a compiler `#if/def`:
 
 ```csharp
 using System;
