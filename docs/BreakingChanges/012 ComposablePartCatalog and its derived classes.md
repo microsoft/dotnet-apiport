@@ -16,7 +16,7 @@ Starting with the .NET Framework 4.5, MEF catalogs implement IEnumerable and the
 - [ ] Build-time break
 
 ### Recommended Action
-TODO
+Can no longer use MEF to create a serializer
 
 ### Affected APIs
 * Not detectable via API analysis
