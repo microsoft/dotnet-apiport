@@ -299,6 +299,62 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             Assert.Equal("userAsm2, Version=2.0.0.0", result.FirstOrDefault().AssemblyIdentity);
         }
 
+        [Fact]
+        public void ShowRetargettingIssuesFalseShouldReturnOnlyRuntimeIssues()
+        {
+            var catalog = Substitute.For<IApiCatalogLookup>();
+            var recommendations = GenerateTestRecommendationsForShowRetargetting(2, 3);
+            var testData = GenerateTestData(catalog);
+            var engine = new AnalysisEngine(catalog, recommendations);
+
+            var framework = new FrameworkName(".NET Framework, Version = v4.5");
+
+            // ShowRetargettingIssues
+            IEnumerable<BreakingChangeDependency> result = engine.FindBreakingChanges(targets: new[] { framework }, 
+                                                                                      dependencies: testData, 
+                                                                                      assembliesToIgnore: null, 
+                                                                                      breakingChangesToSuppress: null, 
+                                                                                      showRetargettingIssues: false);
+
+            Assert.Equal(3, result.Count());
+
+            //verify only 3, 4 and 5 are in the list
+            int expectedID = 3;
+            foreach (BreakingChangeDependency bcd in result)
+            {
+                Assert.Equal(expectedID.ToString(), bcd.Break.Id);
+                expectedID++;
+            }
+        }
+
+        [Fact]
+        public void ShowRetargettingIssuesTrueShouldReturnRuntimeAndRetargettingIssues()
+        {
+            var catalog = Substitute.For<IApiCatalogLookup>();
+            var recommendations = GenerateTestRecommendationsForShowRetargetting(2, 3);
+            var testData = GenerateTestData(catalog);
+            var engine = new AnalysisEngine(catalog, recommendations);
+
+            var framework = new FrameworkName(".NET Framework, Version = v4.5");
+
+            // ShowRetargettingIssues
+            IEnumerable<BreakingChangeDependency> result = engine.FindBreakingChanges(targets: new[] { framework },
+                                                                                      dependencies: testData,
+                                                                                      assembliesToIgnore: null,
+                                                                                      breakingChangesToSuppress: null,
+                                                                                      showRetargettingIssues: true);
+
+            Assert.Equal(5, result.Count());
+
+            //verify 1, 2, 3, 4 and 5 are in the list
+            int expectedID = 1;
+            foreach (BreakingChangeDependency bcd in result)
+            {
+                Assert.Equal(expectedID.ToString(), bcd.Break.Id);
+                expectedID++;
+            }
+        }
+
         private static void TestBreakingChangeWithoutFixedEntry(Version version, bool noBreakingChangesExpected)
         {
             TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null, Enumerable.Empty<string>());
@@ -393,6 +449,58 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             };
 
             recommendations.GetBreakingChanges(TestDocId1).Returns(new[] { breakingChange1 });
+
+            return recommendations;
+        }
+
+        /// <summary>
+        /// This method generates breaking changes recomendations for testing the ShowRetargettingIssues
+        /// </summary>
+        /// <param name="numOfRetargettingIssues">Number of retargetting issues to put in the recommendations result</param>
+        /// <param name="numOfRuntimeIssues">Number of runtime issues to put in the recommendations result</param>
+        /// <returns>API recommendations result containing the number of issues to be included</returns>
+        private static IApiRecommendations GenerateTestRecommendationsForShowRetargetting(int numOfRetargettingIssues = 1,
+                                                                                          int numOfRuntimeIssues = 1)
+        {
+            int lastIDUsed = 1;
+            var recommendations = Substitute.For<IApiRecommendations>();
+            List<BreakingChange> breakingChanges = new List<BreakingChange>();
+
+            //add requested number of retargetting issues
+            for (int i = 0; i < numOfRetargettingIssues; i++)
+            {
+                //add a new breaking change
+                BreakingChange bc = new BreakingChange
+                {
+                    ApplicableApis = new[] { TestDocId1 },
+                    Id = lastIDUsed.ToString(),
+                    VersionBroken = Version.Parse("4.5"),
+                    IsQuirked = true
+                };
+
+                breakingChanges.Add(bc);
+
+                lastIDUsed++;
+            }
+
+            //add requested number of runtime issues
+            for (int i = 0; i < numOfRuntimeIssues; i++)
+            {
+                //add a new breaking change
+                BreakingChange bc = new BreakingChange
+                {
+                    ApplicableApis = new[] { TestDocId1 },
+                    Id = lastIDUsed.ToString(),
+                    VersionBroken = Version.Parse("4.5"),
+                    IsQuirked = false,
+                    IsBuildTime = false
+                };
+
+                breakingChanges.Add(bc);
+                lastIDUsed++;
+            }
+
+            recommendations.GetBreakingChanges(TestDocId1).Returns(breakingChanges.ToArray());
 
             return recommendations;
         }

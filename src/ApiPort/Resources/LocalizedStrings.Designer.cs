@@ -110,11 +110,11 @@ namespace ApiPort.Resources {
         ///for portability concerns or known breaking changes (depending on input parameters) and returns a report that 
         ///gives a summary of issues and possible steps forward.
         ///
-        ///  -e, --endpoint=VALUE       Service endpoint
-        ///  -f, --file=VALUE           [Required] Path to assembly file or directory of
-        ///                               assemblies.
-        ///  -o, --out=VALUE            Output file name
-        ///  -d, --descr [rest of string was truncated]&quot;;.
+        ///  -e, --endpoint=VALUE         Service endpoint
+        ///  -f, --file=VALUE             [Required] Path to assembly file or directory of
+        ///                                 assemblies.
+        ///  -o, --out=VALUE              Output file name
+        ///  -d, [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CmdAnalyzeHelp {
             get {

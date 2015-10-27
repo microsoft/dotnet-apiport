@@ -38,7 +38,11 @@ namespace Microsoft.Fx.Portability.Analysis
             }
         }
 
-        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies, IEnumerable<AssemblyInfo> assembliesToIgnore, IEnumerable<string> breakingChangesToSuppress)
+        public IEnumerable<BreakingChangeDependency> FindBreakingChanges(IEnumerable<FrameworkName> targets,
+                                                                         IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies,
+                                                                         IEnumerable<AssemblyInfo> assembliesToIgnore,
+                                                                         IEnumerable<string> breakingChangesToSuppress,
+                                                                         bool showRetargettingIssues = false)
         {
             // Only proceed to find breaking changes for full .NET Framework (that's where they are applicable)
             var fullFrameworkVersions = targets
@@ -58,6 +62,11 @@ namespace Microsoft.Fx.Portability.Analysis
                     var breakingChanges = _recommendations.GetBreakingChanges(kvp.Key.MemberDocId).Distinct();
                     foreach (var b in breakingChanges)
                     {
+                        if (!showRetargettingIssues && b.IsRetargeting)
+                        {
+                                continue;
+                        }
+
                         if (BreakingChangeIsInVersionRange(fullFrameworkVersions, b) && !(breakingChangesToSuppress?.Contains(b.Id) ?? false))
                         {
                             foreach (var a in kvp.Value)
