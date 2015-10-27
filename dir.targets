@@ -11,7 +11,7 @@
     <!-- Get version info from file -->
     <VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
     <VersionData>1.0.0</VersionData>
-    <VersionData Condition="Exists('$(VersionFile)')">$([System.IO.File]::ReadAllText($(VersionFile)))</VersionData>
+    <VersionData Condition="Exists('$(VersionFile)')">$([System.IO.File]::ReadAllText($(VersionFile)).Trim())</VersionData>
 
     <!-- Set informational version -->
     <InformationVersion>$(VersionData)</InformationVersion>
