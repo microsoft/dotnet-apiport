@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
-  <metadata minClientVersion="3.0">
+  <metadata>
     <id>Microsoft.Fx.Portability</id>
     <version></version>
     <title>Microsoft.Fx.Portability</title>
