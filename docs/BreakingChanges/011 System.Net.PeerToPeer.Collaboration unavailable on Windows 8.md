@@ -1,4 +1,4 @@
-## 11: Types and members of the System.Net.PeerToPeer.Collaboration namespace
+## 11: System.Net.PeerToPeer.Collaboration unavailable on Windows 8
 
 ### Scope
 Major

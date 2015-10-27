@@ -1,4 +1,4 @@
-## 22: Some WorkFlow drag/drop APIs are obsolete
+## 22: Some WorkFlow drag and drop APIs are obsolete
 
 ### Scope
 Minor
