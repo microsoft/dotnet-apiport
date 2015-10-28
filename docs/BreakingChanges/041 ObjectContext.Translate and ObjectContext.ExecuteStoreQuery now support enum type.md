@@ -1,4 +1,4 @@
-## 41: ObjectContext.Translate and ObjectContext.ExecuteStoreQuery methods
+## 41: ObjectContext.Translate and ObjectContext.ExecuteStoreQuery now support enum type
 
 ### Scope
 Edge

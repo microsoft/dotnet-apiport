@@ -1,4 +1,4 @@
-## 43: HttpRequest.ContentEncoding property
+## 43: HttpRequest.ContentEncoding property prohibits UTF7
 
 ### Scope
 Edge

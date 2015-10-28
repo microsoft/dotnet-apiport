@@ -1,4 +1,4 @@
-## 52: WPF TextBox.Text can be out-of-sync with databinding.
+## 52: WPF TextBox.Text can be out-of-sync with databinding
 
 ### Scope
 Edge

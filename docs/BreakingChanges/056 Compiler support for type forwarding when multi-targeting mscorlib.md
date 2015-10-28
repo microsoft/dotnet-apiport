@@ -1,4 +1,4 @@
-## 56: Support for type forwarding when multi-targeting
+## 56: Compiler support for type forwarding when multi-targeting mscorlib
 
 ### Scope
 Edge

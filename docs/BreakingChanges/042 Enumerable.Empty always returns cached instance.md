@@ -1,4 +1,4 @@
-## 42: Enumerable.Empty<TResult> method
+## 42: Enumerable.Empty&lt;TResult&gt; always returns cached instance
 
 ### Scope
 Edge

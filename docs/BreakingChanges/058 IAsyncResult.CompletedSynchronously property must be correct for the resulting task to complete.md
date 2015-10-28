@@ -1,4 +1,4 @@
-## 58: TaskFactory.FromAsync
+## 58: IAsyncResult.CompletedSynchronously property must be correct for the resulting task to complete
 
 ### Scope
 Edge
