@@ -1,4 +1,4 @@
-## 59: Log files created by the ObjectContext.CreateDatabase method
+## 59: Log file name created by the ObjectContext.CreateDatabase method has changed to match SQL Server specifications
 
 ### Scope
 Edge

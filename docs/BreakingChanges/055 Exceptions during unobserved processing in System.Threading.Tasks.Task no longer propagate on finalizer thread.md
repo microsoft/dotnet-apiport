@@ -1,4 +1,4 @@
-## 55: Unobserved exceptions in System.Threading.Tasks.Task operations
+## 55: Exceptions during unobserved processing in System.Threading.Tasks.Task no longer propagate on finalizer thread
 
 ### Scope
 Edge
