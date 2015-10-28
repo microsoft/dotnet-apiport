@@ -1,4 +1,4 @@
-## 120: FlowDocument showing extra line of text
+## 120: FlowDocument may show an extra line of text
 
 ### Scope
 Edge
