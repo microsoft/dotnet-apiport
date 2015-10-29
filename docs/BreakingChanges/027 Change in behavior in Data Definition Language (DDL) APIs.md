@@ -1,4 +1,4 @@
-## 27: Data Definition Language (DDL) APIs
+## 27: Change in behavior in Data Definition Language (DDL) APIs
 
 ### Scope
 Minor

@@ -1,4 +1,4 @@
-## 36: WF serializes Expressions.Literal<T> DateTimes differently now (breaks custom XAML parsers)
+## 36: WF serializes Expressions.Literal&lt;T&gt; DateTimes differently now (breaks custom XAML parsers)
 
 ### Scope
 Edge

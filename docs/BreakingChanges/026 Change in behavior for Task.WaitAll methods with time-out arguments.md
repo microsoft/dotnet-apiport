@@ -1,4 +1,4 @@
-## 26: Task.WaitAll methods with time-out arguments
+## 26: Change in behavior for Task.WaitAll methods with time-out arguments
 
 ### Scope
 Minor

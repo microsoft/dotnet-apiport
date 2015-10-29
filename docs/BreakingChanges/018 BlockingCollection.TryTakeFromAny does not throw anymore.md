@@ -1,4 +1,4 @@
-## 18: BlockingCollection<T>.TryTakeFromAny doesn't throw anymore
+## 18: BlockingCollection&lt;T&gt;.TryTakeFromAny does not throw anymore
 
 ### Scope
 Minor

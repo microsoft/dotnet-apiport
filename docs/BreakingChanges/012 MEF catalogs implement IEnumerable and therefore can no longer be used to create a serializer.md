@@ -1,4 +1,5 @@
-## 12: System.ComponentModel.Composition.Primitives.ComposablePartCatalog and its derived classes
+## 12: MEF catalogs implement IEnumerable and therefore can no longer be used to create a serializer
+
 
 ### Scope
 Major

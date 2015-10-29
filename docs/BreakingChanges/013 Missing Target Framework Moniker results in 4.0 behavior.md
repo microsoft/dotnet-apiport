@@ -1,4 +1,4 @@
-## 13: Missing TFM results in 4.0 behavior
+## 13: Missing Target Framework Moniker results in 4.0 behavior
 
 ### Scope
 Major

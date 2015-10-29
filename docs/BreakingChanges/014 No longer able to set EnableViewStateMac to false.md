@@ -1,4 +1,4 @@
-## 14: enableViewStateMac
+## 14: No longer able to set EnableViewStateMac to false
 
 ### Scope
 Major

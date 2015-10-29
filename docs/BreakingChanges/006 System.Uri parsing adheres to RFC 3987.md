@@ -1,4 +1,4 @@
-## 6: System.Uri
+## 6: System.Uri parsing adheres to RFC 3987
 
 ### Scope
 Major

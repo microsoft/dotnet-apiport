@@ -1,4 +1,4 @@
-## 32: minFreeMemoryPercentageToActiveService is now respected
+## 32: MinFreeMemoryPercentageToActiveService is now respected
 
 ### Scope
 Minor
@@ -10,7 +10,7 @@ Minor
 Available
 
 ### Change Description
-The setting establishes the minimum memory that must be available on the server before a WCF service can be activated. It is designed to prevent OutOfMemoryException exceptions. In the .NET Framework 4.5, this setting had no effect. In the .NET Framework 4.5.1, the setting is observed. 
+This setting establishes the minimum memory that must be available on the server before a WCF service can be activated. It is designed to prevent OutOfMemoryException exceptions. In the .NET Framework 4.5, this setting had no effect. In the .NET Framework 4.5.1, the setting is observed. 
 
 - [ ] Quirked
 - [ ] Build-time break

@@ -1,4 +1,4 @@
-## 28: MachineKey.Encode and MachineKey.Decodemethods
+## 28: MachineKey.Encode and MachineKey.Decodemethods are now obsolete
 
 ### Scope
 Minor
