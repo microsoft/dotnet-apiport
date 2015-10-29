@@ -1,4 +1,4 @@
-## 90: ToggleButton doesn't show any state
+## 90: WPF Aero2 and AeroLite themes toggle button doesn't show any state
 
 ### Scope
 Major

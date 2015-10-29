@@ -1,4 +1,4 @@
-## 72: SqlClient collates sql_variant now
+## 72: Sql_variant data uses sql_variant collation rather than database collation
 
 ### Scope
 Transparent

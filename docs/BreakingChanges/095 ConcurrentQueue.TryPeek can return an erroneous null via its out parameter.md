@@ -1,4 +1,4 @@
-## 95: ConcurrentQueue<T>.TryPeek can return an erroneous null via its out parameter
+## 95: ConcurrentQueue&lt;T&gt;.TryPeek can return an erroneous null via its out parameter
 
 ### Scope
 Major

@@ -1,4 +1,4 @@
-## 78: ContentDisposition DateTimes expanded
+## 78: ContentDisposition DateTimes returns slightly different string
 
 ### Scope
 Minor
