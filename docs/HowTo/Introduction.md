@@ -43,41 +43,42 @@ files, or a directory of assemblies.
 The current options are:
 
 ```
-  -f, --file=VALUE           [Required] Path to assembly file or directory of
-                               assemblies.
-  -o, --out=VALUE            Output file name
-  -d, --description=VALUE    Description of the submission
-  -t, --target=VALUE         The target you want to check against.
-  -r, --resultFormat=VALUE   The report output format
-  -p, --showNonPortableApis  Calculate non-portable APIs
-  -b, --showBreakingChanges  Calculate breaking changes on full .NET Framework
-      --noDefaultIgnoreFile  Do not use the standard assembly ignore list
-                               when analyzing breaking changes. The default
-                               ignore list can be found at KnownSafeBreaks.json
+  -f, --file=VALUE              [Required] Path to assembly file or directory of
+                                assemblies.
+  -o, --out=VALUE               Output file name
+  -d, --description=VALUE       Description of the submission
+  -t, --target=VALUE            The target you want to check against.
+  -r, --resultFormat=VALUE      The report output format
+  -p, --showNonPortableApis     Calculate non-portable APIs
+  -b, --showBreakingChanges     Calculate breaking changes on full .NET Framework
+  -u, --showRetargettingIssues  Include the retargetting issues in the reports
+      --noDefaultIgnoreFile     Do not use the standard assembly ignore list
+                                  when analyzing breaking changes. The default
+                                  ignore list can be found at KnownSafeBreaks.json
   -i, --ignoreAssemblyFile=VALUE
-                             Specifies a json file defining assemblies that
-                               should not be analyzed for specific targets
-                               while analyzing breaking changes. This can be
-                               useful for excluding assemblies that are known
-                               to not regress on certain .NET Framework
-                               versions due to breaking changes. Note that,
-                               currently, this parameter only affects breaking
-                               change analysis; not portability analysis.
+                                Specifies a json file defining assemblies that
+                                  should not be analyzed for specific targets
+                                  while analyzing breaking changes. This can be
+                                  useful for excluding assemblies that are known
+                                  to not regress on certain .NET Framework
+                                  versions due to breaking changes. Note that,
+                                  currently, this parameter only affects breaking
+                                  change analysis; not portability analysis.
   -s, --suppressBreakingChange=VALUE
-                             Specifies a breaking change (by ID) to suppress
-                               during breaking change analysis. Any breaking
-                               changes with IDs specified for suppression will
-                               not be reported.
-  -h, -?, --help             Show help
+                                Specifies a breaking change (by ID) to suppress
+                                  during breaking change analysis. Any breaking
+                                  changes with IDs specified for suppression will
+                                  not be reported.
+  -h, -?, --help                Show help
 ```
 
 For more details on analysis for portability look [here](PlatformPortability.md). For breaking change analysis please
 look [here](BreakingChanges.md).
 
-For example, to analyze `foo.dll` against `.NET Core` to get an HTML report, the following command would be run:
+For example, to analyze `foo.dll` against `.NET Core` and the latest `.NET Framework` and get an HTML report, the following command would be run:
 
 ```
-ApiPort.exe analyze -f foo.dll -t ".NET CORE, Version=5.0" -r HTML
+ApiPort.exe analyze -f foo.dll -t ".NET CORE, Version=5.0" -t ".NET Framework" -r HTML
 ```
 
 ### List targets
@@ -91,10 +92,11 @@ For example, the command `ApiPort.exe listTargets` will output:
 ```
 Available Targets:
 - .NET Core [Version: 5.0*]
-- .NET Framework [Version: 1.1; 2.0; 3.0; 3.5; 4.0; 4.5; 4.5.1; 4.5.2; 4.6*]
+- .NET Core (Cross-platform) [Version: 5.0]
+- .NET Framework [Version: 1.1; 2.0; 3.0; 3.5; 4.0; 4.5; 4.5.1; 4.5.2; 4.6; 4.6.1*]
 - .NET Native [Version: 1.0*]
 - ASP.NET 5 [Version: 1.0*]
-- Mono [Version: 4.5]
+- Mono [Version: 3.3.0.0]
 - Silverlight [Version: 2.0; 3.0; 4.0; 5.0]
 - Windows [Version: 8.0; 8.1]
 - Windows Phone [Version: 8.1]
