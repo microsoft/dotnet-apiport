@@ -1,4 +1,4 @@
-## 139: WPF layout rounding at high DPIs 
+## 139: WPF layout rounding of margins has changed 
 
 ### Scope
 Minor

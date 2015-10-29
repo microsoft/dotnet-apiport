@@ -1,4 +1,4 @@
-## 102: ListBoxItem IsSelected Binding Issue with ObservableCollection<T>.Move
+## 102: ListBoxItem IsSelected binding issue with ObservableCollection&lt;T&gt;.Move
 
 ### Scope
 Minor

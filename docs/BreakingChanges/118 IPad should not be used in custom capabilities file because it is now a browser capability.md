@@ -1,4 +1,4 @@
-## 118: Beginning in .NET 4.5, iPad is an identifier in the default ASP.NET browser capabilities file, so it should not be used in a custom capabilties file
+## 118: IPad should not be used in custom capabilities file because it is now a browser capability
 
 ### Scope
 Edge
