@@ -10,9 +10,11 @@ Edge
 Planned
 
 ### Change Description
-Connections to SQL Server databases using the Virtual Interface Adapter (VIA) protocol are no longer supported. If this app is connecting to SQL via a protocol other than VIA, then no breaking change will be encountered.
+Connections to SQL Server databases using the [Virtual Interface Adapter (VIA) protocol](https://technet.microsoft.com/en-us/library/ms191229%28v=sql.105%29.aspx) are no longer supported. 
+The protocol used to connect to a SQL Server database is visible in the connection string. A VIA connection will contain via:\<servername\>. 
+If this app is connecting to SQL via a protocol other than VIA (tcp: or np: for example), then no breaking change will be encountered. 
 
-Also, connections to SQL Server 1997 are no longer supported.
+Also, connections to SQL Server 7 (1997) are no longer supported.
 
 - [ ] Quirked
 - [ ] Build-time break
