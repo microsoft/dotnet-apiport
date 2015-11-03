@@ -7,7 +7,7 @@ Minor
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 A change was introduced in 4.5 that restricts usage of TreeViewItem elements outside of a TreeView. This manifests under the following conditions:

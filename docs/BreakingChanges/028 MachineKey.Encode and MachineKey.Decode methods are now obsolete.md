@@ -1,4 +1,4 @@
-## 28: MachineKey.Encode and MachineKey.Decodemethods are now obsolete
+## 28: MachineKey.Encode and MachineKey.Decode methods are now obsolete
 
 ### Scope
 Minor
@@ -7,7 +7,7 @@ Minor
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 These methods are now obsolete. Compilation of code that calls these methods produces a compiler warning.

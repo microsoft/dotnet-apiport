@@ -7,7 +7,7 @@ Minor
 4.5
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 The `EncoderParameter.EncoderParameter(Encoder, Int32, Int32, Int32)` constructor is obsolete now and will introduce build warnings if used.

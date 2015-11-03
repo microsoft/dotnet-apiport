@@ -7,7 +7,7 @@ Minor
 4.6
 
 ### Source Analyzer Status
-Planned
+Available
 
 ### Change Description
 Reflection objects can no longer be passed from managed code to out-of-process DCOM clients. The following types are affected: 
