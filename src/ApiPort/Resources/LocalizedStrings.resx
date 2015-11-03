@@ -239,7 +239,6 @@ go here - http://go.microsoft.com/fwlink/?LinkId=397652</value>
 for portability concerns or known breaking changes (depending on input parameters) and returns a report that 
 gives a summary of issues and possible steps forward.
 
-  -e, --endpoint=VALUE         Service endpoint
   -f, --file=VALUE             [Required] Path to assembly file or directory of
                                  assemblies.
   -o, --out=VALUE              Output file name
@@ -271,13 +270,11 @@ gives a summary of issues and possible steps forward.
   <data name="CmdListOutputFormats" xml:space="preserve">
     <value>Retrieves a list of output formats that are available in which to receive reports
 
-  -e, --endpoint=VALUE       Service endpoint
   -h, -?, --help             Show help</value>
   </data>
   <data name="CmdListTargets" xml:space="preserve">
     <value>Retrieves a list of targets available to analyze assemblies against
 
-  -e, --endpoint=VALUE       Service endpoint
   -h, -?, --help             Show help</value>
   </data>
 </root>
