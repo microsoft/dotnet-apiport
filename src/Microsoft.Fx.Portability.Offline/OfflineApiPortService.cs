@@ -17,17 +17,19 @@ namespace Microsoft.Fx.Portability
     {
         private readonly ITargetMapper _mapper;
         private readonly IApiCatalogLookup _lookup;
-        private readonly ICollection<FrameworkName> _defaultTargets; 
+        private readonly ICollection<FrameworkName> _defaultTargets;
         private readonly IRequestAnalyzer _requestAnalyzer;
         private readonly ICollection<IReportWriter> _reportWriters;
+        private readonly ISearcher<string> _searcher;
 
-        public OfflineApiPortService(IApiCatalogLookup lookup, IRequestAnalyzer requestAnalyzer, ITargetMapper mapper, ICollection<IReportWriter> reportWriters,ITargetNameParser targetNameParser)
+        public OfflineApiPortService(IApiCatalogLookup lookup, IRequestAnalyzer requestAnalyzer, ITargetMapper mapper, ICollection<IReportWriter> reportWriters, ITargetNameParser targetNameParser)
         {
             _lookup = lookup;
             _requestAnalyzer = requestAnalyzer;
             _mapper = mapper;
             _reportWriters = reportWriters;
             _defaultTargets = new HashSet<FrameworkName>(targetNameParser.DefaultTargets);
+            _searcher = new StringContainsSearch(lookup);
         }
 
         public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
@@ -35,7 +37,7 @@ namespace Microsoft.Fx.Portability
             var targets = _lookup
                 .GetPublicTargets()
                 .Select(target => new AvailableTarget { Name = target.Identifier, Version = target.Version, IsSet = _defaultTargets.Contains(target) })
-				.OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase);
+                .OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase);
 
             var response = new ServiceResponse<IEnumerable<AvailableTarget>>(targets);
 
@@ -103,9 +105,17 @@ namespace Microsoft.Fx.Portability
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null)
+        public async Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null)
         {
-            throw new NotImplementedException();
+            var queryResult = await _searcher.SearchAsync(query, top ?? 10);
+
+            // TODO: This currently only populates the docid, as that is the only thing the offline service currently requires
+            var result = queryResult.Select(r => new ApiDefinition { DocId = r })
+                .ToList()
+                .AsReadOnly();
+
+            return new ServiceResponse<IReadOnlyCollection<ApiDefinition>>(result);
+
         }
     }
 }

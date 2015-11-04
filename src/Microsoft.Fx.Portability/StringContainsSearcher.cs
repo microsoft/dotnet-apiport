@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
 {
@@ -25,7 +26,13 @@ namespace Microsoft.Fx.Portability
                 .Select(_lookup.GetApiDefinition)
                 .Where(a => queryItems.All(q => a.FullName.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0))
                 .Select(a => a.DocId)
-                .Take(numberOfHits);
+                .Take(numberOfHits)
+                .ToList();
+        }
+
+        public Task<IEnumerable<string>> SearchAsync(string query, int numberOfHits)
+        {
+            return Task.FromResult(Search(query, numberOfHits));
         }
     }
 }

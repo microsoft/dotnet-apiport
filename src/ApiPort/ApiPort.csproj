@@ -34,7 +34,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-	<IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
+    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
@@ -43,6 +43,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,11 +58,14 @@
     <Compile Include="CommandLine\ApiPortConfiguration.cs" />
     <Compile Include="CommandLine\CommonCommands.cs" />
     <Compile Include="CommandLine\ConsoleDefaultApiPortOptions.cs" />
+    <Compile Include="CommandLine\DocIdSearchOptions.cs" />
     <Compile Include="CommandLine\ServiceEndpointOptions.cs" />
     <Compile Include="ConsoleApiPort.cs" />
     <Compile Include="DependencyBuilder.cs" />
+    <Compile Include="DocIdSearchRepl.cs" />
     <Compile Include="EmptyDependencyFinder.cs" />
     <Compile Include="FileOutputApiPortService.cs" />
+    <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="ICommandLineOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">

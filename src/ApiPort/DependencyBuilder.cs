@@ -46,6 +46,8 @@ namespace ApiPort
             container.RegisterType<ConsoleApiPort>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICollection<IReportWriter>>(new ContainerControlledLifetimeManager(), new InjectionFactory(WriterCollection));
             container.RegisterType<IApiPortOptions>(new ContainerControlledLifetimeManager(), new InjectionFactory(GetOptions));
+            container.RegisterType<DocIdSearchRepl>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ISearcher<string>, ApiPortServiceSearcher>(new ContainerControlledLifetimeManager());
 
             // Register the default output format name
             container.RegisterInstance(DefaultOutputFormatInstanceName, "Excel");

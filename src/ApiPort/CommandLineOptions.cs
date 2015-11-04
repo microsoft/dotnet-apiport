@@ -19,7 +19,7 @@ namespace ApiPort
         public abstract ICommandLineOptions Parse(IEnumerable<string> args);
 
         private static IDictionary<string, CommandLineOptions> s_possibleCommands =
-            new CommandLineOptions[] { new AnalyzeOptions(), new ListTargetsOptions(), new ListOutputFormatOptions() }
+            new CommandLineOptions[] { new AnalyzeOptions(), new ListTargetsOptions(), new ListOutputFormatOptions(), new DocIdSearchOptions() }
             .ToDictionary(o => o.Name, o => o, StringComparer.OrdinalIgnoreCase);
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
@@ -86,5 +86,5 @@ namespace ApiPort
 
             return CommonCommands.Exit;
         }
-   }
+    }
 }

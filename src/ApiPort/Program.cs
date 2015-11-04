@@ -44,12 +44,9 @@ namespace ApiPort
                         case AppCommands.AnalyzeAssemblies:
                             client.AnalyzeAssembliesAsync().Wait();
                             break;
-#if DOCID_SEARCH
                         case AppCommands.DocIdSearch:
-                            var docIdSearch = container.Resolve<DocIdSearchRepl>();
-                            docIdSearch.DocIdSearch();
+                            client.RunDocIdSearchAsync().Wait();
                             break;
-#endif
                         case AppCommands.ListOutputFormats:
                             client.ListOutputFormatsAsync().Wait();
                             break;

@@ -15,12 +15,14 @@ namespace ApiPort
         private readonly ApiPortClient _apiPortClient;
         private readonly ITargetMapper _targetMapper;
         private readonly IApiPortOptions _options;
+        private readonly DocIdSearchRepl _repl;
 
-        public ConsoleApiPort(ApiPortClient apiPortClient, ITargetMapper targetMapper, IApiPortOptions options)
+        public ConsoleApiPort(ApiPortClient apiPortClient, ITargetMapper targetMapper, IApiPortOptions options, DocIdSearchRepl repl)
         {
             _apiPortClient = apiPortClient;
             _targetMapper = targetMapper;
             _options = options;
+            _repl = repl;
         }
 
         public async Task ListOutputFormatsAsync()
@@ -100,5 +102,7 @@ namespace ApiPort
                 Console.WriteLine(outputPath);
             }
         }
+
+        public Task RunDocIdSearchAsync() => _repl.DocIdSearchAsync();
     }
 }

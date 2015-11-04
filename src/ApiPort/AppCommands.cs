@@ -8,9 +8,7 @@ namespace ApiPort
         ListTargets,
         AnalyzeAssemblies,
         ListOutputFormats,
-#if DOCID_SEARCH
-        DocIdSearch
-#endif
+        DocIdSearch,
         Help,
         Exit
     }
