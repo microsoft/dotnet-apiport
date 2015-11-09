@@ -24,4 +24,7 @@ There are two areas of impact:
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+MSBuild
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458356(v=vs.110).aspx)

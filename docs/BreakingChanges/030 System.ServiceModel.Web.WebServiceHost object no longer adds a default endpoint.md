@@ -29,6 +29,9 @@ If users will expect to be able to connect to a default endpoint and other expli
 * `M:System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.String,System.ServiceModel.Channels.Binding,System.Uri)`
 * `M:System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.String,System.ServiceModel.Channels.Binding,System.String,System.Uri)`
 * `M:System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.String,System.ServiceModel.Channels.Binding,System.Uri,System.Uri)`
+
+### Category
+Windows Communication Foundation (WCF)
  
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wcf)
 

@@ -22,4 +22,7 @@ When catching an InvalidOperationException while executing ObjectContext.CreateD
 * `M:System.Data.Objects.ObjectContext.CreateDatabase`
 * `M:System.Data.Common.DbProviderServices.CreateDatabase(System.Data.Common.DbConnection,System.Nullable{System.Int32},System.Data.Metadata.Edm.StoreItemCollection)`
 
+### Category
+Entity Framework
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#sql)

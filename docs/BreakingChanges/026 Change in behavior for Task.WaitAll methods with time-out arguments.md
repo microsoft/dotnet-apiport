@@ -25,4 +25,7 @@ If an AggregateException was being caught as a means of detecting a task that wa
 * `M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.Int32,System.Threading.CancellationToken)`
 * `M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[],System.TimeSpan)`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)

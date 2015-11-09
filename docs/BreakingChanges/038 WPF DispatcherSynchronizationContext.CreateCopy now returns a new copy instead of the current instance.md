@@ -21,4 +21,7 @@ Be aware that DispatcherSynchronizationContext.CreateCopy() will now return a ne
 ### Affected APIs
 * `M:System.Windows.Threading.DispatcherSynchronizationContext.CreateCopy`
 
+### Category
+Windows Presentation Framework (WPF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wpf)

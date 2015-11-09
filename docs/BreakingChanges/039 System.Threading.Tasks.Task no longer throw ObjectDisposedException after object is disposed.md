@@ -21,4 +21,7 @@ Be aware that Task methods may no longer throw ObjectDisposedExceptions in cases
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#core)

@@ -22,4 +22,7 @@ If your app depends on the previous behavior of this method, you can add an aspn
 * `M:System.Web.HttpUtility.JavaScriptStringEncode(System.String)`
 * `M:System.Web.HttpUtility.JavaScriptStringEncode(System.String,System.Boolean)`
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#asp)

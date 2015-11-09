@@ -21,6 +21,9 @@ In most cases, these changes won't impact user code. Code that depends on a part
 ### Affected APIs
 * `T:System.Windows.Controls.PageRangeSelection`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wpf)
 
 <!--

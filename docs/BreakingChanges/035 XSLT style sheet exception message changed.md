@@ -28,4 +28,7 @@ Update any app code depending on the excepton message from this error condition 
 * `M:System.Xml.Xsl.XslCompiledTransform.Load(System.Xml.XmlReader,System.Xml.Xsl.XsltSettings,System.Xml.XmlResolver)`
 * `M:System.Xml.Xsl.XslCompiledTransform.Load(System.Xml.XPath.IXPathNavigable,System.Xml.Xsl.XsltSettings,System.Xml.XmlResolver)`
 
+### Category
+XML, XSLT
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#xml)

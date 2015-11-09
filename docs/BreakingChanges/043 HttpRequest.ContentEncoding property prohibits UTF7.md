@@ -23,4 +23,7 @@ Ideally, applications should be updated to not use UTF-7 encoding in HttpRequest
 * `M:System.Web.HttpRequest.get_ContentEncoding`
 * `M:System.Web.HttpRequest.set_ContentEncoding(System.Text.Encoding)`
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#asp)
