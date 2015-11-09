@@ -27,4 +27,7 @@ To avoid ambiguity (and potential differences in exception handling or blocking 
 * `M:System.Windows.Threading.Dispatcher.Invoke(System.Delegate,System.TimeSpan,System.Windows.Threading.DispatcherPriority,System.Object[])`
 * `M:System.Windows.Threading.Dispatcher.Invoke(System.Delegate,System.Windows.Threading.DispatcherPriority,System.Object[])`
 
+### Category
+Windows Workflow Foundation (WF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wwf)

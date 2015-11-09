@@ -21,4 +21,7 @@ Derived classes cannot be marked with the SecurityCriticalAttribute. Previously,
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Workflow Foundation (WF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887)

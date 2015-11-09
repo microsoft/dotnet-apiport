@@ -21,4 +21,7 @@ Ideally, code should be fixed to not modify lists while enumerating their elemen
 ### Affected APIs
 * ``M:System.Collections.Generic.List`1.ForEach(System.Action{`0})``
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)

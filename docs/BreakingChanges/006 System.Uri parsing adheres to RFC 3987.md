@@ -36,4 +36,7 @@ If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), the
 * `M:System.Uri.TryCreate(System.Uri,System.String,System.Uri@)`
 * `M:System.Uri.TryCreate(System.Uri,System.Uri,System.Uri@)`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)
