@@ -1,4 +1,4 @@
-## 110: NetDataContractSerializer throws an exception while trying to de-serialize a ConcurrentDictionary serialized with by a different .NET version
+## 110: NetDataContractSerializer fails to deserialize a ConcurrentDictionary serialized with a different .NET version
 
 ### Scope
 Minor
