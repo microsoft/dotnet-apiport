@@ -21,4 +21,7 @@ Exception-handling code that assumes XmlSchemaException.LineNumber and XmlSchema
 ### Affected APIs
 * `F:System.Xml.Linq.LoadOptions.SetLineInfo`
 
+### Category
+XML, XSLT
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887#xml)

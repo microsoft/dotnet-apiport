@@ -24,4 +24,7 @@ EventSource data should be updated, if possible, to not use embedded null charac
 * `M:System.Diagnostics.Tracing.EventListener.EnableEvents(System.Diagnostics.Tracing.EventSource,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventKeywords)`
 * `M:System.Diagnostics.Tracing.EventListener.EnableEvents(System.Diagnostics.Tracing.EventSource,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventKeywords,System.Collections.Generic.IDictionary{System.String,System.String})`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458360%28v=vs.110%29.aspx#Core)

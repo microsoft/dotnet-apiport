@@ -21,4 +21,7 @@ Although the `EncoderParameter.EncoderParameter(Encoder, Int32, Int32, Int32)`  
 ### Affected APIs
 * `M:System.Drawing.Imaging.EncoderParameter.#ctor(System.Drawing.Imaging.Encoder,System.Int32,System.Int32,System.Int32,System.Int32)`
 
+### Category
+Windows Forms
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#winForms)

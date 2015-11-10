@@ -22,4 +22,7 @@ Can no longer use MEF to create a serializer
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Managed Extensibility Framework (MEF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887#MEF)

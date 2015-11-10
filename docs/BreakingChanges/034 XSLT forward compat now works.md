@@ -26,4 +26,7 @@ Most apps should be unaffected, however data will be sorted differently in some 
 ### Affected APIs
 * `T:System.Xml.Xsl.XslCompiledTransform`
 
+### Category
+XML, XSLT
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#xml)

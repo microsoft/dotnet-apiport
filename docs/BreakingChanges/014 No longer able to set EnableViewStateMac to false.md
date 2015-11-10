@@ -21,4 +21,7 @@ EnableViewStateMac must be assumed to be true, and any resulting MAC errors must
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/dn720774#ASP_NET)

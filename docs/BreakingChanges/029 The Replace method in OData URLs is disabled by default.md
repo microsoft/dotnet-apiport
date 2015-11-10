@@ -21,4 +21,7 @@ If the replace method is required (which is uncommon), it can be re-enabled thro
 ### Affected APIs
 * ``T:System.Data.Services.DataService`1``
 
+### Category
+Windows Communication Foundation (WCF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wcf)

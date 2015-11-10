@@ -23,4 +23,7 @@ We do not recommend applying both ObsoleteAttribute and Windows.Foundation.Depre
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458356(v=vs.110).aspx)

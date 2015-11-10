@@ -35,4 +35,7 @@ If the limit of DTD entity expansion is too low 10,000,000, the value can be ove
 * `M:System.Xml.XmlTextReader.#ctor(System.String,System.Xml.XmlNodeType,System.Xml.XmlParserContext)`
 * `M:System.Xml.XmlTextReader.#ctor(System.Xml.XmlNameTable)`
 
+### Category
+XML, XSLT
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx)

@@ -24,4 +24,7 @@ If Translate or ExecuteStoreQuery was called on an enum type in .NET 4.0, '0' wa
 * ``M:System.Data.Objects.ObjectContext.ExecuteStoreQuery``1(System.String,System.Object[])```
 * ```M:System.Data.Objects.ObjectContext.ExecuteStoreQuery``1(System.String,System.String,System.Data.Objects.MergeOption,System.Object[])```
 
+### Category
+Entity Framework
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#sql)

@@ -21,6 +21,9 @@ This change allows DateTime and DateTimeOffset values to be round-tripped. Custo
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Workflow Foundation (WF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wwf)
 
 <!--

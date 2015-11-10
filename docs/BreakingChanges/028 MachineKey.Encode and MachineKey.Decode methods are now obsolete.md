@@ -22,4 +22,7 @@ The recommended alternatives are [MachineKey.Protect](https://msdn.microsoft.com
 * `M:System.Web.Security.MachineKey.Encode(System.Byte[],System.Web.Security.MachineKeyProtection)`
 * `M:System.Web.Security.MachineKey.Decode(System.String,System.Web.Security.MachineKeyProtection)`
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#asp)

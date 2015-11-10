@@ -21,4 +21,7 @@ An exception occurs if the free memory available on the web server is less than 
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Communication Foundation (WCF)
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458360(v=vs.110).aspx)

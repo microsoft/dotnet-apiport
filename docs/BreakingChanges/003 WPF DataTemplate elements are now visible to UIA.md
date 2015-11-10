@@ -22,4 +22,7 @@ UI Auomation tests for this app may need updated to account for the UIA tree now
 * `M:System.Windows.DataTemplate.#ctor`
 * `M:System.Windows.DataTemplate.#ctor(System.Object)`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#wpf)

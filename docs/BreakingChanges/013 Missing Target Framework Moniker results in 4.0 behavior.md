@@ -20,3 +20,6 @@ A [target framework attribute](https://msdn.microsoft.com/en-us/library/system.r
 
 ### Affected APIs
 * Not detectable via API analysis
+
+### Category
+Core

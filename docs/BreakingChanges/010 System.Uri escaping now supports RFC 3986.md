@@ -29,4 +29,7 @@ URI escaping has changed in .NET 4.5 to support [RFC 3986](http://tools.ietf.org
 * `M:System.Uri.EscapeUriString(System.String)`
 * `M:System.Uri.UnescapeDataString(System.String)`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)

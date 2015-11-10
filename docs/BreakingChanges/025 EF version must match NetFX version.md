@@ -21,4 +21,7 @@ Upgrade to EF 5 for .NET 4.5
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Entity Framework
+
 [More information](http://forums.asp.net/t/1779042.aspx)

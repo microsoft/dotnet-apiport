@@ -24,4 +24,7 @@ New [DragDropHelper](https://msdn.microsoft.com/en-us/library/system.activities.
 * `M:System.Activities.Presentation.DragDropHelper.GetDraggedModelItem(System.Windows.DragEventArgs)`
 * `M:System.Activities.Presentation.DragDropHelper.GetDroppedObject(System.Windows.DependencyObject,System.Windows.DragEventArgs,System.Activities.Presentation.EditingContext)`
 
+### Category
+Windows Workflow Foundation (WF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887#wwf)
