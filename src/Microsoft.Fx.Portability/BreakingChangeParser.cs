@@ -30,7 +30,20 @@ namespace Microsoft.Fx.Portability
         /// </summary>
         /// <param name="stream">The markdown to parse</param>
         /// <returns>BreakingChanges parsed from the markdown</returns>
-        public static IEnumerable<BreakingChange> FromMarkdown(Stream stream, IEnumerable<string> allowedCategories = null)
+        public static IEnumerable<BreakingChange> FromMarkdown(Stream stream)
+        {
+            // Use a separate overload instead of a default parameter so that binaries built against the older version of 
+            // Microsoft.Fx.Portability (without the new FromMarkdown overload) will keep working without recompilation.
+            return FromMarkdown(stream, null);
+        }
+
+        /// <summary>
+        /// Parses markdown files into BrekaingChange objects
+        /// </summary>
+        /// <param name="stream">The markdown to parse</param>
+        /// <param name="allowedCategories">Valid category strings. Pass null to allow any category. A breaking change using an invalid category will throw an exception while parsing the breaking change.</param>
+        /// <returns>BreakingChanges parsed from the markdown</returns>
+        public static IEnumerable<BreakingChange> FromMarkdown(Stream stream, IEnumerable<string> allowedCategories)
         {
             var breakingChanges = new List<BreakingChange>();
             var state = ParseState.None;
