@@ -328,4 +328,7 @@
   <data name="WritingReport" xml:space="preserve">
     <value>Writing report</value>
   </data>
+  <data name="CouldNotWriteReport" xml:space="preserve">
+    <value>Could not write report to directory '{0}' with file name '{1}' and extension '{2}'.</value>
+  </data>
 </root>

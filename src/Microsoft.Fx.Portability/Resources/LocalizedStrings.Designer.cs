@@ -143,6 +143,15 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not write report to directory &apos;{0}&apos; with file name &apos;{1}&apos; and extension &apos;{2}&apos;..
+        /// </summary>
+        public static string CouldNotWriteReport {
+            get {
+                return ResourceManager.GetString("CouldNotWriteReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

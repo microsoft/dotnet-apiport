@@ -88,7 +88,7 @@ namespace Microsoft.Fx.Portability
         /// Writes analysis reports to path supplied by options
         /// </summary>
         /// <param name="options"></param>
-        /// <returns>Output paths</returns>
+        /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
         {
             foreach (var errorInput in options.InvalidInputFiles)
@@ -103,7 +103,10 @@ namespace Microsoft.Fx.Portability
             {
                 var outputPath = await CreateReport(resultAndFormat.Result, options.OutputFileName, resultAndFormat.Format);
 
-                outputPaths.Add(outputPath);
+                if (!string.IsNullOrEmpty(outputPath))
+                {
+                    outputPaths.Add(outputPath);
+                }
             }
 
             return outputPaths;
@@ -129,6 +132,10 @@ namespace Microsoft.Fx.Portability
             }
         }
 
+        /// <summary>
+        /// Writes a report given the output format and filename.
+        /// </summary>
+        /// <returns>null if unable to write the report otherwise, will return the full path to the report.</returns>
         private async Task<string> CreateReport(byte[] result, string suppliedOutputFileName, string outputFormat)
         {
             var filePath = Path.GetFullPath(suppliedOutputFileName);
@@ -141,7 +148,19 @@ namespace Microsoft.Fx.Portability
                 {
                     var extension = await GetExtensionForFormat(outputFormat);
 
-                    return await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwrite: false);
+                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwrite: false);
+
+                    if (string.IsNullOrEmpty(filename))
+                    {
+                        _progressReport.ReportIssue(string.Format(LocalizedStrings.CouldNotWriteReport, outputDirectory, outputFileName, extension));
+                        progressTask.Abort();
+
+                        return null;
+                    }
+                    else
+                    {
+                        return filename;
+                    }
                 }
                 catch (Exception)
                 {
