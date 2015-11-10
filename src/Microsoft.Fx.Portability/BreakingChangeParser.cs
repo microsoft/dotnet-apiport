@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Microsoft.Fx.Portability
 {
@@ -20,7 +21,8 @@ namespace Microsoft.Fx.Portability
             AffectedAPIs,
             OriginalBug,
             Notes,
-            SourceAnalyzerStatus
+            SourceAnalyzerStatus,
+            Categories
         }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace Microsoft.Fx.Portability
         /// </summary>
         /// <param name="stream">The markdown to parse</param>
         /// <returns>BreakingChanges parsed from the markdown</returns>
-        public static IEnumerable<BreakingChange> FromMarkdown(Stream stream)
+        public static IEnumerable<BreakingChange> FromMarkdown(Stream stream, IEnumerable<string> allowedCategories = null)
         {
             var breakingChanges = new List<BreakingChange>();
             var state = ParseState.None;
@@ -110,8 +112,12 @@ namespace Microsoft.Fx.Portability
                                 case "source analyzer status":
                                     state = ParseState.SourceAnalyzerStatus;
                                     break;
+                                case "category":
+                                case "categories":
+                                    state = ParseState.Categories;
+                                    break;
                                 default:
-                                    ParseNonStateChange(currentBreak, state, currentLine);
+                                    ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
                                     break;
                             }
                         }
@@ -134,7 +140,7 @@ namespace Microsoft.Fx.Portability
                                     state = ParseState.None;
                                     break;
                                 default:
-                                    ParseNonStateChange(currentBreak, state, currentLine);
+                                    ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
                                     break;
                             }
                         }
@@ -151,7 +157,7 @@ namespace Microsoft.Fx.Portability
                         // Otherwise, process according to our current state
                         else
                         {
-                            ParseNonStateChange(currentBreak, state, currentLine);
+                            ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
                         }
                     }
                 }
@@ -166,7 +172,7 @@ namespace Microsoft.Fx.Portability
             return breakingChanges;
         }
 
-        private static void ParseNonStateChange(BreakingChange currentBreak, ParseState state, string currentLine)
+        private static void ParseNonStateChange(BreakingChange currentBreak, ParseState state, string currentLine, IEnumerable<string> allowedCategories)
         {
             switch (state)
             {
@@ -244,6 +250,21 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.SourceAnalyzerStatus = status;
                     }
+                    break;
+                case ParseState.Categories:
+                    // Trim md list and code markers, as well as comment tags (in case the categories section is followed by a comment)
+                    var category = currentLine.Trim().TrimStart('*', '-', '!', '<', '>');
+                    if (string.IsNullOrWhiteSpace(category)) break;
+                    if (currentBreak.Categories == null)
+                    {
+                        currentBreak.Categories = new List<string>();
+                    }
+                    // If a list of allowed categories was provided, make sure that the category found is on the list
+                    if ( (!allowedCategories?.Contains(category, StringComparer.OrdinalIgnoreCase))?? false)
+                    {
+                        throw new InvalidOperationException($"Invalid category detected: {category}");
+                    }
+                    ((List<string>)currentBreak.Categories).Add(category);
                     break;
                 default:
                     throw new InvalidOperationException("Unhandled breaking change parse state: " + state.ToString());

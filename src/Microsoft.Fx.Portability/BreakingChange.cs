@@ -28,7 +28,8 @@ namespace Microsoft.Fx.Portability
                 SourceAnalyzerStatus = this.SourceAnalyzerStatus,
                 BugLink = this.BugLink,
                 Notes = this.Notes,
-                ImpactScope = this.ImpactScope
+                ImpactScope = this.ImpactScope,
+                Categories = this.Categories?.ToList()
             };
         }
 
@@ -71,6 +72,8 @@ namespace Microsoft.Fx.Portability
         }
 
         public BreakingChangeImpact ImpactScope { get; set; }
+
+        public IEnumerable<string> Categories;
 
         public int CompareTo(BreakingChange other)
         {
