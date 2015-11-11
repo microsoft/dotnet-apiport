@@ -24,6 +24,9 @@ This behavior was reverted in a .NET Framework 4.5 servicing release. Please upd
 ### Affected APIs
 * `P:System.Activities.Statements.InvokeMethod.Parameters`
 
+### Category
+Windows Workflow Foundation (WF)
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/758736/unexpected-invalidcastexception-from-invokemethod-activity-in-wf4-after-net-4-5-install)
 
 <!--

@@ -21,4 +21,7 @@ See [Mitigation: Deserialization of Objects Across App Domains](https://msdn.mic
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458360(v=vs.110).aspx)

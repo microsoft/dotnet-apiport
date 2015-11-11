@@ -26,4 +26,7 @@ Alternatively, the issue may be avoided by using the [WorkflowContext.Load(strin
 ### Affected APIs
 * `M:System.Activities.Presentation.WorkflowDesigner.Load`
 
+### Category
+Windows Workflow Foundation (WF)
+
 [More information](https://connect.microsoft.com/VisualStudio/feedback/details/786503/)

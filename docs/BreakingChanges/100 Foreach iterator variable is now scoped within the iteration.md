@@ -21,4 +21,8 @@ Ideally, code should be updated to expect the new compiler behavior. If the old 
 ### Affected APIs
 * Not detectable via API analysis
 
+### Categories
+Core
+C#
+
 [More information](http://blogs.msdn.com/b/ericlippert/archive/2009/11/12/closing-over-the-loop-variable-considered-harmful.aspx)

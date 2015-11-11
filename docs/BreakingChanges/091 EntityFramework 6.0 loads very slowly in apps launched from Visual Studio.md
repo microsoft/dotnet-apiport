@@ -21,4 +21,7 @@ This issue is fixed in EntityFramework 6.0.2. Please update EntityFramework to a
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Entity Framework
+
 [More information](https://entityframework.codeplex.com/workitem/1749)

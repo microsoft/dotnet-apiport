@@ -24,4 +24,7 @@ Because the old sort algorithm was also unstable (though in slightly different w
 * ``M:System.Collections.Generic.List`1.Sort(System.Comparison{`0})``
 * ``M:System.Collections.Generic.List`1.Sort(System.Int32,System.Int32,System.Collections.Generic.IComparer{`0})``
 
+### Category
+Core
+
 [More information](http://stackoverflow.com/questions/12461328/behaviour-of-listt-sort-in-net-4-5-changed-from-net-4-0?rq=1)

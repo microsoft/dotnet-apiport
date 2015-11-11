@@ -43,6 +43,9 @@ If necessary, this break can be avoided by targeting the .NET Framework 4.5.2 or
 * `M:System.Xml.XmlWriter.WriteSurrogateCharEntityAsync(System.Char,System.Char)`
 * `M:System.Xml.XmlWriter.WriteValue(System.String)`
 
+### Category
+XML, XSLT
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833123\(v=vs.110\).aspx)
 
 <!--

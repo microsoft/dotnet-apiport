@@ -21,4 +21,7 @@ Previously when overflows occurred, the result would be silently truncated. Now 
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Forms
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx)

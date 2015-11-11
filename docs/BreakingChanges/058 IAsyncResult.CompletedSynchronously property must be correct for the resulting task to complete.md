@@ -42,4 +42,7 @@ If IAsyncResult implementations correctly return true for the CompletedSynchronu
 * ```M:System.Threading.Tasks.TaskFactory.FromAsync``4(System.Func{``0,``1,``2,System.AsyncCallback,System.Object,System.IAsyncResult},System.Func{System.IAsyncResult,``3},``0,``1,``2,System.Object)```
 * ```M:System.Threading.Tasks.TaskFactory.FromAsync``4(System.Func{``0,``1,``2,System.AsyncCallback,System.Object,System.IAsyncResult},System.Func{System.IAsyncResult,``3},``0,``1,``2,System.Object,System.Threading.Tasks.TaskCreationOptions)```
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#core)

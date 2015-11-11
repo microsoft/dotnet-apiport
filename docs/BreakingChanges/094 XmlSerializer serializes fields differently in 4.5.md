@@ -38,4 +38,8 @@ This behavior was corrected in a servicing update of .NET Framework 4.5. Please 
 * `M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String)`
 * `M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String,System.String)`
 
+### Categories
+Serialization
+XML, XSLT
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/761786/net-4-5-xmlserializer-produces-different-output-from-4-0)

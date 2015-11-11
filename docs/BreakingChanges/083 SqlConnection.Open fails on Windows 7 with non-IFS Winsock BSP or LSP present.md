@@ -27,4 +27,7 @@ This bug has been fixed in the .NET Framework 4.5.2, so it can be avoided by upg
 * `M:System.Data.SqlClient.SqlConnection.Open`
 * `M:System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)`
 
+### Category
+Data
+
 [More information](https://connect.microsoft.com/VisualStudio/feedback/details/729323)

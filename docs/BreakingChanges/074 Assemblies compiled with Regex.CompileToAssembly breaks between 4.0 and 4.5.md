@@ -26,4 +26,7 @@ To work around this problem, you can do either of the following:
 * `M:System.Text.RegularExpressions.Regex.CompileToAssembly(System.Text.RegularExpressions.RegexCompilationInfo[],System.Reflection.AssemblyName,System.Reflection.Emit.CustomAttributeBuilder[])`
 * `M:System.Text.RegularExpressions.Regex.CompileToAssembly(System.Text.RegularExpressions.RegexCompilationInfo[],System.Reflection.AssemblyName,System.Reflection.Emit.CustomAttributeBuilder[],System.String)`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#core)

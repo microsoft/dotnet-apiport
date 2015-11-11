@@ -30,4 +30,7 @@ If an app depends on unobserved asynchronous exceptions propagating to the final
 * `M:System.Threading.Tasks.Task.Start`
 * `M:System.Threading.Tasks.Task.Start(System.Threading.Tasks.TaskScheduler)`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#core)

@@ -24,4 +24,7 @@ This issue is fixed in the .NET Framework 4.5.1. Upgrading to that Framework wil
 ### Affected APIs
 * ``M:System.Collections.Concurrent.ConcurrentQueue`1.TryPeek(`0@)``
 
+### Category
+Core
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/762273/bug-in-concurrentqueue-in-net-4-5-trypeek-returns-true-but-no-real-object-returned)

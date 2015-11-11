@@ -29,4 +29,7 @@ This bug can be avoided by upgrading to .NET Framework 4.5.1. Alternatively, tes
 * `M:System.Xml.Serialization.XmlSerializer.#ctor(System.Type)`
 * Investigate applicable APIs
 
+### Category
+Core
+
 [More information](https://connect.microsoft.com/VisualStudio/feedback/details/732334/unable-to-find-an-entry-point-named-getcurrentpackageid-in-dll-kernel32-dll)

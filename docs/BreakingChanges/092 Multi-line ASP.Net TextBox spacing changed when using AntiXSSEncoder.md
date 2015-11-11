@@ -21,6 +21,9 @@ Be aware that 4.0 web apps retargeted to .NET 4.5 may have multi-line text boxes
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+ASP.NET
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/748052/textbox-with-multiline-textmode-adds-additional-linebreak-to-the-output)
 
 <!--

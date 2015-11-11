@@ -23,6 +23,9 @@ If there is a need for databinding, manually invoke databind in an event that is
 ### Affected APIs
 * Investigate applicable APIs
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#asp)
 
 <!--

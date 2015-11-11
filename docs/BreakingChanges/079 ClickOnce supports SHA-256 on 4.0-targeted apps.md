@@ -21,6 +21,9 @@ This change removes that dependency and allows SHA-256 certificates to be used t
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+ClickOnce
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833125(v=vs.110).aspx#ClickOnce)
 
 <!--

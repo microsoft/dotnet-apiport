@@ -27,6 +27,9 @@ If the old behavior is needed for some reason, the app can target the .NET Frame
 * `M:System.Windows.DataObject.GetData(System.Type)`
 * `M:System.Windows.DataObject.GetData(System.String,System.Boolean)`
 
+### Category
+Windows Forms
+
 [More information](https://msdn.microsoft.com/en-us/library/dn720772(v=vs.110).aspx#WinForms)
 
 <!--

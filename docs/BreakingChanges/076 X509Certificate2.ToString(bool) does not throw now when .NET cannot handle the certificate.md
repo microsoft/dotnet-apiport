@@ -21,4 +21,7 @@ Any code depending on X509Certificate2.ToString(bool) should be updated to expec
 ### Affected APIs
 * `M:System.Security.Cryptography.X509Certificates.X509Certificate2.ToString(System.Boolean)`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833125\(v=vs.110\).aspx#Core)

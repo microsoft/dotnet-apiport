@@ -1,9 +1,12 @@
 [
+    "ADO.NET",
     "ASP.NET",
+    "C#",
     "ClickOnce",
     "Core",
     "Data",
     "Entity Framework",
+    "JIT",
     "LINQ",
     "Managed Extensibility Framework (MEF)",
     "MSBuild",

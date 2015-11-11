@@ -31,4 +31,7 @@ This issue was fixed in a servicing update. Please update the .NET Framework 4.5
 * ```M:System.Linq.Queryable.Join``4(System.Linq.IQueryable{``0},System.Collections.Generic.IEnumerable{``1},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Linq.Expressions.Expression{System.Func{``0,``1,``3}})```
 * ```M:System.Linq.Queryable.Join``4(System.Linq.IQueryable{``0},System.Collections.Generic.IEnumerable{``1},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Linq.Expressions.Expression{System.Func{``0,``1,``3}},System.Collections.Generic.IEqualityComparer{``2})```
 
+### Category
+LINQ
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/763986/linq-to-ef-join-throws-index-was-out-of-range-after-upgrade-from-vs2010-to-vs2012)

@@ -26,5 +26,8 @@ When re-building an ADO.NET database provider, these differences will require th
 * `M:System.Data.Common.DbParameter.get_Scale`
 * `M:System.Data.Common.DbParameter.set_Scale(System.Byte)`
 
+### Category
+ADO.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458356(v=vs.110).aspx#ADO)
 

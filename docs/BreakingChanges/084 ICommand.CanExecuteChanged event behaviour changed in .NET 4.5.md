@@ -24,4 +24,7 @@ This bug has been fixed in the .NET Framework 4.5 servicing releases, so it can 
 ### Affected APIs
 * `E:System.Windows.Input.ICommand.CanExecuteChanged`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/751429/wpf-icommand-canexecutechanged-behaviour-change-in-net-4-5)

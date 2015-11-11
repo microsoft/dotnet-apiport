@@ -24,4 +24,7 @@ This issue is fixed in the .NET Framework 4.5.2. Alternatively, the profiler may
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+ASP.NET
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/793730/clr-profiler-crashes-any-asp-net-mvc4-app-on-startup-due-to-ngen-profile-images)

@@ -26,4 +26,7 @@ The VIA protocol is deprecated, so an alternative protocol should be used to con
 * `M:System.Data.SqlClient.SqlConnection.#ctor(System.String)`
 * `M:System.Data.SqlClient.SqlConnection.#ctor(System.String,System.Data.SqlClient.SqlCredential)`
 
+### Category
+Data
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887%28v=vs.110%29.aspx#sql)
