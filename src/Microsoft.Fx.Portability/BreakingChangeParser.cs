@@ -223,7 +223,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.ApplicableApis = new List<string>();
                     }
-                    ((List<string>)currentBreak.ApplicableApis).Add(api);
+                    currentBreak.ApplicableApis.Add(api);
                     break;
                 case ParseState.Details:
                     if (currentBreak.Details == null)
@@ -277,7 +277,7 @@ namespace Microsoft.Fx.Portability
                     {
                         throw new InvalidOperationException($"Invalid category detected: {category}");
                     }
-                    ((List<string>)currentBreak.Categories).Add(category);
+                    currentBreak.Categories.Add(category);
                     break;
                 default:
                     throw new InvalidOperationException("Unhandled breaking change parse state: " + state.ToString());

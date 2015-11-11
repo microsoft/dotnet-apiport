@@ -23,22 +23,11 @@ namespace Microsoft.Fx.Portability
 
         public static IEnumerable<BreakingChange> LoadBreakingChanges()
         {
-            IEnumerable<string> allowedCategories = null;
-
             // Prefer a local 'BreakingChanges' directory to embedded breaking changes
             if (Directory.Exists(Path.Combine(GetCurrentDirectoryName(), "BreakingChanges")))
             {
-                // Check to see if a file defining valid categories exists
-                var categoriesPath = Path.Combine(GetCurrentDirectoryName(), "BreakingChanges", "BreakingChangeCategories.json");
-                if (File.Exists(categoriesPath))
-                {
-                    using (var categoriesFile = File.Open(categoriesPath, FileMode.Open, FileAccess.Read))
-                    {
-                        allowedCategories = categoriesFile.Deserialize<string[]>();
-                    }
-                }
-
                 var breakingChanges = new List<BreakingChange>();
+                var allowedCategories = GetLocalAllowedCategories();
                 foreach (var file in Directory.GetFiles(Path.Combine(GetCurrentDirectoryName(), "BreakingChanges"), "*", SearchOption.AllDirectories))
                 {
                     using (var fs = File.Open(file, FileMode.Open, FileAccess.Read))
@@ -73,6 +62,20 @@ namespace Microsoft.Fx.Portability
 
                 return breakingChanges;
             }
+        }
+
+        private static IEnumerable<string> GetLocalAllowedCategories()
+        {
+            // Check to see if a file defining valid categories exists
+            var categoriesPath = Path.Combine(GetCurrentDirectoryName(), "BreakingChanges", "BreakingChangeCategories.json");
+            if (File.Exists(categoriesPath))
+            {
+                using (var categoriesFile = File.Open(categoriesPath, FileMode.Open, FileAccess.Read))
+                {
+                    return categoriesFile.Deserialize<string[]>();
+                }
+            }
+            return null;
         }
 
         private static Stream OpenFileOrResource(string path)

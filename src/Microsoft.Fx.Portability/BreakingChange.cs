@@ -45,7 +45,7 @@ namespace Microsoft.Fx.Portability
 
         public string Markdown { get; set; }
 
-        public IEnumerable<string> ApplicableApis { get; set; }
+        public IList<string> ApplicableApis { get; set; }
 
         public IEnumerable<string> Related { get; set; }
 
@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability
 
         public BreakingChangeImpact ImpactScope { get; set; }
 
-        public IEnumerable<string> Categories;
+        public IList<string> Categories;
 
         public int CompareTo(BreakingChange other)
         {
