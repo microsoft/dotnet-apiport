@@ -21,6 +21,9 @@ If iPad-specific capabilities are required, it is necessary to modify iPad behav
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+ASP.NET
+
 <!--
     ### Notes
     For analyzer, can look for 'iPad' in .browser capability files

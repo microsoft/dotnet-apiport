@@ -24,8 +24,11 @@ This issue has been fixed in the .NET Framework 4.6 and may be addressed by upgr
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Core
+
 <!--
     ### Notes
-    Native code analysis needed
+    Native code analysis needed. Also, this could be categorized as 'profiling' but I chose to call it 'core' because there are no other profiling issues. We can add that category in the future if enough issues crop up to justify it.
 -->
 

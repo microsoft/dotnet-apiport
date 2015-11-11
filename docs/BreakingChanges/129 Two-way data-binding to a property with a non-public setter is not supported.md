@@ -21,11 +21,14 @@ The app should be updated to either use one-way binding, or expose the property'
 ### Affected APIs
 * `F:System.Windows.Data.BindingMode.TwoWay`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/773682/wpf-property-with-private-setter-is-updated-by-a-twoway-binding)
 
 <!--
     ### Notes
-    This is a good candidate for a source analyzer since most cases of two-way binding will be defined in XAML
+    This is a good candidate for a non-code source analyzer since most cases of two-way binding will be defined in XAML
 -->
 
 

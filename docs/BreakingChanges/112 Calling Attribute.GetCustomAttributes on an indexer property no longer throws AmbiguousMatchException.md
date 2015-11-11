@@ -36,3 +36,5 @@ Be aware that GetCustomAttribute(s) will work more frequently now. If an app was
 * `M:System.Reflection.CustomAttributeExtensions.GetCustomAttributes``1(System.Reflection.MemberInfo)`
 * `M:System.Reflection.CustomAttributeExtensions.GetCustomAttributes``1(System.Reflection.MemberInfo,System.Boolean)`
 
+### Category
+Core

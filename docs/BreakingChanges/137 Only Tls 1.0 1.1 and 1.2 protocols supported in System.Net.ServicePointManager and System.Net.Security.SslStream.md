@@ -27,4 +27,7 @@ The recommended mitigation is to upgrade the sever-side app to Tls1.0, Tls1.1, o
 * `F:System.Security.Authentication.SslProtocols.Ssl2`
 * `F:System.Security.Authentication.SslProtocols.Ssl3`
 
+### Category
+Networking
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833123(v=vs.110).aspx#Net)

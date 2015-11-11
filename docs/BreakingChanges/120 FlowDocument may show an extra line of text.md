@@ -25,6 +25,9 @@ In some cases, decreasing the display element's PageHeight property by one can r
 * `M:System.Windows.Controls.FlowDocumentPageViewer.#ctor`
 * `M:System.Windows.Controls.Primitives.DocumentPageView.#ctor`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 <!--
     ### Notes
     Analyzer would just look for FlowDocument/FlowDocunmentReader/FlowDocumentPageViewer/DocumentPageView usage in xaml

@@ -24,5 +24,8 @@ This issue has been fixed in the .NET Framework 4.6 and may be addressed by upgr
 ### Affected APIs
 * `M:System.Windows.Controls.DataGrid.#ctor`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/1001771/right-clicking-on-wpf-data-grid-row-header-changes-selection)
 

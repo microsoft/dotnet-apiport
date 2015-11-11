@@ -25,5 +25,8 @@ Calling `ObservableCollection<T>.Remove` and `ObservableCollection<T>.Insert` in
 * ``M:System.Collections.ObjectModel.ObservableCollection`1.Move(System.Int32,System.Int32)``
 * ``M:System.Collections.ObjectModel.ObservableCollection`1.MoveItem(System.Int32,System.Int32)``
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://social.msdn.microsoft.com/Forums/en-US/afcbc8b3-a2f2-41e4-b402-2efc9eab1ffe/listboxitem-isselected-binding-issue-with-observablecollectiontmove?forum=wpf)
 

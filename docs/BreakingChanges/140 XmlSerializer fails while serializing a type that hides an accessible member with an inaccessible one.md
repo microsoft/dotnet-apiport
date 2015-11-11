@@ -37,4 +37,7 @@ Alternatively, the following config setting will revert to 4.0 XmlSerializer beh
 * `M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String)`
 * `M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String,System.String)`
 
+### Category
+Serialization
+
 [More information](http://stackoverflow.com/questions/14689305/serialization-breaks-in-net-4-5)

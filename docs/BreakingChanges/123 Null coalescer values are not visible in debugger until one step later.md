@@ -24,4 +24,7 @@ Stepping one additional time in the debugger will cause the local/field's value 
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Debugger
+
 [More information](http://stackoverflow.com/questions/19352130/why-doesnt-the-null-coalescing-operator-work-in-this-situation)

@@ -24,5 +24,8 @@ Entity Framework targets files are fixed to work with the new msbuild layout beg
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Entity Framework
+
 [More information](http://stackoverflow.com/questions/20400054/entitydeploysplit-error-microsoft-data-entity-build-tasks-dll-missing/24249247#24249247)
 

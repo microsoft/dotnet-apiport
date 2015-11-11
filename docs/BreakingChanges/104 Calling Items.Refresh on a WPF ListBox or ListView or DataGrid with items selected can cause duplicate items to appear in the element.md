@@ -24,5 +24,8 @@ This issue may be worked around by programatically unselecting items before Refr
 ### Affected APIs
 * `M:System.Windows.Data.CollectionView.Refresh`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/873075/on-net-4-5-the-selected-items-in-a-wpf-listbox-listview-control-are-incorrect-when-items-refresh-is-called-from-code-behind)
 

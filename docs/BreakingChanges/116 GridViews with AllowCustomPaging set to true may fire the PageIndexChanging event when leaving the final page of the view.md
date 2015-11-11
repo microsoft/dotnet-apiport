@@ -25,6 +25,9 @@ This issue has been fixed in the .NET Framework 4.6 and may be addressed by upgr
 * `M:System.Web.UI.WebControls.GridView.set_AllowCustomPaging(System.Boolean)`
 * `P:System.Web.UI.WebControls.GridView.AllowCustomPaging`
 
+### Category
+ASP.NET
+
 [More information](http://stackoverflow.com/questions/18793795/asp-net-4-5-gridview-postback-of-last-page)
 
 <!--

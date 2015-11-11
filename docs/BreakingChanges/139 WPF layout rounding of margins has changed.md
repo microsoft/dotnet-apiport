@@ -29,4 +29,7 @@ Apps that target the .NET Framework 4.6 but want WPF controls to render using th
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](https://msdn.microsoft.com/en-us/library/mt298997(v=vs.110).aspx)
