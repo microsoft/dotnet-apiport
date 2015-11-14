@@ -27,11 +27,12 @@ namespace Microsoft.Fx.Portability
             if (Directory.Exists(Path.Combine(GetCurrentDirectoryName(), "BreakingChanges")))
             {
                 var breakingChanges = new List<BreakingChange>();
+                var allowedCategories = GetLocalAllowedCategories();
                 foreach (var file in Directory.GetFiles(Path.Combine(GetCurrentDirectoryName(), "BreakingChanges"), "*", SearchOption.AllDirectories))
                 {
                     using (var fs = File.Open(file, FileMode.Open, FileAccess.Read))
                     {
-                        breakingChanges.AddRange(ParseBreakingChange(fs, Path.GetExtension(file)));
+                        breakingChanges.AddRange(ParseBreakingChange(fs, Path.GetExtension(file), allowedCategories));
                     }
                 }
 
@@ -46,7 +47,7 @@ namespace Microsoft.Fx.Portability
                 {
                     using (var stream = typeof(Data).GetTypeInfo().Assembly.GetManifestResourceStream(file))
                     {
-                        var fileBreakingChanges = ParseBreakingChange(stream, Path.GetExtension(file));
+                        var fileBreakingChanges = ParseBreakingChange(stream, Path.GetExtension(file), null);
 
                         if (fileBreakingChanges == null)
                         {
@@ -61,6 +62,20 @@ namespace Microsoft.Fx.Portability
 
                 return breakingChanges;
             }
+        }
+
+        private static IEnumerable<string> GetLocalAllowedCategories()
+        {
+            // Check to see if a file defining valid categories exists
+            var categoriesPath = Path.Combine(GetCurrentDirectoryName(), "BreakingChanges", "BreakingChangeCategories.json");
+            if (File.Exists(categoriesPath))
+            {
+                using (var categoriesFile = File.Open(categoriesPath, FileMode.Open, FileAccess.Read))
+                {
+                    return categoriesFile.Deserialize<string[]>();
+                }
+            }
+            return null;
         }
 
         private static Stream OpenFileOrResource(string path)
@@ -93,20 +108,24 @@ namespace Microsoft.Fx.Portability
 #endif
         }
 
-        private static IEnumerable<BreakingChange> ParseBreakingChange(Stream stream, string extension)
+        private static IEnumerable<BreakingChange> ParseBreakingChange(Stream stream, string extension, IEnumerable<string> allowedCategories)
         {
             if (string.Equals(".md", extension, StringComparison.OrdinalIgnoreCase))
             {
-                return BreakingChangeParser.FromMarkdown(stream);
+                return BreakingChangeParser.FromMarkdown(stream, allowedCategories);
             }
             if (string.Equals(".json", extension, StringComparison.OrdinalIgnoreCase))
             {
-                return stream.Deserialize<IEnumerable<BreakingChange>>();
+                try
+                {
+                    return stream.Deserialize<IEnumerable<BreakingChange>>();
+                }
+                catch (Exception)
+                {
+                    // An invalid json file will throw an exception when deserialized. Simply ignore such files.
+                }
             }
-            else
-            {
-                return Enumerable.Empty<BreakingChange>();
-            }
+            return Enumerable.Empty<BreakingChange>();
         }
     }
 }

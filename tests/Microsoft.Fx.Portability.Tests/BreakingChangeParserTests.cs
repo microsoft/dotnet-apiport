@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Tests
             bc.Title = ListTBC.Title;
             bc.Details = ListTBC.Details + "\n\n\n" + UriBC.Details;
             bc.Suggestion = ListTBC.Suggestion + "\n\n" + UriBC.Suggestion;
-            bc.ApplicableApis = ListTBC.ApplicableApis.Concat(UriBC.ApplicableApis);
+            bc.ApplicableApis = ListTBC.ApplicableApis.Concat(UriBC.ApplicableApis).ToList();
             ValidateParse(GetBreakingChangeMarkdown("DupSections.md"), bc);
         }
 
@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability.Tests
             bc.ImpactScope = BreakingChangeImpact.Unknown;
             bc.SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Unknown;
             bc.IsQuirked = false;
-            bc.ApplicableApis = bc.ApplicableApis.Concat(new[] { "##" });
+            bc.ApplicableApis = bc.ApplicableApis.Concat(new[] { "##" }).ToList();
             bc.Suggestion = "\\0\0\0\0\0" + bc.Suggestion + "\u0001\u0002";
             ValidateParse(GetBreakingChangeMarkdown("CorruptData.md"), bc);
         }
