@@ -1,16 +1,17 @@
 ﻿{
   "runtimes": {
-    "win-anycpu": { }
+    "win-anycpu": {}
   },
   "dependencies": {
-    "Newtonsoft.Json": "6.0.8",
+    "MicroBuild.Core": "0.1.1",
     "Microsoft.Framework.Configuration.CommandLine": "1.0.0-beta5",
     "Microsoft.Framework.OptionsModel": "1.0.0-beta5",
-    "System.Reflection.Metadata": "1.1.0-alpha-00008",
+    "Newtonsoft.Json": "6.0.8",
     "System.Collections.Immutable": "1.1.37",
+    "System.Reflection.Metadata": "1.1.0-alpha-00008",
     "Unity": "3.5.1404"
   },
   "frameworks": {
-    "net45": { }
+    "net45": {}
   }
 }
