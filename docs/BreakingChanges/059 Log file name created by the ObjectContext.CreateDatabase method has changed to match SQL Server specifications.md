@@ -21,4 +21,7 @@ If the log file name is important for an app, the app should be updated to expec
 ### Affected APIs
 * `M:System.Data.Objects.ObjectContext.CreateDatabase`
 
+### Category
+Entity Framework
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#sql)

@@ -24,6 +24,9 @@ This issue was fixed in a servicing update. Please update the .NET Framework 4.5
 ### Affected APIs
 * `M:System.Type.IsAssignableFrom(System.Type)`
 
+### Category
+Core
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/760270/type-isassignablefrom-for-type-parameters-is-broken)
 
 <!--

@@ -20,3 +20,6 @@ If looser, .NET Framework 4.0 validation is needed, the validating application c
 
 ### Affected APIs
 * Not detectable via API analysis
+
+### Category
+XML, XSLT

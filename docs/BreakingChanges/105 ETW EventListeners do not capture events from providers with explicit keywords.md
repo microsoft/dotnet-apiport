@@ -26,4 +26,7 @@ Alternatively, this issue has been fixed in the .NET Framework 4.6 and may be ad
 ### Affected APIs
 * `M:System.Diagnostics.Tracing.EventListener.EnableEvents(System.Diagnostics.Tracing.EventSource,System.Diagnostics.Tracing.EventLevel)`
 
+### Category
+Core
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/816989/tpl-etw-events-for-task-not-captured-by-eventlistener-anymore)

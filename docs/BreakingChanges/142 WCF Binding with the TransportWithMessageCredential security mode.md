@@ -34,5 +34,8 @@ Because this is an opt-in feature, it should not affect the behavior of existing
 * `F:System.ServiceModel.SecurityMode.TransportWithMessageCredential`
 * `F:System.ServiceModel.WSFederationHttpSecurityMode.TransportWithMessageCredential`
 
+### Category
+Windows Communication Foundation (WCF)
+
 [More information](https://msdn.microsoft.com/en-US/library/mt592686%28v=vs.110%29.aspx)
 

@@ -22,6 +22,9 @@ Be aware that enabling `UseRandomizedStringHashAlgorithm` will not result in `Ap
 * `M:System.AppDomainSetup.get_DynamicBase`
 * `P:System.AppDomainSetup.DynamicBase`
 
+### Category
+Core
+
 <!--
     ### Notes
     Should be easy to look for DynamicBase use while UseRandomizedStringHashAlgorithm is set

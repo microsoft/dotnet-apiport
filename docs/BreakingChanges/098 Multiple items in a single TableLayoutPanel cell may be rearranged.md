@@ -24,6 +24,9 @@ This behavior was reverted in a servicing update for the .NET Framework 4.5. Ple
 ### Affected APIs
 * `M:System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control,System.Int32,System.Int32)`
 
+### Category
+Windows Forms
+
 <!--
     ### Notes
     Although we're looking for TableLayoutPanel APIs, what's really needed here is an analyzer that can look for XAML with multiple items in a single TableLayoutPanel cell

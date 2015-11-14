@@ -23,4 +23,7 @@ This change only affects applications targeting the .NET Framework 4.6.1. This c
 ### Affected APIs
 * `M:System.IdentityModel.Claims.X509CertificateClaimSet.FindClaims(System.String,System.String)`
 
+### Category
+Windows Communication Foundation (WCF)
+
 [More information](https://msdn.microsoft.com/en-us/library/mt620031%28v=vs.110%29.aspx#WCF)

@@ -29,5 +29,8 @@ Be aware that some glyph bounding box sizes have increased. These changes will u
 * `M:System.Windows.Media.FormattedText.get_Extent`
 * `P:System.Windows.Media.FormattedText.Extent`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://support.microsoft.com/en-us/kb/3009678)
 

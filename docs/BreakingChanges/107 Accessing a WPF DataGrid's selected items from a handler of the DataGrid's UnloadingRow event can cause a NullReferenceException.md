@@ -26,3 +26,5 @@ This issue has been fixed in the .NET Framework 4.6 and may be addressed by upgr
 * `E:System.Windows.Controls.DataGrid.UnloadingRowDetails`
 * `E:System.Windows.Controls.DataGrid.UnloadingRowGroup`
 
+### Category
+Windows Presentation Foundation (WPF)

@@ -25,6 +25,9 @@ detail and examples of how to workaround the issue.
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Core
+
 [More information](https://support.microsoft.com/en-us/kb/2909958/)
 
 <!--

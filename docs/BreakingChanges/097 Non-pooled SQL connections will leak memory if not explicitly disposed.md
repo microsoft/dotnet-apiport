@@ -25,4 +25,7 @@ This issue is fixed in a .NET Framework 4.5 servicing update. Please update the 
 * `M:System.Data.SqlClient.SqlConnection.#ctor(System.String)`
 * `M:System.Data.SqlClient.SqlConnection.#ctor(System.String,System.Data.SqlClient.SqlCredential)`
 
+### Category
+Data
+
 [More information](https://support.microsoft.com/kb/2748720)

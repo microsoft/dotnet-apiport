@@ -24,4 +24,7 @@ A fix for this issue is available in a servicing release of the .NET Framework 4
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/927119/net-framework-4-5-2-causes-applications-using-wpf-to-spawn-a-wisptis-exe-process-which-can-freeze-the-mouse)

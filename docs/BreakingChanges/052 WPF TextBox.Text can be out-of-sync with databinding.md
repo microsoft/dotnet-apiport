@@ -23,4 +23,7 @@ This should have no negative impact. However, you can restore the previous behav
 * `M:System.Windows.Controls.TextBox.set_Text(System.String)`
 * `P:System.Windows.Controls.TextBox.Text`
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#wpf)

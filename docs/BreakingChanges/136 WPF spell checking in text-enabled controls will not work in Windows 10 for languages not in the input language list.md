@@ -23,4 +23,7 @@ Be aware that the language or text to be spell-checked must be added as an input
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833125(v=vs.110).aspx#WPF)

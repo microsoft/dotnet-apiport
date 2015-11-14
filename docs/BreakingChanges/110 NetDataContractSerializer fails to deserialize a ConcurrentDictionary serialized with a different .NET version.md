@@ -27,5 +27,8 @@ There are a number of possible work-arounds for this issue:
 ### Affected APIs
 * `M:System.Runtime.Serialization.NetDataContractSerializer.Deserialize(System.IO.Stream)`
 
+### Category
+Serialization
+
 [More information](http://stackoverflow.com/questions/19585791/net-4-5-1-wcf-serialization-exception)
 

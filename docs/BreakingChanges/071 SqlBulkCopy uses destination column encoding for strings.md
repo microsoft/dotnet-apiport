@@ -22,4 +22,7 @@ Expect that SqlBulkCopy will no longer corrupt data due to encoding differences.
 * `T:System.Data.SqlClient.SqlBulkCopy`
 * `M:System.Data.SqlClient.SqlBulkCopy.#ctor(System.Data.SqlClient.SqlConnection)`
 
+### Category
+Data
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#xml)

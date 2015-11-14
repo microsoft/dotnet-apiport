@@ -30,3 +30,6 @@ A hotfix will be made available for this.
 
 ### Affected APIs
 * Not detectable via API analysis
+
+### Category
+Windows Presentation Foundation (WPF)

@@ -33,6 +33,9 @@ Alternatively, because this issue is addressed in the .NET Framework 4.6, it may
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn458360(v=vs.110).aspx#Core)
 
 <!--

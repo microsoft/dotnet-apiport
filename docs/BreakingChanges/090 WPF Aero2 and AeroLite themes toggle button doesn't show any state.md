@@ -25,6 +25,9 @@ This issue was fixed in a servicing update. Please update the .NET Framework 4.5
 * T:System.Windows.Controls.Primitives.ToggleButton
 * M:System.Windows.Controls.Primitives.ToggleButton.#ctor
 
+### Category
+Windows Presentation Foundation (WPF)
+
 [More information](http://stackoverflow.com/questions/12450751/togglebutton-doesnt-show-any-state)
 
 <!--

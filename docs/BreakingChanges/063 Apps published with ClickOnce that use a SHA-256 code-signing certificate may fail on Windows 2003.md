@@ -31,6 +31,9 @@ The change in signing the manifest with SHA-256 even when an app targets the .NE
 ### Affected APIs
 * Investigate applicable APIs
 
+### Category
+ClickOnce
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#ClickOnce)
 
 <!--

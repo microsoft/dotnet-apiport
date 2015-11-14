@@ -53,4 +53,7 @@ Be aware that some early or late dates may be slightly different when using the 
 * `P:System.Globalization.PersianCalendar.TwoDigitYearMax`
 * `T:System.Globalization.PersianCalendar`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833125%28v=vs.110%29.aspx#Core)

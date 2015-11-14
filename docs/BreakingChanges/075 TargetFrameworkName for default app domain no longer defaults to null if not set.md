@@ -21,4 +21,7 @@ Code should be updated to not depend on `AppDomainSetup.TargetFrameworkName` def
 ### Affected APIs
 * `M:System.AppDomainSetup.get_TargetFrameworkName`
 
+### Category
+Core
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833125(v=vs.110).aspx#Core)

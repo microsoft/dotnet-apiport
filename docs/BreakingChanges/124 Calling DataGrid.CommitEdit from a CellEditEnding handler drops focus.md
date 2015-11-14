@@ -24,3 +24,6 @@ This bug has been fixed in the .NET Framework 4.5.2, so it can be avoided by upg
 ### Affected APIs
 * `M:System.Windows.Controls.DataGrid.CommitEdit`
 * `M:System.Windows.Controls.DataGrid.CommitEdit(System.Windows.Controls.DataGridEditingUnit,System.Boolean)`
+
+### Category
+Windows Presentation Foundation (WPF)

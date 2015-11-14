@@ -21,5 +21,8 @@ This change (like many other URI changes) will only affect applications targetin
 ### Affected APIs
 * `M:System.Uri.IsWellFormedUriString(System.String,System.UriKind)`
 
+### Category
+Core
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/788841/net-4-5-system-uri-iswellformeduristring-method-returns-false-for-relative-uris-with-a-colon-char-in-first-segment)
 

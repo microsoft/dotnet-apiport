@@ -24,4 +24,7 @@ In rare cases, WCF apps that use custom authentication may see behavioral differ
 ### Affected APIs
 * `M:System.IdentityModel.Policy.AuthorizationContext.CreateDefaultAuthorizationContext(System.Collections.Generic.IList{System.IdentityModel.Policy.IAuthorizationPolicy})`
 
+### Category
+Windows Communication Foundation (WCF)
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833123%28v=vs.110%29.aspx#WCF)

@@ -25,4 +25,7 @@ This change only affects code that uses QueryViews with 1-0..1 relationships whe
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Entity Framework
+
 [More information](https://msdn.microsoft.com/en-us/library/dn720774(v=vs.110).aspx)

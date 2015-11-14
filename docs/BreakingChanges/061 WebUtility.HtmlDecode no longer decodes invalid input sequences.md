@@ -23,6 +23,9 @@ The change in decoder output should matter only if you store binary data instead
 * `M:System.Net.WebUtility.HtmlDecode(System.String,System.IO.TextWriter)`
 * `M:System.Net.WebUtility.UrlDecode(System.String)`
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887\(v=vs.110\).aspx#asp)
 
 <!--

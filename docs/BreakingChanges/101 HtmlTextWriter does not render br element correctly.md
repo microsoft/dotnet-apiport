@@ -22,4 +22,7 @@ If an app depended on the extra `<BR />` tag, `HtmlTextWriter.RenderBeginTag()` 
 * `M:System.Web.UI.HtmlTextWriter.RenderBeginTag(System.String)`
 * `M:System.Web.UI.HtmlTextWriter.RenderBeginTag(System.Web.UI.HtmlTextWriterTag)`
 
+### Category
+ASP.NET
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/813061/htmltextwriter-does-not-render-br-element-correctly)

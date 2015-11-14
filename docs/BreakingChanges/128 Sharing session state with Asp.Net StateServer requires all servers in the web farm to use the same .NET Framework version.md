@@ -21,6 +21,9 @@ Be sure to upgrade .NET Framework versions on web servers that share state at th
 ### Affected APIs
 * `F:System.Web.SessionState.SessionStateMode.StateServer`
 
+### Category
+ASP.NET
+
 [More information](http://connect.microsoft.com/VisualStudio/feedback/details/823803/asp-net-stateserver-requests-are-not-compatible-between-4-0-and-4-5-1-versions-of-net-framework)
 
 <!--

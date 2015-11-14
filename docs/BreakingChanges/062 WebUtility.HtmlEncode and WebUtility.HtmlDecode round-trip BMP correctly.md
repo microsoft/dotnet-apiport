@@ -22,6 +22,9 @@ This change should have no effect on current applications, but to restore the or
 * `M:System.Net.WebUtility.HtmlEncode(System.String)`
 * `M:System.Net.WebUtility.HtmlEncode(System.String,System.IO.TextWriter)`
 
+### Category
+ASP.NET
+
 [More information](https://msdn.microsoft.com/en-us/library/hh367887(v=vs.110).aspx#asp)
 
 <!--

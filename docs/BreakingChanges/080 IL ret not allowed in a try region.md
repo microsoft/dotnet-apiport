@@ -21,6 +21,9 @@ If an app is generating IL that includes a ret opcode in a try region, the app m
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+JIT
+
 [More information](https://msdn.microsoft.com/en-us/library/dn833125(v=vs.110).aspx#RyuJIT)
 
 <!--

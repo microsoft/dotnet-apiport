@@ -1,4 +1,4 @@
-## 131: PreviewLostKeyboardFocus is called repeatedly if its handler shows a message box
+## 131: PreviewLostKeyboardFocus is called repeatedly if its handler shows a Windows Forms message box
 
 ### Scope
 Edge
@@ -28,6 +28,10 @@ There are two options to work around this issue -
 * `M:System.Windows.IInputElement.add_PreviewLostKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventHandler)`
 * `M:System.Windows.UIElement.add_PreviewLostKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventHandler)`
 * `M:System.Windows.UIElement3D.add_PreviewLostKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventHandler)`
+
+### Categories
+Windows Forms
+Windows Presentation Foundation (WPF)
 
 [More information](http://stackoverflow.com/questions/17988219/system-windows-forms-messagebox-in-netversion-4-0-4-5-behaves-differently-in-wi)
 
