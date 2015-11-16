@@ -20,5 +20,7 @@ namespace ApiPort.CommandLine
         }
 
         public AppCommands Command { get; }
+
+        public string TargetMapFile { get; }
     }
 }
