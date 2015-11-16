@@ -265,6 +265,8 @@ gives a summary of issues and possible steps forward.
                                  during breaking change analysis. Any breaking
                                  changes with IDs specified for suppression will
                                  not be reported.
+      --targetMap=VALUE
+                               Specifies a file to be used to map target names
   -h, -?, --help               Show help</value>
   </data>
   <data name="CmdListOutputFormats" xml:space="preserve">
