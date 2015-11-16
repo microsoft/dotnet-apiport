@@ -1,5 +1,8 @@
 ﻿{
   "frameworks": {
-    "net45": { }
+    "net45": {}
+  },
+  "dependencies": {
+    "MicroBuild.Core": "0.1.1"
   }
 }
