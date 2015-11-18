@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly MetadataReader _reader;
         private readonly string _assemblyLocation;
 
-        private readonly string _currentAssemblyInfo;
+        private readonly AssemblyReferenceInformation _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
         
         public DependencyFinderEngineHelper(MetadataReader metadataReader, string assemblyPath)

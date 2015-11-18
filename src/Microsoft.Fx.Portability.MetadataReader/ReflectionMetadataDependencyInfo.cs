@@ -67,7 +67,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                         {
                             MemberDocId = dependencies.MemberDocId,
                             TypeDocId = dependencies.TypeDocId,
-                            DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity
+                            DefinedInAssemblyIdentity = dependencies.DefinedInAssemblyIdentity?.ToString()
                         };
 
                         if (m.DefinedInAssemblyIdentity == null && !dependencies.IsPrimitive)
@@ -156,13 +156,13 @@ namespace Microsoft.Fx.Portability.Analyzer
             foreach (var reference in assemblyReferences)
             {
                 _unresolvedAssemblies.AddOrUpdate(
-                    reference,
-                    new HashSet<string>(StringComparer.Ordinal) { assemblyName },
+                    reference.ToString(),
+                    new HashSet<string>(StringComparer.Ordinal) { assemblyName.ToString() },
                     (key, existing) =>
                     {
                         lock (existing)
                         {
-                            existing.Add(assemblyName);
+                            existing.Add(assemblyName.ToString());
                         }
 
                         return existing;
