@@ -1,9 +1,12 @@
 ﻿{
   "dependencies": {
+    "MicroBuild.Core": "0.1.1",
     "Newtonsoft.Json": "6.0.8"
   },
   "frameworks": {
     "net45": { }
   },
-  "runtimes": { "win": { } }
+  "runtimes": {
+    "win": {}  
+  }
 }

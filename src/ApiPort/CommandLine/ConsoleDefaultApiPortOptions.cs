@@ -22,6 +22,7 @@ namespace ApiPort.CommandLine
             OutputFileName = "ApiPortAnalysis";
             RequestFlags = AnalyzeRequestFlags.None;
             Targets = Enumerable.Empty<string>();
+            TargetMapFile = string.Empty;
         }
 
         public override string ServiceEndpoint
@@ -35,6 +36,8 @@ namespace ApiPort.CommandLine
                 }
             }
         }
+
+        public string TargetMapFile { get; set; }
 
         public override IEnumerable<string> BreakingChangeSuppressions
         {

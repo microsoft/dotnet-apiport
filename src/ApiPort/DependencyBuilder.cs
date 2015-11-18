@@ -25,7 +25,7 @@ namespace ApiPort
             var container = new UnityContainer();
 
             var targetMapper = new TargetMapper();
-            targetMapper.LoadFromConfig();
+            targetMapper.LoadFromConfig(options.TargetMapFile);
 
             container.RegisterInstance<ICommandLineOptions>(options);
             container.RegisterInstance<ITargetMapper>(targetMapper);

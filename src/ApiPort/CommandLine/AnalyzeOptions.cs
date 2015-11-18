@@ -55,6 +55,7 @@ namespace ApiPort.CommandLine
             public string IgnoreAssemblyFile { get; set; }
             public List<string> SuppressBreakingChange { get; set; }
             public bool Help { get; set; }
+            public string TargetMap { get; set; }
         }
 
         private class AnalyzeCommandLineOption : ConsoleDefaultApiPortOptions, ICommandLineOptions
@@ -82,6 +83,7 @@ namespace ApiPort.CommandLine
                 OutputFileName = options.Out;
                 Targets = options.Target;
                 OutputFormats = options.ResultFormat;
+                TargetMapFile = options.TargetMap;
 
                 UpdateRequestFlags(options);
                 UpdateInputAssemblies(options);
@@ -139,7 +141,7 @@ namespace ApiPort.CommandLine
 
             private void UpdateInputAssemblies(Options options)
             {
-                foreach(var file in options.File)
+                foreach (var file in options.File)
                 {
                     UpdateInputAssemblies(file);
                 }

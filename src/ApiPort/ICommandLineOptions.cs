@@ -9,5 +9,7 @@ namespace ApiPort
     public interface ICommandLineOptions : IApiPortOptions
     {
         AppCommands Command { get; }
+
+        string TargetMapFile { get; }
     }
 }

@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Fx.Portability.Resources;
 
-#if DESKTOP
+#if FEATURE_XML_SCHEMA
 using System.Xml.Schema;
 #endif
 
@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability
         {
             yield return path;
 
-#if DESKTOP
+#if FEATURE_ASSEMBLY_LOCATION
             const string DefaultFileName = "TargetMap.xml";
 
             var location = typeof(TargetMapper).Assembly.Location;
@@ -90,7 +90,7 @@ namespace Microsoft.Fx.Portability
             {
                 var doc = XDocument.Load(XmlReader.Create(stream));
 
-#if XML_SCHEMA_SUPPORT
+#if FEATURE_XML_SCHEMA
                 // Validate against schema
                 var schemas = new XmlSchemaSet();
                 schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Targets.xsd")));
@@ -102,7 +102,7 @@ namespace Microsoft.Fx.Portability
                     var alias = (string)item.Attribute("Alias");
                     var name = (string)item.Attribute("Name");
 
-#if !XML_SCHEMA_SUPPORT
+#if !FEATURE_XML_SCHEMA
                     // We must manually check this now that schema validation is not available
                     if (alias == null || name == null)
                     {

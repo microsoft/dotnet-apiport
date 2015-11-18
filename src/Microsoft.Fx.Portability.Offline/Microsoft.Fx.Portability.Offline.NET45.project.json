@@ -2,5 +2,10 @@
   "frameworks": {
     "net45": { }
   },
-  "runtimes": { "win": { } }
+  "dependencies": {
+    "MicroBuild.Core": "0.1.1"
+  },
+  "runtimes": {
+    "win": {}  
+  }
 }

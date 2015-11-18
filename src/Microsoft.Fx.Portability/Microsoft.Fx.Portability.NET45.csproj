@@ -17,20 +17,20 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;NET45</DefineConstants>
+    <DefineConstants>TRACE;NET45;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-	<NugetTarget>net45</NugetTarget>
-	<IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
+    <NugetTarget>net45</NugetTarget>
+    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
