@@ -24,6 +24,9 @@ Suggested steps if user is affected (such as work arounds or code fixes) go here
 ### Affected APIs
 * Not detectable via API analysis
 
+### Category
+Pick-a-Category-From-BreakingChangesCategories.json
+
 [More information](LinkForMoreInformation)
 
 <!--
