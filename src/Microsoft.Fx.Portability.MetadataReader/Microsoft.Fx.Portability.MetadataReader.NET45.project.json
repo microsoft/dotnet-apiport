@@ -5,6 +5,7 @@
     "System.Reflection.Metadata": "1.1.0-alpha-00008"
   },
   "frameworks": {
-    "net45": {}
-  }
+    "net45": { }
+  },
+  "runtimes": { "win": { } }
 }

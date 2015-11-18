@@ -4,6 +4,9 @@
     "Newtonsoft.Json": "6.0.8"
   },
   "frameworks": {
-    "net45": {}
+    "net45": { }
+  },
+  "runtimes": {
+    "win": {}  
   }
 }

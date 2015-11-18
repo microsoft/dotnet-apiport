@@ -1,6 +1,7 @@
 ﻿{
   "runtimes": {
-    "win-anycpu": {}
+    "win-anycpu": {},
+    "win": {}
   },
   "dependencies": {
     "MicroBuild.Core": "0.1.1",
