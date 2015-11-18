@@ -21,11 +21,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 {
                     return ReflectionMetadataDependencyInfo.ComputeDependencies(inputAssemblyPaths, _progressReporter);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     task.Abort();
 
-                    throw e;
+                    throw;
                 }
             }
         }
