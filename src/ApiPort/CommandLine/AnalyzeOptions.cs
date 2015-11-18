@@ -84,6 +84,7 @@ namespace ApiPort.CommandLine
                 Targets = options.Target;
                 OutputFormats = options.ResultFormat;
                 TargetMapFile = options.TargetMap;
+                BreakingChangeSuppressions = options.SuppressBreakingChange;
 
                 UpdateRequestFlags(options);
                 UpdateInputAssemblies(options);
