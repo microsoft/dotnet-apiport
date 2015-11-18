@@ -15,20 +15,23 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class ReflectionMetadataDependencyInfo : IDependencyInfo
     {
+        private readonly IEnumerable<string> _inputAssemblies;
+        private readonly IDependencyFilter _assemblyFilter;
+
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
         private readonly HashSet<string> _assembliesWithError = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<AssemblyInfo> _userAssemblies = new HashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
-        private readonly IEnumerable<string> _inputAssemblies;
 
-        private ReflectionMetadataDependencyInfo(IEnumerable<string> inputAssemblies)
+        private ReflectionMetadataDependencyInfo(IEnumerable<string> inputAssemblies, IDependencyFilter assemblyFilter)
         {
             _inputAssemblies = inputAssemblies;
+            _assemblyFilter = assemblyFilter;
         }
 
-        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<string> inputAssemblies, IProgressReporter progressReport)
+        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<string> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport)
         {
-            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies);
+            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter);
 
             engine.FindDependencies(progressReport);
 
@@ -119,7 +122,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                     AddReferencedAssemblies(metadataReader);
 
-                    var helper = new DependencyFinderEngineHelper(metadataReader, assemblyLocation);
+                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, assemblyLocation);
                     helper.ComputeData();
 
                     // Remember this assembly as a user assembly.
@@ -132,7 +135,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
                 if (exc is InvalidPEAssemblyException) throw;
-                
+
                 // Other exceptions are unexpected, though, and wil benefit from
                 // more details on the scenario that hit them
                 throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, assemblyLocation), exc);

@@ -48,6 +48,9 @@
     <Compile Include="AliasMappedToMultipleNamesException.cs" />
     <Compile Include="Analysis\AnalysisEngine.cs" />
     <Compile Include="Analysis\TargetNameParser.cs" />
+    <Compile Include="Analyzer\AlwaysTrueDependencyFilter.cs" />
+    <Compile Include="Analyzer\DotNetFrameworkFilter.cs" />
+    <Compile Include="Analyzer\IDependencyFilter.cs" />
     <Compile Include="Analyzer\IDependencyFinder.cs" />
     <Compile Include="Analyzer\IDependencyInfo.cs" />
     <Compile Include="Analyzer\IRequestAnalyzer.cs" />

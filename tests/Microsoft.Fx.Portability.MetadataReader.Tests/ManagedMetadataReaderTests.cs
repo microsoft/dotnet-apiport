@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             var assembly = TestAssembly.Create(source, allowUnsafe);
 
-            var dependencyFinder = new ReflectionMetadataDependencyFinder();
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
             var progressReporter = Substitute.For<IProgressReporter>();
 
@@ -103,9 +104,85 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             CompareDependencies(test.AssemblyPath, EmptyProjectMemberDocId());
         }
 
+        [Fact]
+        public void VerifyDotNetFrameworkFilter()
+        {
+            var expected = new[]
+            {
+                "M:System.Console.WriteLine(System.String)",
+                "M:System.Diagnostics.DebuggableAttribute.#ctor(System.Diagnostics.DebuggableAttribute.DebuggingModes)",
+                "M:System.Object.#ctor",
+                "M:System.Object.ToString",
+                "M:System.Runtime.CompilerServices.CompilationRelaxationsAttribute.#ctor(System.Int32)",
+                "M:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute.#ctor",
+                "M:System.Runtime.Versioning.TargetFrameworkAttribute.#ctor(System.String)",
+                "M:System.Type.GetTypeFromHandle(System.RuntimeTypeHandle)",
+                "M:System.Uri.TryCreate(System.String,System.UriKind,System.Uri@)",
+                "T:System.Console",
+                "T:System.Diagnostics.DebuggableAttribute",
+                "T:System.Diagnostics.DebuggableAttribute.DebuggingModes",
+                "T:System.Object",
+                "T:System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
+                "T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
+                "T:System.Runtime.Versioning.TargetFrameworkAttribute",
+                "T:System.RuntimeTypeHandle",
+                "T:System.Type",
+                "T:System.Uri",
+                "T:System.UriKind"
+            };
+
+            var assembly = TestAssembly.Create("FilterApis.cs");
+
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
+            var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
+            var progressReporter = Substitute.For<IProgressReporter>();
+
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+            var foundDocIds = dependencies.Dependencies
+                .Select(m => m.Key.MemberDocId)
+                .OrderBy(o => o, StringComparer.Ordinal);
+
+            foreach (var docId in foundDocIds)
+            {
+                _output.WriteLine(docId);
+            }
+
+            Assert.Equal(expected, foundDocIds);
+        }
+
+        [Fact]
+        public void VerifyFilter()
+        {
+            var expected = new[]
+            {
+                "M:Microsoft.Bar.Test`1.Get",
+                "M:Other.Test`1.Get",
+                "T:Microsoft.Bar.Test`1",
+                "T:Other.Test`1"
+            };
+
+            var assembly = TestAssembly.Create("FilterApis.cs");
+
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AssemblyNameFilter("FilterApis"));
+            var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
+            var progressReporter = Substitute.For<IProgressReporter>();
+
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+            var foundDocIds = dependencies.Dependencies
+                .Select(m => m.Key.MemberDocId)
+                .OrderBy(o => o, StringComparer.Ordinal);
+
+            foreach (var docId in foundDocIds)
+            {
+                _output.WriteLine(docId);
+            }
+
+            Assert.Equal(expected, foundDocIds);
+        }
+
         private void CompareDependencies(string path, IEnumerable<Tuple<string, int>> expected)
         {
-            var dependencyFinder = new ReflectionMetadataDependencyFinder();
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var assemblyToTestFileInfo = new FileInfo(path);
             var progressReporter = Substitute.For<IProgressReporter>();
 
@@ -152,6 +229,21 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             yield return Tuple.Create("T:System.Runtime.CompilerServices.CompilationRelaxationsAttribute", 1);
             yield return Tuple.Create("T:System.Runtime.CompilerServices.RuntimeCompatibilityAttribute", 1);
             yield return Tuple.Create("T:System.Runtime.Versioning.TargetFrameworkAttribute", 1);
+        }
+
+        private class AssemblyNameFilter : IDependencyFilter
+        {
+            private readonly string _assemblyName;
+
+            public AssemblyNameFilter(string assemblyName)
+            {
+                _assemblyName = assemblyName;
+            }
+
+            public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)
+            {
+                return string.Equals(_assemblyName, assembly?.Name);
+            }
         }
     }
 }

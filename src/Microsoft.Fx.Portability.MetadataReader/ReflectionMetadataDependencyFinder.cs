@@ -11,6 +11,13 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     public class ReflectionMetadataDependencyFinder : IDependencyFinder
     {
+        private readonly IDependencyFilter _assemblyFilter;
+
+        public ReflectionMetadataDependencyFinder(IDependencyFilter assemblyFilter)
+        {
+            _assemblyFilter = assemblyFilter;
+        }
+
         public IDependencyInfo FindDependencies(IEnumerable<FileInfo> inputAssemblies, IProgressReporter _progressReporter)
         {
             var inputAssemblyPaths = inputAssemblies.Where(f => FilterValidFiles(f, _progressReporter)).Select(i => i.FullName).ToList();
@@ -19,7 +26,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 try
                 {
-                    return ReflectionMetadataDependencyInfo.ComputeDependencies(inputAssemblyPaths, _progressReporter);
+                    return ReflectionMetadataDependencyInfo.ComputeDependencies(inputAssemblyPaths, _assemblyFilter, _progressReporter);
                 }
                 catch (Exception)
                 {
