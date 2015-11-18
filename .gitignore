@@ -28,3 +28,5 @@ src/Microsoft.Fx.Portability.Offline/data/
 /nupkg
 .tools/
 .data
+*.nuget.props
+*.nuget.targets
