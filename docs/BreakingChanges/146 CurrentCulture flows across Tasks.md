@@ -18,7 +18,10 @@ This means that changes to CurrentCulture or CurrentUICulture will be reflected 
 - [ ] Build-time break
 
 ### Recommended Action
-Apps affected by this change may work around it by explicitly setting the desired CurrentCulture or CurrentUICulture as the first operation in an async Task. Alternatively, because the ExecutionContext change only affects apps targeting the .NET Framework 4.6 or newer, this break can be avoided by targeting the .NET Framework 4.5.2.
+Apps affected by this change may work around it by explicitly setting the desired CurrentCulture or CurrentUICulture as the first operation in an async Task. Alternatively, the old behavior (of not flowing CurrentCulture/CurrentUICulture) may be opted into by setting the following compatibility switch:
+```C#
+AppContext.SetSwitch("Switch.System.Globalization.NoAsyncCurrentCulture", true);
+```
 
 ### Affected APIs
 * `M:System.Globalization.CultureInfo.set_CurrentCulture(System.Globalization.CultureInfo)`
