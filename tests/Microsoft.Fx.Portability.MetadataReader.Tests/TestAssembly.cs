@@ -30,7 +30,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private class CSharpSourceTestAssembly : TestAssembly
         {
-            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).Assembly.Location }
+            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).Assembly.Location, typeof(Uri).Assembly.Location }
                                                                         .Select(r => MetadataReference.CreateFromFile(r))
                                                                         .ToList();
             private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";

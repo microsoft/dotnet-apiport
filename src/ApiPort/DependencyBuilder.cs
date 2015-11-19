@@ -37,6 +37,7 @@ namespace ApiPort
 
             container.RegisterType<IEnumerable<IgnoreAssemblyInfo>, FileIgnoreAssemblyInfoList>(new ContainerControlledLifetimeManager());
             container.RegisterType<IDependencyFinder, ReflectionMetadataDependencyFinder>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IDependencyFilter, DotNetFrameworkFilter>(new ContainerControlledLifetimeManager());
             container.RegisterType<IReportGenerator, ReportGenerator>(new ContainerControlledLifetimeManager());
             container.RegisterType<ApiPortService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IFileSystem, WindowsFileSystem>(new ContainerControlledLifetimeManager());

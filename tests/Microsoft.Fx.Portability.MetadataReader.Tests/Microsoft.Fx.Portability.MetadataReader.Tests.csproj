@@ -101,6 +101,7 @@
     <Compile Include="ManagedMetadataReaderTests.cs" />
     <Compile Include="ReflectionMetadataInfoTests.cs" />
     <Compile Include="TestAssembly.cs" />
+    <EmbeddedResource Include="Tests\FilterApis.cs" />
     <EmbeddedResource Include="Tests\Spec.cs" />
     <EmbeddedResource Include="Tests\NestedGenericTypesWithInvalidNames.cs" />
     <EmbeddedResource Include="Tests\OpImplicitMethod2Parameter.cs" />

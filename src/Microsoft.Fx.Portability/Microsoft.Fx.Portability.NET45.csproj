@@ -53,6 +53,9 @@
     <Compile Include="AliasMappedToMultipleNamesException.cs" />
     <Compile Include="Analysis\AnalysisEngine.cs" />
     <Compile Include="Analysis\TargetNameParser.cs" />
+    <Compile Include="Analyzer\AlwaysTrueDependencyFilter.cs" />
+    <Compile Include="Analyzer\DotNetFrameworkFilter.cs" />
+    <Compile Include="Analyzer\IDependencyFilter.cs" />
     <Compile Include="Analyzer\IDependencyFinder.cs" />
     <Compile Include="Analyzer\IDependencyInfo.cs" />
     <Compile Include="Analyzer\IRequestAnalyzer.cs" />
@@ -62,7 +65,9 @@
     <Compile Include="ApiNote.cs" />
     <Compile Include="ApiPortClient.cs" />
     <Compile Include="ApiPortService.cs" />
+    <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="BreakingChangeAnalyzerStatus.cs" />
+    <Compile Include="ObjectModel\AssemblyReferenceInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BreakingChange.cs" />
     <Compile Include="BreakingChangeDependency.cs" />

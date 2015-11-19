@@ -11,7 +11,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private bool _hashComputed;
         private int _hashCode;
 
-        private string _definedInAssemblyIdentity;
+        private AssemblyReferenceInformation _definedInAssemblyIdentity;
         private string _memberDocId;
         private string _typeDocId;
         private bool _isPrimitive;
@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// <summary>
         /// This represents the assembly in which the member is defined
         /// </summary>
-        public string DefinedInAssemblyIdentity
+        public AssemblyReferenceInformation DefinedInAssemblyIdentity
         {
             get { return _definedInAssemblyIdentity; }
             set
@@ -74,12 +74,15 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override bool Equals(object obj)
         {
-            MemberDependency other = obj as MemberDependency;
-            if (other == null)
-                return false;
+            var other = obj as MemberDependency;
 
-            return StringComparer.Ordinal.Equals(MemberDocId, other.MemberDocId) &&
-                    StringComparer.Ordinal.Equals(DefinedInAssemblyIdentity, other.DefinedInAssemblyIdentity) &&
+            if (other == null)
+            {
+                return false;
+            }
+
+            return string.Equals(MemberDocId, other.MemberDocId, StringComparison.Ordinal) &&
+                    DefinedInAssemblyIdentity == other.DefinedInAssemblyIdentity &&
                     CallingAssembly.Equals(other.CallingAssembly) &&
                     IsPrimitive == other.IsPrimitive;
         }
@@ -88,7 +91,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             if (!_hashComputed)
             {
-                _hashCode = ((DefinedInAssemblyIdentity ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString()).GetHashCode() ^ CallingAssembly.GetHashCode();
+                _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString()).GetHashCode() ^ CallingAssembly.GetHashCode();
                 _hashComputed = true;
             }
             return _hashCode;

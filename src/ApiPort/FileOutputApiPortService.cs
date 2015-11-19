@@ -87,7 +87,7 @@ namespace ApiPort
                 Targets = new SortedSet<string>(a.Targets, StringComparer.Ordinal),
                 ApplicationName = a.ApplicationName,
                 Version = a.Version,
-                BreakingChangesToSuppress = new SortedSet<string>(a.BreakingChangesToSuppress, StringComparer.Ordinal),
+                BreakingChangesToSuppress = new SortedSet<string>(a.BreakingChangesToSuppress ?? Enumerable.Empty<string>(), StringComparer.Ordinal),
                 AssembliesToIgnore = a.AssembliesToIgnore.OrderBy(i => i.AssemblyIdentity)
             };
 

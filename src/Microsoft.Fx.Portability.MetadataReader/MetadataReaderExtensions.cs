@@ -20,25 +20,25 @@ namespace Microsoft.Fx.Portability
 
             return new AssemblyInfo
             {
-                AssemblyIdentity = metadataReader.FormatAssemblyInfo(),
+                AssemblyIdentity = metadataReader.FormatAssemblyInfo().ToString(),
                 FileVersion = fileInfo.FileVersion ?? string.Empty,
                 TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty
             };
         }
 
-        public static string FormatAssemblyInfo(this MetadataReader metadataReader)
+        public static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader)
         {
             return metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition());
         }
 
-        public static string FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyReference assemblyReference)
+        public static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyReference assemblyReference)
         {
             var name = metadataReader.GetString(assemblyReference.Name);
 
             return metadataReader.FormatAssemblyInfo(name, assemblyReference.Culture, assemblyReference.PublicKeyOrToken, assemblyReference.Version);
         }
 
-        public static string FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyDefinition assemblyDefinition)
+        public static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyDefinition assemblyDefinition)
         {
             var name = metadataReader.GetString(assemblyDefinition.Name);
 
@@ -80,7 +80,7 @@ namespace Microsoft.Fx.Portability
             return signature.ParameterTypes;
         }
 
-        private static string FormatAssemblyInfo(this MetadataReader metadataReader, string name, StringHandle cultureHandle, BlobHandle publicKeyTokenHandle, Version version)
+        private static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader, string name, StringHandle cultureHandle, BlobHandle publicKeyTokenHandle, Version version)
         {
             var culture = cultureHandle.IsNil
                 ? "neutral"
@@ -90,7 +90,7 @@ namespace Microsoft.Fx.Portability
                 ? "null"
                 : metadataReader.FormatPublicKeyToken(publicKeyTokenHandle);
 
-            return $"{name}, Version={version}, Culture={culture}, PublicKeyToken={publicKeyToken}";
+            return new AssemblyReferenceInformation(name, version, culture, publicKeyToken);
         }
 
         /// <summary>

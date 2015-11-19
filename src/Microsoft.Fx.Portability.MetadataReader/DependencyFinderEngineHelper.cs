@@ -10,14 +10,16 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class DependencyFinderEngineHelper
     {
+        private readonly IDependencyFilter _assemblyFilter;
         private readonly MetadataReader _reader;
         private readonly string _assemblyLocation;
 
-        private readonly string _currentAssemblyInfo;
+        private readonly AssemblyReferenceInformation _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
-        
-        public DependencyFinderEngineHelper(MetadataReader metadataReader, string assemblyPath)
+
+        public DependencyFinderEngineHelper(IDependencyFilter assemblyFilter, MetadataReader metadataReader, string assemblyPath)
         {
+            _assemblyFilter = assemblyFilter;
             _reader = metadataReader;
             _assemblyLocation = assemblyPath;
 
@@ -96,11 +98,19 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private MemberDependency CreateMemberDependency(MemberMetadataInfo type)
         {
+            var definedInAssembly = type.DefinedInAssembly.HasValue ? _reader.FormatAssemblyInfo(type.DefinedInAssembly.Value) : _currentAssemblyInfo;
+
+            // Apply heuristic to determine if API is most likely defined in a framework assembly
+            if (!_assemblyFilter.IsFrameworkAssembly(definedInAssembly))
+            {
+                return null;
+            }
+
             return new MemberDependency
             {
                 CallingAssembly = CallingAssembly,
                 MemberDocId = $"T:{type}",
-                DefinedInAssemblyIdentity = type.DefinedInAssembly.HasValue ? _reader.FormatAssemblyInfo(type.DefinedInAssembly.Value) : _currentAssemblyInfo
+                DefinedInAssemblyIdentity = definedInAssembly
             };
         }
 
@@ -109,32 +119,43 @@ namespace Microsoft.Fx.Portability.Analyzer
             var provider = new MemberMetadataInfoTypeProvider(_reader);
             var memberRefInfo = provider.GetMemberRefInfo(memberReference);
 
-            // Add the parent type to the types list (only needed when we want to report memberrefs defined in the current assembly)
-            if (memberRefInfo.ParentType.IsTypeDef || (memberRefInfo.ParentType.IsPrimitiveType && _currentAssemblyName.Equals("mscorlib", StringComparison.OrdinalIgnoreCase)))
-            {
-                MemberDependency.Add(CreateMemberDependency(memberRefInfo.ParentType));
-            }
-
-            var dep = new MemberDependency
-            {
-                CallingAssembly = CallingAssembly,
-                MemberDocId = $"{GetPrefix(memberReference)}:{memberRefInfo}",
-                TypeDocId = $"T:{memberRefInfo.ParentType}",
-                IsPrimitive = memberRefInfo.ParentType.IsPrimitiveType
-            };
-
+            AssemblyReferenceInformation definedInAssemblyIdentity = null;
             if (memberRefInfo.ParentType.DefinedInAssembly.HasValue)
             {
-                dep.DefinedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly.Value);
+                definedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly.Value);
             }
             // If no assembly is set, then the type is either a primitive type or it's in the current assembly.
             // Mscorlib is special-cased for testing purposes.
             else if (!memberRefInfo.ParentType.IsPrimitiveType || string.Equals(_currentAssemblyName, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {
-                dep.DefinedInAssemblyIdentity = _currentAssemblyInfo;
+                definedInAssemblyIdentity = _currentAssemblyInfo;
             }
 
-            return dep;
+            // Apply heuristic to determine if API is most likely defined in a framework assembly
+            if (!_assemblyFilter.IsFrameworkAssembly(definedInAssemblyIdentity))
+            {
+                return null;
+            }
+
+            // Add the parent type to the types list (only needed when we want to report memberrefs defined in the current assembly)
+            if (memberRefInfo.ParentType.IsTypeDef || (memberRefInfo.ParentType.IsPrimitiveType && _currentAssemblyName.Equals("mscorlib", StringComparison.OrdinalIgnoreCase)))
+            {
+                var memberDependency = CreateMemberDependency(memberRefInfo.ParentType);
+
+                if (memberDependency != null)
+                {
+                    MemberDependency.Add(memberDependency);
+                }
+            }
+
+            return new MemberDependency
+            {
+                CallingAssembly = CallingAssembly,
+                MemberDocId = $"{GetPrefix(memberReference)}:{memberRefInfo}",
+                TypeDocId = $"T:{memberRefInfo.ParentType}",
+                IsPrimitive = memberRefInfo.ParentType.IsPrimitiveType,
+                DefinedInAssemblyIdentity = definedInAssemblyIdentity
+            };
         }
 
         private string GetPrefix(MemberReference memberReference)

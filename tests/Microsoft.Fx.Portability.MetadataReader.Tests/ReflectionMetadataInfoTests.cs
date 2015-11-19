@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void UnresolvedAssemblyTest()
         {
-            var finder = new Microsoft.Fx.Portability.Analyzer.ReflectionMetadataDependencyFinder();
+            var finder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var progressReport = Substitute.For<IProgressReporter>();
 
             var path = this.GetType().GetTypeInfo().Assembly.Location;
@@ -60,10 +61,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             "Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
             "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "Microsoft.Fx.Portability, Version=1.1.3.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
-            "Microsoft.Fx.Portability.MetadataReader, Version=1.0.1.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
+            "Microsoft.Fx.Portability, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
+            "Microsoft.Fx.Portability.MetadataReader, Version=1.1.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
             "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
+            "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
