@@ -14,7 +14,7 @@ Beginning in the .NET Framework 4.6, changes to CurrentCulture or CurrentUICultu
 
 Practically speaking, this means that CurrentCulture and CurrentUICulture changes may not flow between WPF UI callbacks and other code in a WPF application.
 
-This is due to a change in [ExecutionContext](https://msdn.microsoft.com/en-us/library/system.threading.executioncontext%28v=vs.110%29.aspx) that causes CurrentCulture and CurrentUICulture to be stored in the execution context beginning with apps targeting the .NET Framework 4.6.
+This is due to a change in [ExecutionContext](https://msdn.microsoft.com/en-us/library/system.threading.executioncontext%28v=vs.110%29.aspx) that causes CurrentCulture and CurrentUICulture to be stored in the execution context beginning with apps targeting the .NET Framework 4.6. WPF dispatcher operations store the execution context used to begin the operation and restore the previous context when the operation is completed. Because CurrentCulture and CurrentUICulture are now part of that context, changes to them within a dispatcher operation are not persisted outside of the operation.
 
 - [x] Quirked
 - [ ] Build-time break
