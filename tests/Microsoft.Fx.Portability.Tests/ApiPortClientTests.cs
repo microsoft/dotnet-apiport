@@ -71,9 +71,9 @@ namespace Microsoft.Fx.Portability.Tests
 
             var dependencyFinder = Substitute.For<IDependencyFinder>();
 
-            dependencyFinder.FindDependencies(Arg.Any<IEnumerable<FileInfo>>(), Arg.Any<IProgressReporter>()).Returns(r =>
+            dependencyFinder.FindDependencies(Arg.Any<IEnumerable<IAssemblyFile>>(), Arg.Any<IProgressReporter>()).Returns(r =>
             {
-                var list = r.Arg<IEnumerable<FileInfo>>();
+                var list = r.Arg<IEnumerable<IAssemblyFile>>();
                 var shared = r.Arg<IProgressReporter>();
 
                 var dependencies = Substitute.For<IDependencyInfo>();
@@ -93,7 +93,7 @@ namespace Microsoft.Fx.Portability.Tests
             var options = Substitute.For<IApiPortOptions>();
 
             options.Targets.Returns(Enumerable.Empty<string>());
-            options.InputAssemblies.Returns(Enumerable.Empty<FileInfo>());
+            options.InputAssemblies.Returns(Enumerable.Empty<IAssemblyFile>());
 
             var result = await client.AnalyzeAssembliesAsync(options);
         }

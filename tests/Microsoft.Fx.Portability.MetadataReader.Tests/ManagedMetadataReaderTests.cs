@@ -75,13 +75,12 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private void TestForDocId(string source, string docid, bool allowUnsafe)
         {
-            var assembly = TestAssembly.Create(source, allowUnsafe);
 
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
-            var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
+            var assemblyToTest = TestAssembly.Create(source, allowUnsafe);
             var progressReporter = Substitute.For<IProgressReporter>();
 
-            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
             foreach (var dependency in dependencies.Dependencies)
             {
@@ -95,13 +94,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             _output.WriteLine(string.Join(Environment.NewLine, dependencies.Dependencies.Select(o => o.Key.MemberDocId).OrderBy(o => o)));
 
             Assert.True(false, $"Could not find docid '{docid}'");
-        }
-
-        [Fact]
-        public void EmptyProject()
-        {
-            var test = TestAssembly.Create("EmptyProject.cs");
-            CompareDependencies(test.AssemblyPath, EmptyProjectMemberDocId());
         }
 
         [Fact]
@@ -131,13 +123,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 "T:System.UriKind"
             };
 
-            var assembly = TestAssembly.Create("FilterApis.cs");
-
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
-            var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
+            var assemblyToTest = TestAssembly.Create("FilterApis.cs");
             var progressReporter = Substitute.For<IProgressReporter>();
 
-            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
             var foundDocIds = dependencies.Dependencies
                 .Select(m => m.Key.MemberDocId)
                 .OrderBy(o => o, StringComparer.Ordinal);
@@ -161,13 +151,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 "T:Other.Test`1"
             };
 
-            var assembly = TestAssembly.Create("FilterApis.cs");
-
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AssemblyNameFilter("FilterApis"));
-            var assemblyToTestFileInfo = new FileInfo(assembly.AssemblyPath);
+            var assemblyToTest = TestAssembly.Create("FilterApis.cs");
             var progressReporter = Substitute.For<IProgressReporter>();
 
-            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
             var foundDocIds = dependencies.Dependencies
                 .Select(m => m.Key.MemberDocId)
                 .OrderBy(o => o, StringComparer.Ordinal);
@@ -180,13 +168,16 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.Equal(expected, foundDocIds);
         }
 
-        private void CompareDependencies(string path, IEnumerable<Tuple<string, int>> expected)
+        [Fact]
+        public void EmptyProject()
         {
+            var assemblyToTest = TestAssembly.Create("EmptyProject.cs");
+            var expected = EmptyProjectMemberDocId();
+
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
-            var assemblyToTestFileInfo = new FileInfo(path);
             var progressReporter = Substitute.For<IProgressReporter>();
 
-            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTestFileInfo }, progressReporter);
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
             var foundDocIds = dependencies
                 .Dependencies
@@ -197,12 +188,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var expectedOrdered = expected
                 .OrderBy(o => o.Item1, StringComparer.Ordinal)
                 .ToList();
-
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            foreach (var item in foundDocIds)
-            {
-                sb.AppendLine(string.Format("yield return Tuple.Create(\"{0}\", 1);", item.Item1));
-            }
 
             Assert.Equal(expectedOrdered.Count, foundDocIds.Count);
 

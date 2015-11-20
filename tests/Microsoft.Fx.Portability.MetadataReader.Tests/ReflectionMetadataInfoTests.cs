@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.Analyzer;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +30,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var progressReport = Substitute.For<IProgressReporter>();
 
             var path = this.GetType().GetTypeInfo().Assembly.Location;
-            var testInfo = new FileInfo(path);
+            var testInfo = new FilePathAssemblyFile(path);
 
             var dependencies = finder.FindDependencies(new[] { testInfo }, progressReport);
             var actual = dependencies.UnresolvedAssemblies
@@ -37,7 +38,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                             .OrderBy(u => u);
 
             _log.WriteLine("Actual unresolved assemblies:");
-            foreach(var assembly in actual)
+            foreach (var assembly in actual)
             {
                 _log.WriteLine(assembly);
             }
@@ -72,5 +73,23 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             "xunit.assert, Version=2.1.0.3109, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
             "xunit.core, Version=2.1.0.3109, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
         }.OrderBy(o => o);
+
+        private class FilePathAssemblyFile : IAssemblyFile
+        {
+            private readonly string _path;
+
+            public FilePathAssemblyFile(string path)
+            {
+                _path = path;
+            }
+
+            public string Name => _path;
+
+            public bool Exists => File.Exists(_path);
+
+            public string Version => FileVersionInfo.GetVersionInfo(_path).FileVersion;
+
+            public Stream OpenRead() => File.OpenRead(_path);
+        }
     }
 }

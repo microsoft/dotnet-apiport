@@ -4,7 +4,6 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Decoding;
@@ -14,18 +13,6 @@ namespace Microsoft.Fx.Portability
 {
     internal static class MetadataReaderExtensions
     {
-        public static AssemblyInfo GetAssemblyInfo(this MetadataReader metadataReader, string filePath)
-        {
-            var fileInfo = FileVersionInfo.GetVersionInfo(filePath);
-
-            return new AssemblyInfo
-            {
-                AssemblyIdentity = metadataReader.FormatAssemblyInfo().ToString(),
-                FileVersion = fileInfo.FileVersion ?? string.Empty,
-                TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty
-            };
-        }
-
         public static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader)
         {
             return metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition());

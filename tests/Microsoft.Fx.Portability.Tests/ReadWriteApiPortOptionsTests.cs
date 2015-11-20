@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             public IEnumerable<string> IgnoredAssemblyFiles { get; } = GenerateRandomList(5);
 
-            public IEnumerable<FileInfo> InputAssemblies { get; } = new[] { new FileInfo(Path.GetTempFileName()) };
+            public IEnumerable<IAssemblyFile> InputAssemblies { get; } = new[] { new TestAssemblyFile() };
 
             public IEnumerable<string> InvalidInputFiles { get; } = GenerateRandomList(5);
 
@@ -55,6 +55,17 @@ namespace Microsoft.Fx.Portability.Tests
             }
 
             private static string GetRandomString() => Guid.NewGuid().ToString();
+
+            private class TestAssemblyFile : IAssemblyFile
+            {
+                public bool Exists { get; } = true;
+
+                public string Name { get; } = Path.GetTempFileName();
+
+                public string Version { get; } = string.Empty;
+
+                public Stream OpenRead() => File.OpenRead(Name);
+            }
         }
     }
 }

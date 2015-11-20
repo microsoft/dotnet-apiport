@@ -7,35 +7,51 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
-    internal abstract class TestAssembly
+    internal static class TestAssembly
     {
-        public string AssemblyPath { get; } = Path.GetTempFileName();
-
-        public static TestAssembly Create(string source, bool allowUnsafe = false)
+        public static IAssemblyFile Create(string source, bool allowUnsafe = false)
         {
             switch (Path.GetExtension(source).ToLowerInvariant())
             {
                 case ".dll":
-                    return new BinaryTestAssembly(source);
+                    return new ResourceStreamAssemblyFile(source);
                 case ".cs":
-                    return new CSharpSourceTestAssembly(source, allowUnsafe);
+                    return new CSharpCompileAssemblyFile(source, allowUnsafe);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(source), source, "Unknown extension");
             }
         }
 
-        private class CSharpSourceTestAssembly : TestAssembly
+        private class CSharpCompileAssemblyFile : IAssemblyFile
         {
+            private static readonly Assembly s_assembly = typeof(CSharpCompileAssemblyFile).Assembly;
             private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).Assembly.Location, typeof(Uri).Assembly.Location }
-                                                                        .Select(r => MetadataReference.CreateFromFile(r))
-                                                                        .ToList();
+                                                                     .Select(r => MetadataReference.CreateFromFile(r))
+                                                                     .ToList();
+
             private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
 
-            public CSharpSourceTestAssembly(string source, bool allowUnsafe)
+            private readonly byte[] _data;
+
+            public CSharpCompileAssemblyFile(string source, bool allowUnsafe)
+            {
+                _data = CreateRoslynAssemblyFile(source, allowUnsafe);
+            }
+            
+            public bool Exists { get; }
+
+            public string Name { get; }
+
+            public string Version { get; }
+
+            public Stream OpenRead() => new MemoryStream(_data);
+
+            private static byte[] CreateRoslynAssemblyFile(string source, bool allowUnsafe)
             {
                 var assemblyName = Path.GetFileNameWithoutExtension(source);
                 var text = GetText(source);
@@ -44,18 +60,23 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var tree = CSharpSyntaxTree.ParseText(text);
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: allowUnsafe);
                 var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, s_references, options);
-                var result = compilation.Emit(AssemblyPath);
 
-                Assert.True(result.Success, string.Join("\n", result.Diagnostics
-                                                            .Where(d => d.Severity == DiagnosticSeverity.Error)
-                                                            .Select(d => d.GetMessage())));
+                using (var stream = new MemoryStream())
+                {
+                    var result = compilation.Emit(stream);
+
+                    Assert.True(result.Success, string.Join("\n", result.Diagnostics
+                                                                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                                                                .Select(d => d.GetMessage())));
+                    return stream.ToArray();
+                }
             }
 
             private static string GetText(string fileName)
             {
-                var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+                var name = s_assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
 
-                using (var stream = typeof(TestAssembly).Assembly.GetManifestResourceStream(name))
+                using (var stream = s_assembly.GetManifestResourceStream(name))
                 using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
@@ -63,25 +84,23 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
-        private class BinaryTestAssembly : TestAssembly
+        private class ResourceStreamAssemblyFile : IAssemblyFile
         {
-            public BinaryTestAssembly(string assemblyPath)
-            {
-                var data = GetBytes(assemblyPath);
+            private static readonly Assembly s_assembly = typeof(ResourceStreamAssemblyFile).Assembly;
 
-                File.WriteAllBytes(AssemblyPath, data);
+            public ResourceStreamAssemblyFile(string fileName)
+            {
+                Name = s_assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+                Exists = Name != null;
             }
 
-            private static byte[] GetBytes(string fileName)
-            {
-                var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
-                using (var stream = typeof(TestAssembly).Assembly.GetManifestResourceStream(name))
-                {
-                    var ret = new byte[stream.Length];
-                    stream.Read(ret, 0, ret.Length);
-                    return ret;
-                }
-            }
+            public bool Exists { get; }
+
+            public string Name { get; }
+
+            public string Version { get; }
+
+            public Stream OpenRead() => s_assembly.GetManifestResourceStream(Name);
         }
     }
 }

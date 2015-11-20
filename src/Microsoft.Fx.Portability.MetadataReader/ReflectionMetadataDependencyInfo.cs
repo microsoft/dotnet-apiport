@@ -1,21 +1,20 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Resources;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
-using Microsoft.Fx.Portability.Analyzer.Resources;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class ReflectionMetadataDependencyInfo : IDependencyInfo
     {
-        private readonly IEnumerable<string> _inputAssemblies;
+        private readonly IEnumerable<IAssemblyFile> _inputAssemblies;
         private readonly IDependencyFilter _assemblyFilter;
 
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
@@ -23,13 +22,13 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly HashSet<AssemblyInfo> _userAssemblies = new HashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
-        private ReflectionMetadataDependencyInfo(IEnumerable<string> inputAssemblies, IDependencyFilter assemblyFilter)
+        private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter)
         {
             _inputAssemblies = inputAssemblies;
             _assemblyFilter = assemblyFilter;
         }
 
-        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<string> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport)
+        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport)
         {
             var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter);
 
@@ -60,11 +59,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private void FindDependencies(IProgressReporter progressReport)
         {
-            _inputAssemblies.AsParallel().ForAll(filename =>
+            _inputAssemblies.AsParallel().ForAll(file =>
             {
                 try
                 {
-                    foreach (var dependencies in GetDependencies(filename))
+                    foreach (var dependencies in GetDependencies(file))
                     {
                         var m = new MemberInfo
                         {
@@ -94,12 +93,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 catch (InvalidPEAssemblyException)
                 {
                     // This often indicates a non-PE file
-                    _assembliesWithError.Add(filename);
+                    _assembliesWithError.Add(file.Name);
                 }
                 catch (BadImageFormatException)
                 {
                     // This often indicates a PE file with invalid contents (either because the assembly is protected or corrupted)
-                    _assembliesWithError.Add(filename);
+                    _assembliesWithError.Add(file.Name);
                 }
             });
 
@@ -111,18 +110,18 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
-        private IEnumerable<MemberDependency> GetDependencies(string assemblyLocation)
+        private IEnumerable<MemberDependency> GetDependencies(IAssemblyFile file)
         {
             try
             {
-                using (var stream = File.OpenRead(assemblyLocation))
+                using (var stream = file.OpenRead())
                 using (var peFile = new PEReader(stream))
                 {
                     var metadataReader = GetMetadataReader(peFile);
 
                     AddReferencedAssemblies(metadataReader);
 
-                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, assemblyLocation);
+                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file);
                     helper.ComputeData();
 
                     // Remember this assembly as a user assembly.
@@ -138,7 +137,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                 // Other exceptions are unexpected, though, and wil benefit from
                 // more details on the scenario that hit them
-                throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, assemblyLocation), exc);
+                throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, file.Name), exc);
             }
         }
 

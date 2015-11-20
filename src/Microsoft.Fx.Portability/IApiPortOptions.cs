@@ -10,7 +10,7 @@ namespace Microsoft.Fx.Portability
     public interface IApiPortOptions
     {
         string Description { get; }
-        IEnumerable<FileInfo> InputAssemblies { get; }
+        IEnumerable<IAssemblyFile> InputAssemblies { get; }
         IEnumerable<string> IgnoredAssemblyFiles { get; }
         AnalyzeRequestFlags RequestFlags { get; }
         IEnumerable<string> Targets { get; }

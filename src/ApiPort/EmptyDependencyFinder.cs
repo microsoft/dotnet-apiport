@@ -12,7 +12,17 @@ namespace ApiPort
 {
     internal class EmptyDependendencyFinder : IDependencyFinder
     {
+        public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> inputAssemblyPaths, IProgressReporter progressReport)
+        {
+            return new EmptyDependencyInfo();
+        }
+
         public IDependencyInfo FindDependencies(IEnumerable<FileInfo> inputAssemblyPaths, IProgressReporter progressReport)
+        {
+            return new EmptyDependencyInfo();
+        }
+
+        public IDependencyInfo FindDependencies(byte[] file, IProgressReporter progressReport)
         {
             return new EmptyDependencyInfo();
         }
