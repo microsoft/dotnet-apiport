@@ -75,7 +75,7 @@ namespace ApiPort.CommandLine
             }
         }
 
-        public override IEnumerable<FileInfo> InputAssemblies
+        public override IEnumerable<IAssemblyFile> InputAssemblies
         {
             get { return base.InputAssemblies; }
             set

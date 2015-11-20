@@ -67,6 +67,7 @@
     <Compile Include="ApiPortService.cs" />
     <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="BreakingChangeAnalyzerStatus.cs" />
+    <Compile Include="IAssemblyFile.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BreakingChange.cs" />

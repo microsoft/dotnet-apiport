@@ -18,15 +18,15 @@ namespace Microsoft.Fx.Portability.Analyzer
             _assemblyFilter = assemblyFilter;
         }
 
-        public IDependencyInfo FindDependencies(IEnumerable<FileInfo> inputAssemblies, IProgressReporter _progressReporter)
+        public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> files, IProgressReporter _progressReporter)
         {
-            var inputAssemblyPaths = inputAssemblies.Where(f => FilterValidFiles(f, _progressReporter)).Select(i => i.FullName).ToList();
+            var inputAssemblyPaths = files.Where(f => FilterValidFiles(f, _progressReporter)).ToList();
 
-            using (var task = _progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences, inputAssemblyPaths.Count))
+            using (var task = _progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences))
             {
                 try
                 {
-                    return ReflectionMetadataDependencyInfo.ComputeDependencies(inputAssemblyPaths, _assemblyFilter, _progressReporter);
+                    return ReflectionMetadataDependencyInfo.ComputeDependencies(files, _assemblyFilter, _progressReporter);
                 }
                 catch (Exception)
                 {
@@ -37,31 +37,14 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
-        public IDependencyInfo FindDependencies(byte[] file, IProgressReporter _progressReporter)
-        {
-            using (var task = _progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences))
-            {
-                try
-                {
-                    return ReflectionMetadataDependencyInfo.ComputeDependencies(file, _progressReporter);
-                }
-                catch(Exception e)
-                {
-                    task.Abort();
-
-                    throw e;
-                }
-            }
-        }
-
-        private static bool FilterValidFiles(FileInfo file, IProgressReporter _progressReporter)
+        private static bool FilterValidFiles(IAssemblyFile file, IProgressReporter _progressReporter)
         {
             if (file.Exists)
             {
                 return true;
             }
 
-            _progressReporter.ReportIssue(string.Format(LocalizedStrings.UnknownFile, file.FullName));
+            _progressReporter.ReportIssue(string.Format(LocalizedStrings.UnknownFile, file.Name));
 
             return false;
         }

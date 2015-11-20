@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPort.Resources;
+using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -69,7 +71,7 @@ namespace ApiPort.CommandLine
                 ".ildll"
             };
 
-            private readonly ICollection<FileInfo> _inputAssemblies = new SortedSet<FileInfo>(new FileInfoComparer());
+            private readonly ICollection<IAssemblyFile> _inputAssemblies = new SortedSet<IAssemblyFile>(new AssemblyFileComparer());
 
             // Case insensitive so that if this is run on a case-sensitive file system, we don't override anything 
             private readonly ICollection<string> _invalidInputFiles = new SortedSet<string>(StringComparer.Ordinal);
@@ -90,7 +92,7 @@ namespace ApiPort.CommandLine
                 UpdateInputAssemblies(options);
             }
 
-            public override IEnumerable<FileInfo> InputAssemblies
+            public override IEnumerable<IAssemblyFile> InputAssemblies
             {
                 get
                 {
@@ -167,7 +169,7 @@ namespace ApiPort.CommandLine
                     // assemblies to analyze since others are not valid assemblies 
                     if (HasValidPEExtension(path))
                     {
-                        _inputAssemblies.Add(new FileInfo(path));
+                        _inputAssemblies.Add(new FilePathAssemblyFile(path));
                     }
                 }
                 else
@@ -181,9 +183,9 @@ namespace ApiPort.CommandLine
                 return s_ValidExtensions.Contains(Path.GetExtension(assemblyLocation), StringComparer.OrdinalIgnoreCase);
             }
 
-            private class FileInfoComparer : IComparer<FileInfo>
+            private class AssemblyFileComparer : IComparer<IAssemblyFile>
             {
-                public int Compare(FileInfo x, FileInfo y)
+                public int Compare(IAssemblyFile x, IAssemblyFile y)
                 {
                     if (x == null)
                     {
@@ -191,10 +193,27 @@ namespace ApiPort.CommandLine
                     }
 
 
-                    return x.FullName.CompareTo(y?.FullName);
+                    return x.Name.CompareTo(y?.Name);
                 }
             }
 
+            private class FilePathAssemblyFile : IAssemblyFile
+            {
+                private readonly string _path;
+
+                public FilePathAssemblyFile(string path)
+                {
+                    _path= path;
+                }
+
+                public string Name => _path;
+
+                public bool Exists => File.Exists(_path);
+
+                public string Version => FileVersionInfo.GetVersionInfo(_path).FileVersion;
+
+                public Stream OpenRead() => File.OpenRead(_path);
+            }
         }
     }
 }

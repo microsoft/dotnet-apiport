@@ -34,7 +34,7 @@ namespace Microsoft.Fx.Portability
 
         public virtual IEnumerable<string> IgnoredAssemblyFiles { get; set; }
 
-        public virtual IEnumerable<FileInfo> InputAssemblies { get; set; }
+        public virtual IEnumerable<IAssemblyFile> InputAssemblies { get; set; }
 
         public virtual IEnumerable<string> InvalidInputFiles { get; set; }
 
