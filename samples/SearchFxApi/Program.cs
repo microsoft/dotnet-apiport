@@ -1,4 +1,7 @@
-﻿using Microsoft.Fx.Portability;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Fx.Portability;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SearchFxApi
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var analysisService = new ApiPortService("https://portability.cloudapp.net", new ProductInformation("MyAPIQueryProgram"));
 

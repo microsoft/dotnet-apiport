@@ -112,7 +112,6 @@ namespace ApiPort
                     {
                         yield return innerInnerEx;
                     }
-
                 }
             }
             else // Other exceptions can have only one inner exception

@@ -203,7 +203,7 @@ namespace ApiPort.CommandLine
 
                 public FilePathAssemblyFile(string path)
                 {
-                    _path= path;
+                    _path = path;
                 }
 
                 public string Name => _path;

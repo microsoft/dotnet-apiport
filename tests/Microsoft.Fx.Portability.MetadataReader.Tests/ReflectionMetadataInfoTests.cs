@@ -43,10 +43,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 _log.WriteLine(assembly);
             }
 
-            Assert.Equal(_expectedResult.Count(), actual.Count());
+            Assert.Equal(s_expectedResult.Count(), actual.Count());
 
             // Use this instead of Assert.Equal so it will output the missing item
-            foreach (var items in _expectedResult.Zip(actual, Tuple.Create))
+            foreach (var items in s_expectedResult.Zip(actual, Tuple.Create))
             {
                 Assert.Equal(items.Item1, items.Item2);
             }
@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             progressReport.Received(0).ReportIssue(Arg.Any<string>());
         }
 
-        private static readonly IEnumerable<string> _expectedResult = new[]
+        private static readonly IEnumerable<string> s_expectedResult = new[]
         {
             "Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
             "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",

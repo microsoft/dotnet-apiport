@@ -75,7 +75,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private void TestForDocId(string source, string docid, bool allowUnsafe)
         {
-
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var assemblyToTest = TestAssembly.Create(source, allowUnsafe);
             var progressReporter = Substitute.For<IProgressReporter>();

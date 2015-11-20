@@ -95,7 +95,7 @@ namespace ApiPort
             }
         }
 
-        static void ConsoleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        private static void ConsoleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
         }

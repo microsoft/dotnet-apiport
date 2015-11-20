@@ -310,10 +310,10 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var framework = new FrameworkName(".NET Framework, Version = v4.5");
 
             // ShowRetargettingIssues
-            IEnumerable<BreakingChangeDependency> result = engine.FindBreakingChanges(targets: new[] { framework }, 
-                                                                                      dependencies: testData, 
-                                                                                      assembliesToIgnore: null, 
-                                                                                      breakingChangesToSuppress: null, 
+            IEnumerable<BreakingChangeDependency> result = engine.FindBreakingChanges(targets: new[] { framework },
+                                                                                      dependencies: testData,
+                                                                                      assembliesToIgnore: null,
+                                                                                      breakingChangesToSuppress: null,
                                                                                       showRetargettingIssues: false);
 
             Assert.Equal(3, result.Count());

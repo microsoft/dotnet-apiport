@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             {
                 _data = CreateRoslynAssemblyFile(source, allowUnsafe);
             }
-            
+
             public bool Exists { get; }
 
             public string Name { get; }
