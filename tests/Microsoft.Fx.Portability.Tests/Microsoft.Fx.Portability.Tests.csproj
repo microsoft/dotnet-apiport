@@ -82,6 +82,7 @@
     <Compile Include="Analysis\TargetNameParserTests.cs" />
     <Compile Include="Analyzer\DotNetFrameworkFilterTests.cs" />
     <Compile Include="ApiPortClientTests.cs" />
+    <Compile Include="ApiPortServiceTests.cs" />
     <Compile Include="BreakingChangeParserTests.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformationTests.cs" />
     <Compile Include="ObjectModel\IgnoreAssemblyInfoTests.cs" />
