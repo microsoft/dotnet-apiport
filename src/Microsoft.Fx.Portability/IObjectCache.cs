@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
 {
-    public interface IObjectCache<TObject> : IDisposable
+    public interface IObjectCache : IDisposable
+    {
+        Task UpdateAsync();
+
+        DateTimeOffset LastUpdated { get; }
+    }
+
+    public interface IObjectCache<TObject> : IObjectCache
     {
         TObject Value { get; }
-        DateTimeOffset LastUpdated { get; }
-        Task UpdateAsync();
     }
 }
