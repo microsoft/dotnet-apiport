@@ -70,9 +70,9 @@ namespace ApiPort
                 // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
                 Program.WriteColorLine($"Invalid parameter passed to {suppliedCommand}", ConsoleColor.Red);
             }
-
-            var codebase = new Uri(typeof(CommandLineOptions).GetTypeInfo().Assembly.CodeBase);
-            var path = Path.GetFileName(codebase.AbsolutePath);
+            
+            var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
+            var path = Path.GetFileName(Path.GetFullPath(location));
 
             var displayCommands = command == null ? s_possibleCommands.Select(c => c.Value) : new[] { command };
             foreach (var displayCommand in displayCommands)

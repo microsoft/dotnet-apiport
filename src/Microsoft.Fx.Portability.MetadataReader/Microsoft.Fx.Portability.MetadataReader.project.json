@@ -1,6 +1,7 @@
 ﻿{
   "supports": {
-    "net46.app": {}
+    "net46.app": { },
+    "dnxcore50.app": { }
   },
   "dependencies": {
     "MicroBuild.Core": "0.1.1",
