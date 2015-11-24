@@ -122,6 +122,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provides an interactive console search for APIs. Useful to find the docid of a specific API.
+        /// </summary>
+        public static string CmdDocId {
+            get {
+                return ResourceManager.GetString("CmdDocId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
         /// </summary>
         public static string CmdHelpIgnoreAssembliesFile {
