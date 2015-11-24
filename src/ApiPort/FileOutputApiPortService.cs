@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPort.Resources;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,59 +16,85 @@ namespace ApiPort
     /// </summary>
     internal class FileOutputApiPortService : IApiPortService
     {
+        private static readonly IReadOnlyCollection<ApiDefinition> s_emptySearchResults = new ApiDefinition[] { };
+        private static readonly IEnumerable<ResultFormatInformation> s_formats = new[]
+        {
+            new ResultFormatInformation
+            {
+                DisplayName = "json",
+                FileExtension = ".json"
+            }
+        };
+
+        private readonly IProgressReporter _progress;
+
+        public FileOutputApiPortService(IProgressReporter progress)
+        {
+            _progress = progress;
+        }
+
         public Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
         {
-            throw new NotImplementedException();
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+            var result = ServiceResponse.Create(new AnalyzeResponse());
+
+            return Task.FromResult(result);
         }
 
         public Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
         {
-            throw new NotImplementedException();
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+            var result = ServiceResponse.Create(new byte[] { });
+
+            return Task.FromResult(result);
         }
 
         public Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId)
         {
-            throw new NotImplementedException();
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+            var response = ServiceResponse.Create(new ApiInformation());
+
+            return Task.FromResult(response);
         }
 
         public Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
         {
-            var format = new ResultFormatInformation { DisplayName = "Excel", FileExtension = ".xlsx" };
-            var response = new ServiceResponse<IEnumerable<ResultFormatInformation>>(new[] { format });
+            var response = ServiceResponse.Create(s_formats);
 
             return Task.FromResult(response);
         }
 
         public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
         {
-            throw new NotImplementedException();
+            var response = ServiceResponse.Create(Enumerable.Empty<AvailableTarget>());
+
+            return Task.FromResult(response);
         }
 
         public Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = default(int?), int? top = default(int?), UsageDataFilter? filter = default(UsageDataFilter?), IEnumerable<string> targets = null)
         {
-            throw new NotImplementedException();
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+            var response = ServiceResponse.Create(new UsageDataCollection());
+
+            return Task.FromResult(response);
         }
 
         public Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = default(int?))
         {
-            throw new NotImplementedException();
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+            var response = ServiceResponse.Create(s_emptySearchResults);
+
+            return Task.FromResult(response);
         }
 
         public Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
         {
-            WriteOutput(a);
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
 
             return Task.FromResult(new ServiceResponse<AnalyzeResponse>(new AnalyzeResponse()));
         }
 
         public Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, string format)
-        {
-            WriteOutput(a);
-
-            return Task.FromResult(new ServiceResponse<byte[]>(new byte[] { }));
-        }
-
-        private void WriteOutput(AnalyzeRequest a)
         {
             var sortedAnalyzeRequest = new AnalyzeRequest
             {
@@ -91,15 +116,9 @@ namespace ApiPort
                 AssembliesToIgnore = a.AssembliesToIgnore.OrderBy(i => i.AssemblyIdentity)
             };
 
-            var tmp = $"{Path.GetTempFileName()}.json";
+            var result = sortedAnalyzeRequest.Serialize();
 
-            using (var ms = new MemoryStream(sortedAnalyzeRequest.Serialize()))
-            using (var fs = File.OpenWrite(tmp))
-            {
-                ms.CopyTo(fs);
-            }
-
-            Process.Start(tmp);
+            return Task.FromResult(ServiceResponse.Create(result));
         }
     }
 }

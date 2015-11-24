@@ -83,9 +83,8 @@ ApiPort.exe analyze -f foo.dll -t ".NET CORE, Version=5.0" -t ".NET Framework" -
 
 ### List targets
 
-The targets available to analyze against are retrieved from a service that is updated regularly (except when running in
-[offline mode](OfflineMode.md)).  These are ever growing, and include the previous versions of the framework, although
-it defaults to the most current platforms and versions.
+The targets available to analyze against are retrieved from a service that is updated regularly. These targets change over time as new
+platforms are available. The service will default to the most current platforms and versions.
 
 For example, the command `ApiPort.exe listTargets` will output:
 
@@ -124,3 +123,56 @@ results in the following output formats:
 - json
 - HTML
 - Excel
+
+# Alternate modes
+
+The tool by default will gather the results and submit to a webservice that will analyze the data to determine which APIs need to be addressed. For full
+details on this process, please read the [privacy policy](/docs/LicenseTerms/Microsoft%20.NET%20Portability%20Analyzer%20Privacy%20Statement.txt).
+There are two alternate modes that can be used to alter this workflow. 
+
+## See the data being transmitted
+
+The first option is to output the request to a file. This will result in an output that shows what data is being transmitted to the service, but provides
+no details as to API portability or breaking changes. This is a good option if you would like to see what data will be collected.
+
+In order to enable this mode, create a file `unity.config` and place it in the same directory as `ApiPort.exe`. Add the following contents:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <section name="unity" type="Microsoft.Practices.Unity.Configuration.UnityConfigurationSection, Microsoft.Practices.Unity.Configuration"/>
+  </configSections>
+  <unity xmlns="http://schemas.microsoft.com/practices/2010/unity">
+    <typeAliases>
+      <typeAlias alias="singleton" type="Microsoft.Practices.Unity.ContainerControlledLifetimeManager, Microsoft.Practices.Unity" />
+      <typeAlias alias="IApiPortService" type="Microsoft.Fx.Portability.IApiPortService, Microsoft.Fx.Portability" />
+      <typeAlias alias="FileOutputApiPortService" type="ApiPort.FileOutputApiPortService, ApiPort" />
+    </typeAliases>
+    <container>
+      <register type="IApiPortService" mapTo="FileOutputApiPortService"  >
+        <lifetime type="singleton" />
+      </register>
+	  <instance name="DefaultOutputFormat" value="json" />
+    </container>
+  </unity>
+</configuration>
+```
+
+Now, when you run, it will output a file with the information that is sent to the .NET Portability service.
+
+## Run the tool in an offline mode
+
+Another option is to enable full offline access. This mode will not get automatic updates and no official releases of it are available. In order to use this mode,
+the solution must be manually built. To do so, please follow these steps:
+
+1. Clone the project: `git clone https://github.com/Microsoft/dotnet-apiport`
+2. Build the project: `build.cmd`. 
+
+	*Note: This command must be used as it gathers the correct assemblies for offline mode. Building in VS does not do this.*
+	
+3. Go to `bin\release\ApiPort.Offline`
+4. Run `ApiPort.exe` from this directory as normal.
+
+Additional reports can be generated in offline mode. Any implementation of `Microsoft.Fx.Portability.Reporting.IReportWriter` can be used. Add an entry to `unity.config` 
+following the pattern of the HTML and json writers. The offline mode will pick it up and allow reports to be returned in custom formats.

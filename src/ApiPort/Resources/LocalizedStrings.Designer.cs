@@ -207,6 +207,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyze request file output does not support this operation.
+        /// </summary>
+        public static string FileOutputServiceNotSupported {
+            get {
+                return ResourceManager.GetString("FileOutputServiceNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft (R) {0} v{1}
         ///Copyright (C) Microsoft Corporation. All rights reserved.
         ///
