@@ -279,4 +279,7 @@ gives a summary of issues and possible steps forward.
 
   -h, -?, --help             Show help</value>
   </data>
+  <data name="FileOutputServiceNotSupported" xml:space="preserve">
+    <value>Analyze request file output does not support this operation</value>
+  </data>
 </root>
