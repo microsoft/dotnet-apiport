@@ -6,7 +6,7 @@
     <title>Microsoft.Fx.Portability.Reports.Json</title>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
-    <licenseUrl>https://github.com/Microsoft/dotnet-apiport/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/Microsoft/dotnet-apiport/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Microsoft/dotnet-apiport</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>An HTML formatter for ApiPort reports</description>

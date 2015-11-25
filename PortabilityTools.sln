@@ -40,8 +40,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Re
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FEEF35CB-3AC4-40C5-9CB0-85E52E38D5C6}"
 	ProjectSection(SolutionItems) = preProject
-		build\ci-build.props = build\ci-build.props
-		build\ci-build.targets = build\ci-build.targets
 		build\Get-Nuget.ps1 = build\Get-Nuget.ps1
 		build\Microsoft.Fx.Portability.MetadataReader.nuspec = build\Microsoft.Fx.Portability.MetadataReader.nuspec
 		build\Microsoft.Fx.Portability.nuspec = build\Microsoft.Fx.Portability.nuspec

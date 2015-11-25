@@ -6,7 +6,7 @@
     <title>Microsoft.Fx.Portability.MetadataReader</title>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
-    <licenseUrl>https://github.com/Microsoft/dotnet-apiport/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/Microsoft/dotnet-apiport/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Microsoft/dotnet-apiport</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The core data structures and network calls for .NET Portability Analyzer</description>

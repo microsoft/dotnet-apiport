@@ -71,7 +71,7 @@ foreach($nuspec in $nuspecs)
 	$count++
 }
 
-function CopyOfflineMode()
+function Copy-OfflineMode()
 {
 	$offlineDrop = "$drop\ApiPort.Offline"
 	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
@@ -82,8 +82,12 @@ function CopyOfflineMode()
 	copy $drop\Microsoft.Fx.Portability.Reports.Json\net45\* $offlineDrop
 	copy $drop\Microsoft.Fx.Portability.Reports.Html\net45\* $offlineDrop
 }
+
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
 
 Copy-Item "$PSScriptRoot\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Offline -Recurse -Force
 
-CopyOfflineMode
+Copy-OfflineMode
+
+# Copying the license terms into our drop so we don't have to manually do it when we want to release
+Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort -Recurse -Force
