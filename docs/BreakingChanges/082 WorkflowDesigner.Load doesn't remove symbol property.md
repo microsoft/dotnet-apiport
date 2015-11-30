@@ -19,9 +19,9 @@ When targeting the .NET Framework 4.5 in the workflow designer, and loading a re
 - [ ] Build-time break
 
 ### Recommended Action
-This bug only manifests when targeting .NET Framework 4.5 in the workflow designer, so it can be worked around by setting the `WorkflowDesignier.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName` to the 4.0 .NET Framework.
+This bug only manifests when targeting .NET Framework 4.5 in the workflow designer, so it can be worked around by setting the `WorkflowDesigner.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName` to the 4.0 .NET Framework.
 
-Alternatively, the issue may be avoided by using the [WorkflowContext.Load(string)](https://msdn.microsoft.com/en-us/library/ee425926(v=vs.110).aspx) method to load the workflow, instead of [WorkflowDesigner.Load()](https://msdn.microsoft.com/en-us/library/ee403482()v=vs.110).aspx).
+Alternatively, the issue may be avoided by using the [WorkflowContext.Load(string)](https://msdn.microsoft.com/en-us/library/ee425926(v=vs.110).aspx) method to load the workflow, instead of [WorkflowDesigner.Load()](https://msdn.microsoft.com/en-us/library/ee403482(v=vs.110).aspx).
 
 ### Affected APIs
 * `M:System.Activities.Presentation.WorkflowDesigner.Load`
