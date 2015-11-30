@@ -34,8 +34,13 @@ namespace ApiPort
 
         private static void WriteColor(string message, ConsoleColor color)
         {
-            var previousColor = Console.ForegroundColor;
-
+            var previousColor =
+#if LINUX
+                // Console.get_ForegroundColor is unsopported by the Linux PAL
+                ConsoleColor.White;
+#else // LINUX
+                Console.ForegroundColor;
+#endif // LINUX
             try
             {
                 Console.ForegroundColor = color;

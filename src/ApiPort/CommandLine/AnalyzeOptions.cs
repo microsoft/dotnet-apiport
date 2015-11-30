@@ -210,7 +210,21 @@ namespace ApiPort.CommandLine
 
                 public bool Exists => File.Exists(_path);
 
-                public string Version => FileVersionInfo.GetVersionInfo(_path).FileVersion;
+                public string Version
+                {
+                    get
+                    {
+                        try
+                        {
+                            return FileVersionInfo.GetVersionInfo(_path).FileVersion;
+                        }
+                        catch (ArgumentException)
+                        {
+                            // Temporary workaround for CoreCLR-on-Linux bug (dotnet/corefx#4727) that prevents get_FileVersion from working on that platform
+                            return new Version(0,0).ToString();
+                        }
+                    }
+                }
 
                 public Stream OpenRead() => File.OpenRead(_path);
             }

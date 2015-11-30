@@ -72,7 +72,15 @@ namespace ApiPort
             }
             
             var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
-            var path = Path.GetFileName(Path.GetFullPath(location));
+            var path =
+#if NETCORE
+                // The assembly's file name will have an incorrect extension if the entry point is a host
+                // However ConsoleHost will share a file name with the assembly, so the name without
+                // extension will still be correct.
+                Path.GetFileNameWithoutExtension(Path.GetFullPath(location));
+#else // NETCORE
+                Path.GetFileName(Path.GetFullPath(location));
+#endif // NETCORE
 
             var displayCommands = command == null ? s_possibleCommands.Select(c => c.Value) : new[] { command };
             foreach (var displayCommand in displayCommands)
