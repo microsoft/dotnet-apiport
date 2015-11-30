@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                         IsTypeDef = true
                     };
                 case HandleKind.TypeSpecification:
-                    return SignatureDecoder.DecodeType(parent, this);
+                    return SignatureDecoder.DecodeType(parent, this, null);
                 case HandleKind.MethodDefinition:
                     var method = Reader.GetMethodDefinition((MethodDefinitionHandle)parent);
                     return new MemberMetadataInfo(GetFullName(method.GetDeclaringType()));
@@ -270,7 +270,17 @@ namespace Microsoft.Fx.Portability.Analyzer
             return GetFullName(handle);
         }
 
+        public MemberMetadataInfo GetTypeFromDefinition(TypeDefinitionHandle handle, bool? isValueType)
+        {
+            return GetFullName(handle);
+        }
+
         public MemberMetadataInfo GetTypeFromReference(TypeReferenceHandle handle)
+        {
+            return GetFullName(handle);
+        }
+
+        public MemberMetadataInfo GetTypeFromReference(TypeReferenceHandle handle, bool? isValueType)
         {
             return GetFullName(handle);
         }

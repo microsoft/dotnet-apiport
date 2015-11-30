@@ -93,7 +93,17 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
+        public string GetTypeFromDefinition(TypeDefinitionHandle handle, bool? isValueType)
+        {
+            return string.Empty;
+        }
+
         public string GetTypeFromReference(TypeReferenceHandle handle)
+        {
+            return string.Empty;
+        }
+
+        public string GetTypeFromReference(TypeReferenceHandle handle, bool? isValueType)
         {
             return string.Empty;
         }

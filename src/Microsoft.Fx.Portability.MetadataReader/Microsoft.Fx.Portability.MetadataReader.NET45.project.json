@@ -2,7 +2,7 @@
   "dependencies": {
     "MicroBuild.Core": "0.1.1",
     "System.Collections.Immutable": "1.1.37",
-    "System.Reflection.Metadata": "1.1.0-alpha-00008"
+    "System.Reflection.Metadata": "1.2.0-alpha-00017"
   },
   "frameworks": {
     "net45": { }
