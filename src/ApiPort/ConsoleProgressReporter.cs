@@ -82,7 +82,7 @@ namespace ApiPort
             {
                 await Task.Delay(1);
 
-#if RICH_CONSOLE
+#if FEATURE_RICH_CONSOLE
 
                 {
                     var count = 0;
@@ -105,7 +105,7 @@ namespace ApiPort
                     Console.SetCursorPosition(0, Console.CursorTop);
                     Console.Write(_task);
                 }
-#endif // RICH_CONSOLE
+#endif // FEATURE_RICH_CONSOLE
             }
 
             public void ReportUnitComplete()

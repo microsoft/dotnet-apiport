@@ -13,10 +13,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-#if DESKTOP_CONFIGURATION
+#if FEATURE_DESKTOP_CONFIGURATION
 using Microsoft.Practices.Unity.Configuration;
 using System.Configuration;
-#endif // DESKTOP_CONFIGURATION
+#endif // FEATURE_DESKTOP_CONFIGURATION
 
 namespace ApiPort
 {
@@ -66,7 +66,7 @@ namespace ApiPort
                 container.RegisterType<IProgressReporter, ConsoleProgressReporter>(new ContainerControlledLifetimeManager());
             }
 
-#if DESKTOP_CONFIGURATION // Unity configuration is only available in its desktop package
+#if FEATURE_DESKTOP_CONFIGURATION // Unity configuration is only available in its desktop package
             // Load any customizations via Unity
             var fileMap = new ExeConfigurationFileMap
             {
@@ -77,10 +77,10 @@ namespace ApiPort
             var unitySection = (UnityConfigurationSection)configuration.GetSection("unity");
 
             return unitySection == null ? container : container.LoadConfiguration(unitySection);
-#else // DESKTOP_CONFIGURATION
+#else // FEATURE_DESKTOP_CONFIGURATION
             // TODO : Allow runtime configuration through some non-.config means?
             return container;
-#endif // DESKTOP_CONFIGURATION
+#endif // FEATURE_DESKTOP_CONFIGURATION
         }
 
         private static object GetOptions(IUnityContainer container)
