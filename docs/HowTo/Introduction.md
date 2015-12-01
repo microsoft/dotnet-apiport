@@ -176,3 +176,5 @@ the solution must be manually built. To do so, please follow these steps:
 
 Additional reports can be generated in offline mode. Any implementation of `Microsoft.Fx.Portability.Reporting.IReportWriter` can be used. Add an entry to `unity.config` 
 following the pattern of the HTML and json writers. The offline mode will pick it up and allow reports to be returned in custom formats.
+
+Note that offline mode is not yet supported for .NET Core (CoreCLR) versions of ApiPort.
