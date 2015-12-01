@@ -5,6 +5,7 @@ using Microsoft.Framework.Configuration;
 using Microsoft.Framework.OptionsModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -16,10 +17,10 @@ namespace ApiPort.CommandLine
             where TOptions : class, new()
         {
             var booleanSwitches = GetConfigMapCounts(typeof(TOptions), t => t == typeof(bool), switchMapping);
-            var arrays = GetConfigMapCounts(typeof(TOptions), t => (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>)) || t.IsArray, switchMapping);
+            var arrays = GetConfigMapCounts(typeof(TOptions), t => (t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>)) || t.IsArray, switchMapping);
             var updatedArgs = TransformArguments(args, arrays, booleanSwitches).ToArray();
 
-            var cmd = new ConfigurationBuilder(Environment.CurrentDirectory)
+            var cmd = new ConfigurationBuilder(Directory.GetCurrentDirectory())
                  .AddCommandLine(updatedArgs, switchMapping)
                  .Build();
 

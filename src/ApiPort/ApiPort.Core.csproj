@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+  <!-- Universal properties -->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{560DD4EB-C4D2-4F94-9695-931CD3D17B5B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ApiPort</RootNamespace>
+    <AssemblyName>ApiPort</AssemblyName>
+    <NuGetTargetMoniker>DNXCore,Version=v5.0</NuGetTargetMoniker>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkIdentifier>DNXCore</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <DefineConstants>NETCORE</DefineConstants>
+    <FileAlignment>512</FileAlignment>
+    <HostExe>coreconsole</HostExe>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
+    <SignAssembly>false</SignAssembly>
+    <!-- Output path properties -->
+    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\dotnet\$(Platform)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Configruation (OS and flavor) properties -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;$(DefineConstants)</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <BaseNuGetRuntimeIdentifier>win7</BaseNuGetRuntimeIdentifier>
+    <HostExtension>.exe</HostExtension>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <BaseNuGetRuntimeIdentifier>win7</BaseNuGetRuntimeIdentifier>
+    <HostExtension>.exe</HostExtension>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Ubuntu_Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;TRACE;LINUX;$(DefineConstants)</DefineConstants>
+    <DebugType>full</DebugType>
+    <BaseNuGetRuntimeIdentifier>ubuntu.14.04</BaseNuGetRuntimeIdentifier>
+    <HostExtension>
+    </HostExtension>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Ubuntu_Release'">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;LINUX;$(DefineConstants)</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <BaseNuGetRuntimeIdentifier>ubuntu.14.04</BaseNuGetRuntimeIdentifier>
+    <HostExtension>
+    </HostExtension>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Osx_Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;TRACE;OSX;$(DefineConstants)</DefineConstants>
+    <DebugType>full</DebugType>
+    <BaseNuGetRuntimeIdentifier>osx.10.10</BaseNuGetRuntimeIdentifier>
+    <HostExtension>
+    </HostExtension>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Osx_Release'">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;OSX;$(DefineConstants)</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <BaseNuGetRuntimeIdentifier>osx.10.10</BaseNuGetRuntimeIdentifier>
+    <HostExtension>
+    </HostExtension>
+  </PropertyGroup>
+  <!-- Platform (arch) properties -->
+  <PropertyGroup Condition="'$(Platform)' == 'x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'x86'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'arm'">
+    <PlatformTarget>arm</PlatformTarget>
+  </PropertyGroup>
+  <!-- Source files -->
+  <ItemGroup>
+    <Compile Include="AppCommands.cs" />
+    <Compile Include="CommandLineOptions.cs" />
+    <Compile Include="CommandLine\AnalyzeOptions.cs" />
+    <Compile Include="CommandLine\ApiPortConfiguration.cs" />
+    <Compile Include="CommandLine\CommonCommands.cs" />
+    <Compile Include="CommandLine\ConsoleDefaultApiPortOptions.cs" />
+    <Compile Include="CommandLine\DocIdSearchOptions.cs" />
+    <Compile Include="CommandLine\ServiceEndpointOptions.cs" />
+    <Compile Include="ConsoleApiPort.cs" />
+    <Compile Include="DependencyBuilder.cs" />
+    <Compile Include="DocIdSearchRepl.cs" />
+    <Compile Include="EmptyDependencyFinder.cs" />
+    <Compile Include="FileOutputApiPortService.cs" />
+    <Compile Include="ApiPortServiceSearcher.cs" />
+    <Compile Include="ICommandLineOptions.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ConsoleProgressReporter.cs" />
+    <Compile Include="Resources\LocalizedStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <!-- Other resources -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <BinPlaceContent Include=".\Assets\KnownSafeBreaks.json" />
+    <Content Include="Properties\version.txt" />
+  </ItemGroup>
+  <!-- NuGet references -->
+  <ItemGroup>
+    <None Include="ApiPort.Core.project.json" />
+  </ItemGroup>
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj">
+      <Project>{68c6476e-1f80-412a-a8a7-480f832922d8}</Project>
+      <Name>Microsoft.Fx.Portability.MetadataReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
+      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
+      <Name>Microsoft.Fx.Portability</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- Targets includes -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
+  <PropertyGroup>
+    <!-- We don't use any of MSBuild's resolution logic for resolving the framework, so just set these two  
+             properties to any folder that exists to skip the GetReferenceAssemblyPaths task (not target) and  
+             to prevent it from outputting a warning (MSB3644). 
+        -->
+    <_TargetFrameworkDirectories>$(MSBuildThisFileDirectory)</_TargetFrameworkDirectories>
+    <_FullFrameworkReferenceAssemblyPaths>$(MSBuildThisFileDirectory)</_FullFrameworkReferenceAssemblyPaths>
+    <!-- MSBuild thinks all EXEs need binding redirects, not so for CoreCLR! -->
+    <AutoUnifyAssemblyReferences>true</AutoUnifyAssemblyReferences>
+  </PropertyGroup>
+  <!-- Set up the debug target for portable executables -->
+  <PropertyGroup Condition="'$(OutputType)'=='Exe'">
+    <StartWorkingDirectory Condition="'$(StartWorkingDirectory)' == ''">$(TargetDir)</StartWorkingDirectory>
+    <StartAction Condition="'$(StartAction)' == ''">Program</StartAction>
+    <StartProgram Condition="'$(StartProgram)' == ''">$(TargetPath)</StartProgram>
+    <DebugEngines>{2E36F1D4-B23C-435D-AB41-18E608940038}</DebugEngines>
+  </PropertyGroup>
+  <!-- Post-build actions -->
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Move SourceFiles="$(TargetPath)" DestinationFiles="$(TargetDir)\$(AssemblyName).dll" />
+    <Move SourceFiles="$(TargetDir)\$(HostExe)$(HostExtension)" DestinationFiles="$(TargetDir)\$(AssemblyName)$(HostExtension)" />
+  </Target>
+</Project>

@@ -60,6 +60,13 @@ namespace ApiPort
 
                     // Display the message as it has already been localized
                     WriteError(ex.Message);
+#if DEBUG
+                    // Provide additional info on inner exceptions if built for debug
+                    if (ex.InnerException != null)
+                    {
+                        WriteError(ex.InnerException.ToString());
+                    }
+#endif // DEBUG
                 }
                 catch (AggregateException ex)
                 {
@@ -71,6 +78,13 @@ namespace ApiPort
                         foreach (PortabilityAnalyzerException portEx in GetRecursiveInnerExceptions(ex).Where(x => x is PortabilityAnalyzerException))
                         {
                             WriteError(portEx.Message);
+#if DEBUG
+                            // Provide additional info on inner exceptions if built for debug
+                            if (portEx.InnerException != null)
+                            {
+                                WriteError(portEx.InnerException.ToString());
+                            }
+#endif // DEBUG
                         }
                     }
                     else if (!IsWebSecurityFailureOnMono(ex))
@@ -129,7 +143,13 @@ namespace ApiPort
 
         public static void WriteColorLine(string message, ConsoleColor color)
         {
-            var previousColor = Console.ForegroundColor;
+            var previousColor =
+#if LINUX
+                // Console.get_ForegroundColor is unsopported by the Linux PAL
+                ConsoleColor.White;
+#else // LINUX
+                Console.ForegroundColor;
+#endif // LINUX
 
             try
             {

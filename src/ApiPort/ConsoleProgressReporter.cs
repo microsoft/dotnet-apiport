@@ -34,8 +34,13 @@ namespace ApiPort
 
         private static void WriteColor(string message, ConsoleColor color)
         {
-            var previousColor = Console.ForegroundColor;
-
+            var previousColor =
+#if LINUX
+                // Console.get_ForegroundColor is unsopported by the Linux PAL
+                ConsoleColor.White;
+#else // LINUX
+                Console.ForegroundColor;
+#endif // LINUX
             try
             {
                 Console.ForegroundColor = color;
@@ -77,6 +82,8 @@ namespace ApiPort
             {
                 await Task.Delay(1);
 
+#if FEATURE_RICH_CONSOLE
+
                 {
                     var count = 0;
 
@@ -98,6 +105,7 @@ namespace ApiPort
                     Console.SetCursorPosition(0, Console.CursorTop);
                     Console.Write(_task);
                 }
+#endif // FEATURE_RICH_CONSOLE
             }
 
             public void ReportUnitComplete()
