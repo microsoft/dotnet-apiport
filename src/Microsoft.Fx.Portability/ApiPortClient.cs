@@ -183,13 +183,25 @@ namespace Microsoft.Fx.Portability
             {
                 AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
 
-                var tasks = options.OutputFormats
+                // Create the progress reporter here (instead of within GetResultFromServiceAsync) since the reporter does not work well when run in parallel
+                using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
+                {
+                    try
+                    {
+                        var tasks = options.OutputFormats
                     .Select(f => GetResultFromServiceAsync(request, f))
                     .ToList();
 
-                await Task.WhenAll(tasks);
+                        await Task.WhenAll(tasks);
 
-                return tasks.Select(t => t.Result).ToList();
+                        return tasks.Select(t => t.Result).ToList();
+                    }
+                    catch (Exception)
+                    {
+                        progressTask.Abort();
+                        throw;
+                    }
+                }
             }
             else
             {
@@ -295,22 +307,11 @@ namespace Microsoft.Fx.Portability
         /// <returns>An array of bytes corresponding to the report.</returns>
         private async Task<byte[]> GetResultFromServiceAsync(AnalyzeRequest request, string format)
         {
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
-            {
-                try
-                {
-                    var response = await _apiPortService.SendAnalysisAsync(request, format);
+            var response = await _apiPortService.SendAnalysisAsync(request, format);
 
-                    CheckEndpointStatus(response.Headers.Status);
+            CheckEndpointStatus(response.Headers.Status);
 
-                    return response.Response;
-                }
-                catch (Exception)
-                {
-                    progressTask.Abort();
-                    throw;
-                }
-            }
+            return response.Response;
         }
 
         /// <summary>
