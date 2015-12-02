@@ -18,6 +18,15 @@ Today, the repository contains the following components:
 | :------- | :----------- |
 | ApiPort | Console tool to access portability webservice | 
 
+#### A Note About Expected Errors
+The ApiPort project contains two csproj files - one for building against the [desktop .NET Framework 4.5](src/ApiPort/ApiPort.csproj), the other for building against [.NET Core](src/ApiPort/ApiPort.Core.csproj). Building a .NET Core executable is still not a well-supported scenario and, as a result, building the project in Visual Studio with NuGet package restore enabled (as it is, by default) will result in errors like the following -
+![Errors](docs/DocImages/FalseErrors.png)
+
+**These errors are currently expected and do not keep the project from building successfully.** Notice in the picture that the build succeeded despite the errors.
+
+In order to suppress these false errors, disable Visual Studio's built-in package restore functionality (as described [here](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/getting-started-core.md#advanced-updating-and-using-nugetexe)). The packages can be restored by building or explicitly restoring packages from the command line (`.tools\nuget.exe src\ApiPort\ApiPort.Core.project.json`).
+ Restoring or building from the command line is expected to succeed without any errors.
+
 ### Libraries
 
 | Project | Description |
