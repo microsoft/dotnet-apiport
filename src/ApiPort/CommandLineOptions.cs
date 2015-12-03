@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPort.CommandLine;
@@ -70,7 +70,7 @@ namespace ApiPort
                 // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
                 Program.WriteColorLine($"Invalid parameter passed to {suppliedCommand}", ConsoleColor.Red);
             }
-            
+
             var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
             var path =
 #if NETCORE
