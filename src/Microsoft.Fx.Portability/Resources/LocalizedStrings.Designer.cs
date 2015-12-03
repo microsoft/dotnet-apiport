@@ -12,7 +12,6 @@ namespace Microsoft.Fx.Portability.Resources {
     using System;
     using System.Reflection;
 
-
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -248,6 +247,17 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string IdentifyAssembliesToScan {
             get {
                 return ResourceManager.GetString("IdentifyAssembliesToScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}
+        ///Exception:
+        ///{1}.
+        /// </summary>
+        public static string InternalServerErrorMessage {
+            get {
+                return ResourceManager.GetString("InternalServerErrorMessage", resourceCulture);
             }
         }
         
@@ -599,6 +609,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string UnknownFile {
             get {
                 return ResourceManager.GetString("UnknownFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an issue retrieving error message from the service. Reason: &apos;{0}&apos;. Please wait while we update the service..
+        /// </summary>
+        public static string UnknownInternalErrorCodeMessage {
+            get {
+                return ResourceManager.GetString("UnknownInternalErrorCodeMessage", resourceCulture);
             }
         }
         

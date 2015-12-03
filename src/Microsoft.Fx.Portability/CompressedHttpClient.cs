@@ -1,10 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -130,6 +128,15 @@ namespace Microsoft.Fx.Portability
                             throw new NotFoundException();
                         case HttpStatusCode.Unauthorized:
                             throw new UnauthorizedEndpointException();
+                        case HttpStatusCode.InternalServerError:
+                            var content = await response.Content?.ReadAsStringAsync();
+
+                            if (string.IsNullOrEmpty(content))
+                            {
+                                throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownInternalErrorCodeMessage, response.StatusCode, response.ReasonPhrase));
+                            }
+
+                            throw InternalServerErrorException.Create(response.ReasonPhrase, content);
                     }
 
                     throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
