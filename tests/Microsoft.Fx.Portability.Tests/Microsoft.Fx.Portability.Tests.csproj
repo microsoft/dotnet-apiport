@@ -93,7 +93,6 @@
     <Compile Include="SerializationTests.cs" />
     <Compile Include="TargetMapTests.cs" />
     <Compile Include="TestData\TestCatalog.cs" />
-    <Compile Include="UpdatingObjectCacheTests.cs" />
     <Compile Include="UrlBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>
