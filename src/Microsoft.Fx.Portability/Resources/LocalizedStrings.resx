@@ -331,4 +331,13 @@
   <data name="CouldNotWriteReport" xml:space="preserve">
     <value>Could not write report to directory '{0}' with file name '{1}' and extension '{2}'.</value>
   </data>
+  <data name="UnknownInternalErrorCodeMessage" xml:space="preserve">
+    <value>There was an issue retrieving an error message from the service. Reason: '{0}'. Please wait while we update the service.</value>
+    <comment>When an InternalServerError status code is set, the response.Content should never be null.</comment>
+  </data>
+  <data name="InternalServerErrorMessage" xml:space="preserve">
+    <value>{0}
+Exception:
+{1}</value>
+  </data>
 </root>
