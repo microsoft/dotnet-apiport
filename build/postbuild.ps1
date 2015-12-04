@@ -77,7 +77,7 @@ function Copy-OfflineMode()
 	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
 	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
-	copy $drop\ApiPort\* $offlineDrop
+	copy $drop\ApiPort\net45\* $offlineDrop
 	copy $drop\Microsoft.Fx.Portability.Offline\net45\* $offlineDrop
 	copy $drop\Microsoft.Fx.Portability.Reports.Json\net45\* $offlineDrop
 	copy $drop\Microsoft.Fx.Portability.Reports.Html\net45\* $offlineDrop
@@ -90,4 +90,5 @@ Copy-Item "$PSScriptRoot\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Of
 Copy-OfflineMode
 
 # Copying the license terms into our drop so we don't have to manually do it when we want to release
-Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort -Recurse -Force
+Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort\net45 -Recurse -Force
+Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort.Offline\ -Recurse -Force
