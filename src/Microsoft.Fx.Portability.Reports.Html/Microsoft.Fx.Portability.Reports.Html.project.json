@@ -1,0 +1,13 @@
+﻿{
+  "frameworks": {
+    "net45": { }
+  },
+  "dependencies": {
+    "CommonMark.NET": "0.10.0",
+    "MicroBuild.Core": "0.1.1",
+    "RazorEngine": "3.6.1"
+  },
+  "runtimes": {
+    "win": { }
+  }
+}
