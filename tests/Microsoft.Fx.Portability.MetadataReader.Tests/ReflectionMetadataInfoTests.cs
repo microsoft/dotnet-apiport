@@ -46,7 +46,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.Equal(s_expectedResult.Count(), actual.Count());
 
             // Use this instead of Assert.Equal so it will output the missing item
-            foreach (var items in s_expectedResult.Zip(actual, Tuple.Create))
+            foreach (var items in actual.Zip(s_expectedResult, Tuple.Create))
             {
                 Assert.Equal(items.Item1, items.Item2);
             }
@@ -65,13 +65,13 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             "Microsoft.Fx.Portability, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
             "Microsoft.Fx.Portability.MetadataReader, Version=1.1.1.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69",
             "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            "NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
+            "NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca",
             "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             "xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "xunit.assert, Version=2.1.0.3109, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "xunit.core, Version=2.1.0.3109, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
+            "xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
+            "xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
         }.OrderBy(o => o);
 
         private class FilePathAssemblyFile : IAssemblyFile
