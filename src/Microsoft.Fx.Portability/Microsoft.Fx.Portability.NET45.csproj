@@ -85,8 +85,6 @@
     <Compile Include="ISearcher.cs" />
     <Compile Include="ITargetMapper.cs" />
     <Compile Include="ITargetNameParser.cs" />
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\ITimedEvent.cs" />
     <Compile Include="MovedPermanentlyException.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="ObjectModel\AnalyzeRequest.cs" />
