@@ -1,16 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using MarkdownDeep;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using RazorEngine.Text;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -71,11 +70,9 @@ namespace Microsoft.Fx.Portability.Reports
 
         public class HtmlHelper
         {
-            private readonly Markdown _md = new Markdown();
-
             public string ConvertMarkdownToHtml(string markdown)
             {
-                return _md.Transform(markdown);
+                return CommonMark.CommonMarkConverter.Convert(markdown);
             }
 
             public IEncodedString Raw(string rawString)
