@@ -75,8 +75,6 @@
     <Compile Include="IAnalysisEngine.cs" />
     <Compile Include="IApiPortOptions.cs" />
     <Compile Include="IApiPortService.cs" />
-    <Compile Include="IAuthenticationService.cs" />
-    <Compile Include="IObjectCache.cs" />
     <Compile Include="IProgressReporter.cs" />
     <Compile Include="IProgressTask.cs" />
     <Compile Include="ISearcher.cs" />
@@ -140,8 +138,6 @@
     <Compile Include="UnauthorizedEndpointException.cs" />
     <Compile Include="UnknownReportFormatException.cs" />
     <Compile Include="UnknownTargetException.cs" />
-    <Compile Include="UpdatingObjectCache.cs" />
-    <Compile Include="UrlBlobCache.cs" />
     <Compile Include="UrlBuilder.cs" />
     <Compile Include="Utils\JsonConverters\JsonConverter.cs" />
     <Compile Include="Utils\JsonConverters\JsonMultiDictionaryConverter.cs" />
