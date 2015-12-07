@@ -84,5 +84,15 @@ namespace Microsoft.Fx.Portability
 
             return string.CompareOrdinal(Title, other.Title);
         }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return string.Equals(Id, (obj as BreakingChange)?.Id, StringComparison.Ordinal);
+        }
     }
 }
