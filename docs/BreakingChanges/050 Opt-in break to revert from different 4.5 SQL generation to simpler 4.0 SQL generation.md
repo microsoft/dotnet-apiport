@@ -17,7 +17,7 @@ Queries that produce JOIN statements and contain a call to a limiting operation 
 - [ ] Build-time break
 
 ### Recommended Action
-This feature is disabled by default. If Entity Framework generates extra JOIN statements that cause performance degradation, you can enable this feature by adding the following entry to the <appSettings> section of the application configuration (app.config) file:
+This feature is disabled by default. If Entity Framework generates extra JOIN statements that cause performance degradation, you can enable this feature by adding the following entry to the `<appSettings>` section of the application configuration (app.config) file:
 
 ```xml
 <add key="EntityFramework_SimplifyLimitOperations" value="true" /> 
