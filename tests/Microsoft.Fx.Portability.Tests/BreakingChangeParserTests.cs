@@ -177,7 +177,7 @@ namespace Microsoft.Fx.Portability.Tests
             IsBuildTime = false,
             SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
             Suggestion = "Suggested steps if user is affected (such as work arounds or code fixes) go here.",
-            ApplicableApis = new[] { "Not detectable via API analysis" },
+            ApplicableApis = new string[] { },
             Link = "LinkForMoreInformation",
             BugLink = "Bug link goes here",
             Notes = "Source analyzer status: Not usefully detectable with an analyzer"
