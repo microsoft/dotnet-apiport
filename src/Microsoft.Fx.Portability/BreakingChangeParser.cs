@@ -10,6 +10,15 @@ namespace Microsoft.Fx.Portability
 {
     public static class BreakingChangeParser
     {
+        /// <summary>
+        /// Items that can show up in the breaking change 'Affected APIs' section that should be ignored
+        /// </summary>
+        private static readonly ICollection<string> s_ignoredApis = new HashSet<string>(new[]
+        {
+            "Not detectable via API analysis",
+            "Investigate applicable APIs"
+        }, StringComparer.OrdinalIgnoreCase);
+
         private enum ParseState
         {
             None,
@@ -223,7 +232,10 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.ApplicableApis = new List<string>();
                     }
-                    currentBreak.ApplicableApis.Add(api);
+                    if (!s_ignoredApis.Contains(api))
+                    {
+                        currentBreak.ApplicableApis.Add(api);
+                    }
                     break;
                 case ParseState.Details:
                     if (currentBreak.Details == null)
