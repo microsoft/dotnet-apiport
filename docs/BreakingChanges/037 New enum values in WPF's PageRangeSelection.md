@@ -10,7 +10,7 @@ Edge
 Available
 
 ### Change Description
-Two new members (CurrentPage and SelectedPage) have been added to the <a href="https://msdn.microsoft.com/en-us/library/system.windows.controls.pagerangeselection(v=vs.110).aspx">PageRangeSelection</a> enum.
+Two new members (CurrentPage and SelectedPage) have been added to the [PageRangeSelection](https://msdn.microsoft.com/en-us/library/system.windows.controls.pagerangeselection(v=vs.110).aspx) enum.
 
 - [ ] Quirked
 - [ ] Build-time break
