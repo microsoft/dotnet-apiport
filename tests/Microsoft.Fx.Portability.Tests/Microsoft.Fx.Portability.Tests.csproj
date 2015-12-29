@@ -56,6 +56,7 @@
     <Compile Include="BreakingChangeTests.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformationTests.cs" />
     <Compile Include="ObjectModel\IgnoreAssemblyInfoTests.cs" />
+    <Compile Include="ObjectModel\DiagnosticAnalyzerInfoTests.cs" />
     <Compile Include="ObjectModel\TargetInformationTests.cs" />
     <Compile Include="ReadWriteApiPortOptionsTests.cs" />
     <Compile Include="ReportFileWriterTests.cs" />
