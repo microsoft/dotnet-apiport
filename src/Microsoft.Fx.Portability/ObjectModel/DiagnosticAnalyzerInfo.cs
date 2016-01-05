@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -31,7 +32,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
 
             var regExMatches = s_regEx.Match(Id);
-            return regExMatches.Success ? int.Parse(regExMatches.Captures[0].Value) : -1;
+            return regExMatches.Success ? int.Parse(regExMatches.Captures[0].Value, CultureInfo.InvariantCulture) : -1;
         }
     }
 }
