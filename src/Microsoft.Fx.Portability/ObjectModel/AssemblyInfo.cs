@@ -78,7 +78,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public int CompareTo(object obj)
         {
             var obj2 = obj as AssemblyInfo;
-            return AssemblyIdentity.CompareTo(obj2.AssemblyIdentity);
+
+            return string.Compare(AssemblyIdentity, obj2.AssemblyIdentity, StringComparison.Ordinal);
         }
     }
 }

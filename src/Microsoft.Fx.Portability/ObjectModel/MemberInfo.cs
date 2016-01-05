@@ -85,7 +85,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public int CompareTo(object obj)
         {
             var obj2 = obj as MemberInfo;
-            return MemberDocId.CompareTo(obj2.MemberDocId);
+
+            return string.Compare(MemberDocId, obj2.MemberDocId, StringComparison.Ordinal);
         }
     }
 }

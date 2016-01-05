@@ -37,7 +37,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public int CompareTo(object obj)
         {
             var analyzeObject = obj as AnalyzeRequest;
-            return ApplicationName.CompareTo(analyzeObject.ApplicationName);
+
+            return string.Compare(ApplicationName, analyzeObject.ApplicationName, StringComparison.Ordinal);
         }
     }
 }
