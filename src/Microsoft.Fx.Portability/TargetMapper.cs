@@ -249,7 +249,7 @@ namespace Microsoft.Fx.Portability
 
             if (validate && groups.Any(g => g.Length != 2))
             {
-                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format("An alias should be separated from names by '{0}'", AliasTargetSeparator));
+                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format(CultureInfo.CurrentCulture, "An alias should be separated from names by '{0}'", AliasTargetSeparator));
             }
 
             foreach (var group in groups)

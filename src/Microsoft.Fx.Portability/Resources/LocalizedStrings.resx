@@ -331,4 +331,10 @@
   <data name="CouldNotWriteReport" xml:space="preserve">
     <value>Could not write report to directory '{0}' with file name '{1}' and extension '{2}'.</value>
   </data>
+  <data name="InvalidCategoryDetected" xml:space="preserve">
+    <value>Invalid category detected: {0}</value>
+  </data>
+  <data name="InvalidBreakingChangeParserState" xml:space="preserve">
+    <value>Unhandled breaking change parse state: {0}</value>
+  </data>
 </root>

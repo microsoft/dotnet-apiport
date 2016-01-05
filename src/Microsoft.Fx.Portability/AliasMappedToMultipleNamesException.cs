@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability
 
         private static string GenerateMessage(IEnumerable<string> invalidNames)
         {
-            return string.Format(LocalizedStrings.AliasMappedToMultipleNamesInvalidAliases, string.Join(s_listSeparator, invalidNames));
+            return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasMappedToMultipleNamesInvalidAliases, string.Join(s_listSeparator, invalidNames));
         }
 
         public AliasMappedToMultipleNamesException(IEnumerable<string> invalidNames)

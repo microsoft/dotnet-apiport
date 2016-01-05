@@ -85,7 +85,7 @@ namespace Microsoft.Fx.Portability.Reporting
                 // This file exists already but since we don't care about uniqueness, we'll overwrite it.
                 if (!isUnique)
                 {
-                    _progressReporter.ReportIssue(string.Format(LocalizedStrings.OverwriteFile, uniqueName));
+                    _progressReporter.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.OverwriteFile, uniqueName));
                     return uniqueName;
                 }
 
