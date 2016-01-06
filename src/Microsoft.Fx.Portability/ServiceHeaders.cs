@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -92,12 +93,12 @@ namespace Microsoft.Fx.Portability
 
         public Uri GetDocIdUrl(string docId)
         {
-            return new Uri(string.Format("{0}{1}{2}", WebsiteEndpoint, ApiInfoUrl, WebUtility.UrlEncode(docId)));
+            return new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", WebsiteEndpoint, ApiInfoUrl, WebUtility.UrlEncode(docId)));
         }
 
         public Uri GetSubmissionUrl(string submissionId)
         {
-            return new Uri(string.Format("{0}{1}{2}", WebsiteEndpoint, SubmissionUrl, WebUtility.UrlEncode(submissionId)));
+            return new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", WebsiteEndpoint, SubmissionUrl, WebUtility.UrlEncode(submissionId)));
         }
     }
 }

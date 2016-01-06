@@ -54,7 +54,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         public MissingTypeInfo(AssemblyInfo sourceAssembly, string docId, List<Version> targetStatus, string recommendedChanges)
             : base(docId)
         {
-            int pos = DocId.IndexOf("T:");
+            int pos = DocId.IndexOf("T:", StringComparison.Ordinal);
             if (pos == -1)
                 throw new ArgumentException(LocalizedStrings.MemberShouldBeDefinedOnTypeException, "docId");
 

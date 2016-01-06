@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -287,12 +289,12 @@ namespace Microsoft.Fx.Portability
                     // If a list of allowed categories was provided, make sure that the category found is on the list
                     if (!allowedCategories?.Contains(category, StringComparer.OrdinalIgnoreCase) ?? false)
                     {
-                        throw new InvalidOperationException($"Invalid category detected: {category}");
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, category));
                     }
                     currentBreak.Categories.Add(category);
                     break;
                 default:
-                    throw new InvalidOperationException("Unhandled breaking change parse state: " + state.ToString());
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidBreakingChangeParserState, state.ToString()));
             }
         }
 

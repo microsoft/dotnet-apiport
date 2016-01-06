@@ -84,6 +84,12 @@ namespace Microsoft.Fx.Portability
             Load(stream, null);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.FxCop.Rules.Security.Xml.SecurityXmlRules", "CA3053:UseXmlSecureResolver",
+            MessageId = "System.Xml.XmlReader.Create",
+            Justification = @"For the call to XmlReader.Create() below, CA3053 recommends setting the
+XmlReaderSettings.XmlResolver property to either null or an instance of XmlSecureResolver.
+However, the said XmlResolver property no longer exists in .NET portable framework (i.e. core framework) which means there is no way to set it.
+So we suppress this error until the reporting for CA3053 has been updated to account for .NET portable framework.")]
         private void Load(Stream stream, string path)
         {
             try
@@ -249,7 +255,7 @@ namespace Microsoft.Fx.Portability
 
             if (validate && groups.Any(g => g.Length != 2))
             {
-                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format("An alias should be separated from names by '{0}'", AliasTargetSeparator));
+                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format(CultureInfo.CurrentCulture, "An alias should be separated from names by '{0}'", AliasTargetSeparator));
             }
 
             foreach (var group in groups)

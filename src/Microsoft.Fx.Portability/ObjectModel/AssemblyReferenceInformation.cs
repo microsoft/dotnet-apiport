@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Globalization;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -18,7 +19,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             Culture = culture;
             PublicKeyToken = publicKeyToken;
 
-            _string = $"{Name}, Version={Version}, Culture={Culture}, PublicKeyToken={PublicKeyToken}";
+            _string = string.Format(CultureInfo.InvariantCulture, "{0}, Version={1}, Culture={2}, PublicKeyToken={3}", Name, Version, Culture, PublicKeyToken);
         }
 
         public string Name { get; }

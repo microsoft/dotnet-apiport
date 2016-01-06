@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.Resources;
 using System;
+using System.Globalization;
 
 namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
@@ -36,7 +37,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
             }
             else
             {
-                return string.Format(LocalizedStrings.SupportedOn, version);
+                return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.SupportedOn, version);
             }
         }
     }

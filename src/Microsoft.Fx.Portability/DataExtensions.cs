@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability
 {
     public static class DataExtensions
     {
-        public static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+        public static JsonSerializerSettings JsonSettings { get; } = new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
             Converters = new JsonConverter[]
@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability
             }
         };
 
-        public static readonly JsonSerializer Serializer = JsonSerializer.Create(JsonSettings);
+        public static JsonSerializer Serializer { get; } = JsonSerializer.Create(JsonSettings);
 
         public static byte[] Serialize<T>(this T data)
         {

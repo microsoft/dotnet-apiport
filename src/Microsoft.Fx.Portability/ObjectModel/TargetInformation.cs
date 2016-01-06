@@ -55,7 +55,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             if (ExpandedTargets.Any())
             {
-                return string.Format(LocalizedStrings.TargetInformationGroups, Name, string.Join(s_ListSeparator, ExpandedTargets));
+                return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TargetInformationGroups, Name, string.Join(s_ListSeparator, ExpandedTargets));
             }
             else
             {

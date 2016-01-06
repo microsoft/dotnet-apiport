@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.Resources;
 using System;
+using System.Globalization;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -72,13 +73,14 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string GetFullAssemblyIdentity()
         {
-            return string.Format(LocalizedStrings.FullAssemblyIdentity, AssemblyIdentity, FileVersion);
+            return string.Format(CultureInfo.InvariantCulture, LocalizedStrings.FullAssemblyIdentity, AssemblyIdentity, FileVersion);
         }
 
         public int CompareTo(object obj)
         {
             var obj2 = obj as AssemblyInfo;
-            return AssemblyIdentity.CompareTo(obj2.AssemblyIdentity);
+
+            return string.Compare(AssemblyIdentity, obj2.AssemblyIdentity, StringComparison.Ordinal);
         }
     }
 }

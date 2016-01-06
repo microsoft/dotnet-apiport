@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.Resources;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -76,7 +77,7 @@ namespace Microsoft.Fx.Portability.Reporting
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
             var fileNameFormatString = string.Concat(fileNameWithoutExtension, "{0}", extension);
-            var uniqueName = string.Format(fileNameFormatString, string.Empty);
+            var uniqueName = string.Format(CultureInfo.InvariantCulture, fileNameFormatString, string.Empty);
 
             int i = 1;
 
@@ -85,12 +86,12 @@ namespace Microsoft.Fx.Portability.Reporting
                 // This file exists already but since we don't care about uniqueness, we'll overwrite it.
                 if (!isUnique)
                 {
-                    _progressReporter.ReportIssue(string.Format(LocalizedStrings.OverwriteFile, uniqueName));
+                    _progressReporter.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.OverwriteFile, uniqueName));
                     return uniqueName;
                 }
 
-                var suffix = string.Format("({0})", i++);
-                uniqueName = string.Format(fileNameFormatString, suffix);
+                var suffix = string.Format(CultureInfo.InvariantCulture, "({0})", i++);
+                uniqueName = string.Format(CultureInfo.InvariantCulture, fileNameFormatString, suffix);
             }
 
             return uniqueName;

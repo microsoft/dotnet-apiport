@@ -38,7 +38,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public int CompareTo(object obj)
         {
             var analyzeObject = obj as AnalyzeResponse;
-            return SubmissionId.CompareTo(analyzeObject.SubmissionId);
+
+            return string.Compare(SubmissionId, analyzeObject.SubmissionId, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

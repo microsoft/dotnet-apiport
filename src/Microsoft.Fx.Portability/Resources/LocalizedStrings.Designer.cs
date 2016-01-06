@@ -261,6 +261,24 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unhandled breaking change parse state: {0}.
+        /// </summary>
+        public static string InvalidBreakingChangeParserState {
+            get {
+                return ResourceManager.GetString("InvalidBreakingChangeParserState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid category detected: {0}.
+        /// </summary>
+        public static string InvalidCategoryDetected {
+            get {
+                return ResourceManager.GetString("InvalidCategoryDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid data.
         /// </summary>
         public static string InvalidDataMessage {
