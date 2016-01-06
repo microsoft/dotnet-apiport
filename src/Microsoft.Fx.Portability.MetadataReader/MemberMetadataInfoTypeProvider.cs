@@ -1,14 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Decoding;
 using System.Text;
-using Microsoft.Fx.Portability.Analyzer.Resources;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -290,7 +291,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             return new MemberMetadataInfo(elementType)
             {
-                Name = $"{elementType.Name}[]"
+                Name = string.Format(CultureInfo.InvariantCulture, "{0}[]", elementType.Name)
             };
         }
 
@@ -306,7 +307,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             return new MemberMetadataInfo(elementType)
             {
-                Name = $"{elementType.Name}@"
+                Name = string.Format(CultureInfo.InvariantCulture, "{0}@", elementType.Name)
             };
         }
 
@@ -316,7 +317,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Type generic arguments are prefixed with `
             return new MemberMetadataInfo
             {
-                Name = $"``{index}",
+                Name = string.Format(CultureInfo.InvariantCulture, "``{0}", index),
                 IsGenericInstance = true
             };
         }
@@ -326,7 +327,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Type generic arguments are prefixed with `
             return new MemberMetadataInfo
             {
-                Name = $"`{index}",
+                Name = string.Format(CultureInfo.InvariantCulture, "`{0}", index),
                 IsGenericInstance = true
             };
         }
