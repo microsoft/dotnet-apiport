@@ -4,6 +4,7 @@
 using ApiPort.CommandLine;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -62,13 +63,13 @@ namespace ApiPort
             if (!string.IsNullOrEmpty(suppliedCommand) && command == null)
             {
                 Console.WriteLine();
-                Program.WriteColorLine($"Unknown command: {suppliedCommand}", ConsoleColor.Red);
+                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, "Unknown command: {0}", suppliedCommand), ConsoleColor.Red);
             }
             else if (error)
             {
                 Console.WriteLine();
                 // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
-                Program.WriteColorLine($"Invalid parameter passed to {suppliedCommand}", ConsoleColor.Red);
+                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, "Invalid parameter passed to {0}", suppliedCommand), ConsoleColor.Red);
             }
             
             var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
@@ -87,7 +88,7 @@ namespace ApiPort
             {
                 Console.WriteLine();
                 Console.WriteLine(new string('=', Math.Min(Console.WindowWidth, 100)));
-                Program.WriteColorLine($"{path} {displayCommand.Name} [options]", ConsoleColor.Yellow);
+                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, "{0} {1} [options]", path, displayCommand.Name), ConsoleColor.Yellow);
                 Console.WriteLine();
                 Console.WriteLine(displayCommand.HelpMessage);
             }
