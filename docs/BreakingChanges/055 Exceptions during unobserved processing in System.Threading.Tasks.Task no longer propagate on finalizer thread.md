@@ -16,7 +16,7 @@ Because the System.Threading.Tasks.Task class represents an asynchronous operati
 - [ ] Build-time break
 
 ### Recommended Action
-If an app depends on unobserved asynchronous exceptions propagating to the finalizer thread, the previous behavior can be restored by providing an appropriate handler for the [TaskScheduler.UnobservedTaskException](https://msdn.microsoft.com/en-us/library/system.threading.tasks.taskscheduler.unobservedtaskexception(v=vs.110).aspx) event.
+If an app depends on unobserved asynchronous exceptions propagating to the finalizer thread, the previous behavior can be restored by providing an appropriate handler for the [TaskScheduler.UnobservedTaskException](https://msdn.microsoft.com/en-us/library/system.threading.tasks.taskscheduler.unobservedtaskexception(v=vs.110).aspx) event, or by setting a [runtime configuration element](https://msdn.microsoft.com/en-us/library/jj160346%28v=vs.110%29.aspx).
 
 ### Affected APIs
 * `M:System.Threading.Tasks.Task.Run(System.Action)`
