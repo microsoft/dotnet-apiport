@@ -74,7 +74,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             private static string GetText(string fileName)
             {
-                var name = s_assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+                var name = s_assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName, StringComparison.Ordinal));
 
                 using (var stream = s_assembly.GetManifestResourceStream(name))
                 using (var reader = new StreamReader(stream))
@@ -90,7 +90,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             public ResourceStreamAssemblyFile(string fileName)
             {
-                Name = s_assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+                Name = s_assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName, StringComparison.Ordinal));
                 Exists = Name != null;
             }
 
