@@ -1,5 +1,5 @@
 ﻿using Microsoft.Fx.Portability.ObjectModel;
-using System.Reflection;
+using Microsoft.Fx.Portability.Tests.TestData;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel
@@ -12,7 +12,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         [Theory]
         public void GetAncestorsTest(string docId, string ancestors)
         {
-            var dotnetCatalog = GetDotNetCatalog();
+            var dotnetCatalog = new TestDotNetCatalog();
             var catalog = new CloudApiCatalogLookup(dotnetCatalog);
 
             var expected = ancestors != null ? ancestors.Split(';') : null;
@@ -26,18 +26,16 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
             }
         }
 
-        private static DotNetCatalog GetDotNetCatalog()
+        [InlineData("N:System.Collections.Concurrent")]
+        [Theory]
+        public void GetAncestorsTestEmpty(string docId)
         {
-            const string catalogName = "Microsoft.Fx.Portability.Tests.TestAssets.DummyApiCatalog.json";
+            var dotnetCatalog = new TestDotNetCatalog();
+            var catalog = new CloudApiCatalogLookup(dotnetCatalog);
 
-            DotNetCatalog catalog = null;
+            var results = catalog.GetAncestors(docId);
 
-            using (var template = typeof(CloudApiCatalogLookupTests).GetTypeInfo().Assembly.GetManifestResourceStream(catalogName))
-            {
-                catalog = template.Deserialize<DotNetCatalog>();
-            }
-
-            return catalog;
+            Assert.Empty(results);
         }
     }
 }

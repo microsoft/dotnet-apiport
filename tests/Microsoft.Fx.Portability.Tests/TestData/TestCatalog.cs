@@ -112,5 +112,10 @@ namespace Microsoft.Fx.Portability.TestData
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<string> GetAncestors(string docId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
