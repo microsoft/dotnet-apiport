@@ -11,6 +11,7 @@ namespace Microsoft.Fx.Portability
         private string _returnType;
         private string _name;
         private string _fullName;
+        private string _parent;
 
         public string DocId
         {
@@ -32,6 +33,15 @@ namespace Microsoft.Fx.Portability
         {
             get { return _fullName ?? string.Empty; }
             set { _fullName = value; }
+        }
+
+        /// <summary>
+        /// DocId of Api's parent
+        /// </summary>
+        public string Parent
+        {
+            get { return _parent ?? string.Empty; }
+            set { _parent = value; }
         }
 
         public override bool Equals(object obj)
