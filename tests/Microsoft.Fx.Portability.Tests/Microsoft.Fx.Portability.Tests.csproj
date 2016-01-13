@@ -55,6 +55,7 @@
     <Compile Include="BreakingChangeParserTests.cs" />
     <Compile Include="BreakingChangeTests.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformationTests.cs" />
+    <Compile Include="ObjectModel\CloudApiCatalogLookupTests.cs" />
     <Compile Include="ObjectModel\IgnoreAssemblyInfoTests.cs" />
     <Compile Include="ObjectModel\DiagnosticAnalyzerInfoTests.cs" />
     <Compile Include="ObjectModel\TargetInformationTests.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="SerializationTests.cs" />
     <Compile Include="TargetMapTests.cs" />
     <Compile Include="TestData\TestCatalog.cs" />
+    <Compile Include="TestData\TestDotNetCatalog.cs" />
     <Compile Include="UrlBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>

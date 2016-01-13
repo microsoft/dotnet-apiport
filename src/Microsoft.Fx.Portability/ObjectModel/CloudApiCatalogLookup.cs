@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
             _frameworkAssemblies = new HashSet<string>(catalog.FrameworkAssemblyIdenties, StringComparer.OrdinalIgnoreCase);
 
-            _docIdToApi = catalog.Apis.ToDictionary(key => key.DocId, key => new ApiDefinition { DocId = key.DocId, Name = key.Name, ReturnType = key.Type, FullName = key.FullName });
+            _docIdToApi = catalog.Apis.ToDictionary(key => key.DocId, key => new ApiDefinition { DocId = key.DocId, Name = key.Name, ReturnType = key.Type, FullName = key.FullName, Parent = key.Parent });
         }
 
         public IEnumerable<string> DocIds
@@ -163,6 +163,25 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public IEnumerable<TargetInfo> GetAllTargets()
         {
             return _allTargets;
+        }
+
+        /// <summary>
+        /// Retrieves the ancestors for a given docId. 
+        /// This retrieves the Api's parent first and then the parent's ancestor
+        /// until it reaches the root.
+        /// </summary>
+        public IEnumerable<string> GetAncestors(string docId)
+        {
+            var api = GetApiDefinition(docId);
+            var parent = api.Parent;
+
+            while (!string.IsNullOrEmpty(parent))
+            {
+                yield return parent;
+
+                api = GetApiDefinition(parent);
+                parent = api.Parent;
+            }
         }
 
         public string BuiltBy { get { return _builtBy; } }
