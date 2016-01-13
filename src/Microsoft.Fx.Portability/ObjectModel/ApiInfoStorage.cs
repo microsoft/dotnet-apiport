@@ -13,6 +13,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public string Type { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
+
+        /// <summary>
+        /// DocId of the parent. Null if the Api does not have a parent.
+        /// </summary>
+        public string Parent { get; set; }
         public IReadOnlyCollection<FrameworkName> Targets { get; set; }
         public IReadOnlyCollection<ApiMetadataStorage> Metadata { get; set; }
     }

@@ -8,11 +8,16 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Versioning;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
 {
     public static class DataExtensions
     {
+        private const int DefaultBufferSize = 1024;
+        private static readonly Encoding DefaultEncoding = Encoding.UTF8;
+
         public static JsonSerializerSettings JsonSettings { get; } = new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
@@ -37,6 +42,20 @@ namespace Microsoft.Fx.Portability
                 writer.Flush();
 
                 return outputStream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Serializes an object to Json and writes the output to the given stream.
+        /// </summary>
+        /// <param name="data">object to serialize</param>
+        /// <param name="outputStream">Stream to write Json to</param>
+        /// <param name="leaveOpen">true to leave the stream open; false otherwise</param>
+        public static void Serialize<T>(this T data, Stream outputStream, bool leaveOpen)
+        {
+            using (var writer = new StreamWriter(outputStream, DefaultEncoding, DefaultBufferSize, leaveOpen))
+            {
+                Serializer.Serialize(writer, data);
             }
         }
 
@@ -65,6 +84,29 @@ namespace Microsoft.Fx.Portability
                 }
 
                 return outputStream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Given the input stream, will take its contents and compress them into the output stream.
+        /// </summary>
+        /// <param name="inputStream">Input stream to read contents from</param>
+        /// <param name="outputStream">Stream to write contents to</param>
+        /// <param name="leaveOpen">Whether to leave the input and output streams open after reading/writing to/from them.</param>
+        /// <returns></returns>
+        public static async Task CompressAsync(this Stream inputStream, Stream outputStream, bool leaveOpen)
+        {
+            using (var reader = new BinaryReader(inputStream, DefaultEncoding, leaveOpen))
+            using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen))
+            {
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                {
+                    var buffer = reader.ReadBytes(DefaultBufferSize);
+
+                    await compressionStream.WriteAsync(buffer, 0, buffer.Length);
+                }
             }
         }
 
