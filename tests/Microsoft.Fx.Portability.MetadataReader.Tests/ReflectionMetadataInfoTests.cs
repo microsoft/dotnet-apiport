@@ -60,8 +60,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private static readonly IEnumerable<string> s_expectedResult = new[]
         {
-            "Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
+            "Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
+            "Microsoft.CodeAnalysis.CSharp, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
             typeof(ApiPortClient).Assembly.ToString(),
             typeof(ReflectionMetadataDependencyFinder).Assembly.ToString(),
             "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
