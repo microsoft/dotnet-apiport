@@ -56,7 +56,7 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
-        public string GetModifiedType(string unmodifiedType, ImmutableArray<CustomModifier<string>> customModifiers)
+        public string GetModifiedType(MetadataReader reader, bool isRequired, EntityHandle modifierTypeHandle, string unmodifiedType)
         {
             return string.Empty;
         }
@@ -98,12 +98,22 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
+        public string GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, SignatureTypeHandleCode code)
+        {
+            return string.Empty;
+        }
+
         public string GetTypeFromReference(TypeReferenceHandle handle)
         {
             return string.Empty;
         }
 
         public string GetTypeFromReference(TypeReferenceHandle handle, bool? isValueType)
+        {
+            return string.Empty;
+        }
+
+        public string GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, SignatureTypeHandleCode code)
         {
             return string.Empty;
         }

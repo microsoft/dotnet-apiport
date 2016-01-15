@@ -4,7 +4,7 @@
 using Microsoft.Fx.Portability.Analyzer;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reflection.Metadata;
+using System.Reflection.Metadata.Decoding;
 
 namespace Microsoft.Fx.Portability
 {
