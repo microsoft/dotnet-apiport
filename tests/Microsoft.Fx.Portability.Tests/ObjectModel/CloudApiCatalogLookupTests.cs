@@ -27,6 +27,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [InlineData("N:System.Collections.Concurrent")]
+        [InlineData("N:NonExistentDocId")]
         [Theory]
         public void GetAncestorsTestEmpty(string docId)
         {

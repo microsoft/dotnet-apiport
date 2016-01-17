@@ -68,9 +68,23 @@ namespace Microsoft.Fx.Portability.ObjectModel
             get { return _apiMapping.Keys; }
         }
 
+        /// <summary>
+        /// Gets the ApiDefinition for a docId.
+        /// </summary>
+        /// <returns>The corresponding ApiDefinition if it exists.  
+        /// If docId is null/empty or does not exist, returns null.</returns>
         public ApiDefinition GetApiDefinition(string docId)
         {
-            return _docIdToApi[docId];
+            ApiDefinition apiDefinition;
+
+            if (string.IsNullOrEmpty(docId) || !_docIdToApi.TryGetValue(docId, out apiDefinition))
+            {
+                return null;
+            }
+            else
+            {
+                return apiDefinition;
+            }
         }
 
         public bool IsFrameworkMember(string docId)
@@ -169,10 +183,23 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// Retrieves the ancestors for a given docId. 
         /// This retrieves the Api's parent first and then the parent's ancestor
         /// until it reaches the root.
+        /// If the docId does not exist or is null, it will return an empty
+        /// Enumerable.
         /// </summary>
         public IEnumerable<string> GetAncestors(string docId)
         {
+            if (string.IsNullOrEmpty(docId))
+            {
+                yield break;
+            }
+
             var api = GetApiDefinition(docId);
+
+            if (api == null)
+            {
+                yield break;
+            }
+
             var parent = api.Parent;
 
             while (!string.IsNullOrEmpty(parent))
