@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Reflection.Metadata.Decoding;
 using System.Text;
 
 namespace Microsoft.Fx.Portability.Analyzer

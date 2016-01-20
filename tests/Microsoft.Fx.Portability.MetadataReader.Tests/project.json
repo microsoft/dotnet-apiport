@@ -1,10 +1,10 @@
 ﻿{
   "dependencies": {
     "MicroBuild.Core": "0.1.1",
-    "Microsoft.CodeAnalysis.Csharp": "1.0.0",
+    "Microsoft.CodeAnalysis.CSharp": "1.1.0",
     "Newtonsoft.Json": "6.0.8",
     "NSubstitute": "1.9.2",
-    "System.Reflection.Metadata": "1.2.0-alpha-00017",
+    "System.Reflection.Metadata": "1.2.0-rc2-23713",
     "xunit": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0"
   },

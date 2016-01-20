@@ -45,7 +45,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                         Name = Reader.GetString(memberReference.Name),
                         ParentType = parentType,
                         Kind = MemberKind.Method,
-                        MethodSignature = SignatureDecoder.DecodeMethodSignature(memberReference.Signature, this).MakeEnclosedType()
+                        MethodSignature = memberReference.DecodeMethodSignature(this).MakeEnclosedType()
                     };
                 default:
                     return null;
@@ -65,7 +65,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                         IsTypeDef = true
                     };
                 case HandleKind.TypeSpecification:
-                    return SignatureDecoder.DecodeType(parent, this, null);
+                    var type = Reader.GetTypeSpecification((TypeSpecificationHandle)parent);
+                    return type.DecodeSignature(this);
                 case HandleKind.MethodDefinition:
                     var method = Reader.GetMethodDefinition((MethodDefinitionHandle)parent);
                     return new MemberMetadataInfo(GetFullName(method.GetDeclaringType()));
@@ -395,19 +396,50 @@ namespace Microsoft.Fx.Portability.Analyzer
             return elementType;
         }
 
-        public MemberMetadataInfo GetModifiedType(MemberMetadataInfo unmodifiedType, ImmutableArray<CustomModifier<MemberMetadataInfo>> modifiers)
+        public MemberMetadataInfo GetModifiedType(MetadataReader reader, bool isRequired, EntityHandle modifierTypeHandle, MemberMetadataInfo unmodifiedType)
         {
             var builder = new StringBuilder();
             builder.Append(unmodifiedType.Name);
 
-            foreach (var modifier in modifiers)
+            builder.Append(isRequired ? " reqmod " : " optmod ");
+
+            MemberMetadataInfo info = null;
+
+            switch (modifierTypeHandle.Kind)
             {
-                builder.Append(modifier.IsRequired ? " reqmod " : " optmod ");
-                builder.Append(modifier.Type);
+                case HandleKind.TypeDefinition:
+                    info = GetTypeFromDefinition((TypeDefinitionHandle)modifierTypeHandle);
+
+                    builder.Append(info.ToString());
+
+                    break;
+                case HandleKind.TypeReference:
+                    info = GetTypeFromReference((TypeReferenceHandle)modifierTypeHandle);
+
+                    builder.Append(info.ToString());
+                    break;
+                case HandleKind.TypeSpecification:
+                    var specification = reader.GetTypeSpecification((TypeSpecificationHandle)modifierTypeHandle);
+                    var signature = specification.DecodeSignature(this);
+
+                    builder.Append(signature);
+                    break;
+                default:
+                    throw new NotSupportedException("This kind is not supported!");
             }
 
             unmodifiedType.Name = builder.ToString();
             return unmodifiedType;
+        }
+
+        public MemberMetadataInfo GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, SignatureTypeHandleCode code)
+        {
+            return GetTypeFromDefinition(handle);
+        }
+
+        public MemberMetadataInfo GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, SignatureTypeHandleCode code)
+        {
+            return GetTypeFromReference(handle);
         }
     }
 }
