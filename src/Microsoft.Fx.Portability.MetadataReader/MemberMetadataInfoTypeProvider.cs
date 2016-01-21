@@ -298,7 +298,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             return new MemberMetadataInfo(elementType)
             {
-                Name = $"{elementType.Name}*"
+                IsPointer = true
             };
         }
 
@@ -399,9 +399,8 @@ namespace Microsoft.Fx.Portability.Analyzer
         public MemberMetadataInfo GetModifiedType(MetadataReader reader, bool isRequired, EntityHandle modifierTypeHandle, MemberMetadataInfo unmodifiedType)
         {
             var builder = new StringBuilder();
-            builder.Append(unmodifiedType.Name);
 
-            builder.Append(isRequired ? " reqmod " : " optmod ");
+            builder.Append(isRequired ? "reqmod " : "optmod ");
 
             MemberMetadataInfo info = null;
 
@@ -428,7 +427,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                     throw new NotSupportedException("This kind is not supported!");
             }
 
-            unmodifiedType.Name = builder.ToString();
+            unmodifiedType.Modifiers.Add(builder.ToString());
+
             return unmodifiedType;
         }
 
