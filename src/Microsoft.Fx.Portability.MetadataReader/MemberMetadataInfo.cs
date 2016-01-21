@@ -17,6 +17,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             Kind = MemberKind.Type;
             Names = new List<string>();
+            Modifiers = new StackCollection<string>();
         }
 
         public MemberMetadataInfo(MemberMetadataInfo other)
@@ -30,6 +31,8 @@ namespace Microsoft.Fx.Portability.Analyzer
             Kind = other.Kind;
             IsGenericInstance = other.IsGenericInstance;
             IsEnclosedType = other.IsEnclosedType;
+            IsPointer = other.IsPointer;
+            Modifiers = new StackCollection<string>(other.Modifiers);
             Name = other.Name;
             Namespace = other.Namespace;
             DefinedInAssembly = other.DefinedInAssembly;
@@ -92,6 +95,10 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public AssemblyReference? DefinedInAssembly { get; set; }
 
+        public ICollection<string> Modifiers { get; }
+
+        public bool IsPointer { get; set; }
+
         public override string ToString()
         {
             if (Kind == MemberKind.Method || Kind == MemberKind.Field)
@@ -123,6 +130,17 @@ namespace Microsoft.Fx.Portability.Analyzer
             if (IsArrayType)
             {
                 sb.Append(ArrayTypeInfo);
+            }
+
+            if (Modifiers.Any())
+            {
+                sb.Append(' ');
+                sb.Append(string.Join(" ", Modifiers));
+            }
+
+            if (IsPointer)
+            {
+                sb.Append('*');
             }
 
             return sb.ToString();
@@ -311,6 +329,22 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             return int.TryParse(displayName.Substring(pos, offsetStringAfterGenericMarker - pos), out numGenericArgs);
+        }
+
+        private class StackCollection<T> : Stack<T>, ICollection<T>
+        {
+            public StackCollection()
+            { }
+
+            public StackCollection(IEnumerable<T> other)
+                : base(other)
+            { }
+
+            public bool IsReadOnly { get; } = false;
+
+            public void Add(T item) => Push(item);
+
+            public bool Remove(T item) => false;
         }
     }
 }
