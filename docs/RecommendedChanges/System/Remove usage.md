@@ -8,7 +8,7 @@ Remove usage.
 * `T:System.AppDomainManagerInitializationOptions`
 * `T:System.AppDomainSetup`
 * `T:System.AppDomainUnloadedException`
-* `T:System.Converter`2`
+* ``T:System.Converter`2``
 * `T:System.ICloneable`
 * `T:System.IConvertible`
 * `T:System.MarshalByRefObject`
