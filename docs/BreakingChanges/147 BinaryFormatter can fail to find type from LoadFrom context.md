@@ -41,7 +41,7 @@ public class TypeFinderBinder : SerializationBinder
 ### Affected APIs
 * `T:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter`
 * `M:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Deserialize(System.IO.Stream)`
-* `M:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Deserialize(System.IO.Stream, System.Runtime.Remoting.Messaging.HeaderHandler)`
+* `M:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Deserialize(System.IO.Stream,System.Runtime.Remoting.Messaging.HeaderHandler)`
 
 ### Category
 Serialization
