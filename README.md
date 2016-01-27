@@ -46,10 +46,13 @@ More projects are coming soon. Stay tuned!
 
 ## How to Engage, Contribute and Provide Feedback
 
-Some of the best ways to contribute are to try things out, file bugs, and join in design conversations.
+Here are some ways to contribute:
+* [Update/Add recommended changes](docs/RecommendedChanges/README.md)
+* Try things out!
+* File issues
+* Join in design conversations
 
 Want to get more familiar with what's going on in the code?
-
 * [Pull requests](https://github.com/Microsoft/dotnet-apiport/pulls): [Open](https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Apr+is%3Aclosed)
 
 Looking for something to work on? The list of [up-for-grabs issues](https://github.com/Microsoft/dotnet-apiport/issues?q=is%3Aopen+is%3Aissue) is a great place to start.
