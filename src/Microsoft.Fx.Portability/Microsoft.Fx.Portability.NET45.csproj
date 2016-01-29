@@ -69,6 +69,7 @@
     <Compile Include="BreakingChangeAnalyzerStatus.cs" />
     <Compile Include="IAssemblyFile.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformation.cs" />
+    <Compile Include="ObjectModel\AncestorApiRecommendations.cs" />
     <Compile Include="ObjectModel\CompatibilityRange.cs" />
     <Compile Include="ObjectModel\DiagnosticAnalyzerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
