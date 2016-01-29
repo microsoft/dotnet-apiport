@@ -30,7 +30,6 @@ Because this is an opt-in feature, it should not affect the behavior of existing
 ### Affected APIs
 * `F:System.ServiceModel.BasicHttpSecurityMode.TransportWithMessageCredential`
 * `F:System.ServiceModel.BasicHttpsSecurityMode.TransportWithMessageCredential`
-* `F:System.ServiceModel.PollingDuplexHttpSecurityMode.TransportWithMessageCredential`
 * `F:System.ServiceModel.SecurityMode.TransportWithMessageCredential`
 * `F:System.ServiceModel.WSFederationHttpSecurityMode.TransportWithMessageCredential`
 
