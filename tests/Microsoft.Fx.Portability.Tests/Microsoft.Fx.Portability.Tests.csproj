@@ -54,6 +54,7 @@
     <Compile Include="ApiPortServiceTests.cs" />
     <Compile Include="BreakingChangeParserTests.cs" />
     <Compile Include="BreakingChangeTests.cs" />
+    <Compile Include="ObjectModel\AncestorApiRecommendationsTests.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformationTests.cs" />
     <Compile Include="ObjectModel\CloudApiCatalogLookupTests.cs" />
     <Compile Include="ObjectModel\IgnoreAssemblyInfoTests.cs" />

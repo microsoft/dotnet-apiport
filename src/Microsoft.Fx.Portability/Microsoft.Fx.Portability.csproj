@@ -62,6 +62,7 @@
     <Compile Include="ApiPortService.cs" />
     <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="BreakingChangeAnalyzerStatus.cs" />
+    <Compile Include="ObjectModel\AncestorApiRecommendations.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformation.cs" />
     <Compile Include="IAssemblyFile.cs" />
     <Compile Include="ObjectModel\CompatibilityRange.cs" />
