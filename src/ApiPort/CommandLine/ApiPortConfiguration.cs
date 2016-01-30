@@ -5,6 +5,7 @@ using Microsoft.Framework.Configuration;
 using Microsoft.Framework.OptionsModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -80,11 +81,12 @@ namespace ApiPort.CommandLine
         {
             foreach (var tag in array.Tags)
             {
-                var newKey = $"{array.ExpectedTag}:{array.Count++}";
+                var newKey = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", array.ExpectedTag, array.Count++);
+                var tagFormatted = string.Format(CultureInfo.InvariantCulture, "{0}=", tag);
 
-                if (arg.StartsWith($"{tag}=", StringComparison.OrdinalIgnoreCase))
+                if (arg.StartsWith(tagFormatted, StringComparison.OrdinalIgnoreCase))
                 {
-                    return arg.Replace($"{tag}=", $"{newKey}=");
+                    return arg.Replace(tagFormatted, string.Format(CultureInfo.InvariantCulture, "{0}=", newKey));
                 }
                 else if (string.Equals(arg, tag, StringComparison.OrdinalIgnoreCase))
                 {

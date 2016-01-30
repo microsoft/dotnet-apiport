@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Decoding;
@@ -277,7 +278,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 if (MethodSignature.GenericParameterCount > 0)
                 {
-                    sb.Append($"``{MethodSignature.GenericParameterCount}");
+                    sb.Append(string.Format(CultureInfo.InvariantCulture, "``{0}", MethodSignature.GenericParameterCount));
                 }
             }
 

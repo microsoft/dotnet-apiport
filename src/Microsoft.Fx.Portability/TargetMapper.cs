@@ -1,16 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Fx.Portability.Resources;
 
 #if FEATURE_XML_SCHEMA
 using System.Xml.Schema;
@@ -84,8 +85,8 @@ namespace Microsoft.Fx.Portability
             Load(stream, null);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.FxCop.Rules.Security.Xml.SecurityXmlRules", "CA3053:UseXmlSecureResolver",
-            MessageId = "System.Xml.XmlReader.Create",
+        [SuppressMessage("Microsoft.Security.Xml", "CA3053:UseXmlSecureResolver",
+            Target = "XmlReader.Create(System.IO.Stream)",
             Justification = @"For the call to XmlReader.Create() below, CA3053 recommends setting the
 XmlReaderSettings.XmlResolver property to either null or an instance of XmlSecureResolver.
 However, the said XmlResolver property no longer exists in .NET portable framework (i.e. core framework) which means there is no way to set it.

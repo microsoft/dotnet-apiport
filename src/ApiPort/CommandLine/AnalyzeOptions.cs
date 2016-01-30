@@ -192,8 +192,7 @@ namespace ApiPort.CommandLine
                         return y == null ? 0 : -1;
                     }
 
-
-                    return x.Name.CompareTo(y?.Name);
+                    return string.Compare(x.Name, y?.Name, StringComparison.Ordinal);
                 }
             }
 

@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
@@ -137,7 +138,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                 // Other exceptions are unexpected, though, and wil benefit from
                 // more details on the scenario that hit them
-                throw new PortabilityAnalyzerException(string.Format(LocalizedStrings.MetadataParsingExceptionMessage, file.Name), exc);
+                throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MetadataParsingExceptionMessage, file.Name), exc);
             }
         }
 
