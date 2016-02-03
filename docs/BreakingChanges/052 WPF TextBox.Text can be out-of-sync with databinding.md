@@ -19,8 +19,6 @@ In some cases, the TextBox.Text property reflects a previous value of the databo
 This should have no negative impact. However, you can restore the previous behavior by setting the [FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty](https://msdn.microsoft.com/en-us/library/system.windows.frameworkcompatibilitypreferences.keeptextboxdisplaysynchronizedwithtextproperty(v=vs.110).aspx) property to false.
 
 ### Affected APIs
-* `M:System.Windows.Controls.TextBox.get_Text`
-* `M:System.Windows.Controls.TextBox.set_Text(System.String)`
 * `P:System.Windows.Controls.TextBox.Text`
 
 ### Category

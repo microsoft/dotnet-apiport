@@ -26,7 +26,6 @@ Be aware that some glyph bounding box sizes have increased. These changes will u
 
 ### Affected APIs
 * `M:System.Windows.Media.GlyphRun.ComputeInkBoundingBox`
-* `M:System.Windows.Media.FormattedText.get_Extent`
 * `P:System.Windows.Media.FormattedText.Extent`
 
 ### Category

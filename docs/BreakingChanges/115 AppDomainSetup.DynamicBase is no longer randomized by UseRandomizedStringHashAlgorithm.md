@@ -19,7 +19,6 @@ Prior to the .NET Framework 4.6, the value of AppDomainSetup.DynamicBase would b
 Be aware that enabling `UseRandomizedStringHashAlgorithm` will not result in `AppDomainSetup.DynamicBase` being randomized. If a random base is needed, it must be produced in your app's code rather than via this API.
 
 ### Affected APIs
-* `M:System.AppDomainSetup.get_DynamicBase`
 * `P:System.AppDomainSetup.DynamicBase`
 
 ### Category

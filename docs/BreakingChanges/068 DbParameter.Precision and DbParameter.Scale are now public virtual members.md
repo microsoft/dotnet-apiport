@@ -20,11 +20,7 @@ When re-building an ADO.NET database provider, these differences will require th
 
 ### Affected APIs
 * `P:System.Data.Common.DbParameter.Precision`
-* `M:System.Data.Common.DbParameter.get_Precision`
-* `M:System.Data.Common.DbParameter.set_Precision(System.Byte)`
 * `P:System.Data.Common.DbParameter.Scale`
-* `M:System.Data.Common.DbParameter.get_Scale`
-* `M:System.Data.Common.DbParameter.set_Scale(System.Byte)`
 
 ### Category
 ADO.NET

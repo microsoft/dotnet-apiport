@@ -22,7 +22,6 @@ A bug in the .NET Framework 4.5 causes `PageIndexChanging` to sometimes not fire
 This issue has been fixed in the .NET Framework 4.6 and may be addressed by upgrading to that version of the .NET Framework. As a work-around, the app can do an explicit BindGrid on any `Page_Load` that would hit these conditions (the GridView is on the last page and LastPageSize is different from PageSize). Alternatively, the app can be modified to allow paging (instead of custom paging), as that scenario does not demonstrate the problem.
 
 ### Affected APIs
-* `M:System.Web.UI.WebControls.GridView.set_AllowCustomPaging(System.Boolean)`
 * `P:System.Web.UI.WebControls.GridView.AllowCustomPaging`
 
 ### Category
