@@ -1,0 +1,11 @@
+﻿{
+  "dependencies": {
+    "NSubstitute": "1.9.2",
+  },
+  "frameworks": {
+    "net45": {}
+  },
+  "runtimes": {
+    "win": {}
+  }
+}

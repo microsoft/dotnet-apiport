@@ -21,8 +21,9 @@ namespace Microsoft.Fx.Portability
         private readonly IRequestAnalyzer _requestAnalyzer;
         private readonly ICollection<IReportWriter> _reportWriters;
         private readonly ISearcher<string> _searcher;
+        private readonly IApiRecommendations _apiRecommendations;
 
-        public OfflineApiPortService(IApiCatalogLookup lookup, IRequestAnalyzer requestAnalyzer, ITargetMapper mapper, ICollection<IReportWriter> reportWriters, ITargetNameParser targetNameParser)
+        public OfflineApiPortService(IApiCatalogLookup lookup, IRequestAnalyzer requestAnalyzer, ITargetMapper mapper, ICollection<IReportWriter> reportWriters, ITargetNameParser targetNameParser, IApiRecommendations apiRecommendations)
         {
             _lookup = lookup;
             _requestAnalyzer = requestAnalyzer;
@@ -30,6 +31,7 @@ namespace Microsoft.Fx.Portability
             _reportWriters = reportWriters;
             _defaultTargets = new HashSet<FrameworkName>(targetNameParser.DefaultTargets);
             _searcher = new StringContainsSearch(lookup);
+            _apiRecommendations = apiRecommendations;
         }
 
         public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
@@ -115,6 +117,24 @@ namespace Microsoft.Fx.Portability
                 .AsReadOnly();
 
             return new ServiceResponse<IReadOnlyCollection<ApiDefinition>>(result);
+        }
+
+        public Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
+        {
+            if (docIds == null)
+            {
+                throw new ArgumentNullException("docIds");
+            }
+
+            // return the ApiInformation for all valid Ids
+            var result = docIds
+                        .Distinct(StringComparer.Ordinal)
+                        .Where(_lookup.IsFrameworkMember)
+                        .Select(d => new ApiInformation(d, _lookup, _apiRecommendations))
+                        .ToList()
+                        .AsReadOnly();
+
+            return Task.FromResult(new ServiceResponse<IReadOnlyCollection<ApiInformation>>(result));
         }
     }
 }

@@ -17,6 +17,7 @@ namespace ApiPort
     internal class FileOutputApiPortService : IApiPortService
     {
         private static readonly IReadOnlyCollection<ApiDefinition> s_emptySearchResults = new ApiDefinition[] { };
+        private static readonly IReadOnlyCollection<ApiInformation> s_emptyQueryDocIds = new ApiInformation[] { };
         private static readonly IEnumerable<ResultFormatInformation> s_formats = new[]
         {
             new ResultFormatInformation
@@ -75,6 +76,14 @@ namespace ApiPort
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
             var response = ServiceResponse.Create(new UsageDataCollection());
+
+            return Task.FromResult(response);
+        }
+
+        public Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
+        {
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+            var response = ServiceResponse.Create(s_emptyQueryDocIds);
 
             return Task.FromResult(response);
         }
