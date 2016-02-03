@@ -18,6 +18,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private const string RecommendedChangeKey = "Recommended Changes";
         private const string SourceCompatibleEquivalent = "SourceCompatibleEquivalent";
 
+        private readonly DateTimeOffset _lastModified;
         private readonly string _builtBy;
         private readonly Dictionary<string, Dictionary<string, Version>> _apiMapping;
         private readonly Dictionary<string, Dictionary<string, string>> _apiMetadata;
@@ -29,6 +30,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public CloudApiCatalogLookup(DotNetCatalog catalog)
         {
+            _lastModified = catalog.LastModified;
             _builtBy = catalog.BuiltBy;
 
             // we want to recreate the fast look-up data structures.
@@ -210,6 +212,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 parent = api.Parent;
             }
         }
+
+        public DateTimeOffset LastModified { get { return _lastModified; } }
 
         public string BuiltBy { get { return _builtBy; } }
 

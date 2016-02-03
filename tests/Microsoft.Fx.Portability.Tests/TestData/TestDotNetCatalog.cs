@@ -1,4 +1,5 @@
 ﻿using Microsoft.Fx.Portability.ObjectModel;
+using System;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Tests.TestData
@@ -27,6 +28,7 @@ namespace Microsoft.Fx.Portability.Tests.TestData
 
         public TestDotNetCatalog()
         {
+            LastModified = new DateTimeOffset(2015, 12, 2, 11, 23, 01, TimeSpan.FromHours(7));
             BuiltBy = "Test Machine";
             Apis = GetApis();
             FrameworkAssemblyIdenties = FrameworkIdentities;
