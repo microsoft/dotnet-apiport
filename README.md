@@ -6,7 +6,10 @@ all of the components that we plan on open sourcing. Make sure to watch this
 repository in order to be notified as we make changes to and expand it.
 
 ## Usage
-To use this tool, please refer to the [documentation](docs/HowTo/Introduction.md).
+
+To use this tool, please refer to the [documentation](docs/HowTo/Introduction.md). For a quick introduction, check out [this video on Channel 9](https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer):
+
+[![A Brief Look at the .NET Portability Analyzer](https://sec.ch9.ms/ch9/031c/f3d7672b-dd71-4a18-a8b4-37573c08031c/DotNetPortabilityAnalyzer_960.jpg)](https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer)
 
 ## Projects
 
