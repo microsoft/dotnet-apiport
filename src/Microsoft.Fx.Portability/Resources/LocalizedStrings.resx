@@ -337,4 +337,7 @@
   <data name="InvalidBreakingChangeParserState" xml:space="preserve">
     <value>Unhandled breaking change parse state: {0}</value>
   </data>
+  <data name="CatalogLastUpdated" xml:space="preserve">
+    <value>API Catalog last updated on: '{0}'</value>
+  </data>
 </root>

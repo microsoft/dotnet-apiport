@@ -9,9 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace Microsoft.Fx.Portability.Resources {
-    using System;
     using System.Reflection;
-
 
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -112,6 +110,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string BreakingChangeDisclaimer {
             get {
                 return ResourceManager.GetString("BreakingChangeDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Catalog last updated on: &apos;{0}&apos;.
+        /// </summary>
+        public static string CatalogLastUpdated {
+            get {
+                return ResourceManager.GetString("CatalogLastUpdated", resourceCulture);
             }
         }
         

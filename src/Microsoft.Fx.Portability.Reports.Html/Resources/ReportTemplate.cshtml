@@ -15,6 +15,7 @@
 @{
     ViewBag.Title = LocalizedStrings.HtmlReportTitle;
     var submissionId = Model.ReportingResult.SubmissionId;
+    var catalogLastUpdated = Model.CatalogBuiltOn.ToString("D", System.Globalization.CultureInfo.CurrentCulture);
     var includeBreakingChanges = Model.RequestFlags.HasFlag(Microsoft.Fx.Portability.ObjectModel.AnalyzeRequestFlags.ShowBreakingChanges);
     var includePortabilityReport = Model.RequestFlags.HasFlag(Microsoft.Fx.Portability.ObjectModel.AnalyzeRequestFlags.ShowNonPortableApis);
 }
@@ -35,6 +36,9 @@
                 <i>
                     @LocalizedStrings.SubmissionId&nbsp;
                     @submissionId
+
+                    @LocalizedStrings.CatalogLastUpdated&nbsp;
+                    @catalogLastUpdated
 
                     @* TODO: Add back in logic to create URIs when finished abstracting IReportWriter. *@
                     @*
