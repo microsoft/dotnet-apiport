@@ -7,6 +7,10 @@ tools is to help identify possible problem areas in an assembly and help direct 
 1. Are not portable to specific platforms
 2. Have breaking changes between 4.x versions
 
+For a quick introduction, check out [this video on Channel 9](https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer):
+
+[![A Brief Look at the .NET Portability Analyzer](https://sec.ch9.ms/ch9/031c/f3d7672b-dd71-4a18-a8b4-37573c08031c/DotNetPortabilityAnalyzer_960.jpg)](https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer)
+
 ## Platform Portability
 
 The first goal of these tools are to help identify APIs that are not portable among the various .NET Platforms. These 
