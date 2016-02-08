@@ -35,7 +35,7 @@
       <_Parameter1>$(AssemblyName)</_Parameter1>
     </AssemblyVersionAttribute>
     <AssemblyVersionAttribute Include="System.Reflection.AssemblyCopyright">
-      <_Parameter1>Copyright 2015</_Parameter1>
+      <_Parameter1>Copyright 2016</_Parameter1>
     </AssemblyVersionAttribute>
     <AssemblyVersionAttribute Include="System.Reflection.AssemblyCompany">
       <_Parameter1>Microsoft</_Parameter1>
