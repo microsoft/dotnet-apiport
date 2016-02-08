@@ -102,6 +102,16 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<IReadOnlyCollection<ApiDefinition>>(HttpMethod.Get, url.Url);
         }
 
+        /// <summary>
+        /// Returns a list of valid DocIds from the PortabilityService
+        /// </summary>
+        /// <param name="docIds">Enumerable of DocIds</param>
+        public async Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
+        {
+            return await _client.CallAsync<IEnumerable<string>, 
+                IReadOnlyCollection<ApiInformation>>(HttpMethod.Post, Endpoints.FxApi, docIds);
+        }
+
         public async Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
         {
             return await _client.CallAsync<IEnumerable<ResultFormatInformation>>(HttpMethod.Get, Endpoints.ResultFormat);

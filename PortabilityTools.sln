@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24711.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C991F5FC-04B5-420C-98A0-80974AA946F7}"
 	ProjectSection(SolutionItems) = preProject
@@ -73,6 +73,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Reports.Json.NET45", "src\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.NET45.csproj", "{08DD5EC4-BA0B-405C-B8CF-B48357A90402}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort.Core", "src\ApiPort\ApiPort.Core.csproj", "{560DD4EB-C4D2-4F94-9695-931CD3D17B5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Offline.Tests", "tests\Microsoft.Fx.Portability.Offline.Tests\Microsoft.Fx.Portability.Offline.Tests.csproj", "{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -662,6 +664,54 @@ Global
 		{560DD4EB-C4D2-4F94-9695-931CD3D17B5B}.Ubuntu_Release|x64.ActiveCfg = Ubuntu_Release|x64
 		{560DD4EB-C4D2-4F94-9695-931CD3D17B5B}.Ubuntu_Release|x64.Build.0 = Ubuntu_Release|x64
 		{560DD4EB-C4D2-4F94-9695-931CD3D17B5B}.Ubuntu_Release|x86.ActiveCfg = Release|x64
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|x64.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|ARM.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|x64.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Debug|x86.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|Any CPU.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|ARM.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|ARM.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|x64.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|x64.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|x86.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Osx_Release|x86.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|ARM.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|x64.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Release|x86.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|ARM.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|x64.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Debug|x86.Build.0 = Debug|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|Any CPU.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|ARM.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|ARM.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|x64.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -687,5 +737,6 @@ Global
 		{30E5290C-4F2D-4E68-BD4C-7EDA41218EF0} = {207BD92D-9395-4792-BDA3-C20478FBE5C2}
 		{08DD5EC4-BA0B-405C-B8CF-B48357A90402} = {9DC3E926-9CA5-41E3-9761-33D90EB8883E}
 		{560DD4EB-C4D2-4F94-9695-931CD3D17B5B} = {6234AABE-C4F3-4094-9C0D-FFD589235DBE}
+		{FD6B4124-975B-454E-ACC8-424CC9A8BB8B} = {7DC7AA2C-0401-495B-B42C-32F44085EBE6}
 	EndGlobalSection
 EndGlobal
