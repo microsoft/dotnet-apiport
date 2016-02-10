@@ -18,6 +18,8 @@ namespace Microsoft.Fx.Portability.Reports
     {
         private readonly ITargetMapper _targetMapper;
 
+        public DateTimeOffset CatalogBuiltOn { get; private set; }
+
         public ReportingResult ReportingResult { get; private set; }
 
         public IEnumerable<MissingTypeInfo> MissingTypes { get; private set; }
@@ -38,6 +40,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         public RazorHtmlObject(AnalyzeResponse response, ITargetMapper targetMapper)
         {
+            CatalogBuiltOn = response.CatalogLastUpdated;
             _targetMapper = targetMapper;
             RequestFlags = response.ReportingResult.RequestFlags;
             ReportingResult = response.ReportingResult;

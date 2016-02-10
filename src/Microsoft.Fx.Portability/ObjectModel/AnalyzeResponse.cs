@@ -22,6 +22,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string ApplicationName { get; set; }
 
+        public DateTimeOffset CatalogLastUpdated { get; set; }
+
         public IList<MemberInfo> MissingDependencies { get; set; }
 
         public IList<string> UnresolvedUserAssemblies { get; set; }

@@ -10,6 +10,8 @@ namespace Microsoft.Fx.Portability.TestData
 {
     public class TestCatalog : IApiCatalogLookup
     {
+        public DateTimeOffset LastModified { get { return DateTimeOffset.UtcNow; } }
+
         public string BuiltBy
         {
             get { return "Test catalog"; }

@@ -9,6 +9,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public interface IApiCatalogLookup
     {
+        DateTimeOffset LastModified { get; }
         string BuiltBy { get; }
         ApiDefinition GetApiDefinition(string docId);
         IEnumerable<string> DocIds { get; }
