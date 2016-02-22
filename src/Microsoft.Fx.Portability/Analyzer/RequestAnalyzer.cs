@@ -58,6 +58,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             return new AnalyzeResponse
             {
+                CatalogLastUpdated = _analysisEngine.CatalogLastUpdated,
                 ApplicationName = request.ApplicationName,
                 MissingDependencies = notInAnyTarget,
                 UnresolvedUserAssemblies = missingUserAssemblies,
