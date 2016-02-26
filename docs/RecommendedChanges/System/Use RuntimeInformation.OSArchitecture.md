@@ -1,5 +1,5 @@
 ### Recommended Action
-Use System.Runtime.InteropServices.OSArchitecture instead
+Use System.Runtime.InteropServices.RuntimeInformation.OSArchitecture instead
 
 ### Affected APIs
 * `P:System.Environment.Is64BitOperatingSystem`
