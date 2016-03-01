@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +27,10 @@ namespace Microsoft.Fx.Portability.Analyzer
         public AnalyzeResponse AnalyzeRequest(AnalyzeRequest request, string submissionId)
         {
             // Get the list of targets we should consider in the analysis
-            var targets = _targetNameParser.MapTargetsToExplicitVersions(request.Targets.SelectMany(_targetMapper.GetNames)).ToList();
+            var targets = _targetNameParser
+                .MapTargetsToExplicitVersions(request.Targets.SelectMany(_targetMapper.GetNames))
+                .OrderBy(x => x.FullName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
 
             var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
                 ? _analysisEngine.FindMembersNotInTargets(targets, request.Dependencies)
