@@ -17,6 +17,8 @@ namespace Microsoft.Fx.Portability.Analysis
         private readonly IApiCatalogLookup _catalog;
         private readonly IApiRecommendations _recommendations;
 
+        public DateTimeOffset CatalogLastUpdated { get { return _catalog.LastModified; } }
+
         public AnalysisEngine(IApiCatalogLookup catalog, IApiRecommendations recommendations)
         {
             _catalog = catalog;

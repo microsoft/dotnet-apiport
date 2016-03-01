@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Catalog last updated on: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to API Catalog last updated on: {0}.
         /// </summary>
         public static string CatalogLastUpdated {
             get {
