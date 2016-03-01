@@ -3,7 +3,7 @@
     "net45": { }
   },
   "dependencies": {
-    "MicroBuild.Core": "0.1.1"
+    "MicroBuild.Core": "0.2.0"
   },
   "runtimes": {
     "win": {}  

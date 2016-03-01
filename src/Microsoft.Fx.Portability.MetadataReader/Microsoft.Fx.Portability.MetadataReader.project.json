@@ -4,7 +4,7 @@
     "dnxcore50.app": { }
   },
   "dependencies": {
-    "MicroBuild.Core": "0.1.1",
+    "MicroBuild.Core": "0.2.0",
     "Microsoft.NETCore": "5.0.0",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23516",
     "System.Reflection.Metadata": "1.2.0-rc2-23713",
