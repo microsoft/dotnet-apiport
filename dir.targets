@@ -5,8 +5,9 @@
     <BuildVersion>0</BuildVersion>
 
     <!-- Get build number from TFS if in automated build -->
-    <BuildVersion Condition=" '$(TF_BUILD_BUILDNUMBER)' != '' ">$(TF_BUILD_BUILDNUMBER.Split('.')[1].TrimStart('0'))</BuildVersion>
-	<BuildVersion>$(BuildVersion.PadLeft(5,"0"))</BuildVersion>
+    <!-- Use TF_BUILD_BUILDNUMBER for old XAML style builds -->
+    <BuildVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER.Split('.')[1].TrimStart('0'))</BuildVersion>
+    <BuildVersion>$(BuildVersion.PadLeft(5,"0"))</BuildVersion>
 	
     <!-- Get version info from file -->
     <VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
