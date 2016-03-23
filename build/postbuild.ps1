@@ -59,8 +59,8 @@ foreach($nuspec in $nuspecs)
 				$item.Pushed = $true;
 			}
 		}
-		
-		$item
+
+        $item | Format-List
 	}
 	else
 	{
@@ -73,14 +73,16 @@ foreach($nuspec in $nuspecs)
 
 function Copy-OfflineMode()
 {
+    $extensionsToInclude = @("*.exe", "*.dll", "*.pdb", "*.config")
 	$offlineDrop = "$drop\ApiPort.Offline"
+
 	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
 	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
-	copy $drop\ApiPort\net45\* -Include *.exe,*.dll,*.pdb $offlineDrop
-	copy $drop\Microsoft.Fx.Portability.Offline\net45\* -Include *.exe,*.dll,*.pdb $offlineDrop
-	copy $drop\Microsoft.Fx.Portability.Reports.Json\net45\* -Include *.exe,*.dll,*.pdb $offlineDrop
-	copy $drop\Microsoft.Fx.Portability.Reports.Html\net45\* -Include *.exe,*.dll,*.pdb $offlineDrop
+	Copy-Item $drop\ApiPort\net45\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\Microsoft.Fx.Portability.Offline\net45\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\net45\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\net45\* -Include $extensionsToInclude $offlineDrop
 }
 
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
