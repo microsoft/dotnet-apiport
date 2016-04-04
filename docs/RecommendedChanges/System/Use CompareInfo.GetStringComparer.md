@@ -1,5 +1,5 @@
 ### Recommended Action
-Use CompareInfo.GetStringComparer.
+Use `System.Globalization.CultureInfo.InvariantCulture.CompareInfo.GetStringComparer(CompareOptions.IgnoreCase)` from the `System.Globalization.Extensions` package.
 
 ### Affected APIs
 * `M:System.StringComparer.Create(System.Globalization.CultureInfo,System.Boolean)`
