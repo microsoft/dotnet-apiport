@@ -298,15 +298,6 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notes on usage:.
-        /// </summary>
-        public static string NotesOnUsage {
-            get {
-                return ResourceManager.GetString("NotesOnUsage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Output file name.
         /// </summary>
         public static string OutputFileName {
@@ -379,11 +370,11 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - {0} [Version: {1}].
+        ///   Looks up a localized string similar to Description:.
         /// </summary>
-        public static string TargetsList {
+        public static string TargetsDescription {
             get {
-                return ResourceManager.GetString("TargetsList", resourceCulture);
+                return ResourceManager.GetString("TargetsDescription", resourceCulture);
             }
         }
         
@@ -406,11 +397,44 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name:.
+        /// </summary>
+        public static string TargetsName {
+            get {
+                return ResourceManager.GetString("TargetsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The target you want to check against..
         /// </summary>
         public static string TargetsToCheckAgainst {
             get {
                 return ResourceManager.GetString("TargetsToCheckAgainst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Versions:.
+        /// </summary>
+        public static string TargetsVersion {
+            get {
+                return ResourceManager.GetString("TargetsVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In order to specify a target, run the tool with the following command switch:
+        ///     ApiPort.exe analyze -t &quot;(Target Name)&quot; [other args]
+        ///
+        ///In order to specify a version, please specify a target and a version with the following switch:
+        ///     ApiPort.exe analyze -t &quot;(Target Name), Version=(Version)&quot; [other args]
+        ///
+        ///Versions marked with an asterisk (*) implies that these are default targets if none are submitted..
+        /// </summary>
+        public static string TargetUsage {
+            get {
+                return ResourceManager.GetString("TargetUsage", resourceCulture);
             }
         }
         
@@ -429,15 +453,6 @@ namespace ApiPort.Resources {
         public static string VersionListJoin {
             get {
                 return ResourceManager.GetString("VersionListJoin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Versions marked with an asterisk (*) implies that these are default targets if none are submitted..
-        /// </summary>
-        public static string WhatAsteriskMeans {
-            get {
-                return ResourceManager.GetString("WhatAsteriskMeans", resourceCulture);
             }
         }
     }

@@ -50,14 +50,31 @@ namespace ApiPort
             if (targets.Any())
             {
                 Console.WriteLine();
+                Console.WriteLine(LocalizedStrings.TargetUsage);
+                Console.WriteLine();
                 Console.WriteLine(LocalizedStrings.AvailableTargets);
 
                 var expandableTargets = targets.Where(target => target.ExpandedTargets.Any());
                 var groupedTargets = targets.Where(target => !target.ExpandedTargets.Any()).GroupBy(target => target.Name);
 
+                var offsetLength = new[] { LocalizedStrings.TargetsName, LocalizedStrings.TargetsVersion, LocalizedStrings.TargetsDescription }.Max(i => i.Length) + 1;
+
                 foreach (var item in groupedTargets)
                 {
-                    Console.WriteLine(LocalizedStrings.TargetsList, item.Key, String.Join(LocalizedStrings.VersionListJoin, item.Select(v => v.Version.ToString() + (v.IsSet ? SelectedMarker : String.Empty))));
+                    Console.WriteLine();
+
+                    // Select the latest non-empty target's description
+                    var description = item
+                        .OrderByDescending(i => i.Version)
+                        .FirstOrDefault(i => !string.IsNullOrWhiteSpace(i.Description));
+
+                    Console.WriteLine(LocalizedStrings.TargetsName.PadRight(offsetLength, ' ') + item.Key);
+                    Console.WriteLine(LocalizedStrings.TargetsVersion.PadRight(offsetLength) + string.Join(LocalizedStrings.VersionListJoin, item.Select(v => v.Version.ToString() + (v.IsSet ? SelectedMarker : string.Empty))));
+
+                    if (description != null)
+                    {
+                        Console.WriteLine(LocalizedStrings.TargetsDescription.PadRight(offsetLength) + description.Description);
+                    }
                 }
 
                 if (expandableTargets.Any())
@@ -82,12 +99,6 @@ namespace ApiPort
                     Console.WriteLine(LocalizedStrings.TargetsListNoVersion, alias);
                 }
             }
-
-            Console.WriteLine();
-            Console.WriteLine(LocalizedStrings.NotesOnUsage);
-            Console.WriteLine(LocalizedStrings.TargetsListNoVersion, Microsoft.Fx.Portability.Resources.LocalizedStrings.HowToSpecifyVersion);
-            Console.WriteLine();
-            Console.WriteLine(LocalizedStrings.TargetsListNoVersion, LocalizedStrings.WhatAsteriskMeans);
         }
 
         public async Task AnalyzeAssembliesAsync()
