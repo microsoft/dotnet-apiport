@@ -170,8 +170,8 @@ go here - http://go.microsoft.com/fwlink/?LinkId=397652</value>
   <data name="AvailableAliases" xml:space="preserve">
     <value>Available Aliases:</value>
   </data>
-  <data name="TargetsList" xml:space="preserve">
-    <value>- {0} [Version: {1}]</value>
+  <data name="TargetsVersion" xml:space="preserve">
+    <value>Versions:</value>
   </data>
   <data name="ApplicationName" xml:space="preserve">
     <value>API Portability Analyzer</value>
@@ -187,12 +187,6 @@ go here - http://go.microsoft.com/fwlink/?LinkId=397652</value>
   </data>
   <data name="TargetsListGrouped" xml:space="preserve">
     <value>- {0} ({1})</value>
-  </data>
-  <data name="NotesOnUsage" xml:space="preserve">
-    <value>Notes on usage:</value>
-  </data>
-  <data name="WhatAsteriskMeans" xml:space="preserve">
-    <value>Versions marked with an asterisk (*) implies that these are default targets if none are submitted.</value>
   </data>
   <data name="MonoWebRequestsFailure" xml:space="preserve">
     <value>If you are running on the mono runtime, you must configure root certificates before using this application.  Please see http://www.mono-project.com/docs/faq/security/</value>
@@ -284,5 +278,20 @@ gives a summary of issues and possible steps forward.
   </data>
   <data name="CmdDocId" xml:space="preserve">
     <value>Provides an interactive console search for APIs. Useful to find the docid of a specific API</value>
+  </data>
+  <data name="TargetsDescription" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="TargetsName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="TargetUsage" xml:space="preserve">
+    <value>In order to specify a target, run the tool with the following command switch:
+     ApiPort.exe analyze -t "(Target Name)" [other args]
+
+In order to specify a version, please specify a target and a version with the following switch:
+     ApiPort.exe analyze -t "(Target Name), Version=(Version)" [other args]
+
+Versions marked with an asterisk (*) implies that these are default targets if none are submitted.</value>
   </data>
 </root>
