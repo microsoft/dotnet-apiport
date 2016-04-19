@@ -17,20 +17,20 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45;FEATURE_HTML_WRITER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;NET45</DefineConstants>
+    <DefineConstants>TRACE;NET45;FEATURE_HTML_WRITER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <NugetTarget>net45</NugetTarget>
-	<IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
+    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
@@ -50,8 +50,17 @@
     <Compile Include="OfflineApiPortService.cs" />
     <Compile Include="OfflineApiRecommendations.cs" />
     <Compile Include="OfflineBreakingChanges.cs" />
+    <Compile Include="OfflineDataModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj">
+      <Project>{83f4a5fe-faf8-4952-899e-ea0bb08f8e60}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.Html</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.NET45.csproj">
+      <Project>{08dd5ec4-ba0b-405c-b8cf-b48357a90402}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.Json.NET45</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
       <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
       <Name>Microsoft.Fx.Portability.NET45</Name>
@@ -64,16 +73,13 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(CatalogDataFile)" Condition="Exists($(CatalogDataFile))">
-	  <Link>data\catalog.bin</Link>
-	</EmbeddedResource>
+      <Link>data\catalog.bin</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="$(BreakingChangePath)*.md">
       <Link>data\%(Filename)%(Extension)</Link>
       <BreakingChange>true</BreakingChange>
     </EmbeddedResource>
     <None Include="Microsoft.Fx.Portability.Offline.NET45.project.json" />
-    <None Include="unity.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\version.txt" />
@@ -81,7 +87,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
-	<Warning Text="Could not find catalog.bin. Please run build\restore.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
+    <Warning Text="Could not find catalog.bin. Please run build\restore.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
   </Target>
   <Target Name="BeforeBuild">
   </Target>

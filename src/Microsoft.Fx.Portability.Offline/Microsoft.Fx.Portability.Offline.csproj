@@ -42,6 +42,7 @@
     <Compile Include="OfflineApiPortService.cs" />
     <Compile Include="OfflineApiRecommendations.cs" />
     <Compile Include="OfflineBreakingChanges.cs" />
+    <Compile Include="OfflineDataModule.cs" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
@@ -58,11 +59,12 @@
       <BreakingChange>true</BreakingChange>
     </EmbeddedResource>
     <None Include="Microsoft.Fx.Portability.Offline.project.json" />
-    <None Include="unity.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj">
+      <Project>{28d8d77d-e68d-4ebc-9150-f7c433d63bfa}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
       <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
       <Name>Microsoft.Fx.Portability</Name>

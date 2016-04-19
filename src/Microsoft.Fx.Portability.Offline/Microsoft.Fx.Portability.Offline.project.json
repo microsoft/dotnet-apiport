@@ -1,11 +1,11 @@
 ﻿{
   "supports": {
     "net46.app": {},
-    "uwp.10.0.app": {},
-    "dnxcore50.app": {}
+    "uwp.10.0.app": {}
   },
   "dependencies": {
     "MicroBuild.Core": "0.2.0",
+    "Autofac": "3.5.2",
     "Microsoft.NETCore": "5.0.0",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.0"
   },
