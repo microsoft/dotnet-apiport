@@ -7,6 +7,7 @@
     "Data",
     "Debugger",
     "Entity Framework",
+    "Globalization",
     "JIT",
     "LINQ",
     "Managed Extensibility Framework (MEF)",
