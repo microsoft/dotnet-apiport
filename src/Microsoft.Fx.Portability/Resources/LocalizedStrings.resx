@@ -170,8 +170,8 @@
   <data name="RetrievingTargets" xml:space="preserve">
     <value>Retrieving targets</value>
   </data>
-  <data name="SendingDataToService" xml:space="preserve">
-    <value>Sending data to service</value>
+  <data name="AnalyzingCompatibility" xml:space="preserve">
+    <value>Analyzing compatibility</value>
   </data>
   <data name="ServerEndpointDeprecated" xml:space="preserve">
     <value>Warning: A newer version of the application is available. Please update to the latest version to continue using this service</value>

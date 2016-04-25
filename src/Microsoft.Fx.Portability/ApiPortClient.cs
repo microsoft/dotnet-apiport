@@ -184,7 +184,7 @@ namespace Microsoft.Fx.Portability
                 AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
 
                 // Create the progress reporter here (instead of within GetResultFromServiceAsync) since the reporter does not work well when run in parallel
-                using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
+                using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
                 {
                     try
                     {
@@ -287,7 +287,7 @@ namespace Microsoft.Fx.Portability
 
         private async Task<ServiceResponse<AnalyzeResponse>> RetrieveResultAsync(AnalyzeRequest request)
         {
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.SendingDataToService))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
             {
                 try
                 {
