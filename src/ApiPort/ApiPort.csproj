@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <DefineConstants>FEATURE_DESKTOP_CONFIGURATION;FEATURE_RICH_CONSOLE</DefineConstants>
+    <DefineConstants>FEATURE_RICH_CONSOLE</DefineConstants>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

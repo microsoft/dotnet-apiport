@@ -1,22 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Autofac;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-
-#if FEATURE_DESKTOP_CONFIGURATION
-using Microsoft.Practices.Unity.Configuration;
-using System.Configuration;
-#endif // FEATURE_DESKTOP_CONFIGURATION
 
 namespace ApiPort
 {
@@ -24,88 +19,130 @@ namespace ApiPort
     {
         private const string DefaultOutputFormatInstanceName = "DefaultOutputFormat";
 
-        public static IUnityContainer Build(ICommandLineOptions options, ProductInformation productInformation)
+        public static IContainer Build(ICommandLineOptions options, ProductInformation productInformation)
         {
-            var container = new UnityContainer();
+            var builder = new ContainerBuilder();
 
-            var targetMapper = new TargetMapper();
-            targetMapper.LoadFromConfig(options.TargetMapFile);
+            builder.RegisterType<TargetMapper>()
+                .As<ITargetMapper>()
+                .OnActivated(c => c.Instance.LoadFromConfig(options.TargetMapFile))
+                .SingleInstance();
 
-            container.RegisterInstance<ICommandLineOptions>(options);
-            container.RegisterInstance<ITargetMapper>(targetMapper);
+            builder.RegisterInstance<ICommandLineOptions>(options);
 
+#if DEBUG_SERVICE
             // For debug purposes, the FileOutputApiPortService helps as it serializes the request to json and opens it with the
             // default json handler. To use this service, uncomment the the next line and comment the one after that.
-            //container.RegisterType<IApiPortService, FileOutputApiPortService>(new ContainerControlledLifetimeManager());
-            container.RegisterInstance<IApiPortService>(new ApiPortService(options.ServiceEndpoint, productInformation));
+            container.RegisterType<FileOutputApiPortService>()
+                .As<IApiPortService>()
+                .SingleInstance();
+#else
+            builder.RegisterInstance<IApiPortService>(new ApiPortService(options.ServiceEndpoint, productInformation));
+#endif
 
-            container.RegisterType<IEnumerable<IgnoreAssemblyInfo>, FileIgnoreAssemblyInfoList>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IDependencyFinder, ReflectionMetadataDependencyFinder>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IDependencyFilter, DotNetFrameworkFilter>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IReportGenerator, ReportGenerator>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ApiPortService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IFileSystem, WindowsFileSystem>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IFileWriter, ReportFileWriter>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IRequestAnalyzer, RequestAnalyzer>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IAnalysisEngine, AnalysisEngine>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ConsoleApiPort>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ICollection<IReportWriter>>(new ContainerControlledLifetimeManager(), new InjectionFactory(WriterCollection));
-            container.RegisterType<IApiPortOptions>(new ContainerControlledLifetimeManager(), new InjectionFactory(GetOptions));
-            container.RegisterType<DocIdSearchRepl>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ISearcher<string>, ApiPortServiceSearcher>(new ContainerControlledLifetimeManager());
+            builder.RegisterType<FileIgnoreAssemblyInfoList>()
+                .As<IEnumerable<IgnoreAssemblyInfo>>()
+                .SingleInstance();
+
+            builder.RegisterType<ReflectionMetadataDependencyFinder>()
+                .As<IDependencyFinder>()
+                .SingleInstance();
+
+            builder.RegisterType<DotNetFrameworkFilter>()
+                .As<IDependencyFilter>()
+                .SingleInstance();
+
+            builder.RegisterType<ReportGenerator>()
+                .As<IReportGenerator>()
+                .SingleInstance();
+
+            builder.RegisterType<ApiPortClient>()
+                .SingleInstance();
+
+            builder.RegisterType<ApiPortService>()
+                .SingleInstance();
+
+            builder.RegisterType<WindowsFileSystem>()
+                .As<IFileSystem>()
+                .SingleInstance();
+
+            builder.RegisterType<ReportFileWriter>()
+                .As<IFileWriter>()
+                .SingleInstance();
+
+            builder.RegisterType<RequestAnalyzer>()
+                .As<IRequestAnalyzer>()
+                .SingleInstance();
+
+            builder.RegisterType<AnalysisEngine>()
+                .As<IAnalysisEngine>()
+                .SingleInstance();
+
+            builder.RegisterType<ConsoleApiPort>()
+                .SingleInstance();
+
+            builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
+            {
+                if (opts.OutputFormats?.Any() == true)
+                {
+                    return opts;
+                }
+
+                return new ReadWriteApiPortOptions(opts)
+                {
+                    OutputFormats = new[] { ctx.ResolveNamed<string>(DefaultOutputFormatInstanceName) }
+                };
+            })
+            .SingleInstance();
+
+            builder.RegisterType<DocIdSearchRepl>();
+
+            builder.RegisterType<ApiPortServiceSearcher>()
+                .As<ISearcher<string>>()
+                .SingleInstance();
 
             // Register the default output format name
-            container.RegisterInstance(DefaultOutputFormatInstanceName, "Excel");
+            builder.RegisterInstance("Excel")
+                .Named<string>(DefaultOutputFormatInstanceName);
 
             if (Console.IsOutputRedirected)
             {
-                container.RegisterInstance<IProgressReporter>(new TextWriterProgressReporter(Console.Out));
+                builder.RegisterInstance<IProgressReporter>(new TextWriterProgressReporter(Console.Out));
             }
             else
             {
-                container.RegisterType<IProgressReporter, ConsoleProgressReporter>(new ContainerControlledLifetimeManager());
+                builder.RegisterType<ConsoleProgressReporter>()
+                    .As<IProgressReporter>()
+                    .SingleInstance();
             }
 
-#if FEATURE_DESKTOP_CONFIGURATION // Unity configuration is only available in its desktop package
-            // Load any customizations via Unity
-            var fileMap = new ExeConfigurationFileMap
-            {
-                ExeConfigFilename = Path.Combine(GetApplicationDirectory(), "unity.config")
-            };
+            TryLoadOffline(builder);
 
-            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
-            var unitySection = (UnityConfigurationSection)configuration.GetSection("unity");
-
-            return unitySection == null ? container : container.LoadConfiguration(unitySection);
-#else // FEATURE_DESKTOP_CONFIGURATION
-            // TODO : Allow runtime configuration through some non-.config means?
-            return container;
-#endif // FEATURE_DESKTOP_CONFIGURATION
+            return builder.Build();
         }
 
-        private static object GetOptions(IUnityContainer container)
+        private static void TryLoadOffline(ContainerBuilder builder)
         {
-            var options = container.Resolve<ICommandLineOptions>();
-
-            if (options.OutputFormats?.Any() == true)
+            try
             {
-                return options;
+                var assembly = Assembly.Load("Microsoft.Fx.Portability.Offline");
+                var type = assembly.GetType("Microsoft.Fx.Portability.OfflineDataModule");
+                var offlineModule = type?.GetTypeInfo()
+                    .GetConstructor(new[] { typeof(string) })
+                    .Invoke(new[] { DefaultOutputFormatInstanceName }) as Autofac.Module;
+
+                if (offlineModule != null)
+                {
+                    builder.RegisterModule(offlineModule);
+                }
+
             }
-
-            return new ReadWriteApiPortOptions(options)
-            {
-                OutputFormats = new[] { container.Resolve<string>(DefaultOutputFormatInstanceName) }
-            };
+            catch (Exception) { }
         }
 
         private static string GetApplicationDirectory()
         {
             return Path.GetDirectoryName(typeof(DependencyBuilder).GetTypeInfo().Assembly.Location);
-        }
-
-        private static object WriterCollection(IUnityContainer container)
-        {
-            return container.ResolveAll<IReportWriter>().ToList();
         }
     }
 }
