@@ -276,16 +276,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             return GetFullName(handle);
         }
 
-        public MemberMetadataInfo GetTypeFromReference(TypeReferenceHandle handle)
-        {
-            return GetFullName(handle);
-        }
-
-        public MemberMetadataInfo GetTypeFromReference(TypeReferenceHandle handle, bool? isValueType)
-        {
-            return GetFullName(handle);
-        }
-
         public MemberMetadataInfo GetSZArrayType(MemberMetadataInfo elementType)
         {
             return new MemberMetadataInfo(elementType)
@@ -396,40 +386,31 @@ namespace Microsoft.Fx.Portability.Analyzer
             return elementType;
         }
 
-        public MemberMetadataInfo GetModifiedType(MetadataReader reader, bool isRequired, EntityHandle modifierTypeHandle, MemberMetadataInfo unmodifiedType)
+        public MemberMetadataInfo GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, SignatureTypeHandleCode code)
         {
-            var builder = new StringBuilder();
+            var entityHandle = (EntityHandle)handle;
 
-            builder.Append(isRequired ? "reqmod " : "optmod ");
-
-            MemberMetadataInfo info = null;
-
-            switch (modifierTypeHandle.Kind)
+            switch (entityHandle.Kind)
             {
                 case HandleKind.TypeDefinition:
-                    info = GetTypeFromDefinition((TypeDefinitionHandle)modifierTypeHandle);
-
-                    builder.Append(info.ToString());
-
-                    break;
+                    return GetTypeFromDefinition((TypeDefinitionHandle)entityHandle);
                 case HandleKind.TypeReference:
-                    info = GetTypeFromReference((TypeReferenceHandle)modifierTypeHandle);
-
-                    builder.Append(info.ToString());
-                    break;
+                    return GetFullName((TypeReferenceHandle)entityHandle);
                 case HandleKind.TypeSpecification:
-                    var specification = reader.GetTypeSpecification((TypeSpecificationHandle)modifierTypeHandle);
-                    var signature = specification.DecodeSignature(this);
+                    var specification = reader.GetTypeSpecification((TypeSpecificationHandle)entityHandle);
 
-                    builder.Append(signature);
-                    break;
+                    return specification.DecodeSignature(this);
                 default:
                     throw new NotSupportedException("This kind is not supported!");
             }
+        }
 
-            unmodifiedType.Modifiers.Add(builder.ToString());
-
-            return unmodifiedType;
+        public MemberMetadataInfo GetModifiedType(MetadataReader reader, bool isRequired, MemberMetadataInfo modifier, MemberMetadataInfo unmodifiedType)
+        {
+            return new MemberMetadataInfo(unmodifiedType)
+            {
+                Modifiers = unmodifiedType.Modifiers.Push(new MemberModifiedMetadata(isRequired, modifier))
+            };
         }
 
         public MemberMetadataInfo GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, SignatureTypeHandleCode code)
@@ -439,7 +420,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public MemberMetadataInfo GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, SignatureTypeHandleCode code)
         {
-            return GetTypeFromReference(handle);
+            return GetFullName(handle);
         }
     }
 }

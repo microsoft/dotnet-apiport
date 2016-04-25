@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -17,7 +18,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             Kind = MemberKind.Type;
             Names = new List<string>();
-            Modifiers = new StackCollection<string>();
+            Modifiers = ImmutableStack.Create<MemberModifiedMetadata>();
         }
 
         public MemberMetadataInfo(MemberMetadataInfo other)
@@ -32,7 +33,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             IsGenericInstance = other.IsGenericInstance;
             IsEnclosedType = other.IsEnclosedType;
             IsPointer = other.IsPointer;
-            Modifiers = new StackCollection<string>(other.Modifiers);
+            Modifiers = other.Modifiers;
             Name = other.Name;
             Namespace = other.Namespace;
             DefinedInAssembly = other.DefinedInAssembly;
@@ -95,7 +96,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public AssemblyReference? DefinedInAssembly { get; set; }
 
-        public ICollection<string> Modifiers { get; }
+        public IImmutableStack<MemberModifiedMetadata> Modifiers { get; set; }
 
         public bool IsPointer { get; set; }
 
@@ -132,10 +133,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append(ArrayTypeInfo);
             }
 
-            if (Modifiers.Any())
+            foreach (var modifier in Modifiers)
             {
-                sb.Append(' ');
-                sb.Append(string.Join(" ", Modifiers));
+                sb.Append(modifier.IsRequired ? " reqmod " : " optmod ");
+                sb.Append(modifier.Metadata);
             }
 
             if (IsPointer)
@@ -329,22 +330,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             return int.TryParse(displayName.Substring(pos, offsetStringAfterGenericMarker - pos), out numGenericArgs);
-        }
-
-        private class StackCollection<T> : Stack<T>, ICollection<T>
-        {
-            public StackCollection()
-            { }
-
-            public StackCollection(IEnumerable<T> other)
-                : base(other)
-            { }
-
-            public bool IsReadOnly { get; } = false;
-
-            public void Add(T item) => Push(item);
-
-            public bool Remove(T item) => false;
         }
     }
 }

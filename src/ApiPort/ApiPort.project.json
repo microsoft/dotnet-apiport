@@ -9,8 +9,8 @@
     "Microsoft.Framework.Configuration.CommandLine": "1.0.0-beta5",
     "Microsoft.Framework.OptionsModel": "1.0.0-beta5",
     "Newtonsoft.Json": "6.0.8",
-    "System.Collections.Immutable": "1.1.38-*",
-    "System.Reflection.Metadata": "1.2.0-rc2-23713"
+    "System.Collections.Immutable": "1.2.0-rc2-24022",
+    "System.Reflection.Metadata": "1.3.0-rc2-24022"
   },
   "frameworks": {
     "net45": {}

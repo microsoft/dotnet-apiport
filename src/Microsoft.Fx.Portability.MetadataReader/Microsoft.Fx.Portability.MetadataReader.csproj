@@ -44,6 +44,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MemberModifiedMetadata.cs" />
     <Compile Include="MetadataReaderExtensions.cs" />
     <Compile Include="MethodSignatureExtensions.cs" />
     <Compile Include="ReflectionMetadataDependencyFinder.cs" />
