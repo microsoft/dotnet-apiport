@@ -4,7 +4,8 @@
     "Microsoft.CodeAnalysis.CSharp": "1.1.0",
     "Newtonsoft.Json": "6.0.8",
     "NSubstitute": "1.9.2",
-    "System.Reflection.Metadata": "1.2.0-rc2-23713",
+    "System.Collections.Immutable": "1.2.0-rc2-24022",
+    "System.Reflection.Metadata": "1.3.0-rc2-24022",
     "xunit": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0"
   },

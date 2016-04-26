@@ -10,7 +10,7 @@
 
 namespace Microsoft.Fx.Portability.Resources {
     using System.Reflection;
-
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -78,6 +78,15 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyzing compatibility.
+        /// </summary>
+        public static string AnalyzingCompatibility {
+            get {
+                return ResourceManager.GetString("AnalyzingCompatibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assembly.
         /// </summary>
         public static string AssemblyHeader {
@@ -114,7 +123,7 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Catalog last updated on: {0}.
+        ///   Looks up a localized string similar to API Catalog last updated on.
         /// </summary>
         public static string CatalogLastUpdated {
             get {
@@ -507,15 +516,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string RuntimeCompatIssueDescription {
             get {
                 return ResourceManager.GetString("RuntimeCompatIssueDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sending data to service.
-        /// </summary>
-        public static string SendingDataToService {
-            get {
-                return ResourceManager.GetString("SendingDataToService", resourceCulture);
             }
         }
         

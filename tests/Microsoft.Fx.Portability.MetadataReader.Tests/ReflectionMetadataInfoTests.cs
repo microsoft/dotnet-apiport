@@ -4,7 +4,6 @@
 using Microsoft.Fx.Portability.Analyzer;
 using NSubstitute;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -30,6 +29,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var progressReport = Substitute.For<IProgressReporter>();
 
             var path = this.GetType().GetTypeInfo().Assembly.Location;
+            var referencedAssemblies = this.GetType().GetTypeInfo().Assembly.GetReferencedAssemblies()
+                .Select(a => a.ToString())
+                .OrderBy(a => a)
+                .ToList();
             var testInfo = new FilePathAssemblyFile(path);
 
             var dependencies = finder.FindDependencies(new[] { testInfo }, progressReport);
@@ -43,10 +46,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 _log.WriteLine(assembly);
             }
 
-            Assert.Equal(s_expectedResult.Count(), actual.Count());
+            Assert.Equal(referencedAssemblies.Count(), actual.Count());
 
             // Use this instead of Assert.Equal so it will output the missing item
-            foreach (var items in actual.Zip(s_expectedResult, Tuple.Create))
+            foreach (var items in actual.Zip(referencedAssemblies, Tuple.Create))
             {
                 Assert.Equal(items.Item1, items.Item2);
             }
@@ -57,22 +60,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             // Make sure no issues were found
             progressReport.Received(0).ReportIssue(Arg.Any<string>());
         }
-
-        private static readonly IEnumerable<string> s_expectedResult = new[]
-        {
-            "Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            "Microsoft.CodeAnalysis.CSharp, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
-            typeof(ApiPortClient).Assembly.ToString(),
-            typeof(ReflectionMetadataDependencyFinder).Assembly.ToString(),
-            "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            typeof(Substitute).Assembly.ToString(),
-            "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            "System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-            "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            "xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c",
-            "xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"
-        }.OrderBy(o => o);
 
         private class FilePathAssemblyFile : IAssemblyFile
         {
