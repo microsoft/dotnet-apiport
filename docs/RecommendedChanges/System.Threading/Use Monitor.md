@@ -4,7 +4,7 @@ If you need to synchronize destruction of the timer with execution of the callba
 ### Affected APIs
 * `M:System.Threading.Timer.Dispose(System.Threading.WaitHandle)`
 
-### Replacement code
+### Replacement Code
 The following class shows how you can wait for the callback of a timer to finish running. 
 
 ```C#
