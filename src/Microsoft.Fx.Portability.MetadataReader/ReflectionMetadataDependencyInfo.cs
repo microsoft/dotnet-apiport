@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Analyzer.Resources;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly IDependencyFilter _assemblyFilter;
 
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
-        private readonly HashSet<string> _assembliesWithError = new HashSet<string>(StringComparer.Ordinal);
-        private readonly HashSet<AssemblyInfo> _userAssemblies = new HashSet<AssemblyInfo>();
+        private readonly ICollection<string> _assembliesWithError = new ConcurrentHashSet<string>(StringComparer.Ordinal);
+        private readonly ICollection<AssemblyInfo> _userAssemblies = new ConcurrentHashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
         private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter)
@@ -195,6 +196,34 @@ namespace Microsoft.Fx.Portability.Analyzer
             public InvalidPEAssemblyException(Exception inner)
                 : base("Not a valid assembly", inner)
             { }
+        }
+
+        private class ConcurrentHashSet<T> : ConcurrentDictionary<T, byte>, ICollection<T>
+        {
+            public ConcurrentHashSet()
+            { }
+
+            public ConcurrentHashSet(IEqualityComparer<T> comparer)
+                : base(comparer)
+            { }
+
+            public bool IsReadOnly { get; } = false;
+
+            public void Add(T item) => TryAdd(item, 1);
+
+            public bool Contains(T item) => ContainsKey(item);
+
+            public void CopyTo(T[] array, int arrayIndex) => Keys.CopyTo(array, arrayIndex);
+
+            public bool Remove(T item)
+            {
+                byte b;
+                return TryRemove(item, out b);
+            }
+            
+            IEnumerator IEnumerable.GetEnumerator() => Keys.GetEnumerator();
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() => Keys.GetEnumerator();
         }
     }
 }
