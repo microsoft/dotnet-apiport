@@ -1,4 +1,4 @@
-## ID: Breaking Change Title
+## 149: Remove Ssl3 from the WCF TransportDefaults
 
 ### Scope
 Edge
