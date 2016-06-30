@@ -92,7 +92,7 @@ namespace Microsoft.Fx.Portability
 
                 if (stream == null)
                 {
-                    throw new FileNotFoundException("Could not find data file next to or embedded in assembly.", path);
+                    throw new PortabilityAnalyzerException($"Could not find data file '{path}'. Either ensure the file is accessible during build or place it next to ApiPort at runtime.");
                 }
 
                 return stream;
