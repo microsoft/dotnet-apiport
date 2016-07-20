@@ -54,19 +54,13 @@ namespace ApiPort
 
                     return 0;
                 }
+                catch (Autofac.Core.DependencyResolutionException ex) when (ex.InnerException is PortabilityAnalyzerException)
+                {
+                    WriteException(ex.InnerException);
+                }
                 catch (PortabilityAnalyzerException ex)
                 {
-                    Trace.TraceError(ex.ToString());
-
-                    // Display the message as it has already been localized
-                    WriteError(ex.Message);
-#if DEBUG
-                    // Provide additional info on inner exceptions if built for debug
-                    if (ex.InnerException != null)
-                    {
-                        WriteError(ex.InnerException.ToString());
-                    }
-#endif // DEBUG
+                    WriteException(ex);
                 }
                 catch (AggregateException ex)
                 {
@@ -77,14 +71,7 @@ namespace ApiPort
                     {
                         foreach (PortabilityAnalyzerException portEx in GetRecursiveInnerExceptions(ex).Where(x => x is PortabilityAnalyzerException))
                         {
-                            WriteError(portEx.Message);
-#if DEBUG
-                            // Provide additional info on inner exceptions if built for debug
-                            if (portEx.InnerException != null)
-                            {
-                                WriteError(portEx.InnerException.ToString());
-                            }
-#endif // DEBUG
+                            WriteException(portEx);
                         }
                     }
                     else if (!IsWebSecurityFailureOnMono(ex))
@@ -113,6 +100,21 @@ namespace ApiPort
 
                 return -1;
             }
+        }
+
+        private static void WriteException(Exception ex)
+        {
+            Trace.TraceError(ex.ToString());
+
+            // Display the message as it has already been localized
+            WriteError(ex.Message);
+#if DEBUG
+            // Provide additional info on inner exceptions if built for debug
+            if (ex.InnerException != null)
+            {
+                WriteError(ex.InnerException.ToString());
+            }
+#endif // DEBUG
         }
 
         private static IEnumerable<Exception> GetRecursiveInnerExceptions(Exception ex)
