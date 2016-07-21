@@ -10,14 +10,4 @@
     <SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <ItemGroup Condition="'$(OutputType)' == 'Exe'">
-    <FilesToSign Include="$(OutDir)\$(AssemblyName).exe">
-      <Authenticode>Microsoft</Authenticode>
-    </FilesToSign>
-  </ItemGroup>
-  <ItemGroup Condition="'$(OutputType)' == 'Library'">
-    <FilesToSign Include="$(OutDir)\$(AssemblyName).dll">
-      <Authenticode>Microsoft</Authenticode>
-    </FilesToSign>
-  </ItemGroup>
 </Project>

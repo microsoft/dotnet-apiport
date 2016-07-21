@@ -1,5 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Depending on whether it is a VSIX or MSIL, choose the correct certificate. 
+       1) By default, the VSIX project just packages the contents, so 
+       CopyBuildOutputToOutputDirectory/IncludeAssemblyInVSIXContainer will be 
+       false. But if you have a VSIX that builds a DLL as well, it will have both
+       properties set as true.
+       
+       2) When conditions are chosen from top-down... so if multiple ones are true,
+       the first one it encounters is the type it chooses.
+  -->
+  <Choose>
+    <When Condition="'$(TargetVsixContainerName)' != '' AND '$(CopyBuildOutputToOutputDirectory)' == 'false' AND '$(IncludeAssemblyInVSIXContainer)' == 'false'">
+      <ItemGroup>
+        <FilesToSign Include="$(TargetVsixContainer)">
+          <Authenticode>Vsix</Authenticode>
+        </FilesToSign>
+      </ItemGroup>
+    </When>
+    <When Condition="'$(OutputType)' == 'Exe' OR '$(OutputType)' == 'Library'">
+      <ItemGroup>
+        <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
+          <Authenticode>Microsoft</Authenticode>
+        </FilesToSign>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
+          <Authenticode>MicrosoftSHA1</Authenticode>
+        </FilesToSign>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
   <PropertyGroup>
     <!-- When building from a dev machine, the BuildNumber won't be set, so set it to 0.1 to indicate this is a private build -->
     <BuildVersion>0</BuildVersion>
