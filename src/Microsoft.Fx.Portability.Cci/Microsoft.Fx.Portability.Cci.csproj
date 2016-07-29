@@ -92,7 +92,6 @@
     <Compile Include="AssemblyIdentityHelpers.cs" />
     <Compile Include="DocIdExtensions.cs" />
     <Compile Include="HostEnvironment.cs" />
-    <Compile Include="ModuleExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

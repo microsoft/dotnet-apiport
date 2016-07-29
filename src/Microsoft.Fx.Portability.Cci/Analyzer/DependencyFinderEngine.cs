@@ -1,10 +1,9 @@
-﻿using Microsoft.Cci.MetadataReader.Extensions;
-using Microsoft.Fx.Portability.ObjectModel;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Cci.Extensions;
+using Microsoft.Fx.Portability.ObjectModel;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -128,8 +127,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 _userAssemblies.Add(assemblyInfo);
 
                 // Identify references to members (generic and non-generic)
-                foreach (var reference in cciAssembly.GetTypeMemberReferences()
-                                          .Union(cciAssembly.GetConstructedTypeInstanceMembers().Select(m => m.UnWrapMember())))
+                foreach (var reference in cciAssembly.GetTypeMemberReferences())
                 {
                     if (reference.ContainingType.GetAssemblyReference() == null)
                         continue;
