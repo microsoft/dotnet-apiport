@@ -121,7 +121,9 @@ namespace ApiPortVS.ViewModels
                     var existingTargetPlatform = _optionsModel.Platforms
                         .FirstOrDefault(t => StringComparer.OrdinalIgnoreCase.Equals(t.Name, canonicalPlatform.Name));
 
-                    var platform = existingTargetPlatform ?? canonicalPlatform;
+                    var platform = (existingTargetPlatform?.Equals(canonicalPlatform) ?? false)
+                                        ? existingTargetPlatform
+                                        : canonicalPlatform;
 
                     foreach (var alias in _targetMapper.Aliases)
                     {

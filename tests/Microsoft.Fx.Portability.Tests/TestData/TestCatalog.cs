@@ -5,11 +5,25 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
+using System.Linq;
 
 namespace Microsoft.Fx.Portability.TestData
 {
     public class TestCatalog : IApiCatalogLookup
     {
+        internal const string DocId1 = "DocId1";
+
+        internal static readonly FrameworkName Target1 = new FrameworkName("Target 1, version=1.0");
+        internal static readonly FrameworkName Target2 = new FrameworkName("Target 2, version=1.0");
+        internal static readonly FrameworkName Target3 = new FrameworkName("Target 3, version=2.0");
+
+        internal static readonly Dictionary<FrameworkName, TargetInfo> AllTargets = new Dictionary<FrameworkName, TargetInfo>()
+        {
+            { Target1, new TargetInfo() { DisplayName = Target1, IsReleased = true } },
+            { Target2, new TargetInfo() { DisplayName = Target2, IsReleased = true } },
+            { Target3, new TargetInfo() { DisplayName = Target3, IsReleased = false } }
+        };
+
         public DateTimeOffset LastModified { get { return DateTimeOffset.UtcNow; } }
 
         public string BuiltBy
@@ -19,9 +33,7 @@ namespace Microsoft.Fx.Portability.TestData
 
         public IEnumerable<TargetInfo> GetAllTargets()
         {
-            yield return new TargetInfo() { DisplayName = new FrameworkName("Target 1, version=1.0"), IsReleased = true };
-            yield return new TargetInfo() { DisplayName = new FrameworkName("Target 2, version=1.0"), IsReleased = true };
-            yield return new TargetInfo() { DisplayName = new FrameworkName("Target 3, version=2.0"), IsReleased = false };
+            return AllTargets.Values;
         }
 
         public string GetApiMetadata(string docId, string metadataKey)
@@ -31,26 +43,26 @@ namespace Microsoft.Fx.Portability.TestData
 
         public FrameworkName GetLatestVersion(string targetIdentifier)
         {
-            if (targetIdentifier == "Target 1")
-                return new FrameworkName("Target 1, version=1.0");
-            if (targetIdentifier == "Target 2")
-                return new FrameworkName("Target 2, version=1.0");
-            if (targetIdentifier == "Target 3")
-                return new FrameworkName("Target 3, version=2.0");
+            foreach (var frameworkName in AllTargets.Keys)
+            {
+                if (frameworkName.Identifier.Equals(targetIdentifier))
+                {
+                    return frameworkName;
+                }
+            }
 
             return null;
         }
 
         public IEnumerable<FrameworkName> GetPublicTargets()
         {
-            yield return new FrameworkName("Target 1, version=1.0");
-            yield return new FrameworkName("Target 2, version=1.0");
+            return AllTargets.Where(x => x.Value.IsReleased).Select(x => x.Key);
         }
 
         public Version GetVersionIntroducedIn(string docId, FrameworkName target)
         {
-            if (docId == "DocId1")
-                return new Version("1.0.0.0");
+            if (docId == DocId1)
+                return Target1.Version;
 
             return null;
         }
@@ -65,7 +77,7 @@ namespace Microsoft.Fx.Portability.TestData
 
         public bool IsFrameworkMember(string docId)
         {
-            if (docId == "DocId1")
+            if (docId == DocId1)
                 return true;
 
             return false;
@@ -73,9 +85,9 @@ namespace Microsoft.Fx.Portability.TestData
 
         public bool IsMemberInTarget(string docId, FrameworkName targetName, out Version introducedVersion)
         {
-            if (docId == "DocId1" && targetName.Identifier == "Target 1")
+            if (docId == DocId1 && targetName.Identifier == Target1.Identifier)
             {
-                introducedVersion = new Version("1.0.0.0");
+                introducedVersion = Target1.Version;
                 return true;
             }
 

@@ -122,6 +122,7 @@
     <Compile Include="ProjectBuilderTests.cs" />
     <Compile Include="CciSourceLineMapperTests.cs" />
     <Compile Include="ApiPortVSPackageTests.cs" />
+    <Compile Include="TargetPlatformTests.cs" />
     <Compile Include="TestAssemblyFile.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -48,6 +48,22 @@ namespace ApiPortVS
             Versions = platform.Versions.Select(v => new TargetPlatformVersion(v)).ToList();
         }
 
+        public override bool Equals(object obj)
+        {
+            var compared = obj as TargetPlatform;
+
+            if (compared == null)
+                return false;
+
+            return string.Equals(Name, compared.Name, StringComparison.Ordinal)
+                && Versions.SequenceEqual(compared.Versions);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
         public override string ToString()
         {
             return DisplayName;
@@ -55,20 +71,24 @@ namespace ApiPortVS
 
         public override bool Equals(TargetPlatform x, TargetPlatform y)
         {
-            return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase)
-                   && x.Versions.SequenceEqual(y.Versions);
+            if (x == null && y != null)
+            {
+                return false;
+            }
+
+            return x.Equals(y);
         }
 
         public override int GetHashCode(TargetPlatform obj)
         {
-            return obj.Name.GetHashCode();
+            return obj.GetHashCode();
         }
 
         public int CompareTo(TargetPlatform other)
         {
             if (other == null) return -1;
 
-            return String.CompareOrdinal(Name, other.Name);
+            return string.CompareOrdinal(Name, other.Name);
         }
     }
 }

@@ -19,5 +19,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public Version Version { get; set; }
         public IEnumerable<string> ExpandedTargets { get; set; }
         public bool IsSet { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name}, v{Version}, Targets: [{string.Join(",", ExpandedTargets)}]";
+        }
     }
 }

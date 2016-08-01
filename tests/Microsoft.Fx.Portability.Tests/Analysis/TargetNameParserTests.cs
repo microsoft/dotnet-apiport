@@ -20,7 +20,7 @@ namespace Microsoft.Fx.Portability.Tests
             // Tests if we actually filter out the public targets based on the default target list in the config
             // We should only have 1 target!
             Assert.Equal(1, targets.Count());
-            Assert.Equal("Target 1,Version=v1.0", targets.First().ToString());
+            Assert.Equal(TestCatalog.Target1.FullName, targets.First().ToString());
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             // We should only have 1 target!
             Assert.Equal(1, targets.Count());
-            Assert.Equal("Target 1,Version=v1.0", targets.First().ToString());
+            Assert.Equal(TestCatalog.Target1.FullName, targets.First().ToString());
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             // We should only have 1 target!
             Assert.Equal(1, targets.Count());
-            Assert.Equal("Target 3,Version=v2.0", targets.First().ToString());
+            Assert.Equal(TestCatalog.Target3.FullName, targets.First().ToString());
         }
 
         [Fact]
