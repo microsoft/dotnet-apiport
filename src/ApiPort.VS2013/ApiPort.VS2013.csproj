@@ -68,40 +68,8 @@
     </Reference>
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Cci.ILGenerator, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.ILGenerator.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MetadataHelper, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.MetadataHelper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MetadataModel, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.MetadataModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MutableMetadataModel, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.MutableMetadataModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PdbReader, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.PdbReader.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PdbWriter, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.PdbWriter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PeReader, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.PeReader.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PeWriter, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.PeWriter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Cci.SourceModel, Version=1.66.517.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SymbolSource.Microsoft.Cci.Metadata.1.66.517.0\lib\net40\Microsoft.Cci.SourceModel.dll</HintPath>
+    <Reference Include="Microsoft.Cci, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Cci.4.0.0-rc3-24214-00\lib\netstandard1.3\Microsoft.Cci.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -193,10 +161,22 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.NonGeneric.4.0.1\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
