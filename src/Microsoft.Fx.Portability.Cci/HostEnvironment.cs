@@ -185,7 +185,7 @@ namespace Microsoft.Cci.Extensions
             //".ni.exe" Do these actually exist?
         };
 
-        public override AssemblyIdentity Probe(string probeDir, AssemblyIdentity referencedAssembly)
+        protected override AssemblyIdentity Probe(string probeDir, AssemblyIdentity referencedAssembly)
         {
             Contract.Requires(probeDir != null);
             Contract.Requires(referencedAssembly != null);
@@ -216,7 +216,7 @@ namespace Microsoft.Cci.Extensions
             return null;
         }
 
-        public override AssemblyIdentity GetCoreAssemblySymbolicIdentity()
+        protected override AssemblyIdentity GetCoreAssemblySymbolicIdentity()
         {
             // If explicitly set return that identity
             if (_coreAssemblyIdentity != null)
