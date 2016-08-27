@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
-using System.Reflection.Metadata.Decoding;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Microsoft.Fx.Portability.Analyzer.Resources;
 
@@ -14,11 +14,14 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class MemberMetadataInfoTypeProvider : ISignatureTypeProvider<MemberMetadataInfo>
     {
+        private readonly SignatureDecoder<MemberMetadataInfo> _methodDecoder;
+
         public MetadataReader Reader { get; }
 
         public MemberMetadataInfoTypeProvider(MetadataReader reader)
         {
             Reader = reader;
+            _methodDecoder = new SignatureDecoder<MemberMetadataInfo>(this, reader);
         }
 
         public MemberMetadataInfo GetMemberRefInfo(MemberReference memberReference)
@@ -386,7 +389,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             return elementType;
         }
 
-        public MemberMetadataInfo GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, SignatureTypeHandleCode code)
+        public MemberMetadataInfo GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, byte rawTypeKind)
         {
             var entityHandle = (EntityHandle)handle;
 
@@ -413,12 +416,12 @@ namespace Microsoft.Fx.Portability.Analyzer
             };
         }
 
-        public MemberMetadataInfo GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, SignatureTypeHandleCode code)
+        public MemberMetadataInfo GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, byte rawTypeKind)
         {
             return GetTypeFromDefinition(handle);
         }
 
-        public MemberMetadataInfo GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, SignatureTypeHandleCode code)
+        public MemberMetadataInfo GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, byte rawTypeKind)
         {
             return GetFullName(handle);
         }

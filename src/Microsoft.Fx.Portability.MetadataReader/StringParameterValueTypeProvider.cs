@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
-using System.Reflection.Metadata.Decoding;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Microsoft.Fx.Portability
 {
@@ -88,17 +88,17 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
-        public string GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, SignatureTypeHandleCode code)
+        public string GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, byte rawTypeKind)
         {
             return string.Empty;
         }
 
-        public string GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, SignatureTypeHandleCode code)
+        public string GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, byte rawTypeKind)
         {
             return string.Empty;
         }
 
-        public string GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, SignatureTypeHandleCode code)
+        public string GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, byte rawTypeKind)
         {
             return string.Empty;
         }
