@@ -17,7 +17,7 @@
       <group targetFramework="net45">
         <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
       </group>
-      <group targetFramework="dotnet">
+      <group targetFramework="netstandard1.3">
         <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
         <dependency id="System.AppContext" version="4.0.0" />
         <dependency id="System.Collections" version="4.0.10" />
@@ -33,9 +33,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="dotnet\Microsoft.Fx.Portability.Offline.dll" target="lib\dotnet" />
-    <file src="dotnet\Microsoft.Fx.Portability.Offline.pdb" target="lib\dotnet" />
-    <file src="dotnet\Microsoft.Fx.Portability.Offline.xml" target="lib\dotnet" />
+    <file src="netstandard1.3\Microsoft.Fx.Portability.Offline.dll" target="lib\netstandard1.3" />
+    <file src="netstandard1.3\Microsoft.Fx.Portability.Offline.pdb" target="lib\netstandard1.3" />
+    <file src="netstandard1.3\Microsoft.Fx.Portability.Offline.xml" target="lib\netstandard1.3" />
     <file src="net45\Microsoft.Fx.Portability.Offline.dll" target="lib\net45" />
     <file src="net45\Microsoft.Fx.Portability.Offline.pdb" target="lib\net45" />
     <file src="net45\Microsoft.Fx.Portability.Offline.xml" target="lib\net45" />

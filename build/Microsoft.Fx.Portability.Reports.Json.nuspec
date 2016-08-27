@@ -18,7 +18,7 @@
         <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
         <dependency id="Newtonsoft.Json" version="6.0.8" />
       </group>
-      <group targetFramework="dotnet">
+      <group targetFramework="netstandard1.3">
         <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
         <dependency id="Newtonsoft.Json" version="6.0.8" />
         <dependency id="System.IO" version="4.0.10" />
@@ -27,9 +27,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="dotnet\Microsoft.Fx.Portability.Reports.Json.dll" target="lib\dotnet" />
-    <file src="dotnet\Microsoft.Fx.Portability.Reports.Json.pdb" target="lib\dotnet" />
-    <file src="dotnet\Microsoft.Fx.Portability.Reports.Json.xml" target="lib\dotnet" />
+    <file src="netstandard1.3\Microsoft.Fx.Portability.Reports.Json.dll" target="lib\netstandard1.3" />
+    <file src="netstandard1.3\Microsoft.Fx.Portability.Reports.Json.pdb" target="lib\netstandard1.3" />
+    <file src="netstandard1.3\Microsoft.Fx.Portability.Reports.Json.xml" target="lib\netstandard1.3" />
     <file src="net45\Microsoft.Fx.Portability.Reports.Json.dll" target="lib\net45" />
     <file src="net45\Microsoft.Fx.Portability.Reports.Json.pdb" target="lib\net45" />
     <file src="net45\Microsoft.Fx.Portability.Reports.Json.xml" target="lib\net45" />
