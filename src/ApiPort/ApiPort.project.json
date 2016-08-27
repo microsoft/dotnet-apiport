@@ -4,7 +4,7 @@
     "win": {}
   },
   "dependencies": {
-    "Autofac": "3.5.2",
+    "Autofac": "4.1.0",
     "MicroBuild.Core": "0.2.0",
     "Microsoft.Framework.Configuration.CommandLine": "1.0.0-beta5",
     "Microsoft.Framework.OptionsModel": "1.0.0-beta5",
