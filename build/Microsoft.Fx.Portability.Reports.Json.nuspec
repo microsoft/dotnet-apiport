@@ -15,14 +15,14 @@
     <tags>.NET portability apiport</tags>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
-        <dependency id="Newtonsoft.Json" version="6.0.8" />
+        <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
       </group>
       <group targetFramework="netstandard1.3">
-        <dependency id="Microsoft.Fx.Portability" version="1.1.1-alpha" />
-        <dependency id="Newtonsoft.Json" version="6.0.8" />
-        <dependency id="System.IO" version="4.0.10" />
-        <dependency id="System.Runtime" version="4.0.20" />
+        <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
+        <dependency id="System.IO" version="4.1.0" />
+        <dependency id="System.Runtime" version="4.1.0" />
       </group>
     </dependencies>
   </metadata>
