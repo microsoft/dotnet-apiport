@@ -3,6 +3,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel.Design;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace ApiPortVS
@@ -17,11 +18,16 @@ namespace ApiPortVS
     {
         private static ServiceProvider _serviceProvider;
 
+        private readonly AssemblyRedirects _assemblyRedirects;
+
         internal static IServiceProvider LocalServiceProvider { get { return _serviceProvider; } }
 
-        public ApiPortVSPackage()
+        public ApiPortVSPackage() : base()
         {
             _serviceProvider = new ServiceProvider(this);
+            _assemblyRedirects = _serviceProvider.GetService(typeof(AssemblyRedirects)) as AssemblyRedirects;
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         protected override void Dispose(bool disposing)
@@ -30,7 +36,6 @@ namespace ApiPortVS
 
             base.Dispose(disposing);
         }
-
 
         // Called after constructor when package is sited
         protected override void Initialize()
@@ -51,6 +56,14 @@ namespace ApiPortVS
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ContextMenuItem_BeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
             }
+        }
+
+        /// <summary>
+        /// Programmatically provides binding redirects for assemblies that cannot be resolved.
+        /// </summary>
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            return _assemblyRedirects?.ResolveAssembly(args.Name, args.RequestingAssembly);
         }
     }
 }

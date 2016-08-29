@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DeployExtension>False</DeployExtension>
+    <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -81,7 +81,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <None Include="app.config" />
+    <Content Include="app.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>

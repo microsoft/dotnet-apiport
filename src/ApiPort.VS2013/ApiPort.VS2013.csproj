@@ -190,6 +190,7 @@
     <Compile Include="Analyze\FileListAnalyzer.cs" />
     <Compile Include="Analyze\ProjectAnalyzer.cs" />
     <Compile Include="AssemblyFile.cs" />
+    <Compile Include="AssemblyRedirects.cs" />
     <Compile Include="Contracts\IReportViewer.cs" />
     <Compile Include="Contracts\ISourceLineMapper.cs" />
     <Compile Include="Contracts\ISourceMappedItem.cs" />
@@ -246,7 +247,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
