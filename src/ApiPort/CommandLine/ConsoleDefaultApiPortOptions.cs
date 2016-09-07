@@ -17,7 +17,7 @@ namespace ApiPort.CommandLine
     {
         public ConsoleDefaultApiPortOptions()
         {
-            ServiceEndpoint = "http://portability.cloudapp.net";
+            ServiceEndpoint = "http://portability.dot.net";
             Description = string.Empty;
             OutputFileName = "ApiPortAnalysis";
             RequestFlags = AnalyzeRequestFlags.None;
