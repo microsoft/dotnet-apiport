@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" 
+           Name="Microsoft .NET Portability Analyzer" 
+           Language="1033" 
+           Version="1.0.0.0" 
+           Manufacturer="Microsoft" 
+           UpgradeCode="1d2c6e3b-3fb6-40fe-afa3-ed185b3cb2e4">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of Microsoft .NET Portability Analyzer is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="Microsoft .NET Portability Analyzer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Microsoft .NET Portability Analyzer" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ApiPort">
+        <File Source="$(var.ApiPort.TargetPath)" />
+      </Component>
+      <Component Id="KnownSafeBreaks">
+        <File Source="$(var.ApiPort.TargetDir)KnownSafeBreaks.json" />
+      </Component>
+      <Component Id="PortabilityAnalyzerPreReleaseLicenseTerms">
+        <File Source="$(var.ApiPort.TargetDir)LicenseTerms\Microsoft .NET Portability Analyzer Pre-release License Terms.txt" />
+      </Component>
+      <Component Id="PortabilityAnalyzerPrivacyStatement">
+        <File Source="$(var.ApiPort.TargetDir)LicenseTerms\Microsoft .NET Portability Analyzer Privacy Statement.txt" />
+      </Component>
+      <Component Id="PortabilityAnalyzerThirdPartyNotices">
+        <File Source="$(var.ApiPort.TargetDir)LicenseTerms\Microsoft .NET Portability Analyzer Third Party Notices.txt" />
+      </Component>
+      <Component Id="Microsoft.Framework.Configuration.Abstractions">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Framework.Configuration.Abstractions.dll" />
+      </Component>
+      <Component Id="Microsoft.Framework.Configuration.Binder">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Framework.Configuration.Binder.dll" />
+      </Component>
+      <Component Id="Microsoft.Framework.Configuration.CommandLine">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Framework.Configuration.CommandLine.dll" />
+      </Component>
+      <Component Id="Microsoft.Framework.Configuration">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Framework.Configuration.dll" />
+      </Component>
+      <Component Id="Microsoft.Framework.DependencyInjection.Abstractions">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Framework.DependencyInjection.Abstractions.dll" />
+      </Component>
+      <Component Id="Microsoft.Framework.OptionsModel">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Framework.OptionsModel.dll" />
+      </Component>
+      <Component Id="Microsoft.Fx.Portability.MetadataReader">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Fx.Portability.MetadataReader.dll" />
+      </Component>
+      <Component Id="Microsoft.Practices.Unity.Configuration">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Practices.Unity.Configuration.dll" />
+      </Component>
+      <Component Id="Microsoft.Practices.Unity">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Practices.Unity.dll" />
+      </Component>
+      <Component Id="Microsoft.Practices.Unity.RegistrationByConvention">
+        <File Source="$(var.ApiPort.TargetDir)Microsoft.Practices.Unity.RegistrationByConvention.dll" />
+      </Component>
+      <Component Id="System.Collections.Immutable">
+        <File Source="$(var.ApiPort.TargetDir)System.Collections.Immutable.dll" />
+      </Component>
+      <Component Id="System.Reflection.Metadata">
+        <File Source="$(var.ApiPort.TargetDir)System.Reflection.Metadata.dll" />
+      </Component>
+      <Component Id="Microsoft.Fx.Portability.Offline">
+        <File Source="$(var.Microsoft.Fx.Portability.Offline.NET45.TargetPath)" />
+      </Component>
+      <Component Id="Microsoft.Fx.Portability">
+        <File Source="$(var.Microsoft.Fx.Portability.Offline.NET45.TargetDir)Microsoft.Fx.Portability.dll" />
+      </Component>
+      <Component Id="Newtonsoft.Json">
+        <File Source="$(var.Microsoft.Fx.Portability.Offline.NET45.TargetDir)Newtonsoft.Json.dll" />
+      </Component>
+      <Component Id="Unity.Config">
+        <File Source="$(var.Microsoft.Fx.Portability.Offline.NET45.TargetDir)Unity.Config" />
+      </Component>
+      <Component Id="Microsoft.Fx.Portability.Reports.Json">
+        <File Source="$(var.Microsoft.Fx.Portability.Reports.Json.NET45.TargetPath)" />
+      </Component>
+      <Component Id="Microsoft.Fx.Portability.Reports.Html">
+        <File Source="$(var.Microsoft.Fx.Portability.Reports.Html _src\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html_.TargetPath)" />
+      </Component>
+      <Component Id="CommonMark">
+        <File Source="$(var.Microsoft.Fx.Portability.Reports.Html _src\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html_.TargetDir)CommonMark.dll" />
+      </Component>
+      <Component Id="RazorEngine">
+        <File Source="$(var.Microsoft.Fx.Portability.Reports.Html _src\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html_.TargetDir)RazorEngine.dll" />
+      </Component>
+      <Component Id="System.Web.Razor">
+        <File Source="$(var.Microsoft.Fx.Portability.Reports.Html _src\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html_.TargetDir)System.Web.Razor.dll" />
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>
