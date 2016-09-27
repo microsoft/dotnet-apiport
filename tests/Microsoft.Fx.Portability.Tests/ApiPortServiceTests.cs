@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
@@ -26,11 +27,21 @@ namespace Microsoft.Fx.Portability.Tests
 
     public class ApiPortServiceTests
     {
-        private const string ServiceEndpoint = "http://portability.cloudapp.net";
-
-        private readonly ApiPortService _apiPortService = new ApiPortService(
-            ServiceEndpoint,
+        private static readonly ApiPortService _apiPortService = new ApiPortService(
+            "http://portability.dot.net",
             new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
+        private static readonly ApiPortService _oldApiService = new ApiPortService(
+            "http://portability.cloudapp.net",
+            new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
+
+        public static IEnumerable<object[]> ApiPortServices
+        {
+            get
+            {
+                yield return new object[] { _apiPortService, EndpointStatus.Alive };
+                yield return new object[] { _oldApiService, EndpointStatus.Deprecated };
+            }
+        }
 
         [Fact]
         public void VerifyParameterChecks()
@@ -40,13 +51,10 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation("")));
         }
 
-        [Fact(Skip = "Skipping because this will ping the live service when running.")]
-        public void ApiPortService_GetDocIdsWithValidDocId()
+        [Theory(Skip = "Skipping because this will ping the live service when running.")]
+        [MemberData("ApiPortServices")]
+        public async Task ApiPortService_GetDocIdsWithValidDocIdAsync(ApiPortService apiPortService, EndpointStatus expectedStatus)
         {
-            var apiPortService = new ApiPortService(
-                ServiceEndpoint,
-                new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
-
             var docIds = new List<string>
             {
                 "T:System.Console",
@@ -60,21 +68,26 @@ namespace Microsoft.Fx.Portability.Tests
                 "M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String)"
             };
 
-            var result = apiPortService.QueryDocIdsAsync(docIds).Result.Response;
+            var serviceResponse = await apiPortService.QueryDocIdsAsync(docIds);
+            var headers = serviceResponse.Headers;
+            var result = serviceResponse.Response;
+
+            Assert.Equal(expectedStatus, headers.Status);
             Assert.Equal(docIds.Count(), result.Count());
             Assert.Equal(0, docIds.Except(result.Select(r => r.Definition.DocId)).Count());
         }
 
-        [Fact(Skip = "Skipping because this will ping the live service when running.")]
-        public void ApiPortService_GetAvailableFormats()
+        [Theory(Skip = "Skipping because this will ping the live service when running.")]
+        [MemberData("ApiPortServices")]
+        public async Task ApiPortService_GetAvailableFormatsAsync(ApiPortService apiPortService, EndpointStatus expectedStatus)
         {
             var expected = new List<string> { "Json", "HTML", "Excel" };
 
-            var apiPortService = new ApiPortService(
-                ServiceEndpoint,
-                new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
+            var serviceResponse = await apiPortService.GetResultFormatsAsync();
+            var headers = serviceResponse.Headers;
+            var result = serviceResponse.Response;
 
-            var result = apiPortService.GetResultFormatsAsync().Result.Response;
+            Assert.Equal(expectedStatus, headers.Status);
             Assert.Equal(expected.Count(), result.Count());
             Assert.Equal(0, expected.Except(result.Select(r => r.DisplayName)).Count());
         }
