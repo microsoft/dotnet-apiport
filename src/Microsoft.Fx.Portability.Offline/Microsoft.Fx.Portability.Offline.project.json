@@ -1,17 +1,11 @@
 ﻿{
-  "supports": {
-    "net46.app": {},
-    "uwp.10.0.app": {}
-  },
   "dependencies": {
+    "Autofac": "4.1.0",
     "MicroBuild.Core": "0.2.0",
-    "Autofac": "3.5.2",
-    "Microsoft.NETCore": "5.0.0",
-    "Microsoft.NETCore.Portable.Compatibility": "1.0.0"
+    "Microsoft.NETCore": "5.0.1",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1"
   },
   "frameworks": {
-    "dotnet": {
-      "imports": "portable-net45+win8"
-    }
+    "netstandard1.3": { }
   }
 }

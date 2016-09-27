@@ -6,7 +6,6 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection.Metadata;
-using System.Reflection.Metadata.Decoding;
 using System.Security.Cryptography;
 
 namespace Microsoft.Fx.Portability
