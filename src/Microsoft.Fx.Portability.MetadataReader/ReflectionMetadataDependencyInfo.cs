@@ -220,7 +220,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 byte b;
                 return TryRemove(item, out b);
             }
-            
+
             IEnumerator IEnumerable.GetEnumerator() => Keys.GetEnumerator();
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => Keys.GetEnumerator();

@@ -70,7 +70,7 @@ namespace ApiPort
                 // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
                 Program.WriteColorLine($"Invalid parameter passed to {suppliedCommand}", ConsoleColor.Red);
             }
-            
+
             var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
             var path =
 #if NETCORE

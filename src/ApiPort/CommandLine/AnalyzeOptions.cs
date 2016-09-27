@@ -222,7 +222,7 @@ namespace ApiPort.CommandLine
                         {
                             // Temporary workaround for CoreCLR-on-Linux bug (dotnet/corefx#4727) that prevents get_FileVersion from working on that platform
                             // This bug is now fixed and the correct behavior should be present in .NET Core RC2
-                            return new Version(0,0).ToString();
+                            return new Version(0, 0).ToString();
                         }
                     }
                 }

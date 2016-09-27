@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Autofac;
 using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
@@ -55,7 +58,6 @@ namespace Microsoft.Fx.Portability
                 return ctx.Resolve<IReportWriter>().Format.DisplayName;
             })
             .Named<string>(_defaultOutputFormatName);
-
         }
     }
 }

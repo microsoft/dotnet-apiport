@@ -135,7 +135,6 @@ namespace ApiPort
                 {
                     builder.RegisterModule(offlineModule);
                 }
-
             }
             catch (Exception) { }
         }

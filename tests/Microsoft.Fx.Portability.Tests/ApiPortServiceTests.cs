@@ -27,10 +27,10 @@ namespace Microsoft.Fx.Portability.Tests
 
     public class ApiPortServiceTests
     {
-        private static readonly ApiPortService _apiPortService = new ApiPortService(
+        private static readonly ApiPortService s_apiPortService = new ApiPortService(
             "http://portability.dot.net",
             new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
-        private static readonly ApiPortService _oldApiService = new ApiPortService(
+        private static readonly ApiPortService s_oldApiService = new ApiPortService(
             "http://portability.cloudapp.net",
             new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
 
@@ -38,8 +38,8 @@ namespace Microsoft.Fx.Portability.Tests
         {
             get
             {
-                yield return new object[] { _apiPortService, EndpointStatus.Alive };
-                yield return new object[] { _oldApiService, EndpointStatus.Deprecated };
+                yield return new object[] { s_apiPortService, EndpointStatus.Alive };
+                yield return new object[] { s_oldApiService, EndpointStatus.Deprecated };
             }
         }
 
@@ -91,6 +91,5 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Equal(expected.Count(), result.Count());
             Assert.Equal(0, expected.Except(result.Select(r => r.DisplayName)).Count());
         }
-
     }
 }

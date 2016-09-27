@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AssemblyHeader" xml:space="preserve">
+    <value>Assembly</value>
+    <comment>Header for assembly name entries</comment>
+  </data>
+  <data name="DetailsPageTitle" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="MissingAssembliesPageTitle" xml:space="preserve">
+    <value>Missing assemblies</value>
+  </data>
+  <data name="MissingAssemblyStatus" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="RecommendedChanges" xml:space="preserve">
+    <value>Recommended changes</value>
+  </data>
+  <data name="SummaryHeading" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Targets" xml:space="preserve">
+    <value>Targets</value>
+  </data>
+  <data name="TargetTypeHeader" xml:space="preserve">
+    <value>Target type</value>
+    <comment>Header for detailed output for target type</comment>
+  </data>
+  <data name="UnresolvedUsedAssembly" xml:space="preserve">
+    <value>Unresolved assembly</value>
+    <comment>An assembly used in the portability analysis that cannot be resolved</comment>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Used By</value>
+  </data>
+  <data name="WritingReport" xml:space="preserve">
+    <value>Writing report.</value>
+  </data>
+  <data name="AnalysisFailed" xml:space="preserve">
+    <value>Analysis failed.</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Back to summary</value>
+  </data>
+  <data name="InvalidAssembly" xml:space="preserve">
+    <value>{0} is an invalid assembly.</value>
+  </data>
+  <data name="CannotSaveReport" xml:space="preserve">
+    <value>Unable to save report at '{0}'.</value>
+  </data>
+  <data name="CannotReferenceOutputWindow" xml:space="preserve">
+    <value>Failed to get a reference to the Output window general pane.</value>
+  </data>
+  <data name="AssemblyFiles" xml:space="preserve">
+    <value>Assembly Files</value>
+  </data>
+  <data name="SelectAssemblyFiles" xml:space="preserve">
+    <value>Select Assembly Files</value>
+  </data>
+  <data name="RefreshingPlatforms" xml:space="preserve">
+    <value>Refreshing platforms...</value>
+  </data>
+  <data name="TargetPlatforms" xml:space="preserve">
+    <value>Target Platforms</value>
+  </data>
+  <data name="UnableToContactService" xml:space="preserve">
+    <value>Unable to contact service.  Try again later.</value>
+  </data>
+  <data name="UnableToSaveFileFormat" xml:space="preserve">
+    <value>Unable to save file {0}.</value>
+  </data>
+  <data name="NotSupportedOn" xml:space="preserve">
+    <value>Not supported on </value>
+  </data>
+  <data name="Suggestion" xml:space="preserve">
+    <value>Suggestion: </value>
+  </data>
+  <data name="NoAnalyzableAssemblies" xml:space="preserve">
+    <value>No analyzable assemblies found in {0}.</value>
+  </data>
+  <data name="UnableToBuildProject" xml:space="preserve">
+    <value>Unable to build {0}.</value>
+  </data>
+  <data name="UnableToLoad" xml:space="preserve">
+    <value>Unable to load {0}.</value>
+  </data>
+  <data name="FailedToFindSourceLines" xml:space="preserve">
+    <value>Failed to find source line information for {0}.</value>
+  </data>
+  <data name="FindingSourceLineInformationFor" xml:space="preserve">
+    <value>Finding source line information</value>
+  </data>
+  <data name="HtmlContentLanguage" xml:space="preserve">
+    <value>en-us</value>
+  </data>
+  <data name="PdbNotFoundFormat" xml:space="preserve">
+    <value>Failed: PDB {0} not found.</value>
+  </data>
+  <data name="HtmlReportTitle" xml:space="preserve">
+    <value>.NET Portability Report</value>
+  </data>
+  <data name="MoreInformationAvailableAt" xml:space="preserve">
+    <value>More information is available at</value>
+  </data>
+  <data name="MoreInformationUrl" xml:space="preserve">
+    <value>http://go.microsoft.com/fwlink/?LinkId=506955</value>
+    <comment>Link to the blog post announcing this tool's release</comment>
+  </data>
+  <data name="TargetPlatformVersionFormat" xml:space="preserve">
+    <value>Target platform {0} {1}.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="InvalidPlatformSelectedFormat" xml:space="preserve">
+    <value>Invalid platform {0} selected.</value>
+  </data>
+  <data name="ClickToRefreshPlatforms" xml:space="preserve">
+    <value>Click to refresh platforms</value>
+  </data>
+  <data name="TargetSelectionGuidance" xml:space="preserve">
+    <value>To select platforms, visit Tools-&gt;Options-&gt;.NET Portability Analyzer.</value>
+  </data>
+  <data name="UsingDefaultTargets" xml:space="preserve">
+    <value>Using default target platforms.</value>
+  </data>
+  <data name="FailedToLocateBuildOutputDir" xml:space="preserve">
+    <value>Failed to locate build output directory.</value>
+  </data>
+  <data name="CopyrightFormat" xml:space="preserve">
+    <value>Microsoft (R) .NET Portability Analyzer {0} (alpha)
+Copyright (C) Microsoft Corporation. All rights reserved.</value>
+    <comment>Printed in the output window before analysis</comment>
+  </data>
+  <data name="SubmissionId" xml:space="preserve">
+    <value>Submission ID:</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>An unknown error occured.</value>
+  </data>
+  <data name="CannotViewReport" xml:space="preserve">
+    <value>Cannot view report because browser service is null.</value>
+  </data>
+  <data name="ListItem" xml:space="preserve">
+    <value>* {0}</value>
+  </data>
+  <data name="ReportLocation" xml:space="preserve">
+    <value>Report written to '{0}'</value>
+  </data>
+</root>
