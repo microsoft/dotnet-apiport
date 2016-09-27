@@ -108,9 +108,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApiPort.VS2013\ApiPort.VS2013.csproj">
-      <Project>{D15030D8-CFC5-4F05-8987-784326856E90}</Project>
-      <Name>ApiPort.VS2013</Name>
+    <ProjectReference Include="..\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj">
+      <Project>{d15030d8-cfc5-4f05-8987-784326856e90}</Project>
+      <Name>ApiPort.VisualStudio</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>

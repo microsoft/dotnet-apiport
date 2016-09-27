@@ -131,7 +131,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ApiPort.VS2013\ApiPort.VS2013.csproj">
+    <ProjectReference Include="..\..\src\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj">
       <Project>{d15030d8-cfc5-4f05-8987-784326856e90}</Project>
       <Name>ApiPort.VS2013</Name>
     </ProjectReference>
