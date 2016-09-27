@@ -200,7 +200,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
 
             Assert.Equal(expected.Value, actual);
         }
-        
+
         /// <summary>
         /// Provides an easy mock to inject breaking changes into AncestorApiRecommendations
         /// </summary>

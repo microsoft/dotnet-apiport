@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Views;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Views;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -16,23 +19,23 @@ namespace ApiPortVS
     [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "Target Platforms", 0, 0, true)] // TODO how to localize?
     public class ApiPortVSPackage : Package
     {
-        private static ServiceProvider _serviceProvider;
+        private static ServiceProvider s_serviceProvider;
 
         private readonly AssemblyRedirects _assemblyRedirects;
 
-        internal static IServiceProvider LocalServiceProvider { get { return _serviceProvider; } }
+        internal static IServiceProvider LocalServiceProvider { get { return s_serviceProvider; } }
 
         public ApiPortVSPackage() : base()
         {
-            _serviceProvider = new ServiceProvider(this);
-            _assemblyRedirects = _serviceProvider.GetService(typeof(AssemblyRedirects)) as AssemblyRedirects;
+            s_serviceProvider = new ServiceProvider(this);
+            _assemblyRedirects = s_serviceProvider.GetService(typeof(AssemblyRedirects)) as AssemblyRedirects;
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         protected override void Dispose(bool disposing)
         {
-            _serviceProvider.Dispose();
+            s_serviceProvider.Dispose();
 
             base.Dispose(disposing);
         }

@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Contracts;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.VisualStudio.Shell;

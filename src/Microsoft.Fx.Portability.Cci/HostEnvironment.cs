@@ -222,7 +222,7 @@ namespace Microsoft.Cci.Extensions
             if (_coreAssemblyIdentity != null)
                 return _coreAssemblyIdentity;
 
-            AssemblyIdentity baseCoreAssemblyIdentity =  base.GetCoreAssemblySymbolicIdentity();
+            AssemblyIdentity baseCoreAssemblyIdentity = base.GetCoreAssemblySymbolicIdentity();
 
             // Try to find the assembly which believes itself is the core assembly
             foreach (var assembly in this.LoadedUnits.OfType<IAssembly>())

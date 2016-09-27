@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Contracts;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using EnvDTE;
@@ -125,7 +128,5 @@ namespace ApiPortVS.Analyze
             // Outside the finally because it will obscure errors reported on the output window
             _errorList.BringToFront();
         }
-
-
     }
 }

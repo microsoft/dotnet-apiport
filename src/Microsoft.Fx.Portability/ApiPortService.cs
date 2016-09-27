@@ -108,7 +108,7 @@ namespace Microsoft.Fx.Portability
         /// <param name="docIds">Enumerable of DocIds</param>
         public async Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
         {
-            return await _client.CallAsync<IEnumerable<string>, 
+            return await _client.CallAsync<IEnumerable<string>,
                 IReadOnlyCollection<ApiInformation>>(HttpMethod.Post, Endpoints.FxApi, docIds);
         }
 

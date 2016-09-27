@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -37,12 +40,12 @@ namespace ApiPortVS
             Func<string, XName> getFullName = (name) => { return XName.Get(name, "urn:schemas-microsoft-com:asm.v1"); };
 
             var redirects = from element in xml.Descendants(getFullName("dependentAssembly"))
-                                      let identity = element.Element(getFullName("assemblyIdentity"))
-                                      let redirect = element.Element(getFullName("bindingRedirect"))
-                                      let name = identity.Attribute("name").Value
-                                      let publicKey = identity.Attribute("publicKeyToken").Value
-                                      let newVersion = redirect.Attribute("newVersion").Value
-                                      select new AssemblyRedirect(name, newVersion, publicKey);
+                            let identity = element.Element(getFullName("assemblyIdentity"))
+                            let redirect = element.Element(getFullName("bindingRedirect"))
+                            let name = identity.Attribute("name").Value
+                            let publicKey = identity.Attribute("publicKeyToken").Value
+                            let newVersion = redirect.Attribute("newVersion").Value
+                            select new AssemblyRedirect(name, newVersion, publicKey);
 
             _redirects = redirects;
             _redirectsDictionary = redirects.ToDictionary(x => x.Name);

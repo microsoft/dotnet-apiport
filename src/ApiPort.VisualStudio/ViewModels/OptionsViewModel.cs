@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Models;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Models;
 using ApiPortVS.Resources;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
@@ -15,10 +18,10 @@ namespace ApiPortVS.ViewModels
         private readonly ITargetMapper _targetMapper;
         private readonly OptionsModel _optionsModel;
 
-        private bool canRefresh; 
-        private bool updating;
-        private bool saveMetadata;
-        private string status;
+        private bool _canRefresh;
+        private bool _updating;
+        private bool _saveMetadata;
+        private string _status;
 
         public OptionsViewModel(IApiPortService apiPort, ITargetMapper targetMapper, OptionsModel optionsModel)
         {
@@ -37,11 +40,11 @@ namespace ApiPortVS.ViewModels
         {
             get
             {
-                return canRefresh;
+                return _canRefresh;
             }
             private set
             {
-                UpdateProperty(ref canRefresh, value);
+                UpdateProperty(ref _canRefresh, value);
             }
         }
 
@@ -63,11 +66,11 @@ namespace ApiPortVS.ViewModels
         {
             get
             {
-                return saveMetadata;
+                return _saveMetadata;
             }
             set
             {
-                UpdateProperty(ref saveMetadata, value);
+                UpdateProperty(ref _saveMetadata, value);
             }
         }
 
@@ -75,11 +78,11 @@ namespace ApiPortVS.ViewModels
         {
             get
             {
-                return status;
+                return _status;
             }
             set
             {
-                UpdateProperty(ref status, value);
+                UpdateProperty(ref _status, value);
             }
         }
 
@@ -87,11 +90,11 @@ namespace ApiPortVS.ViewModels
         {
             get
             {
-                return updating;
+                return _updating;
             }
             set
             {
-                UpdateProperty(ref updating, value);
+                UpdateProperty(ref _updating, value);
             }
         }
 

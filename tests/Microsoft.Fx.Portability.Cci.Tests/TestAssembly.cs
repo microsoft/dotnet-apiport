@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -8,9 +11,9 @@ using System.Linq;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
-    class TestAssembly
+    internal class TestAssembly
     {
-        private static readonly string mscorlib = typeof(object).Assembly.Location;
+        private static readonly string s_mscorlib = typeof(object).Assembly.Location;
         private readonly string _path;
         private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
 
@@ -49,7 +52,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             get
             {
                 var text = GetText("EmptyProject.cs");
-                return new TestAssembly("EmptyProject", text, new[] { mscorlib }).path;
+                return new TestAssembly("EmptyProject", text, new[] { s_mscorlib }).path;
             }
         }
 
@@ -58,7 +61,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             get
             {
                 var text = GetText("WithGenericsAndReference.cs");
-                return new TestAssembly("WithGenericsAndReference", text, new[] { mscorlib, EmptyProject }).path;
+                return new TestAssembly("WithGenericsAndReference", text, new[] { s_mscorlib, EmptyProject }).path;
             }
         }
 

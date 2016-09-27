@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Resources;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
@@ -123,7 +126,7 @@ namespace ApiPortVS.Analyze
 
             // TODO: Support multiple reports in VS extension
             var filename = result.FirstOrDefault();
-            
+
             if (string.IsNullOrEmpty(filename))
             {
                 var issues = _reporter.Issues.ToArray();

@@ -16,7 +16,7 @@ namespace Microsoft.Fx.Portability
     public static class DataExtensions
     {
         private const int DefaultBufferSize = 1024;
-        private static readonly Encoding DefaultEncoding = Encoding.UTF8;
+        private static readonly Encoding s_defaultEncoding = Encoding.UTF8;
 
         public static JsonSerializerSettings JsonSettings { get; } = new JsonSerializerSettings
         {
@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability
         /// <param name="leaveOpen">true to leave the stream open; false otherwise</param>
         public static void Serialize<T>(this T data, Stream outputStream, bool leaveOpen)
         {
-            using (var writer = new StreamWriter(outputStream, DefaultEncoding, DefaultBufferSize, leaveOpen))
+            using (var writer = new StreamWriter(outputStream, s_defaultEncoding, DefaultBufferSize, leaveOpen))
             {
                 Serializer.Serialize(writer, data);
             }
@@ -96,7 +96,7 @@ namespace Microsoft.Fx.Portability
         /// <returns></returns>
         public static async Task CompressAsync(this Stream inputStream, Stream outputStream, bool leaveOpen)
         {
-            using (var reader = new BinaryReader(inputStream, DefaultEncoding, leaveOpen))
+            using (var reader = new BinaryReader(inputStream, s_defaultEncoding, leaveOpen))
             using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen))
             {
                 reader.BaseStream.Seek(0, SeekOrigin.Begin);

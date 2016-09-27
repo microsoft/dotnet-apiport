@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Resources;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Resources;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
@@ -11,7 +14,7 @@ namespace ApiPortVS
 {
     public class AnalysisOptions : IApiPortOptions
     {
-		internal const string DefaultReportFilename = "PortabilityAnalysis.html";
+        internal const string DefaultReportFilename = "PortabilityAnalysis.html";
 
         public string Description { get; private set; }
         public IEnumerable<IAssemblyFile> InputAssemblies { get; private set; }

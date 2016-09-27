@@ -1,8 +1,11 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 
 namespace ApiPortVS
 {
-    static class Guids
+    internal static class Guids
     {
         public const string ApiPortVSPkgString = "05b3d9f1-6699-4f10-a9e4-da2ed1248523";
         public const string AnalyzeMenuItemCmdSetString = "d4c08529-d7a0-4ee1-8093-fb5d4b54e36c";

@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Analyze;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Analyze;
 using ApiPortVS.Contracts;
 using ApiPortVS.Models;
 using ApiPortVS.Reporting;
@@ -22,7 +25,7 @@ namespace ApiPortVS
         private const string DefaultEndpoint = @"https://portability.dot.net/";
         private const string AppConfig = "app.config";
 
-        private static readonly string AppConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), AppConfig);
+        private static readonly string s_appConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), AppConfig);
 
         private readonly IContainer _container;
 
@@ -41,7 +44,7 @@ namespace ApiPortVS
             builder.RegisterType<VsBrowserReportViewer>()
                 .As<IReportViewer>()
                 .SingleInstance();
-            builder.Register(x => new AssemblyRedirects(AppConfigFilePath))
+            builder.Register(x => new AssemblyRedirects(s_appConfigFilePath))
                 .AsSelf()
                 .SingleInstance()
                 .AutoActivate();

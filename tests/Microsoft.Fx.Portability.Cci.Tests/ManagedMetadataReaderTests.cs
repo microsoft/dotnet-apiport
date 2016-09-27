@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,25 +12,25 @@ namespace Microsoft.Fx.Portability.Cci.Tests
     [TestClass]
     public class ManagedMetadataReaderTests
     {
-        private readonly static string EmptyProjectPath = TestAssembly.EmptyProject;
-        private readonly static string WithGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
+        private readonly static string s_emptyProjectPath = TestAssembly.EmptyProject;
+        private readonly static string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
 
         [TestMethod]
         public void EmptyProject()
         {
-            CompareFinders(EmptyProjectPath);
+            CompareFinders(s_emptyProjectPath);
         }
 
         [TestMethod]
         public void WithGenericsAndReference()
         {
-            CompareFinders(WithGenericsAndReferencePath);
+            CompareFinders(s_withGenericsAndReferencePath);
         }
 
         [TestMethod]
         public void WithGenericsAndReferenceAndEmptyProject()
         {
-            CompareFinders(WithGenericsAndReferencePath, EmptyProjectPath);
+            CompareFinders(s_withGenericsAndReferencePath, s_emptyProjectPath);
         }
 
         private static void CompareFinders(params string[] paths)
