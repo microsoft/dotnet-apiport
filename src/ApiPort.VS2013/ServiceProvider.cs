@@ -13,12 +13,16 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace ApiPortVS
 {
     internal sealed class ServiceProvider : IDisposable, IServiceProvider
     {
         private const string DefaultEndpoint = @"https://portability.dot.net/";
+        private const string AppConfig = "app.config";
+
+        private static readonly string AppConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), AppConfig);
 
         private readonly IContainer _container;
 
@@ -37,6 +41,10 @@ namespace ApiPortVS
             builder.RegisterType<VsBrowserReportViewer>()
                 .As<IReportViewer>()
                 .SingleInstance();
+            builder.Register(x => new AssemblyRedirects(AppConfigFilePath))
+                .AsSelf()
+                .SingleInstance()
+                .AutoActivate();
 
             // Service registration
             builder.RegisterInstance(new ProductInformation("ApiPort_VS"))
