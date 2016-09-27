@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-	<NugetTarget>dotnet</NugetTarget>
+	<NugetTarget>netstandard1.3</NugetTarget>
 	<IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>

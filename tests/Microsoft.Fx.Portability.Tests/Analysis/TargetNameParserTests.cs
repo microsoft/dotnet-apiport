@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.TestData;
 using System;
 using System.Linq;
+using System.Runtime.Versioning;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
@@ -67,24 +68,36 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void NonExistantSpecifiedTarget()
+        public void NonExistentSpecifiedTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             Assert.Throws<UnknownTargetException>(() => parser.MapTargetsToExplicitVersions(new string[] { "Foo" }));
         }
 
         [Fact]
-        public void NonExistantSpecifiedVersionOnKnownTarget()
+        public void NonExistentSpecifiedVersionOnKnownTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             Assert.Throws<UnknownTargetException>(() => parser.MapTargetsToExplicitVersions(new string[] { "Target 1, version=2.0" }));
         }
 
         [Fact]
-        public void NonExistantSpecifiedVersionOnKnownTargetWithAvailableTarget()
+        public void NonExistentSpecifiedVersionOnKnownTargetWithAvailableTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             Assert.Throws<UnknownTargetException>(() => parser.MapTargetsToExplicitVersions(new string[] { "Target 1, version=2.0", "Target 1, version=1.0" }));
+        }
+
+        [Fact]
+        public void NonExistentDefaultTarget()
+        {
+            var target1 = "Target 1, version=1.0";
+            var target1Framework = new FrameworkName(target1);
+
+            var parser = new TargetNameParser(new TestCatalog(), $"TargetNonExistent, version=4.0;{target1}");
+
+            Assert.Equal(1, parser.DefaultTargets.Count());
+            Assert.Equal(target1Framework, parser.DefaultTargets.Single());
         }
     }
 }
