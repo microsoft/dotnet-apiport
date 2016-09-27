@@ -18,7 +18,7 @@ namespace ApiPortVS
 {
     internal sealed class ServiceProvider : IDisposable, IServiceProvider
     {
-        private const string DefaultEndpoint = @"https://portability.cloudapp.net/";
+        private const string DefaultEndpoint = @"https://portability.dot.net/";
 
         private readonly IContainer _container;
 
