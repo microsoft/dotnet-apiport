@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "NSubstitute": "1.9.2",
+    "NSubstitute": "1.10.0",
     "xunit": "2.1.0"
   },
   "frameworks": {
