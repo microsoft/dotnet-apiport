@@ -36,7 +36,7 @@ namespace ApiPortVS.Analyze
             _errorList = errorList;
         }
 
-        public async Task AnalyzeProjectAsync(Project project, string reportFileName)
+        public async Task AnalyzeProjectAsync(Project project)
         {
             var buildSucceeded = await BuildProjectAsync(project);
             if (!buildSucceeded)
@@ -51,7 +51,7 @@ namespace ApiPortVS.Analyze
             var targetAssemblies = project.GetAssemblyPaths();
 
             // This call writes the portability reports
-            var reportPaths = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, project.GetProjectFileDirectory(), reportFileName);
+            var reportPaths = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter);
 
             foreach (var reportPath in reportPaths)
             {

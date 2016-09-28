@@ -23,6 +23,8 @@ namespace ApiPortVS.Models
 
         private IList<SelectedResultFormat> _formats;
         private IList<TargetPlatform> _platforms;
+        private string _outputDirectory;
+        private string _defaultOutputName;
 
         static OptionsModel()
         {
@@ -36,6 +38,9 @@ namespace ApiPortVS.Models
         {
             _platforms = Array.Empty<TargetPlatform>();
             _formats = Array.Empty<SelectedResultFormat>();
+            _defaultOutputName = "ApiPortAnalysis";
+
+            OutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
         }
 
         public IList<SelectedResultFormat> Formats
@@ -48,6 +53,29 @@ namespace ApiPortVS.Models
         {
             get { return _platforms; }
             set { UpdateProperty(ref _platforms, value.ToList()); }
+        }
+
+        public string OutputDirectory
+        {
+            get { return _outputDirectory; }
+            set
+            {
+                UpdateProperty(ref _outputDirectory, value);
+
+                if (!Directory.Exists(_outputDirectory))
+                {
+                    Directory.CreateDirectory(_outputDirectory);
+                }
+            }
+        }
+
+        public string DefaultOutputName
+        {
+            get { return _defaultOutputName; }
+            set
+            {
+                UpdateProperty(ref _defaultOutputName, value);
+            }
         }
 
         public static OptionsModel Load()

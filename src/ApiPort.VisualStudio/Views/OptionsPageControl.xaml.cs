@@ -43,5 +43,20 @@ namespace ApiPortVS.Views
         {
             await ViewModel.UpdateAsync();
         }
+
+        private void UpdateDirectoryClick(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.SelectedPath = ViewModel.OutputDirectory;
+
+                var result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    ViewModel.OutputDirectory = dialog.SelectedPath;
+                }
+            }
+        }
     }
 }
