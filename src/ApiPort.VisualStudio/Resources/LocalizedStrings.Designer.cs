@@ -287,6 +287,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Portability Analysis.
+        /// </summary>
+        public static string PortabilityOutputTitle {
+            get {
+                return ResourceManager.GetString("PortabilityOutputTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recommended changes.
         /// </summary>
         public static string RecommendedChanges {

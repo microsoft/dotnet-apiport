@@ -4,6 +4,7 @@
 using ApiPortVS.Analyze;
 using ApiPortVS.Contracts;
 using ApiPortVS.Models;
+using ApiPortVS.Resources;
 using ApiPortVS.Reporting;
 using ApiPortVS.SourceMapping;
 using ApiPortVS.ViewModels;
@@ -18,10 +19,14 @@ using System;
 using System.IO;
 using System.Reflection;
 
+using static Microsoft.VisualStudio.VSConstants;
+
 namespace ApiPortVS
 {
     internal sealed class ServiceProvider : IDisposable, IServiceProvider
     {
+        private static Guid OutputWindowGuid = new Guid(0xe2fc797f, 0x1dd3, 0x476c, 0x89, 0x17, 0x86, 0xcd, 0x31, 0x33, 0xc4, 0x69);
+
         private const string DefaultEndpoint = @"https://portability.dot.net/";
         private const string AppConfig = "app.config";
 
@@ -75,7 +80,7 @@ namespace ApiPortVS
             builder.RegisterType<ReportGenerator>()
                 .As<IReportGenerator>()
                 .SingleInstance();
-            builder.Register(CreateOutputTextWriter)
+            builder.RegisterType<OutputWindowWriter>()
                 .As<TextWriter>()
                 .SingleInstance();
             builder.RegisterType<TextWriterProgressReporter>()
@@ -84,6 +89,21 @@ namespace ApiPortVS
             builder.RegisterType<ReportFileWriter>()
                 .As<IFileWriter>()
                 .SingleInstance();
+            builder.RegisterAdapter<IServiceProvider, IVsOutputWindowPane>(provider =>
+            {
+                var outputWindow = serviceProvider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
+                if (outputWindow.CreatePane(ref OutputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
+                {
+                    IVsOutputWindowPane windowPane;
+                    if (outputWindow.GetPane(ref OutputWindowGuid, out windowPane) == S_OK)
+                    {
+                        return windowPane;
+                    }
+                }
+
+                // If a custom window couldn't be opened, open the general purpose window
+                return serviceProvider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
+            }).SingleInstance();
 
             // Register menu handlers
             builder.RegisterType<AnalyzeMenu>()
@@ -123,14 +143,6 @@ namespace ApiPortVS
         public void Dispose()
         {
             _container.Dispose();
-        }
-
-        private TextWriter CreateOutputTextWriter(IComponentContext arg)
-        {
-            var serviceProvider = arg.Resolve<IServiceProvider>();
-            var windowPane = serviceProvider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
-
-            return windowPane == null ? TextWriter.Null : new OutputWindowWriter(windowPane);
         }
     }
 }
