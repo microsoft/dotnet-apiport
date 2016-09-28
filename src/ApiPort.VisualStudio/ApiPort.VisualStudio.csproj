@@ -257,7 +257,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="ApiPort.VS2013.vsct">
+    <VSCTCompile Include="ApiPort.VisualStudio.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
     </VSCTCompile>

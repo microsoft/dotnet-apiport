@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidApiPortVSPkg">
+    <Groups>
+
+      <Group guid="guidAnalyzeMenuItemCmdSet" id="AnalyzeMenuGroup" priority="0x0600">
+        <Parent guid="guidAnalyzeMenuGroup" id="IDM_DIAG_TOPLEVELMENU"/>
+      </Group>
+
+      <Group guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
+      </Group>
+
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidAnalyzeMenuItemCmdSet" id="CmdIdAnalyzeMenuItem" priority="0x0100" type="Button">
+        <Parent guid="guidAnalyzeMenuItemCmdSet" id="AnalyzeMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
+        <Strings>
+          <ButtonText>Analyze Assembly Portability...</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid ="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextMenuItem" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_ANALYZE_GENERAL"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Analyze Assembly Portability</ButtonText>
+        </Strings>
+      </Button>
+
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
+
+    </Bitmaps>
+
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidApiPortVSPkg" value="{05b3d9f1-6699-4f10-a9e4-da2ed1248523}" />
+
+    <GuidSymbol name="guidAnalyzeMenuItemCmdSet" value="{d4c08529-d7a0-4ee1-8093-fb5d4b54e36c}">
+      <IDSymbol name="AnalyzeMenuGroup" value="0x1020" />
+      <IDSymbol name="CmdIdAnalyzeMenuItem" value="0x0100" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidProjectContextMenuItemCmdSet" value="{5AD32A4E-F8D4-4675-9914-CD514C32FF6D}">
+      <IDSymbol name="ProjectContextMenuGroup" value="0x1021"/>
+      <IDSymbol name="CmdIdProjectContextMenuItem" value="0x0101"/>
+    </GuidSymbol>
+
+    <GuidSymbol name="guidAnalyzeMenuGroup" value="{CD68F8E6-2842-4F7E-AF7B-5A019631CEB5}">
+      <IDSymbol name="IDM_DIAG_TOPLEVELMENU" value="0x0001"/>
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{9a75ef23-d009-41db-8393-159d9af28483}" >
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>
