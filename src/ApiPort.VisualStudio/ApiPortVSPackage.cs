@@ -50,15 +50,29 @@ namespace ApiPortVS
             {
                 var menuInitializer = LocalServiceProvider.GetService(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
-                CommandID menuCommandID = new CommandID(Guids.analyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeMenuItem);
-                MenuCommand menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, menuCommandID);
+                CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeMenuItem);
+                MenuCommand menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, anazlyMenuCommandID);
                 mcs.AddCommand(menuItem);
 
-                CommandID contextMenuCmdId = new CommandID(Guids.projectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
-                OleMenuCommand contextMenuItem = new OleMenuCommand(menuInitializer.ContextMenuItemCallback, contextMenuCmdId);
-                contextMenuItem.BeforeQueryStatus += menuInitializer.ContextMenuItem_BeforeQueryStatus;
+                CommandID analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeOptionsMenuItem);
+                MenuCommand analyzeMenuOptionsItem = new MenuCommand(ShowOptionsPage, analyzeMenuOptionsCommandID);
+                mcs.AddCommand(analyzeMenuOptionsItem);
+
+                CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
+                OleMenuCommand contextMenuItem = new OleMenuCommand(menuInitializer.ContextMenuItemCallback, projectContextMenuCmdId);
+                contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
+
+                CommandID projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextOptionsMenuItem);
+                OleMenuCommand contextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, projectContextMenuOptionsCmdId);
+                contextMenuOptionsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
+                mcs.AddCommand(contextMenuOptionsItem);
             }
+        }
+
+        private void ShowOptionsPage(object sender, EventArgs e)
+        {
+            ShowOptionPage(typeof(OptionsPage));
         }
 
         /// <summary>

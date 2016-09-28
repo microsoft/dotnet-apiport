@@ -23,16 +23,33 @@
         <Parent guid="guidAnalyzeMenuItemCmdSet" id="AnalyzeMenuGroup" />
         <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
-          <ButtonText>Analyze Assembly Portability...</ButtonText>
+          <ButtonText>Analyze Assembly Portability</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidAnalyzeMenuItemCmdSet" id="CmdIdAnalyzeOptionsMenuItem" priority="0x0101" type="Button">
+        <Parent guid="guidAnalyzeMenuItemCmdSet" id="AnalyzeMenuGroup" />
+        <Strings>
+          <ButtonText>Portability Analyzer Settings</ButtonText>
         </Strings>
       </Button>
 
       <Button guid ="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextMenuItem" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_ANALYZE_GENERAL"/>
+        <Parent guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup"/>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Analyze Assembly Portability</ButtonText>
+        </Strings>
+      </Button>
+
+
+      <Button guid ="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextOptionsMenuItem" priority="0x0101" type="Button">
+        <Parent guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Portability Analyzer Settings</ButtonText>
         </Strings>
       </Button>
 
@@ -51,13 +68,16 @@
     <GuidSymbol name="guidAnalyzeMenuItemCmdSet" value="{d4c08529-d7a0-4ee1-8093-fb5d4b54e36c}">
       <IDSymbol name="AnalyzeMenuGroup" value="0x1020" />
       <IDSymbol name="CmdIdAnalyzeMenuItem" value="0x0100" />
+      <IDSymbol name="CmdIdAnalyzeOptionsMenuItem" value="0x0101" />
     </GuidSymbol>
 
     <GuidSymbol name="guidProjectContextMenuItemCmdSet" value="{5AD32A4E-F8D4-4675-9914-CD514C32FF6D}">
       <IDSymbol name="ProjectContextMenuGroup" value="0x1021"/>
-      <IDSymbol name="CmdIdProjectContextMenuItem" value="0x0101"/>
+      <IDSymbol name="CmdIdProjectContextMenuItem" value="0x0200"/>
+      <IDSymbol name="CmdIdProjectContextOptionsMenuItem" value="0x0201"/>
     </GuidSymbol>
 
+    <!-- The symbol for the Analyze menu is not built in so this allows us to add buttons to that menu -->
     <GuidSymbol name="guidAnalyzeMenuGroup" value="{CD68F8E6-2842-4F7E-AF7B-5A019631CEB5}">
       <IDSymbol name="IDM_DIAG_TOPLEVELMENU" value="0x0001"/>
     </GuidSymbol>

@@ -65,7 +65,7 @@ namespace ApiPortVS
         // called when the project-level context menu is about to be displayed,
         // i.e. the user has right-clicked a single project in the solution explorer
         // (the command is sited in a menu which only appears on single selections)
-        public void ContextMenuItem_BeforeQueryStatus(object sender, EventArgs e)
+        public void ProjectContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
         {
             var menuItem = sender as Microsoft.VisualStudio.Shell.OleMenuCommand;
             if (menuItem == null)

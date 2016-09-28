@@ -11,7 +11,7 @@ namespace ApiPortVS
         public const string AnalyzeMenuItemCmdSetString = "d4c08529-d7a0-4ee1-8093-fb5d4b54e36c";
         public const string ProjectContextMenuItemCmdSetString = "5AD32A4E-F8D4-4675-9914-CD514C32FF6D";
 
-        public static readonly Guid analyzeMenuItemCmdSet = new Guid(AnalyzeMenuItemCmdSetString);
-        public static readonly Guid projectContextMenuItemCmdSet = new Guid(ProjectContextMenuItemCmdSetString);
+        public static readonly Guid AnalyzeMenuItemCmdSet = new Guid(AnalyzeMenuItemCmdSetString);
+        public static readonly Guid ProjectContextMenuItemCmdSet = new Guid(ProjectContextMenuItemCmdSetString);
     }
 }

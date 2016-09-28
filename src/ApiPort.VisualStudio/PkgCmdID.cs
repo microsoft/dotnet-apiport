@@ -7,8 +7,9 @@ namespace ApiPortVS
 {
     internal static class PkgCmdIDList
     {
-        public const uint CmdIdAnalyzeMenuItem = 0x100;
-        public const uint CmdIdProjectContextMenuItem = 0x101;
-        public const uint CmdIdCalculateCodeMetricsForProject = 0x103;
+        public const uint CmdIdAnalyzeMenuItem = 0x0100;
+        public const uint CmdIdAnalyzeOptionsMenuItem = 0x0101;
+        public const uint CmdIdProjectContextMenuItem = 0x0200;
+        public const uint CmdIdProjectContextOptionsMenuItem = 0x0201;
     };
 }
