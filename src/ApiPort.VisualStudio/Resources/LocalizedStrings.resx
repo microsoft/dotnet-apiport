@@ -213,6 +213,9 @@
   <data name="PdbNotFoundFormat" xml:space="preserve">
     <value>Failed: PDB {0} not found.</value>
   </data>
+  <data name="PortabilityOutputTitle" xml:space="preserve">
+    <value>Portability Analysis</value>
+  </data>
   <data name="HtmlReportTitle" xml:space="preserve">
     <value>.NET Portability Report</value>
   </data>
