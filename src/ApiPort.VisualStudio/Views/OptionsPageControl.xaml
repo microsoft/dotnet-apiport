@@ -6,38 +6,86 @@
              xmlns:const="clr-namespace:ApiPortVS.Resources"
              xmlns:utils="clr-namespace:ApiPortVS.Utils"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" >
+             d:DesignHeight="283.5" d:DesignWidth="640" >
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <utils:HideWhenTrueBoolConverter x:Key="HideWhenTrue" />
+    </UserControl.Resources>
 
     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" KeyboardNavigation.ControlTabNavigation="Local">
 
-        <StackPanel Margin="0,10,10,5" DockPanel.Dock="Bottom" MinHeight="10" KeyboardNavigation.IsTabStop="False">
-            <TextBlock FontSize="11">
-                    <TextBlock Background="Transparent" Text="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}"/>
-                    <Hyperlink Name="GuidanceLink" RequestNavigate="Hyperlink_RequestNavigate"
-                               AutomationProperties.Name="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}">
-                        <TextBlock Text="{x:Static const:LocalizedStrings.MoreInformationUrl}"
-                                   KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
-                    </Hyperlink>
-                </TextBlock>
-        </StackPanel>
+        <TextBlock DockPanel.Dock="Top" FontSize="11" Foreground="Red"
+                   Text="{x:Static const:LocalizedStrings.UnableToContactService}" 
+                   Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"/>
+        
+        <Grid Margin="0,10,10,5" DockPanel.Dock="Bottom" MinHeight="10" HorizontalAlignment="Stretch" KeyboardNavigation.IsTabStop="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" FontSize="11" HorizontalAlignment="Left"
+                Visibility="{Binding UpdatingPlatforms, Converter={StaticResource HideWhenTrue}}">
+               <Hyperlink Click="RefreshRequested"
+                          AutomationProperties.Name="{x:Static const:LocalizedStrings.Refresh}">
+                  <TextBlock Text="{x:Static const:LocalizedStrings.Refresh}"
+                    ToolTip="{x:Static const:LocalizedStrings.Refresh}"
+                    KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1" />
+               </Hyperlink>
+            </TextBlock>
+
+            <TextBlock Grid.Column="2" FontSize="11" HorizontalAlignment="Right">
+                <TextBlock Background="Transparent" Text="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}"/>
+                <Hyperlink Name="GuidanceLink" RequestNavigate="MoreInformationRequested"
+                           AutomationProperties.Name="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}">
+                    <TextBlock Text="{x:Static const:LocalizedStrings.MoreInformationUrl}"
+                               KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+
+        <GroupBox Header="{x:Static const:LocalizedStrings.OutputFormats}" BorderBrush="LightGray" IsTabStop="False" DockPanel.Dock="Top">
+            <DockPanel>
+                <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}" 
+                       Text="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
+                       KeyboardNavigation.IsTabStop="false" KeyboardNavigation.TabIndex="0" Margin="0,5,0,5"/>
+
+                <ItemsControl ItemsSource="{Binding Path=Formats, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Background="Transparent" BorderBrush="Transparent"
+                                  Visibility="{Binding Path=UpdatingPlatforms, Mode=OneWay, Converter={StaticResource HideWhenTrue}}"
+                                  KeyboardNavigation.IsTabStop="False">
+
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Control.Margin" Value="5,5,0,0" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding DisplayName}"
+                                     KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
+                                     Padding="3,0,10,3"
+                                     AutomationProperties.Name="{Binding NarrationString}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </GroupBox>
 
         <GroupBox Header="{x:Static const:LocalizedStrings.TargetPlatforms}" BorderBrush="LightGray" IsTabStop="False" DockPanel.Dock="Top">
             <DockPanel>
-                <DockPanel.Resources>
-                    <BooleanToVisibilityConverter x:Key="BoolToVis" />
-                    <utils:HideWhenTrueBoolConverter x:Key="HideWhenTrue" />
-                </DockPanel.Resources>
-
-                <StackPanel Width="Auto">
-                    <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVis}}" Text="{Binding Status}"
-                           AutomationProperties.Name="{Binding Status}"
-                           KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0" Margin="0,5,0,5"/>
-                    <Button Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVis}}"
-                            IsEnabled="{Binding CanRefresh}"
-                            Content="{x:Static const:LocalizedStrings.Retry}" Click="Button_Click"
-                            ToolTip="{x:Static const:LocalizedStrings.ClickToRefreshPlatforms}"
-                            KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1" HorizontalAlignment="Left" />
-                </StackPanel>
+                <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}" 
+                       Text="{x:Static const:LocalizedStrings.RefreshingPlatforms}"
+                       KeyboardNavigation.IsTabStop="false" KeyboardNavigation.TabIndex="0" Margin="0,5,0,5"/>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto" KeyboardNavigation.IsTabStop="False" IsTabStop="False">
                     <ItemsControl ItemsSource="{Binding Path=Targets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

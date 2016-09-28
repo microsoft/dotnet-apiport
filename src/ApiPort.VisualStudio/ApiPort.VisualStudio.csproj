@@ -31,7 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
@@ -195,6 +196,7 @@
     <Compile Include="Contracts\ISourceLineMapper.cs" />
     <Compile Include="Contracts\ISourceMappedItem.cs" />
     <Compile Include="Models\OptionsModel.cs" />
+    <Compile Include="Models\SelectedResultFormat.cs" />
     <Compile Include="NotifyPropertyBase.cs" />
     <Compile Include="SourceLineMapperExtensions.cs" />
     <Compile Include="SourceMapping\CciSourceLineMapper.cs" />

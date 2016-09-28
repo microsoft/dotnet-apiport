@@ -16,7 +16,7 @@ namespace ApiPortVS
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)] // load when a solution is opened
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "Target Platforms", 0, 0, true)] // TODO how to localize?
+    [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "General", 110, 113, true)]
     public class ApiPortVSPackage : Package
     {
         private static ServiceProvider s_serviceProvider;

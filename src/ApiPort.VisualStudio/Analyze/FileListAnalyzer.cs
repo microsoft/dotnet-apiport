@@ -31,9 +31,9 @@ namespace ApiPortVS.Analyze
         {
             // write report to same directory as input
             var dirForReport = _fileSystem.GetDirectoryNameFromPath(inputAssemblyPaths.First());
-            var reportPath = await WriteAnalysisReportAsync(inputAssemblyPaths, _reportWriter, dirForReport, reportFileName);
+            var reportPaths = await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, dirForReport, reportFileName);
 
-            if (!string.IsNullOrEmpty(reportPath))
+            foreach (var reportPath in reportPaths)
             {
                 _reportViewer.View(reportPath);
             }

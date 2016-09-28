@@ -44,7 +44,7 @@ namespace ApiPortVS.Analyze
             var paths = assemblyPaths.Select(t => new AssemblyFile(t));
             var dependencyInfo = _dependencyFinder.FindDependencies(paths, _reporter);
 
-            var analysisOptions = await GetApiPortOptions(assemblyPaths, "json");
+            var analysisOptions = await GetApiPortOptions(assemblyPaths, new[] { "json" });
 
             var request = GenerateRequest(analysisOptions, dependencyInfo);
             var result = await GetResultsAsync(request, dependencyInfo);
@@ -109,25 +109,20 @@ namespace ApiPortVS.Analyze
                 }
             }
         }
-        protected async Task<string> WriteAnalysisReportAsync(
+
+        protected async Task<IEnumerable<string>> WriteAnalysisReportsAsync(
             IEnumerable<string> assemblyPaths,
             IFileWriter reportWriter,
             string reportDirectory,
             string reportFileName)
         {
-            // TODO: This is currently hard coded - we should expose a way to ask for more types of reports
-            var outputFormat = "html";
-
-            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormat, Path.Combine(reportDirectory, reportFileName));
-
+            var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
+            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, Path.Combine(reportDirectory, reportFileName));
             var issuesBefore = _reporter.Issues.Count;
 
             var result = await _client.WriteAnalysisReportsAsync(analysisOptions);
 
-            // TODO: Support multiple reports in VS extension
-            var filename = result.FirstOrDefault();
-
-            if (string.IsNullOrEmpty(filename))
+            if (!result.Any())
             {
                 var issues = _reporter.Issues.ToArray();
 
@@ -138,10 +133,13 @@ namespace ApiPortVS.Analyze
             }
             else
             {
-                _outputWindow.WriteLine(LocalizedStrings.ListItem, string.Format(LocalizedStrings.ReportLocation, filename));
+                foreach (var filename in result)
+                {
+                    _outputWindow.WriteLine(LocalizedStrings.ListItem, string.Format(LocalizedStrings.ReportLocation, filename));
+                }
             }
 
-            return filename;
+            return result;
         }
 
         protected void SelectPlatformsFromReportingResult(ReportingResult analysis)
@@ -162,11 +160,11 @@ namespace ApiPortVS.Analyze
             }
         }
 
-        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, string format, string reportFileName = AnalysisOptions.DefaultReportFilename)
+        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, string reportFileName = AnalysisOptions.DefaultReportFilename)
         {
-            var invalidPlatforms = await _optionsViewModel.UpdateTargets();
+            await _optionsViewModel.UpdateAsync();
 
-            foreach (var invalidPlatform in invalidPlatforms)
+            foreach (var invalidPlatform in _optionsViewModel.InvalidTargets)
             {
                 if (invalidPlatform.Versions.Any(v => v.IsSelected))
                 {
@@ -193,7 +191,7 @@ namespace ApiPortVS.Analyze
                 description,
                 assemblyPaths,
                 targets.SelectMany(_targetMapper.GetNames),
-                format,
+                formats,
                 !_optionsViewModel.SaveMetadata,
                 reportFileName);
         }

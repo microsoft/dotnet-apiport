@@ -21,6 +21,7 @@ namespace ApiPortVS.Models
 
         public static readonly string OptionsFilePath;
 
+        private IList<SelectedResultFormat> _formats;
         private IList<TargetPlatform> _platforms;
 
         static OptionsModel()
@@ -33,19 +34,20 @@ namespace ApiPortVS.Models
 
         public OptionsModel()
         {
-            _platforms = new List<TargetPlatform>();
+            _platforms = Array.Empty<TargetPlatform>();
+            _formats = Array.Empty<SelectedResultFormat>();
+        }
+
+        public IList<SelectedResultFormat> Formats
+        {
+            get { return _formats; }
+            set { UpdateProperty(ref _formats, value); }
         }
 
         public IList<TargetPlatform> Platforms
         {
-            get
-            {
-                return _platforms;
-            }
-            set
-            {
-                UpdateProperty(ref _platforms, value.ToList());
-            }
+            get { return _platforms; }
+            set { UpdateProperty(ref _platforms, value.ToList()); }
         }
 
         public static OptionsModel Load()
