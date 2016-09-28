@@ -50,10 +50,10 @@ namespace ApiPortVS.Analyze
             //var targetAssemblies = project.GetAssemblyPaths(GetAllAssembliesInDirectory);
             var targetAssemblies = project.GetAssemblyPaths();
 
-            // This call writes the HTML portability report
-            var reportPath = await WriteAnalysisReportAsync(targetAssemblies, _reportWriter, project.GetProjectFileDirectory(), reportFileName);
+            // This call writes the portability reports
+            var reportPaths = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, project.GetProjectFileDirectory(), reportFileName);
 
-            if (!string.IsNullOrEmpty(reportPath))
+            foreach (var reportPath in reportPaths)
             {
                 _reportViewer.View(reportPath);
             }

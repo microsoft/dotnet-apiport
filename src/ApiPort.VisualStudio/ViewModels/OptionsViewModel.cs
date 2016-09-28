@@ -18,16 +18,17 @@ namespace ApiPortVS.ViewModels
         private readonly ITargetMapper _targetMapper;
         private readonly OptionsModel _optionsModel;
 
-        private bool _canRefresh;
+        private bool _hasError;
         private bool _updating;
         private bool _saveMetadata;
-        private string _status;
 
         public OptionsViewModel(IApiPortService apiPort, ITargetMapper targetMapper, OptionsModel optionsModel)
         {
             _apiPortService = apiPort;
             _targetMapper = targetMapper;
             _optionsModel = optionsModel;
+
+            InvalidTargets = Array.Empty<TargetPlatform>();
 
 #if DEBUG
             SaveMetadata = false; // ensures telemetry from debug builds doesn't skew our data
@@ -36,129 +37,61 @@ namespace ApiPortVS.ViewModels
 #endif
         }
 
-        public bool CanRefresh
+        public IList<SelectedResultFormat> Formats
         {
-            get
+            get { return _optionsModel.Formats; }
+            set
             {
-                return _canRefresh;
-            }
-            private set
-            {
-                UpdateProperty(ref _canRefresh, value);
+                _optionsModel.Formats = value;
+                OnPropertyUpdated();
             }
         }
 
         public IList<TargetPlatform> Targets
         {
-            get
-            {
-                return _optionsModel.Platforms;
-            }
+            get { return _optionsModel.Platforms; }
             set
             {
                 _optionsModel.Platforms = value;
                 OnPropertyUpdated();
-                OnPropertyUpdated("UpdatingPlatforms");
             }
         }
 
         public bool SaveMetadata
         {
-            get
-            {
-                return _saveMetadata;
-            }
-            set
-            {
-                UpdateProperty(ref _saveMetadata, value);
-            }
-        }
-
-        public string Status
-        {
-            get
-            {
-                return _status;
-            }
-            set
-            {
-                UpdateProperty(ref _status, value);
-            }
+            get { return _saveMetadata; }
+            set { UpdateProperty(ref _saveMetadata, value); }
         }
 
         public bool UpdatingPlatforms
         {
-            get
-            {
-                return _updating;
-            }
-            set
-            {
-                UpdateProperty(ref _updating, value);
-            }
+            get { return _updating; }
+            set { UpdateProperty(ref _updating, value); }
         }
 
-        public void SaveModel()
+        public bool HasError
         {
-            _optionsModel.Save();
+            get { return _hasError; }
+            set { UpdateProperty(ref _hasError, value); }
         }
 
-        /// <summary>
-        /// Matches targets with what is available on the server and updates the options model
-        /// </summary>
-        /// <returns>Targets that were removed</returns>
-        public async Task<IEnumerable<TargetPlatform>> UpdateTargets()
+        public IList<TargetPlatform> InvalidTargets { get; set; }
+
+        public async Task UpdateAsync()
         {
             UpdatingPlatforms = true;
-            CanRefresh = false;
-            Status = LocalizedStrings.RefreshingPlatforms;
+            HasError = false;
 
             try
             {
-                var targets = await GetTargets();
-                var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t => new TargetPlatform(t));
-                var reconciledPlatforms = new List<TargetPlatform>();
-
-                foreach (var canonicalPlatform in canonicalPlatforms)
-                {
-                    var existingTargetPlatform = _optionsModel.Platforms
-                        .FirstOrDefault(t => StringComparer.OrdinalIgnoreCase.Equals(t.Name, canonicalPlatform.Name));
-
-                    var platform = (existingTargetPlatform?.Equals(canonicalPlatform) ?? false)
-                                        ? existingTargetPlatform
-                                        : canonicalPlatform;
-
-                    foreach (var alias in _targetMapper.Aliases)
-                    {
-                        foreach (var name in _targetMapper.GetNames(alias))
-                        {
-                            if (String.Equals(platform.Name, name))
-                            {
-                                platform.AlternativeNames.Add(alias);
-                            }
-                        }
-                    }
-
-                    reconciledPlatforms.Add(platform);
-                }
-
-                // This will sort the platforms on the 'Name' property 
-                reconciledPlatforms.Sort();
-
-                var invalidPlatforms = Targets.Where(p => !reconciledPlatforms.Contains(p)).ToList();
-
-                Targets = reconciledPlatforms;
+                await UpdateTargetsAsync();
+                await UpdateResultsAsync();
 
                 _optionsModel.Save();
-
-                return invalidPlatforms;
             }
             catch (PortabilityAnalyzerException)
             {
-                Status = LocalizedStrings.UnableToContactService;
-                CanRefresh = true;
-
-                return Enumerable.Empty<TargetPlatform>();
+                HasError = true;
             }
             finally
             {
@@ -166,7 +99,68 @@ namespace ApiPortVS.ViewModels
             }
         }
 
-        private async Task<IEnumerable<AvailableTarget>> GetTargets()
+        private async Task UpdateResultsAsync()
+        {
+            var formats = await _apiPortService.GetResultFormatsAsync();
+            var current = new HashSet<string>(Formats.Where(f => f.IsSelected).Select(f => f.MimeType), StringComparer.OrdinalIgnoreCase);
+
+            if (current.Count == 0)
+            {
+                const string DefaultMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+                current.Add(DefaultMimeType);
+            }
+
+            Formats = formats.Response.Select(f => new SelectedResultFormat
+            {
+                DisplayName = f.DisplayName,
+                FileExtension = f.FileExtension,
+                MimeType = f.MimeType,
+                IsSelected = current.Contains(f.MimeType)
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Matches targets with what is available on the server and updates the options model
+        /// </summary>
+        /// <returns>Targets that were removed</returns>
+        private async Task UpdateTargetsAsync()
+        {
+            var targets = await GetTargetsAsync();
+            var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t => new TargetPlatform(t));
+            var reconciledPlatforms = new List<TargetPlatform>();
+
+            foreach (var canonicalPlatform in canonicalPlatforms)
+            {
+                var existingTargetPlatform = _optionsModel.Platforms
+                    .FirstOrDefault(t => StringComparer.OrdinalIgnoreCase.Equals(t.Name, canonicalPlatform.Name));
+
+                var platform = (existingTargetPlatform?.Equals(canonicalPlatform) ?? false)
+                                    ? existingTargetPlatform
+                                    : canonicalPlatform;
+
+                foreach (var alias in _targetMapper.Aliases)
+                {
+                    foreach (var name in _targetMapper.GetNames(alias))
+                    {
+                        if (String.Equals(platform.Name, name))
+                        {
+                            platform.AlternativeNames.Add(alias);
+                        }
+                    }
+                }
+
+                reconciledPlatforms.Add(platform);
+            }
+
+            // This will sort the platforms on the 'Name' property
+            reconciledPlatforms.Sort();
+
+            InvalidTargets = Targets.Where(p => !reconciledPlatforms.Contains(p)).ToList();
+            Targets = reconciledPlatforms;
+        }
+
+        private async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
         {
             var allTargetInfos = await _apiPortService.GetTargetsAsync();
 

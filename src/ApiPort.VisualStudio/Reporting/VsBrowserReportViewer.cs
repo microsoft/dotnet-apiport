@@ -5,6 +5,8 @@ using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.VisualStudio.Shell.Interop;
+using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace ApiPortVS.Reporting
@@ -23,6 +25,26 @@ namespace ApiPortVS.Reporting
         }
 
         public void View(string url)
+        {
+            if (IsHtml(url))
+            {
+                ShowHtml(url);
+            }
+            else
+            {
+                Process.Start(url);
+            }
+        }
+
+        private bool IsHtml(string url)
+        {
+            var extension = Path.GetExtension(url);
+
+            return string.Equals(".html", extension, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(".htm", extension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void ShowHtml(string url)
         {
             const uint REUSE_EXISTING_BROWSER_IF_AVAILABLE = 0;
 

@@ -229,8 +229,8 @@
   <data name="TargetPlatformVersionFormat" xml:space="preserve">
     <value>Target platform {0} {1}.</value>
   </data>
-  <data name="Retry" xml:space="preserve">
-    <value>Retry</value>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
   </data>
   <data name="InvalidPlatformSelectedFormat" xml:space="preserve">
     <value>Invalid platform {0} selected.</value>
@@ -266,5 +266,11 @@ Copyright (C) Microsoft Corporation. All rights reserved.</value>
   </data>
   <data name="ReportLocation" xml:space="preserve">
     <value>Report written to '{0}'</value>
+  </data>
+  <data name="OutputFormats" xml:space="preserve">
+    <value>Output formats</value>
+  </data>
+  <data name="RefreshingOutputFormats" xml:space="preserve">
+    <value>Refreshing output formats...</value>
   </data>
 </root>

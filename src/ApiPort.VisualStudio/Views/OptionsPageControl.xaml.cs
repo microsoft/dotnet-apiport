@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace ApiPortVS.Views
 {
@@ -24,31 +25,23 @@ namespace ApiPortVS.Views
             GuidanceLink.NavigateUri = new Uri(LocalizedStrings.MoreInformationUrl);
 
             Loaded += ControlLoaded;
-            Unloaded += ControlUnloaded;
-        }
-
-        private void ControlUnloaded(object sender, RoutedEventArgs e)
-        {
-            Unloaded -= ControlUnloaded;
-
-            ViewModel.SaveModel();
         }
 
         private async void ControlLoaded(object sender, RoutedEventArgs e)
         {
             Loaded -= ControlLoaded;
 
-            await ViewModel.UpdateTargets(); // checkboxes don't appear until this finishes
+            await ViewModel.UpdateAsync();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        private void MoreInformationRequested(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.AbsoluteUri);
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void RefreshRequested(object sender, RoutedEventArgs e)
         {
-            await ViewModel.UpdateTargets();
+            await ViewModel.UpdateAsync();
         }
     }
 }

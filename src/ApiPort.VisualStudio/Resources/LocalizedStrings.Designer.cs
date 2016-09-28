@@ -278,6 +278,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output formats.
+        /// </summary>
+        public static string OutputFormats {
+            get {
+                return ResourceManager.GetString("OutputFormats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed: PDB {0} not found..
         /// </summary>
         public static string PdbNotFoundFormat {
@@ -305,6 +314,24 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing output formats....
+        /// </summary>
+        public static string RefreshingOutputFormats {
+            get {
+                return ResourceManager.GetString("RefreshingOutputFormats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refreshing platforms....
         /// </summary>
         public static string RefreshingPlatforms {
@@ -319,15 +346,6 @@ namespace ApiPortVS.Resources {
         public static string ReportLocation {
             get {
                 return ResourceManager.GetString("ReportLocation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Retry.
-        /// </summary>
-        public static string Retry {
-            get {
-                return ResourceManager.GetString("Retry", resourceCulture);
             }
         }
         
