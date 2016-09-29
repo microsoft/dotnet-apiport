@@ -3,7 +3,6 @@
 
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,16 +10,6 @@ namespace ApiPortVS
 {
     public class AnalysisOptions : IApiPortOptions
     {
-        internal const string DefaultReportFilename = "PortabilityAnalysis.html";
-
-        public string Description { get; private set; }
-        public IEnumerable<IAssemblyFile> InputAssemblies { get; private set; }
-        public AnalyzeRequestFlags RequestFlags { get; private set; }
-        public IEnumerable<string> Targets { get; private set; }
-        public IEnumerable<string> OutputFormats { get; private set; }
-        public string OutputFileName { get; private set; }
-        public IEnumerable<string> IgnoredAssemblyFiles { get { return Enumerable.Empty<string>(); } }
-
         public AnalysisOptions(string description, IEnumerable<string> inputAssemblies, IEnumerable<string> targets, IEnumerable<string> formats, bool discardMetadata, string outputFileName)
         {
             Description = description;
@@ -37,16 +26,24 @@ namespace ApiPortVS
             }
         }
 
-        public IEnumerable<string> BreakingChangeSuppressions { get; private set; }
+        public string Description { get; }
 
-        public IEnumerable<string> InvalidInputFiles
-        {
-            get { return Enumerable.Empty<string>(); }
-        }
+        public IEnumerable<IAssemblyFile> InputAssemblies { get; }
 
-        public string ServiceEndpoint
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public AnalyzeRequestFlags RequestFlags { get; }
+
+        public IEnumerable<string> Targets { get; }
+
+        public IEnumerable<string> OutputFormats { get; }
+
+        public string OutputFileName { get; }
+
+        public IEnumerable<string> IgnoredAssemblyFiles { get; } = Enumerable.Empty<string>();
+
+        public IEnumerable<string> BreakingChangeSuppressions { get; } = Enumerable.Empty<string>();
+
+        public IEnumerable<string> InvalidInputFiles { get; } = Enumerable.Empty<string>();
+
+        public string ServiceEndpoint { get; } = string.Empty;
     }
 }

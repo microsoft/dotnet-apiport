@@ -72,6 +72,7 @@
     <Compile Include="ObjectModel\AncestorApiRecommendations.cs" />
     <Compile Include="ObjectModel\CompatibilityRange.cs" />
     <Compile Include="ObjectModel\DiagnosticAnalyzerInfo.cs" />
+    <Compile Include="Reporting\ObjectModel\ReportingResultPaths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BreakingChange.cs" />
     <Compile Include="BreakingChangeDependency.cs" />
