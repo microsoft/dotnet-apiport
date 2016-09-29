@@ -4,7 +4,6 @@
 using ApiPortVS.Contracts;
 using ApiPortVS.ViewModels;
 using Microsoft.Fx.Portability;
-using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Reporting;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +17,8 @@ namespace ApiPortVS.Analyze
         private readonly IReportViewer _reportViewer;
         private readonly IFileWriter _reportWriter;
 
-        public FileListAnalyzer(ApiPortClient client, OptionsViewModel optionsViewModel, IFileSystem fileSystem, IFileWriter reportWriter, IReportViewer reportViewer, TextWriter outputWindow, ITargetMapper targetMapper, IProgressReporter reporter, IDependencyFinder dependencyFinder, IApiPortService service, IReportGenerator reportGenerator)
-            : base(client, optionsViewModel, outputWindow, targetMapper, reporter, dependencyFinder, service, reportGenerator)
+        public FileListAnalyzer(ApiPortClient client, OptionsViewModel optionsViewModel, IFileSystem fileSystem, IFileWriter reportWriter, IReportViewer reportViewer, TextWriter outputWindow, IProgressReporter reporter)
+            : base(client, optionsViewModel, outputWindow, reporter)
         {
             _fileSystem = fileSystem;
             _reportWriter = reportWriter;
@@ -28,15 +27,12 @@ namespace ApiPortVS.Analyze
 
         public async Task AnalyzeProjectAsync(IEnumerable<string> inputAssemblyPaths)
         {
-            var reportPaths = await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter);
+            var reports = await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, false);
 
-            foreach (var reportPath in reportPaths)
+            foreach (var reportPath in reports.Paths)
             {
                 _reportViewer.View(reportPath);
             }
-
-            // This second call sets the default targets and highlights any source lines.
-            await AnalyzeAssembliesAsync(inputAssemblyPaths);
         }
     }
 }

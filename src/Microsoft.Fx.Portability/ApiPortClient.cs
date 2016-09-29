@@ -16,6 +16,8 @@ namespace Microsoft.Fx.Portability
 {
     public class ApiPortClient
     {
+        private const string Json = "json";
+
         private readonly IApiPortService _apiPortService;
         private readonly IProgressReporter _progressReport;
         private readonly ITargetMapper _targetMapper;
@@ -91,6 +93,21 @@ namespace Microsoft.Fx.Portability
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
         {
+            var result = await WriteAnalysisReportsAsync(options, false);
+
+            return result.Paths;
+        }
+
+        /// <summary>
+        /// Writes analysis reports to path supplied by options
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="includeResponse"></param>
+        /// <returns>Output paths to the reports that were successfully written.</returns>
+        public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
+        {
+            var jsonAdded = includeResponse ? TryAddJsonToOptions(options, out options) : false;
+
             foreach (var errorInput in options.InvalidInputFiles)
             {
                 _progressReport.ReportIssue(string.Format(LocalizedStrings.InvalidFileName, errorInput));
@@ -99,9 +116,21 @@ namespace Microsoft.Fx.Portability
             var results = await GetAnalysisResultAsync(options);
             var outputPaths = new List<string>();
 
-            foreach (var resultAndFormat in results.Zip(options.OutputFormats, (r, f) => new { Result = r, Format = f }))
+            AnalyzeResponse response = null;
+
+            foreach (var result in results.Results)
             {
-                var outputPath = await CreateReport(resultAndFormat.Result, options.OutputFileName, resultAndFormat.Format);
+                if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
+                {
+                    response = result.Data?.Deserialize<AnalyzeResponse>();
+
+                    if (jsonAdded)
+                    {
+                        continue;
+                    }
+                }
+
+                var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format);
 
                 if (!string.IsNullOrEmpty(outputPath))
                 {
@@ -109,7 +138,11 @@ namespace Microsoft.Fx.Portability
                 }
             }
 
-            return outputPaths;
+            return new ReportingResultPaths
+            {
+                Paths = outputPaths,
+                Result = GetReportingResult(results.Request, response, results.Info)
+            };
         }
 
         public async Task<IEnumerable<string>> GetResultFormatsAsync()
@@ -175,7 +208,7 @@ namespace Microsoft.Fx.Portability
         /// </summary>
         /// <param name="options">Options to generate report</param>
         /// <returns>A collection of reports</returns>
-        private async Task<IEnumerable<byte[]>> GetAnalysisResultAsync(IApiPortOptions options)
+        private async Task<MultipleFormatAnalysis> GetAnalysisResultAsync(IApiPortOptions options)
         {
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
@@ -189,12 +222,23 @@ namespace Microsoft.Fx.Portability
                     try
                     {
                         var tasks = options.OutputFormats
-                    .Select(f => GetResultFromServiceAsync(request, f))
-                    .ToList();
+                            .Select(f => new { Format = f, Task = GetResultFromServiceAsync(request, f) })
+                            .ToList();
 
-                        await Task.WhenAll(tasks);
+                        await Task.WhenAll(tasks.Select(t => t.Task));
 
-                        return tasks.Select(t => t.Result).ToList();
+                        var results = tasks.Select(t => new ReportingResultWithFormat
+                        {
+                            Data = t.Task.Result,
+                            Format = t.Format,
+                        }).ToList();
+
+                        return new MultipleFormatAnalysis
+                        {
+                            Info = dependencyInfo,
+                            Request = request,
+                            Results = results
+                        };
                     }
                     catch (Exception)
                     {
@@ -207,7 +251,10 @@ namespace Microsoft.Fx.Portability
             {
                 _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
 
-                return Enumerable.Empty<byte[]>();
+                return new MultipleFormatAnalysis
+                {
+                    Results = Enumerable.Empty<ReportingResultWithFormat>()
+                };
             }
         }
 
@@ -232,10 +279,10 @@ namespace Microsoft.Fx.Portability
                 Dependencies = dependencyInfo.Dependencies,
                 AssembliesToIgnore = _assembliesToIgnore,                 // We pass along assemblies to ignore instead of filtering them from Dependencies at this point
                                                                           // because breaking change analysis and portability analysis will likely want to filter dependencies
-                                                                          // in different ways for ignored assemblies. 
+                                                                          // in different ways for ignored assemblies.
                                                                           // For breaking changes, we should show breaking changes for
                                                                           // an assembly if it is un-ignored on any of the user-specified targets and we should hide breaking changes
-                                                                          // for an assembly if it ignored on all user-specified targets. 
+                                                                          // for an assembly if it ignored on all user-specified targets.
                                                                           // For portability analysis, on the other hand, we will want to show portability for precisely those targets
                                                                           // that a user specifies that are not on the ignore list. In this case, some of the assembly's dependency
                                                                           // information will be needed.
@@ -260,12 +307,20 @@ namespace Microsoft.Fx.Portability
 
             CheckEndpointStatus(fullResponse.Headers.Status);
 
+            return GetReportingResult(request, fullResponse.Response, dependencyInfo);
+        }
+
+        private ReportingResult GetReportingResult(AnalyzeRequest request, AnalyzeResponse response, IDependencyInfo dependencyInfo)
+        {
+            if (response == null)
+            {
+                return null;
+            }
+
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.ComputingReport))
             {
                 try
                 {
-                    var response = fullResponse.Response;
-
                     return _reportGenerator.ComputeReport(
                         response.Targets,
                         response.SubmissionId,
@@ -315,7 +370,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Verifies that the service is alive.  If the service is not alive, then an issue is logged 
+        /// Verifies that the service is alive.  If the service is not alive, then an issue is logged
         /// that will be reported back to the user.
         /// </summary>
         private void CheckEndpointStatus(EndpointStatus status)
@@ -324,6 +379,48 @@ namespace Microsoft.Fx.Portability
             {
                 _progressReport.ReportIssue(LocalizedStrings.ServerEndpointDeprecated);
             }
+        }
+
+        /// <summary>
+        /// Add JSON to the options object if it is not there. This is used in cases where an analysis
+        /// doesn't request the JSON result, but the result is needed for analysis (ie source line mapping)
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        private bool TryAddJsonToOptions(IApiPortOptions options, out IApiPortOptions other)
+        {
+            var outputs = new HashSet<string>(options.OutputFormats, StringComparer.OrdinalIgnoreCase);
+
+            if (outputs.Contains(Json))
+            {
+                other = options;
+                return false;
+            }
+            else
+            {
+                outputs.Add(Json);
+
+                other = new ReadWriteApiPortOptions(options)
+                {
+                    OutputFormats = outputs
+                };
+
+                return true;
+            }
+        }
+
+        private struct MultipleFormatAnalysis
+        {
+            public AnalyzeRequest Request;
+            public IDependencyInfo Info;
+            public IEnumerable<ReportingResultWithFormat> Results;
+        }
+
+        private struct ReportingResultWithFormat
+        {
+            public string Format;
+            public byte[] Data;
         }
     }
 }

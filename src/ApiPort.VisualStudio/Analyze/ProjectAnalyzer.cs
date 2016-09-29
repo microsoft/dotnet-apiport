@@ -6,7 +6,6 @@ using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using EnvDTE;
 using Microsoft.Fx.Portability;
-using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Reporting;
 using System;
 using System.Collections.Generic;
@@ -25,8 +24,19 @@ namespace ApiPortVS.Analyze
         private readonly ISourceLineMapper _sourceLineMapper;
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
 
-        public ProjectAnalyzer(ApiPortClient client, OptionsViewModel optionsViewModel, IFileWriter reportWriter, IReportViewer reportViewer, ISourceLineMapper sourceLineMapper, IServiceProvider serviceProvider, IFileSystem fileSystem, Microsoft.VisualStudio.Shell.ErrorListProvider errorList, TextWriter outputWindow, ITargetMapper targetMapper, IProgressReporter reporter, IDependencyFinder dependencyFinder, IApiPortService service, IReportGenerator reportGenerator)
-            : base(client, optionsViewModel, outputWindow, targetMapper, reporter, dependencyFinder, service, reportGenerator)
+        public ProjectAnalyzer(
+            ApiPortClient client,
+            OptionsViewModel optionsViewModel,
+            IFileWriter reportWriter,
+            IReportViewer reportViewer,
+            ISourceLineMapper sourceLineMapper,
+            IServiceProvider serviceProvider,
+            IFileSystem fileSystem,
+            Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
+            TextWriter outputWindow,
+            ITargetMapper targetMapper,
+            IProgressReporter reporter)
+            : base(client, optionsViewModel, outputWindow,  reporter)
         {
             _reportWriter = reportWriter;
             _reportViewer = reportViewer;
@@ -50,17 +60,14 @@ namespace ApiPortVS.Analyze
             //var targetAssemblies = project.GetAssemblyPaths(GetAllAssembliesInDirectory);
             var targetAssemblies = project.GetAssemblyPaths();
 
-            // This call writes the portability reports
-            var reportPaths = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter);
+            var result = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
 
-            foreach (var reportPath in reportPaths)
+            foreach (var reportPath in result.Paths)
             {
                 _reportViewer.View(reportPath);
             }
 
-            // This call sets the default targets and highlights any source lines.
-            var analysis = await AnalyzeAssembliesAsync(targetAssemblies);
-            var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, analysis));
+            var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result.Result));
 
             DisplaySourceItemsInErrorList(sourceItems, project);
         }
