@@ -8,7 +8,6 @@ using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Reporting;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPortVS.Analyze
@@ -27,11 +26,9 @@ namespace ApiPortVS.Analyze
             _reportViewer = reportViewer;
         }
 
-        public async Task AnalyzeProjectAsync(IEnumerable<string> inputAssemblyPaths, string reportFileName)
+        public async Task AnalyzeProjectAsync(IEnumerable<string> inputAssemblyPaths)
         {
-            // write report to same directory as input
-            var dirForReport = _fileSystem.GetDirectoryNameFromPath(inputAssemblyPaths.First());
-            var reportPaths = await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, dirForReport, reportFileName);
+            var reportPaths = await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter);
 
             foreach (var reportPath in reportPaths)
             {

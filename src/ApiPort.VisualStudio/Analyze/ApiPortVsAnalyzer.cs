@@ -44,7 +44,7 @@ namespace ApiPortVS.Analyze
             var paths = assemblyPaths.Select(t => new AssemblyFile(t));
             var dependencyInfo = _dependencyFinder.FindDependencies(paths, _reporter);
 
-            var analysisOptions = await GetApiPortOptions(assemblyPaths, new[] { "json" });
+            var analysisOptions = await GetApiPortOptions(assemblyPaths, new[] { "json" }, AnalysisOptions.DefaultReportFilename);
 
             var request = GenerateRequest(analysisOptions, dependencyInfo);
             var result = await GetResultsAsync(request, dependencyInfo);
@@ -112,11 +112,12 @@ namespace ApiPortVS.Analyze
 
         protected async Task<IEnumerable<string>> WriteAnalysisReportsAsync(
             IEnumerable<string> assemblyPaths,
-            IFileWriter reportWriter,
-            string reportDirectory,
-            string reportFileName)
+            IFileWriter reportWriter)
         {
+            var reportDirectory = _optionsViewModel.OutputDirectory;
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
+            var reportFileName = _optionsViewModel.Model.DefaultOutputName;
+
             var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, Path.Combine(reportDirectory, reportFileName));
             var issuesBefore = _reporter.Issues.Count;
 
@@ -160,7 +161,7 @@ namespace ApiPortVS.Analyze
             }
         }
 
-        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, string reportFileName = AnalysisOptions.DefaultReportFilename)
+        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, string reportFileName)
         {
             await _optionsViewModel.UpdateAsync();
 

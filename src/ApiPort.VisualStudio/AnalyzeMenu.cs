@@ -44,7 +44,7 @@ namespace ApiPortVS
                 {
                     var projectAnalyzer = innerScope.Resolve<ProjectAnalyzer>();
 
-                    await projectAnalyzer.AnalyzeProjectAsync(selectedProject, AnalysisOptions.DefaultReportFilename);
+                    await projectAnalyzer.AnalyzeProjectAsync(selectedProject);
                 }
             }
             catch (PortabilityAnalyzerException ex)
@@ -93,7 +93,7 @@ namespace ApiPortVS
                 {
                     var fileListAnalyzer = innerScope.Resolve<FileListAnalyzer>();
 
-                    await fileListAnalyzer.AnalyzeProjectAsync(inputAssemblyPaths, AnalysisOptions.DefaultReportFilename);
+                    await fileListAnalyzer.AnalyzeProjectAsync(inputAssemblyPaths);
                 }
             }
             catch (PortabilityAnalyzerException ex)

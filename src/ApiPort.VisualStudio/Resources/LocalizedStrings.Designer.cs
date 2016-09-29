@@ -143,6 +143,24 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default output name.
+        /// </summary>
+        public static string DefaultFileName {
+            get {
+                return ResourceManager.GetString("DefaultFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default output directory.
+        /// </summary>
+        public static string DefaultOutputDirectory {
+            get {
+                return ResourceManager.GetString("DefaultOutputDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Details.
         /// </summary>
         public static string DetailsPageTitle {
@@ -175,6 +193,15 @@ namespace ApiPortVS.Resources {
         public static string FindingSourceLineInformationFor {
             get {
                 return ResourceManager.GetString("FindingSourceLineInformationFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string GeneralSettings {
+            get {
+                return ResourceManager.GetString("GeneralSettings", resourceCulture);
             }
         }
         

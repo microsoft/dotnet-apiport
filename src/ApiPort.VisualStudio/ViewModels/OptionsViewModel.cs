@@ -69,6 +69,26 @@ namespace ApiPortVS.ViewModels
             set { UpdateProperty(ref _updating, value); }
         }
 
+        public string OutputDirectory
+        {
+            get { return _optionsModel.OutputDirectory; }
+            set
+            {
+                _optionsModel.OutputDirectory = value;
+                OnPropertyUpdated();
+            }
+        }
+
+        public string DefaultOutputName
+        {
+            get { return _optionsModel.DefaultOutputName; }
+            set
+            {
+                _optionsModel.DefaultOutputName = value;
+                OnPropertyUpdated();
+            }
+        }
+
         public bool HasError
         {
             get { return _hasError; }

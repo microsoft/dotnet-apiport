@@ -273,4 +273,13 @@ Copyright (C) Microsoft Corporation. All rights reserved.</value>
   <data name="RefreshingOutputFormats" xml:space="preserve">
     <value>Refreshing output formats...</value>
   </data>
+  <data name="DefaultFileName" xml:space="preserve">
+    <value>Default output name</value>
+  </data>
+  <data name="DefaultOutputDirectory" xml:space="preserve">
+    <value>Default output directory</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>General</value>
+  </data>
 </root>
