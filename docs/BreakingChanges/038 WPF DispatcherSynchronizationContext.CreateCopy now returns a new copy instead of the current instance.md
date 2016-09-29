@@ -19,7 +19,7 @@ In the .NET Framework 4, DispatcherSynchronizationContext.CreateCopy() returned 
 Be aware that DispatcherSynchronizationContext.CreateCopy() will now return a new SynchronizationContext object.  Previously, code that used equivalence of references generated this way was not actually checking whether it was in the proper context, but does when built against .NET 4.5 or newer.  While unlikely to cause issues, exercising the affected code paths should be enough to determine if this poses any problem.
 
 ### Affected APIs
-* `M:System.Windows.Threading.DispatcherSynchronizationContext.CreateCopy`
+* `M:System.Threading.DispatcherSynchronizationContext.CreateCopy`
 
 ### Category
 Windows Presentation Foundation (WPF)
