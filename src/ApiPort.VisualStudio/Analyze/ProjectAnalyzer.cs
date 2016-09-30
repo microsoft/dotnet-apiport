@@ -3,7 +3,6 @@
 
 using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
-using ApiPortVS.ViewModels;
 using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
@@ -14,30 +13,25 @@ using System.Threading.Tasks;
 
 namespace ApiPortVS.Analyze
 {
-    public class ProjectAnalyzer : ApiPortVsAnalyzer
+    public class ProjectAnalyzer
     {
         private readonly IFileWriter _reportWriter;
-        private readonly IReportViewer _reportViewer;
         private readonly IServiceProvider _serviceProvider;
         private readonly IFileSystem _fileSystem;
         private readonly ISourceLineMapper _sourceLineMapper;
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
+        private readonly IVsApiPortAnalyzer _analyzer;
 
         public ProjectAnalyzer(
-            ApiPortClient client,
-            OptionsViewModel optionsViewModel,
-            OutputWindowWriter outputWindow,
-            IReportViewer reportViewer,
-            IProgressReporter reporter,
+            IVsApiPortAnalyzer analyzer,
             Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
             IServiceProvider serviceProvider,
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
             IFileSystem fileSystem,
             ITargetMapper targetMapper)
-            : base(client, optionsViewModel, outputWindow, reportViewer, reporter)
         {
-            _reportViewer = reportViewer;
+            _analyzer = analyzer;
             _sourceLineMapper = sourceLineMapper;
             _serviceProvider = serviceProvider;
             _reportWriter = reportWriter;
@@ -59,7 +53,7 @@ namespace ApiPortVS.Analyze
             //var targetAssemblies = project.GetAssemblyPaths(GetAllAssembliesInDirectory);
             var targetAssemblies = project.GetAssemblyPaths();
 
-            var result = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
+            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
 
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result));
 
@@ -76,15 +70,13 @@ namespace ApiPortVS.Analyze
             return buildSucceeded;
         }
 
-        protected virtual bool FileHasAnalyzableExtension(string fileName)
+        public bool FileHasAnalyzableExtension(string fileName)
         {
             var extension = _fileSystem.GetFileExtension(fileName);
 
-            bool analyzable = (string.Equals(extension, ".dll", StringComparison.OrdinalIgnoreCase)
-                               || string.Equals(extension, ".exe", StringComparison.OrdinalIgnoreCase))
-                              && fileName.IndexOf("vshost", StringComparison.OrdinalIgnoreCase) == -1;
-
-            return analyzable;
+            return (string.Equals(extension, ".dll", StringComparison.OrdinalIgnoreCase)
+                       || string.Equals(extension, ".exe", StringComparison.OrdinalIgnoreCase))
+                    && fileName.IndexOf("vshost", StringComparison.OrdinalIgnoreCase) == -1;
         }
 
         private IEnumerable<string> GetAllAssembliesInDirectory(string directory)

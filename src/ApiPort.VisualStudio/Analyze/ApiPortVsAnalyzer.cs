@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ApiPortVS.Analyze
 {
-    public class ApiPortVsAnalyzer
+    public class ApiPortVsAnalyzer : IVsApiPortAnalyzer
     {
         private readonly ApiPortClient _client;
         private readonly OptionsViewModel _optionsViewModel;
@@ -36,7 +36,7 @@ namespace ApiPortVS.Analyze
             _reporter = reporter;
         }
 
-        protected async Task<ReportingResult> WriteAnalysisReportsAsync(
+        public async Task<ReportingResult> WriteAnalysisReportsAsync(
             IEnumerable<string> assemblyPaths,
             IFileWriter reportWriter,
             bool includeJson)

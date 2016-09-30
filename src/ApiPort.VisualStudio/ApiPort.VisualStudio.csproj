@@ -187,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisOptions.cs" />
+    <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="Reporting\IResultToolbar.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />

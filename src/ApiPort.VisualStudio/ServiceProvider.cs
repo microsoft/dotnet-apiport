@@ -58,6 +58,9 @@ namespace ApiPortVS
                 .AsSelf()
                 .SingleInstance()
                 .AutoActivate();
+            builder.RegisterType<ApiPortVsAnalyzer>()
+                .As<IVsApiPortAnalyzer>()
+                .InstancePerLifetimeScope();
 
             // Service registration
             builder.RegisterInstance(new ProductInformation("ApiPort_VS"))
