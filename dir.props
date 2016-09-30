@@ -12,16 +12,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <ItemGroup Condition="'$(OutputType)' == 'Exe' AND $(MSBuildProjectDirectory.StartsWith('$(SourceProjectsDirectory)'))">
-    <FilesToSign Include="$(OutDir)\$(AssemblyName).exe">
-      <Authenticode>Microsoft</Authenticode>
-    </FilesToSign>
-  </ItemGroup>
-  <ItemGroup Condition="'$(OutputType)' == 'Library' AND $(MSBuildProjectDirectory.StartsWith('$(SourceProjectsDirectory)'))">
-    <FilesToSign Include="$(OutDir)\$(AssemblyName).dll">
-      <Authenticode>Microsoft</Authenticode>
-    </FilesToSign>
-  </ItemGroup>
 </Project>
