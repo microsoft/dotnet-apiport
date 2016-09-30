@@ -9,7 +9,6 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +26,7 @@ namespace ApiPortVS.Analyze
         public ProjectAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
-            TextWriter outputWindow,
+            OutputWindowWriter outputWindow,
             IReportViewer reportViewer,
             IProgressReporter reporter,
             Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
