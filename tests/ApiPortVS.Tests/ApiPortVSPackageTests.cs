@@ -16,7 +16,7 @@ namespace ApiPortVS.Tests
         private class TestableApiPortVSPackage : ProjectAnalyzer
         {
             public TestableApiPortVSPackage()
-                : base(null, null, null, null, null, null, CreateFileSystem(), null, null, null, null)
+                : base(null, null, null, null, null, null, null, null, null, CreateFileSystem(), null)
             { }
 
             private static IFileSystem CreateFileSystem()
