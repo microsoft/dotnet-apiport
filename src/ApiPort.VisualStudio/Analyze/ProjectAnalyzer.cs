@@ -17,8 +17,8 @@ namespace ApiPortVS.Analyze
 {
     public class ProjectAnalyzer : ApiPortVsAnalyzer
     {
-        private readonly IReportViewer _reportViewer;
         private readonly IFileWriter _reportWriter;
+        private readonly IReportViewer _reportViewer;
         private readonly IServiceProvider _serviceProvider;
         private readonly IFileSystem _fileSystem;
         private readonly ISourceLineMapper _sourceLineMapper;
@@ -27,21 +27,21 @@ namespace ApiPortVS.Analyze
         public ProjectAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
-            IFileWriter reportWriter,
-            IReportViewer reportViewer,
-            ISourceLineMapper sourceLineMapper,
-            IServiceProvider serviceProvider,
-            IFileSystem fileSystem,
-            Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
             TextWriter outputWindow,
-            ITargetMapper targetMapper,
-            IProgressReporter reporter)
-            : base(client, optionsViewModel, outputWindow,  reporter)
+            IReportViewer reportViewer,
+            IProgressReporter reporter,
+            Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
+            IServiceProvider serviceProvider,
+            ISourceLineMapper sourceLineMapper,
+            IFileWriter reportWriter,
+            IFileSystem fileSystem,
+            ITargetMapper targetMapper)
+            : base(client, optionsViewModel, outputWindow, reportViewer, reporter)
         {
-            _reportWriter = reportWriter;
             _reportViewer = reportViewer;
             _sourceLineMapper = sourceLineMapper;
             _serviceProvider = serviceProvider;
+            _reportWriter = reportWriter;
             _fileSystem = fileSystem;
             _errorList = errorList;
         }
@@ -62,12 +62,7 @@ namespace ApiPortVS.Analyze
 
             var result = await WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
 
-            foreach (var reportPath in result.Paths)
-            {
-                _reportViewer.View(reportPath);
-            }
-
-            var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result.Result));
+            var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result));
 
             DisplaySourceItemsInErrorList(sourceItems, project);
         }

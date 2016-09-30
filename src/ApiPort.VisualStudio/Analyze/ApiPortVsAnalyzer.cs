@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using Microsoft.Fx.Portability;
@@ -19,16 +20,23 @@ namespace ApiPortVS.Analyze
         private readonly OptionsViewModel _optionsViewModel;
         private readonly TextWriter _outputWindow;
         private readonly IProgressReporter _reporter;
+        private readonly IReportViewer _viewer;
 
-        public ApiPortVsAnalyzer(ApiPortClient client, OptionsViewModel optionsViewModel, TextWriter outputWindow, IProgressReporter reporter)
+        public ApiPortVsAnalyzer(
+            ApiPortClient client,
+            OptionsViewModel optionsViewModel,
+            TextWriter outputWindow,
+            IReportViewer viewer,
+            IProgressReporter reporter)
         {
             _client = client;
             _optionsViewModel = optionsViewModel;
             _outputWindow = outputWindow;
+            _viewer = viewer;
             _reporter = reporter;
         }
 
-        protected async Task<ReportingResultPaths> WriteAnalysisReportsAsync(
+        protected async Task<ReportingResult> WriteAnalysisReportsAsync(
             IEnumerable<string> assemblyPaths,
             IFileWriter reportWriter,
             bool includeJson)
@@ -52,7 +60,9 @@ namespace ApiPortVS.Analyze
                 }
             }
 
-            return result;
+            _viewer.View(result.Paths);
+
+            return result.Result;
         }
 
         private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, string reportFileName)

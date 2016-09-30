@@ -166,6 +166,7 @@
       <HintPath>..\..\packages\System.Collections.NonGeneric.4.0.1\lib\net46\System.Collections.NonGeneric.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Design" />
@@ -186,6 +187,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisOptions.cs" />
+    <Compile Include="Reporting\ToolbarListReportViewer.cs" />
+    <Compile Include="ViewModels\OutputViewModel.cs" />
+    <Compile Include="Views\AnalysisOutputToolWindow.cs" />
+    <Compile Include="Views\AnalysisOutputToolWindowControl.xaml.cs">
+      <DependentUpon>AnalysisOutputToolWindowControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AnalyzeMenu.cs" />
     <Compile Include="Analyze\ApiPortVsAnalyzer.cs" />
     <Compile Include="Analyze\FileListAnalyzer.cs" />
@@ -281,6 +288,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AnalysisOutputToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\OptionsPageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

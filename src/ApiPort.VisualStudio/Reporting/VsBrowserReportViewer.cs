@@ -6,6 +6,7 @@ using ApiPortVS.Resources;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -24,15 +25,18 @@ namespace ApiPortVS.Reporting
             _browserService = webBrowsingService;
         }
 
-        public void View(string url)
+        public void View(IEnumerable<string> urls)
         {
-            if (IsHtml(url))
+            foreach (var url in urls)
             {
-                ShowHtml(url);
-            }
-            else
-            {
-                Process.Start(url);
+                if (IsHtml(url))
+                {
+                    ShowHtml(url);
+                }
+                else
+                {
+                    Process.Start(url);
+                }
             }
         }
 

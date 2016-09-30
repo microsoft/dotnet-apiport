@@ -13,26 +13,23 @@ namespace ApiPortVS.Analyze
 {
     public class FileListAnalyzer : ApiPortVsAnalyzer
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly IReportViewer _reportViewer;
         private readonly IFileWriter _reportWriter;
 
-        public FileListAnalyzer(ApiPortClient client, OptionsViewModel optionsViewModel, IFileSystem fileSystem, IFileWriter reportWriter, IReportViewer reportViewer, TextWriter outputWindow, IProgressReporter reporter)
-            : base(client, optionsViewModel, outputWindow, reporter)
+        public FileListAnalyzer(
+            ApiPortClient client,
+            OptionsViewModel optionsViewModel,
+            TextWriter outputWindow,
+            IReportViewer viewer,
+            IProgressReporter reporter,
+            IFileWriter reportWriter)
+            : base(client, optionsViewModel, outputWindow, viewer, reporter)
         {
-            _fileSystem = fileSystem;
             _reportWriter = reportWriter;
-            _reportViewer = reportViewer;
         }
 
         public async Task AnalyzeProjectAsync(IEnumerable<string> inputAssemblyPaths)
         {
-            var reports = await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, false);
-
-            foreach (var reportPath in reports.Paths)
-            {
-                _reportViewer.View(reportPath);
-            }
+            await WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, false);
         }
     }
 }

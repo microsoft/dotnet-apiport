@@ -49,6 +49,8 @@ namespace ApiPortVS
             builder.RegisterType<VsBrowserReportViewer>()
                 .As<IReportViewer>()
                 .SingleInstance();
+            builder.RegisterType<ToolbarListReportViewer>()
+                .As<IReportViewer>();
             builder.Register(x => new AssemblyRedirects(s_appConfigFilePath))
                 .AsSelf()
                 .SingleInstance()
@@ -104,6 +106,8 @@ namespace ApiPortVS
                 // If a custom window couldn't be opened, open the general purpose window
                 return serviceProvider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
             }).SingleInstance();
+            builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
+                .As<OutputViewModel>();
 
             // Register menu handlers
             builder.RegisterType<AnalyzeMenu>()
