@@ -4,6 +4,7 @@
 using ApiPortVS.Resources;
 using EnvDTE;
 using Microsoft.Fx.Portability;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
@@ -94,9 +95,9 @@ namespace ApiPortVS
             return false;
         }
 
-        public static IVsHierarchy GetHierarchy(this Project project, IServiceProvider serviceProvider)
+        public static IVsHierarchy GetHierarchy(this Project project)
         {
-            var solution = serviceProvider.GetService(typeof(SVsSolution)) as IVsSolution;
+            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
             if (solution == null)
             {
                 return null;

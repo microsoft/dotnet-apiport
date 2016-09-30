@@ -1,35 +1,25 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Threading.Tasks;
 
 namespace ApiPortVS
 {
-    public class ProjectBuilder : IVsUpdateSolutionEvents
+    public class ProjectBuilder
     {
         private IVsSolutionBuildManager _buildManager;
-        private IServiceProvider _serviceProvider;
-        private uint _updateSolutionEventsCookie;
-        private TaskCompletionSource<bool> _completionSource;
 
-        public ProjectBuilder(IServiceProvider serviceProvider)
+        public ProjectBuilder(IVsSolutionBuildManager buildManager)
         {
-            Debug.Assert(serviceProvider != null);
-
-            _serviceProvider = serviceProvider;
-            _buildManager = serviceProvider.GetService(typeof(SVsSolutionBuildManager)) as IVsSolutionBuildManager;
+            _buildManager = buildManager;
         }
 
-        public void Build(Project project, TaskCompletionSource<bool> completionSource)
+        public Task<bool> BuildAsync(Project project)
         {
-            _completionSource = completionSource;
-
-            var projectHierarchy = project.GetHierarchy(_serviceProvider);
+            var projectHierarchy = project.GetHierarchy();
             int suppressUI = 0;
             uint buildUpdateFlags = (uint)(VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD);
             uint defQueryResults = 0; // enumerated in VSSOLNBUILDQUERYRESULTS
@@ -39,47 +29,66 @@ namespace ApiPortVS
             var updateErrCode = _buildManager.StartSimpleUpdateProjectConfiguration(projectHierarchy, null, null,
                 buildUpdateFlags, defQueryResults, suppressUI);
 
+            var tcs = new TaskCompletionSource<bool>();
+
             if (updateErrCode == VSConstants.S_OK)
             {
-                _buildManager.AdviseUpdateSolutionEvents(this, out _updateSolutionEventsCookie);
+                var builder = new ProjectAsyncBuilder(_buildManager, tcs);
+                _buildManager.AdviseUpdateSolutionEvents(builder, out builder.UpdateSolutionEventsCookie);
             }
             else
             {
-                completionSource.SetResult(false);
+                tcs.SetResult(false);
             }
+
+            return tcs.Task;
         }
 
-        public int OnActiveProjectCfgChange(IVsHierarchy pIVsHierarchy)
+        private class ProjectAsyncBuilder : TaskCompletionSource<bool>, IVsUpdateSolutionEvents
         {
-            return VSConstants.S_OK;
-        }
+            private readonly TaskCompletionSource<bool> _completionSource;
+            private readonly IVsSolutionBuildManager _buildManager;
 
-        public int UpdateSolution_Begin(ref int pfCancelUpdate)
-        {
-            return VSConstants.S_OK;
-        }
+            public uint UpdateSolutionEventsCookie;
 
-        public int UpdateSolution_Cancel()
-        {
-            _buildManager.UnadviseUpdateSolutionEvents(_updateSolutionEventsCookie);
-            _completionSource.SetResult(false);
+            public ProjectAsyncBuilder(IVsSolutionBuildManager manager, TaskCompletionSource<bool> completionSource)
+            {
+                _buildManager = manager;
+                _completionSource = completionSource;
+            }
 
-            return VSConstants.S_OK;
-        }
+            public int OnActiveProjectCfgChange(IVsHierarchy pIVsHierarchy)
+            {
+                return VSConstants.S_OK;
+            }
 
-        // called when entire solution is done building
-        public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
-        {
-            _buildManager.UnadviseUpdateSolutionEvents(_updateSolutionEventsCookie);
-            var buildSucceeded = fSucceeded == 1; // no update actions failed
-            _completionSource.SetResult(buildSucceeded);
+            public int UpdateSolution_Begin(ref int pfCancelUpdate)
+            {
+                return VSConstants.S_OK;
+            }
 
-            return VSConstants.S_OK;
-        }
+            public int UpdateSolution_Cancel()
+            {
+                _buildManager.UnadviseUpdateSolutionEvents(UpdateSolutionEventsCookie);
+                _completionSource.SetResult(false);
 
-        public int UpdateSolution_StartUpdate(ref int pfCancelUpdate)
-        {
-            return VSConstants.S_OK;
+                return VSConstants.S_OK;
+            }
+
+            // called when entire solution is done building
+            public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
+            {
+                _buildManager.UnadviseUpdateSolutionEvents(UpdateSolutionEventsCookie);
+                var buildSucceeded = fSucceeded == 1; // no update actions failed
+                _completionSource.SetResult(buildSucceeded);
+
+                return VSConstants.S_OK;
+            }
+
+            public int UpdateSolution_StartUpdate(ref int pfCancelUpdate)
+            {
+                return VSConstants.S_OK;
+            }
         }
     }
 }
