@@ -21,27 +21,28 @@ namespace ApiPortVS.Analyze
         private readonly ISourceLineMapper _sourceLineMapper;
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
         private readonly IVsApiPortAnalyzer _analyzer;
+        private readonly ProjectBuilder _builder;
 
         public ProjectAnalyzer(
             IVsApiPortAnalyzer analyzer,
             Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
-            IServiceProvider serviceProvider,
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
             IFileSystem fileSystem,
+            ProjectBuilder builder,
             ITargetMapper targetMapper)
         {
             _analyzer = analyzer;
             _sourceLineMapper = sourceLineMapper;
-            _serviceProvider = serviceProvider;
             _reportWriter = reportWriter;
             _fileSystem = fileSystem;
+            _builder = builder;
             _errorList = errorList;
         }
 
         public async Task AnalyzeProjectAsync(Project project)
         {
-            var buildSucceeded = await BuildProjectAsync(project);
+            var buildSucceeded = await _builder.BuildAsync(project);
             if (!buildSucceeded)
             {
                 var message = string.Format(LocalizedStrings.UnableToBuildProject, project.Name);
@@ -58,16 +59,6 @@ namespace ApiPortVS.Analyze
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result));
 
             DisplaySourceItemsInErrorList(sourceItems, project);
-        }
-
-        private async Task<bool> BuildProjectAsync(Project project)
-        {
-            var builder = new ProjectBuilder(_serviceProvider);
-            var completionSource = new TaskCompletionSource<bool>();
-            builder.Build(project, completionSource);
-            var buildSucceeded = await completionSource.Task; // lack of timeout trusts VS to somehow end the build
-
-            return buildSucceeded;
         }
 
         public bool FileHasAnalyzableExtension(string fileName)
@@ -100,7 +91,7 @@ namespace ApiPortVS.Analyze
 
             try
             {
-                var hierarchy = project.GetHierarchy(_serviceProvider);
+                var hierarchy = project.GetHierarchy();
 
                 foreach (var item in items)
                 {

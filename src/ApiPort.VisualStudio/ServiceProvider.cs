@@ -61,6 +61,10 @@ namespace ApiPortVS
             builder.RegisterType<ApiPortVsAnalyzer>()
                 .As<IVsApiPortAnalyzer>()
                 .InstancePerLifetimeScope();
+            builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
+                .As<IVsSolutionBuildManager>();
+            builder.RegisterType<ProjectBuilder>()
+                .AsSelf();
 
             // Service registration
             builder.RegisterInstance(new ProductInformation("ApiPort_VS"))
