@@ -18,14 +18,14 @@ namespace ApiPortVS.Analyze
     {
         private readonly ApiPortClient _client;
         private readonly OptionsViewModel _optionsViewModel;
-        private readonly TextWriter _outputWindow;
+        private readonly OutputWindowWriter _outputWindow;
         private readonly IProgressReporter _reporter;
         private readonly IReportViewer _viewer;
 
         public ApiPortVsAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
-            TextWriter outputWindow,
+            OutputWindowWriter outputWindow,
             IReportViewer viewer,
             IProgressReporter reporter)
         {
@@ -41,6 +41,8 @@ namespace ApiPortVS.Analyze
             IFileWriter reportWriter,
             bool includeJson)
         {
+            _outputWindow.ShowWindow();
+
             var reportDirectory = _optionsViewModel.OutputDirectory;
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
             var reportFileName = _optionsViewModel.DefaultOutputName;

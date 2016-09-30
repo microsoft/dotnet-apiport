@@ -18,7 +18,7 @@ namespace ApiPortVS.Analyze
         public FileListAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
-            TextWriter outputWindow,
+            OutputWindowWriter outputWindow,
             IReportViewer viewer,
             IProgressReporter reporter,
             IFileWriter reportWriter)

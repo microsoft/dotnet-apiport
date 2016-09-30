@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPortVS.Reporting;
 using ApiPortVS.Views;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -19,7 +20,7 @@ namespace ApiPortVS
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "General", 110, 113, true)]
     [ProvideToolWindow(typeof(AnalysisOutputToolWindow))]
-    public class ApiPortVSPackage : Package
+    public class ApiPortVSPackage : Package, IResultToolbar
     {
         private static ServiceProvider s_serviceProvider;
 
@@ -61,7 +62,7 @@ namespace ApiPortVS
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
                 CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeToolbarMenuItem);
-                MenuCommand analyzeMenuToolbarItem = new MenuCommand(ShowToolbar, analyzeMenuToolbarCommandID);
+                MenuCommand analyzeMenuToolbarItem = new MenuCommand((_, __) => ShowToolbar(), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
@@ -76,7 +77,7 @@ namespace ApiPortVS
             }
         }
 
-        private void ShowToolbar(object sender, EventArgs e)
+        public void ShowToolbar()
         {
             ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
             if ((null == window) || (null == window.Frame))

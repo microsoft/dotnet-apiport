@@ -10,14 +10,18 @@ namespace ApiPortVS.Reporting
     internal class ToolbarListReportViewer : IReportViewer
     {
         private readonly OutputViewModel _model;
+        private readonly IResultToolbar _toolbar;
 
-        public ToolbarListReportViewer(OutputViewModel model)
+        public ToolbarListReportViewer(OutputViewModel model, IResultToolbar toolbar)
         {
             _model = model;
+            _toolbar = toolbar;
         }
 
         public void View(IEnumerable<string> urls)
         {
+            _toolbar.ShowToolbar();
+
             foreach (var url in urls)
             {
                 _model.Paths.Add(url);

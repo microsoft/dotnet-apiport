@@ -10,6 +10,7 @@ using ApiPortVS.SourceMapping;
 using ApiPortVS.ViewModels;
 using ApiPortVS.Views;
 using Autofac;
+using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Reporting;
@@ -34,7 +35,7 @@ namespace ApiPortVS
 
         private readonly IContainer _container;
 
-        public ServiceProvider(IServiceProvider serviceProvider)
+        public ServiceProvider(ApiPortVSPackage serviceProvider)
         {
             var builder = new ContainerBuilder();
 
@@ -42,7 +43,8 @@ namespace ApiPortVS
             builder.RegisterType<ErrorListProvider>()
                 .AsSelf()
                 .SingleInstance();
-            builder.RegisterInstance<IServiceProvider>(serviceProvider)
+            builder.RegisterInstance(serviceProvider)
+                .As<IResultToolbar>()
                 .As<IServiceProvider>();
             builder.Register(_ => Package.GetGlobalService(typeof(SVsWebBrowsingService)))
                 .As<IVsWebBrowsingService>();
@@ -50,7 +52,8 @@ namespace ApiPortVS
                 .As<IReportViewer>()
                 .SingleInstance();
             builder.RegisterType<ToolbarListReportViewer>()
-                .As<IReportViewer>();
+                .As<IReportViewer>()
+                .InstancePerLifetimeScope();
             builder.Register(x => new AssemblyRedirects(s_appConfigFilePath))
                 .AsSelf()
                 .SingleInstance()
@@ -83,6 +86,7 @@ namespace ApiPortVS
                 .As<IReportGenerator>()
                 .SingleInstance();
             builder.RegisterType<OutputWindowWriter>()
+                .AsSelf()
                 .As<TextWriter>()
                 .SingleInstance();
             builder.RegisterType<TextWriterProgressReporter>()
@@ -91,12 +95,20 @@ namespace ApiPortVS
             builder.RegisterType<ReportFileWriter>()
                 .As<IFileWriter>()
                 .SingleInstance();
+            builder.RegisterAdapter<IServiceProvider, DTE>(provider => (DTE)provider.GetService(typeof(DTE)));
+
             builder.RegisterAdapter<IServiceProvider, IVsOutputWindowPane>(provider =>
             {
-                var outputWindow = serviceProvider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
+                var outputWindow = provider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
+
+                IVsOutputWindowPane windowPane;
+                if (outputWindow.GetPane(ref OutputWindowGuid, out windowPane) == S_OK)
+                {
+                    return windowPane;
+                }
+
                 if (outputWindow.CreatePane(ref OutputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
                 {
-                    IVsOutputWindowPane windowPane;
                     if (outputWindow.GetPane(ref OutputWindowGuid, out windowPane) == S_OK)
                     {
                         return windowPane;
@@ -104,10 +116,11 @@ namespace ApiPortVS
                 }
 
                 // If a custom window couldn't be opened, open the general purpose window
-                return serviceProvider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
+                return provider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
             }).SingleInstance();
             builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
-                .As<OutputViewModel>();
+                .As<OutputViewModel>()
+                .SingleInstance();
 
             // Register menu handlers
             builder.RegisterType<AnalyzeMenu>()
