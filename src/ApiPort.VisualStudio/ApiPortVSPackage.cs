@@ -4,6 +4,7 @@
 using ApiPortVS.Views;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.Reflection;
@@ -17,6 +18,7 @@ namespace ApiPortVS
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)] // load when a solution is opened
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "General", 110, 113, true)]
+    [ProvideToolWindow(typeof(AnalysisOutputToolWindow))]
     public class ApiPortVSPackage : Package
     {
         private static ServiceProvider s_serviceProvider;
@@ -58,6 +60,10 @@ namespace ApiPortVS
                 MenuCommand analyzeMenuOptionsItem = new MenuCommand(ShowOptionsPage, analyzeMenuOptionsCommandID);
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
+                CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeToolbarMenuItem);
+                MenuCommand analyzeMenuToolbarItem = new MenuCommand(ShowToolbar, analyzeMenuToolbarCommandID);
+                mcs.AddCommand(analyzeMenuToolbarItem);
+
                 CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
                 OleMenuCommand contextMenuItem = new OleMenuCommand(menuInitializer.ContextMenuItemCallback, projectContextMenuCmdId);
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
@@ -68,6 +74,18 @@ namespace ApiPortVS
                 contextMenuOptionsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuOptionsItem);
             }
+        }
+
+        private void ShowToolbar(object sender, EventArgs e)
+        {
+            ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
+            if ((null == window) || (null == window.Frame))
+            {
+                throw new NotSupportedException("Cannot create tool window");
+            }
+
+            IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
+            ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
 
         private void ShowOptionsPage(object sender, EventArgs e)

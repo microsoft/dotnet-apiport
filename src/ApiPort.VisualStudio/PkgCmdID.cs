@@ -9,6 +9,7 @@ namespace ApiPortVS
     {
         public const uint CmdIdAnalyzeMenuItem = 0x0100;
         public const uint CmdIdAnalyzeOptionsMenuItem = 0x0101;
+        public const uint CmdIdAnalyzeToolbarMenuItem = 0x0102;
         public const uint CmdIdProjectContextMenuItem = 0x0200;
         public const uint CmdIdProjectContextOptionsMenuItem = 0x0201;
     };
