@@ -17,123 +17,56 @@ namespace ApiPortVS.Tests
         [TestMethod]
         public void Build_VsFailsToStartBuild_TaskResultSetFalse()
         {
-            var serviceProvider = ProviderWithBuildManagerWhichReturns(VSConstants.S_FALSE);
-
+            var buildManager = BuildManagerWhichReturns(VSConstants.S_FALSE);
             var project = Substitute.For<Project>();
+            var projectBuilder = new ProjectBuilder(buildManager);
+            uint pdwCookie;
 
-            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var result = projectBuilder.BuildAsync(project).Result;
 
-            var projectBuilder = new ProjectBuilder(serviceProvider);
-            projectBuilder.Build(project, taskCompletionSource);
+            Assert.IsFalse(result);
 
-            Assert.IsFalse(taskCompletionSource.Task.Result);
-        }
-
-        [TestMethod]
-        public void Build_UpdateActionFailed_TaskResultSetFalse()
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            var projectBuilder = ProjectBuilderAfterBuildHasBegun(taskCompletionSource);
-
-            var updateActionFailed = 0;
-            projectBuilder.UpdateSolution_Done(updateActionFailed, 0, 0);
-
-            Assert.IsFalse(taskCompletionSource.Task.Result);
-        }
-
-        [TestMethod]
-        public void Build_UpdateCanceled_TaskResultSetFalse()
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            var projectBuilder = ProjectBuilderAfterBuildHasBegun(taskCompletionSource);
-
-            projectBuilder.UpdateSolution_Cancel();
-
-            Assert.IsFalse(taskCompletionSource.Task.Result);
+            // Checking that we are not listening to build events 
+            // if starting a build was not successful
+            buildManager.DidNotReceiveWithAnyArgs()
+                .AdviseUpdateSolutionEvents(null, out pdwCookie);
         }
 
         [TestMethod]
         public void Build_BuildCompletedSuccessfully_TaskResultSetTrue()
         {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            var projectBuilder = ProjectBuilderAfterBuildHasBegun(taskCompletionSource);
+            var buildManager = BuildManagerWhichReturns(VSConstants.S_OK);
+            var project = Substitute.For<Project>();
+            var projectBuilder = new ProjectBuilder(buildManager);
+            uint pdwCookie;
 
-            var updateActionSucceeded = 1;
-            projectBuilder.UpdateSolution_Done(updateActionSucceeded, 0, 0);
+            var buildTask = projectBuilder.BuildAsync(project);
 
-            Assert.IsTrue(taskCompletionSource.Task.Result);
+            // Checking that we are subscribed to build events
+            buildManager.ReceivedWithAnyArgs(1)
+                .AdviseUpdateSolutionEvents(Arg.Any<IVsUpdateSolutionEvents>(), out pdwCookie);
         }
 
-        [TestMethod]
-        public void Build_BuildCompletedSuccessfully_UnregistersForBuildEvents()
-        {
-            var buildManager = Substitute.For<IVsSolutionBuildManager>();
-
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-
-            var projectBuilder = ProjectBuilderAfterBuildHasBegun(taskCompletionSource, buildManager);
-
-            var updateActionSucceeded = 1;
-            projectBuilder.UpdateSolution_Done(updateActionSucceeded, 0, 0);
-
-            buildManager.Received().UnadviseUpdateSolutionEvents(Arg.Any<uint>());
-        }
-
-        [TestMethod]
-        public void Build_BuildCompletedUnsuccessfully_UnregistersForBuildEvents()
-        {
-            var buildManager = Substitute.For<IVsSolutionBuildManager>();
-
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-
-            var projectBuilder = ProjectBuilderAfterBuildHasBegun(taskCompletionSource, buildManager);
-
-            var updateActionFailed = 0;
-            projectBuilder.UpdateSolution_Done(updateActionFailed, 0, 0);
-
-            buildManager.Received().UnadviseUpdateSolutionEvents(Arg.Any<uint>());
-        }
-
-        [TestMethod]
-        public void Build_BuildCanceled_UnregistersForBuildEvents()
-        {
-            var buildManager = Substitute.For<IVsSolutionBuildManager>();
-
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-
-            var projectBuilder = ProjectBuilderAfterBuildHasBegun(taskCompletionSource, buildManager);
-
-            projectBuilder.UpdateSolution_Cancel();
-
-            buildManager.Received().UnadviseUpdateSolutionEvents(Arg.Any<uint>());
-        }
-
-        private IServiceProvider ProviderWithBuildManagerWhichReturns(int returnForUpdate)
+        private IVsSolutionBuildManager BuildManagerWhichReturns(int returnForUpdate)
         {
             var buildManager = Substitute.For<IVsSolutionBuildManager>();
             buildManager.StartSimpleUpdateProjectConfiguration(null, null, null, 0, 0, 0)
                         .ReturnsForAnyArgs(returnForUpdate);
 
-            return ProviderReturningBuildManager(buildManager);
+            uint cookie;
+
+            buildManager.AdviseUpdateSolutionEvents(null, out cookie)
+                .ReturnsForAnyArgs(4);
+
+            return buildManager;
         }
 
-        private IServiceProvider ProviderReturningBuildManager(IVsSolutionBuildManager buildManager)
+        private ProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager buildManager)
         {
-            var serviceProvider = Substitute.For<IServiceProvider>();
-            serviceProvider.GetService(typeof(SVsSolutionBuildManager)).Returns(buildManager);
-
-            return serviceProvider;
-        }
-
-        private ProjectBuilder ProjectBuilderAfterBuildHasBegun(TaskCompletionSource<bool> taskCompletionSource, IVsSolutionBuildManager buildManager = null)
-        {
-            var serviceProvider = buildManager == null ? ProviderWithBuildManagerWhichReturns(VSConstants.S_OK)
-                                                       : ProviderReturningBuildManager(buildManager);
-
             var project = Substitute.For<Project>();
 
-            var projectBuilder = new ProjectBuilder(serviceProvider);
-            projectBuilder.Build(project, taskCompletionSource);
+            var projectBuilder = new ProjectBuilder(buildManager);
+            projectBuilder.BuildAsync(project);
 
             return projectBuilder;
         }
