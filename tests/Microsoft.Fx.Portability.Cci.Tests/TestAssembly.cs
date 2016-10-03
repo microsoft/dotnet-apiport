@@ -19,7 +19,8 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private TestAssembly(string assemblyName, string text, IEnumerable<string> referencePaths)
         {
-            var path = new FileInfo(Path.Combine(System.IO.Path.GetTempPath(), assemblyName + ".exe"));
+            var executableName = $"{assemblyName}-{Guid.NewGuid().ToString()}.exe";
+            var path = new FileInfo(Path.Combine(System.IO.Path.GetTempPath(), executableName));
             _path = path.FullName;
 
             if (path.Exists)
