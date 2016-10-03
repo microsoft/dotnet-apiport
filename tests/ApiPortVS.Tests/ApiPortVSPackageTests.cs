@@ -3,16 +3,15 @@
 
 using ApiPortVS.Analyze;
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.IO;
+using Xunit;
 
 namespace ApiPortVS.Tests
 {
-    [TestClass]
     public class ApiPortVSPackageTests
     {
-        [TestMethod]
+        [Fact]
         public void FileHasAnalyzableExtension_FileIsExe_ReturnsTrue()
         {
             var filename = "analyzable.exe";
@@ -21,10 +20,10 @@ namespace ApiPortVS.Tests
 
             var result = package.FileHasAnalyzableExtension(filename);
 
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void FileHasAnalyzableExtension_FileIsDll_ReturnsTrue()
         {
             var filename = "analyzable.dll";
@@ -33,10 +32,10 @@ namespace ApiPortVS.Tests
 
             var result = package.FileHasAnalyzableExtension(filename);
 
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void FileHasAnalyzableExtension_FilenameContainsVshost_ReturnsFalse()
         {
             var filename = "analyzable.vshost.exe";
@@ -45,8 +44,9 @@ namespace ApiPortVS.Tests
 
             var result = package.FileHasAnalyzableExtension(filename);
 
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
+
         private ProjectAnalyzer GetProjectAnalyzer()
         {
             var fileSystem = Substitute.For<IFileSystem>();

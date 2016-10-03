@@ -8,18 +8,17 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
+using Xunit;
 
 namespace ApiPortVS.Tests
 {
-    [TestClass]
     public class CciSourceLineMapperTests
     {
-        [TestMethod]
+        [Fact]
         public void FindMissingTypeReferences_PdbNotFound_ReportedToTextOutput()
         {
             var assemblyName = "assemblyPath";

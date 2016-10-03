@@ -3,11 +3,11 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
@@ -19,7 +19,8 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private TestAssembly(string assemblyName, string text, IEnumerable<string> referencePaths)
         {
-            var path = new FileInfo(Path.Combine(System.IO.Path.GetTempPath(), assemblyName + ".exe"));
+            var executableName = $"{assemblyName}-{Guid.NewGuid().ToString()}.exe";
+            var path = new FileInfo(Path.Combine(System.IO.Path.GetTempPath(), executableName));
             _path = path.FullName;
 
             if (path.Exists)
@@ -42,7 +43,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references);
             var result = compilation.Emit(path.FullName);
 
-            Assert.IsTrue(result.Success);
+            Assert.True(result.Success);
         }
 
         public string path { get { return _path; } }

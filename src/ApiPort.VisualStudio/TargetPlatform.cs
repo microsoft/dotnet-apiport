@@ -14,7 +14,7 @@ namespace ApiPortVS
 
         public string Name { get; set; }
 
-        public IEnumerable<TargetPlatformVersion> Versions { get; set; }
+        public IOrderedEnumerable<TargetPlatformVersion> Versions { get; set; }
 
         public string DisplayName
         {
@@ -22,7 +22,7 @@ namespace ApiPortVS
             {
                 if (AlternativeNames.Count > 0)
                 {
-                    return String.Format("{0} ({1})", Name, String.Join(", ", AlternativeNames));
+                    return $"{Name} ({string.Join(", ", AlternativeNames)})";
                 }
                 else
                 {
@@ -38,9 +38,8 @@ namespace ApiPortVS
             Name = targetInfo.Key;
 
             Versions = targetInfo
-                .OrderBy(v => v.Version)
                 .Select(v => new TargetPlatformVersion(this) { Version = v.Version, IsSelected = v.IsSet })
-                .ToList();
+                .OrderBy(v => v.Version);
         }
 
         public TargetPlatform() { }
@@ -48,7 +47,7 @@ namespace ApiPortVS
         public TargetPlatform(TargetPlatform platform)
         {
             Name = platform.Name;
-            Versions = platform.Versions.Select(v => new TargetPlatformVersion(v)).ToList();
+            Versions = platform.Versions.Select(v => new TargetPlatformVersion(v)).OrderBy(v => v.Version);
         }
 
         public override bool Equals(object obj)
@@ -64,7 +63,7 @@ namespace ApiPortVS
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return base.GetHashCode();
         }
 
         public override string ToString()
@@ -89,9 +88,61 @@ namespace ApiPortVS
 
         public int CompareTo(TargetPlatform other)
         {
-            if (other == null) return -1;
+            if (other == null)
+            {
+                return -1;
+            }
+            else if (Equals(other))
+            {
+                return 0;
+            }
 
-            return string.CompareOrdinal(Name, other.Name);
+            var comparedNames = string.CompareOrdinal(Name, other.Name);
+
+            if (comparedNames != 0)
+            {
+                return comparedNames;
+            }
+
+            // Adapted from:
+            // https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/SequenceEqual.cs#L43-L55
+            // Remarks:
+            // We opted to use this logic instead of calling
+            // `e1.SequenceEquals(e2)` because SequenceEquals only tells us 
+            // whether or not to return 0.  CompareTo needs to return more
+            // information, like whether e1 comes before e2 (returning -1) or e1
+            // comes after e2 (returning +1).
+            using (var e1 = Versions.GetEnumerator())
+            using (var e2 = other.Versions.GetEnumerator())
+            {
+                while (e1.MoveNext())
+                {
+                    // `this` has more Versions than the compared object, so
+                    // `this` should come after the compared object since all
+                    // other elements up until this point were equal.
+                    if (!e2.MoveNext())
+                    {
+                        return 1;
+                    }
+                    else if (Equals(e1.Current, e2.Current))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return e1.Current.Version.CompareTo(e2.Current.Version);
+                    }
+                }
+
+                // Compared has more Versions than `this`.  `this` comes first
+                if (e2.MoveNext())
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
+
         }
     }
 }
