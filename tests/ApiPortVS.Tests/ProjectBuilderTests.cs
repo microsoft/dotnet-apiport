@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using Xunit;
 
 namespace ApiPortVS.Tests
 {
-    [TestClass]
     public class ProjectBuilderTests
     {
-        [TestMethod]
+        [Fact]
         public void Build_VsFailsToStartBuild_TaskResultSetFalse()
         {
             var buildManager = BuildManagerWhichReturns(VSConstants.S_FALSE);
@@ -24,7 +23,7 @@ namespace ApiPortVS.Tests
 
             var result = projectBuilder.BuildAsync(project).Result;
 
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             // Checking that we are not listening to build events 
             // if starting a build was not successful
@@ -32,7 +31,7 @@ namespace ApiPortVS.Tests
                 .AdviseUpdateSolutionEvents(null, out pdwCookie);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_BuildCompletedSuccessfully_TaskResultSetTrue()
         {
             var buildManager = BuildManagerWhichReturns(VSConstants.S_OK);
