@@ -21,8 +21,16 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
             var dependencies = cci.FindDependencies(new[] { path }, progressReporter);
 
-            var foundDocIds = dependencies.Dependencies.Select(o => Tuple.Create(o.Key.MemberDocId, o.Value.Count)).ToList();
-            Assert.Equal(EmptyProjectMemberDocId().ToList(), foundDocIds);
+            var foundDocIds = dependencies.Dependencies
+                .Select(o => Tuple.Create(o.Key.MemberDocId, o.Value.Count))
+                .OrderBy(x => x.Item1)
+                .ToList();
+
+            var expected = EmptyProjectMemberDocId()
+                .OrderBy(x => x.Item1)
+                .ToList();
+
+            Assert.Equal(expected, foundDocIds);
         }
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
