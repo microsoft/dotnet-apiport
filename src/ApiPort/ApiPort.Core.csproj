@@ -7,27 +7,33 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{560DD4EB-C4D2-4F94-9695-931CD3D17B5B}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ApiPort</RootNamespace>
     <AssemblyName>ApiPort</AssemblyName>
-    <NuGetTargetMoniker>DNXCore,Version=v5.0</NuGetTargetMoniker>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkIdentifier>DNXCore</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
     <DefineConstants>NETCORE</DefineConstants>
     <FileAlignment>512</FileAlignment>
-    <HostExe>coreconsole</HostExe>
-    <NoStdLib>true</NoStdLib>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
     <SignAssembly>false</SignAssembly>
-    <!-- Output path properties -->
+  </PropertyGroup>
+
+  <!-- Taken from: https://docs.microsoft.com/en-us/dotnet/articles/core/tutorials/target-dotnetcore-with-msbuild#creating-a-net-core-console-application -->
+  <PropertyGroup>
+    <TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+    <BaseNuGetRuntimeIdentifier>win7</BaseNuGetRuntimeIdentifier>
+    <NoStdLib>true</NoStdLib>
+    <NoWarn>$(NoWarn);1701</NoWarn>
+  </PropertyGroup>
+
+  <!-- Output path properties -->
+  <PropertyGroup>
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\dotnet\$(Platform)</OutputPath>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\netcoreapp1.0\$(Platform)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
   <!-- Configruation (OS and flavor) properties -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,8 +42,6 @@
     <DefineConstants>TRACE;DEBUG;$(DefineConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <BaseNuGetRuntimeIdentifier>win7</BaseNuGetRuntimeIdentifier>
-    <HostExtension>.exe</HostExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
@@ -45,41 +49,30 @@
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <BaseNuGetRuntimeIdentifier>win7</BaseNuGetRuntimeIdentifier>
-    <HostExtension>.exe</HostExtension>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Ubuntu_Debug'">
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG;TRACE;LINUX;$(DefineConstants)</DefineConstants>
     <DebugType>full</DebugType>
     <BaseNuGetRuntimeIdentifier>ubuntu.14.04</BaseNuGetRuntimeIdentifier>
-    <HostExtension>
-    </HostExtension>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Ubuntu_Release'">
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;LINUX;$(DefineConstants)</DefineConstants>
     <DebugType>pdbonly</DebugType>
     <BaseNuGetRuntimeIdentifier>ubuntu.14.04</BaseNuGetRuntimeIdentifier>
-    <HostExtension>
-    </HostExtension>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Osx_Debug'">
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG;TRACE;OSX;$(DefineConstants)</DefineConstants>
     <DebugType>full</DebugType>
     <BaseNuGetRuntimeIdentifier>osx.10.10</BaseNuGetRuntimeIdentifier>
-    <HostExtension>
-    </HostExtension>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Osx_Release'">
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;OSX;$(DefineConstants)</DefineConstants>
     <DebugType>pdbonly</DebugType>
     <BaseNuGetRuntimeIdentifier>osx.10.10</BaseNuGetRuntimeIdentifier>
-    <HostExtension>
-    </HostExtension>
   </PropertyGroup>
   <!-- Platform (arch) properties -->
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
@@ -91,6 +84,7 @@
   <PropertyGroup Condition="'$(Platform)' == 'arm'">
     <PlatformTarget>arm</PlatformTarget>
   </PropertyGroup>
+
   <!-- Source files -->
   <ItemGroup>
     <Compile Include="AppCommands.cs" />
@@ -141,29 +135,31 @@
     </ProjectReference>
   </ItemGroup>
   <!-- Targets includes -->
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <!-- Post-build actions -->
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- Taken from: https://docs.microsoft.com/en-us/dotnet/articles/core/tutorials/target-dotnetcore-with-msbuild#creating-a-net-core-console-application -->
   <PropertyGroup>
-    <!-- We don't use any of MSBuild's resolution logic for resolving the framework, so just set these two  
-             properties to any folder that exists to skip the GetReferenceAssemblyPaths task (not target) and  
-             to prevent it from outputting a warning (MSB3644). 
-        -->
+    <!-- We don't use any of MSBuild's resolution logic for resolving the framework, so just set these two
+              properties to any folder that exists to skip the GetReferenceAssemblyPaths task (not target) and
+              to prevent it from outputting a warning (MSB3644).
+          -->
     <_TargetFrameworkDirectories>$(MSBuildThisFileDirectory)</_TargetFrameworkDirectories>
     <_FullFrameworkReferenceAssemblyPaths>$(MSBuildThisFileDirectory)</_FullFrameworkReferenceAssemblyPaths>
     <!-- MSBuild thinks all EXEs need binding redirects, not so for CoreCLR! -->
     <AutoUnifyAssemblyReferences>true</AutoUnifyAssemblyReferences>
-  </PropertyGroup>
-  <!-- Set up the debug target for portable executables -->
-  <PropertyGroup Condition="'$(OutputType)'=='Exe'">
-    <StartWorkingDirectory Condition="'$(StartWorkingDirectory)' == ''">$(TargetDir)</StartWorkingDirectory>
-    <StartAction Condition="'$(StartAction)' == ''">Program</StartAction>
-    <StartProgram Condition="'$(StartProgram)' == ''">$(TargetPath)</StartProgram>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <!-- Set up debug options to run with host, and to use the CoreCLR debug engine -->
+    <!-- Depending on where dotnet.exe is installed, <StartProgram> may have to 
+        be changed. We set $(DotNetExe) in lines 205 - 210-->
+    <StartAction>Program</StartAction>
+    <StartProgram>$(TargetDir)dotnet.exe</StartProgram>
+    <StartArguments>$(TargetPath)</StartArguments>
     <DebugEngines>{2E36F1D4-B23C-435D-AB41-18E608940038}</DebugEngines>
   </PropertyGroup>
-  <!-- Post-build actions -->
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Move SourceFiles="$(TargetPath)" DestinationFiles="$(TargetDir)\$(AssemblyName).dll" />
-    <Move SourceFiles="$(TargetDir)\$(HostExe)$(HostExtension)" DestinationFiles="$(TargetDir)\$(AssemblyName)$(HostExtension)" />
-  </Target>
 </Project>

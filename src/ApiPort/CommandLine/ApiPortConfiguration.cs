@@ -1,8 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+#if NETCORE
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+#else
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.OptionsModel;
+#endif
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,11 +25,12 @@ namespace ApiPort.CommandLine
             var arrays = GetConfigMapCounts(typeof(TOptions), t => (t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>)) || t.IsArray, switchMapping);
             var updatedArgs = TransformArguments(args, arrays, booleanSwitches).ToArray();
 
-            var cmd = new ConfigurationBuilder(Directory.GetCurrentDirectory())
-                 .AddCommandLine(updatedArgs, switchMapping)
-                 .Build();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddCommandLine(updatedArgs, switchMapping)
+                .Build();
 
-            var manager = new ConfigureFromConfigurationOptions<TOptions>(cmd);
+            var manager = new ConfigureFromConfigurationOptions<TOptions>(configuration);
 
             var options = new TOptions();
             manager.Action(options);

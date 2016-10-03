@@ -1,37 +1,29 @@
 {
   "runtimes": {
-    "win7-x86": { },
-    "win7-x64": { },
-    "win8-arm": { },
-    "ubuntu.14.04-x64": { },
-    "osx.10.10-x64": { }
+    "win7-x86": {},
+    "win7-x64": {},
+    "win8-arm": {},
+    "ubuntu.14.04-x64": {},
+    "osx.10.10-x64": {}
+  },
+  "buildOptions": {
+    "warningsAsErrors": true,
+    "emitEntryPoint": true
   },
   "dependencies": {
+    "Autofac": "4.1.0",
     "MicroBuild.Core": "0.2.0",
-    "Microsoft.Framework.Configuration.CommandLine": "1.0.0-beta5",
-    "Microsoft.Framework.OptionsModel": "1.0.0-beta5",
-    "Microsoft.NETCore.Platforms": "1.0.1-beta-23516",
-    "Newtonsoft.Json": "6.0.8",
-    "System.Collections.Immutable": "1.1.38-beta-23516",
-    "System.Reflection.Metadata": "1.2.0-rc2-23715",
-    "Unity": "3.5.1404-*"
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+    "Microsoft.NETCore.App": "1.0.1",
+    "Newtonsoft.Json": "9.0.1",
+    "System.Diagnostics.FileVersionInfo": "4.0.0",
+    "System.Diagnostics.TraceSource": "4.0.0"
   },
   "frameworks": {
-    "dnxcore50": {
-      "imports": "portable-net45+win8",
-      "dependencies": {
-        "Microsoft.NETCore.ConsoleHost": "1.0.0-beta-23516",
-        "Microsoft.NETCore.Runtime.CoreCLR": "1.0.1-beta-23516",
-        "System.Collections.Concurrent": "4.0.11-beta-23516",
-        "System.Console": "4.0.0-beta-23516",
-        "System.Diagnostics.FileVersionInfo": "4.0.0-beta-23516",
-        "System.Diagnostics.Process": "4.1.0-beta-23516",
-        "System.Diagnostics.TraceSource": "4.0.0-beta-23516",
-        "System.Net.Requests": "4.0.11-beta-23516",
-        "System.Private.Uri": "4.0.1-beta-23516",
-        "System.Reflection": "4.1.0-beta-23516",
-        "System.Runtime.Serialization.Primitives": "4.1.0-beta-23516"
-      }
+    "netcoreapp1.0": {
+      "imports": [ "dnxcore50", "portable-net452" ]
     }
   }
 }
