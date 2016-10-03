@@ -16,7 +16,6 @@ namespace ApiPortVS.Analyze
     public class ProjectAnalyzer
     {
         private readonly IFileWriter _reportWriter;
-        private readonly IServiceProvider _serviceProvider;
         private readonly IFileSystem _fileSystem;
         private readonly ISourceLineMapper _sourceLineMapper;
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
