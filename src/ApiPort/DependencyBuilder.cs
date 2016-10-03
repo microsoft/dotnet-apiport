@@ -125,7 +125,8 @@ namespace ApiPort
         {
             try
             {
-                var assembly = Assembly.Load("Microsoft.Fx.Portability.Offline");
+                var offlineAssembly = new AssemblyName("Microsoft.Fx.Portability.Offline");
+                var assembly = Assembly.Load(offlineAssembly);
                 var type = assembly.GetType("Microsoft.Fx.Portability.OfflineDataModule");
                 var offlineModule = type?.GetTypeInfo()
                     .GetConstructor(new[] { typeof(string) })
