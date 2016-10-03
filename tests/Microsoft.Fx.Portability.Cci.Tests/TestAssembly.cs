@@ -3,11 +3,11 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references);
             var result = compilation.Emit(path.FullName);
 
-            Assert.IsTrue(result.Success);
+            Assert.True(result.Success);
         }
 
         public string path { get { return _path; } }

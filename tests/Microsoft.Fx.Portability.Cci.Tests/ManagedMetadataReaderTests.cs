@@ -4,30 +4,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
-    [TestClass]
     public class ManagedMetadataReaderTests
     {
         private readonly static string s_emptyProjectPath = TestAssembly.EmptyProject;
         private readonly static string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
 
-        [TestMethod]
+        [Fact]
         public void EmptyProject()
         {
             CompareFinders(s_emptyProjectPath);
         }
 
-        [TestMethod]
+        [Fact]
         public void WithGenericsAndReference()
         {
             CompareFinders(s_withGenericsAndReferencePath);
         }
 
-        [TestMethod]
+        [Fact]
         public void WithGenericsAndReferenceAndEmptyProject()
         {
             CompareFinders(s_withGenericsAndReferencePath, s_emptyProjectPath);
@@ -64,16 +63,16 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
             var b = Equals(f1, f2);
 
-            CollectionAssert.AreEquivalent(enumerable1.ToList(), enumerable2.ToList());
+            Assert.Equal(enumerable1.ToList(), enumerable2.ToList());
         }
 
         private static void CompareDictionary<TKey, TValue>(IDictionary<TKey, ICollection<TValue>> dictionary1, IDictionary<TKey, ICollection<TValue>> dictionary2)
         {
-            CollectionAssert.AreEquivalent(dictionary1.Keys.ToList(), dictionary2.Keys.ToList());
+            Assert.Equal(dictionary1.Keys.ToList(), dictionary2.Keys.ToList());
 
             foreach (var key in dictionary1.Keys)
             {
-                CollectionAssert.AreEquivalent(dictionary1[key].ToList(), dictionary2[key].ToList());
+                Assert.Equal(dictionary1[key].ToList(), dictionary2[key].ToList());
             }
         }
     }

@@ -5,15 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
-    [TestClass]
     public class CciAnalyzerTests
     {
-        [TestMethod]
+        [Fact]
         public void FindDependencies()
         {
             var cci = new CciDependencyFinder();
@@ -23,7 +22,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             var dependencies = cci.FindDependencies(new[] { path }, progressReporter);
 
             var foundDocIds = dependencies.Dependencies.Select(o => Tuple.Create(o.Key.MemberDocId, o.Value.Count)).ToList();
-            CollectionAssert.AreEquivalent(EmptyProjectMemberDocId().ToList(), foundDocIds);
+            Assert.Equal(EmptyProjectMemberDocId().ToList(), foundDocIds);
         }
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
