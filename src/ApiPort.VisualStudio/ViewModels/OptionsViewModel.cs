@@ -95,6 +95,8 @@ namespace ApiPortVS.ViewModels
             set { UpdateProperty(ref _hasError, value); }
         }
 
+        public void Save() => _optionsModel.Save();
+
         public IList<TargetPlatform> InvalidTargets { get; set; }
 
         public async Task UpdateAsync()

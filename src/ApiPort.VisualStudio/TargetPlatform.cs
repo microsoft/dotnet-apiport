@@ -14,7 +14,7 @@ namespace ApiPortVS
 
         public string Name { get; set; }
 
-        public IOrderedEnumerable<TargetPlatformVersion> Versions { get; set; }
+        public ICollection<TargetPlatformVersion> Versions { get; set; }
 
         public string DisplayName
         {
@@ -39,7 +39,8 @@ namespace ApiPortVS
 
             Versions = targetInfo
                 .Select(v => new TargetPlatformVersion(this) { Version = v.Version, IsSelected = v.IsSet })
-                .OrderBy(v => v.Version);
+                .OrderBy(v => v.Version)
+                .ToList();
         }
 
         public TargetPlatform() { }
@@ -47,7 +48,10 @@ namespace ApiPortVS
         public TargetPlatform(TargetPlatform platform)
         {
             Name = platform.Name;
-            Versions = platform.Versions.Select(v => new TargetPlatformVersion(v)).OrderBy(v => v.Version);
+            Versions = platform.Versions
+                .Select(v => new TargetPlatformVersion(v))
+                .OrderBy(v => v.Version)
+                .ToList();
         }
 
         public override bool Equals(object obj)
@@ -108,7 +112,7 @@ namespace ApiPortVS
             // https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/SequenceEqual.cs#L43-L55
             // Remarks:
             // We opted to use this logic instead of calling
-            // `e1.SequenceEquals(e2)` because SequenceEquals only tells us 
+            // `e1.SequenceEquals(e2)` because SequenceEquals only tells us
             // whether or not to return 0.  CompareTo needs to return more
             // information, like whether e1 comes before e2 (returning -1) or e1
             // comes after e2 (returning +1).

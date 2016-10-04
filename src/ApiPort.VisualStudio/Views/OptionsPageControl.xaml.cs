@@ -24,14 +24,8 @@ namespace ApiPortVS.Views
             DataContext = viewModel;
             GuidanceLink.NavigateUri = new Uri(LocalizedStrings.MoreInformationUrl);
 
-            Loaded += ControlLoaded;
-        }
-
-        private async void ControlLoaded(object sender, RoutedEventArgs e)
-        {
-            Loaded -= ControlLoaded;
-
-            await ViewModel.UpdateAsync();
+            Loaded += async (s, e) => await viewModel.UpdateAsync();
+            Unloaded += (s, e) => viewModel.Save();
         }
 
         private void MoreInformationRequested(object sender, RequestNavigateEventArgs e)
