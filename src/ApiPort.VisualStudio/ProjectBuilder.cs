@@ -3,35 +3,37 @@
 
 using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPortVS
 {
     public class ProjectBuilder
     {
-        private IVsSolutionBuildManager _buildManager;
+        private IVsSolutionBuildManager2 _buildManager;
 
-        public ProjectBuilder(IVsSolutionBuildManager buildManager)
+        public ProjectBuilder(IVsSolutionBuildManager2 buildManager)
         {
             _buildManager = buildManager;
         }
 
-        public Task<bool> BuildAsync(Project project)
+        public Task<bool> BuildAsync(ICollection<Project> projects)
         {
-            var projectHierarchy = project.GetHierarchy();
-            int suppressUI = 0;
-            uint buildUpdateFlags = (uint)(VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD);
-            uint defQueryResults = 0; // enumerated in VSSOLNBUILDQUERYRESULTS
+            var projectHierarchy = projects.Select(project => project.GetHierarchy()).ToArray()
+            var suppressUI = 0;
+            var buildUpdateFlags = Enumerable.Repeat((uint)VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD, projectHierarchy.Length).ToArray();
 
             // launches an asynchronous build operation, returns S_OK immediately if the build begins
             // => S_OK does not indicate completion or success of the build
-            var updateErrCode = _buildManager.StartSimpleUpdateProjectConfiguration(projectHierarchy, null, null,
-                buildUpdateFlags, defQueryResults, suppressUI);
+            var updateErrorCode = _buildManager.StartUpdateSpecificProjectConfigurations((uint)projects.Count, projectHierarchy, null, null, buildUpdateFlags, null, (uint)VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD, suppressUI);
 
             var tcs = new TaskCompletionSource<bool>();
 
-            if (updateErrCode == VSConstants.S_OK)
+            if (updateErrorCode == VSConstants.S_OK)
             {
                 var builder = new ProjectAsyncBuilder(_buildManager, tcs);
                 _buildManager.AdviseUpdateSolutionEvents(builder, out builder.UpdateSolutionEventsCookie);

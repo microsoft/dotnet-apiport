@@ -458,7 +458,7 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to build {0}..
+        ///   Looks up a localized string similar to Unable to build..
         /// </summary>
         public static string UnableToBuildProject {
             get {

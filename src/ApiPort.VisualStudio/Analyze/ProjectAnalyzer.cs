@@ -39,25 +39,23 @@ namespace ApiPortVS.Analyze
             _errorList = errorList;
         }
 
-        public async Task AnalyzeProjectAsync(Project project)
+        public async Task AnalyzeProjectAsync(ICollection<Project> projects)
         {
-            var buildSucceeded = await _builder.BuildAsync(project);
+            var buildSucceeded = await _builder.BuildAsync(projects);
             if (!buildSucceeded)
             {
-                var message = string.Format(LocalizedStrings.UnableToBuildProject, project.Name);
+                var message = string.Format(LocalizedStrings.UnableToBuildProject);
                 throw new InvalidOperationException(message);
             }
 
-            // TODO: Add this to the options model
-            // Swap the lines below to include all assemblies in the output directory
-            //var targetAssemblies = project.GetAssemblyPaths(GetAllAssembliesInDirectory);
-            var targetAssemblies = project.GetAssemblyPaths();
+            // TODO: Add option to include everything in output, not just build artifacts
+            var targetAssemblies = projects.SelectMany(p => p.GetAssemblyPaths()).ToList();
 
             var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
 
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result));
 
-            DisplaySourceItemsInErrorList(sourceItems, project);
+            DisplaySourceItemsInErrorList(sourceItems, projects);
         }
 
         public bool FileHasAnalyzableExtension(string fileName)
@@ -82,15 +80,21 @@ namespace ApiPortVS.Analyze
             }
         }
 
-        private void DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, Project project)
+        private void DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, ICollection<Project> projects)
         {
+            if (!items.Any())
+            {
+                return;
+            }
+
             _errorList.Tasks.Clear();
             _errorList.Refresh();
             _errorList.SuspendRefresh();
 
             try
             {
-                var hierarchy = project.GetHierarchy();
+                // Using a single project for this appears to work, but there may be a better way
+                var hierarchy = project.First().GetHierarchy();
 
                 foreach (var item in items)
                 {
