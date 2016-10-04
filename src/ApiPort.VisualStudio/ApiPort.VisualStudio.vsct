@@ -16,9 +16,14 @@
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
       </Group>
 
+      <Group guid="guidSolutionContextMenuItemCmdSet" id="SolutionContextMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
+      </Group>
     </Groups>
 
     <Buttons>
+
+      <!-- Add menu items for Analyze toolbar -->
       <Button guid="guidAnalyzeMenuItemCmdSet" id="CmdIdAnalyzeMenuItem" priority="0x0100" type="Button">
         <Parent guid="guidAnalyzeMenuItemCmdSet" id="AnalyzeMenuGroup" />
         <Icon guid="guidImages" id="bmpPicSearch" />
@@ -41,8 +46,10 @@
         </Strings>
       </Button>
 
+      <!-- Add menu items for project context menu -->
       <Button guid="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextMenuItem" priority="0x0100" type="Button">
         <Parent guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
@@ -52,6 +59,26 @@
 
       <Button guid="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextOptionsMenuItem" priority="0x0101" type="Button">
         <Parent guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Portability Analyzer Settings</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Add menu items for solution context menu -->
+      <Button guid="guidSolutionContextMenuItemCmdSet" id="CmdIdSolutionContextMenuItem" priority="0x0102" type="Button">
+        <Parent guid="guidSolutionContextMenuItemCmdSet" id="SolutionContextMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Analyze Assembly Portability</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSolutionContextMenuItemCmdSet" id="CmdIdSolutionContextOptionsMenuItem" priority="0x0103" type="Button">
+        <Parent guid="guidSolutionContextMenuItemCmdSet" id="SolutionContextMenuGroup" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
@@ -81,6 +108,12 @@
       <IDSymbol name="ProjectContextMenuGroup" value="0x1021" />
       <IDSymbol name="CmdIdProjectContextMenuItem" value="0x0200" />
       <IDSymbol name="CmdIdProjectContextOptionsMenuItem" value="0x0201" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidSolutionContextMenuItemCmdSet" value="{1A55772C-AEA4-41D1-99EF-0A8278AED5AE}">
+      <IDSymbol name="SolutionContextMenuGroup" value="0x1022" />
+      <IDSymbol name="CmdIdSolutionContextMenuItem" value="0x0300" />
+      <IDSymbol name="CmdIdSolutionContextOptionsMenuItem" value="0x0301" />
     </GuidSymbol>
 
     <!-- The symbol for the Analyze menu is not built in so this allows us to add buttons to that menu -->

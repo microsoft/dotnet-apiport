@@ -8,30 +8,42 @@ using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ApiPortVS
 {
     internal class AnalyzeMenu
     {
         private readonly TextWriter _output;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly DTE _dte;
         private readonly ILifetimeScope _scope;
 
-        public AnalyzeMenu(ILifetimeScope scope, IServiceProvider serviceProvider, TextWriter output)
+        public AnalyzeMenu(ILifetimeScope scope, DTE dte, TextWriter output)
         {
             _scope = scope;
-            _serviceProvider = serviceProvider;
+            _dte = dte;
             _output = output;
         }
 
-        public async void ContextMenuItemCallback(object sender, EventArgs e)
+        public async void ProjectContextMenuItemCallback(object sender, EventArgs e)
         {
-            var selectedProject = GetSelectedProject();
-            if (selectedProject == null)
+            await AnalyzeProjects(GetSelectedProjects());
+        }
+
+        public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
+        {
+            await AnalyzeProjects(_dte.Solution.GetProjects().ToList());
+        }
+
+        private async Task AnalyzeProjects(ICollection<Project> projects)
+        {
+            if (!projects.Any())
             {
                 return;
             }
@@ -44,7 +56,7 @@ namespace ApiPortVS
                 {
                     var projectAnalyzer = innerScope.Resolve<ProjectAnalyzer>();
 
-                    await projectAnalyzer.AnalyzeProjectAsync(selectedProject);
+                    await projectAnalyzer.AnalyzeProjectAsync(projects);
                 }
             }
             catch (PortabilityAnalyzerException ex)
@@ -67,14 +79,23 @@ namespace ApiPortVS
         // (the command is sited in a menu which only appears on single selections)
         public void ProjectContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
         {
+            ContextMenuItemBeforeQueryStatus(sender, GetSelectedProjects());
+        }
+
+        public void SolutionContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
+        {
+            ContextMenuItemBeforeQueryStatus(sender, _dte.Solution.GetProjects());
+        }
+
+        private void ContextMenuItemBeforeQueryStatus(object sender, IEnumerable<Project> projects)
+        {
             var menuItem = sender as Microsoft.VisualStudio.Shell.OleMenuCommand;
             if (menuItem == null)
             {
                 return;
             }
 
-            var selectedProject = GetSelectedProject();
-            menuItem.Visible = selectedProject != null && selectedProject.IsDotNetProject();
+            menuItem.Visible = projects.Any() && projects.All(p => p.IsDotNetProject());
         }
 
         public async void AnalyzeMenuItemCallback(object sender, EventArgs e)
@@ -134,20 +155,13 @@ namespace ApiPortVS
             _output.WriteLine(header.ToString());
         }
 
-        private Project GetSelectedProject()
+        private ICollection<Project> GetSelectedProjects()
         {
-            try
-            {
-                var dte = _serviceProvider.GetService(typeof(DTE)) as DTE;
-                var selection = dte.SelectedItems;
-                var selectedItem = selection.Item(1); // selection container is indexed from 1
-
-                return selectedItem.Project;
-            }
-            catch
-            {
-                return null;
-            }
+            return _dte.SelectedItems
+                .OfType<SelectedItem>()
+                .Select(i => i.Project)
+                .Distinct()
+                .ToList();
         }
     }
 }

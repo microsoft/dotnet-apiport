@@ -62,7 +62,7 @@ namespace ApiPortVS
                 .As<IVsApiPortAnalyzer>()
                 .InstancePerLifetimeScope();
             builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
-                .As<IVsSolutionBuildManager>();
+                .As<IVsSolutionBuildManager2>();
             builder.RegisterType<ProjectBuilder>()
                 .AsSelf();
 

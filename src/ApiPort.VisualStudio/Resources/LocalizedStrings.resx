@@ -196,7 +196,7 @@
     <value>No analyzable assemblies found in {0}.</value>
   </data>
   <data name="UnableToBuildProject" xml:space="preserve">
-    <value>Unable to build {0}.</value>
+    <value>Unable to build.</value>
   </data>
   <data name="UnableToLoad" xml:space="preserve">
     <value>Unable to load {0}.</value>
