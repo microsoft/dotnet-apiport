@@ -12,23 +12,9 @@ namespace ApiPortVS
     {
         private readonly ICollection<string> _alternativeNames = new HashSet<string>(StringComparer.Ordinal);
 
-        public TargetPlatform(IGrouping<string, AvailableTarget> targetInfo)
-        {
-            Name = targetInfo.Key;
-
-            Versions = targetInfo
-                .Select(v => new TargetPlatformVersion
-                {
-                    PlatformName = Name,
-                    Version = v.Version,
-                    IsSelected = v.IsSet
-                })
-                .OrderBy(v => v.Version)
-                .ToList();
-        }
-
         public TargetPlatform()
         {
+            Versions = Array.Empty<TargetPlatformVersion>();
         }
 
         public string Name { get; set; }
@@ -50,7 +36,27 @@ namespace ApiPortVS
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            const int HashMultipler = 31;
+
+            unchecked
+            {
+                int hash = 17;
+
+                if (Name != null)
+                {
+                    hash = hash * HashMultipler + Name.GetHashCode();
+                }
+
+                if (Versions != null)
+                {
+                    foreach (var version in Versions)
+                    {
+                        hash = hash * HashMultipler + version.GetHashCode();
+                    }
+                }
+
+                return hash;
+            }
         }
 
         public override string ToString()
