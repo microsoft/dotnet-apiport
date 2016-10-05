@@ -40,8 +40,11 @@ namespace ApiPortVS.Models
             _formats = Array.Empty<SelectedResultFormat>();
             _defaultOutputName = "ApiPortAnalysis";
 
+            LastUpdate = DateTimeOffset.MinValue;
             OutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
         }
+        
+        public DateTimeOffset LastUpdate { get; set; }
 
         public IList<SelectedResultFormat> Formats
         {
