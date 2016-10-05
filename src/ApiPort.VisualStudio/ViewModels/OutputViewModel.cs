@@ -18,14 +18,17 @@ namespace ApiPortVS.ViewModels
 
         public ICommand SaveAs { get; }
 
+        public ICommand OpenDirectory { get; }
+
         public OutputViewModel()
         {
             Paths = new ObservableCollection<string>();
             OpenFile = new DelegateCommand<string>(path => Process.Start(path));
+            OpenDirectory = new DelegateCommand<string>(path => Process.Start(Path.GetDirectoryName(path)));
             SaveAs = new DelegateCommand<string>(SaveFileAs);
         }
 
-        private void SaveFileAs(string path)
+        private static void SaveFileAs(string path)
         {
             try
             {

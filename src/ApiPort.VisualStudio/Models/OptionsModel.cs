@@ -82,16 +82,19 @@ namespace ApiPortVS.Models
         {
             try
             {
-                var bytes = File.ReadAllBytes(OptionsFilePath);
+                if (File.Exists(OptionsFilePath))
+                {
+                    var bytes = File.ReadAllBytes(OptionsFilePath);
 
-                return bytes.Deserialize<OptionsModel>();
+                    return bytes.Deserialize<OptionsModel>();
+                }
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e.ToString());
-
-                return new OptionsModel();
             }
+
+            return new OptionsModel();
         }
 
         public bool Save()

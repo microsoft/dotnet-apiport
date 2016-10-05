@@ -43,6 +43,8 @@ namespace ApiPortVS.Analyze
         {
             _outputWindow.ShowWindow();
 
+            await _optionsViewModel.UpdateAsync();
+
             var reportDirectory = _optionsViewModel.OutputDirectory;
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
             var reportFileName = _optionsViewModel.DefaultOutputName;
