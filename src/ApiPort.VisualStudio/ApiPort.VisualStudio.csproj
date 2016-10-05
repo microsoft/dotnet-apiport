@@ -191,6 +191,8 @@
     <Compile Include="Reporting\IResultToolbar.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
+    <Compile Include="Utils\TargetPlatformDisplayNameConverter.cs" />
+    <Compile Include="Utils\TargetInformationStringConverter.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />
     <Compile Include="Views\AnalysisOutputToolWindow.cs" />
     <Compile Include="Views\AnalysisOutputToolWindowControl.xaml.cs">

@@ -12,47 +12,16 @@ namespace ApiPortVS
     {
         private readonly ICollection<string> _alternativeNames = new HashSet<string>(StringComparer.Ordinal);
 
+        public TargetPlatform()
+        {
+            Versions = Array.Empty<TargetPlatformVersion>();
+        }
+
         public string Name { get; set; }
 
         public ICollection<TargetPlatformVersion> Versions { get; set; }
 
-        public string DisplayName
-        {
-            get
-            {
-                if (AlternativeNames.Count > 0)
-                {
-                    return $"{Name} ({string.Join(", ", AlternativeNames)})";
-                }
-                else
-                {
-                    return Name;
-                }
-            }
-        }
-
         public ICollection<string> AlternativeNames { get { return _alternativeNames; } }
-
-        public TargetPlatform(IGrouping<string, AvailableTarget> targetInfo)
-        {
-            Name = targetInfo.Key;
-
-            Versions = targetInfo
-                .Select(v => new TargetPlatformVersion(this) { Version = v.Version, IsSelected = v.IsSet })
-                .OrderBy(v => v.Version)
-                .ToList();
-        }
-
-        public TargetPlatform() { }
-
-        public TargetPlatform(TargetPlatform platform)
-        {
-            Name = platform.Name;
-            Versions = platform.Versions
-                .Select(v => new TargetPlatformVersion(v))
-                .OrderBy(v => v.Version)
-                .ToList();
-        }
 
         public override bool Equals(object obj)
         {
@@ -67,12 +36,32 @@ namespace ApiPortVS
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            const int HashMultipler = 31;
+
+            unchecked
+            {
+                int hash = 17;
+
+                if (Name != null)
+                {
+                    hash = hash * HashMultipler + Name.GetHashCode();
+                }
+
+                if (Versions != null)
+                {
+                    foreach (var version in Versions)
+                    {
+                        hash = hash * HashMultipler + version.GetHashCode();
+                    }
+                }
+
+                return hash;
+            }
         }
 
         public override string ToString()
         {
-            return DisplayName;
+            return Name;
         }
 
         public override bool Equals(TargetPlatform x, TargetPlatform y)

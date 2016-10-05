@@ -156,7 +156,23 @@ namespace ApiPortVS.ViewModels
         private async Task UpdateTargetsAsync()
         {
             var targets = await GetTargetsAsync();
-            var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t => new TargetPlatform(t));
+            var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t =>
+            {
+                return new TargetPlatform
+                {
+                    Name = t.Key,
+
+                    Versions = t.Select(v => new TargetPlatformVersion
+                    {
+                        PlatformName = t.Key,
+                        Version = v.Version,
+                        IsSelected = v.IsSet
+                    })
+                    .OrderBy(v => v.Version)
+                    .ToList()
+                };
+            });
+
             var reconciledPlatforms = new List<TargetPlatform>();
 
             foreach (var canonicalPlatform in canonicalPlatforms)
