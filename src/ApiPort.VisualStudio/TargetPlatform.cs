@@ -12,6 +12,25 @@ namespace ApiPortVS
     {
         private readonly ICollection<string> _alternativeNames = new HashSet<string>(StringComparer.Ordinal);
 
+        public TargetPlatform(IGrouping<string, AvailableTarget> targetInfo)
+        {
+            Name = targetInfo.Key;
+
+            Versions = targetInfo
+                .Select(v => new TargetPlatformVersion
+                {
+                    PlatformName = DisplayName,
+                    Version = v.Version,
+                    IsSelected = v.IsSet
+                })
+                .OrderBy(v => v.Version)
+                .ToList();
+        }
+
+        public TargetPlatform()
+        {
+        }
+
         public string Name { get; set; }
 
         public ICollection<TargetPlatformVersion> Versions { get; set; }
@@ -32,27 +51,6 @@ namespace ApiPortVS
         }
 
         public ICollection<string> AlternativeNames { get { return _alternativeNames; } }
-
-        public TargetPlatform(IGrouping<string, AvailableTarget> targetInfo)
-        {
-            Name = targetInfo.Key;
-
-            Versions = targetInfo
-                .Select(v => new TargetPlatformVersion(this) { Version = v.Version, IsSelected = v.IsSet })
-                .OrderBy(v => v.Version)
-                .ToList();
-        }
-
-        public TargetPlatform() { }
-
-        public TargetPlatform(TargetPlatform platform)
-        {
-            Name = platform.Name;
-            Versions = platform.Versions
-                .Select(v => new TargetPlatformVersion(v))
-                .OrderBy(v => v.Version)
-                .ToList();
-        }
 
         public override bool Equals(object obj)
         {

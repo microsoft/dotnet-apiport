@@ -1,19 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPortVS.Resources;
 using System;
 
 namespace ApiPortVS
 {
     public class TargetPlatformVersion
     {
-        public string NarrationString
+        public TargetPlatformVersion()
         {
-            get
-            {
-                return string.Format(LocalizedStrings.TargetPlatformVersionFormat, PlatformName, Version);
-            }
         }
 
         public string PlatformName { get; set; }
@@ -22,19 +17,6 @@ namespace ApiPortVS
 
         public Version Version { get; set; }
 
-        public TargetPlatformVersion() { }
-
-        public TargetPlatformVersion(TargetPlatform platform)
-        {
-            PlatformName = platform.DisplayName;
-        }
-
-        public TargetPlatformVersion(TargetPlatformVersion otherVersion)
-        {
-            PlatformName = otherVersion.PlatformName;
-            IsSelected = otherVersion.IsSelected;
-            Version = otherVersion.Version;
-        }
 
         public override string ToString()
         {

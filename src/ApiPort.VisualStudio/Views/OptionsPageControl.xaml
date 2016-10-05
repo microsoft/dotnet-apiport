@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <utils:HideWhenTrueBoolConverter x:Key="HideWhenTrue" />
+        <utils:TargetInformationStringConverter x:Key="TargetInformationString" />
     </UserControl.Resources>
 
     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" KeyboardNavigation.ControlTabNavigation="Local">
@@ -97,7 +98,7 @@
                             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding DisplayName}"
                                      KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
                                      Padding="3,0,10,3"
-                                     AutomationProperties.Name="{Binding NarrationString}" />
+                                     AutomationProperties.Name="{Binding ., Converter={StaticResource TargetInformationString}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -138,7 +139,7 @@
                                                 <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding Version}"
                                                           KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
                                                           Padding="3,0,10,3"
-                                                          AutomationProperties.Name="{Binding NarrationString}" />
+                                                          AutomationProperties.Name="{Binding ., Converter={StaticResource TargetInformationString}}" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
