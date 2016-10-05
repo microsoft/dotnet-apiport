@@ -19,7 +19,7 @@ namespace ApiPortVS
             Versions = targetInfo
                 .Select(v => new TargetPlatformVersion
                 {
-                    PlatformName = DisplayName,
+                    PlatformName = Name,
                     Version = v.Version,
                     IsSelected = v.IsSet
                 })
@@ -34,21 +34,6 @@ namespace ApiPortVS
         public string Name { get; set; }
 
         public ICollection<TargetPlatformVersion> Versions { get; set; }
-
-        public string DisplayName
-        {
-            get
-            {
-                if (AlternativeNames.Count > 0)
-                {
-                    return $"{Name} ({string.Join(", ", AlternativeNames)})";
-                }
-                else
-                {
-                    return Name;
-                }
-            }
-        }
 
         public ICollection<string> AlternativeNames { get { return _alternativeNames; } }
 
@@ -70,7 +55,7 @@ namespace ApiPortVS
 
         public override string ToString()
         {
-            return DisplayName;
+            return Name;
         }
 
         public override bool Equals(TargetPlatform x, TargetPlatform y)

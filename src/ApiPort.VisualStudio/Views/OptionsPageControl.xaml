@@ -12,6 +12,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <utils:HideWhenTrueBoolConverter x:Key="HideWhenTrue" />
         <utils:TargetInformationStringConverter x:Key="TargetInformationString" />
+        <utils:TargetPlatformDisplayNameConverter x:Key="TargetPlatformDisplayName" />
     </UserControl.Resources>
 
     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" KeyboardNavigation.ControlTabNavigation="Local">
@@ -98,7 +99,7 @@
                             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding DisplayName}"
                                      KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
                                      Padding="3,0,10,3"
-                                     AutomationProperties.Name="{Binding ., Converter={StaticResource TargetInformationString}}" />
+                                     AutomationProperties.Name="{Binding DisplayName}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -126,7 +127,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
-                                    <TextBlock Text="{Binding DisplayName}" DockPanel.Dock="Top" />
+                                    <TextBlock Text="{Binding ., Converter={StaticResource TargetPlatformDisplayName}}" DockPanel.Dock="Top" />
                                     <ItemsControl ItemsSource="{Binding Path=Versions}" Margin="10,5,0,0"
                                                   KeyboardNavigation.DirectionalNavigation="Local" KeyboardNavigation.IsTabStop="False">
                                         <ItemsControl.ItemsPanel>
