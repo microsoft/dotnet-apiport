@@ -99,8 +99,13 @@ namespace ApiPortVS.ViewModels
 
         public IList<TargetPlatform> InvalidTargets { get; set; }
 
-        public async Task UpdateAsync()
+        public async Task UpdateAsync(bool force = false)
         {
+            if (!force && _optionsModel.LastUpdate.AddDays(1) > DateTimeOffset.Now)
+            {
+                return;
+            }
+
             UpdatingPlatforms = true;
             HasError = false;
 
@@ -108,6 +113,8 @@ namespace ApiPortVS.ViewModels
             {
                 await UpdateTargetsAsync();
                 await UpdateResultsAsync();
+
+                _optionsModel.LastUpdate = DateTimeOffset.Now;
 
                 _optionsModel.Save();
             }

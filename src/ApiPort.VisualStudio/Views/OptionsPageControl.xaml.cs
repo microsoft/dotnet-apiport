@@ -35,7 +35,7 @@ namespace ApiPortVS.Views
 
         private async void RefreshRequested(object sender, RoutedEventArgs e)
         {
-            await ViewModel.UpdateAsync();
+            await ViewModel.UpdateAsync(force: true);
         }
 
         private void UpdateDirectoryClick(object sender, RoutedEventArgs e)
