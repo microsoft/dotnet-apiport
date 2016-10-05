@@ -23,7 +23,7 @@ namespace ApiPortVS
 
         public Task<bool> BuildAsync(ICollection<Project> projects)
         {
-            var projectHierarchy = projects.Select(project => project.GetHierarchy()).ToArray()
+            var projectHierarchy = projects.Select(project => project.GetHierarchy()).ToArray();
             var suppressUI = 0;
             var buildUpdateFlags = Enumerable.Repeat((uint)VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD, projectHierarchy.Length).ToArray();
 

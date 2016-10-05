@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using Xunit;
+using System.Collections.Generic;
 
 namespace ApiPortVS.Tests
 {
@@ -21,7 +22,7 @@ namespace ApiPortVS.Tests
             var projectBuilder = new ProjectBuilder(buildManager);
             uint pdwCookie;
 
-            var result = projectBuilder.BuildAsync(project).Result;
+            var result = projectBuilder.BuildAsync(new List<Project> { project }).Result;
 
             Assert.False(result);
 
@@ -39,17 +40,17 @@ namespace ApiPortVS.Tests
             var projectBuilder = new ProjectBuilder(buildManager);
             uint pdwCookie;
 
-            var buildTask = projectBuilder.BuildAsync(project);
+            var buildTask = projectBuilder.BuildAsync(new List<Project> { project });
 
             // Checking that we are subscribed to build events
             buildManager.ReceivedWithAnyArgs(1)
                 .AdviseUpdateSolutionEvents(Arg.Any<IVsUpdateSolutionEvents>(), out pdwCookie);
         }
 
-        private IVsSolutionBuildManager BuildManagerWhichReturns(int returnForUpdate)
+        private IVsSolutionBuildManager2 BuildManagerWhichReturns(int returnForUpdate)
         {
-            var buildManager = Substitute.For<IVsSolutionBuildManager>();
-            buildManager.StartSimpleUpdateProjectConfiguration(null, null, null, 0, 0, 0)
+            var buildManager = Substitute.For<IVsSolutionBuildManager2>();
+            buildManager.StartUpdateSpecificProjectConfigurations(default(uint), null, null, null, null, null, default(uint), default(int))
                         .ReturnsForAnyArgs(returnForUpdate);
 
             uint cookie;
@@ -60,12 +61,12 @@ namespace ApiPortVS.Tests
             return buildManager;
         }
 
-        private ProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager buildManager)
+        private ProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager2 buildManager)
         {
             var project = Substitute.For<Project>();
 
             var projectBuilder = new ProjectBuilder(buildManager);
-            projectBuilder.BuildAsync(project);
+            projectBuilder.BuildAsync(new List<Project> { project });
 
             return projectBuilder;
         }
