@@ -94,7 +94,7 @@ namespace ApiPortVS.Analyze
             try
             {
                 // Using a single project for this appears to work, but there may be a better way
-                var hierarchy = project.First().GetHierarchy();
+                var hierarchy = projects.First().GetHierarchy();
 
                 foreach (var item in items)
                 {
