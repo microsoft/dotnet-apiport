@@ -40,16 +40,6 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.NET45.csproj">
-      <Project>{30e5290c-4f2d-4e68-bd4c-7eda41218ef0}</Project>
-      <Name>Microsoft.Fx.Portability.Offline.NET45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
-      <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
-      <Name>Microsoft.Fx.Portability.NET45</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

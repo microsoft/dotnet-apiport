@@ -77,16 +77,6 @@
     <Compile Include="ConsoleProgressReporter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.NET45.csproj">
-      <Project>{c14486ac-22be-480c-8235-2479c6c8f3ff}</Project>
-      <Name>Microsoft.Fx.Portability.MetadataReader.NET45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
-      <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
-      <Name>Microsoft.Fx.Portability.NET45</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\LocalizedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>

@@ -71,12 +71,6 @@
   <ItemGroup>
     <Content Include="Properties\version.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
-      <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
-      <Name>Microsoft.Fx.Portability.NET45</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

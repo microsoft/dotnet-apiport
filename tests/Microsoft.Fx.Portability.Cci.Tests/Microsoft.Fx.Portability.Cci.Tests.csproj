@@ -104,10 +104,6 @@
       <Project>{b0468d19-0f98-49a8-ba28-926331c72e26}</Project>
       <Name>Microsoft.Fx.Portability.Cci</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
-      <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
-      <Name>Microsoft.Fx.Portability.NET45</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
