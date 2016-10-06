@@ -15,6 +15,10 @@ formats are:
     * Excel
 * Configurable report options in the Options pane
 * View and save generated reports in a tool window
+* Up-to-date server-side analysis
+    * __NOTE__ .NET platform targets are constantly fetched from an Azure cloud
+    service that is updated constantly. In addition, the analysis is performed
+    remotely so the information is always the latest.
 
 ![Sample report][SampleReport]
 
