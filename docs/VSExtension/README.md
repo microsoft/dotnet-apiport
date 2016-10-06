@@ -65,7 +65,7 @@ You can view or save previously generated reports by performing the following:
 
 The .NET Portabilty Analyzer can be configured through the Options window.
 Here, you can choose what .NET platforms to perform your analysis against, and
-the filename, location and formats of the analysis report.
+the file name, location and formats of the analysis report.
 
 You can access the settings page via one of three methods:
 
