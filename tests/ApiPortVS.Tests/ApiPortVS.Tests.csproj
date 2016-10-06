@@ -140,6 +140,10 @@
       <Project>{d15030d8-cfc5-4f05-8987-784326856e90}</Project>
       <Name>ApiPort.VisualStudio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
+      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
+      <Name>Microsoft.Fx.Portability</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
