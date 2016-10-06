@@ -5,7 +5,8 @@
   "dependencies": {
     "CommonMark.NET": "0.10.0",
     "MicroBuild.Core": "0.2.0",
-    "RazorEngine": "3.6.1"
+    "RazorEngine": "3.6.1",
+    "System.Net.Http": "4.1.0"
   },
   "runtimes": {
     "win": { }
