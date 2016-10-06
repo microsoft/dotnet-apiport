@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ApiPort</RootNamespace>
     <AssemblyName>ApiPort</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DefineConstants>FEATURE_RICH_CONSOLE</DefineConstants>
@@ -36,7 +36,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\net45</OutputPath>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\net46</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>

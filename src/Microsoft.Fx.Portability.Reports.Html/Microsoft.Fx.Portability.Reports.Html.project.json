@@ -1,6 +1,6 @@
 ﻿{
   "frameworks": {
-    "net45": { }
+    "net46": { }
   },
   "dependencies": {
     "CommonMark.NET": "0.10.0",
