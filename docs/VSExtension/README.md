@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The .NET Portability Analyzer helps you determine how flexible your application is across .NET Platforms.  For more information about platform portability analysis, read ["Platform Portability"][PlatformPortability].
+The .NET Portability Analyzer helps you determine how flexible your application is across .NET Platforms. For more information about platform portability analysis, read ["Platform Portability"][PlatformPortability].
 
 __Features__
 
@@ -17,6 +17,10 @@ formats are:
 * View and save generated reports in a tool window
 
 ![Sample report][SampleReport]
+
+## How to obtain
+
+Official releases can be obtained from the [Visual Studio extension gallery][VSGallery]
 
 ## Usage
 
@@ -91,3 +95,4 @@ A list of changes can be found in the [Changelog](Changelog.md).
 [SampleReport]: img/analysisReport.png
 [SolutionExplorer-ContextMenu]: img/analysisContextMenu.png
 [SourceCodeMapping]: img/sourceMapping.output.png
+[VSGallery]: https://visualstudiogallery.msdn.microsoft.com/1177943e-cfb7-4822-a8a6-e56c7905292b
