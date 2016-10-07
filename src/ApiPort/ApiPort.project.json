@@ -6,9 +6,9 @@
   "dependencies": {
     "Autofac": "4.1.0",
     "MicroBuild.Core": "0.2.0",
-    "Microsoft.Framework.Configuration.CommandLine": "1.0.0-beta8",
-    "Microsoft.Framework.Configuration.FileExtensions": "1.0.0-beta8",
-    "Microsoft.Framework.OptionsModel": "1.0.0-beta8",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Newtonsoft.Json": "9.0.1",
     "System.Collections.Immutable": "1.2.0",
     "System.Reflection.Metadata": "1.4.1-beta-24227-04"
