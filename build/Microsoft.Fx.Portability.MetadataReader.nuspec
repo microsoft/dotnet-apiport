@@ -14,11 +14,6 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
-      <group targetFramework="net45">
-        <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
-        <dependency id="System.Reflection.Metadata" version="1.4.1-beta-24227-04" />
-        <dependency id="System.Collections.Immutable" version="1.2.0" />
-      </group>
       <group targetFramework="netstandard1.3">
         <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
         <dependency id="System.Diagnostics.FileVersionInfo" version="4.0.0-beta-23123" />
@@ -49,8 +44,5 @@
     <file src="netstandard1.3\Microsoft.Fx.Portability.MetadataReader.dll" target="lib\netstandard1.3" />
     <file src="netstandard1.3\Microsoft.Fx.Portability.MetadataReader.pdb" target="lib\netstandard1.3" />
     <file src="netstandard1.3\Microsoft.Fx.Portability.MetadataReader.xml" target="lib\netstandard1.3" />
-    <file src="net45\Microsoft.Fx.Portability.MetadataReader.dll" target="lib\net45" />
-    <file src="net45\Microsoft.Fx.Portability.MetadataReader.pdb" target="lib\net45" />
-    <file src="net45\Microsoft.Fx.Portability.MetadataReader.xml" target="lib\net45" />
   </files>
 </package>
