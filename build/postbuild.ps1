@@ -83,10 +83,10 @@ function Copy-OfflineMode()
 	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
 	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
-	Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
 	Copy-Item $drop\Microsoft.Fx.Portability.Offline\$netStandard\* -Include $extensionsToInclude $offlineDrop
 	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\$netStandard\* -Include $extensionsToInclude $offlineDrop
 	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\$netFramework\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
 }
 
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
