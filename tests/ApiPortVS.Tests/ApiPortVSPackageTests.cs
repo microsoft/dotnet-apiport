@@ -64,7 +64,6 @@ namespace ApiPortVS.Tests
                 null,
                 null,
                 fileSystem,
-                null,
                 null);
         }
     }
