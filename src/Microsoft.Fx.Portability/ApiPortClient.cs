@@ -175,7 +175,7 @@ namespace Microsoft.Fx.Portability
             var outputDirectory = Path.GetDirectoryName(filePath);
             var outputFileName = Path.GetFileName(filePath);
 
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.WritingReport))
+            using (var progressTask = _progressReport.StartTask(string.Format(LocalizedStrings.WritingReport, outputFormat)))
             {
                 try
                 {

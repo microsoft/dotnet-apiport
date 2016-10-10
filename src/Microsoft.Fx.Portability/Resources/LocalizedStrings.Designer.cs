@@ -9,7 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace Microsoft.Fx.Portability.Resources {
+    using System;
     using System.Reflection;
+    
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -664,7 +666,7 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Writing report.
+        ///   Looks up a localized string similar to Writing {0} report.
         /// </summary>
         public static string WritingReport {
             get {
