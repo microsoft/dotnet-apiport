@@ -221,23 +221,15 @@ namespace Microsoft.Fx.Portability
                 {
                     try
                     {
-                        var tasks = options.OutputFormats
-                            .Select(f => new { Format = f, Task = GetResultFromServiceAsync(request, f) })
-                            .ToList();
+                        var results = await _apiPortService.SendAnalysisAsync(request, options.OutputFormats);
 
-                        await Task.WhenAll(tasks.Select(t => t.Task));
-
-                        var results = tasks.Select(t => new ReportingResultWithFormat
-                        {
-                            Data = t.Task.Result,
-                            Format = t.Format,
-                        }).ToList();
+                        CheckEndpointStatus(results.Headers.Status);
 
                         return new MultipleFormatAnalysis
                         {
                             Info = dependencyInfo,
                             Request = request,
-                            Results = results
+                            Results = results.Response
                         };
                     }
                     catch (Exception)
@@ -357,19 +349,6 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Gets the Portability report for the request.
-        /// </summary>
-        /// <returns>An array of bytes corresponding to the report.</returns>
-        private async Task<byte[]> GetResultFromServiceAsync(AnalyzeRequest request, string format)
-        {
-            var response = await _apiPortService.SendAnalysisAsync(request, format);
-
-            CheckEndpointStatus(response.Headers.Status);
-
-            return response.Response;
-        }
-
-        /// <summary>
         /// Verifies that the service is alive.  If the service is not alive, then an issue is logged
         /// that will be reported back to the user.
         /// </summary>
@@ -415,12 +394,6 @@ namespace Microsoft.Fx.Portability
             public AnalyzeRequest Request;
             public IDependencyInfo Info;
             public IEnumerable<ReportingResultWithFormat> Results;
-        }
-
-        private struct ReportingResultWithFormat
-        {
-            public string Format;
-            public byte[] Data;
         }
     }
 }

@@ -54,23 +54,28 @@ namespace Microsoft.Fx.Portability
             return Task.FromResult(serviceResponse);
         }
 
-        public Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, string format)
+        public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
         {
             var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
+            var formatSet = new HashSet<string>(formats, StringComparer.OrdinalIgnoreCase);
 
-            var writer = _reportWriters.FirstOrDefault(w => string.Equals(w.Format.DisplayName, format, StringComparison.OrdinalIgnoreCase));
+            var result = new List<ReportingResultWithFormat>();
 
-            if (writer == null)
+            foreach (var writer in _reportWriters.Where(w => formatSet.Contains(w.Format.DisplayName)))
             {
-                throw new UnknownReportFormatException(format);
+                using (var ms = new MemoryStream())
+                {
+                    writer.WriteStream(ms, response);
+
+                    result.Add(new ReportingResultWithFormat
+                    {
+                        Format = writer.Format.DisplayName,
+                        Data = ms.ToArray()
+                    });
+                }
             }
 
-            using (var ms = new MemoryStream())
-            {
-                writer.WriteStream(ms, response);
-
-                return WrapResponse(ms.ToArray());
-            }
+            return WrapResponse<IEnumerable<ReportingResultWithFormat>>(result);
         }
 
         public Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
@@ -135,6 +140,26 @@ namespace Microsoft.Fx.Portability
                         .AsReadOnly();
 
             return Task.FromResult(new ServiceResponse<IReadOnlyCollection<ApiInformation>>(result));
+        }
+
+        private async Task<IEnumerable<ResultFormatInformation>> GetResultFormatAsync(IEnumerable<string> format)
+        {
+            var requestedFormats = new HashSet<string>(format, StringComparer.OrdinalIgnoreCase);
+            var formats = await GetResultFormatsAsync();
+            var formatInformation = formats.Response
+                .Where(r => requestedFormats.Contains(r.DisplayName))
+                .ToList();
+
+            var unknownFormats = requestedFormats
+                .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            if (unknownFormats.Any())
+            {
+                throw new UnknownReportFormatException(unknownFormats);
+            }
+
+            return formatInformation;
         }
     }
 }

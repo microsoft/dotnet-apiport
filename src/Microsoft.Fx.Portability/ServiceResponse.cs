@@ -41,5 +41,10 @@ namespace Microsoft.Fx.Portability
         {
             return new ServiceResponse<T>(response);
         }
+
+        public static ServiceResponse<T> Create<T>(T response, ServiceHeaders headers)
+        {
+            return new ServiceResponse<T>(response, headers);
+        }
     }
 }

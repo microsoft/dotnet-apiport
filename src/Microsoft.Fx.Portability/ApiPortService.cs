@@ -43,6 +43,26 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<AnalyzeRequest, AnalyzeResponse>(HttpMethod.Post, Endpoints.Analyze, a);
         }
 
+        public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
+        {
+            var requests = formats.Select(format => new
+            {
+                Task = SendAnalysisAsync(a, format),
+                Format = format
+            }).ToList();
+
+            await Task.WhenAll(requests.Select(r => r.Task));
+
+            var headers = requests[0].Task.Result.Headers;
+            var result = requests.Select(r => new ReportingResultWithFormat
+            {
+                Data = r.Task.Result.Response,
+                Format = r.Format
+            }).ToList() as IEnumerable<ReportingResultWithFormat>;
+
+            return ServiceResponse.Create(result, headers);
+        }
+
         public async Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, string format)
         {
             var formatInformation = await GetResultFormat(format);
