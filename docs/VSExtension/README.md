@@ -2,7 +2,9 @@
 
 ## Introduction
 
-The .NET Portability Analyzer helps you determine how flexible your application is across .NET Platforms. For more information about platform portability analysis, read ["Platform Portability"][PlatformPortability].
+The .NET Portability Analyzer helps you determine how flexible your application
+is across .NET Platforms. For more information about platform portability
+analysis, read ["Platform Portability"][PlatformPortability].
 
 __Features__
 
@@ -16,9 +18,12 @@ formats are:
 * Configurable report options in the Options pane
 * View and save generated reports in a tool window
 * Up-to-date server-side analysis
-    * __NOTE__ .NET platform targets are constantly fetched from an Azure cloud
-    service that is updated constantly. In addition, the analysis is performed
-    remotely so the information is always the latest.
+    * __NOTE__ .NET platform targets and report formats are constantly fetched
+    from an Azure cloud service that is updated constantly. In addition, the
+    analysis is performed remotely so the information is always the latest.
+    * We only send .NET APIs to the service to analyze for portability. For more
+    information, our privacy policy is [here][PrivacyPolicy].
+
 
 ![Sample report][SampleReport]
 
@@ -61,7 +66,8 @@ files.
 
 ### View/Save generated reports
 
-You can view or save previously generated reports by performing the following:
+You can view or save previously generated reports in your Visual Studio session
+by performing the following:
 
 1. Click the "Analyze" menu item in the main toolbar
 2. Select "View analysis reports"
@@ -95,6 +101,7 @@ A list of changes can be found in the [Changelog](Changelog.md).
 [BinaryAnalysis]: img/analyzeToolbar.png
 [OptionsPane]: img/optionsPanel.png
 [PlatformPortability]: ../HowTo/PlatformPortability.md
+[PrivacyPolicy]: ../LicenseTerms/Microsoft%20.NET%20Portability%20Analyzer%20Privacy%20Statement.txt
 [ReportToolWindow]: img/report.toolWindow.png
 [SampleReport]: img/analysisReport.png
 [SolutionExplorer-ContextMenu]: img/analysisContextMenu.png
