@@ -12,11 +12,11 @@ namespace Microsoft.Fx.Portability
         public UnknownReportFormatException(IEnumerable<string> format)
             : this(string.Join(", ", format))
         {
-
         }
 
         public UnknownReportFormatException(string format)
             : base(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownResultFormat, format))
-        { }
+        {
+        }
     }
 }
