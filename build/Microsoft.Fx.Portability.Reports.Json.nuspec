@@ -14,10 +14,6 @@
     <copyright>Copyright 2015</copyright>
     <tags>.NET portability apiport</tags>
     <dependencies>
-      <group targetFramework="net45">
-        <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
-        <dependency id="Newtonsoft.Json" version="9.0.1" />
-      </group>
       <group targetFramework="netstandard1.3">
         <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
         <dependency id="Newtonsoft.Json" version="9.0.1" />
@@ -30,8 +26,5 @@
     <file src="netstandard1.3\Microsoft.Fx.Portability.Reports.Json.dll" target="lib\netstandard1.3" />
     <file src="netstandard1.3\Microsoft.Fx.Portability.Reports.Json.pdb" target="lib\netstandard1.3" />
     <file src="netstandard1.3\Microsoft.Fx.Portability.Reports.Json.xml" target="lib\netstandard1.3" />
-    <file src="net45\Microsoft.Fx.Portability.Reports.Json.dll" target="lib\net45" />
-    <file src="net45\Microsoft.Fx.Portability.Reports.Json.pdb" target="lib\net45" />
-    <file src="net45\Microsoft.Fx.Portability.Reports.Json.xml" target="lib\net45" />
   </files>
 </package>

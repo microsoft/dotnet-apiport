@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Fx.Portability.MetadataReader.Tests</RootNamespace>
     <AssemblyName>Microsoft.Fx.Portability.MetadataReader.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -84,13 +84,13 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.NET45.csproj">
-      <Project>{c14486ac-22be-480c-8235-2479c6c8f3ff}</Project>
-      <Name>Microsoft.Fx.Portability.MetadataReader.NET45</Name>
+    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj">
+      <Project>{68c6476e-1f80-412a-a8a7-480f832922d8}</Project>
+      <Name>Microsoft.Fx.Portability.MetadataReader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.NET45.csproj">
-      <Project>{18419457-1176-4989-8358-2024ab5b7085}</Project>
-      <Name>Microsoft.Fx.Portability.NET45</Name>
+    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
+      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
+      <Name>Microsoft.Fx.Portability</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -20,8 +20,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="net45\Microsoft.Fx.Portability.Reports.Html.dll" target="lib\net45" />
-    <file src="net45\Microsoft.Fx.Portability.Reports.Html.pdb" target="lib\net45" />
-    <file src="net45\Microsoft.Fx.Portability.Reports.Html.xml" target="lib\net45" />
+    <file src="net46\Microsoft.Fx.Portability.Reports.Html.dll" target="lib\net46" />
+    <file src="net46\Microsoft.Fx.Portability.Reports.Html.pdb" target="lib\net46" />
+    <file src="net46\Microsoft.Fx.Portability.Reports.Html.xml" target="lib\net46" />
   </files>
 </package>

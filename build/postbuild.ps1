@@ -5,9 +5,13 @@ param(
 	[string]$apiKey
 )
 
+$ErrorActionPreference = "Stop"
+
 $root = $PSScriptRoot
 $drop = $env:TF_BUILD_BINARIESDIRECTORY 
 $nuget = & "$root\Get-Nuget.ps1"
+$netFramework = "net46"
+$netStandard = "netstandard1.3"
 
 if(!$drop)
 {
@@ -60,7 +64,7 @@ foreach($nuspec in $nuspecs)
 			}
 		}
 
-        $item | Format-List
+        Write-Host "Package: [$($item.Package)], Pushed: [$($item.Pushed)]"
 	}
 	else
 	{
@@ -79,10 +83,10 @@ function Copy-OfflineMode()
 	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
 	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
-	Copy-Item $drop\ApiPort\net45\* -Include $extensionsToInclude $offlineDrop
-	Copy-Item $drop\Microsoft.Fx.Portability.Offline\net45\* -Include $extensionsToInclude $offlineDrop
-	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\net45\* -Include $extensionsToInclude $offlineDrop
-	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\net45\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\Microsoft.Fx.Portability.Offline\$netStandard\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\$netStandard\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\$netFramework\* -Include $extensionsToInclude $offlineDrop
+	Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
 }
 
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
@@ -92,5 +96,5 @@ Copy-Item "$PSScriptRoot\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Of
 Copy-OfflineMode
 
 # Copying the license terms into our drop so we don't have to manually do it when we want to release
-Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort\net45 -Recurse -Force
+Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort\$netFramework -Recurse -Force
 Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort.Offline\ -Recurse -Force
