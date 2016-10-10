@@ -28,8 +28,7 @@ namespace ApiPortVS.Analyze
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
             IFileSystem fileSystem,
-            ProjectBuilder builder,
-            ITargetMapper targetMapper)
+            ProjectBuilder builder)
         {
             _analyzer = analyzer;
             _sourceLineMapper = sourceLineMapper;
@@ -42,10 +41,10 @@ namespace ApiPortVS.Analyze
         public async Task AnalyzeProjectAsync(ICollection<Project> projects)
         {
             var buildSucceeded = await _builder.BuildAsync(projects);
+
             if (!buildSucceeded)
             {
-                var message = string.Format(LocalizedStrings.UnableToBuildProject);
-                throw new InvalidOperationException(message);
+                throw new PortabilityAnalyzerException(LocalizedStrings.UnableToBuildProject);
             }
 
             // TODO: Add option to include everything in output, not just build artifacts
