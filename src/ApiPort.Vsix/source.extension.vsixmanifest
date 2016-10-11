@@ -7,6 +7,7 @@
     <MoreInfo>http://go.microsoft.com/fwlink/?LinkId=506955</MoreInfo>
     <License>Resources\API Portability Analyzer Alpha Pre-Release License Terms.rtf</License>
     <Icon>Resources\Package.ico</Icon>
+    <PreviewImage>Resources\Preview.png</PreviewImage>
     <Tags>code analysis, cross-platform, .NET Framework, .NET, portable, cross platform, Portable Library</Tags>
   </Metadata>
   <Installation>
