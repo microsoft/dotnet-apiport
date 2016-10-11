@@ -1,21 +1,26 @@
 [CmdletBinding()] # Needed to support -Verbose
 param(
-	[string][ValidateSet("Release","Debug")]$configuration = "Release",
-	[string]$feedUrl,
-	[string]$apiKey
+    [string][ValidateSet("Release","Debug")]$Configuration = "Release",
+    [string]$FeedUrl,
+    [string]$ApiKey,
+    [switch]$PublishVsix
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = $PSScriptRoot
-$drop = $env:TF_BUILD_BINARIESDIRECTORY 
-$nuget = & "$root\Get-Nuget.ps1"
+$buildToolScript = Join-Path $root "Get-BuildTools.ps1"
+$tools = [System.IO.Path]::Combine($root, "..", ".tools")
+$nuget = & $buildToolScript "nuget"
+
 $netFramework = "net46"
 $netStandard = "netstandard1.3"
 
+$drop = $env:TF_BUILD_BINARIESDIRECTORY 
+
 if(!$drop)
 {
-	$drop = "$root\..\bin\$configuration"
+    $drop = $(Resolve-Path "$root\..\bin\$Configuration").Path
 }
 
 [object[]]$nuspecs = Get-ChildItem $root -Filter *.nuspec `
@@ -44,7 +49,10 @@ foreach($nuspec in $nuspecs)
 				| where {$_.src.EndsWith("$($nuspec.Name).dll")} `
 				| % { Get-ChildItem "$bin\$($_.src)" } `
 				| % { $_.VersionInfo.ProductVersion } `
-				| Select -First 1
+				| select -First 1
+    
+    Write-Verbose "Package: [$($nuspec.Name)] Version: [$version]"
+
 	$nuspecData.package.metadata.version = "$version"
 	$nuspecData.Save($nuspecName)
 
@@ -54,13 +62,13 @@ foreach($nuspec in $nuspecs)
 	{
 		$item = New-Object PSObject -Property @{"Package" = [System.IO.Path]::GetFileName($matches[2]); "Nuspec" = $matches[1]; "Path" = $matches[2]; "Pushed" = $false}
 		
-		if($feedUrl)
+		if($FeedUrl)
 		{
-			$pushedOutput = & $nuget push $item.Path $apiKey -Source $feedUrl
+			$pushedOutput = & $nuget push $item.Path $ApiKey -Source $FeedUrl
 
 			if($pushedOutput -match "Your package was pushed.")
 			{
-				$item.Pushed = $true;
+				$item.Pushed = $true
 			}
 		}
 
@@ -75,6 +83,8 @@ foreach($nuspec in $nuspecs)
 	$count++
 }
 
+Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
+
 function Copy-OfflineMode()
 {
     $extensionsToInclude = @("*.exe", "*.dll", "*.pdb", "*.config")
@@ -83,18 +93,29 @@ function Copy-OfflineMode()
 	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
 	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
+    Copy-Item "$root\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Offline -Recurse -Force
+
 	Copy-Item $drop\Microsoft.Fx.Portability.Offline\$netStandard\* -Include $extensionsToInclude $offlineDrop
 	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\$netStandard\* -Include $extensionsToInclude $offlineDrop
 	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\$netFramework\* -Include $extensionsToInclude $offlineDrop
 	Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
 }
 
-Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
-
-Copy-Item "$PSScriptRoot\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Offline -Recurse -Force
-
 Copy-OfflineMode
 
 # Copying the license terms into our drop so we don't have to manually do it when we want to release
-Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort\$netFramework -Recurse -Force
-Copy-Item "$PSScriptRoot\..\docs\LicenseTerms" $drop\ApiPort.Offline\ -Recurse -Force
+Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort\$netFramework -Recurse -Force
+Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort.Offline\ -Recurse -Force
+
+if ($PublishVsix) {
+    # Setting these environment variables because they are used in the script
+    # for the upload endpoint:
+    # https://github.com/madskristensen/ExtensionScripts/blob/master/AppVeyor/vsix.ps1#L52-L55
+    # https://github.com/madskristensen/ExtensionScripts/blob/master/AppVeyor/vsix.ps1#L68
+    $env:APPVEYOR_REPO_PROVIDER = "github"
+    $env:APPVEYOR_REPO_NAME = "microsoft/dotnet-apiport"
+
+    . $(& $buildToolScript "vsix")
+
+    Vsix-PublishToGallery -path $drop\**\*.vsix
+}
