@@ -121,7 +121,7 @@
     <value>.NET Portability Analyzer</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>API portability analyzer.</value>
+    <value>Evaluates portability of assemblies across .NET platforms.</value>
   </data>
   <data name="113" xml:space="preserve">
     <value>General</value>
