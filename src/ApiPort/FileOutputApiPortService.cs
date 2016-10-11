@@ -42,10 +42,10 @@ namespace ApiPort
             return Task.FromResult(result);
         }
 
-        public Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
+        public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> GetAnalysisAsync(string submissionId, IEnumerable<string> format)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var result = ServiceResponse.Create(new byte[] { });
+            var result = ServiceResponse.Create(Enumerable.Empty<ReportingResultWithFormat>());
 
             return Task.FromResult(result);
         }
@@ -135,7 +135,18 @@ namespace ApiPort
             return Task.FromResult(new ServiceResponse<AnalyzeResponse>(new AnalyzeResponse()));
         }
 
-        public Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, string format)
+        public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
+        {
+            var result = formats.Select(f => new ReportingResultWithFormat
+            {
+                Data = SendAnalysisAsync(a, f),
+                Format = f
+            });
+
+            return Task.FromResult(new ServiceResponse<IEnumerable<ReportingResultWithFormat>>(result.ToList()));
+        }
+
+        private byte[] SendAnalysisAsync(AnalyzeRequest a, string format)
         {
             var sortedAnalyzeRequest = new AnalyzeRequest
             {
@@ -157,9 +168,7 @@ namespace ApiPort
                 AssembliesToIgnore = a.AssembliesToIgnore.OrderBy(i => i.AssemblyIdentity)
             };
 
-            var result = sortedAnalyzeRequest.Serialize();
-
-            return Task.FromResult(ServiceResponse.Create(result));
+            return sortedAnalyzeRequest.Serialize();
         }
     }
 }

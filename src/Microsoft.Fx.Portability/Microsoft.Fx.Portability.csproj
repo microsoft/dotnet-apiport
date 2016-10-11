@@ -67,6 +67,7 @@
     <Compile Include="IAssemblyFile.cs" />
     <Compile Include="ObjectModel\CompatibilityRange.cs" />
     <Compile Include="ObjectModel\DiagnosticAnalyzerInfo.cs" />
+    <Compile Include="ObjectModel\ReportingResultWithFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BreakingChange.cs" />
     <Compile Include="BreakingChangeDependency.cs" />

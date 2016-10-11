@@ -43,7 +43,7 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<AnalyzeRequest, AnalyzeResponse>(HttpMethod.Post, Endpoints.Analyze, a);
         }
 
-        public async Task<ServiceResponse<byte[]>> SendAnalysisAsync(AnalyzeRequest a, string format)
+        public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format)
         {
             var formatInformation = await GetResultFormat(format);
 
@@ -74,9 +74,9 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<AnalyzeResponse>(HttpMethod.Get, submissionUrl);
         }
 
-        public async Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
+        public async Task<ServiceResponse<ReportingResultWithFormat>> GetAnalysisAsync(string submissionId, string format)
         {
-            var formatInformation = await GetResultFormat(format);
+            var formatInformation = await GetResultFormat(new[] { format });
             var submissionUrl = UrlBuilder.Create(Endpoints.Analyze).AddPath(submissionId).Url;
 
             return await _client.CallAsync(HttpMethod.Get, submissionUrl, formatInformation);
@@ -122,14 +122,21 @@ namespace Microsoft.Fx.Portability
             _client.Dispose();
         }
 
-        private async Task<ResultFormatInformation> GetResultFormat(string format)
+        private async Task<IEnumerable<ResultFormatInformation>> GetResultFormat(IEnumerable<string> format)
         {
+            var requestedFormats = new HashSet<string>(format, StringComparer.OrdinalIgnoreCase);
             var formats = await GetResultFormatsAsync();
-            var formatInformation = formats.Response.FirstOrDefault(r => string.Equals(r.DisplayName, format, StringComparison.OrdinalIgnoreCase));
+            var formatInformation = formats.Response
+                .Where(r => requestedFormats.Contains(r.DisplayName))
+                .ToList();
 
-            if (formatInformation == null)
+            var unknownFormats = requestedFormats
+                .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            if (unknownFormats.Any())
             {
-                throw new UnknownReportFormatException(format);
+                throw new UnknownReportFormatException(unknownFormats);
             }
 
             return formatInformation;
