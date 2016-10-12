@@ -22,6 +22,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 * [Platform Portability](docs/HowTo/PlatformPortability.md)
 * [Breaking Changes](docs/HowTo/BreakingChanges.md)
 * [.NET Portability Analyzer (Console application)](docs/Console)
+    * [.NET Core application](docs/Console/README.md#using-net-core-application)
 * [.NET Portability Analyzer (Visual Studio extension)](docs/VSExtension)
 
 ## Projects
@@ -36,16 +37,6 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 | Microsoft.Fx.Portability.Offline | Provides access to data in an offline setting so network calls are not needed |
 | Microsoft.Fx.Portability.Reporting.Html | Provides an HTML report for ApiPort (used in offline mode) |
 | Microsoft.Fx.Portability.Reporting.Json | Provides a JSON reporter for ApiPort (used in offline mode) |
-
-### Building ApiPort.Core
-
-__Compiling, Debugging and Running__
-
-* Change __Platform__ to `x64`
-* Compile solution
-* Run/debug the solution by:
-    * Executing: `dotnet.exe ApiPort.exe [arguments]`
-    * Debug `ApiPort.Core` project in Visual Studio
 
 ## How to Engage, Contribute and Provide Feedback
 
@@ -67,7 +58,7 @@ for more details.
 
 * [How to Contribute][Contributing Guide]
     * [Contributing Guide][Contributing Guide]
-    * [Developer Guide]
+    * [Developer Guide][Developer Guide]
 
 You are also encouraged to start a discussion on the .NET Foundation forums!
 

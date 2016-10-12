@@ -1,7 +1,5 @@
 # .NET Portability Analyzer (Visual Studio Extension)
 
-## Introduction
-
 The .NET Portability Analyzer helps you determine how flexible your application
 is across .NET Platforms. For more information about platform portability
 analysis, read ["Platform Portability"][PlatformPortability].
@@ -23,7 +21,6 @@ formats are:
     analysis is performed remotely so the information is always the latest.
     * We only send .NET APIs to the service to analyze for portability. For more
     information, our privacy policy is [here][PrivacyPolicy].
-
 
 ![Sample report][SampleReport]
 

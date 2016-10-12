@@ -23,3 +23,9 @@ apply to a given assembly. This functionality is currently restricted to .NET Fr
 with no side-by-side support for alternative versions.  Most of these are considered benign changes that shouldn't affect
 most applications; however, we understand that what may be low impact for one scenario may be a very impactful breaking change
 for another. For details please see [here](BreakingChanges.md).
+
+## .NET Portability Analyzer Tools
+
+* [Console Application (.NET Framework)](../Console)
+* [.NET Core Application](../Console/README.md#using-net-core-application)
+* [Visual Studio 2015 Extension](../VSExtension)
