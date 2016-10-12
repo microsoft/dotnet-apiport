@@ -42,6 +42,8 @@ if(Test-Path $destination)
 }
 else
 {
+    Write-Verbose "Trying to download $ToolToFetch from $uri to $destination"
+    
     Invoke-Webrequest $uri -OutFile $destination
 }
 
