@@ -1,8 +1,8 @@
 // Import the utility functionality.
 import jobs.generation.Utilities;
 
-def project = 'microsoft/dotnet-apiport'
-def branch = 'master'
+def project = GithubProject
+def branch = GithubBranchName
 
 // Generate the builds for debug and release, commit and PRJob
 [true, false].each { isPR -> // Defines a closure over true and false, value assigned to isPR
