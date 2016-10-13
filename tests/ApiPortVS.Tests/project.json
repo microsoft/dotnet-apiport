@@ -1,28 +1,8 @@
 ﻿{
   "dependencies": {
-    "Microsoft.VisualStudio.Imaging": "14.3.25407",
-    "Microsoft.VisualStudio.OLE.Interop": "7.10.6070",
-    "Microsoft.VisualStudio.Shell.14.0": "14.3.25407",
-    "Microsoft.VisualStudio.Shell.Immutable.10.0": "10.0.30319",
-    "Microsoft.VisualStudio.Shell.Immutable.11.0": "11.0.50727",
-    "Microsoft.VisualStudio.Shell.Immutable.12.0": "12.0.21003",
-    "Microsoft.VisualStudio.Shell.Immutable.14.0": "14.3.25407",
-    "Microsoft.VisualStudio.Shell.Interop": "7.10.6071",
-    "Microsoft.VisualStudio.Shell.Interop.8.0": "8.0.50727",
-    "Microsoft.VisualStudio.Shell.Interop.9.0": "9.0.30729",
-    "Microsoft.VisualStudio.TextManager.Interop": "7.10.6070",
-    "Microsoft.VisualStudio.TextManager.Interop.8.0": "8.0.50727",
-    "Microsoft.VisualStudio.Threading": "14.1.111",
-    "Microsoft.VisualStudio.Utilities": "14.3.25407",
-    "Microsoft.VisualStudio.Validation": "14.1.111",
     "Newtonsoft.Json": "9.0.1",
     "NSubstitute": "1.10.0",
     "xunit": "2.1.0",
-    "xunit.abstractions": "2.0.0",
-    "xunit.assert": "2.1.0",
-    "xunit.core": "2.1.0",
-    "xunit.extensibility.core": "2.1.0",
-    "xunit.extensibility.execution": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0"
   },
   "frameworks": {

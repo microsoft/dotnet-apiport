@@ -15,19 +15,9 @@
     <tags>.NET portability apiport</tags>
     <dependencies>
       <group targetFramework="netstandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.0" />
         <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
         <dependency id="Autofac" version="4.1.0" />
-        <dependency id="System.AppContext" version="4.1.0" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.IO" version="4.1.0" />
-        <dependency id="System.IO.FileSystem" version="4.0.1" />
-        <dependency id="System.IO.FileSystem.Primitives" version="4.0.1" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
     </dependencies>
   </metadata>

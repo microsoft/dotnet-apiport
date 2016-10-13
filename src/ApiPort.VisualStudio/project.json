@@ -23,10 +23,7 @@
     "Microsoft.VisualStudio.Utilities": "14.3.25407",
     "Microsoft.VisualStudio.Validation": "14.1.111",
     "Microsoft.VSSDK.BuildTools": "14.3.25407",
-    "Newtonsoft.Json": "9.0.1",
-    "System.Collections.NonGeneric": "4.0.1",
-    "System.IO.FileSystem": "4.0.1",
-    "System.IO.FileSystem.Primitives": "4.0.1"
+    "Newtonsoft.Json": "9.0.1"
   },
   "frameworks": {
     "net46": {}
