@@ -12,7 +12,7 @@ def branch = GithubBranchName
             def newJobName = Utilities.getFullJobName(project, configuration, isPR)
             
             // Define build string
-            def buildString = "build.ps1 ${configuration} ${platform} -RunTests"
+            def buildString = ".\\build.ps1 ${configuration} ${platform} -RunTests"
 
             // Create a new job with the specified name.  The brace opens a new closure
             // and calls made within that closure apply to the newly created job.
