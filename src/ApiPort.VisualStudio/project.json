@@ -5,6 +5,7 @@
     "Microsoft.Cci": "4.0.0-rc3-24214-00",
     "Microsoft.VisualStudio.Imaging": "14.3.25407",
     "Microsoft.VisualStudio.OLE.Interop": "7.10.6070",
+    "Microsoft.VisualStudio.SDK.EmbedInteropTypes": "14.1.4",
     "Microsoft.VisualStudio.Shell.14.0": "14.3.25407",
     "Microsoft.VisualStudio.Shell.Immutable.10.0": "10.0.30319",
     "Microsoft.VisualStudio.Shell.Immutable.11.0": "11.0.50727",

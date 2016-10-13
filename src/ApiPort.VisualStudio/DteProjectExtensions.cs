@@ -3,7 +3,6 @@
 
 using ApiPortVS.Resources;
 using EnvDTE;
-using EnvDTE80;
 using Microsoft.Fx.Portability;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -114,7 +113,7 @@ namespace ApiPortVS
         {
             foreach (Project project in sln.Projects)
             {
-                if (string.Equals(project.Kind, ProjectKinds.vsProjectKindSolutionFolder, StringComparison.OrdinalIgnoreCase))
+                if (IsSolutionFolder(project))
                 {
                     foreach (var prj in GetSolutionFolderProjects(project))
                     {
@@ -139,7 +138,7 @@ namespace ApiPortVS
                     continue;
                 }
 
-                if (subProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+                if (IsSolutionFolder(subProject))
                 {
                     foreach (var prj in GetSolutionFolderProjects(subProject))
                     {
@@ -172,6 +171,13 @@ namespace ApiPortVS
             Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.UnloadProject(buildProject);
 
             return value;
+        }
+
+        private static bool IsSolutionFolder(Project project)
+        {
+            const string vsProjectKindSolutionFolder = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
+
+            return string.Equals(project.Kind, vsProjectKindSolutionFolder, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
