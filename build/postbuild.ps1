@@ -115,7 +115,13 @@ if ($PublishVsix) {
     $env:APPVEYOR_REPO_PROVIDER = "github"
     $env:APPVEYOR_REPO_NAME = "microsoft/dotnet-apiport"
 
-    . $(& $buildToolScript "vsix")
+    $vsix = "$drop\ApiPort.Vsix\ApiPort.vsix"
 
-    Vsix-PublishToGallery -path $drop\**\*.vsix
+    if (!(Test-Path $vsix)) {
+        Write-Error "Could not find $vsix to upload"
+    }
+
+    . $(& $buildToolScript "vsix")
+    
+    Vsix-PublishToGallery -path $vsix
 }
