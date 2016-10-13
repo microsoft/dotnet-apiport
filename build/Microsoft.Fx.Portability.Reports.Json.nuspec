@@ -15,10 +15,9 @@
     <tags>.NET portability apiport</tags>
     <dependencies>
       <group targetFramework="netstandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.0" />
         <dependency id="Microsoft.Fx.Portability" version="2.0.0-alpha" />
         <dependency id="Newtonsoft.Json" version="9.0.1" />
-        <dependency id="System.IO" version="4.1.0" />
-        <dependency id="System.Runtime" version="4.1.0" />
       </group>
     </dependencies>
   </metadata>

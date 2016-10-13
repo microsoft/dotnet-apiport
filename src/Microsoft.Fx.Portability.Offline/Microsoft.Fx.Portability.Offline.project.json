@@ -1,9 +1,8 @@
 ﻿{
   "dependencies": {
+    "NETStandard.Library": "1.6.0",
     "Autofac": "4.1.0",
-    "MicroBuild.Core": "0.2.0",
-    "Microsoft.NETCore": "5.0.1",
-    "Microsoft.NETCore.Portable.Compatibility": "1.0.1"
+    "MicroBuild.Core": "0.2.0"
   },
   "frameworks": {
     "netstandard1.3": { }
