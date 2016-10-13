@@ -13,7 +13,7 @@
     <When Condition="'$(TargetVsixContainerName)' != '' AND '$(CopyBuildOutputToOutputDirectory)' == 'false' AND '$(IncludeAssemblyInVSIXContainer)' == 'false'">
       <ItemGroup>
         <FilesToSign Include="$(TargetVsixContainer)">
-          <Authenticode>Vsix</Authenticode>
+          <Authenticode>VsixSHA2</Authenticode>
         </FilesToSign>
       </ItemGroup>
     </When>
