@@ -14,4 +14,10 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <!-- Trying to mitigate the number of warnings that the solution contains by
+    adding this into our Release builds.  As a result, it should be caught in
+    our PRs because of the CI builds -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 </Project>
