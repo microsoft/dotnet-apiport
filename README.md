@@ -21,9 +21,9 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 * [Introduction](docs/HowTo)
 * [Platform Portability](docs/HowTo/PlatformPortability.md)
 * [Breaking Changes](docs/HowTo/BreakingChanges.md)
-* [.NET Portability Analyzer (Console application)](docs/Console)
+* [.NET Portability Analyzer (Console application)](docs/Console/README.md)
     * [.NET Core application](docs/Console/README.md#using-net-core-application)
-* [.NET Portability Analyzer (Visual Studio extension)](docs/VSExtension)
+* [.NET Portability Analyzer (Visual Studio extension)](docs/VSExtension/README.md)
 
 ## Projects
 

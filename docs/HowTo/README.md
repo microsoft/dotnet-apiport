@@ -26,6 +26,6 @@ for another. For details please see [here](BreakingChanges.md).
 
 ## .NET Portability Analyzer Tools
 
-* [Console Application (.NET Framework)](../Console)
+* [Console Application (.NET Framework)](../Console/README.md)
 * [.NET Core Application](../Console/README.md#using-net-core-application)
-* [Visual Studio 2015 Extension](../VSExtension)
+* [Visual Studio 2015 Extension](../VSExtension/README.md)
