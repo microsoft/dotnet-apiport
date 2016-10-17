@@ -11,7 +11,8 @@ namespace ApiPortVS
         public const uint CmdIdAnalyzeOptionsMenuItem = 0x0101;
         public const uint CmdIdAnalyzeToolbarMenuItem = 0x0102;
         public const uint CmdIdProjectContextMenuItem = 0x0200;
-        public const uint CmdIdProjectContextOptionsMenuItem = 0x0201;
+        public const uint CmdIdProjectContextDependentsMenuItem = 0x0201;
+        public const uint CmdIdProjectContextOptionsMenuItem = 0x0202;
         public const uint CmdIdSolutionContextMenuItem = 0x0300;
         public const uint CmdIdSolutionContextOptionsMenuItem = 0x0301;
     };

@@ -127,6 +127,24 @@ namespace ApiPortVS
             }
         }
 
+        public static IEnumerable<Project> GetReferences(this Project project)
+        {
+            var vsproj = project.Object as VSLangProj.VSProject;
+
+            if (vsproj == null)
+            {
+                yield break;
+            }
+
+            foreach (VSLangProj.Reference reference in vsproj.References)
+            {
+                if (reference.SourceProject != null)
+                {
+                    yield return reference.SourceProject;
+                }
+            }
+        }
+
         private static IEnumerable<Project> GetSolutionFolderProjects(Project solutionFolder)
         {
             foreach (ProjectItem project in solutionFolder.ProjectItems)

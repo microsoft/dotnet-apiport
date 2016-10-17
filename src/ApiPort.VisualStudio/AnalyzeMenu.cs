@@ -31,17 +31,19 @@ namespace ApiPortVS
             _output = output;
         }
 
-        public async void ProjectContextMenuItemCallback(object sender, EventArgs e)
+        public async Task AnalyzeSelectedProjectsAsync(bool includeDependencies)
         {
-            await AnalyzeProjects(GetSelectedProjects());
+            var projects = GetSelectedProjects();
+
+            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects);
         }
 
         public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
-            await AnalyzeProjects(_dte.Solution.GetProjects().ToList());
+            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().ToList());
         }
 
-        private async Task AnalyzeProjects(ICollection<Project> projects)
+        private async Task AnalyzeProjectsAsync(ICollection<Project> projects)
         {
             if (!projects.Any())
             {
@@ -77,21 +79,22 @@ namespace ApiPortVS
             }
         }
 
-
-        // called when the project-level context menu is about to be displayed,
-        // i.e. the user has right-clicked a single project in the solution explorer
-        // (the command is sited in a menu which only appears on single selections)
         public void ProjectContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
         {
-            ContextMenuItemBeforeQueryStatus(sender, GetSelectedProjects());
+            ContextMenuItemBeforeQueryStatus(sender, GetSelectedProjects(), false);
+        }
+
+        public void ProjectContextMenuDependenciesItemBeforeQueryStatus(object sender, EventArgs e)
+        {
+            ContextMenuItemBeforeQueryStatus(sender, GetSelectedProjects(), true);
         }
 
         public void SolutionContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
         {
-            ContextMenuItemBeforeQueryStatus(sender, _dte.Solution.GetProjects());
+            ContextMenuItemBeforeQueryStatus(sender, _dte.Solution.GetProjects(), false);
         }
 
-        private void ContextMenuItemBeforeQueryStatus(object sender, IEnumerable<Project> projects)
+        private void ContextMenuItemBeforeQueryStatus(object sender, IEnumerable<Project> projects, bool checkDependencies)
         {
             var menuItem = sender as Microsoft.VisualStudio.Shell.OleMenuCommand;
             if (menuItem == null)
@@ -100,6 +103,12 @@ namespace ApiPortVS
             }
 
             menuItem.Visible = projects.Any() && projects.All(p => p.IsDotNetProject());
+
+            // Only need to check dependents if menuItem is still visible
+            if (checkDependencies && menuItem.Visible)
+            {
+                menuItem.Visible = projects.SelectMany(p => p.GetReferences()).Any();
+            }
         }
 
         public async void AnalyzeMenuItemCallback(object sender, EventArgs e)
@@ -170,6 +179,19 @@ namespace ApiPortVS
                 .Select(i => i.Project)
                 .Distinct()
                 .ToList();
+        }
+
+        private ICollection<Project> GetTransitiveReferences(IEnumerable<Project> projects, HashSet<Project> expandedProjects)
+        {
+            foreach (var project in projects)
+            {
+                if (expandedProjects.Add(project))
+                {
+                    GetTransitiveReferences(project.GetReferences(), expandedProjects);
+                }
+            }
+
+            return expandedProjects;
         }
     }
 }
