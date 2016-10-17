@@ -135,9 +135,31 @@ namespace ApiPort
                 if (offlineModule != null)
                 {
                     builder.RegisterModule(offlineModule);
+
+                    TryLoadReportWriters(builder);
                 }
             }
             catch (Exception) { }
+        }
+
+        private static void TryLoadReportWriters(ContainerBuilder builder)
+        {
+            foreach (var path in Directory.EnumerateFiles(GetApplicationDirectory(), "Microsoft.Fx.Portability.Reports.*.dll"))
+            {
+                try
+                {
+                    var name = new AssemblyName(Path.GetFileNameWithoutExtension(path));
+                    var assembly = Assembly.Load(name);
+
+                    builder.RegisterAssemblyTypes(assembly)
+                        .AssignableTo<IReportWriter>()
+                        .As<IReportWriter>()
+                        .SingleInstance();
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
 
         private static string GetApplicationDirectory()
