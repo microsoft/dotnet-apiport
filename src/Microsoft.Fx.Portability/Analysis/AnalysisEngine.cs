@@ -44,6 +44,7 @@ namespace Microsoft.Fx.Portability.Analysis
                                                                          IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies,
                                                                          IEnumerable<AssemblyInfo> assembliesToIgnore,
                                                                          IEnumerable<string> breakingChangesToSuppress,
+                                                                         ICollection<string> submittedAssemblies,
                                                                          bool showRetargettingIssues = false)
         {
             // Only proceed to find breaking changes for full .NET Framework (that's where they are applicable)
@@ -59,7 +60,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
             foreach (var kvp in dependencies)
             {
-                if (MemberIsInFramework(kvp.Key))
+                if (MemberIsInFramework(kvp.Key, submittedAssemblies))
                 {
                     var breakingChanges = _recommendations.GetBreakingChanges(kvp.Key.MemberDocId).Distinct();
                     foreach (var b in breakingChanges)
@@ -112,7 +113,7 @@ namespace Microsoft.Fx.Portability.Analysis
             return false;
         }
 
-        public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, ICollection<string> submittedAssemblies, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
             //Trace.TraceInformation("Computing members not in target");
             Stopwatch sw = new Stopwatch();
@@ -129,7 +130,7 @@ namespace Microsoft.Fx.Portability.Analysis
             //  -- Keep only the members that are not supported on at least one of the targets.
 
             var missingMembers = dependencies.Keys
-                .Where(MemberIsInFramework)
+                .Where(m => MemberIsInFramework(m, submittedAssemblies))
                 .AsParallel()
                 .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
                 .Where(memberInfo => !memberInfo.IsSupportedAcrossTargets)
@@ -141,8 +142,13 @@ namespace Microsoft.Fx.Portability.Analysis
             return missingMembers;
         }
 
-        private bool MemberIsInFramework(MemberInfo dep)
+        private bool MemberIsInFramework(MemberInfo dep, ICollection<string> submittedAssemblies)
         {
+            if (submittedAssemblies.Contains(dep.DefinedInAssemblyIdentity))
+            {
+                return false;
+            }
+
             // A null 'DefinedInAssemblyIdentity is indicative of a primitive
             // type, which should always be considered within the Framework.
             // For non-primitive types, consult the catalog to determine whether the

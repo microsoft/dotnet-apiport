@@ -127,7 +127,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         {
             var engine = new AnalysisEngine(null, null);
 
-            engine.FindMembersNotInTargets(null, null);
+            engine.FindMembersNotInTargets(null, null, null);
         }
 
         [Fact]
@@ -159,9 +159,44 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations);
-            var notInTarget = engine.FindMembersNotInTargets(targets, testData);
+            var notInTarget = engine.FindMembersNotInTargets(targets, Array.Empty<string>(), testData);
 
             Assert.Equal(2, notInTarget.Count);
+        }
+
+
+        [Fact]
+        public void FindMembersNotInTargetsWithSuppliedAssembly()
+        {
+            var testData = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
+
+            var userAsm1 = new AssemblyInfo() { AssemblyIdentity = "userAsm1, Version=1.0.0.0", FileVersion = "1.0.0.0" };
+            var userAsm2 = new AssemblyInfo() { AssemblyIdentity = "userAsm2, Version=2.0.0.0", FileVersion = "2.0.0.0" };
+            var userAsm3 = new AssemblyInfo() { AssemblyIdentity = "userAsm3, Version=3.0.0.0", FileVersion = "3.0.0.0" };
+            var mi1 = new MemberInfo() { DefinedInAssemblyIdentity = "System.Drawing, Version=1.0.136.0, PublicKeyToken=b03f5f7f11d50a3a", MemberDocId = "T:System.Drawing.Color" };
+            var mi2 = new MemberInfo() { DefinedInAssemblyIdentity = "System.Data, Version=1.0.136.0, PublicKeyToken=b77a5c561934e089", MemberDocId = "T:System.Data.SqlTypes.SqlBoolean" };
+            var mi3 = new MemberInfo() { DefinedInAssemblyIdentity = "userAsm1, Version=1.0.0.0", MemberDocId = "T:MyType" };
+
+            var usedIn1 = new HashSet<AssemblyInfo>() { userAsm1, userAsm2 };
+            testData.Add(mi1, usedIn1);
+
+            var usedIn2 = new HashSet<AssemblyInfo>() { userAsm2, userAsm3 };
+            testData.Add(mi2, usedIn2);
+            testData.Add(mi3, usedIn2);
+
+            var targets = new List<FrameworkName>() { new FrameworkName("Windows Phone, version=8.1") };
+
+            var catalog = Substitute.For<IApiCatalogLookup>();
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(mi1.DefinedInAssemblyIdentity)).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(mi2.DefinedInAssemblyIdentity)).Returns(true);
+            catalog.IsFrameworkMember(mi1.MemberDocId).Returns(true);
+            catalog.IsFrameworkMember(mi2.MemberDocId).Returns(true);
+
+            var recommendations = Substitute.For<IApiRecommendations>();
+            var engine = new AnalysisEngine(catalog, recommendations);
+            var notInTarget = engine.FindMembersNotInTargets(targets, new[] { mi1.DefinedInAssemblyIdentity }, testData);
+
+            Assert.Equal(1, notInTarget.Count);
         }
 
         [Fact]
@@ -176,7 +211,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations);
-            var notInTarget = engine.FindMembersNotInTargets(targets, testData);
+            var notInTarget = engine.FindMembersNotInTargets(targets, Array.Empty<string>(), testData);
 
             Assert.Equal(0, notInTarget.Count);
         }
@@ -231,7 +266,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(".NET Core Framework,Version=4.5.1");
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, null, null).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, null, null, Array.Empty<string>()).ToList();
 
             Assert.Empty(breakingChanges);
         }
@@ -314,6 +349,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
                                                                                       dependencies: testData,
                                                                                       assembliesToIgnore: null,
                                                                                       breakingChangesToSuppress: null,
+                                                                                      submittedAssemblies: Array.Empty<string>(),
                                                                                       showRetargettingIssues: false);
 
             Assert.Equal(3, result.Count());
@@ -342,6 +378,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
                                                                                       dependencies: testData,
                                                                                       assembliesToIgnore: null,
                                                                                       breakingChangesToSuppress: null,
+                                                                                      submittedAssemblies: Array.Empty<string>(),
                                                                                       showRetargettingIssues: true);
 
             Assert.Equal(5, result.Count());
@@ -388,7 +425,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var framework = new FrameworkName(AnalysisEngine.FullFrameworkIdentifier + ",Version=" + version);
 
-            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore, breakingChangesToSuppress).ToList();
+            var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore, breakingChangesToSuppress, Array.Empty<string>()).ToList();
 
             if (noBreakingChangesExpected)
             {
