@@ -32,8 +32,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                 .OrderBy(x => x.FullName, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
+            var userAssemblies = new HashSet<string>(request.UserAssemblies.Select(a => a.AssemblyIdentity), StringComparer.OrdinalIgnoreCase);
+
             var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
-                ? _analysisEngine.FindMembersNotInTargets(targets, request.Dependencies)
+                ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, request.Dependencies)
                 : new List<MemberInfo>();
 
             var unresolvedAssemblies = request.UnresolvedAssembliesDictionary != null
@@ -47,7 +49,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 : new List<AssemblyInfo>();
 
             var breakingChanges = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
-                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
+                ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, userAssemblies, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
                 : new List<BreakingChangeDependency>();
 
             var reportingResult = _reportGenerator.ComputeReport(
