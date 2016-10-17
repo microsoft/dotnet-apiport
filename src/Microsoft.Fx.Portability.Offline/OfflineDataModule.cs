@@ -37,17 +37,6 @@ namespace Microsoft.Fx.Portability
                 .As<IApiRecommendations>()
                 .SingleInstance();
 
-            builder.RegisterType<JsonReportWriter>()
-                .As<IReportWriter>()
-                .SingleInstance();
-
-#if FEATURE_HTML_WRITER
-            // Currently, the HTML writer has dependencies that do not work on .NET Core
-            builder.RegisterType<HtmlReportWriter>()
-                .As<IReportWriter>()
-                .SingleInstance();
-#endif
-
             builder.RegisterType<TargetNameParser>()
                 .WithParameter(TypedParameter.From(".NET Framework"))
                 .As<ITargetNameParser>()
