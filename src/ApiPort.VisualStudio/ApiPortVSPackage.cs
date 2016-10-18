@@ -24,16 +24,11 @@ namespace ApiPortVS
     {
         private static ServiceProvider s_serviceProvider;
 
-        private readonly AssemblyRedirects _assemblyRedirects;
-
         internal static IServiceProvider LocalServiceProvider { get { return s_serviceProvider; } }
 
         public ApiPortVSPackage() : base()
         {
             s_serviceProvider = new ServiceProvider(this);
-            _assemblyRedirects = s_serviceProvider.GetService(typeof(AssemblyRedirects)) as AssemblyRedirects;
-
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         protected override void Dispose(bool disposing)
@@ -110,14 +105,6 @@ namespace ApiPortVS
         private void ShowOptionsPage(object sender, EventArgs e)
         {
             ShowOptionPage(typeof(OptionsPage));
-        }
-
-        /// <summary>
-        /// Programmatically provides binding redirects for assemblies that cannot be resolved.
-        /// </summary>
-        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return _assemblyRedirects?.ResolveAssembly(args.Name, args.RequestingAssembly);
         }
     }
 }
