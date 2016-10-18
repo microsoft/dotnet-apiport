@@ -53,11 +53,21 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Analyze Assembly Portability</ButtonText>
+          <ButtonText>Analyze Project Portability</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextOptionsMenuItem" priority="0x0101" type="Button">
+      <Button guid="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextDependentsMenuItem" priority="0x0101" type="Button">
+        <Parent guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Analyze Project Portability (with project references)</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidProjectContextMenuItemCmdSet" id="CmdIdProjectContextOptionsMenuItem" priority="0x0102" type="Button">
         <Parent guid="guidProjectContextMenuItemCmdSet" id="ProjectContextMenuGroup" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -67,7 +77,7 @@
       </Button>
 
       <!-- Add menu items for solution context menu -->
-      <Button guid="guidSolutionContextMenuItemCmdSet" id="CmdIdSolutionContextMenuItem" priority="0x0102" type="Button">
+      <Button guid="guidSolutionContextMenuItemCmdSet" id="CmdIdSolutionContextMenuItem" priority="0x0103" type="Button">
         <Parent guid="guidSolutionContextMenuItemCmdSet" id="SolutionContextMenuGroup" />
         <Icon guid="guidImages" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -77,7 +87,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidSolutionContextMenuItemCmdSet" id="CmdIdSolutionContextOptionsMenuItem" priority="0x0103" type="Button">
+      <Button guid="guidSolutionContextMenuItemCmdSet" id="CmdIdSolutionContextOptionsMenuItem" priority="0x0104" type="Button">
         <Parent guid="guidSolutionContextMenuItemCmdSet" id="SolutionContextMenuGroup" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -107,7 +117,8 @@
     <GuidSymbol name="guidProjectContextMenuItemCmdSet" value="{5AD32A4E-F8D4-4675-9914-CD514C32FF6D}">
       <IDSymbol name="ProjectContextMenuGroup" value="0x1021" />
       <IDSymbol name="CmdIdProjectContextMenuItem" value="0x0200" />
-      <IDSymbol name="CmdIdProjectContextOptionsMenuItem" value="0x0201" />
+      <IDSymbol name="CmdIdProjectContextDependentsMenuItem" value="0x0201" />
+      <IDSymbol name="CmdIdProjectContextOptionsMenuItem" value="0x0202" />
     </GuidSymbol>
 
     <GuidSymbol name="guidSolutionContextMenuItemCmdSet" value="{1A55772C-AEA4-41D1-99EF-0A8278AED5AE}">
