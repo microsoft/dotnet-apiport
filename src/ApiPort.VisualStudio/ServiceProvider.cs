@@ -18,7 +18,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
-using System.Reflection;
 
 using static Microsoft.VisualStudio.VSConstants;
 
@@ -29,9 +28,6 @@ namespace ApiPortVS
         private static Guid OutputWindowGuid = new Guid(0xe2fc797f, 0x1dd3, 0x476c, 0x89, 0x17, 0x86, 0xcd, 0x31, 0x33, 0xc4, 0x69);
 
         private const string DefaultEndpoint = @"https://portability.dot.net/";
-        private const string AppConfig = "app.config";
-
-        private static readonly string s_appConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), AppConfig);
 
         private readonly IContainer _container;
 
@@ -54,10 +50,6 @@ namespace ApiPortVS
             builder.RegisterType<ToolbarListReportViewer>()
                 .As<IReportViewer>()
                 .InstancePerLifetimeScope();
-            builder.Register(x => new AssemblyRedirects(s_appConfigFilePath))
-                .AsSelf()
-                .SingleInstance()
-                .AutoActivate();
             builder.RegisterType<ApiPortVsAnalyzer>()
                 .As<IVsApiPortAnalyzer>()
                 .InstancePerLifetimeScope();
