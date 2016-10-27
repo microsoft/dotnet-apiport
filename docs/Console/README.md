@@ -158,10 +158,16 @@ steps:
 3. Go to `bin\release\ApiPort.Offline`
 4. Run `ApiPort.exe` from this directory as normal.
 
-Additional reports can be generated in offline mode. Any implementation of 
-`Microsoft.Fx.Portability.Reporting.IReportWriter` can be used. Add an entry to
-`unity.config` following the pattern of the HTML and json writers. The offline 
-mode will pick it up and allow reports to be returned in custom formats.
+If you have issues with proxies, please add your proxy information to the catalog script:
+
+1. Edit [`.\build\Get-CatalogFile.ps1` at line 24](https://github.com/Microsoft/dotnet-apiport/blob/master/build/Get-CatalogFile.ps1#L24)
+2. Replace Line 24 with: 
+  - If your proxy uses your default credentials: `Invoke-WebRequest $url -OutFile $OutputPath -Proxy [Proxy Address] -ProxyUseDefaultCredentials`
+  - Otherwise: `Invoke-WebRequest $url -OutFile $OutputPath -Proxy [Proxy Address] -ProxyCredential [Credentials]` 
+3. Run `build.cmd` 
+
+Additional reports can be generated in offline mode. Any implementation of `Microsoft.Fx.Portability.Reporting.IReportWriter` can be
+used. An assembly with the name of `Microsoft.Fx.Portability.Writers.[NAME].dll` will be searched for any available implementations.
 
 Note that offline mode is not supported for .NET Core versions of ApiPort.
 
