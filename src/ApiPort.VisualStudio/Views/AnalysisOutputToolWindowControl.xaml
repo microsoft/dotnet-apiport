@@ -20,39 +20,41 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
     </UserControl.Resources>
 
     <Grid>
-        <StackPanel>
-            <TextBlock FontWeight="Bold" Text="Available reports:" />
-            <ItemsControl Margin="20,10,0,0" ItemsSource="{Binding Path=Paths}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+        <ScrollViewer>
+            <StackPanel>
+                <TextBlock FontWeight="Bold" Text="Available reports:" />
+                <ItemsControl Margin="20,10,0,0" ItemsSource="{Binding Path=Paths}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="{Binding Path=., Converter={StaticResource PathToFileName}}" Margin="5,0,5,0" />
-                            <TextBlock Grid.Column="1" Margin="5,0,5,0">
+                                <TextBlock Grid.Column="0" Text="{Binding Path=., Converter={StaticResource PathToFileName}}" Margin="5,0,5,0" />
+                                <TextBlock Grid.Column="1" Margin="5,0,5,0">
                                 <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenFile}" CommandParameter="{Binding}">
                                     <TextBlock Text="Open Report" />
                                 </Hyperlink>
                             </TextBlock>
-                            <TextBlock Grid.Column="3" Margin="5,0,5,0">
+                                <TextBlock Grid.Column="3" Margin="5,0,5,0">
                                 <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenDirectory}" CommandParameter="{Binding}">
                                     <TextBlock Text="Open directory" />
                                 </Hyperlink>
                             </TextBlock>
-                            <TextBlock Grid.Column="2" Margin="5,0,5,0">
+                                <TextBlock Grid.Column="2" Margin="5,0,5,0">
                                 <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SaveAs}" CommandParameter="{Binding}">
                                     <TextBlock Text="Save As" />
                                 </Hyperlink>
                             </TextBlock>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>
