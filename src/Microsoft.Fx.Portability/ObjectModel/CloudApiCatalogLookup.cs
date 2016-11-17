@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             _docIdToApi = catalog.Apis.ToDictionary(key => key.DocId, key => new ApiDefinition { DocId = key.DocId, Name = key.Name, ReturnType = key.Type, FullName = key.FullName, Parent = key.Parent });
         }
 
-        public IEnumerable<string> DocIds
+        public virtual IEnumerable<string> DocIds
         {
             get { return _apiMapping.Keys; }
         }
@@ -75,7 +75,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// </summary>
         /// <returns>The corresponding ApiDefinition if it exists.  
         /// If docId is null/empty or does not exist, returns null.</returns>
-        public ApiDefinition GetApiDefinition(string docId)
+        public virtual ApiDefinition GetApiDefinition(string docId)
         {
             ApiDefinition apiDefinition;
 
@@ -89,12 +89,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
         }
 
-        public bool IsFrameworkMember(string docId)
+        public virtual bool IsFrameworkMember(string docId)
         {
             return _apiMapping.ContainsKey(docId);
         }
 
-        public bool IsMemberInTarget(string docId, FrameworkName targetName, out Version introducedVersion)
+        public virtual bool IsMemberInTarget(string docId, FrameworkName targetName, out Version introducedVersion)
         {
             Dictionary<string, Version> targets;
             introducedVersion = null;
@@ -112,13 +112,13 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return targetName.Version >= introducedVersion;
         }
 
-        public bool IsMemberInTarget(string docId, FrameworkName targetName)
+        public virtual bool IsMemberInTarget(string docId, FrameworkName targetName)
         {
             Version version;
             return IsMemberInTarget(docId, targetName, out version);
         }
 
-        public string GetApiMetadata(string docId, string metadataKey)
+        public virtual string GetApiMetadata(string docId, string metadataKey)
         {
             Dictionary<string, string> metadata;
             string metadataValue = null;
@@ -130,22 +130,22 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return metadataValue;
         }
 
-        public string GetRecommendedChange(string docId)
+        public virtual string GetRecommendedChange(string docId)
         {
             return GetApiMetadata(docId, RecommendedChangeKey);
         }
 
-        public string GetSourceCompatibilityEquivalent(string docId)
+        public virtual string GetSourceCompatibilityEquivalent(string docId)
         {
             return GetApiMetadata(docId, SourceCompatibleEquivalent);
         }
 
-        public bool IsFrameworkAssembly(string assemblyIdentity)
+        public virtual bool IsFrameworkAssembly(string assemblyIdentity)
         {
             return _frameworkAssemblies.Contains(assemblyIdentity);
         }
 
-        public Version GetVersionIntroducedIn(string docId, FrameworkName target)
+        public virtual Version GetVersionIntroducedIn(string docId, FrameworkName target)
         {
             Dictionary<string, Version> targets;
             Version versionIntroducedIn;
@@ -161,7 +161,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return null;
         }
 
-        public FrameworkName GetLatestVersion(string targetIdentifier)
+        public virtual FrameworkName GetLatestVersion(string targetIdentifier)
         {
             FrameworkName name;
             if (_latestTargetVersion.TryGetValue(targetIdentifier, out name))
@@ -171,12 +171,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return null;
         }
 
-        public IEnumerable<FrameworkName> GetPublicTargets()
+        public virtual IEnumerable<FrameworkName> GetPublicTargets()
         {
             return _publicTargets;
         }
 
-        public IEnumerable<TargetInfo> GetAllTargets()
+        public virtual IEnumerable<TargetInfo> GetAllTargets()
         {
             return _allTargets;
         }
@@ -188,7 +188,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// If the docId does not exist or is null, it will return an empty
         /// Enumerable.
         /// </summary>
-        public IEnumerable<string> GetAncestors(string docId)
+        public virtual IEnumerable<string> GetAncestors(string docId)
         {
             if (string.IsNullOrEmpty(docId))
             {
@@ -213,11 +213,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
         }
 
-        public DateTimeOffset LastModified { get { return _lastModified; } }
+        public virtual DateTimeOffset LastModified { get { return _lastModified; } }
 
-        public string BuiltBy { get { return _builtBy; } }
+        public virtual string BuiltBy { get { return _builtBy; } }
 
-        public IEnumerable<FrameworkName> GetSupportedVersions(string docId)
+        public virtual IEnumerable<FrameworkName> GetSupportedVersions(string docId)
         {
             return _publicTargets.Where(t => IsMemberInTarget(docId, t)).ToList();
         }
