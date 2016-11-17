@@ -40,4 +40,33 @@
         var currentClass = beginCollapsed[i].getAttribute('class');
         beginCollapsed[i].setAttribute('class', currentClass.concat(' ToggledOff').trim());
     }
+
+    // Toggle the visibility of a column in the portability report detail
+    // table (id='table_portability_details')
+    function show_hide_column(col_no, do_show) {
+        var stl;
+        if (do_show) stl = ''
+        else stl = 'none';
+
+        var tables = document.getElementsByClassName('table_portability_details');
+        for (var tbl = 0; tbl < tables.length; tbl++) {
+            var rows = tables[tbl].getElementsByTagName('tr');
+
+            var headers = rows[0].getElementsByTagName('th');
+            headers[col_no].style.display = stl;
+
+            for (var row = 1; row < rows.length; row++) {
+                var cels = rows[row].getElementsByTagName('td')
+                cels[col_no].style.display = stl;
+            }
+        }
+    }
+
+    // Event handler for checkboxes to hide columns in the portability report detail table.
+    function ToggleColumnVisibility(element) {
+        var col_id = parseInt(element.id.substr(-1));
+        var visible = !element.checked;
+        show_hide_column(col_id, visible);
+    }
+
 </script>
