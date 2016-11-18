@@ -458,7 +458,7 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project was either canceled or could not be built. Please look at the erorr window for any build errors..
+        ///   Looks up a localized string similar to Project was either canceled or could not be built. Please look at the error window for any build errors..
         /// </summary>
         public static string UnableToBuildProject {
             get {
