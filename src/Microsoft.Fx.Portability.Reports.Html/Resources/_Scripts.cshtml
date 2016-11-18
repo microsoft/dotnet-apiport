@@ -67,6 +67,57 @@
         var col_id = parseInt(element.id.substr(-1));
         var visible = !element.checked;
         show_hide_column(col_id, visible);
+        // Refresh the rows because showing columns could make error cells visible.
+        ToggleRowVisibility(document.getElementById('row_visibility_checkbox'));
     }
 
+
+    function ToggleRowVisibility(element){
+        var stl;
+        if (!element.checked) stl = '';
+        else stl = 'none';
+
+        var tables = document.getElementsByClassName('table_portability_details');
+        for (var tbl = 0; tbl < tables.length; tbl++) {
+            var rows = tables[tbl].getElementsByTagName('tr');
+            if (stl == '') { // show all rows
+                for(var row = 0; row < rows.length; row++)
+                    if (rows[row].style.display == 'none') rows[row].style.display = stl; // show previously hidden rows
+            } else {
+                var row = 1;
+                while (row < rows.length) { // work on one Target type at a time.
+                    var type_row = rows[row];
+                    var type_has_visible_child = false;
+                    var j = row + 1;
+                    var cels = rows[j].getElementsByTagName('td');
+                    while (cels[0].innerHTML != '&nbsp;') { // Types are separated by blank rows.
+                        var all_cells_success = true;
+                        // No need to check the first column (Target type) and the last column (Recommended changes)
+                        for (var cel = 1; cel < cels.length - 1; cel++) {
+                            var cell = cels[cel];
+                            // Keep rows that have visible errors
+                            if (cell.classList.contains('IconErrorEncoded') && cell.style.display != 'none') {
+                                all_cells_success = false;
+                                type_has_visible_child = true;
+                                break;
+                            }
+                        }
+                        // Hide all success row
+                        if (all_cells_success) rows[j].style.display = stl;
+                        else rows[j].style.display = '';
+                        j += 1;
+                        cels = rows[j].getElementsByTagName('td');
+                    }
+                    if (type_has_visible_child) {
+                        type_row.style.display = ''; // make sure they are visible
+                        rows[j].style.display = '';
+                    } else {
+                        type_row.style.display = stl; // hide the type row
+                        rows[j].style.display = stl;  // hide the blank separator row
+                    }
+                    row = j+1;
+                }
+            }
+        }
+    }
 </script>

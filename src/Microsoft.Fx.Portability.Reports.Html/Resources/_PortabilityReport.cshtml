@@ -106,11 +106,18 @@
     </tbody>
 </table>
 <div id="details">
+        <h3>Hide rows:</h3>
+        <form>
+            <input type="checkbox" id="row_visibility_checkbox" onchange="ToggleRowVisibility(this)">
+            <label for="row_visibility_checkbox">Hide rows that don't have problems</label>
+        </form>
+
         @{ 
             var detailColumnHeaders = new List<string>();
             detailColumnHeaders.Add(LocalizedStrings.TargetTypeHeader);
             detailColumnHeaders.AddRange(Model.TargetHeaders);
             detailColumnHeaders.Add(LocalizedStrings.RecommendedChanges);
+
         <h3>Hide columns:</h3>
         <form>
             @* It doesn't make sense to hide the first column (Target type), which lists
