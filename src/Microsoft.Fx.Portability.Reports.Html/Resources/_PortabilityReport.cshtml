@@ -125,7 +125,7 @@
             @for (int i = 1; i < detailColumnHeaders.Count; i++)
             {
                 var id = "checkbox" + i.ToString();
-                <input type="checkbox" id="@id" onchange='ToggleColumnVisibility(this)'>
+                <input type="checkbox" id="@id" onchange='onToggleColumnVisibility(this)'>
                 <label for="@id">@detailColumnHeaders[i]</label>
             }
         </form>
