@@ -20,14 +20,14 @@ only the first instance is removed.  Furthermore, subsequent use of SelectedItem
 (e.g. SelectedItems.Clear()) can encounter problems such as ArgumentException, because
 SelectedItems contains items that are no longer in the data source.
 
-- [ ] Quirked // Uses some mechanism to turn the feature on or off, usually using runtime targeting, AppContext or config files. Needs to be turned on automatically for some situations.
-- [ ] Build-time break // Causes a break if attempted to recompile
+- [ ] Quirked
+- [ ] Build-time break
 
 ### Recommended Action
 Upgrade if possible to .NET 4.6.2.
 
 ### Affected APIs
-* `P:System.Windows.Controls.Primitives.Selector.SelectedItems`
+* `P:System.Windows.Controls.Primitives.MultiSelector.SelectedItems`
 
 ### Category
 Windows Presentation Foundation (WPF)
