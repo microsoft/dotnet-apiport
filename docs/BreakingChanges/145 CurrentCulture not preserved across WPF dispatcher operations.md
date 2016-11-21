@@ -6,6 +6,9 @@ Minor
 ### Version Introduced
 4.6
 
+### Version Reverted
+4.6.2
+
 ### Source Analyzer Status
 Planned
 
@@ -21,6 +24,15 @@ This is due to a change in [ExecutionContext](https://msdn.microsoft.com/en-us/l
 
 ### Recommended Action
 Apps affected by this change may work around it by storing the desired CurrentCulture or CurrentUICulture in a field and checking in all Dispatcher operation bodies (including UI event callback handlers) that the correct CurrentCulture and CurrentUICulture are set. Alternatively, because the ExecutionContext change underlying this WPF change only affects apps targeting the .NET Framework 4.6 or newer, this break can be avoided by targeting the .NET Framework 4.5.2.
+
+Apps that target .NET Framework 4.6 or later can also work around this by setting the following compatibility switch: 
+
+    ```
+    AppContext.SetSwitch("Switch.System.Globalization.NoAsyncCurrentCulture", true);
+    ```
+
+This issue has been fixed by WPF in .NET Framework 4.6.2. It has also been fixed in .NET Frameworks 4.6, 4.6.1 through [KB 3139549](https://support.microsoft.com/en-us/kb/3139549). 
+Applications targeting .NET 4.6 or later will automatically get the right behavior in WPF applications - CurrentCulture/CurrentUICulture would be preserved across Dispatcher operations. 
 
 ### Affected APIs
 * Not detectable via API analysis
