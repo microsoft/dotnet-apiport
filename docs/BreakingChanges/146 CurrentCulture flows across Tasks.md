@@ -6,6 +6,9 @@ Minor
 ### Version Introduced
 4.6
 
+### Version Reverted
+4.6.2
+
 ### Source Analyzer Status
 Planned
 
@@ -22,6 +25,9 @@ Apps affected by this change may work around it by explicitly setting the desire
 ```C#
 AppContext.SetSwitch("Switch.System.Globalization.NoAsyncCurrentCulture", true);
 ```
+
+This issue has been fixed by WPF in .NET Framework 4.6.2. It has also been fixed in .NET Frameworks 4.6, 4.6.1 through [KB 3139549](https://support.microsoft.com/en-us/kb/3139549). 
+Applications targeting .NET 4.6 or later will automatically get the right behavior in WPF applications - CurrentCulture/CurrentUICulture would be preserved across Dispatcher operations. 
 
 ### Affected APIs
 * `M:System.Globalization.CultureInfo.set_CurrentCulture(System.Globalization.CultureInfo)`
