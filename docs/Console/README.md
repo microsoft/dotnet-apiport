@@ -115,32 +115,21 @@ output that shows what data is being transmitted to the service, but provides no
 details as to API portability or breaking changes. This is a good option if you
 would like to see what data will be collected.
 
-In order to enable this mode, create a file `unity.config` and place it in the
+In order to enable this mode, create a file `autofac.json` and place it in the
 same directory as `ApiPort.exe`. Add the following contents:
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <configSections>
-    <section name="unity" type="Microsoft.Practices.Unity.Configuration.UnityConfigurationSection, Microsoft.Practices.Unity.Configuration"/>
-  </configSections>
-  <unity xmlns="http://schemas.microsoft.com/practices/2010/unity">
-    <typeAliases>
-      <typeAlias alias="singleton" type="Microsoft.Practices.Unity.ContainerControlledLifetimeManager, Microsoft.Practices.Unity" />
-      <typeAlias alias="IApiPortService" type="Microsoft.Fx.Portability.IApiPortService, Microsoft.Fx.Portability" />
-      <typeAlias alias="FileOutputApiPortService" type="ApiPort.FileOutputApiPortService, ApiPort" />
-    </typeAliases>
-    <container>
-      <register type="IApiPortService" mapTo="FileOutputApiPortService"  >
-        <lifetime type="singleton" />
-      </register>
-      <instance name="DefaultOutputFormat" value="json" />
-    </container>
-  </unity>
-</configuration>
+```json
+{
+  "defaultAssembly": "ApiPort",
+  "modules": [
+    {
+      "type": "ApiPort.Modules.DataTransferModule"
+    }
+  ]
+}
 ```
 
-Now, when you run, it will output a file with the information that is sent to 
+Now, when you run, it will output a file (ie. `ApiPortAnalysis.json`) with the information that is sent to 
 the .NET Portability service.
 
 ### Run the tool in an offline mode
