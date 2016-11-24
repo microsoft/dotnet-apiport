@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Autofac.Configuration;
 
 namespace ApiPort
 {
     internal static class DependencyBuilder
     {
-        private const string DefaultOutputFormatInstanceName = "DefaultOutputFormat";
+        internal const string AutofacConfiguration = "autofac.json";
+        internal const string DefaultOutputFormatInstanceName = "DefaultOutputFormat";
 
         public static IContainer Build(ICommandLineOptions options, ProductInformation productInformation)
         {
@@ -116,9 +119,28 @@ namespace ApiPort
                     .SingleInstance();
             }
 
+
             TryLoadOffline(builder);
+            TryLoadAutofacConfiguration(builder);
 
             return builder.Build();
+        }
+
+        private static void TryLoadAutofacConfiguration(ContainerBuilder builder)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(GetApplicationDirectory())
+                .AddJsonFile(AutofacConfiguration, optional: true)
+                .Build();
+
+            if (!configuration.GetChildren().Any())
+            {
+                return;
+            }
+
+            var module = new ConfigurationModule(configuration);
+
+            builder.RegisterModule(module);
         }
 
         private static void TryLoadOffline(ContainerBuilder builder)

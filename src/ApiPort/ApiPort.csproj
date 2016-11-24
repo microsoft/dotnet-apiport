@@ -68,6 +68,7 @@
     <Compile Include="FileOutputApiPortService.cs" />
     <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="ICommandLineOptions.cs" />
+    <Compile Include="Modules\DataTransferModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
