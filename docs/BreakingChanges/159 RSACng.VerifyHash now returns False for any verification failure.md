@@ -22,7 +22,7 @@ In the .NET Framework 4.6 and 4.6.1, the method throws a `T:System.Security.Cryp
 Any code whose execution depends on handling the `T:System.Security.Cryptography.CryptographicException` should instead execute if validation fails and the method returns **False**.
 
 ### Affected APIs
-* `M:System.Security.Cryptography.VerifyHash(System.Byte[],System.Byte[],System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.RSASignaturePadding)`
+* `M:System.Security.Cryptography.RSACng.VerifyHash(System.Byte[],System.Byte[],System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.RSASignaturePadding)`
 
 ### Category
 Security
