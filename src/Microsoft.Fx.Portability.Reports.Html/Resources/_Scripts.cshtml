@@ -43,30 +43,77 @@
 
     // Toggle the visibility of a column in the portability report detail
     // table (id='table_portability_details')
-    function show_hide_column(col_no, do_show) {
-        var stl;
-        if (do_show) stl = ''
-        else stl = 'none';
+    function ToggleColumnVisibility(columnNumber, visible) {
+        var style = visible ? '' : 'none';
 
         var tables = document.getElementsByClassName('table_portability_details');
-        for (var tbl = 0; tbl < tables.length; tbl++) {
-            var rows = tables[tbl].getElementsByTagName('tr');
+        for (var table = 0; table < tables.length; table++) {
+            var rows = tables[table].getElementsByTagName('tr');
 
             var headers = rows[0].getElementsByTagName('th');
-            headers[col_no].style.display = stl;
+            headers[columnNumber].style.display = style;
 
             for (var row = 1; row < rows.length; row++) {
-                var cels = rows[row].getElementsByTagName('td')
-                cels[col_no].style.display = stl;
+                var cells = rows[row].getElementsByTagName('td')
+                cells[columnNumber].style.display = style;
             }
         }
     }
 
     // Event handler for checkboxes to hide columns in the portability report detail table.
-    function ToggleColumnVisibility(element) {
-        var col_id = parseInt(element.id.substr(-1));
+    function onToggleColumnVisibility(element) {
+        var columnId = parseInt(element.id.substr(-1));
         var visible = !element.checked;
-        show_hide_column(col_id, visible);
+        ToggleColumnVisibility(columnId, visible);
+        // Refresh the rows because showing columns could make error cells visible.
+        ToggleRowVisibility(document.getElementById('row_visibility_checkbox'));
     }
 
+
+    function ToggleRowVisibility(element){
+        var style = element.checked ? 'none' : '';
+
+        var tables = document.getElementsByClassName('table_portability_details');
+        for (var table = 0; table < tables.length; table++) {
+            var rows = tables[table].getElementsByTagName('tr');
+            if (style === '') { // show all rows
+                for(var row = 0; row < rows.length; row++)
+                    if (rows[row].style.display === 'none') rows[row].style.display = style; // show previously hidden rows
+            } else {
+                var row = 1;
+                while (row < rows.length) { // work on one Target type at a time.
+                    var typeRow = rows[row];
+                    var typeHasVisibleChild = false;
+                    var j = row + 1;
+                    var cells = rows[j].getElementsByTagName('td');
+                    while (cells[0].innerHTML !== '&nbsp;') { // Types are separated by blank rows.
+                        var allCellsSuccess = true;
+                        // No need to check the first column (Target type) and the last column (Recommended changes)
+                        for (var cel = 1; cel < cells.length - 1; cel++) {
+                            var cell = cells[cel];
+                            // Keep rows that have visible errors
+                            if (cell.classList.contains('IconErrorEncoded') && cell.style.display !== 'none') {
+                                allCellsSuccess = false;
+                                typeHasVisibleChild = true;
+                                break;
+                            }
+                        }
+                        // Hide all success row
+                        if (allCellsSuccess) rows[j].style.display = style;
+                        else rows[j].style.display = '';
+                        j += 1;
+                        cells = rows[j].getElementsByTagName('td');
+                    }
+                    if (typeHasVisibleChild) {
+                        typeRow.style.display = ''; // make sure they are visible
+                        rows[j].style.display = '';
+                    } else {
+                        typeRow.style.display = style; // hide the type row
+                        rows[j].style.display = style;  // hide the blank separator row
+                    }
+                    row = j+1;
+                }
+            }
+        }
+    }
 </script>
