@@ -3,9 +3,7 @@
 This repository contains the source code for .NET Portability Analyzer tools and
 dependencies.
 
-| Status | Latest Version |
-| :----- | :------------- |
-| ![][BuildStatus] | [![][Version]][myget] |
+[![][BuildStatus]][myget]
 
 For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
@@ -37,6 +35,10 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 | Microsoft.Fx.Portability.Offline | Provides access to data in an offline setting so network calls are not needed |
 | Microsoft.Fx.Portability.Reporting.Html | Provides an HTML report for ApiPort (used in offline mode) |
 | Microsoft.Fx.Portability.Reporting.Json | Provides a JSON reporter for ApiPort (used in offline mode) |
+
+### Builds
+
+The libraries are continuously published to [dotnet-apiport MyGet gallery][myget]. The Visual Studio extension is published to [Open VSIX Gallery][VSIX Gallery].  The latest version number of each library can be seen in that gallery.
 
 ## How to Engage, Contribute and Provide Feedback
 
@@ -80,7 +82,7 @@ This project is licensed under the [MIT license](LICENSE).
 [PR]: https://github.com/Microsoft/dotnet-apiport/pulls
 [PR-Closed]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Apr+is%3Aclosed
 [PR-Open]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr
-[myget]: https://www.myget.org/gallery/dotnet-apiport
+[myget]: https://dotnet.myget.org/gallery/dotnet-apiport
 [System.Reflection.Metadata]: https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata
-[Version]: https://img.shields.io/myget/dotnet-apiport/v/Microsoft.Fx.Portability.svg
 [Visual Studio 2015]: http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx
+[VSIX Gallery]: http://vsixgallery.com/extension/55d15546-28ca-40dc-af23-dfa503e9c5fe
