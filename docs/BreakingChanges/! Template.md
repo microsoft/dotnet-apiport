@@ -5,7 +5,8 @@
 // Entries with [| ... |] are fields that must be updated.
 
 ### Scope
-[|Major|Minor|Edge|]
+[|Major|Minor|Edge|Transparent|]
+//A description of the Scopes can be found at https://msdn.microsoft.com/en-us/library/mt661864(v=vs.110).aspx
 
 ### Version Introduced
 [|Version in which the breaking change first occured|]
