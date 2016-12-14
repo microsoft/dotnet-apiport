@@ -30,10 +30,11 @@ This can also be done programmatically with the following code:
    ```cs
    private const string DisableCngCertificates = @"Switch.System.ServiceModel.DisableCngCertificate"; 
    AppContext.SetSwitch(disableCngCertificates, false);
-   ```cs
+   ```
 
    ```vb
-   Const DisableCngCertificates As String = "Switch.System.ServiceModel.DisableCngCertificates" AppContext.SetSwitch(disableCngCertificates, False)
+   Const DisableCngCertificates As String = "Switch.System.ServiceModel.DisableCngCertificates"
+   AppContext.SetSwitch(disableCngCertificates, False)
    ```
 
 Note that, because of this change, any exception handling code that depends on the attempt to initiate secure communication with a CNG certificate to fail will no longer execute. 

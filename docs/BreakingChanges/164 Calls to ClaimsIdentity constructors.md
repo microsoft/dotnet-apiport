@@ -29,9 +29,9 @@ If this behavior is undesirable, you can restore the previous behavior by settin
    ```
 
 ### Affected APIs
-M:System.Security.Claims.ClaimsIdentity.#ctor(System.Security.Principal.IIdentity)
-M:System.Security.Claims.ClaimsIdentity.#ctor(System.Security.Principal.IIdentity,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})
-M:System.Security.Claims.ClaimsIdentity.#ctor(System.Security.Principal.IIdentity,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.String,System.String,System.String)
+- `M:System.Security.Claims.ClaimsIdentity.#ctor(System.Security.Principal.IIdentity)`
+- `M:System.Security.Claims.ClaimsIdentity.#ctor(System.Security.Principal.IIdentity,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})`
+- `M:System.Security.Claims.ClaimsIdentity.#ctor(System.Security.Principal.IIdentity,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.String,System.String,System.String)`
 
 ### Category
 Core

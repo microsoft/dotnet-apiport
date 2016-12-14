@@ -36,7 +36,7 @@ In addition, applications that target a previous version of the .NET Framework b
    ```
 
 ### Affected APIs
-`M:System.Security.Cryptography.AesCryptoServiceProvider.CreateDecryptor`
+- `M:System.Security.Cryptography.AesCryptoServiceProvider.CreateDecryptor`
 
 ### Category
 Core
