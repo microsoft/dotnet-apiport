@@ -21,7 +21,7 @@ In the .NET Framework 4.6.1 and earlier versions, controls inside a `T:System.Wi
 None. This change conforms to the expected behavior for controls inside a `T:System.Windows.Controls.TextBlock` control.
 
 ### Affected APIs
-The `IsEnabled` property of a `T:System.Windows.Controls.TextBlock` control's child controls
+`P:System.Windows.UIElement.IsEnabled`
 
 ### Category
 Windows Presentation Foundation (WPF)

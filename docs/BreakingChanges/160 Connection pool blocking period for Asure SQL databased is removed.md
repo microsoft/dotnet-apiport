@@ -29,8 +29,8 @@ If this behavior is undesirable, the connection pool blocking period can be conf
 The previous behavior can be restored by setting the `P:System.Data.SqlClient.SqlConnectionStringBuilder.PoolBlockingPeriod` property to `F:System.Data.SqlClient.PoolBlockingPeriod.AlwaysBlock`.
 
 ### Affected APIs
+`M:System.Data.Common.DbConnection.OpenAsync`
 `M:System.Data.SqlClient.SqlConnection.Open`
-`M:System.Data.SqlClient.SqlConnection.OpenAsync`
 `M:System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)`
 
 ### Category

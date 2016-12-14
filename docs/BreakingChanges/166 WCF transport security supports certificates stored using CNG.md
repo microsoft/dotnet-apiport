@@ -38,9 +38,6 @@ This can also be done programmatically with the following code:
 
 Note that, because of this change, any exception handling code that depends on the attempt to initiate secure communication with a CNG certificate to fail will no longer execute. 
 
-### Affected APIs
-[| List of APIs affected by change referred to using docids|]
-
 ### Category
 Windows Communication Foundation (WCF)
 
