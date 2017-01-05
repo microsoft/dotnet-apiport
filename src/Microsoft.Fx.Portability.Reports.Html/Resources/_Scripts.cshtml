@@ -83,8 +83,8 @@
                 var row = 1;
                 while (row < rows.length) { // work on one Target type at a time.
                     var typeRow = rows[row];
-                    var typeHasVisibleChild = false;
-                    var j = row + 1;
+                    var typeOrChildVisible = false;
+                    var j = row;
                     var cells = rows[j].getElementsByTagName('td');
                     while (cells[0].innerHTML !== '&nbsp;') { // Types are separated by blank rows.
                         var allCellsSuccess = true;
@@ -94,7 +94,7 @@
                             // Keep rows that have visible errors
                             if (cell.classList.contains('IconErrorEncoded') && cell.style.display !== 'none') {
                                 allCellsSuccess = false;
-                                typeHasVisibleChild = true;
+                                typeOrChildVisible = true;
                                 break;
                             }
                         }
@@ -104,7 +104,7 @@
                         j += 1;
                         cells = rows[j].getElementsByTagName('td');
                     }
-                    if (typeHasVisibleChild) {
+                    if (typeOrChildVisible) {
                         typeRow.style.display = ''; // make sure they are visible
                         rows[j].style.display = '';
                     } else {
