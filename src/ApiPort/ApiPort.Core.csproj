@@ -17,7 +17,6 @@
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
-
   <!-- Taken from: https://docs.microsoft.com/en-us/dotnet/articles/core/tutorials/target-dotnetcore-with-msbuild#creating-a-net-core-console-application -->
   <PropertyGroup>
     <TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
@@ -26,14 +25,12 @@
     <NoStdLib>true</NoStdLib>
     <NoWarn>$(NoWarn);1701</NoWarn>
   </PropertyGroup>
-
   <!-- Output path properties -->
   <PropertyGroup>
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\netcoreapp1.0\$(Platform)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
-
   <!-- Configruation (OS and flavor) properties -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -84,7 +81,6 @@
   <PropertyGroup Condition="'$(Platform)' == 'arm'">
     <PlatformTarget>arm</PlatformTarget>
   </PropertyGroup>
-
   <!-- Source files -->
   <ItemGroup>
     <Compile Include="AppCommands.cs" />
@@ -102,6 +98,7 @@
     <Compile Include="FileOutputApiPortService.cs" />
     <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="ICommandLineOptions.cs" />
+    <Compile Include="Modules\DataTransferModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ConsoleProgressReporter.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
@@ -137,12 +134,10 @@
   <!-- Targets includes -->
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
   <!-- Post-build actions -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
-
   <!-- Taken from: https://docs.microsoft.com/en-us/dotnet/articles/core/tutorials/target-dotnetcore-with-msbuild#creating-a-net-core-console-application -->
   <PropertyGroup>
     <!-- We don't use any of MSBuild's resolution logic for resolving the framework, so just set these two
