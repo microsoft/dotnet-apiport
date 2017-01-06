@@ -7,7 +7,7 @@ Minor
 4.6.2
 
 ### Source Analyzer Status
-[Investigating]
+Investigating
 
 ### Change Description
 Starting with the .NET Framework 4.6.2, for connection open requests to known Azure SQL databases (*.database.windows.net, *.database.chinacloudapi.cn, *.database.usgovcloudapi.net, *.database.cloudapi.de), the connection pool blocking period is removed, and connection open errors are not cached. Attempts to retry connection open requests will occur almost immediately after transient connection errors. This change allows the connection open attempt to be retried immediately for Azure SQL databases, thereby improving the performance of cloud-enabled apps. For all other connection attempts, the connection pool blocking period continues to be enforced.
@@ -27,9 +27,9 @@ If this behavior is undesirable, the connection pool blocking period can be conf
 The previous behavior can be restored by setting the `P:System.Data.SqlClient.SqlConnectionStringBuilder.PoolBlockingPeriod` property to `F:System.Data.SqlClient.PoolBlockingPeriod.AlwaysBlock`.
 
 ### Affected APIs
-`M:System.Data.Common.DbConnection.OpenAsync`
-`M:System.Data.SqlClient.SqlConnection.Open`
-`M:System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)`
+- `M:System.Data.Common.DbConnection.OpenAsync`
+- `M:System.Data.SqlClient.SqlConnection.Open`
+- `M:System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)`
 
 ### Category
 Data
