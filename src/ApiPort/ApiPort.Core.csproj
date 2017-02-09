@@ -101,6 +101,10 @@
     <Compile Include="Modules\DataTransferModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ConsoleProgressReporter.cs" />
+    <Compile Include="Proxy\ConsoleCredentialProvider.cs" />
+    <Compile Include="Proxy\ProxyConstants.cs" />
+    <Compile Include="Proxy\ProxyProvider.cs" />
+    <Compile Include="Proxy\WebProxy.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,6 +123,7 @@
   <!-- NuGet references -->
   <ItemGroup>
     <None Include="ApiPort.Core.project.json" />
+    <None Include="config.json" />
   </ItemGroup>
   <!-- Project references -->
   <ItemGroup>

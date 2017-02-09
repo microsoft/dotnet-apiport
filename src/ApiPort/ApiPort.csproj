@@ -13,7 +13,6 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <DefineConstants>FEATURE_RICH_CONSOLE</DefineConstants>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,6 +37,7 @@
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\net46</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <DefineConstants>$(DefineConstants);FEATURE_RICH_CONSOLE;FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
@@ -70,6 +70,10 @@
     <Compile Include="ICommandLineOptions.cs" />
     <Compile Include="Modules\DataTransferModule.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Proxy\ConsoleCredentialProvider.cs" />
+    <Compile Include="Proxy\ProxyProvider.cs" />
+    <Compile Include="Proxy\ProxyConstants.cs" />
+    <Compile Include="Proxy\WebProxy.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,6 +92,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ApiPort.project.json" />
+    <None Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BinPlaceContent Include=".\Assets\KnownSafeBreaks.json" />
