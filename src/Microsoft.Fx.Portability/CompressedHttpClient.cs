@@ -23,7 +23,12 @@ namespace Microsoft.Fx.Portability
         /// <param name="productName">Product name that will be displayed in the User Agent string of requests</param>
         /// <param name="productVersion">Product version that will be displayed in the User Agent string of requests</param>
         public CompressedHttpClient(ProductInformation info)
-            : base(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+            : this(info, new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+        {
+        }
+
+        public CompressedHttpClient(ProductInformation info, HttpMessageHandler handler)
+            : base(handler)
         {
             DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentCulture.ToString());
@@ -214,6 +219,8 @@ namespace Microsoft.Fx.Portability
                                 throw new NotFoundException();
                             case HttpStatusCode.Unauthorized:
                                 throw new UnauthorizedEndpointException();
+                            case HttpStatusCode.ProxyAuthenticationRequired:
+                                throw new ProxyAuthenticationRequiredException(request.RequestUri);
                         }
 
                         throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
