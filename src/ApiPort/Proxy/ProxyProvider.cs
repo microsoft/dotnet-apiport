@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Proxy
 {
@@ -32,6 +34,7 @@ namespace Microsoft.Fx.Portability.Proxy
 #endif
         private readonly IConfigurationRoot _configuration;
         private readonly CredentialsWrapper _credentialsWrapper;
+        private readonly ICredentialProvider _credentialProvider;
 
         public ProxyProvider(string configurationDirectory, string configurationFile, ICredentialProvider credentialProvider)
         {
@@ -41,10 +44,13 @@ namespace Microsoft.Fx.Portability.Proxy
                  .Build();
 
             _credentialsWrapper = new CredentialsWrapper(CredentialCache.DefaultNetworkCredentials);
-            CredentialProvider = credentialProvider;
+            _credentialProvider = credentialProvider;
         }
 
-        public ICredentialProvider CredentialProvider { get; }
+        public bool CanUpdateCredentials
+        {
+            get { return _credentialProvider != null; }
+        }
 
         public IWebProxy GetProxy(Uri sourceUri)
         {
@@ -87,7 +93,7 @@ namespace Microsoft.Fx.Portability.Proxy
         /// 2. Configuration file passed in.
         /// </summary>
         /// <returns>A web proxy or null if none was found.</returns>
-        public IWebProxy GetUserConfiguredProxy()
+        private IWebProxy GetUserConfiguredProxy()
         {
             var proxy = GetWebProxyFromEnvironment();
 
@@ -99,13 +105,24 @@ namespace Microsoft.Fx.Portability.Proxy
             return GetWebProxyFromConfiguration();
         }
 
-        /// <summary>
-        /// Update existing proxy credential
-        /// </summary>
-        /// <param name="credentials">New credential object</param>
-        public void UpdateProxyCredentials(NetworkCredential credentials)
+        public async Task<bool> TryUpdateCredentialsAsync(Uri uri, IWebProxy proxy, CredentialRequestType type, CancellationToken cancellationToken)
         {
-            _credentialsWrapper.UpdateCredentials(credentials);
+            if (!CanUpdateCredentials)
+            {
+                return false;
+            }
+
+            var updatedCredentials = await _credentialProvider.GetCredentialsAsync(uri, proxy, type, cancellationToken);
+
+            if (updatedCredentials != null)
+            {
+                _credentialsWrapper.UpdateCredentials(updatedCredentials);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Proxy
 {
@@ -9,9 +11,10 @@ namespace Microsoft.Fx.Portability.Proxy
     public interface IProxyProvider
     {
         /// <summary>
-        /// The credential provider to fetch credentials
+        /// True if it can get updated credentials (if the existing ones for
+        /// the proxy are not sufficient).
         /// </summary>
-        ICredentialProvider CredentialProvider { get; }
+        bool CanUpdateCredentials { get; }
 
         /// <summary>
         /// The resolved proxy based on the destination Uri.
@@ -19,8 +22,8 @@ namespace Microsoft.Fx.Portability.Proxy
         IWebProxy GetProxy(Uri sourceUri);
 
         /// <summary>
-        /// Updates the existing credentials in the proxy.
+        /// True if it was possible to update the credentials and false otherwise.
         /// </summary>
-        void UpdateProxyCredentials(NetworkCredential credentials);
+        Task<bool> TryUpdateCredentialsAsync(Uri uri, IWebProxy proxy, CredentialRequestType type, CancellationToken cancellationToken);
     }
 }

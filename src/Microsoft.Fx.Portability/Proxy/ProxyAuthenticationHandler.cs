@@ -54,12 +54,7 @@ namespace Microsoft.Fx.Portability.Proxy
                         return response;
                     }
 
-                    if (_clientHandler.Proxy == null)
-                    {
-                        return response;
-                    }
-
-                    if (_proxyProvider.CredentialProvider == null)
+                    if (_clientHandler.Proxy == null || !_proxyProvider.CanUpdateCredentials)
                     {
                         return response;
                     }
@@ -70,7 +65,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     }
                 }
                 catch (Exception ex)
-                when (ProxyAuthenticationRequired(ex) && _clientHandler.Proxy != null && _proxyProvider.CredentialProvider != null)
+                when (ProxyAuthenticationRequired(ex) && _clientHandler.Proxy != null && _proxyProvider.CanUpdateCredentials)
                 {
                     if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken))
                     {
@@ -97,17 +92,8 @@ namespace Microsoft.Fx.Portability.Proxy
             var proxyAddress = _clientHandler.Proxy.GetProxy(requestUri);
 
             // prompt user for proxy credentials.
-            var credentials = await _proxyProvider.CredentialProvider?.GetCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken);
-
-            if (credentials == null)
-            {
-                return false;
-            }
-
-            _proxyProvider.UpdateProxyCredentials(credentials);
-
-            // use the user provided credential to send the request again.
-            return true;
+            // use the user provided credential to send the request again if it was successful.
+            return await _proxyProvider.TryUpdateCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken);
         }
 
 #if FEATURE_NETCORE
