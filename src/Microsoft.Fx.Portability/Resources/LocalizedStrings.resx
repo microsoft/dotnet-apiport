@@ -341,4 +341,7 @@
   <data name="CatalogLastUpdated" xml:space="preserve">
     <value>API Catalog last updated on</value>
   </data>
+  <data name="ProxyAuthenticationRequiredMessage" xml:space="preserve">
+    <value>Proxy authentication required to access: {0}. To resolve, try setting proxy in config.json.</value>
+  </data>
 </root>

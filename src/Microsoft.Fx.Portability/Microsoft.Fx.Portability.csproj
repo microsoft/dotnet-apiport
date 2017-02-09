@@ -38,6 +38,7 @@
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <DefineConstants>FEATURE_NETCORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Microsoft.Fx.Portability.project.json" />
@@ -62,6 +63,11 @@
     <Compile Include="ApiPortService.cs" />
     <Compile Include="ApiPortServiceSearcher.cs" />
     <Compile Include="BreakingChangeAnalyzerStatus.cs" />
+    <Compile Include="Proxy\ProxyAuthenticationRequiredException.cs" />
+    <Compile Include="Proxy\CredentialRequestType.cs" />
+    <Compile Include="Proxy\ICredentialProvider.cs" />
+    <Compile Include="Proxy\IProxyProvider.cs" />
+    <Compile Include="Proxy\ProxyAuthenticationHandler.cs" />
     <Compile Include="ObjectModel\AncestorApiRecommendations.cs" />
     <Compile Include="ObjectModel\AssemblyReferenceInformation.cs" />
     <Compile Include="IAssemblyFile.cs" />
