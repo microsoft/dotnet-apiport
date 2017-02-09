@@ -62,6 +62,10 @@ namespace ApiPort
                 {
                     WriteException(ex);
                 }
+                catch (ProxyAuthenticationRequiredException ex)
+                {
+                    WriteException(ex);
+                }
                 catch (AggregateException ex)
                 {
                     Trace.TraceError(ex.ToString());
