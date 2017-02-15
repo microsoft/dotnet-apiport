@@ -1,55 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F3D148CA-D49D-4315-9CD6-AE7B0EEA9549}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Fx.Portability</RootNamespace>
-    <AssemblyName>Microsoft.Fx.Portability.Offline</AssemblyName>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <TargetFramework>netstandard1.3</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <PropertyGroup>
-    <NugetTarget>netstandard1.3</NugetTarget>
-    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\$(NugetTarget)</IntermediateOutputPath>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\$(NugetTarget)</OutputPath>
+    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\</IntermediateOutputPath>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="Data.cs" />
-    <Compile Include="OfflineApiCatalogLookup.cs" />
-    <Compile Include="OfflineApiPortService.cs" />
-    <Compile Include="OfflineApiRecommendations.cs" />
-    <Compile Include="OfflineBreakingChanges.cs" />
-    <Compile Include="OfflineDataModule.cs" />
+    <PackageReference Include="Autofac" Version="4.1.0" />
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
   </ItemGroup>
-  <ItemGroup />
+
   <PropertyGroup>
     <DataPath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\.data\</DataPath>
     <BreakingChangePath>$(MSBuildThisFileDirectory)..\..\docs\BreakingChanges\</BreakingChangePath>
     <CatalogDataFile>$(DataPath)catalog.bin</CatalogDataFile>
   </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="$(CatalogDataFile)" Condition="Exists($(CatalogDataFile))">
       <Link>data\catalog.bin</Link>
@@ -58,8 +30,8 @@
       <Link>data\%(Filename)%(Extension)</Link>
       <BreakingChange>true</BreakingChange>
     </EmbeddedResource>
-    <None Include="Microsoft.Fx.Portability.Offline.project.json" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj">
       <Project>{28d8d77d-e68d-4ebc-9150-f7c433d63bfa}</Project>
@@ -70,10 +42,11 @@
       <Name>Microsoft.Fx.Portability</Name>
     </ProjectReference>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="Properties\version.txt" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
     <Warning Text="Could not find catalog.bin. Please run build\restore.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
