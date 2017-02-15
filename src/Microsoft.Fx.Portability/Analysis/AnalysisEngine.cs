@@ -226,7 +226,7 @@ namespace Microsoft.Fx.Portability.Analysis
             return new System.Reflection.AssemblyName(assemblyIdentity)
             {
                 Version = null,
-#if NET45
+#if NET451
                 CultureInfo = null
 #else
                 CultureName = null
