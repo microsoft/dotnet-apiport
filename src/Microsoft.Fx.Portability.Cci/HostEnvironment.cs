@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+
+#if !NETSTANDARD1_3
+using System.Diagnostics.Contracts;
+#endif
 
 namespace Microsoft.Cci.Extensions
 {
@@ -187,9 +190,10 @@ namespace Microsoft.Cci.Extensions
 
         protected override AssemblyIdentity Probe(string probeDir, AssemblyIdentity referencedAssembly)
         {
+#if !NETSTANDARD1_3
             Contract.Requires(probeDir != null);
             Contract.Requires(referencedAssembly != null);
-
+#endif
             string path = null;
             foreach (var extension in s_probingExtensions)
             {
@@ -256,8 +260,9 @@ namespace Microsoft.Cci.Extensions
 
         private AssemblyIdentity FindUnifiedAssemblyIdentity(AssemblyIdentity identity)
         {
+#if !NETSTANDARD1_3
             Contract.Assert(this.UnifyToLibPath);
-
+#endif
             // Find exact assembly match
             IAssembly asm = this.FindAssembly(identity);
 
@@ -416,7 +421,7 @@ namespace Microsoft.Cci.Extensions
             }
         }
 
-        #region Assembly Set and Path Helpers
+#region Assembly Set and Path Helpers
 
         public static string[] SplitPaths(string pathSet)
         {
@@ -756,7 +761,7 @@ namespace Microsoft.Cci.Extensions
             }
         }
 
-        #endregion
+#endregion
 
         private sealed class StreamDocument : IBinaryDocument
         {
