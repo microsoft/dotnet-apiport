@@ -16,7 +16,7 @@ Starting in .NET Framework 4.7, customer can configure either TLS1.1 or TLS1.2 i
 - [ ] Build-time break
 
 ### Recommended Action
-Prior to .NET Framework 4.7, this change is disabled by default. You can enable this fix by adding the following line to the `<runtime>` section of the app.config or web.config file:
+In the .NET Framework 4.7, support for TLS1.1 and TLS1.2 in WCF message security is disabled by default. You can enable this fix by adding the following line to the `<runtime>` section of the app.config or web.config file:
 
    ```xml
    <runtime>
