@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability
         IProgressTask StartTask(string taskName);
         IReadOnlyCollection<string> Issues { get; }
 
-        void SuspendProgressTasks();
-        void ResumeProgressTasks();
+        void Suspend();
+        void Resume();
     }
 }

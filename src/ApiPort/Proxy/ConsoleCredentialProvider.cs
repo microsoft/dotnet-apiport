@@ -46,7 +46,7 @@ namespace ApiPort
 
             try
             {
-                _progressReporter.SuspendProgressTasks();
+                _progressReporter.Suspend();
 
                 Console.WriteLine();
                 Console.WriteLine(message, uri.OriginalString);
@@ -84,7 +84,7 @@ namespace ApiPort
             }
             finally
             {
-                _progressReporter.ResumeProgressTasks();
+                _progressReporter.Resume();
             }
         }
 

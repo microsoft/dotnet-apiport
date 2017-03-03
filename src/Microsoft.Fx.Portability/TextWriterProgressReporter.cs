@@ -34,10 +34,10 @@ namespace Microsoft.Fx.Portability
             _issuesReported.Add(issue);
         }
 
-        public void SuspendProgressTasks()
+        public void Suspend()
         { }
 
-        public void ResumeProgressTasks()
+        public void Resume()
         { }
 
         public void Dispose()

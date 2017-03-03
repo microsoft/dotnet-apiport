@@ -41,7 +41,7 @@ namespace ApiPort
         /// <summary>
         /// Suspends all progress tasks.
         /// </summary>
-        public void SuspendProgressTasks()
+        public void Suspend()
         {
             foreach (var task in _progressTasks)
             {
@@ -52,7 +52,7 @@ namespace ApiPort
         /// <summary>
         /// Resumes all progress tasks.
         /// </summary>
-        public void ResumeProgressTasks()
+        public void Resume()
         {
             foreach (var task in _progressTasks)
             {
