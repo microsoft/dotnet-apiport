@@ -37,7 +37,7 @@
     <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\net46</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-    <DefineConstants>$(DefineConstants);FEATURE_RICH_CONSOLE;FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
+    <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->

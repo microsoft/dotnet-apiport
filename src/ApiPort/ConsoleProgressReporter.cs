@@ -129,8 +129,6 @@ namespace ApiPort
             private async Task RunBusyAnimation(CancellationToken cancelToken)
             {
                 await Task.Delay(1);
-
-#if FEATURE_RICH_CONSOLE
                 var count = 0;
 
                 // 'left' is the last character written after the task name was written.
@@ -151,7 +149,6 @@ namespace ApiPort
                 Console.Write(" ".PadLeft(Console.WindowWidth - 1));
                 Console.SetCursorPosition(0, Console.CursorTop);
                 Console.Write(_task);
-#endif // FEATURE_RICH_CONSOLE
             }
 
             public void ReportUnitComplete()
