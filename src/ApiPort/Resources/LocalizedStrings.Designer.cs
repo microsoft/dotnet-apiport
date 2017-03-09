@@ -199,6 +199,51 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The remote server indicated that the previous request was forbidden. Please provide credentials for: {0}.
+        /// </summary>
+        public static string Credentials_ForbiddenCredentials {
+            get {
+                return ResourceManager.GetString("Credentials_ForbiddenCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password:.
+        /// </summary>
+        public static string Credentials_Password {
+            get {
+                return ResourceManager.GetString("Credentials_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide proxy credentials:.
+        /// </summary>
+        public static string Credentials_ProxyCredentials {
+            get {
+                return ResourceManager.GetString("Credentials_ProxyCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide credentials for: {0}.
+        /// </summary>
+        public static string Credentials_RequestCredentials {
+            get {
+                return ResourceManager.GetString("Credentials_RequestCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username:.
+        /// </summary>
+        public static string Credentials_UserName {
+            get {
+                return ResourceManager.GetString("Credentials_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

@@ -294,4 +294,19 @@ In order to specify a version, please specify a target and a version with the fo
 
 Versions marked with an asterisk (*) implies that these are default targets if none are submitted.</value>
   </data>
+  <data name="Credentials_ForbiddenCredentials" xml:space="preserve">
+    <value>The remote server indicated that the previous request was forbidden. Please provide credentials for: {0}</value>
+  </data>
+  <data name="Credentials_ProxyCredentials" xml:space="preserve">
+    <value>Please provide proxy credentials:</value>
+  </data>
+  <data name="Credentials_RequestCredentials" xml:space="preserve">
+    <value>Please provide credentials for: {0}</value>
+  </data>
+  <data name="Credentials_Password" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="Credentials_UserName" xml:space="preserve">
+    <value>Username:</value>
+  </data>
 </root>

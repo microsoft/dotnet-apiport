@@ -459,6 +459,15 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proxy authentication required to access: {0}. To resolve, try setting proxy in config.json.
+        /// </summary>
+        public static string ProxyAuthenticationRequiredMessage {
+            get {
+                return ResourceManager.GetString("ProxyAuthenticationRequiredMessage", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Recommended changes.
         /// </summary>
         public static string RecommendedChanges {

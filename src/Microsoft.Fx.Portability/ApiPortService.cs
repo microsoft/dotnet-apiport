@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -22,7 +24,44 @@ namespace Microsoft.Fx.Portability
             internal const string ResultFormat = "/api/resultformat";
         }
 
+        private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
         private readonly CompressedHttpClient _client;
+
+        public ApiPortService(string endpoint, ProductInformation info, IProxyProvider proxyProvider)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint))
+            {
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+            }
+            if (proxyProvider == null)
+            {
+                throw new ArgumentNullException(nameof(proxyProvider));
+            }
+
+            var uri = new Uri(endpoint);
+            var proxy = proxyProvider.GetProxy(uri);
+            
+            // replace the handler with the proxy aware handler
+            var clientHandler = new HttpClientHandler
+            {
+                Proxy = proxy,
+                AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
+            };
+
+            // HTTP handler pipeline can be injected here, around the client handler
+            HttpMessageHandler messageHandler = clientHandler;
+
+            if (proxy != null)
+            {
+                messageHandler = new ProxyAuthenticationHandler(clientHandler, proxyProvider);
+            }
+
+            _client = new CompressedHttpClient(info, messageHandler)
+            {
+                BaseAddress = new Uri(endpoint),
+                Timeout = Timeout
+            };
+        }
 
         public ApiPortService(string endpoint, ProductInformation info)
         {
@@ -34,7 +73,7 @@ namespace Microsoft.Fx.Portability
             _client = new CompressedHttpClient(info)
             {
                 BaseAddress = new Uri(endpoint),
-                Timeout = TimeSpan.FromMinutes(10)
+                Timeout = Timeout
             };
         }
 

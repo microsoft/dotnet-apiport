@@ -15,13 +15,14 @@
     "Autofac.Configuration": "4.0.1",
     "MicroBuild.Core": "0.2.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.NETCore.App": "1.0.1",
     "Newtonsoft.Json": "9.0.1",
     "System.Diagnostics.FileVersionInfo": "4.0.0",
-    "System.Diagnostics.TraceSource": "4.0.0"
+    "System.Diagnostics.TraceSource": "4.0.0",
+    "System.Security.SecureString": "4.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {

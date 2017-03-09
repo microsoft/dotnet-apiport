@@ -34,6 +34,15 @@ namespace Microsoft.Fx.Portability
             _issuesReported.Add(issue);
         }
 
+        public void Suspend()
+        { }
+
+        public void Resume()
+        { }
+
+        public void Dispose()
+        { }
+
         private sealed class TextWriterProgressTask : IProgressTask
         {
             private readonly TextWriter _textWriter;

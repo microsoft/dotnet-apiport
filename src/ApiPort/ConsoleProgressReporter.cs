@@ -5,7 +5,6 @@ using ApiPort.Resources;
 using Microsoft.Fx.Portability;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,15 +13,22 @@ namespace ApiPort
     public class ConsoleProgressReporter : IProgressReporter
     {
         private readonly List<string> _issuesReported = new List<string>();
+        private readonly List<ConsoleProgressTask> _progressTasks = new List<ConsoleProgressTask>();
+
+        private bool _disposed = false;
 
         public IProgressTask StartTask(string taskName)
         {
-            return new ConsoleProgressTask(taskName, null);
+            var task = new ConsoleProgressTask(taskName, null);
+            _progressTasks.Add(task);
+            return task;
         }
 
         public IProgressTask StartTask(string taskName, int total)
         {
-            return new ConsoleProgressTask(taskName, total);
+            var task = new ConsoleProgressTask(taskName, total);
+            _progressTasks.Add(task);
+            return task;
         }
 
         public IReadOnlyCollection<string> Issues { get { return _issuesReported.AsReadOnly(); } }
@@ -30,6 +36,28 @@ namespace ApiPort
         public void ReportIssue(string issue)
         {
             _issuesReported.Add(issue);
+        }
+
+        /// <summary>
+        /// Suspends all progress tasks.
+        /// </summary>
+        public void Suspend()
+        {
+            foreach (var task in _progressTasks)
+            {
+                task.SuspendAnimation();
+            }
+        }
+
+        /// <summary>
+        /// Resumes all progress tasks.
+        /// </summary>
+        public void Resume()
+        {
+            foreach (var task in _progressTasks)
+            {
+                task.ResumeAnimation();
+            }
         }
 
         private static void WriteColor(string message, ConsoleColor color)
@@ -58,12 +86,32 @@ namespace ApiPort
             Console.WriteLine();
         }
 
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+
+                foreach (var task in _progressTasks)
+                {
+                    task.Dispose();
+                }
+
+                _progressTasks.Clear();
+            }
+        }
+
         private sealed class ConsoleProgressTask : IProgressTask
         {
+            private static readonly TimeSpan MaxWaitTime = TimeSpan.FromMinutes(10);
+
             private readonly static char[] s_chars = new char[] { '-', '\\', '|', '/' };
 
             private readonly Task _animationTask;
+
             private readonly CancellationTokenSource _cancellationSource = new CancellationTokenSource();
+            private readonly ManualResetEventSlim _animationResetEvent = new ManualResetEventSlim(initialState: true);
+
             private readonly int? _totalCount;
             private readonly string _task;
 
@@ -81,35 +129,50 @@ namespace ApiPort
             private async Task RunBusyAnimation(CancellationToken cancelToken)
             {
                 await Task.Delay(1);
+                var count = 0;
 
-#if FEATURE_RICH_CONSOLE
-
+                // 'left' is the last character written after the task name was written.
+                var left = Console.CursorLeft;
+                while (!cancelToken.IsCancellationRequested)
                 {
-                    var count = 0;
+                    _animationResetEvent.Wait(MaxWaitTime, cancelToken);
 
-                    // 'left' is the last character written after the task name was written.
-                    var left = Console.CursorLeft;
-                    while (!cancelToken.IsCancellationRequested)
-                    {
-                        Console.SetCursorPosition(left, Console.CursorTop);
+                    Console.SetCursorPosition(left, Console.CursorTop);
 
-                        WriteColor(string.Format(LocalizedStrings.ProgressReportInProgress, new string('.', ++count % 4).PadRight(3)), ConsoleColor.Yellow);
+                    WriteColor(string.Format(LocalizedStrings.ProgressReportInProgress, new string('.', ++count % 4).PadRight(3)), ConsoleColor.Yellow);
 
-
-                        await Task.Delay(350);
-                    }
-
-                    // Make sure we remove the last characted that we wrote.
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write(" ".PadLeft(Console.WindowWidth - 1));
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write(_task);
+                    await Task.Delay(350);
                 }
-#endif // FEATURE_RICH_CONSOLE
+
+                // Make sure we remove the last characted that we wrote.
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.Write(" ".PadLeft(Console.WindowWidth - 1));
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.Write(_task);
             }
 
             public void ReportUnitComplete()
             {
+            }
+
+            public void SuspendAnimation()
+            {
+                if (_completed)
+                {
+                    return;
+                }
+                _animationResetEvent.Reset();
+            }
+
+            public void ResumeAnimation()
+            {
+                if (_completed)
+                {
+                    return;
+                }
+
+                Console.Write(_task);
+                _animationResetEvent.Set();
             }
 
             public void Abort()

@@ -2,24 +2,26 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Autofac;
+using Autofac.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Reporting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
-using Autofac.Configuration;
 
 namespace ApiPort
 {
     internal static class DependencyBuilder
     {
         internal const string AutofacConfiguration = "autofac.json";
+        internal const string ConfigurationFile = "config.json";
         internal const string DefaultOutputFormatInstanceName = "DefaultOutputFormat";
 
         public static IContainer Build(ICommandLineOptions options, ProductInformation productInformation)
@@ -31,7 +33,22 @@ namespace ApiPort
                 .OnActivated(c => c.Instance.LoadFromConfig(options.TargetMapFile))
                 .SingleInstance();
 
+            builder.RegisterInstance<ProductInformation>(productInformation);
             builder.RegisterInstance<ICommandLineOptions>(options);
+
+            builder.RegisterType<ConsoleCredentialProvider>()
+                .As<ICredentialProvider>()
+                .SingleInstance();
+            builder.Register(context => {
+                    var directory = Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location);
+
+                    return new ProxyProvider(
+                        directory,
+                        ConfigurationFile,
+                        context.Resolve<ICredentialProvider>());
+                 })
+                .As<IProxyProvider>()
+                .SingleInstance();
 
 #if DEBUG_SERVICE
             // For debug purposes, the FileOutputApiPortService helps as it serializes the request to json and opens it with the
@@ -40,7 +57,13 @@ namespace ApiPort
                 .As<IApiPortService>()
                 .SingleInstance();
 #else
-            builder.RegisterInstance<IApiPortService>(new ApiPortService(options.ServiceEndpoint, productInformation));
+            builder.Register(context =>
+                new ApiPortService(
+                        context.Resolve<ICommandLineOptions>().ServiceEndpoint,
+                        context.Resolve<ProductInformation>(),
+                        context.Resolve<IProxyProvider>()))
+                .As<IApiPortService>()
+                .SingleInstance();
 #endif
 
             builder.RegisterType<FileIgnoreAssemblyInfoList>()
