@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="55d15546-28ca-40dc-af23-dfa503e9c5fe" Version="1.3.0" Language="en-US" Publisher="Microsoft" />
+    <Identity Id="55d15546-28ca-40dc-af23-dfa503e9c5fe" Version="1.3.1" Language="en-US" Publisher="Microsoft" />
     <DisplayName>.NET Portability Analyzer</DisplayName>
     <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms</Description>
     <MoreInfo>http://go.microsoft.com/fwlink/?LinkId=506955</MoreInfo>
@@ -21,4 +21,8 @@
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="ApiPort.VisualStudio" Path="|ApiPort.VisualStudio;PkgdefProjectOutputGroup|" />
   </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.Roslyn.LanguageServices" Version="[14.0,16.0)" DisplayName="C# and Visual Basic" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[14.0,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
 </PackageManifest>

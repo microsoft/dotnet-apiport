@@ -84,6 +84,32 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.1.0" />
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
+    <PackageReference Include="Microsoft.Cci" Version="4.0.0-rc3-24214-00" />
+    <PackageReference Include="Microsoft.VisualStudio.Imaging" Version="15.0.26201" />
+    <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="7.10.6070" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="15.0.25414-Preview5" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Version="15.0.25413-Preview5" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Version="15.0.25413-Preview5" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Version="15.0.25413-Preview5" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Version="15.0.25403-Preview5" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop" Version="7.10.6071" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30319" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Version="11.0.61030" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Version="12.0.30110" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.8.0" Version="8.0.50727" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Version="9.0.30729" />
+    <PackageReference Include="Microsoft.VisualStudio.TextManager.Interop" Version="7.10.6070" />
+    <PackageReference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" Version="8.0.50727" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="15.0.240" />
+    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="15.0.26201" />
+    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="15.0.82" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.0.26201" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="AnalysisOptions.cs" />
     <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="Properties\Properties.cs" />
