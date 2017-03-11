@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
@@ -115,7 +116,7 @@ namespace Microsoft.Fx.Portability.Tests
         private void ValidateParse(Stream markdown, params BreakingChange[] expected)
         {
             BreakingChange[] actual = BreakingChangeParser.FromMarkdown(markdown).ToArray();
-            markdown.Close();
+            markdown.Dispose();
 
             Assert.Equal(expected.Length, actual.Length);
 
@@ -157,8 +158,8 @@ namespace Microsoft.Fx.Portability.Tests
 
         private Stream GetBreakingChangeMarkdown(string resourceName)
         {
-            var name = typeof(BreakingChangeParserTests).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceName));
-            return typeof(BreakingChangeParserTests).Assembly.GetManifestResourceStream(name);
+            var name = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceName));
+            return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
         }
 
         #endregion

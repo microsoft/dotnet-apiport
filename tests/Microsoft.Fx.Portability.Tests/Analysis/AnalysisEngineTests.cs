@@ -423,7 +423,8 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var testData = GenerateTestData(catalog);
             var engine = new AnalysisEngine(catalog, recommendations);
 
-            var framework = new FrameworkName(AnalysisEngine.FullFrameworkIdentifier + ",Version=" + version);
+            // Value from AnalysisEngine.FullFrameworkIdentifier
+            var framework = new FrameworkName(".NET Framework" + ",Version=" + version);
 
             var breakingChanges = engine.FindBreakingChanges(new[] { framework }, testData, assembliesToIgnore, breakingChangesToSuppress, Array.Empty<string>()).ToList();
 
@@ -576,7 +577,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
         private static string GetAssemblyIdentityWithoutCultureAndVersion(string assemblyIdentity)
         {
-            return new System.Reflection.AssemblyName(assemblyIdentity) { CultureInfo = null, Version = null }.ToString();
+            var assembly = new System.Reflection.AssemblyName(assemblyIdentity) { Version = null };
+#if NET46
+            assembly.CultureInfo = null;
+#else
+            assembly.CultureName = null;
+#endif
+            return assembly.ToString();
         }
     }
 }
