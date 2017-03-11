@@ -29,8 +29,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private class CSharpCompileAssemblyFile : IAssemblyFile
         {
-            private static readonly Assembly s_assembly = typeof(CSharpCompileAssemblyFile).Assembly;
-            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).Assembly.Location, typeof(Uri).Assembly.Location }
+            private static readonly Assembly s_assembly = typeof(CSharpCompileAssemblyFile).GetTypeInfo().Assembly;
+            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).GetTypeInfo().Assembly.Location, typeof(Uri).GetTypeInfo().Assembly.Location }
                                                                      .Select(r => MetadataReference.CreateFromFile(r))
                                                                      .ToList();
 
@@ -86,7 +86,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private class ResourceStreamAssemblyFile : IAssemblyFile
         {
-            private static readonly Assembly s_assembly = typeof(ResourceStreamAssemblyFile).Assembly;
+            private static readonly Assembly s_assembly = typeof(ResourceStreamAssemblyFile).GetTypeInfo().Assembly;
 
             public ResourceStreamAssemblyFile(string fileName)
             {

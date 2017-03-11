@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
@@ -17,11 +17,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact(Skip = "Requires an updated version of System.Reflection.Metadata")]
         public void MscorlibTest()
         {
-            var mscorlib = typeof(object).Assembly.Location;
+            var dependencyFilter = Substitute.For<IDependencyFilter>();
+
+            var mscorlib = typeof(object).GetTypeInfo().Assembly.Location;
 
             var baseline = GetBaseline(mscorlib);
-            var dependencyFinder = new ReflectionMetadataDependencyFinder();
-            var path = new FileInfo(mscorlib);
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter);
+            var path = new AssemblyFileClass(new FileInfo(mscorlib));
+            var assemblyFile = Substitute.For<IAssemblyFile>();
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { path }, progressReporter);
@@ -33,21 +36,36 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.Equal(baseline, result);
         }
 
-        private IEnumerable<MemberInfo> GetBaseline(string path)
+        private IEnumerable<ObjectModel.MemberInfo> GetBaseline(string path)
         {
             var fileName = Path.GetFileNameWithoutExtension(path);
             var version = FileVersionInfo.GetVersionInfo(path);
             var version_file = $"{fileName}_{version.ProductVersion}.json";
 
-            using (var data = typeof(ManagedMetadataReaderTests).Assembly.GetManifestResourceStream(typeof(ManagedMetadataReaderTests), $"Data.{version_file}"))
+            using (var data = typeof(ManagedMetadataReaderTests).GetTypeInfo().Assembly.GetManifestResourceStream($"Data.{version_file}"))
             {
                 if (data == null)
                 {
                     Assert.True(false, $"Could not find baseline file for {fileName} version={version.ProductVersion}");
                 }
 
-                return data.Deserialize<IEnumerable<MemberInfo>>();
+                return data.Deserialize<IEnumerable<ObjectModel.MemberInfo>>();
             }
         }
+
+        private class AssemblyFileClass : IAssemblyFile
+        {
+            private readonly FileInfo _file;
+            public AssemblyFileClass(FileInfo info) => _file = info;
+
+            public string Name => _file.Name;
+
+            public string Version => FileVersionInfo.GetVersionInfo(_file.FullName).FileVersion;
+
+            public bool Exists => _file.Exists;
+
+            public Stream OpenRead() => _file.OpenRead();
+        }
+
     }
 }
