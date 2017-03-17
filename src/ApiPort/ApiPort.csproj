@@ -5,6 +5,8 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net46;netcoreapp1.0</TargetFrameworks>
     <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
@@ -43,9 +45,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<None Include="app.config">
+    <None Include="app.config">
       <SubType>Designer</SubType>
-    </None>-->
+    </None>
   </ItemGroup>
 
   <ItemGroup>
