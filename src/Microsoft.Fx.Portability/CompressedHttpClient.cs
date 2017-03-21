@@ -64,7 +64,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> CallAsync<TRequest>(HttpMethod method, string requestUri, TRequest requestData, IEnumerable<ResultFormatInformation> formats)
         {
-            var content = requestData.Serialize().Compress();
+            var content = requestData.SerializeAndCompress();
 
             using (var request = new HttpRequestMessage(method, requestUri))
             {
@@ -77,7 +77,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<TResponse>> CallAsync<TRequest, TResponse>(HttpMethod method, string requestUri, TRequest requestData)
         {
-            var content = requestData.Serialize().Compress();
+            var content = requestData.SerializeAndCompress();
 
             using (var request = new HttpRequestMessage(method, requestUri))
             {
