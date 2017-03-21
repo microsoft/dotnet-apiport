@@ -217,7 +217,7 @@
     <value>No files were found to upload.</value>
   </data>
   <data name="NotFoundException" xml:space="preserve">
-    <value>Resource was not found.</value>
+    <value>Resource was not found for {0} {1}</value>
   </data>
   <data name="ChangingFileExtension" xml:space="preserve">
     <value>The given filename [{0}] has a different extension than the output format extension. Changed extension '{1}' to '{2}'.</value>
