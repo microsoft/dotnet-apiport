@@ -344,4 +344,7 @@
   <data name="ProxyAuthenticationRequiredMessage" xml:space="preserve">
     <value>Proxy authentication required to access: {0}. To resolve, try setting proxy in config.json.</value>
   </data>
+  <data name="RequestTooLargeMessage" xml:space="preserve">
+    <value>Request to service is too large. Send fewer assemblies for analysis. Content length: {0} bytes</value>
+  </data>
 </root>

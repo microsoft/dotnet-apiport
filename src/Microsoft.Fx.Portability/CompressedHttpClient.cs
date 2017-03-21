@@ -216,7 +216,19 @@ namespace Microsoft.Fx.Portability
                             case HttpStatusCode.MovedPermanently:
                                 throw new MovedPermanentlyException();
                             case HttpStatusCode.NotFound:
-                                throw new NotFoundException();
+                                // Estimated maximum allowed content from the portability service in bytes
+                                const long estimatedMaximumAllowedContentLength = 31457280;
+
+                                var contentLength = request.Content?.Headers?.ContentLength;
+
+                                if (contentLength.HasValue && contentLength.Value >= estimatedMaximumAllowedContentLength)
+                                {
+                                    throw new RequestTooLargeException(contentLength.Value);
+                                }
+                                else
+                                {
+                                    throw new NotFoundException(request.Method, request.RequestUri);
+                                }
                             case HttpStatusCode.Unauthorized:
                                 throw new UnauthorizedEndpointException();
                             case HttpStatusCode.ProxyAuthenticationRequired:

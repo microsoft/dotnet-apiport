@@ -131,6 +131,7 @@
     <Compile Include="Reporting\ReportFileWriter.cs" />
     <Compile Include="Reporting\ReportGenerator.cs" />
     <Compile Include="Reporting\WindowsFileSystem.cs" />
+    <Compile Include="RequestTooLargeException.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
