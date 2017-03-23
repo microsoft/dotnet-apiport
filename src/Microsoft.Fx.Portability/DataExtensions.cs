@@ -33,15 +33,38 @@ namespace Microsoft.Fx.Portability
 
         public static byte[] Serialize<T>(this T data)
         {
-            var str = JsonConvert.SerializeObject(data, Formatting.Indented, JsonSettings);
-
             using (var outputStream = new MemoryStream())
-            using (var writer = new StreamWriter(outputStream))
             {
-                writer.Write(str);
-                writer.Flush();
+                using (var writer = new StreamWriter(outputStream))
+                using (var jsonWriter = new JsonTextWriter(writer))
+                {
+                    var serializer = JsonSerializer.Create(JsonSettings);
+                    serializer.Formatting = Formatting.None;
+                    serializer.Serialize(jsonWriter, data);
+                }
 
                 return outputStream.ToArray();
+            }
+        }
+
+        public static byte[] SerializeAndCompress<T>(this T data)
+        {
+            using (var jsonSerializedStream = new MemoryStream())
+            using (var writer = new StreamWriter(jsonSerializedStream))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                Serializer.Serialize(jsonWriter, data);
+                jsonWriter.Flush();
+
+                using (var outputStream = new MemoryStream())
+                {
+                    using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress))
+                    {
+                        jsonSerializedStream.WriteTo(compressStream);
+                    }
+
+                    return outputStream.ToArray();
+                }
             }
         }
 

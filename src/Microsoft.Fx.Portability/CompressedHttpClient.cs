@@ -64,7 +64,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> CallAsync<TRequest>(HttpMethod method, string requestUri, TRequest requestData, IEnumerable<ResultFormatInformation> formats)
         {
-            var content = requestData.Serialize().Compress();
+            var content = requestData.SerializeAndCompress();
 
             using (var request = new HttpRequestMessage(method, requestUri))
             {
@@ -77,7 +77,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<TResponse>> CallAsync<TRequest, TResponse>(HttpMethod method, string requestUri, TRequest requestData)
         {
-            var content = requestData.Serialize().Compress();
+            var content = requestData.SerializeAndCompress();
 
             using (var request = new HttpRequestMessage(method, requestUri))
             {
@@ -216,7 +216,19 @@ namespace Microsoft.Fx.Portability
                             case HttpStatusCode.MovedPermanently:
                                 throw new MovedPermanentlyException();
                             case HttpStatusCode.NotFound:
-                                throw new NotFoundException();
+                                // Estimated maximum allowed content from the portability service in bytes
+                                const long estimatedMaximumAllowedContentLength = 31457280;
+
+                                var contentLength = request.Content?.Headers?.ContentLength;
+
+                                if (contentLength.HasValue && contentLength.Value >= estimatedMaximumAllowedContentLength)
+                                {
+                                    throw new RequestTooLargeException(contentLength.Value);
+                                }
+                                else
+                                {
+                                    throw new NotFoundException(request.Method, request.RequestUri);
+                                }
                             case HttpStatusCode.Unauthorized:
                                 throw new UnauthorizedEndpointException();
                             case HttpStatusCode.ProxyAuthenticationRequired:
