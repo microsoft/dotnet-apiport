@@ -22,7 +22,7 @@ namespace Microsoft.Fx.Portability
 
         protected override IEnumerable<BreakingChange> GetBreakingChanges(string docId)
         {
-            return _breakingChanges.Where(b => b.ApplicableApis.Contains(docId, StringComparer.Ordinal));
+            return _breakingChanges.Where(b => b.ApplicableApis != null && b.ApplicableApis.Contains(docId, StringComparer.Ordinal));
         }
     }
 }
