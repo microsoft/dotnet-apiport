@@ -1,9 +1,9 @@
 ﻿{
   "dependencies": {
     "Newtonsoft.Json": "9.0.1",
-    "NSubstitute": "1.10.0",
-    "xunit": "2.1.0",
-    "xunit.runner.visualstudio": "2.1.0"
+    "NSubstitute": "2.0.2",
+    "xunit": "2.2.0",
+    "xunit.runner.visualstudio": "2.2.0"
   },
   "frameworks": {
     "net46": {}
