@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability
 
             var ctor = metadataReader.GetMemberReference((MemberReferenceHandle)customAttribute.Constructor);
             var provider = new StringParameterValueTypeProvider(metadataReader, customAttribute.Value);
-            var signature = ctor.DecodeMethodSignature(provider);
+            var signature = ctor.DecodeMethodSignature(provider, null);
 
             return signature.ParameterTypes;
         }

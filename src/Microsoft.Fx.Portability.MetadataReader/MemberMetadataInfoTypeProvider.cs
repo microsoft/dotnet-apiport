@@ -12,16 +12,16 @@ using Microsoft.Fx.Portability.Analyzer.Resources;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
-    internal class MemberMetadataInfoTypeProvider : ISignatureTypeProvider<MemberMetadataInfo>
+    internal class MemberMetadataInfoTypeProvider : ISignatureTypeProvider<MemberMetadataInfo, object>
     {
-        private readonly SignatureDecoder<MemberMetadataInfo> _methodDecoder;
+        private readonly SignatureDecoder<MemberMetadataInfo, object> _methodDecoder;
 
         public MetadataReader Reader { get; }
 
         public MemberMetadataInfoTypeProvider(MetadataReader reader)
         {
             Reader = reader;
-            _methodDecoder = new SignatureDecoder<MemberMetadataInfo>(this, reader);
+            _methodDecoder = new SignatureDecoder<MemberMetadataInfo, object>(this, reader, null);
         }
 
         public MemberMetadataInfo GetMemberRefInfo(MemberReference memberReference)
@@ -48,7 +48,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                         Name = Reader.GetString(memberReference.Name),
                         ParentType = parentType,
                         Kind = MemberKind.Method,
-                        MethodSignature = memberReference.DecodeMethodSignature(this).MakeEnclosedType()
+                        MethodSignature = memberReference.DecodeMethodSignature(this, null).MakeEnclosedType()
                     };
                 default:
                     return null;
@@ -69,7 +69,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     };
                 case HandleKind.TypeSpecification:
                     var type = Reader.GetTypeSpecification((TypeSpecificationHandle)parent);
-                    return type.DecodeSignature(this);
+                    return type.DecodeSignature(this, null);
                 case HandleKind.MethodDefinition:
                     var method = Reader.GetMethodDefinition((MethodDefinitionHandle)parent);
                     return new MemberMetadataInfo(GetFullName(method.GetDeclaringType()));
@@ -303,7 +303,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             };
         }
 
-        public MemberMetadataInfo GetGenericMethodParameter(int index)
+        public MemberMetadataInfo GetGenericMethodParameter(object genericContext, int index)
         {
             // Generic arguments on methods are prefixed with ``
             // Type generic arguments are prefixed with `
@@ -314,7 +314,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             };
         }
 
-        public MemberMetadataInfo GetGenericTypeParameter(int index)
+        public MemberMetadataInfo GetGenericTypeParameter(object genericContext, int index)
         {
             // Type generic arguments are prefixed with `
             return new MemberMetadataInfo
@@ -324,7 +324,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             };
         }
 
-        public MemberMetadataInfo GetGenericInstance(MemberMetadataInfo genericType, ImmutableArray<MemberMetadataInfo> typeArguments)
+        public MemberMetadataInfo GetGenericInstantiation(MemberMetadataInfo genericType, ImmutableArray<MemberMetadataInfo> typeArguments)
         {
             genericType.IsGenericInstance = true;
             genericType.GenericTypeArgs = new List<MemberMetadataInfo>(typeArguments);
@@ -389,7 +389,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             return elementType;
         }
 
-        public MemberMetadataInfo GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, byte rawTypeKind)
+        public MemberMetadataInfo GetTypeFromSpecification(MetadataReader reader, object genericContext, TypeSpecificationHandle handle, byte rawTypeKind)
         {
             var entityHandle = (EntityHandle)handle;
 
@@ -402,13 +402,13 @@ namespace Microsoft.Fx.Portability.Analyzer
                 case HandleKind.TypeSpecification:
                     var specification = reader.GetTypeSpecification((TypeSpecificationHandle)entityHandle);
 
-                    return specification.DecodeSignature(this);
+                    return specification.DecodeSignature(this, null);
                 default:
                     throw new NotSupportedException("This kind is not supported!");
             }
         }
 
-        public MemberMetadataInfo GetModifiedType(MetadataReader reader, bool isRequired, MemberMetadataInfo modifier, MemberMetadataInfo unmodifiedType)
+        public MemberMetadataInfo GetModifiedType(MemberMetadataInfo modifier, MemberMetadataInfo unmodifiedType, bool isRequired)
         {
             return new MemberMetadataInfo(unmodifiedType)
             {
