@@ -87,7 +87,7 @@ namespace Microsoft.Fx.Portability
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Id?.GetHashCode() ?? 0;
         }
 
         public override bool Equals(object obj)
