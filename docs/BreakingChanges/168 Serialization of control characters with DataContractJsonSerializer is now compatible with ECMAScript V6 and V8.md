@@ -32,4 +32,4 @@ For apps that target the .NET Framework 4.7, this feature is enabled by default.
 
 
 ### Category
-* Windows Communication Foundation (WCF)
+* Core
