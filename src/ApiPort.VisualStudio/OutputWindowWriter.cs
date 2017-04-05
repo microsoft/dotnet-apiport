@@ -9,8 +9,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using static EnvDTE.Constants;
-
 namespace ApiPortVS
 {
     public class OutputWindowWriter : TextWriter
@@ -34,7 +32,7 @@ namespace ApiPortVS
 
             try
             {
-                Window window = _dte.Windows.Item(vsWindowKindOutput);
+                Window window = _dte.Windows.Item(Constants.EnvDTE.vsWindowKindOutput);
                 window.Activate();
             }
             catch (Exception) { }
