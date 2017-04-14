@@ -10,7 +10,7 @@ def branch = GithubBranchName
         ['AnyCPU', 'x64', 'x86'].each { platform ->
 
             def newJobName = Utilities.getFullJobName(project, configuration, isPR)
-            
+
             // Define build string
             def buildString = ".\\build.ps1 ${configuration} ${platform} -RunTests"
 
@@ -21,9 +21,9 @@ def branch = GithubBranchName
                     powerShell(buildString)
                 }
             }
-            
-            Utilities.setMachineAffinity(newJob, 'Windows_NT', 'latest-or-auto')
-            
+
+            Utilities.setMachineAffinity(newJob, 'Windows_NT', 'latest-or-auto-dev15')
+
             // This call performs remaining common job setup on the newly created job.
             // It does the following:
             //   1. Sets up source control for the project.
@@ -31,7 +31,7 @@ def branch = GithubBranchName
             //   3. Adds standard parameters for PR and push jobs.
             Utilities.standardJobSetup(newJob, project, isPR, "*/${branch}")
             Utilities.addMSTestResults(newJob, 'TestResults/*.trx')
-            
+
             // The following two calls add triggers for push and PR jobs
             // In Github, the PR trigger will appear as "Windows Debug" and "Windows Release" and will be run
             // by default
