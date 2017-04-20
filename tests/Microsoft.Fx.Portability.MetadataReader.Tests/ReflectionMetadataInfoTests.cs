@@ -55,7 +55,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
 
             Assert.True(dependencies.UnresolvedAssemblies.All(o => o.Value.Count == 1));
-            Assert.True(dependencies.UnresolvedAssemblies.All(o => string.Equals(o.Value.First(), "Microsoft.Fx.Portability.MetadataReader.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4a286c3e845c3e69", StringComparison.Ordinal)));
 
             // Make sure no issues were found
             progressReport.Received(0).ReportIssue(Arg.Any<string>());

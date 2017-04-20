@@ -221,7 +221,7 @@ namespace Microsoft.Fx.Portability.Tests
 
                 var map = new TargetMapper();
 
-                Assert.True(map.LoadFromConfig(String.Format(@"{0}\{1}", Environment.CurrentDirectory, "TargetMap.xml")));
+                Assert.True(map.LoadFromConfig(String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "TargetMap.xml")));
                 Assert.Equal("target1", map.GetNames("alias1").Single());
             }
             finally

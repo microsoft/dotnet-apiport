@@ -1,77 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{36E8F09A-D3CA-405B-B515-9206F85B432C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Fx.Portability.Tests</RootNamespace>
-    <AssemblyName>Microsoft.Fx.Portability.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <ItemGroup>
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="NSubstitute" Version="2.0.2" />
+    <PackageReference Include="System.Diagnostics.FileVersionInfo " Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\PortabilityTools.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\..\PortabilityTools.snk" />
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Analysis\AnalysisEngineTests.cs" />
-    <Compile Include="Analysis\TargetNameParserTests.cs" />
-    <Compile Include="Analyzer\DotNetFrameworkFilterTests.cs" />
-    <Compile Include="ApiPortClientTests.cs" />
-    <Compile Include="ApiPortServiceTests.cs" />
-    <Compile Include="BreakingChangeParserTests.cs" />
-    <Compile Include="BreakingChangeTests.cs" />
-    <Compile Include="ObjectModel\AncestorApiRecommendationsTests.cs" />
-    <Compile Include="ObjectModel\AssemblyReferenceInformationTests.cs" />
-    <Compile Include="ObjectModel\CloudApiCatalogLookupTests.cs" />
-    <Compile Include="ObjectModel\IgnoreAssemblyInfoTests.cs" />
-    <Compile Include="ObjectModel\DiagnosticAnalyzerInfoTests.cs" />
-    <Compile Include="ObjectModel\TargetInformationTests.cs" />
-    <Compile Include="ReadWriteApiPortOptionsTests.cs" />
-    <Compile Include="ReportFileWriterTests.cs" />
-    <Compile Include="ReportingResultTests.cs" />
-    <Compile Include="SerializationTests.cs" />
-    <Compile Include="TargetMapTests.cs" />
-    <Compile Include="TestData\TestCatalog.cs" />
-    <Compile Include="TestData\TestDotNetCatalog.cs" />
-    <Compile Include="UrlBuilderTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="project.json">
-      <SubType>Designer</SubType>
-    </None>
     <EmbeddedResource Include="TestAssets\005- ListT.ForEach.md" />
     <EmbeddedResource Include="TestAssets\006- System.Uri.md" />
     <EmbeddedResource Include="TestAssets\CorruptData.md" />
@@ -91,22 +45,12 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
       <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
       <Name>Microsoft.Fx.Portability</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

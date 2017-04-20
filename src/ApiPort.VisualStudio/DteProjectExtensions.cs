@@ -85,10 +85,10 @@ namespace ApiPortVS
 
             switch (project.CodeModel.Language)
             {
-                case CodeModelLanguageConstants.vsCMLanguageCSharp:
-                case CodeModelLanguageConstants.vsCMLanguageVB:
+                case Constants.CodeModelLanguageConstants.vsCMLanguageCSharp:
+                case Constants.CodeModelLanguageConstants.vsCMLanguageVB:
                     return true;
-                case CodeModelLanguageConstants.vsCMLanguageVC:
+                case Constants.CodeModelLanguageConstants.vsCMLanguageVC:
                     return project.IsManagedCppProject();
             }
 

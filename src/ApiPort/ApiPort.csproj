@@ -1,107 +1,57 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A2EAD0F-FF3E-4968-A865-7B29C4B10A72}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ApiPort</RootNamespace>
-    <AssemblyName>ApiPort</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net46;netcoreapp1.0</TargetFrameworks>
+    <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;$(DefineConstants)</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\net46</OutputPath>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\</IntermediateOutputPath>
+    <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Autofac" Version="4.4.0" />
+    <PackageReference Include="Autofac.Configuration" Version="4.0.1" />
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.4.2" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AppCommands.cs" />
-    <Compile Include="CommandLineOptions.cs" />
-    <Compile Include="CommandLine\AnalyzeOptions.cs" />
-    <Compile Include="CommandLine\ApiPortConfiguration.cs" />
-    <Compile Include="CommandLine\CommonCommands.cs" />
-    <Compile Include="CommandLine\ConsoleDefaultApiPortOptions.cs" />
-    <Compile Include="CommandLine\DocIdSearchOptions.cs" />
-    <Compile Include="CommandLine\ServiceEndpointOptions.cs" />
-    <Compile Include="ConsoleApiPort.cs" />
-    <Compile Include="DependencyBuilder.cs" />
-    <Compile Include="DocIdSearchRepl.cs" />
-    <Compile Include="EmptyDependencyFinder.cs" />
-    <Compile Include="FileOutputApiPortService.cs" />
-    <Compile Include="ApiPortServiceSearcher.cs" />
-    <Compile Include="ICommandLineOptions.cs" />
-    <Compile Include="Modules\DataTransferModule.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Proxy\ConsoleCredentialProvider.cs" />
-    <Compile Include="Proxy\ProxyProvider.cs" />
-    <Compile Include="Proxy\ProxyConstants.cs" />
-    <Compile Include="Proxy\WebProxy.cs" />
-    <Compile Include="Resources\LocalizedStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LocalizedStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ConsoleProgressReporter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ApiPort.project.json" />
-    <None Include="config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+
   <ItemGroup>
     <BinPlaceContent Include=".\Assets\KnownSafeBreaks.json" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="Properties\version.txt" />
+    <None Include="App.config" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj">
       <Project>{68c6476e-1f80-412a-a8a7-480f832922d8}</Project>
@@ -112,7 +62,7 @@
       <Name>Microsoft.Fx.Portability</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- Depending on whether it is a VSIX or MSIL, choose the correct certificate. 
-       1) By default, the VSIX project just packages the contents, so 
-       CopyBuildOutputToOutputDirectory/IncludeAssemblyInVSIXContainer will be 
+<Project>
+  <!-- Depending on whether it is a VSIX or MSIL, choose the correct certificate.
+       1) By default, the VSIX project just packages the contents, so
+       CopyBuildOutputToOutputDirectory/IncludeAssemblyInVSIXContainer will be
        false. But if you have a VSIX that builds a DLL as well, it will have both
        properties set as true.
-       
+
        2) When conditions are chosen from top-down... so if multiple ones are true,
        the first one it encounters is the type it chooses.
   -->
@@ -41,7 +41,7 @@
     <!-- Use TF_BUILD_BUILDNUMBER for old XAML style builds -->
     <BuildVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER.Split('.')[1].TrimStart('0'))</BuildVersion>
     <BuildVersion>$(BuildVersion.PadLeft(5,"0"))</BuildVersion>
-	
+
     <!-- Get version info from file -->
     <VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
     <VersionData>1.0.0</VersionData>
@@ -86,4 +86,14 @@
   <PropertyGroup>
     <CompileDependsOn>GenerateAssemblyInfoFile;$(CompileDependsOn)</CompileDependsOn>
   </PropertyGroup>
+
+  <!-- In .NET Core SDK 1.0-rc3, all *.cs files are implicitly added for compiled.  This includes the test files we embed as resources.
+       We explicitly remove them here so that they are not compiled.
+       BUG: https://github.com/dotnet/sdk/issues/977 -->
+  <Target Name="RemoveEmbeddedResources"
+          BeforeTargets="CoreCompile">
+    <ItemGroup>
+        <Compile Remove="@(EmbeddedResource-> '%(Identity)')" />
+    </ItemGroup>
+  </Target>
 </Project>

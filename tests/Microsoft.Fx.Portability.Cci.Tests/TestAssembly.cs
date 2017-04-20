@@ -7,13 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
     internal class TestAssembly
     {
-        private static readonly string s_mscorlib = typeof(object).Assembly.Location;
+        private static readonly string s_mscorlib = typeof(object).GetTypeInfo().Assembly.Location;
         private readonly string _path;
         private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
 
@@ -68,9 +69,9 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private static string GetText(string fileName)
         {
-            var name = typeof(TestAssembly).Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+            var name = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
 
-            using (var stream = typeof(TestAssembly).Assembly.GetManifestResourceStream(name))
+            using (var stream = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceStream(name))
             using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();

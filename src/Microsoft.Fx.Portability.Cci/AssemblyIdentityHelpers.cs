@@ -12,13 +12,17 @@ namespace Microsoft.Cci.Extensions
         public static string Format(this AssemblyIdentity assemblyIdentity)
         {
             var name = new System.Reflection.AssemblyName();
+            var cultureInfo = new CultureInfo(assemblyIdentity.Culture);
+
             name.Name = assemblyIdentity.Name.Value;
-#if !COREFX
-            name.CultureInfo = new CultureInfo(assemblyIdentity.Culture);
+#if FEATURE_ASSEMBLYNAME_CULTUREINFO
+            name.CultureInfo = cultureInfo;
+#else
+            name.CultureName = cultureInfo.Name;
 #endif
             name.Version = assemblyIdentity.Version;
             name.SetPublicKeyToken(assemblyIdentity.PublicKeyToken.ToArray());
-#if !COREFX
+#if FEATURE_ASSEMBLYNAME_CODEBASE
             name.CodeBase = assemblyIdentity.Location;
 #endif
             return name.ToString();
@@ -28,17 +32,17 @@ namespace Microsoft.Cci.Extensions
         {
             var name = new System.Reflection.AssemblyName(formattedName);
             return new AssemblyIdentity(nameTable.GetNameFor(name.Name),
-#if COREFX
-                                        name.CultureName,
-#else
+#if FEATURE_ASSEMBLYNAME_CULTUREINFO
                                         name.CultureInfo.Name,
+#else
+                                        name.CultureName,
 #endif
                                         name.Version,
                                         name.GetPublicKeyToken(),
-#if COREFX
-                                        "");
-#else
+#if FEATURE_ASSEMBLYNAME_CODEBASE
                                         name.CodeBase);
+#else
+                                        "");
 #endif
         }
     }

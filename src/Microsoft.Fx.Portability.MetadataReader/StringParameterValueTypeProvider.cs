@@ -8,7 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace Microsoft.Fx.Portability
 {
-    internal class StringParameterValueTypeProvider : ISignatureTypeProvider<string>
+    internal class StringParameterValueTypeProvider : ISignatureTypeProvider<string, object>
     {
         private readonly BlobReader _valueReader;
 
@@ -46,17 +46,23 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
+        public string GetGenericInstantiation(string genericType, ImmutableArray<string> typeArguments) => throw new NotImplementedException();
+
         public string GetGenericMethodParameter(int index)
         {
             return string.Empty;
         }
+
+        public string GetGenericMethodParameter(object genericContext, int index) => throw new NotImplementedException();
 
         public string GetGenericTypeParameter(int index)
         {
             return string.Empty;
         }
 
-        public string GetModifiedType(MetadataReader reader, bool isRequired, string modifier, string unmodifiedType)
+        public string GetGenericTypeParameter(object genericContext, int index) => throw new NotImplementedException();
+
+        public string GetModifiedType(string modifier, string unmodifiedType, bool isRequired)
         {
             return string.Empty;
         }
@@ -98,7 +104,7 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
-        public string GetTypeFromSpecification(MetadataReader reader, TypeSpecificationHandle handle, byte rawTypeKind)
+        public string GetTypeFromSpecification(MetadataReader reader, object genericContext, TypeSpecificationHandle handle, byte rawTypeKind)
         {
             return string.Empty;
         }

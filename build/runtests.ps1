@@ -2,7 +2,10 @@
 Param(
     [ValidateSet("Debug", "Release")]
 	[Parameter(Position=0, Mandatory=$True)]
-    [string]$Configuration
+    [string]$Configuration,
+
+    [ValidateSet(2015, 2017)]
+    [int]$VisualStudioVersion = 2017
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,18 +18,19 @@ if (!(Test-Path $testFolder)) {
     return -1
 }
 
-if ($env:VS140COMNTOOLS) {
-    $vstest = Resolve-Path ([IO.Path]::Combine($env:VS140COMNTOOLS, "..", "IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"))
-} elseif ($env:VS120COMNTOOLS) {
-    $vstest = Resolve-Path ([IO.Path]::Combine($env:VS120COMNTOOLS, "..", "IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"))
-} else {
-    Write-Error "Could not set vstest.console.exe because %VS140COMNTOOLS% or %VS120COMNTOOLS% are not set."
+$VsTestConsoleCommand = $(Get-Command "vstest.console.exe" -CommandType Application -ErrorAction Ignore)
+
+# Possible that the VS Developer Command prompt is not yet set.
+if ($VsTestConsoleCommand -eq $null) {
+    .\build\Set-VsDevEnv.ps1 -VisualstudioVersion $VisualStudioVersion
+    $VsTestConsoleCommand = $(Get-Command "vstest.console.exe" -CommandType Application -ErrorAction Ignore)
+
+    if ($VsTestConsoleCommand -eq $null) {
+        Write-Error "Could not set visual studio $VisualStudioVersion environment and locate vstest.console.exe!"
+    }
 }
 
-if (!(Test-Path $vstest)) {
-    Write-Error "$vstest does not exist"
-}
-
+$vstest = $VsTestConsoleCommand.Path
 $binaryFolders = Get-ChildItem $testFolder -Recurse | ? { $_.PsIsContainer -and $_.FullName.EndsWith($(Join-Path "bin" $Configuration)) }
 
 $testDlls = New-Object System.Collections.ArrayList
