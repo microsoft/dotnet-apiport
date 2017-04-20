@@ -15,14 +15,14 @@ namespace Microsoft.Cci.Extensions
             var cultureInfo = new CultureInfo(assemblyIdentity.Culture);
 
             name.Name = assemblyIdentity.Name.Value;
-#if NETSTANDARD1_3 || NETSTANDARD1_6
-            name.CultureName = cultureInfo.Name;
-#else
+#if FEATURE_ASSEMBLYNAME_CULTUREINFO
             name.CultureInfo = cultureInfo;
+#else
+            name.CultureName = cultureInfo.Name;
 #endif
             name.Version = assemblyIdentity.Version;
             name.SetPublicKeyToken(assemblyIdentity.PublicKeyToken.ToArray());
-#if !NETSTANDARD1_3 && !NETSTANDARD1_6
+#if FEATURE_ASSEMBLYNAME_CODEBASE
             name.CodeBase = assemblyIdentity.Location;
 #endif
             return name.ToString();
@@ -32,17 +32,17 @@ namespace Microsoft.Cci.Extensions
         {
             var name = new System.Reflection.AssemblyName(formattedName);
             return new AssemblyIdentity(nameTable.GetNameFor(name.Name),
-#if NETSTANDARD1_3 || NETSTANDARD1_6
-                                        name.CultureName,
-#else
+#if FEATURE_ASSEMBLYNAME_CULTUREINFO
                                         name.CultureInfo.Name,
+#else
+                                        name.CultureName,
 #endif
                                         name.Version,
                                         name.GetPublicKeyToken(),
-#if NETSTANDARD1_3 || NETSTANDARD1_6
-                                        "");
-#else
+#if FEATURE_ASSEMBLYNAME_CODEBASE
                                         name.CodeBase);
+#else
+                                        "");
 #endif
         }
     }

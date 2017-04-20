@@ -578,7 +578,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         private static string GetAssemblyIdentityWithoutCultureAndVersion(string assemblyIdentity)
         {
             var assembly = new System.Reflection.AssemblyName(assemblyIdentity) { Version = null };
-#if NET46
+#if FEATURE_ASSEMBLYNAME_CULTUREINFO
             assembly.CultureInfo = null;
 #else
             assembly.CultureName = null;

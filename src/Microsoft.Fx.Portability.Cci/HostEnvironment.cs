@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-#if !NETSTANDARD1_3
+#if FEATURE_DIAGNOSTICS_CONTRACT
 using System.Diagnostics.Contracts;
 #endif
 
@@ -190,7 +190,7 @@ namespace Microsoft.Cci.Extensions
 
         protected override AssemblyIdentity Probe(string probeDir, AssemblyIdentity referencedAssembly)
         {
-#if !NETSTANDARD1_3
+#if FEATURE_DIAGNOSTICS_CONTRACT
             Contract.Requires(probeDir != null);
             Contract.Requires(referencedAssembly != null);
 #endif
@@ -260,7 +260,7 @@ namespace Microsoft.Cci.Extensions
 
         private AssemblyIdentity FindUnifiedAssemblyIdentity(AssemblyIdentity identity)
         {
-#if !NETSTANDARD1_3
+#if FEATURE_DIAGNOSTICS_CONTRACT
             Contract.Assert(this.UnifyToLibPath);
 #endif
             // Find exact assembly match
