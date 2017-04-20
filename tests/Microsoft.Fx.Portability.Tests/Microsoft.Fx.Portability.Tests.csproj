@@ -38,6 +38,7 @@
     <EmbeddedResource Include="TestAssets\RandomText.md" />
     <EmbeddedResource Include="TestAssets\RandomText2.md" />
     <EmbeddedResource Include="TestAssets\Template.md" />
+    <EmbeddedResource Include="TestAssets\Application.FilterMessage.md" />
     <None Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

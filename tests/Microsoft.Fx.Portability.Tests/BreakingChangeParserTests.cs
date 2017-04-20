@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -69,6 +70,34 @@ namespace Microsoft.Fx.Portability.Tests
             bc.ApplicableApis = bc.ApplicableApis.Concat(new[] { "##" }).ToList();
             bc.Suggestion = "\\0\0\0\0\0" + bc.Suggestion + "\u0001\u0002";
             ValidateParse(GetBreakingChangeMarkdown("CorruptData.md"), bc);
+        }
+
+        [Fact]
+        public void IdInComments()
+        {
+            BreakingChange bc = new BreakingChange
+            {
+                Id = "144",
+                Title = "Application.FilterMessage no longer throws for re-entrant implementations of IMessageFilter.PreFilterMessage",
+                VersionBroken = Version.Parse("4.6.1"),
+                ImpactScope = BreakingChangeImpact.Edge,
+                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Planned,
+                Details = "Prior to the .NET Framework 4.6.1, calling Application.FilterMessage with an IMessageFilter.PreFilterMessage which called AddMessageFilter or RemoveMessageFilter (while also calling Application.DoEvents) would cause an IndexOutOfRangeException."
+                + "\n\n"
+                + "Beginning with applications targeting the .NET Framework 4.6.1, this exception is no longer thrown, and re-entrant filters as described above may be used.",
+                IsQuirked = true,
+                Suggestion = "Be aware that Application.FilterMessage will no longer throw for the re-entrant IMessageFilter.PreFilterMessage behavior described above. This only affects applications targeting the .NET Framework 4.6.1.",
+                Categories = new List<string> { "Windows Forms" },
+                Link = "https://msdn.microsoft.com/en-us/library/mt620031%28v=vs.110%29.aspx#WinForms",
+                ApplicableApis = new List<string> {
+                    "M:System.Windows.Forms.Application.FilterMessage(System.Windows.Forms.Message@)"
+                },
+                Notes = "It's unclear if this one will be better analyzed by Application.FilterMessage callers (who would have seen the exception previously)"
+                + "\n" + "or the IMessageFilter.PreFilterMessage implementers (who caused the exception previously). Unfortunately, the analyzer on the caller is probably"
+                + "\n" + "more useful, even though it would be easier to be 'precise' if we analyzed the interface implementer."
+            };
+
+            ValidateParse(GetBreakingChangeMarkdown("Application.FilterMessage.md"), bc);
         }
 
         [Fact]

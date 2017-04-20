@@ -178,6 +178,23 @@ namespace Microsoft.Fx.Portability
                             state = ParseState.None;
                         }
 
+                        // Comments.
+                        else if (currentLine.StartsWith("<!--", StringComparison.Ordinal))
+                        {
+                            var contents = currentLine.Replace("<!--", "").Replace("-->", "");
+                            var startIndex = contents.IndexOf(":");
+                            int id;
+
+                            // <!-- breaking change id: 144 -->
+                            if (contents.IndexOf("breaking change id", StringComparison.OrdinalIgnoreCase) != -1
+                                && startIndex != -1
+                                && int.TryParse(contents.Substring(startIndex + 1), out id))
+                            {
+                                currentBreak.Id = id.ToString();
+                            }
+
+                            state = ParseState.None;
+                        }
                         // Otherwise, process according to our current state
                         else
                         {
