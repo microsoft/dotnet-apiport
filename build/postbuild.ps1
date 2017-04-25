@@ -3,7 +3,8 @@ param(
     [string][ValidateSet("Release","Debug")]$Configuration = "Release",
     [string]$FeedUrl,
     [string]$ApiKey,
-    [switch]$PublishVsix
+    [switch]$PublishVsix,
+    [switch]$PublishNuGet
 )
 
 $ErrorActionPreference = "Stop"
@@ -16,7 +17,7 @@ $nuget = & $buildToolScript "nuget"
 $netFramework = "net46"
 $netStandard = "netstandard1.3"
 
-$drop = $env:TF_BUILD_BINARIESDIRECTORY 
+$drop = $env:TF_BUILD_BINARIESDIRECTORY
 
 if(!$drop)
 {
@@ -32,13 +33,13 @@ foreach($nuspec in $nuspecs)
 {
 	Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$($nuspec.Name)" -PercentComplete ($count / $nuspecs.Count * 100)
 	$bin = Join-Path $drop $nuspec.Name
-	
+
 	if(!(Test-Path $bin))
 	{
 		Write-Warning "Could not find path: $($nuspec)"
 		continue
 	}
-	
+
 	Copy-Item $nuspec.Path $bin
 	Push-Location $bin
 
@@ -50,19 +51,19 @@ foreach($nuspec in $nuspecs)
 				| % { Get-ChildItem "$bin\$($_.src)" } `
 				| % { $_.VersionInfo.ProductVersion } `
 				| select -First 1
-    
-    Write-Verbose "Package: [$($nuspec.Name)] Version: [$version]"
+
+    Write-Host "Package: [$($nuspec.Name)] Version: [$version]"
 
 	$nuspecData.package.metadata.version = "$version"
 	$nuspecData.Save($nuspecName)
 
 	[string]$output = & $nuget pack
-	
+
 	if($output -Match "Attempting to build package from '(.*)'. Successfully created package '(.*)'.")
 	{
 		$item = New-Object PSObject -Property @{"Package" = [System.IO.Path]::GetFileName($matches[2]); "Nuspec" = $matches[1]; "Path" = $matches[2]; "Pushed" = $false}
-		
-		if($FeedUrl)
+
+		if($PublishNuGet -and ![string]::IsNullOrWhitespace($FeedUrl))
 		{
 			$pushedOutput = & $nuget push $item.Path $ApiKey -Source $FeedUrl
 
@@ -78,7 +79,7 @@ foreach($nuspec in $nuspecs)
 	{
 		Write-Warning "There was an error packing nuget.  Output was: '$output'"
 	}
-	
+
 	Pop-Location
 	$count++
 }
@@ -122,6 +123,6 @@ if ($PublishVsix) {
     }
 
     . $(& $buildToolScript "vsix")
-    
+
     Vsix-PublishToGallery -path $vsix
 }
