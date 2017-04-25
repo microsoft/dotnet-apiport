@@ -6,8 +6,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
-    <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)\bin\$(Configuration)\</OutputDrop>
-    <OutputIntermediate>$(MSBuildThisFileDirectory)\obj\$(Configuration)</OutputIntermediate>
+    <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputDrop>
+    <OutputIntermediate>$(MSBuildThisFileDirectory)obj\$(Configuration)</OutputIntermediate>
     <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
