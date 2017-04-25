@@ -13,6 +13,10 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+
+    <!--Do not generate assemblyinfo because we are doing that with the
+    GenerateAssemblyInfoFile target in dir.targets -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <!-- Trying to mitigate the number of warnings that the solution contains by
     adding this into our Release builds.  As a result, it should be caught in
