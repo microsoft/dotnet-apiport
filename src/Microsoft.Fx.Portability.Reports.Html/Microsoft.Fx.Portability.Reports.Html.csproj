@@ -5,7 +5,6 @@
     <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
-    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
