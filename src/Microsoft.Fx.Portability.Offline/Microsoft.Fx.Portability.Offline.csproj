@@ -8,6 +8,9 @@
   <PropertyGroup>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+
+    <!-- NuGet package description -->
+    <Description>The core data structures for .NET Portability Analyzer in Offline mode</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,6 +8,9 @@
   <PropertyGroup>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+
+    <!-- NuGet package description -->
+    <Description>A JSON formatter for ApiPort reports</Description>
   </PropertyGroup>
 
   <ItemGroup>

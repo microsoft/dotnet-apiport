@@ -9,6 +9,9 @@
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>FEATURE_NETCORE</DefineConstants>
+
+    <!-- NuGet package description -->
+    <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'== 'net451'">

@@ -7,6 +7,9 @@
   <PropertyGroup>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+
+    <!-- NuGet package description -->
+    <Description>An HTML formatter for ApiPort reports</Description>
   </PropertyGroup>
 
   <ItemGroup>

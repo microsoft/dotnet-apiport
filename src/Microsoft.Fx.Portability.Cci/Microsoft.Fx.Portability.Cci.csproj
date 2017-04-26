@@ -12,6 +12,9 @@
   <PropertyGroup>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+
+    <!-- NuGet package description -->
+    <Description>Metadata reader for binaries using Microsoft.CCI</Description>
   </PropertyGroup>
 
   <ItemGroup>

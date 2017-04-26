@@ -24,4 +24,14 @@
   <!-- <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>-->
+
+  <!--NuGet properties-->
+  <PropertyGroup>
+    <Authors>Microsoft</Authors>
+    <PackageLicenseUrl>https://github.com/Microsoft/dotnet-apiport/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Microsoft/dotnet-apiport</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>.NET portability apiport</PackageTags>
+    <Copyright>Copyright 2017</Copyright>
+  </PropertyGroup>
 </Project>
