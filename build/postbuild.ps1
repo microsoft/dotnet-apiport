@@ -13,6 +13,14 @@ $root = $PSScriptRoot
 $buildToolScript = Join-Path $root "Get-BuildTools.ps1"
 $tools = [System.IO.Path]::Combine($root, "..", ".tools")
 $nuget = & $buildToolScript "nuget"
+$src = [System.IO.Path]::Combine($root, "..", "src")
+
+$MSBuildVersion = 15
+$MSBuildCommand = $(Get-Command "MSBuild.exe" -CommandType Application -ErrorAction Ignore) | ? { $_.Version.Major -eq $MSBuildVersion } | Select -First 1
+
+if (!$MSBuildCommand) {
+    Write-Error "Could not find MSBuild.  Please set your VS environment to find MSBuild $MSBuildVersion"
+}
 
 $netFramework = "net46"
 $netStandard = "netstandard1.3"
@@ -24,64 +32,66 @@ if(!$drop)
     $drop = $(Resolve-Path "$root\..\bin\$Configuration").Path
 }
 
-[object[]]$nuspecs = Get-ChildItem $root -Filter *.nuspec `
-			| % { New-Object PSObject -Property @{"Name" = [System.IO.Path]::GetFileNameWithoutExtension($_.Name); "Path" = $_.FullName } }
-
 $count = 0
 
-foreach($nuspec in $nuspecs)
+$projects = @(Get-ChildItem $src -Exclude "ApiPort*")
+
+foreach ($project in $projects)
 {
-	Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$($nuspec.Name)" -PercentComplete ($count / $nuspecs.Count * 100)
-	$bin = Join-Path $drop $nuspec.Name
+    $name = $project.Name
+    $csproj = Join-Path $project.FullName "$($project.BaseName).csproj"
 
-	if(!(Test-Path $bin))
-	{
-		Write-Warning "Could not find path: $($nuspec)"
-		continue
-	}
+    if (Test-Path $csproj) {
+        Write-Host "$csproj does not exist!"
+    }
 
-	Copy-Item $nuspec.Path $bin
-	Push-Location $bin
+    Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$name" -PercentComplete ($count / $projects.Count * 100)
 
-	# Update version based on compiled version
-	$nuspecName = "$bin\$($nuspec.Name).nuspec"
-	[xml]$nuspecData = Get-Content $nuspecName
-	$version = $nuspecData.package.files.file `
-				| where {$_.src.EndsWith("$($nuspec.Name).dll")} `
-				| % { Get-ChildItem "$bin\$($_.src)" } `
-				| % { $_.VersionInfo.ProductVersion } `
-				| select -First 1
+    $bin = Join-Path $drop $name
 
-    Write-Host "Package: [$($nuspec.Name)] Version: [$version]"
+    if(!(Test-Path $bin))
+    {
+        Write-Warning "Could not find path: $(bin)"
+        continue
+    }
 
-	$nuspecData.package.metadata.version = "$version"
-	$nuspecData.Save($nuspecName)
+    # Update version based on compiled version
+    $version = Get-ChildItem $bin -Recurse `
+                | ? { $_.Name.EndsWith("$name.dll") } `
+                | % { $_.VersionInfo.ProductVersion } `
+                | select -First 1
 
-	[string]$output = & $nuget pack
+    Write-Host "Package: [$($project.Name)] Version: [$version]"
 
-	if($output -Match "Attempting to build package from '(.*)'. Successfully created package '(.*)'.")
-	{
-		$item = New-Object PSObject -Property @{"Package" = [System.IO.Path]::GetFileName($matches[2]); "Nuspec" = $matches[1]; "Path" = $matches[2]; "Pushed" = $false}
+    & $MSBuildCommand /t:Pack /p:Version=$version /p:Configuration=$Configuration /p:PackageOutputPath=$bin "$csproj"
 
-		if($PublishNuGet -and ![string]::IsNullOrWhitespace($FeedUrl))
-		{
-			$pushedOutput = & $nuget push $item.Path $ApiKey -Source $FeedUrl
+    $childItem = Get-ChildItem $bin | ? { $_.BaseName.StartsWith($name) -and $_.Extension.Equals(".nupkg") } | Select -First 1
 
-			if($pushedOutput -match "Your package was pushed.")
-			{
-				$item.Pushed = $true
-			}
-		}
+    if ($childItem -ne $null)
+    {
+        Write-Host "Package created!"
+    }
+    else
+    {
+        Write-Error "Failed to create NuGet Package for $csproj."
+    }
 
-        Write-Host "Package: [$($item.Package)], Pushed: [$($item.Pushed)]"
-	}
-	else
-	{
-		Write-Warning "There was an error packing nuget.  Output was: '$output'"
-	}
+    if($PublishNuGet -and ![string]::IsNullOrWhitespace($FeedUrl))
+    {
+        $pushedOutput = & $nuget push $($childItem.FullName) -ApiKey $ApiKey -Source $FeedUrl
 
-	Pop-Location
-	$count++
+        if($pushedOutput -match "Your package was pushed.")
+        {
+            Write-Host "Package pushed: $($childItem.FullName)"
+        }
+        else
+        {
+            Write-Host $pushedOutput
+            Write-Error "Package not pushed: $($childItem.FullName)"
+        }
+    }
+
+    $count++
 }
 
 Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -PercentComplete 100
@@ -89,17 +99,17 @@ Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -Perce
 function Copy-OfflineMode()
 {
     $extensionsToInclude = @("*.exe", "*.dll", "*.pdb", "*.config")
-	$offlineDrop = "$drop\ApiPort.Offline"
+    $offlineDrop = "$drop\ApiPort.Offline"
 
-	Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
-	New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
+    Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
+    New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
     Copy-Item "$root\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Offline -Recurse -Force
 
-	Copy-Item $drop\Microsoft.Fx.Portability.Offline\$netStandard\* -Include $extensionsToInclude $offlineDrop
-	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\$netStandard\* -Include $extensionsToInclude $offlineDrop
-	Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\$netFramework\* -Include $extensionsToInclude $offlineDrop
-	Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
+    Copy-Item $drop\Microsoft.Fx.Portability.Offline\$netStandard\* -Include $extensionsToInclude $offlineDrop
+    Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\$netStandard\* -Include $extensionsToInclude $offlineDrop
+    Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\$netFramework\* -Include $extensionsToInclude $offlineDrop
+    Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
 }
 
 Copy-OfflineMode
