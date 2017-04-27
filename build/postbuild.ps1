@@ -15,6 +15,9 @@ $tools = [System.IO.Path]::Combine($root, "..", ".tools")
 $nuget = & $buildToolScript "nuget"
 $src = [System.IO.Path]::Combine($root, "..", "src")
 
+$VisualStudioVersion = 2017
+& $root\Set-VsDevEnv.ps1 -VisualstudioVersion $VisualStudioVersion
+
 $MSBuildVersion = 15
 $MSBuildCommand = $(Get-Command "MSBuild.exe" -CommandType Application -ErrorAction Ignore) | ? { $_.Version.Major -eq $MSBuildVersion } | Select -First 1
 
@@ -41,8 +44,8 @@ foreach ($project in $projects)
     $name = $project.Name
     $csproj = Join-Path $project.FullName "$($project.BaseName).csproj"
 
-    if (Test-Path $csproj) {
-        Write-Host "$csproj does not exist!"
+    if (!$(Test-Path $csproj)) {
+        Write-Error "$csproj does not exist!"
     }
 
     Write-Progress -Activity "Creating portability nupkgs" -Status "Packing '$name" -PercentComplete ($count / $projects.Count * 100)
@@ -55,11 +58,27 @@ foreach ($project in $projects)
         continue
     }
 
+    $dll = "$name.dll"
+
+    Write-Host "Looking for $dll in $bin..."
+
     # Update version based on compiled version
-    $version = Get-ChildItem $bin -Recurse `
-                | ? { $_.Name.EndsWith("$name.dll") } `
-                | % { $_.VersionInfo.ProductVersion } `
-                | select -First 1
+    $versions = Get-ChildItem $bin -Recurse `
+                | ? { $_.Name -eq $dll }
+
+    if (@($versions).Count -eq 0) {
+        Write-Error "Could not find any binaries in $bin matching $dll"
+    } elseif (@($versions).Count -gt 1) {
+        Write-Host "Found multiple versions..."
+
+        foreach ($v in $versions) {
+            Write-Host "$($v.FullName): $($v.VersionInfo.ProductVersion)"
+        }
+
+        Write-Host "Using first one"
+    }
+
+    $version = $versions | % { $_.VersionInfo.ProductVersion } | select -First 1
 
     Write-Host "Package: [$($project.Name)] Version: [$version]"
 
@@ -115,7 +134,7 @@ function Copy-OfflineMode()
 Copy-OfflineMode
 
 # Copying the license terms into our drop so we don't have to manually do it when we want to release
-Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort\$netFramework -Recurse -Force
+Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort\$netFramework\ -Recurse -Force
 Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort.Offline\ -Recurse -Force
 
 if ($PublishVsix) {
