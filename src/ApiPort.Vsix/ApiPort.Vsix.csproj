@@ -47,7 +47,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)</OutputPath>
     <!-- This project does not output any binaries, so API Scan can be skipped. -->
     <IsPackage>true</IsPackage>

@@ -76,16 +76,13 @@
     </AssemblyVersionAttribute>
   </ItemGroup>
 
-  <Target Name="GenerateAssemblyInfoFile">
+  <Target Name="GenerateAssemblyInfoFile" BeforeTargets="BeforeBuild">
+    <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
     <WriteCodeFragment AssemblyAttributes="@(AssemblyVersionAttribute)" Language="C#" OutputFile="$(IntermediateOutputPath)\_GlobalAssemblyInfo.g.cs">
       <Output TaskParameter="OutputFile" ItemName="Compile" />
       <Output TaskParameter="OutputFile" ItemName="FileWrites" />
     </WriteCodeFragment>
   </Target>
-
-  <PropertyGroup>
-    <CompileDependsOn>GenerateAssemblyInfoFile;$(CompileDependsOn)</CompileDependsOn>
-  </PropertyGroup>
 
   <!-- In .NET Core SDK 1.0-rc3, all *.cs files are implicitly added for compiled.  This includes the test files we embed as resources.
        We explicitly remove them here so that they are not compiled.

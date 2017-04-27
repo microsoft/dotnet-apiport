@@ -6,13 +6,17 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
-    <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)\bin\$(Configuration)\</OutputDrop>
-    <OutputIntermediate>$(MSBuildThisFileDirectory)\obj\$(Configuration)</OutputIntermediate>
+    <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputDrop>
+    <OutputIntermediate>$(MSBuildThisFileDirectory)obj\$(Configuration)</OutputIntermediate>
     <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+
+    <!--Do not generate assemblyinfo because we are doing that with the
+    GenerateAssemblyInfoFile target in dir.targets -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <!-- Trying to mitigate the number of warnings that the solution contains by
     adding this into our Release builds.  As a result, it should be caught in
@@ -20,4 +24,14 @@
   <!-- <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>-->
+
+  <!--NuGet properties-->
+  <PropertyGroup>
+    <Authors>Microsoft</Authors>
+    <PackageLicenseUrl>https://github.com/Microsoft/dotnet-apiport/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Microsoft/dotnet-apiport</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>.NET portability apiport</PackageTags>
+    <Copyright>Copyright 2017</Copyright>
+  </PropertyGroup>
 </Project>

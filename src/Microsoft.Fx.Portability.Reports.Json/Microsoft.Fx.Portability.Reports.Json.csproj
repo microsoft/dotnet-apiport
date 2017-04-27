@@ -6,9 +6,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+
+    <!-- NuGet package description -->
+    <Description>A JSON formatter for ApiPort reports</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Properties\version.txt" />
+    <Content Include="Properties\version.txt">
+      <Pack>false</Pack>
+    </Content>
   </ItemGroup>
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />

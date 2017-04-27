@@ -6,10 +6,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <IntermediateOutputPath>$(OutputIntermediate)\$(AssemblyName)\</IntermediateOutputPath>
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>FEATURE_NETCORE</DefineConstants>
+
+    <!-- NuGet package description -->
+    <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'== 'net451'">
@@ -33,7 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Properties\version.txt" />
+    <Content Include="Properties\version.txt">
+      <Pack>false</Pack>
+    </Content>
   </ItemGroup>
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
