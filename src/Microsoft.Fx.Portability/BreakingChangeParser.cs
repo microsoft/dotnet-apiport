@@ -79,7 +79,9 @@ namespace Microsoft.Fx.Portability
                         currentBreak = new BreakingChange();
 
                         // Separate ID and title
-                        var splitTitle = currentLine.Substring("## ".Length).Split(new[] { ':' }, 2);
+                        var substring = currentLine.Substring("## ".Length).Trim();
+                        var splitTitle = substring.Split(new[] { ':' }, 2);
+
                         if (splitTitle.Length == 1)
                         {
                             // Breaking changes are keyed on title, not ID, so if ':' is missing, just take the line as a title.
@@ -88,8 +90,16 @@ namespace Microsoft.Fx.Portability
                         }
                         else if (splitTitle.Length == 2)
                         {
-                            currentBreak.Id = splitTitle[0].Trim();
-                            currentBreak.Title = splitTitle[1].Trim();
+                            int id;
+                            if (int.TryParse(splitTitle[0], out id))
+                            {
+                                currentBreak.Id = id.ToString();
+                                currentBreak.Title = splitTitle[1].Trim();
+                            }
+                            else
+                            {
+                                currentBreak.Title = substring;
+                            }
                         }
 
                         // Clear state
