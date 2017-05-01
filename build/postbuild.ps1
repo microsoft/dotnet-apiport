@@ -82,7 +82,7 @@ foreach ($project in $projects)
 
     Write-Host "Package: [$($project.Name)] Version: [$version]"
 
-    & $MSBuildCommand /t:Pack /p:Version=$version /p:Configuration=$Configuration /p:PackageOutputPath=$bin "$csproj"
+    & $MSBuildCommand /t:Pack /p:NoBuild=true /p:Version=$version /p:Configuration=$Configuration /p:PackageOutputPath=$bin "$csproj"
 
     $childItem = Get-ChildItem $bin | ? { $_.BaseName.StartsWith($name) -and $_.Extension.Equals(".nupkg") } | Select -First 1
 
