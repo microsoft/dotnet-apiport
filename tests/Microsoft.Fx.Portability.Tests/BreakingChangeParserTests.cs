@@ -197,7 +197,7 @@ namespace Microsoft.Fx.Portability.Tests
         #region Expected Breaking Changes
         public static BreakingChange TemplateBC = new BreakingChange
         {
-            Id = "ID",
+            Id = "100",
             Title = "Breaking Change Title",
             ImpactScope = BreakingChangeImpact.Major,
             VersionBroken = new Version(4, 5),
