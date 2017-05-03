@@ -134,7 +134,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj">
