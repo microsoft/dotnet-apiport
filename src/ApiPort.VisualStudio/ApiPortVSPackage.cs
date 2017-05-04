@@ -23,17 +23,27 @@ namespace ApiPortVS
     public class ApiPortVSPackage : Package, IResultToolbar
     {
         private static ServiceProvider s_serviceProvider;
+        private readonly AssemblyRedirectResolver _assemblyResolver;
 
         internal static IServiceProvider LocalServiceProvider { get { return s_serviceProvider; } }
 
         public ApiPortVSPackage() : base()
         {
             s_serviceProvider = new ServiceProvider(this);
+            _assemblyResolver = s_serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
+
+            if (_assemblyResolver == default(AssemblyRedirectResolver))
+            {
+                throw new InvalidOperationException("Could not find AssemblyRedirectResolver. It should have been resolved in the service provider.");
+            }
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         protected override void Dispose(bool disposing)
         {
             s_serviceProvider.Dispose();
+            AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
 
             base.Dispose(disposing);
         }
@@ -101,6 +111,8 @@ namespace ApiPortVS
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
             ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) => _assemblyResolver.ResolveAssembly(args.Name, args.RequestingAssembly);
 
         private void ShowOptionsPage(object sender, EventArgs e)
         {

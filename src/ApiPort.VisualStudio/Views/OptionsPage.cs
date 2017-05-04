@@ -48,7 +48,8 @@ namespace ApiPortVS.Views
 
         protected override void Dispose(bool disposing)
         {
-            _optionsPageControl.Dispose();
+            if (_optionsPageControl != null)
+                _optionsPageControl.Dispose();
 
             base.Dispose(disposing);
         }
