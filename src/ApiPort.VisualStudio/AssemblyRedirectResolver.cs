@@ -17,7 +17,6 @@ namespace ApiPortVS
     /// </summary>
     internal class AssemblyRedirectResolver
     {
-        private readonly IEnumerable<AssemblyRedirect> _redirects;
         private readonly IDictionary<string, AssemblyRedirect> _redirectsDictionary;
 
         public AssemblyRedirectResolver(string configFile)
@@ -33,20 +32,19 @@ namespace ApiPortVS
                             let newVersion = redirect.Attribute("newVersion").Value
                             select new AssemblyRedirect(name, newVersion, publicKey);
 
-            _redirects = redirects;
             _redirectsDictionary = redirects.ToDictionary(x => x.Name);
         }
 
         public AssemblyRedirectResolver(DirectoryInfo assemblyFolder)
         {
-            _redirects = assemblyFolder.GetFiles("*.dll")
+            var redirects = assemblyFolder.GetFiles("*.dll")
                 .Select(dll => {
                     var name = AssemblyName.GetAssemblyName(dll.FullName);
                     var publicKeyToken = name.GetPublicKeyToken().Aggregate("", (s, b) => s += b.ToString("x2"));
                     return new AssemblyRedirect(name.Name, name.Version.ToString(), publicKeyToken);
                 });
 
-            _redirectsDictionary = _redirects.ToDictionary(x => x.Name);
+            _redirectsDictionary = redirects.ToDictionary(x => x.Name);
         }
 
         public Assembly ResolveAssembly(string assemblyName, Assembly requestingAssembly)
