@@ -11,8 +11,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
 ## Using this Repository
 
-* Install [Visual Studio 2015 with Update 3][Visual Studio 2015]
-* Install [.NET Core 1.0.1](https://dot.net/core)
+* Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
 
 ## Documentation
 
@@ -27,9 +26,9 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
 | Project | Description |
 | :------ | :---------- |
-| ApiPort | Console tool to access portability webservice | 
-| ApiPort.Core | Cross-platform .NET Core application | 
-| ApiPort.Vsix | Visual Studio Extension | 
+| ApiPort | Console tool to access portability webservice |
+| ApiPort.Core | Cross-platform .NET Core application |
+| ApiPort.Vsix | Visual Studio Extension |
 | Microsoft.Fx.Portability | Provides common types for API Port |
 | Microsoft.Fx.Portability.MetadataReader | Implements a dependency finder based off of [System.Reflection.Metadata][System.Reflection.Metadata]. The library  will generate DocIds that conform to [these specifications][DocId]. |
 | Microsoft.Fx.Portability.Offline | Provides access to data in an offline setting so network calls are not needed |
@@ -54,8 +53,8 @@ Want to get more familiar with what's going on in the code?
 Looking for something to work on? The list of [up-for-grabs issues][Issues-Open]
 is a great place to start.
 
-We're re-using the same contributing approach as .NET Core. You can check out 
-the .NET Core [contributing guide][Contributing Guide] at the corefx repo wiki 
+We're re-using the same contributing approach as .NET Core. You can check out
+the .NET Core [contributing guide][Contributing Guide] at the corefx repo wiki
 for more details.
 
 * [How to Contribute][Contributing Guide]
@@ -84,5 +83,5 @@ This project is licensed under the [MIT license](LICENSE).
 [PR-Open]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr
 [myget]: https://dotnet.myget.org/gallery/dotnet-apiport
 [System.Reflection.Metadata]: https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata
-[Visual Studio 2015]: http://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx
+[Visual Studio 2017]: https://www.microsoft.com/net/core#windowsvs2017
 [VSIX Gallery]: http://vsixgallery.com/extension/55d15546-28ca-40dc-af23-dfa503e9c5fe
