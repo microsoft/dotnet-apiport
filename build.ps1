@@ -16,7 +16,7 @@ param(
     [switch]$CreateNugetPackages,
 
     [string]$VersionSuffix = "alpha",
-    
+
     [ValidateSet(2015, 2017)]
     [int]$VisualStudioVersion = 2017
 )
@@ -76,9 +76,11 @@ pushd $root
 popd
 
 if ($RunTests) {
-    .\build\runtests.ps1 $Configuration 
+    .\build\runtests.ps1 $Configuration
 }
 
 if ($CreateNugetPackages) {
+    .\build\postbuild.ps1 $Configuration -CreateNugetPackages
+} else {
     .\build\postbuild.ps1 $Configuration
 }
