@@ -117,24 +117,40 @@ Write-Progress -Activity "Creating portability nupkgs" -Status "Complete" -Perce
 
 function Copy-OfflineMode()
 {
+
+    $netFramework = "net46"
+    $netStandard = "netstandard1.3"
+
     $extensionsToInclude = @("*.exe", "*.dll", "*.pdb", "*.config")
     $offlineDrop = "$drop\ApiPort.Offline"
+
+    Write-host "Creating offline drop [$offlineDrop]..."
 
     Remove-Item $offlineDrop -Recurse -Force -ErrorAction Ignore
     New-Item -Type Directory $offlineDrop -ErrorAction Ignore | Out-Null
 
-    Copy-Item "$root\..\.data\catalog.bin" $drop\Microsoft.Fx.Portability.Offline -Recurse -Force
+    $catalogPath = Resolve-Path "$root\..\.data\catalog.bin"
+
+    Write-Host "Copying: $catalogPath"
+
+    Copy-Item $catalogPath $offlineDrop\ -Force
 
     Copy-Item $drop\Microsoft.Fx.Portability.Offline\$netStandard\* -Include $extensionsToInclude $offlineDrop
     Copy-Item $drop\Microsoft.Fx.Portability.Reports.Json\$netStandard\* -Include $extensionsToInclude $offlineDrop
     Copy-Item $drop\Microsoft.Fx.Portability.Reports.Html\$netFramework\* -Include $extensionsToInclude $offlineDrop
-    Copy-Item $drop\ApiPort\$netFramework\* -Include $extensionsToInclude $offlineDrop
+    Copy-Item $drop\ApiPort\$netFramework\win7-x64\* -Include $extensionsToInclude $offlineDrop
 }
 
 Copy-OfflineMode
 
+Write-Host "Copying license terms into ApiPort folders..."
+
 # Copying the license terms into our drop so we don't have to manually do it when we want to release
-Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort\$netFramework\ -Recurse -Force
+foreach ($platform in $(Get-ChildItem $drop\ApiPort | ? { $_.PSIsContainer })) {
+
+    Copy-Item "$root\..\docs\LicenseTerms" "$($platform.FullName)\" -Recurse -Force
+}
+
 Copy-Item "$root\..\docs\LicenseTerms" $drop\ApiPort.Offline\ -Recurse -Force
 
 if ($PublishVsix) {
