@@ -11,6 +11,11 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Do not want to run VsDevCmd.bat if we are already set the VS Developer Environment
+if (![string]::IsNullOrEmpty($env:DevEnvDir)) {
+    return
+}
+
 [bool]$findVsVersion = $true
 
 if ($PSCmdlet.ParameterSetName -eq "PathGiven") {
