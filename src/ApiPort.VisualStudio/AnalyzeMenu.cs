@@ -40,7 +40,7 @@ namespace ApiPortVS
 
         public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
-            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().ToList());
+            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList());
         }
 
         private async Task AnalyzeProjectsAsync(ICollection<Project> projects)
@@ -102,7 +102,8 @@ namespace ApiPortVS
                 return;
             }
 
-            menuItem.Visible = projects.Any() && projects.All(p => p.IsDotNetProject());
+
+            menuItem.Visible = projects.Any(p => p.IsDotNetProject());
 
             // Only need to check dependents if menuItem is still visible
             if (checkDependencies && menuItem.Visible)
