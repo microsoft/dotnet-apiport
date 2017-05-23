@@ -179,7 +179,7 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to locate build output directory..
+        ///   Looks up a localized string similar to Failed to locate build output files..
         /// </summary>
         public static string FailedToLocateBuildOutputDir {
             get {

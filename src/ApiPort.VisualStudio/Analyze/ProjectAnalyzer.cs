@@ -7,8 +7,10 @@ using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ApiPortVS.Analyze
@@ -38,9 +40,9 @@ namespace ApiPortVS.Analyze
             _errorList = errorList;
         }
 
-        public async Task AnalyzeProjectAsync(ICollection<Project> projects)
+        public async Task AnalyzeProjectAsync(ICollection<Project> projects, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var buildSucceeded = await _builder.BuildAsync(projects);
+            var buildSucceeded = await _builder.BuildAsync(projects).ConfigureAwait(false);
 
             if (!buildSucceeded)
             {
@@ -48,7 +50,28 @@ namespace ApiPortVS.Analyze
             }
 
             // TODO: Add option to include everything in output, not just build artifacts
-            var targetAssemblies = projects.SelectMany(p => p.GetAssemblyPaths().Where(x => !string.IsNullOrEmpty(x))).ToList();
+            var targetAssemblies = new ConcurrentBag<string>();
+
+            foreach (var project in projects)
+            {
+                var output = await project.GetBuildOutputFilesAsync();
+
+                // Could not find any output files for this. Skip it.
+                if (output == null)
+                {
+                    continue;
+                }
+
+                foreach (var file in output)
+                {
+                    targetAssemblies.Add(file);
+                }
+            }
+
+            if (!targetAssemblies.Any())
+            {
+                throw new PortabilityAnalyzerException(LocalizedStrings.FailedToLocateBuildOutputDir);
+            }
 
             var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
 
