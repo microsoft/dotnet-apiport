@@ -58,7 +58,7 @@ namespace ApiPortVS
                 {
                     var projectAnalyzer = innerScope.Resolve<ProjectAnalyzer>();
 
-                    await projectAnalyzer.AnalyzeProjectAsync(projects);
+                    await projectAnalyzer.AnalyzeProjectAsync(projects).ConfigureAwait(false);
                 }
             }
             catch (PortabilityAnalyzerException ex)

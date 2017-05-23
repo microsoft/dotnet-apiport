@@ -4,6 +4,9 @@
 using ApiPortVS.Contracts;
 using ApiPortVS.ViewModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS.Reporting
 {
@@ -18,9 +21,11 @@ namespace ApiPortVS.Reporting
             _toolbar = toolbar;
         }
 
-        public void View(IEnumerable<string> urls)
+        public async Task ViewAsync(IEnumerable<string> urls)
         {
-            _toolbar.ShowToolbar();
+            await _toolbar.ShowToolbarAsync().ConfigureAwait(false);
+
+            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             foreach (var url in urls)
             {

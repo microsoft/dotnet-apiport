@@ -77,7 +77,7 @@ namespace ApiPortVS.Analyze
 
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result));
 
-            DisplaySourceItemsInErrorList(sourceItems, projects);
+            await DisplaySourceItemsInErrorList(sourceItems, projects);
         }
 
         public bool FileHasAnalyzableExtension(string fileName)
@@ -102,12 +102,14 @@ namespace ApiPortVS.Analyze
             }
         }
 
-        private void DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, ICollection<Project> projects)
+        private async Task DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, ICollection<Project> projects)
         {
             if (!items.Any())
             {
                 return;
             }
+
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _errorList.Tasks.Clear();
             _errorList.Refresh();

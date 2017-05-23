@@ -8,6 +8,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+
+using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS
 {
@@ -26,8 +29,10 @@ namespace ApiPortVS
 
         public override Encoding Encoding { get { return Encoding.UTF8; } }
 
-        public void ShowWindow()
+        public async Task ShowWindowAsync()
         {
+            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             _outputWindow.Activate();
 
             try

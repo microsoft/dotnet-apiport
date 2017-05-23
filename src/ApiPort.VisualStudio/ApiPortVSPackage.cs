@@ -68,7 +68,7 @@ namespace ApiPortVS
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
                 CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeToolbarMenuItem);
-                MenuCommand analyzeMenuToolbarItem = new MenuCommand((_, __) => ShowToolbar(), analyzeMenuToolbarCommandID);
+                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, __) => await ShowToolbarAsync(), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 // Add menu items for Project context menus
@@ -100,8 +100,12 @@ namespace ApiPortVS
             }
         }
 
-        public void ShowToolbar()
+        public async System.Threading.Tasks.Task ShowToolbarAsync()
         {
+            // Calls to UI elements should use the main task thread.
+            // https://blogs.msdn.microsoft.com/andrewarnottms/2014/05/07/asynchronous-and-multithreaded-programming-within-vs-using-the-joinabletaskfactory/
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
             if ((null == window) || (null == window.Frame))
             {

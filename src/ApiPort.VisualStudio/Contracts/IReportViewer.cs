@@ -2,11 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ApiPortVS.Contracts
 {
     public interface IReportViewer
     {
-        void View(IEnumerable<string> urls);
+        Task ViewAsync(IEnumerable<string> urls);
     }
 }

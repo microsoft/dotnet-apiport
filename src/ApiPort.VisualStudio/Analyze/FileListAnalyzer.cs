@@ -20,7 +20,7 @@ namespace ApiPortVS.Analyze
 
         public async Task AnalyzeProjectAsync(IEnumerable<string> inputAssemblyPaths)
         {
-            await _analyzer.WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, false);
+            await _analyzer.WriteAnalysisReportsAsync(inputAssemblyPaths, _reportWriter, false).ConfigureAwait(false);
         }
     }
 }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ApiPortVS.Reporting
 {
@@ -25,13 +26,13 @@ namespace ApiPortVS.Reporting
             _browserService = webBrowsingService;
         }
 
-        public void View(IEnumerable<string> urls)
+        public async Task ViewAsync(IEnumerable<string> urls)
         {
             foreach (var url in urls)
             {
                 if (IsHtml(url))
                 {
-                    ShowHtml(url);
+                    await ShowHtmlAsync(url);
                 }
                 else
                 {
@@ -48,9 +49,11 @@ namespace ApiPortVS.Reporting
                 || string.Equals(".htm", extension, StringComparison.OrdinalIgnoreCase);
         }
 
-        private void ShowHtml(string url)
+        private async Task ShowHtmlAsync(string url)
         {
             const uint REUSE_EXISTING_BROWSER_IF_AVAILABLE = 0;
+
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             if (!_fileSystem.FileExists(url))
             {
