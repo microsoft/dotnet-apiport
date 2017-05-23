@@ -272,6 +272,7 @@
     <Compile Include="AnalysisOptions.cs" />
     <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="AssemblyRedirectResolver.cs" />
+    <Compile Include="IVsHierarchyExtensions.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\IResultToolbar.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
