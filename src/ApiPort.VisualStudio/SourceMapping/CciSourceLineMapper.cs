@@ -24,7 +24,7 @@ namespace ApiPortVS.SourceMapping
             using (var pdbFs = File.OpenRead(pdbPath))
             using (var pdbReader = new PdbReader(pdbFs, host))
             {
-                var metadataVisitor = new CciMetadataTraverser(report, pdbReader);
+                var metadataVisitor = new CciMetadataTraverser(assemblyPath, report, pdbReader);
                 var traverser = new MetadataTraverser
                 {
                     PreorderVisitor = metadataVisitor,

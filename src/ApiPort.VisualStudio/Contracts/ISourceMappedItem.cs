@@ -9,6 +9,8 @@ namespace ApiPortVS.Contracts
 {
     public interface ISourceMappedItem
     {
+        string Assembly { get; }
+
         MissingInfo Item { get; }
 
         IEnumerable<FrameworkName> UnsupportedTargets { get; }
