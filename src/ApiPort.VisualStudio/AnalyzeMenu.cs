@@ -20,11 +20,11 @@ namespace ApiPortVS
 {
     internal class AnalyzeMenu
     {
-        private readonly TextWriter _output;
+        private readonly OutputWindowWriter _output;
         private readonly DTE _dte;
         private readonly ILifetimeScope _scope;
 
-        public AnalyzeMenu(ILifetimeScope scope, DTE dte, TextWriter output)
+        public AnalyzeMenu(ILifetimeScope scope, DTE dte, OutputWindowWriter output)
         {
             _scope = scope;
             _dte = dte;
@@ -52,7 +52,7 @@ namespace ApiPortVS
 
             try
             {
-                WriteHeader();
+                await WriteHeaderAsync().ConfigureAwait(false);
 
                 using (var innerScope = _scope.BeginLifetimeScope())
                 {
@@ -122,7 +122,7 @@ namespace ApiPortVS
 
             try
             {
-                WriteHeader();
+                await WriteHeaderAsync().ConfigureAwait(false);
 
                 using (var innerScope = _scope.BeginLifetimeScope())
                 {
@@ -163,8 +163,10 @@ namespace ApiPortVS
             return (bool)openDialog.ShowDialog() ? openDialog.FileNames : null;
         }
 
-        private void WriteHeader()
+        private async Task WriteHeaderAsync()
         {
+            await _output.ClearWindowAsync();
+
             var header = new StringBuilder();
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
             header.AppendLine(string.Format(LocalizedStrings.CopyrightFormat, assemblyVersion));

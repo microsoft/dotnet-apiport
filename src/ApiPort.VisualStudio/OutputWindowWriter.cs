@@ -43,6 +43,12 @@ namespace ApiPortVS
             catch (Exception) { }
         }
 
+        public async Task ClearWindowAsync()
+        {
+            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            _outputWindow.Clear();
+        }
+
         public override void Write(char text)
         {
             var errCode = _outputWindow.OutputStringThreadSafe(text.ToString());
