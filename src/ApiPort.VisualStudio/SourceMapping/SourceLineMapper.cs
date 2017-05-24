@@ -6,8 +6,11 @@ using ApiPortVS.Resources;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ApiPortVS.SourceMapping
 {
@@ -31,6 +34,8 @@ namespace ApiPortVS.SourceMapping
             _textOutput.WriteLine();
             _textOutput.WriteLine(LocalizedStrings.FindingSourceLineInformationFor);
 
+            int currentIssues = _progressReporter.Issues.Count;
+
             foreach (var assembly in assemblyPaths)
             {
                 using (var task = _progressReporter.StartTask(string.Format("\t{0}\b\b\b", Path.GetFileName(assembly))))
@@ -43,15 +48,45 @@ namespace ApiPortVS.SourceMapping
                         {
                             _progressReporter.ReportIssue(string.Format(LocalizedStrings.PdbNotFoundFormat, assembly));
                             task.Abort();
-                            continue;
                         }
+                        else
+                        {
+                            try
+                            {
+                                var sourceItems = GetSourceInfo(assembly, pdbPath, report);
+                                items.AddRange(sourceItems);
+                            }
+                            catch (OutOfMemoryException ex)
+                            {
+                                // TODO: Update Microsoft.CCI to support parsing portable pdbs.
+                                // Due to an OutOfMemoryException thrown when trying to parse portable pdb files.
+                                // https://github.com/icsharpcode/ILSpy/issues/789
+                                // There is no public build for https://github.com/Microsoft/cci yet, which supports it.
+                                Trace.TraceError($"OOM while trying to parse pdb file." + Environment.NewLine + ex.ToString());
 
-                        items.AddRange(GetSourceInfo(assembly, pdbPath, report));
+                                _progressReporter.ReportIssue(string.Format(LocalizedStrings.SourceLineMappingNotSupportedPortablePdb, assembly));
+
+                                task.Abort();
+                            }
+                        }
                     }
                     catch (PortabilityAnalyzerException)
                     {
                         task.Abort();
                     }
+                }
+
+                var issues = _progressReporter.Issues.ToArray();
+
+                // There were more issues reported while running this current task.
+                if (currentIssues < issues.Length)
+                {
+                    for (int i = currentIssues; i < issues.Length; i++)
+                    {
+                        _textOutput.WriteLine(issues[i]);
+                    }
+
+                    currentIssues = issues.Length;
                 }
             }
 

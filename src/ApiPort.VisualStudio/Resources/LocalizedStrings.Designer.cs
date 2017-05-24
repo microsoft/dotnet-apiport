@@ -404,6 +404,21 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to         Source line information for portable pdbs is not currently supported.
+        ///        Add the following code to: {0}&apos;s
+        ///        project (ie. *.csproj or *.fsproj) and try again.
+        ///
+        ///        &lt;PropertyGroup&gt;
+        ///          &lt;DebugType&gt;Full&lt;/DebugType&gt;
+        ///        &lt;/PropertyGroup&gt;.
+        /// </summary>
+        public static string SourceLineMappingNotSupportedPortablePdb {
+            get {
+                return ResourceManager.GetString("SourceLineMappingNotSupportedPortablePdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submission ID:.
         /// </summary>
         public static string SubmissionId {

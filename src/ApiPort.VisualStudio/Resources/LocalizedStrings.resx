@@ -288,4 +288,17 @@ Copyright (C) Microsoft Corporation. All rights reserved.</value>
   <data name="ReportNotAvailable" xml:space="preserve">
     <value>The report is not available. It may have been deleted.</value>
   </data>
+  <data name="SourceLineMappingNotSupportedPortablePdb" xml:space="preserve">
+    <value>        Source line information for portable pdbs is not currently supported.
+        Add the following code to: {0}'s
+        project (ie. *.csproj or *.fsproj) and try again.
+
+        &lt;PropertyGroup&gt;
+          &lt;DebugType&gt;Full&lt;/DebugType&gt;
+        &lt;/PropertyGroup&gt;</value>
+    <comment>Due to an OutOfMemoryException thrown when trying to parse portable pdb files.
+https://github.com/icsharpcode/ILSpy/issues/789
+There is no public build for https://github.com/Microsoft/cci yet, which supports it.
+    </comment>
+  </data>
 </root>
