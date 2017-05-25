@@ -31,16 +31,16 @@ namespace ApiPortVS
             _output = output;
         }
 
-        public async Task AnalyzeSelectedProjectsAsync(bool includeDependencies)
+        public async void AnalyzeSelectedProjectsAsync(bool includeDependencies)
         {
             var projects = GetSelectedProjects();
 
-            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects);
+            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects).ConfigureAwait(false);
         }
 
         public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
-            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList());
+            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList()).ConfigureAwait(false);
         }
 
         private async Task AnalyzeProjectsAsync(ICollection<Project> projects)
@@ -128,7 +128,7 @@ namespace ApiPortVS
                 {
                     var fileListAnalyzer = innerScope.Resolve<FileListAnalyzer>();
 
-                    await fileListAnalyzer.AnalyzeProjectAsync(inputAssemblyPaths);
+                    await fileListAnalyzer.AnalyzeProjectAsync(inputAssemblyPaths).ConfigureAwait(false);
                 }
             }
             catch (PortabilityAnalyzerException ex)
@@ -165,7 +165,7 @@ namespace ApiPortVS
 
         private async Task WriteHeaderAsync()
         {
-            await _output.ClearWindowAsync();
+            await _output.ClearWindowAsync().ConfigureAwait(false);
 
             var header = new StringBuilder();
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;

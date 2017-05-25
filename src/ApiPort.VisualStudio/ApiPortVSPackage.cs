@@ -68,17 +68,17 @@ namespace ApiPortVS
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
                 CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeToolbarMenuItem);
-                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, __) => await ShowToolbarAsync(), analyzeMenuToolbarCommandID);
+                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, __) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 // Add menu items for Project context menus
                 CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
-                OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
+                OleMenuCommand contextMenuItem = new OleMenuCommand((_, __) => menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
 
                 CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextDependentsMenuItem);
-                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
+                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand((_, __) => menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
                 contextMenuDependentsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuDependenciesItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuDependentsItem);
 

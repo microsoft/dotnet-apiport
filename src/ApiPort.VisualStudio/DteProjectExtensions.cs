@@ -32,7 +32,12 @@ namespace ApiPortVS
         /// <returns>null if it is unable to retrieve VS configuration objects</returns>
         public static async Task<IEnumerable<string>> GetBuildOutputFilesAsync(this Project project, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var output = await project?.GetBuildOutputFilesFromCPSAsync(cancellationToken);
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            var output = await project.GetBuildOutputFilesFromCPSAsync(cancellationToken).ConfigureAwait(false);
 
             if (output != null)
             {

@@ -32,7 +32,7 @@ namespace ApiPortVS.Reporting
             {
                 if (IsHtml(url))
                 {
-                    await ShowHtmlAsync(url);
+                    await ShowHtmlAsync(url).ConfigureAwait(false);
                 }
                 else
                 {

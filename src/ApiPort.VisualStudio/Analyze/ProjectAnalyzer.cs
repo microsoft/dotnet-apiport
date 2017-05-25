@@ -57,7 +57,7 @@ namespace ApiPortVS.Analyze
 
             foreach (var project in projects)
             {
-                var output = await project.GetBuildOutputFilesAsync();
+                var output = await project.GetBuildOutputFilesAsync().ConfigureAwait(false);
 
                 // Could not find any output files for this. Skip it.
                 if (output == null)
@@ -122,7 +122,7 @@ namespace ApiPortVS.Analyze
 
             foreach (var project in projects)
             {
-                var outputs = await project.GetBuildOutputFilesAsync();
+                var outputs = await project.GetBuildOutputFilesAsync().ConfigureAwait(false);
 
                 if (outputs == null)
                 {
