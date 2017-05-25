@@ -155,7 +155,6 @@ namespace ApiPortVS.SourceMapping
             private readonly int _column;
             private readonly int _line;
             private readonly string _path;
-            private readonly string _assembly;
 
             public CciSourceItem(string assembly, IPrimarySourceLocation location, MissingInfo item, IEnumerable<FrameworkName> unsupportedPlatformNames)
             {
