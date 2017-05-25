@@ -50,26 +50,24 @@ namespace ApiPortVS
             {
                 return null;
             }
-            if (!(configuration is IVsProjectCfg2))
+
+            if (!(configuration is IVsProjectCfg2 configuration2))
             {
                 Trace.TraceError($"IVsCfg returned {configuration.GetType()} is not of the right type. Expected: {nameof(IVsProjectCfg2)}");
                 return null;
             }
-
-            var configuration2 = configuration as IVsProjectCfg2;
 
             if (ErrorHandler.Failed(configuration2.OpenOutputGroup(Constants.OutputGroups.BuiltProject, out IVsOutputGroup outputGroup)))
             {
                 Trace.TraceError($"Could not retrieve {nameof(IVsOutputGroup)} from project: {project.Name}");
                 return null;
             }
-            if (!(outputGroup is IVsOutputGroup2))
+
+            if (!(outputGroup is IVsOutputGroup2 outputGroup2))
             {
                 Trace.TraceError($"Could not retrieve {nameof(IVsOutputGroup2)} from project: {project.Name}");
                 return null;
             }
-
-            var outputGroup2 = (IVsOutputGroup2)outputGroup;
 
             if (ErrorHandler.Failed(outputGroup2.get_KeyOutputObject(out IVsOutput2 keyGroup)))
             {
