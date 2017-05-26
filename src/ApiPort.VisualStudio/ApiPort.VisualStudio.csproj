@@ -328,8 +328,6 @@
     </Compile>
     <Compile Include="AnalyzeMenu.cs" />
     <Compile Include="AssemblyFile.cs" />
-    <Compile Include="Models\OptionsModel.cs" />
-    <Compile Include="Models\SelectedResultFormat.cs" />
     <Compile Include="NotifyPropertyBase.cs" />
     <Compile Include="SourceLineMapperExtensions.cs" />
     <Compile Include="SourceMapping\CciSourceLineMapper.cs" />
