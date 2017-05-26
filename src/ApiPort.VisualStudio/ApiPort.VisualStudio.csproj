@@ -314,7 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisOptions.cs" />
-    <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="AssemblyRedirectResolver.cs" />
     <Compile Include="IVsHierarchyExtensions.cs" />
     <Compile Include="Properties\Properties.cs" />
@@ -329,9 +328,6 @@
       <DependentUpon>AnalysisOutputToolWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="AnalyzeMenu.cs" />
-    <Compile Include="Analyze\ApiPortVsAnalyzer.cs" />
-    <Compile Include="Analyze\FileListAnalyzer.cs" />
-    <Compile Include="Analyze\ProjectAnalyzer.cs" />
     <Compile Include="AssemblyFile.cs" />
     <Compile Include="Contracts\IReportViewer.cs" />
     <Compile Include="Contracts\ISourceLineMapper.cs" />
@@ -417,6 +413,18 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApiPort.VisualStudio.2015\ApiPort.VisualStudio.2015.csproj">
+      <Project>{9def460b-6383-4665-839b-c0b5e6bb6a5f}</Project>
+      <Name>ApiPort.VisualStudio.2015</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ApiPort.VisualStudio.2017\ApiPort.VisualStudio.2017.csproj">
+      <Project>{c0629a8d-7107-46cf-83b8-408e1886ab36}</Project>
+      <Name>ApiPort.VisualStudio.2017</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ApiPort.VisualStudio.Model\ApiPort.VisualStudio.Model.csproj">
+      <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
+      <Name>ApiPort.VisualStudio.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Fx.Portability.Cci\Microsoft.Fx.Portability.Cci.csproj">
       <Project>{b0468d19-0f98-49a8-ba28-926331c72e26}</Project>
       <Name>Microsoft.Fx.Portability.Cci</Name>
