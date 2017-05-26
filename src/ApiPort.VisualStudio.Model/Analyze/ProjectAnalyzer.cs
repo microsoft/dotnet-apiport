@@ -26,6 +26,7 @@ namespace ApiPortVS.Analyze
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
         private readonly IVsApiPortAnalyzer _analyzer;
         private readonly ProjectBuilder _builder;
+        private readonly IVSThreadingService _threadingService;
 
         public ProjectAnalyzer(
             IVsApiPortAnalyzer analyzer,
@@ -33,7 +34,8 @@ namespace ApiPortVS.Analyze
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
             IFileSystem fileSystem,
-            ProjectBuilder builder)
+            ProjectBuilder builder,
+            IVSThreadingService threadingService)
         {
             _analyzer = analyzer;
             _sourceLineMapper = sourceLineMapper;
@@ -41,6 +43,7 @@ namespace ApiPortVS.Analyze
             _fileSystem = fileSystem;
             _builder = builder;
             _errorList = errorList;
+            _threadingService = threadingService;
         }
 
         public async Task AnalyzeProjectAsync(ICollection<Project> projects, CancellationToken cancellationToken = default(CancellationToken))
@@ -112,7 +115,7 @@ namespace ApiPortVS.Analyze
                 return;
             }
 
-            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await _threadingService.SwitchToMainThreadAsync();
 
             _errorList.Tasks.Clear();
             _errorList.Refresh();
@@ -137,7 +140,7 @@ namespace ApiPortVS.Analyze
                 }
             }
 
-            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await _threadingService.SwitchToMainThreadAsync();
 
             try
             {

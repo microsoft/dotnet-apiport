@@ -60,6 +60,7 @@
     <Compile Include="Contracts\IReportViewer.cs" />
     <Compile Include="Contracts\ISourceLineMapper.cs" />
     <Compile Include="Contracts\ISourceMappedItem.cs" />
+    <Compile Include="Contracts\IVSThreadingService.cs" />
     <Compile Include="Models\OptionsModel.cs" />
     <Compile Include="Models\SelectedResultFormat.cs" />
     <Compile Include="NotifyPropertyBase.cs" />
