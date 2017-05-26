@@ -351,21 +351,12 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ApiPortVSPackage.cs" />
     <Compile Include="PkgCmdID.cs" />
-    <Compile Include="Resources\LocalizedStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LocalizedStrings.resx</DependentUpon>
-    </Compile>
     <Compile Include="TargetPlatformVersion.cs" />
     <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\OptionsPage.resx">
       <DependentUpon>OptionsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LocalizedStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
