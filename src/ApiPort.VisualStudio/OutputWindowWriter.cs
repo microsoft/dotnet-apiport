@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -14,7 +15,7 @@ using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS
 {
-    public class OutputWindowWriter : TextWriter
+    public class OutputWindowWriter : TextWriter, IOutputWindowWriter
     {
         private readonly DTE _dte;
         private readonly IVsOutputWindowPane _outputWindow;

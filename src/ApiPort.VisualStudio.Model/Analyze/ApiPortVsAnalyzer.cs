@@ -12,22 +12,20 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using VisualStudio = Microsoft.VisualStudio.Shell;
-
 namespace ApiPortVS.Analyze
 {
     public class ApiPortVsAnalyzer : IVsApiPortAnalyzer
     {
         private readonly ApiPortClient _client;
         private readonly OptionsViewModel _optionsViewModel;
-        private readonly OutputWindowWriter _outputWindow;
+        private readonly IOutputWindowWriter _outputWindow;
         private readonly IProgressReporter _reporter;
         private readonly IReportViewer _viewer;
 
         public ApiPortVsAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
-            OutputWindowWriter outputWindow,
+            IOutputWindowWriter outputWindow,
             IReportViewer viewer,
             IProgressReporter reporter)
         {
