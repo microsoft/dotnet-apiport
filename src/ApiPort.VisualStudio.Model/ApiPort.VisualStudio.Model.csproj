@@ -56,7 +56,6 @@
     <Compile Include="Analyze\FileListAnalyzer.cs" />
     <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="Analyze\ProjectAnalyzer.cs" />
-    <Compile Include="Contracts\IErrorWindowItem.cs" />
     <Compile Include="Contracts\IOutputWindowWriter.cs" />
     <Compile Include="Contracts\IReportViewer.cs" />
     <Compile Include="Contracts\ISourceLineMapper.cs" />
