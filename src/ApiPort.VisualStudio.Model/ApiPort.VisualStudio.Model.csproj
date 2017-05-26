@@ -39,6 +39,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -50,6 +51,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyze\AnalysisOptions.cs" />
     <Compile Include="Analyze\ApiPortVsAnalyzer.cs" />
     <Compile Include="Analyze\FileListAnalyzer.cs" />
     <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
@@ -61,6 +63,8 @@
     <Compile Include="Contracts\ISourceMappedItem.cs" />
     <Compile Include="Models\OptionsModel.cs" />
     <Compile Include="Models\SelectedResultFormat.cs" />
+    <Compile Include="NotifyPropertyBase.cs" />
+    <Compile Include="Models\TargetPlatform.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
