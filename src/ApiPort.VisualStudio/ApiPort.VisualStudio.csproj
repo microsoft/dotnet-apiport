@@ -348,7 +348,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ApiPortVSPackage.cs" />
     <Compile Include="PkgCmdID.cs" />
-    <Compile Include="TargetPlatformVersion.cs" />
     <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>

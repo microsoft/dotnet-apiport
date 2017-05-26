@@ -63,6 +63,7 @@
     <Compile Include="Contracts\IVSThreadingService.cs" />
     <Compile Include="Models\OptionsModel.cs" />
     <Compile Include="Models\SelectedResultFormat.cs" />
+    <Compile Include="Models\TargetPlatformVersion.cs" />
     <Compile Include="NotifyPropertyBase.cs" />
     <Compile Include="Models\TargetPlatform.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
