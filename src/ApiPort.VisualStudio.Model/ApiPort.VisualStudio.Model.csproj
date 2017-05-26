@@ -54,6 +54,10 @@
     <Compile Include="Analyze\FileListAnalyzer.cs" />
     <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="Analyze\ProjectAnalyzer.cs" />
+    <Compile Include="Contracts\IErrorWindowItem.cs" />
+    <Compile Include="Contracts\IReportViewer.cs" />
+    <Compile Include="Contracts\ISourceLineMapper.cs" />
+    <Compile Include="Contracts\ISourceMappedItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />

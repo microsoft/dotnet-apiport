@@ -329,9 +329,6 @@
     </Compile>
     <Compile Include="AnalyzeMenu.cs" />
     <Compile Include="AssemblyFile.cs" />
-    <Compile Include="Contracts\IReportViewer.cs" />
-    <Compile Include="Contracts\ISourceLineMapper.cs" />
-    <Compile Include="Contracts\ISourceMappedItem.cs" />
     <Compile Include="Models\OptionsModel.cs" />
     <Compile Include="Models\SelectedResultFormat.cs" />
     <Compile Include="NotifyPropertyBase.cs" />
@@ -341,7 +338,6 @@
     <Compile Include="Reporting\VsBrowserReportViewer.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="SourceMapping\CodeDocumentNavigator.cs" />
-    <Compile Include="Contracts\IErrorWindowItem.cs" />
     <Compile Include="DteProjectExtensions.cs" />
     <Compile Include="SourceMapping\CciMetadataTraverser.cs" />
     <Compile Include="SourceMapping\SourceLineMapper.cs" />
