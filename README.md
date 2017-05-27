@@ -11,7 +11,21 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
 ## Using this Repository
 
-* Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
+### Windows
+
+1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
+2. Building:
+   * Visual Studio: `PortabilityTools.sln`
+   * Powershell: `build.ps1 -Configuration Debug -Platform AnyCPU`
+
+### Linux/Mac
+
+1. Install [.NET Core SDK](https://www.microsoft.com/net/core)
+2. Execute: `build.sh`
+3. Go to: `bin/Debug/ApiPort/netcoreapp1.0`
+4. Run ApiPort by executing: `dotnet ApiPort.dll`
+  * Example: `dotnet ApiPort.dll listTargets`
+  * Example: `dotnet ApiPort.dll analyze -f Foo.dll -r HTML`
 
 ## Documentation
 
