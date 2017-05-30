@@ -3,6 +3,16 @@ CONFIGURATION=Debug
 
 usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
 
+build() {
+    echo "Building ApiPort... Configuration: "$CONFIGURATION
+    pushd src/ApiPort > /dev/null
+    dotnet restore
+    dotnet build -f netcoreapp1.0 -c $CONFIGURATION
+    popd > /dev/null
+}
+    popd
+}
+
 while [[ $# -gt 0 ]]
 do
     option="$(echo $1 | awk '{print tolower($0)}')"
@@ -34,16 +44,11 @@ fi
 
 shopt -u nocasematch
 
-echo "Building ApiPort... Configuration: "$CONFIGURATION
-
 if ! hash dotnet 2>/dev/null; then
     echo "ERROR: Please install dotnet SDK from https://microsoft.com/net/core."
     exit 2
 fi
 
-pushd src/ApiPort
-dotnet restore
-dotnet build -f netcoreapp1.0 -c $CONFIGURATION
-popd
+build
 
 echo "Finished!"
