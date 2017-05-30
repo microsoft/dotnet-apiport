@@ -4,6 +4,20 @@ Configuration=Debug
 
 usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
 
+prebuild() {
+    local catalog=".data/catalog.bin"
+    local data=$(dirname $catalog)
+
+    if [[ ! -e $data ]]; then
+        mkdir $data
+    fi
+
+    if [[ ! -e $catalog ]]; then
+        echo "Downloading catalog.bin..."
+        curl --output $catalog "https://portabilitystorage.blob.core.windows.net/catalog/catalog.bin?sr=c&sv=2015-02-21&si=Readcatalog&sig=8tOHoX2ZvcSFLol0GI6lxmydNPJbnJdHNLKr06aD7t4%3D"
+    fi
+}
+
 build() {
     echo "Building ApiPort... Configuration: "$Configuration
     pushd src/ApiPort > /dev/null
@@ -62,6 +76,8 @@ if ! hash dotnet 2>/dev/null; then
     echo "ERROR: Please install dotnet SDK from https://microsoft.com/net/core."
     exit 2
 fi
+
+prebuild
 
 build
 
