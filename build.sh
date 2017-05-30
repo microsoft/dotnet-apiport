@@ -1,36 +1,30 @@
 #!/usr/bin/env bash
 set -e
-CONFIGURATION=Debug
+Configuration=Debug
 
 usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
 
 build() {
-    echo "Building ApiPort... Configuration: "$CONFIGURATION
+    echo "Building ApiPort... Configuration: "$Configuration
     pushd src/ApiPort > /dev/null
     dotnet restore
-    dotnet build -f netcoreapp1.0 -c $CONFIGURATION
+    dotnet build -f netcoreapp1.0 -c $Configuration
     popd > /dev/null
 }
 
 runTest() {
-    local PROJECT=$1
-
-    pushd $PROJECT > /dev/null
-
-    ls *.csproj | while read file
+    ls $1/*.csproj | while read file
     do
         if awk -F: '/<TargetFramework>netcoreapp1\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
             echo "Testing " $file
             dotnet restore
-            dotnet test -c $CONFIGURATION
+            dotnet test $file -c $Configuration --logger trx
         else
             # Can remove this when: https://github.com/dotnet/sdk/issues/335 is resolved
             echo "Skipping " $file
             echo "--- Desktop .NET Framework testing is not currently supported on Unix."
         fi
     done
-
-    popd > /dev/null
 }
 
 while [[ $# -gt 0 ]]
@@ -42,7 +36,7 @@ do
         exit 1
         ;;
         "-c" | "--configuration")
-        CONFIGURATION="$2"
+        Configuration="$2"
         shift 2
         ;;
         *)
@@ -56,8 +50,8 @@ done
 # Enable insensitive case-matching
 shopt -s nocasematch
 
-if [[ "$CONFIGURATION" != "Debug" && "$CONFIGURATION" != "Release" ]]; then
-    echo "ERROR: Supported configuration types are Debug or Release.  Invalid configuration: "$CONFIGURATION
+if [[ "$Configuration" != "Debug" && "$Configuration" != "Release" ]]; then
+    echo "ERROR: Supported configuration types are Debug or Release.  Invalid configuration: "$Configuration
     usage
     exit 3
 fi
