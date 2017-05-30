@@ -12,45 +12,39 @@ $ErrorActionPreference = "Stop"
 
 $root = $PSScriptRoot
 $testFolder = $(Resolve-Path $([IO.Path]::Combine($root, "..", "tests"))).Path
+$testResults = [IO.Path]::Combine($root, "..", "TestResults")
 
 if (!(Test-Path $testFolder)) {
     Write-Error "Could not find test folder [$testFolder]"
     return -1
 }
 
-$VsTestConsoleCommand = $(Get-Command "vstest.console.exe" -CommandType Application -ErrorAction Ignore)
+if (!(Test-Path $testResults)) {
+    Write-Host "Creating $testResults folder..."
+    New-Item $testResults -ItemType Directory
+}
+
+$dotnet = "dotnet.exe"
+$dotnetCommand = $(Get-Command $dotnet -CommandType Application -ErrorAction Ignore)
 
 # Possible that the VS Developer Command prompt is not yet set.
-if ($VsTestConsoleCommand -eq $null) {
+if ($dotnetCommand -eq $null) {
     .\build\Set-VsDevEnv.ps1 -VisualstudioVersion $VisualStudioVersion
-    $VsTestConsoleCommand = $(Get-Command "vstest.console.exe" -CommandType Application -ErrorAction Ignore)
+    $dotnetCommand = $(Get-Command $dotnet -CommandType Application -ErrorAction Ignore)
 
-    if ($VsTestConsoleCommand -eq $null) {
-        Write-Error "Could not set visual studio $VisualStudioVersion environment and locate vstest.console.exe!"
+    if ($dotnetCommand -eq $null) {
+        Write-Error "Could not set visual studio $VisualStudioVersion environment and locate $dotnet!"
     }
 }
 
-$vstest = $VsTestConsoleCommand.Path
-$binaryFolders = Get-ChildItem $testFolder -Recurse | ? { $_.PsIsContainer -and $_.FullName.EndsWith($(Join-Path "bin" $Configuration)) }
+foreach ($test in $(Get-ChildItem $testFolder | ? { $_.PsIsContainer })) {
+    $csprojs = Get-ChildItem $test.FullName -Recurse | ? { $_.Extension -eq ".csproj" }
+    foreach ($proj in $csprojs) {
+        $trx = "$($proj.BaseName).$(Get-Date -Format "yyyy-MM-dd.hh_mm_ss").trx"
+        $fullpath = Join-Path $testResults $trx
 
-$testDlls = New-Object System.Collections.ArrayList
-$testAdapters = New-Object System.Collections.ArrayList
+        Write-Host "Testing $($proj.Name). Output: $trx"
 
-foreach ($folder in $binaryFolders) {
-    
-    $dlls = Get-ChildItem $folder.FullName | ? { $_.Extension -eq ".dll" }
-
-    foreach ($dll in $dlls) {
-        if ($dll.Name -match "(T|t)ests?\.dll") {
-            $testDlls.Add($dll.FullName) | Out-Null
-        } elseif ($dll.Name -match "testadapter\.dll") {
-            $testAdapters.Add($dll.DirectoryName) | Out-Null
-        }
+        & $dotnetCommand test "$($proj.FullName)" --configuration $Configuration --logger "trx;LogFileName=$fullpath" --no-build
     }
-}
-
-$testAdapterFolder = """$($testFolder | select -First 1)"""
-
-foreach ($test in $testDlls) {
-    & $vstest $test /logger:trx /TestAdapterPath:$testAdapterFolder
 }
