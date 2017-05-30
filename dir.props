@@ -10,14 +10,20 @@
     <OutputIntermediate>$(MSBuildThisFileDirectory)obj\$(Configuration)</OutputIntermediate>
     <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
-  <PropertyGroup>
+
+  <!-- Assembly signing not supported on Linux, yet.
+    `CS7027: Error signing output with public key from file` -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
 
-    <!--Do not generate assemblyinfo because we are doing that with the
+  <!-- Do not generate AssemblyInfo because we are doing that with the
     GenerateAssemblyInfoFile target in dir.targets -->
+  <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
   <!-- Trying to mitigate the number of warnings that the solution contains by
     adding this into our Release builds.  As a result, it should be caught in
     our PRs because of the CI builds -->
