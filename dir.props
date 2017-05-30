@@ -16,6 +16,7 @@
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
+    <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
   </PropertyGroup>
 
   <!-- Do not generate AssemblyInfo because we are doing that with the
