@@ -210,7 +210,6 @@ namespace Microsoft.Fx.Portability.Tests
        </Targets>
      </ApiTool> ";
             var file = new FileInfo("TargetMap.xml");
-
             try
             {
                 using (var fs = file.OpenWrite())
@@ -220,8 +219,7 @@ namespace Microsoft.Fx.Portability.Tests
                 }
 
                 var map = new TargetMapper();
-
-                Assert.True(map.LoadFromConfig(String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "TargetMap.xml")));
+                Assert.True(map.LoadFromConfig(file.FullName));
                 Assert.Equal("target1", map.GetNames("alias1").Single());
             }
             finally
