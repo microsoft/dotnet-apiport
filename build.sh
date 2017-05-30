@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 CONFIGURATION=Debug
 
 usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
@@ -10,7 +11,26 @@ build() {
     dotnet build -f netcoreapp1.0 -c $CONFIGURATION
     popd > /dev/null
 }
-    popd
+
+runTest() {
+    local PROJECT=$1
+
+    pushd $PROJECT > /dev/null
+
+    ls *.csproj | while read file
+    do
+        if awk -F: '/<TargetFramework>netcoreapp1\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
+            echo "Testing " $file
+            dotnet restore
+            dotnet test -c $CONFIGURATION
+        else
+            # Can remove this when: https://github.com/dotnet/sdk/issues/335 is resolved
+            echo "Skipping " $file
+            echo "--- Desktop .NET Framework testing is not currently supported on Unix."
+        fi
+    done
+
+    popd > /dev/null
 }
 
 while [[ $# -gt 0 ]]
@@ -50,5 +70,10 @@ if ! hash dotnet 2>/dev/null; then
 fi
 
 build
+
+find tests/ -type d -name "*\.Tests" | while read file
+do
+    runTest $file
+done
 
 echo "Finished!"
