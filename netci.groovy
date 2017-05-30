@@ -3,26 +3,34 @@ import jobs.generation.Utilities;
 
 def project = GithubProject
 def branch = GithubBranchName
+def configurationGroups = ['Debug', 'Release']
+def outerloopPlatforms = ['Windows_NT', 'Ubuntu14.04', 'Ubuntu16.04', 'OSX10.12']
 
 // Generate the builds for debug and release, commit and PRJob
 [true, false].each { isPR -> // Defines a closure over true and false, value assigned to isPR
-    ['Debug', 'Release'].each { configuration ->
-        ['AnyCPU', 'x64', 'x86'].each { platform ->
+    configurationGroups.each { configuration ->
+        outerloopPlatforms.each { os ->
+            def name = "${os.toLowerCase()}_${configuration.toLowerCase()}"
+            def newJobName = Utilities.getFullJobName(project, name, isPR)
+            def newJob = job(newJobName)
 
-            def newJobName = Utilities.getFullJobName(project, configuration, isPR)
-
-            // Define build string
-            def buildString = ".\\build.ps1 ${configuration} ${platform} -RunTests"
-
-            // Create a new job with the specified name.  The brace opens a new closure
-            // and calls made within that closure apply to the newly created job.
-            def newJob = job(newJobName) {
-                steps {
-                    powerShell(buildString)
+            if (os == 'Windows_NT') {
+                newJob.with {
+                    steps {
+                        powerShell(".\\build.ps1 -Configuration ${configuration} -Platform AnyCPU -RunTests")
+                    }
                 }
-            }
 
-            Utilities.setMachineAffinity(newJob, 'Windows_NT', 'latest-or-auto-dev15-0')
+                Utilities.setMachineAffinity(newJob, os, 'latest-or-auto-dev15-0')
+            } else {
+                newJob.with {
+                    steps {
+                        shell("./build.sh --configuration ${configuration}")
+                    }
+                }
+
+                Utilities.setMachineAffinity(newJob, os, 'latest-or-auto')
+            }
 
             // This call performs remaining common job setup on the newly created job.
             // It does the following:
@@ -36,7 +44,7 @@ def branch = GithubBranchName
             // In Github, the PR trigger will appear as "Windows Debug" and "Windows Release" and will be run
             // by default
             if (isPR) {
-                Utilities.addGithubPRTriggerForBranch(newJob, branch, "Windows ${configuration}")
+                Utilities.addGithubPRTriggerForBranch(newJob, branch, "${os} ${configuration}")
             }
             else {
                 Utilities.addGithubPushTrigger(newJob)
