@@ -2,19 +2,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Contracts;
+using ApiPortVS.Models;
 using ApiPortVS.Resources;
 using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS.Analyze
 {
@@ -23,14 +21,14 @@ namespace ApiPortVS.Analyze
         private readonly IFileWriter _reportWriter;
         private readonly IFileSystem _fileSystem;
         private readonly ISourceLineMapper _sourceLineMapper;
-        private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
+        private readonly IErrorListProvider _errorList;
         private readonly IVsApiPortAnalyzer _analyzer;
         private readonly IProjectBuilder _builder;
         private readonly IVSThreadingService _threadingService;
 
         public ProjectAnalyzer(
             IVsApiPortAnalyzer analyzer,
-            Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
+            IErrorListProvider errorList,
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
             IFileSystem fileSystem,
@@ -82,6 +80,8 @@ namespace ApiPortVS.Analyze
             var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true).ConfigureAwait(false);
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result)).ConfigureAwait(false);
 
+            var dictionary = new ConcurrentBag<CalculatedProject>();
+
             foreach (var project in projects)
             {
                 var outputFiles = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
@@ -90,7 +90,7 @@ namespace ApiPortVS.Analyze
                 dictionary.Add(new CalculatedProject(project, hierarchy, outputFiles ?? Enumerable.Empty<string>()));
             }
 
-            await DisplaySourceItemsInErrorList(sourceItems, projects).ConfigureAwait(false);
+            await _errorList.DisplaySourceItemsAsync(sourceItems, dictionary.ToArray()).ConfigureAwait(false);
         }
 
         public bool FileHasAnalyzableExtension(string fileName)
@@ -113,69 +113,6 @@ namespace ApiPortVS.Analyze
             {
                 return Enumerable.Empty<string>();
             }
-        }
-
-        private async Task DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, ICollection<Project> projects)
-        {
-            if (!items.Any())
-            {
-                return;
-            }
-
-            await _threadingService.SwitchToMainThreadAsync();
-
-            _errorList.Tasks.Clear();
-            _errorList.Refresh();
-            _errorList.SuspendRefresh();
-
-            var projectWithOutputMappings = new ConcurrentDictionary<string, IVsHierarchy>();
-
-            foreach (var project in projects)
-            {
-                var outputs = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
-
-                if (outputs == null)
-                {
-                    continue;
-                }
-
-                var hierarchy = project.GetHierarchy();
-
-                foreach (var output in outputs)
-                {
-                    projectWithOutputMappings.AddOrUpdate(output, hierarchy, (existingKey, existingValue) => hierarchy);
-                }
-            }
-
-            await _threadingService.SwitchToMainThreadAsync();
-
-            try
-            {
-                var defaultHierarchy = projects.First().GetHierarchy();
-
-                foreach (var item in items)
-                {
-                    if (!_fileSystem.FileExists(item.Path))
-                    {
-                        continue;
-                    }
-
-                    if (!projectWithOutputMappings.TryGetValue(item.Assembly, out IVsHierarchy hierarchy))
-                    {
-                        hierarchy = defaultHierarchy;
-                    }
-
-                    var errorWindowTask = item.GetErrorWindowTask(hierarchy);
-                    var result = _errorList.Tasks.Add(errorWindowTask);
-                }
-            }
-            finally
-            {
-                _errorList.ResumeRefresh();
-            }
-
-            // Outside the finally because it will obscure errors reported on the output window
-            _errorList.BringToFront();
         }
     }
 }
