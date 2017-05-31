@@ -25,7 +25,7 @@ namespace ApiPortVS.Analyze
         private readonly ISourceLineMapper _sourceLineMapper;
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
         private readonly IVsApiPortAnalyzer _analyzer;
-        private readonly ProjectBuilder _builder;
+        private readonly IProjectBuilder _builder;
         private readonly IVSThreadingService _threadingService;
 
         public ProjectAnalyzer(
@@ -34,7 +34,7 @@ namespace ApiPortVS.Analyze
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
             IFileSystem fileSystem,
-            ProjectBuilder builder,
+            IProjectBuilder builder,
             IVSThreadingService threadingService)
         {
             _analyzer = analyzer;
@@ -60,7 +60,7 @@ namespace ApiPortVS.Analyze
 
             foreach (var project in projects)
             {
-                var output = await project.GetBuildOutputFilesAsync().ConfigureAwait(false);
+                var output = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
 
                 // Could not find any output files for this. Skip it.
                 if (output == null)
@@ -80,8 +80,15 @@ namespace ApiPortVS.Analyze
             }
 
             var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true).ConfigureAwait(false);
-
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result)).ConfigureAwait(false);
+
+            foreach (var project in projects)
+            {
+                var outputFiles = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
+                var hierarchy = await _builder.GetVsHierarchyAsync(project).ConfigureAwait(false);
+
+                dictionary.Add(new CalculatedProject(project, hierarchy, outputFiles ?? Enumerable.Empty<string>()));
+            }
 
             await DisplaySourceItemsInErrorList(sourceItems, projects).ConfigureAwait(false);
         }
@@ -125,7 +132,7 @@ namespace ApiPortVS.Analyze
 
             foreach (var project in projects)
             {
-                var outputs = await project.GetBuildOutputFilesAsync().ConfigureAwait(false);
+                var outputs = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
 
                 if (outputs == null)
                 {
