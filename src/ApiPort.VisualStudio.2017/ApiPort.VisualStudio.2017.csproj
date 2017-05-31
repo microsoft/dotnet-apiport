@@ -44,9 +44,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApiPort.VisualStudio.Model\ApiPort.VisualStudio.Model.csproj">
+    <ProjectReference Include="..\ApiPort.VisualStudio.Model\ApiPort.VisualStudio.Common.csproj">
       <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
-      <Name>ApiPort.VisualStudio.Model</Name>
+      <Name>ApiPort.VisualStudio.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
