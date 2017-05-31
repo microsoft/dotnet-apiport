@@ -5,6 +5,8 @@ using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
+
+#if FEATURE_STRONGNAMESIGNING
     public class UrlBuilderTest
     {
         [Fact]
@@ -121,4 +123,5 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Equal("test", withNull.Url);
         }
     }
+#endif
 }
