@@ -316,7 +316,6 @@
     <Compile Include="AssemblyRedirectResolver.cs" />
     <Compile Include="IVsHierarchyExtensions.cs" />
     <Compile Include="Properties\Properties.cs" />
-    <Compile Include="Reporting\IResultToolbar.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
     <Compile Include="Utils\TargetPlatformDisplayNameConverter.cs" />
@@ -400,7 +399,7 @@
       <Project>{c0629a8d-7107-46cf-83b8-408e1886ab36}</Project>
       <Name>ApiPort.VisualStudio.2017</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ApiPort.VisualStudio.Model\ApiPort.VisualStudio.Common.csproj">
+    <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
       <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
       <Name>ApiPort.VisualStudio.Common</Name>
     </ProjectReference>

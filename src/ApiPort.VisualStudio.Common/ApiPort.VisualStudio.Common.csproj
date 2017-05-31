@@ -8,8 +8,8 @@
     <ProjectGuid>{60798B82-B273-4D39-AA52-021C7228A0AD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ApiPort.VisualStudio</RootNamespace>
-    <AssemblyName>ApiPort.VisualStudio.Model</AssemblyName>
+    <RootNamespace>ApiPortVS</RootNamespace>
+    <AssemblyName>ApiPort.VisualStudio.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -85,6 +85,7 @@
     <Compile Include="Models\TargetPlatformVersion.cs" />
     <Compile Include="NotifyPropertyBase.cs" />
     <Compile Include="Models\TargetPlatform.cs" />
+    <Compile Include="Reporting\IResultToolbar.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">
