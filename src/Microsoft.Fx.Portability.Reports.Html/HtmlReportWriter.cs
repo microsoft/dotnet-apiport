@@ -10,6 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System;
+using Microsoft.Fx.Portability.Reports.Html;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -60,12 +61,21 @@ namespace Microsoft.Fx.Portability.Reports
 
         private static string Resolve(string name)
         {
+            var fullName = $"Microsoft.Fx.Portability.Reports.Resources.{name}.cshtml";
             var names = typeof(HtmlReportWriter).GetTypeInfo().Assembly.GetManifestResourceNames();
-            using (var template = typeof(HtmlReportWriter).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Reports.Resources." + name + ".cshtml"))
-            using (var reader = new StreamReader(template, Encoding.UTF8))
+            using (var template = typeof(HtmlReportWriter).GetTypeInfo().Assembly.GetManifestResourceStream(fullName))
             {
-                return reader.ReadToEnd();
+                if (template == default(Stream))
+                {
+                    throw new MissingResourceException(fullName);
+                }
+
+                using (var reader = new StreamReader(template, Encoding.UTF8))
+                {
+                    return reader.ReadToEnd();
+                }
             }
+
         }
 
         public class HtmlHelper

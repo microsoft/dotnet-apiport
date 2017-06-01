@@ -26,6 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\_PortabilityReport.cshtml" />
+    <EmbeddedResource Include="Resources\ReportTemplate.cshtml" />
+    <EmbeddedResource Include="Resources\_Scripts.cshtml" />
+    <EmbeddedResource Include="Resources\_Styles.cshtml" />
+    <EmbeddedResource Include="Resources\_BreakingChangesReport.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
       <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
       <Name>Microsoft.Fx.Portability</Name>
