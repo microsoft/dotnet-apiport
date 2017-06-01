@@ -51,7 +51,9 @@ namespace Microsoft.Fx.Portability.Reports
             TargetHeaders = _targetMapper.GetTargetNames(response.ReportingResult.Targets, true);
             OrderedBreakingChangesByAssembly = GetGroupedBreakingChanges(response.BreakingChanges, response.ReportingResult.GetAssemblyUsageInfo().Select(a => a.SourceAssembly));
             BreakingChangesSummary = GetBreakingChangesSummary(OrderedBreakingChangesByAssembly);
-            OrderedBreakingChangeSkippedAssemblies = response.BreakingChangeSkippedAssemblies.OrderBy(a => a.AssemblyIdentity);
+
+            var skippedAssemblies = response.BreakingChangeSkippedAssemblies ?? Enumerable.Empty<AssemblyInfo>();
+            OrderedBreakingChangeSkippedAssemblies = skippedAssemblies.OrderBy(a => a.AssemblyIdentity);
         }
 
         private IDictionary<BreakingChange, IEnumerable<MemberInfo>> GetBreakingChangesSummary(IEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> orderedBreakingChangesByAssembly)
@@ -66,7 +68,8 @@ namespace Microsoft.Fx.Portability.Reports
         private IOrderedEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> GetGroupedBreakingChanges(IList<BreakingChangeDependency> breakingChanges, IEnumerable<AssemblyInfo> assembliesToInclude)
         {
             Dictionary<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>> ret = new Dictionary<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>();
-            foreach (BreakingChangeDependency b in breakingChanges)
+
+            foreach (BreakingChangeDependency b in breakingChanges ?? Enumerable.Empty<BreakingChangeDependency>())
             {
                 // Add breaking changes, grouped by assembly, each with a collection of MemberInfos that trigger the break
                 if (!ret.ContainsKey(b.DependantAssembly))

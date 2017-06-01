@@ -32,7 +32,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 .OrderBy(x => x.FullName, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            var userAssemblies = new HashSet<string>(request.UserAssemblies.Select(a => a.AssemblyIdentity), StringComparer.OrdinalIgnoreCase);
+            var assemblyIdentities = request.UserAssemblies
+                .Where(x => x.AssemblyIdentity != null)
+                .Select(a => a.AssemblyIdentity);
+
+            var userAssemblies = new HashSet<string>(assemblyIdentities, StringComparer.OrdinalIgnoreCase);
 
             var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
                 ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, request.Dependencies)
