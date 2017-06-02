@@ -34,7 +34,7 @@ namespace ApiPortVS
             {
                 var buildDir = project.GetBuildOutputPath();
 
-                var targetAssemblies = getAllDirectories(buildDir);
+                var targetAssemblies = getAllDirectories(buildDir) ?? Enumerable.Empty<string>();
 
                 if (!targetAssemblies.Any())
                 {
