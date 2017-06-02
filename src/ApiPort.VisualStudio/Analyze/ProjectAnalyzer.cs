@@ -48,7 +48,7 @@ namespace ApiPortVS.Analyze
             }
 
             // TODO: Add option to include everything in output, not just build artifacts
-            var targetAssemblies = projects.SelectMany(p => p.GetAssemblyPaths()).ToList();
+            var targetAssemblies = projects.SelectMany(p => p.GetAssemblyPaths().Where(x => !string.IsNullOrEmpty(x))).ToList();
 
             var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
 

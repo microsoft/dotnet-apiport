@@ -32,9 +32,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 .OrderBy(x => x.FullName, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            var assemblyIdentities = request.UserAssemblies
-                .Where(x => x.AssemblyIdentity != null)
-                .Select(a => a.AssemblyIdentity);
+            // TODO: It's possible that an AssemblyInfo in UserAssemblies is null.
+            // This appears to be coming from analysis in the VSIX, possibly
+            // from CCI.  Figure out where this is coming from.
+            var assemblyIdentities = request?.UserAssemblies.Where(x => x != null && x.AssemblyIdentity != null).Select(a => a.AssemblyIdentity)
+                ?? Enumerable.Empty<string>();
 
             var userAssemblies = new HashSet<string>(assemblyIdentities, StringComparer.OrdinalIgnoreCase);
 
