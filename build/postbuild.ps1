@@ -55,7 +55,7 @@ function Generate-NuGetPackages
 
         if(!(Test-Path $bin))
         {
-            Write-Warning "Could not find path: $(bin)"
+            Write-Warning "Could not find path: $bin"
             continue
         }
 
