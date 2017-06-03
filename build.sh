@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+export HOME=~
+export NUGET_PACKAGES=~/.nuget/packages
+export NUGET_HTTP_CACHE_PATH=~/.local/share/NuGet/v3-cache
+
 Configuration=Debug
 
 DotNetSDKChannel="preview"
@@ -9,6 +13,8 @@ DotNetSDKVersion="1.0.4"
 RootDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DotNetSDKPath=$RootDir"/.tools/dotnet/"$DotNetSDKVersion
 DotNetExe=$DotNetSDKPath"/dotnet"
+
+TestResults=$RootDir"/TestResults"
 
 usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
 
@@ -44,7 +50,8 @@ installSDK() {
 }
 
 build() {
-    echo "Building ApiPort... Configuration: "$Configuration
+    echo "Building ApiPort... Configuration: ["$Configuration"]"
+
     pushd src/ApiPort > /dev/null
     $DotNetExe restore
     $DotNetExe build -f netcoreapp1.0 -c $Configuration
@@ -55,14 +62,23 @@ runTest() {
     ls $1/*.csproj | while read file
     do
         if awk -F: '/<TargetFramework>netcoreapp1\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
-            echo "Testing " $file
+            echo "Testing "$file
             $DotNetExe restore
             $DotNetExe test $file -c $Configuration --logger trx
         else
             # Can remove this when: https://github.com/dotnet/sdk/issues/335 is resolved
-            echo "Skipping " $file
+            echo "Skipping "$file
             echo "--- Desktop .NET Framework testing is not currently supported on Unix."
         fi
+    done
+
+    if [ ! -d $TestResults ]; then
+        mkdir $TestResults
+    fi
+
+    find $RootDir/tests/ -type f -name "*.trx" | while read line
+    do
+        mv $line $TestResults/
     done
 }
 
