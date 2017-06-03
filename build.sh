@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 set -e
+
 Configuration=Debug
+
+DotNetSDKChannel="preview"
+DotNetSDKVersion="1.0.4"
+
+RootDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DotNetSDKPath=$RootDir"/.tools/dotnet/"$DotNetSDKVersion
+DotNetExe=$DotNetSDKPath"/dotnet"
 
 usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
 
 prebuild() {
-    local catalog=".data/catalog.bin"
+    local catalog=$RootDir"/.data/catalog.bin"
     local data=$(dirname $catalog)
 
     if [[ ! -e $data ]]; then
@@ -18,11 +26,28 @@ prebuild() {
     fi
 }
 
+installSDK() {
+    if [[ -e $DotNetExe ]]; then
+        echo $DotNetExe" exists.  Skipping install..."
+        return 0
+    fi
+
+    local DotNetToolsPath=$(dirname $DotNetSDKPath)
+
+    if [ ! -d $DotNetToolsPath ]; then
+        mkdir -p $DotNetToolsPath
+    fi
+
+    echo "Installing "$DotNetSDKVersion"from "$DotNetSDKChannel" channel..."
+
+    $RootDir/build/dotnet-install.sh --channel $DotNetSDKChannel --version $DotNetSDKVersion --install-dir $DotNetSDKPath
+}
+
 build() {
     echo "Building ApiPort... Configuration: "$Configuration
     pushd src/ApiPort > /dev/null
-    dotnet restore
-    dotnet build -f netcoreapp1.0 -c $Configuration
+    $DotNetExe restore
+    $DotNetExe build -f netcoreapp1.0 -c $Configuration
     popd > /dev/null
 }
 
@@ -31,8 +56,8 @@ runTest() {
     do
         if awk -F: '/<TargetFramework>netcoreapp1\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
             echo "Testing " $file
-            dotnet restore
-            dotnet test $file -c $Configuration --logger trx
+            $DotNetExe restore
+            $DotNetExe test $file -c $Configuration --logger trx
         else
             # Can remove this when: https://github.com/dotnet/sdk/issues/335 is resolved
             echo "Skipping " $file
@@ -72,8 +97,10 @@ fi
 
 shopt -u nocasematch
 
-if ! hash dotnet 2>/dev/null; then
-    echo "ERROR: Please install dotnet SDK from https://microsoft.com/net/core."
+installSDK
+
+if [[ ! -e $DotNetExe ]]; then
+    echo "ERROR: It should have been installed from build/dotnet-install.sh"
     exit 2
 fi
 
