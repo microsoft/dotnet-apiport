@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace ApiPortVS.Contracts
 {
@@ -17,5 +18,7 @@ namespace ApiPortVS.Contracts
         /// </summary>
         /// <returns></returns>
         Task SwitchToMainThreadAsync();
+
+        Task SwitchToMainThreadAsync(Action action);
     }
 }

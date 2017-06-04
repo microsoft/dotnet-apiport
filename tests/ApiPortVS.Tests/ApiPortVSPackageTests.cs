@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Analyze;
+using ApiPortVS.Contracts;
 using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiPortVS.Tests
@@ -49,6 +51,10 @@ namespace ApiPortVS.Tests
 
         private ProjectAnalyzer GetProjectAnalyzer()
         {
+            var threadingService = Substitute.For<IVSThreadingService>();
+
+            threadingService.SwitchToMainThreadAsync().Returns(Task.CompletedTask);
+
             var fileSystem = Substitute.For<IFileSystem>();
 
             fileSystem.GetFileExtension(Arg.Any<string>()).Returns(arg =>
@@ -64,7 +70,8 @@ namespace ApiPortVS.Tests
                 null,
                 null,
                 fileSystem,
-                null);
+                null,
+                threadingService);
         }
     }
 }
