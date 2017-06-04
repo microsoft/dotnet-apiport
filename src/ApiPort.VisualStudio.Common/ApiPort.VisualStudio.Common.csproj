@@ -55,6 +55,7 @@
       <HintPath>..\..\packages\Microsoft.VisualStudio.TextManager.Interop.7.10.6070\lib\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,6 +76,7 @@
     <Compile Include="Analyze\FileListAnalyzer.cs" />
     <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
     <Compile Include="Analyze\ProjectAnalyzer.cs" />
+    <Compile Include="AssemblyFile.cs" />
     <Compile Include="Contracts\IErrorListProvider.cs" />
     <Compile Include="Contracts\IOutputWindowWriter.cs" />
     <Compile Include="Contracts\IProjectBuilder.cs" />
