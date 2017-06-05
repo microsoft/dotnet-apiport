@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:const="clr-namespace:ApiPortVS.Resources"
+             xmlns:const="clr-namespace:ApiPortVS.Resources;assembly=ApiPort.VisualStudio.Common"
              xmlns:utils="clr-namespace:ApiPortVS.Utils"
              mc:Ignorable="d"
              d:DesignHeight="283.5" d:DesignWidth="640" >
@@ -127,7 +127,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
-                                    <TextBlock Text="{Binding ., Converter={StaticResource TargetPlatformDisplayName}}" DockPanel.Dock="Top" />
+                                    <TextBlock Text="{Binding Converter={StaticResource TargetPlatformDisplayName}}" DockPanel.Dock="Top" />
                                     <ItemsControl ItemsSource="{Binding Path=Versions}" Margin="10,5,0,0"
                                                   KeyboardNavigation.DirectionalNavigation="Local" KeyboardNavigation.IsTabStop="False">
                                         <ItemsControl.ItemsPanel>
@@ -140,7 +140,7 @@
                                                 <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding Version}"
                                                           KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
                                                           Padding="3,0,10,3"
-                                                          AutomationProperties.Name="{Binding ., Converter={StaticResource TargetInformationString}}" />
+                                                          AutomationProperties.Name="{Binding Converter={StaticResource TargetInformationString}}" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
