@@ -91,6 +91,7 @@
     <Compile Include="NotifyPropertyBase.cs" />
     <Compile Include="Models\TargetPlatform.cs" />
     <Compile Include="Reporting\IResultToolbar.cs" />
+    <Compile Include="SourceLineMapperExtensions.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />
     <Compile Include="Resources\LocalizedStrings.Designer.cs">

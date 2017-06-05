@@ -325,7 +325,6 @@
       <DependentUpon>AnalysisOutputToolWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="AnalyzeMenu.cs" />
-    <Compile Include="SourceLineMapperExtensions.cs" />
     <Compile Include="SourceMapping\CciSourceLineMapper.cs" />
     <Compile Include="Utils\HideWhenTrueBoolConverter.cs" />
     <Compile Include="Reporting\VsBrowserReportViewer.cs" />
