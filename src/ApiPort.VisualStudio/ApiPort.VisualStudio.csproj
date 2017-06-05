@@ -325,14 +325,10 @@
       <DependentUpon>AnalysisOutputToolWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="AnalyzeMenu.cs" />
-    <Compile Include="SourceMapping\CciSourceLineMapper.cs" />
     <Compile Include="Utils\HideWhenTrueBoolConverter.cs" />
     <Compile Include="Reporting\VsBrowserReportViewer.cs" />
     <Compile Include="ServiceProvider.cs" />
-    <Compile Include="SourceMapping\CodeDocumentNavigator.cs" />
     <Compile Include="DteProjectExtensions.cs" />
-    <Compile Include="SourceMapping\CciMetadataTraverser.cs" />
-    <Compile Include="SourceMapping\SourceLineMapper.cs" />
     <Compile Include="Views\OptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
