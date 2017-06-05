@@ -1,4 +1,5 @@
 ﻿using EnvDTE;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 
@@ -9,11 +10,14 @@ namespace ApiPortVS.Models
     /// </summary>
     public class CalculatedProject
     {
-        public CalculatedProject(Project project, IEnumerable<string> outputFiles)
+        public CalculatedProject(Project project, IVsHierarchy hierarchy, IEnumerable<string> outputFiles)
         {
             Project = project ?? throw new ArgumentNullException(nameof(project));
+            VsHierarchy = hierarchy ?? throw new ArgumentNullException(nameof(hierarchy));
             OutputFiles = outputFiles ?? throw new ArgumentNullException(nameof(outputFiles));
         }
+
+        public IVsHierarchy VsHierarchy { get; }
 
         public Project Project { get; }
 
