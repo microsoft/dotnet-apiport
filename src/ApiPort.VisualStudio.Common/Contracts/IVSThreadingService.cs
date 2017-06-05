@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace ApiPortVS.Contracts
@@ -17,8 +17,6 @@ namespace ApiPortVS.Contracts
         /// Ensures that the caller is on the UI thread.
         /// </summary>
         /// <returns></returns>
-        Task SwitchToMainThreadAsync();
-
-        Task SwitchToMainThreadAsync(Action action);
+        Task SwitchToMainThreadAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
