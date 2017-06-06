@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Threading;
+using ApiPortVS.Common;
+using System.Diagnostics;
+using Microsoft.VisualStudio.ProjectSystem;
+using Microsoft.VisualStudio.ProjectSystem.Properties;
+using Microsoft.VisualStudio;
+using System.Collections.Concurrent;
+using Microsoft.VisualStudio.ProjectSystem.Build;
 
 namespace ApiPortVS.VS2017
 {
