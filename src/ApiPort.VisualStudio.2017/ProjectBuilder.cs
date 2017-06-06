@@ -10,17 +10,109 @@ using System.Threading;
 
 namespace ApiPortVS.VS2017
 {
-    public class ProjectBuilder : IProjectBuilder
+    public class ProjectBuilder : DefaultProjectBuilder
     {
-        private readonly IVSThreadingService _threadingService;
+        public ProjectBuilder(
+            IVsSolutionBuildManager2 buildManager,
+            IVSThreadingService threadingService,
+            IProjectMapper projectMapper)
+            : base(buildManager, threadingService, projectMapper)
+        { }
 
-        public ProjectBuilder(IVSThreadingService threadingService)
+        /// <summary>
+        /// Tries to fetch output items if it uses Common Project System then
+        /// tries to fetch output items by retrieving FinalBuildOutput
+        /// location using code snippet from:
+        /// https://github.com/Microsoft/visualfsharp/blob/master/vsintegration/tests/unittests/Tests.ProjectSystem.Miscellaneous.fs#L168-L182
+        /// </summary>
+        /// <returns>null if it is unable to retrieve VS configuration objects</returns>
+        public override async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _threadingService = threadingService;
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            var output = await GetBuildOutputFilesFromCPSAsync(project, cancellationToken).ConfigureAwait(false);
+
+            if (output != null)
+            {
+                return output;
+            }
+
+            return await base.GetBuildOutputFilesAsync(project, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<bool> BuildAsync(IEnumerable<Project> projects) => throw new NotImplementedException();
-        public Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken)) => throw new NotImplementedException();
-        public Task<IVsHierarchy> GetVsHierarchyAsync(Project project) => throw new NotImplementedException();
+        /// <summary>
+        /// Tries to fetch files if it is a project that uses the Common
+        /// Project System (CPS) extensibility model.
+        /// </summary>
+        /// <returns>null if it is unable to find any output items or this
+        /// project is not a CPS project.</returns>
+        private async Task<IEnumerable<string>> GetBuildOutputFilesFromCPSAsync(
+            Project project,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            var hierarchy = await _projectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
+
+            if (hierarchy == null)
+            {
+                Trace.TraceWarning($"Unable to locate {nameof(IVsHierarchy)} for {project.Name}");
+                return null;
+            }
+
+            if (!hierarchy.IsCpsProject())
+            {
+                return null;
+            }
+
+            var unconfigured = GetUnconfiguredProject(project);
+
+            if (unconfigured == null)
+            {
+                return null;
+            }
+
+            // There are multiple loaded configurations for this project.
+            // This is true for .NET Core projects that multi-target.
+            // We'll return all those builds so APIPort can analyze them all.
+            var configuredProjects = unconfigured.LoadedConfiguredProjects;
+
+            if (configuredProjects?.Count() > 1)
+            {
+                var bag = new ConcurrentBag<string>();
+
+                foreach (var proj in configuredProjects)
+                {
+                    var keyOutput = await proj.Services.OutputGroups.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
+                    bag.Add(keyOutput);
+                }
+
+                return bag;
+            }
+
+            // This is a typical CPS project that builds one component at a time.
+            var configured = await unconfigured.GetSuggestedConfiguredProjectAsync().ConfigureAwait(false);
+
+            if (configured == null)
+            {
+                return null;
+            }
+
+            var outputGroupsService = configured.Services.OutputGroups;
+            var keyOutputFile = await outputGroupsService.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
+
+            return new[] { keyOutputFile };
+        }
+
+        private UnconfiguredProject GetUnconfiguredProject(Project project)
+        {
+            return (project as IVsBrowseObjectContext)?.UnconfiguredProject;
+        }
     }
 }

@@ -71,6 +71,7 @@ namespace ApiPortVS.Tests
                 null,
                 fileSystem,
                 null,
+                null,
                 threadingService);
         }
     }

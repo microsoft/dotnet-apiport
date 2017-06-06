@@ -55,7 +55,7 @@ namespace ApiPortVS
                 .InstancePerLifetimeScope();
             builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
                 .As<IVsSolutionBuildManager2>();
-            builder.RegisterType<ProjectBuilder>()
+            builder.RegisterType<DefaultProjectBuilder>()
                 .AsSelf();
 
             // Service registration

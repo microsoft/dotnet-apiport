@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using Xunit;
 using System.Collections.Generic;
+using ApiPortVS.Contracts;
 
 namespace ApiPortVS.Tests
 {
@@ -19,7 +20,9 @@ namespace ApiPortVS.Tests
         {
             var buildManager = BuildManagerWhichReturns(VSConstants.S_FALSE);
             var project = Substitute.For<Project>();
-            var projectBuilder = new ProjectBuilder(buildManager);
+            var mapper = Substitute.For<IProjectMapper>();
+            var threading = Substitute.For<IVSThreadingService>();
+            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, mapper);
             uint pdwCookie;
 
             var result = projectBuilder.BuildAsync(new List<Project> { project }).Result;
@@ -37,7 +40,10 @@ namespace ApiPortVS.Tests
         {
             var buildManager = BuildManagerWhichReturns(VSConstants.S_OK);
             var project = Substitute.For<Project>();
-            var projectBuilder = new ProjectBuilder(buildManager);
+            var mapper = Substitute.For<IProjectMapper>();
+            var threading = Substitute.For<IVSThreadingService>();
+
+            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, mapper);
             uint pdwCookie;
 
             var buildTask = projectBuilder.BuildAsync(new List<Project> { project });
@@ -61,11 +67,13 @@ namespace ApiPortVS.Tests
             return buildManager;
         }
 
-        private ProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager2 buildManager)
+        private DefaultProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager2 buildManager)
         {
             var project = Substitute.For<Project>();
+            var projectMapper = Substitute.For<IProjectMapper>();
+            var threading = Substitute.For<IVSThreadingService>();
 
-            var projectBuilder = new ProjectBuilder(buildManager);
+            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, projectMapper);
             projectBuilder.BuildAsync(new List<Project> { project });
 
             return projectBuilder;
