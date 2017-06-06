@@ -32,14 +32,17 @@ namespace Microsoft.Fx.Portability.Reporting
 
             var filePath = _fileSystem.CombinePaths(outputDirectory, filename);
             var isWritten = await TryWriteReportAsync(report, filePath);
-            if (isWritten)
-                return filePath;
 
-            return null;
+            return isWritten ? filePath : null;
         }
 
         private async Task<bool> TryWriteReportAsync(byte[] report, string filePath)
         {
+            if (filePath == null)
+            {
+                return false;
+            }
+
             try
             {
                 using (var destinationStream = _fileSystem.CreateFile(filePath))

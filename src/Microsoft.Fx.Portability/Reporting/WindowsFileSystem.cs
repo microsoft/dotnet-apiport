@@ -42,6 +42,11 @@ namespace Microsoft.Fx.Portability.Reporting
 
         public virtual Stream CreateFile(string path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
             var file = new FileInfo(path);
 
             if (!file.Directory.Exists)
