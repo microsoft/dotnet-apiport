@@ -25,6 +25,7 @@ namespace ApiPortVS.Analyze
         private readonly IVsApiPortAnalyzer _analyzer;
         private readonly IProjectBuilder _builder;
         private readonly IVSThreadingService _threadingService;
+        private readonly IProjectMapper _projectMapper;
 
         public ProjectAnalyzer(
             IVsApiPortAnalyzer analyzer,
@@ -33,6 +34,7 @@ namespace ApiPortVS.Analyze
             IFileWriter reportWriter,
             IFileSystem fileSystem,
             IProjectBuilder builder,
+            IProjectMapper projectMapper,
             IVSThreadingService threadingService)
         {
             _analyzer = analyzer;
@@ -41,6 +43,7 @@ namespace ApiPortVS.Analyze
             _fileSystem = fileSystem;
             _builder = builder;
             _errorList = errorList;
+            _projectMapper = projectMapper;
             _threadingService = threadingService;
         }
 
@@ -85,7 +88,7 @@ namespace ApiPortVS.Analyze
             foreach (var project in projects)
             {
                 var outputFiles = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
-                var hierarchy = await _builder.GetVsHierarchyAsync(project).ConfigureAwait(false);
+                var hierarchy = await _projectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
 
                 dictionary.Add(new CalculatedProject(project, hierarchy, outputFiles ?? Enumerable.Empty<string>()));
             }
