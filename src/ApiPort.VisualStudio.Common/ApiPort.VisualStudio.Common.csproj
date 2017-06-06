@@ -144,6 +144,7 @@
     <Compile Include="Contracts\IErrorListProvider.cs" />
     <Compile Include="Contracts\IOutputWindowWriter.cs" />
     <Compile Include="Contracts\IProjectBuilder.cs" />
+    <Compile Include="Contracts\IProjectMapper.cs" />
     <Compile Include="Contracts\IReportViewer.cs" />
     <Compile Include="Contracts\ISourceLineMapper.cs" />
     <Compile Include="Contracts\ISourceMappedItem.cs" />
