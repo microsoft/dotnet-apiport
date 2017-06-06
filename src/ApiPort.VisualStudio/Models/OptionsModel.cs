@@ -43,7 +43,7 @@ namespace ApiPortVS.Models
             LastUpdate = DateTimeOffset.MinValue;
             OutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
         }
-        
+
         public DateTimeOffset LastUpdate { get; set; }
 
         public IList<SelectedResultFormat> Formats
@@ -61,24 +61,13 @@ namespace ApiPortVS.Models
         public string OutputDirectory
         {
             get { return _outputDirectory; }
-            set
-            {
-                UpdateProperty(ref _outputDirectory, value);
-
-                if (!Directory.Exists(_outputDirectory))
-                {
-                    Directory.CreateDirectory(_outputDirectory);
-                }
-            }
+            set { UpdateProperty(ref _outputDirectory, value); }
         }
 
         public string DefaultOutputName
         {
             get { return _defaultOutputName; }
-            set
-            {
-                UpdateProperty(ref _defaultOutputName, value);
-            }
+            set { UpdateProperty(ref _defaultOutputName, value); }
         }
 
         public static OptionsModel Load()

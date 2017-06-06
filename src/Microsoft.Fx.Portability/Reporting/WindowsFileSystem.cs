@@ -42,7 +42,14 @@ namespace Microsoft.Fx.Portability.Reporting
 
         public virtual Stream CreateFile(string path)
         {
-            return File.Open(path, FileMode.Create, FileAccess.ReadWrite);
+            var file = new FileInfo(path);
+
+            if (!file.Directory.Exists)
+            {
+                file.Directory.Create();
+            }
+
+            return file.Open(FileMode.Create, FileAccess.ReadWrite);
         }
 
         public virtual IEnumerable<string> SearchPathForFile(string filename)

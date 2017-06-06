@@ -368,11 +368,29 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The directory the report was in is not available. It may have been deleted..
+        /// </summary>
+        public static string ReportDirectoryNotAvailable {
+            get {
+                return ResourceManager.GetString("ReportDirectoryNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Report written to &apos;{0}&apos;.
         /// </summary>
         public static string ReportLocation {
             get {
                 return ResourceManager.GetString("ReportLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The report is not available. It may have been deleted..
+        /// </summary>
+        public static string ReportNotAvailable {
+            get {
+                return ResourceManager.GetString("ReportNotAvailable", resourceCulture);
             }
         }
         

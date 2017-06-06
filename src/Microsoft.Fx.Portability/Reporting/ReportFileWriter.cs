@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Reporting
         {
             try
             {
-                using (Stream destinationStream = _fileSystem.CreateFile(filePath))
+                using (var destinationStream = _fileSystem.CreateFile(filePath))
                 using (var memoryStream = new MemoryStream(report))
                 {
                     await memoryStream.CopyToAsync(destinationStream);
@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability.Reporting
 
         private string GetFileName(string directory, string fileName, string inputExtension, bool isUnique)
         {
-            // We want to change the extension of the filename given regardless 
+            // We want to change the extension of the filename given regardless
             // of whether the user gave an extension or not. However, if they give
             // us an extension and it doesn't match the expected one, we'll report
             // the problem to them.
