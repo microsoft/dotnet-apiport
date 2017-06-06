@@ -20,27 +20,27 @@ namespace ApiPortVS
 {
     internal class AnalyzeMenu
     {
-        private readonly TextWriter _output;
+        private readonly OutputWindowWriter _output;
         private readonly DTE _dte;
         private readonly ILifetimeScope _scope;
 
-        public AnalyzeMenu(ILifetimeScope scope, DTE dte, TextWriter output)
+        public AnalyzeMenu(ILifetimeScope scope, DTE dte, OutputWindowWriter output)
         {
             _scope = scope;
             _dte = dte;
             _output = output;
         }
 
-        public async Task AnalyzeSelectedProjectsAsync(bool includeDependencies)
+        public async void AnalyzeSelectedProjectsAsync(bool includeDependencies)
         {
             var projects = GetSelectedProjects();
 
-            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects);
+            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects).ConfigureAwait(false);
         }
 
         public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
-            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList());
+            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList()).ConfigureAwait(false);
         }
 
         private async Task AnalyzeProjectsAsync(ICollection<Project> projects)
@@ -52,13 +52,13 @@ namespace ApiPortVS
 
             try
             {
-                WriteHeader();
+                await WriteHeaderAsync().ConfigureAwait(false);
 
                 using (var innerScope = _scope.BeginLifetimeScope())
                 {
                     var projectAnalyzer = innerScope.Resolve<ProjectAnalyzer>();
 
-                    await projectAnalyzer.AnalyzeProjectAsync(projects);
+                    await projectAnalyzer.AnalyzeProjectAsync(projects).ConfigureAwait(false);
                 }
             }
             catch (PortabilityAnalyzerException ex)
@@ -122,13 +122,13 @@ namespace ApiPortVS
 
             try
             {
-                WriteHeader();
+                await WriteHeaderAsync().ConfigureAwait(false);
 
                 using (var innerScope = _scope.BeginLifetimeScope())
                 {
                     var fileListAnalyzer = innerScope.Resolve<FileListAnalyzer>();
 
-                    await fileListAnalyzer.AnalyzeProjectAsync(inputAssemblyPaths);
+                    await fileListAnalyzer.AnalyzeProjectAsync(inputAssemblyPaths).ConfigureAwait(false);
                 }
             }
             catch (PortabilityAnalyzerException ex)
@@ -163,8 +163,10 @@ namespace ApiPortVS
             return (bool)openDialog.ShowDialog() ? openDialog.FileNames : null;
         }
 
-        private void WriteHeader()
+        private async Task WriteHeaderAsync()
         {
+            await _output.ClearWindowAsync().ConfigureAwait(false);
+
             var header = new StringBuilder();
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
             header.AppendLine(string.Format(LocalizedStrings.CopyrightFormat, assemblyVersion));

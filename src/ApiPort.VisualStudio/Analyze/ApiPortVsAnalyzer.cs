@@ -12,6 +12,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
+using VisualStudio = Microsoft.VisualStudio.Shell;
+
 namespace ApiPortVS.Analyze
 {
     public class ApiPortVsAnalyzer : IVsApiPortAnalyzer
@@ -41,22 +43,24 @@ namespace ApiPortVS.Analyze
             IFileWriter reportWriter,
             bool includeJson)
         {
-            _outputWindow.ShowWindow();
+            await _outputWindow.ShowWindowAsync().ConfigureAwait(false);
 
-            await _optionsViewModel.UpdateAsync();
+            await _optionsViewModel.UpdateAsync().ConfigureAwait(false);
 
             var reportDirectory = _optionsViewModel.OutputDirectory;
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
             var reportFileName = _optionsViewModel.DefaultOutputName;
 
-            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, Path.Combine(reportDirectory, reportFileName));
+            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, Path.Combine(reportDirectory, reportFileName)).ConfigureAwait(false);
             var issuesBefore = _reporter.Issues.Count;
 
-            var result = await _client.WriteAnalysisReportsAsync(analysisOptions, includeJson);
+            var result = await _client.WriteAnalysisReportsAsync(analysisOptions, includeJson).ConfigureAwait(false);
 
             if (!result.Paths.Any())
             {
                 var issues = _reporter.Issues.ToArray();
+
+                await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
                 for (int i = issuesBefore; i < issues.Length; i++)
                 {
@@ -64,19 +68,21 @@ namespace ApiPortVS.Analyze
                 }
             }
 
-            _viewer.View(result.Paths);
+            await _viewer.ViewAsync(result.Paths).ConfigureAwait(false);
 
             return result.Result;
         }
 
         private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, string reportFileName)
         {
-            await _optionsViewModel.UpdateAsync();
+            await _optionsViewModel.UpdateAsync().ConfigureAwait(false);
 
             foreach (var invalidPlatform in _optionsViewModel.InvalidTargets)
             {
                 if (invalidPlatform.Versions.Any(v => v.IsSelected))
                 {
+                    await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                     var message = string.Format(LocalizedStrings.InvalidPlatformSelectedFormat, invalidPlatform.Name);
                     _outputWindow.WriteLine(message);
                 }
@@ -89,6 +95,8 @@ namespace ApiPortVS.Analyze
 
             if (!targets.Any())
             {
+                await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                 _outputWindow.WriteLine(LocalizedStrings.UsingDefaultTargets);
                 _outputWindow.WriteLine(LocalizedStrings.TargetSelectionGuidance);
             }

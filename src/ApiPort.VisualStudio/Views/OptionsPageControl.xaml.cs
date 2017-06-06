@@ -24,7 +24,7 @@ namespace ApiPortVS.Views
             DataContext = viewModel;
             GuidanceLink.NavigateUri = new Uri(LocalizedStrings.MoreInformationUrl);
 
-            Loaded += async (s, e) => await viewModel.UpdateAsync();
+            Loaded += async (s, e) => await viewModel.UpdateAsync().ConfigureAwait(false);
             Unloaded += (s, e) => viewModel.Save();
         }
 
@@ -35,7 +35,7 @@ namespace ApiPortVS.Views
 
         private async void RefreshRequested(object sender, RoutedEventArgs e)
         {
-            await ViewModel.UpdateAsync(force: true);
+            await ViewModel.UpdateAsync(force: true).ConfigureAwait(false);
         }
 
         private void UpdateDirectoryClick(object sender, RoutedEventArgs e)

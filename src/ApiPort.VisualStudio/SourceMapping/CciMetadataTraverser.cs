@@ -25,9 +25,11 @@ namespace ApiPortVS.SourceMapping
         private readonly IDictionary<string, MissingTypeInfo> _interestingTypes;
         private readonly ReportingResult _analysis;
         private readonly PdbReader _pdbReader;
+        private readonly string _assemblyPath;
 
-        public CciMetadataTraverser(ReportingResult analysis, PdbReader pdbReader)
+        public CciMetadataTraverser(string assemblyPath, ReportingResult analysis, PdbReader pdbReader)
         {
+            _assemblyPath = assemblyPath;
             _analysis = analysis;
             _pdbReader = pdbReader;
 
@@ -142,7 +144,7 @@ namespace ApiPortVS.SourceMapping
         {
             var unsupportedPlatformNames = GetUnsupportedPlatformNames(GetTargetStatus(memberInfo));
 
-            return new CciSourceItem(location, memberInfo, unsupportedPlatformNames);
+            return new CciSourceItem(_assemblyPath, location, memberInfo, unsupportedPlatformNames);
         }
 
         [DebuggerDisplay("{_item}")]
@@ -154,8 +156,9 @@ namespace ApiPortVS.SourceMapping
             private readonly int _line;
             private readonly string _path;
 
-            public CciSourceItem(IPrimarySourceLocation location, MissingInfo item, IEnumerable<FrameworkName> unsupportedPlatformNames)
+            public CciSourceItem(string assembly, IPrimarySourceLocation location, MissingInfo item, IEnumerable<FrameworkName> unsupportedPlatformNames)
             {
+                Assembly = assembly;
                 _column = location.StartColumn;
                 _line = location.StartLine;
                 _path = location.SourceDocument.Location;
@@ -174,6 +177,8 @@ namespace ApiPortVS.SourceMapping
             public int Line { get { return _line; } }
 
             public string Path { get { return _path; } }
+
+            public string Assembly { get; }
         }
     }
 }

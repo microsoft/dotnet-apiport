@@ -6,10 +6,15 @@ using ApiPortVS.Resources;
 using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+
+using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS.Analyze
 {
@@ -38,9 +43,9 @@ namespace ApiPortVS.Analyze
             _errorList = errorList;
         }
 
-        public async Task AnalyzeProjectAsync(ICollection<Project> projects)
+        public async Task AnalyzeProjectAsync(ICollection<Project> projects, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var buildSucceeded = await _builder.BuildAsync(projects);
+            var buildSucceeded = await _builder.BuildAsync(projects).ConfigureAwait(false);
 
             if (!buildSucceeded)
             {
@@ -48,13 +53,34 @@ namespace ApiPortVS.Analyze
             }
 
             // TODO: Add option to include everything in output, not just build artifacts
-            var targetAssemblies = projects.SelectMany(p => p.GetAssemblyPaths().Where(x => !string.IsNullOrEmpty(x))).ToList();
+            var targetAssemblies = new ConcurrentBag<string>();
 
-            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true);
+            foreach (var project in projects)
+            {
+                var output = await project.GetBuildOutputFilesAsync().ConfigureAwait(false);
 
-            var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result));
+                // Could not find any output files for this. Skip it.
+                if (output == null)
+                {
+                    continue;
+                }
 
-            DisplaySourceItemsInErrorList(sourceItems, projects);
+                foreach (var file in output)
+                {
+                    targetAssemblies.Add(file);
+                }
+            }
+
+            if (!targetAssemblies.Any())
+            {
+                throw new PortabilityAnalyzerException(LocalizedStrings.FailedToLocateBuildOutputDir);
+            }
+
+            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true).ConfigureAwait(false);
+
+            var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result)).ConfigureAwait(false);
+
+            await DisplaySourceItemsInErrorList(sourceItems, projects).ConfigureAwait(false);
         }
 
         public bool FileHasAnalyzableExtension(string fileName)
@@ -79,27 +105,54 @@ namespace ApiPortVS.Analyze
             }
         }
 
-        private void DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, ICollection<Project> projects)
+        private async Task DisplaySourceItemsInErrorList(IEnumerable<ISourceMappedItem> items, ICollection<Project> projects)
         {
             if (!items.Any())
             {
                 return;
             }
 
+            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             _errorList.Tasks.Clear();
             _errorList.Refresh();
             _errorList.SuspendRefresh();
 
+            var projectWithOutputMappings = new ConcurrentDictionary<string, IVsHierarchy>();
+
+            foreach (var project in projects)
+            {
+                var outputs = await project.GetBuildOutputFilesAsync().ConfigureAwait(false);
+
+                if (outputs == null)
+                {
+                    continue;
+                }
+
+                var hierarchy = project.GetHierarchy();
+
+                foreach (var output in outputs)
+                {
+                    projectWithOutputMappings.AddOrUpdate(output, hierarchy, (existingKey, existingValue) => hierarchy);
+                }
+            }
+
+            await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             try
             {
-                // Using a single project for this appears to work, but there may be a better way
-                var hierarchy = projects.First().GetHierarchy();
+                var defaultHierarchy = projects.First().GetHierarchy();
 
                 foreach (var item in items)
                 {
                     if (!_fileSystem.FileExists(item.Path))
                     {
                         continue;
+                    }
+
+                    if (!projectWithOutputMappings.TryGetValue(item.Assembly, out IVsHierarchy hierarchy))
+                    {
+                        hierarchy = defaultHierarchy;
                     }
 
                     var errorWindowTask = item.GetErrorWindowTask(hierarchy);

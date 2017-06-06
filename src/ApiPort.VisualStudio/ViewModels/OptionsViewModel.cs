@@ -111,8 +111,8 @@ namespace ApiPortVS.ViewModels
 
             try
             {
-                await UpdateTargetsAsync();
-                await UpdateResultsAsync();
+                await UpdateTargetsAsync().ConfigureAwait(false);
+                await UpdateResultsAsync().ConfigureAwait(false);
 
                 _optionsModel.LastUpdate = DateTimeOffset.Now;
 
@@ -130,7 +130,7 @@ namespace ApiPortVS.ViewModels
 
         private async Task UpdateResultsAsync()
         {
-            var formats = await _apiPortService.GetResultFormatsAsync();
+            var formats = await _apiPortService.GetResultFormatsAsync().ConfigureAwait(false);
             var current = new HashSet<string>(Formats.Where(f => f.IsSelected).Select(f => f.MimeType), StringComparer.OrdinalIgnoreCase);
 
             if (current.Count == 0)
@@ -155,7 +155,7 @@ namespace ApiPortVS.ViewModels
         /// <returns>Targets that were removed</returns>
         private async Task UpdateTargetsAsync()
         {
-            var targets = await GetTargetsAsync();
+            var targets = await GetTargetsAsync().ConfigureAwait(false);
             var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t =>
             {
                 return new TargetPlatform
@@ -207,7 +207,7 @@ namespace ApiPortVS.ViewModels
 
         private async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
         {
-            var allTargetInfos = await _apiPortService.GetTargetsAsync();
+            var allTargetInfos = await _apiPortService.GetTargetsAsync().ConfigureAwait(false);
 
             // We don't want any grouped targets as that option only makes sense for command line
             var targetInfos = allTargetInfos.Response.Where(t => !t.ExpandedTargets.Any());

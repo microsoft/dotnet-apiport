@@ -1,7 +1,9 @@
-﻿namespace ApiPortVS.Reporting
+﻿using System.Threading.Tasks;
+
+namespace ApiPortVS.Reporting
 {
     internal interface IResultToolbar
     {
-        void ShowToolbar();
+        Task ShowToolbarAsync();
     }
 }
