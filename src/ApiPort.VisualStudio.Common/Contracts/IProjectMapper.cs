@@ -10,5 +10,7 @@ namespace ApiPortVS.Contracts
     public interface IProjectMapper
     {
         Task<IVsHierarchy> GetVsHierarchyAsync(Project project);
+
+        Task<IVsCfg> GetVsProjectConfigurationAsync(Project project);
     }
 }
