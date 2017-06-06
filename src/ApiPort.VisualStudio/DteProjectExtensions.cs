@@ -21,7 +21,6 @@ namespace ApiPortVS
 {
     internal static class DteProjectExtensions
     {
-        private const string FSharpProjectKindString = "{f2a71f9b-5d33-465a-a702-920d77279786}";
 
         /// <summary>
         /// Tries to fetch output items if it uses Common Project System then
@@ -194,25 +193,6 @@ namespace ApiPortVS
             return Path.GetDirectoryName(project.FullName); // FullName is the project file path
         }
 
-        public static bool IsDotNetProject(this Project project)
-        {
-            if (project.CodeModel == null) // e.g. F# projects
-            {
-                return IsFSharpProject(project);
-            }
-
-            switch (project.CodeModel.Language)
-            {
-                case Constants.CodeModelLanguageConstants.vsCMLanguageCSharp:
-                case Constants.CodeModelLanguageConstants.vsCMLanguageVB:
-                    return true;
-                case Constants.CodeModelLanguageConstants.vsCMLanguageVC:
-                    return project.IsManagedCppProject();
-            }
-
-            return false;
-        }
-
         public static IVsHierarchy GetHierarchy(this Project project)
         {
             var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
@@ -286,27 +266,6 @@ namespace ApiPortVS
                     yield return subProject;
                 }
             }
-        }
-
-        private static bool IsFSharpProject(this Project project)
-        {
-            return string.Equals(project.Kind, FSharpProjectKindString, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static bool IsManagedCppProject(this Project project)
-        {
-            var clrSupport = GetPropertyValueFromBuildProject(project, "CLRSupport");
-
-            return bool.Parse(clrSupport);
-        }
-
-        private static string GetPropertyValueFromBuildProject(Project project, string property)
-        {
-            var buildProject = new Microsoft.Build.Evaluation.Project(project.FullName);
-            var value = buildProject.GetPropertyValue(property);
-            Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.UnloadProject(buildProject);
-
-            return value;
         }
 
         private static bool IsSolutionFolder(Project project)

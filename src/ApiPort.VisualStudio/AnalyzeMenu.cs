@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Analyze;
+using ApiPortVS.Common;
 using ApiPortVS.Resources;
 using Autofac;
 using EnvDTE;

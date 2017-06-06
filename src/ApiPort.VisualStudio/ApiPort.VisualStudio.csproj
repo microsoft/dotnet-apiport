@@ -314,7 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyRedirectResolver.cs" />
-    <Compile Include="IVsHierarchyExtensions.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
