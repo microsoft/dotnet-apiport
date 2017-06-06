@@ -282,4 +282,10 @@ Copyright (C) Microsoft Corporation. All rights reserved.</value>
   <data name="GeneralSettings" xml:space="preserve">
     <value>General</value>
   </data>
+  <data name="ReportDirectoryNotAvailable" xml:space="preserve">
+    <value>The directory the report was in is not available. It may have been deleted.</value>
+  </data>
+  <data name="ReportNotAvailable" xml:space="preserve">
+    <value>The report is not available. It may have been deleted.</value>
+  </data>
 </root>

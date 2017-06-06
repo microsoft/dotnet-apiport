@@ -45,6 +45,13 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
+    <!-- Debugging Settings; Stored in project file instead of .user file to be available to everyone -->
+    <StartAction>Program</StartAction>
+    <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/RootSuffix Exp</StartArguments>
+    <EnableUnmanagedDebugging>False</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup>
     <OutputPath>$(OutputDrop)\$(AssemblyName)</OutputPath>
   </PropertyGroup>
   <ItemGroup>

@@ -1,11 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPortVS.Resources;
 using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ApiPortVS.ViewModels
@@ -23,9 +26,39 @@ namespace ApiPortVS.ViewModels
         public OutputViewModel()
         {
             Paths = new ObservableCollection<string>();
-            OpenFile = new DelegateCommand<string>(path => Process.Start(path));
-            OpenDirectory = new DelegateCommand<string>(path => Process.Start(Path.GetDirectoryName(path)));
             SaveAs = new DelegateCommand<string>(SaveFileAs);
+            OpenFile = new DelegateCommand<string>(path =>
+            {
+                if (File.Exists(path))
+                {
+                    Process.Start(path);
+                }
+                else
+                {
+                    MessageBox.Show(LocalizedStrings.ReportNotAvailable);
+                    Paths.Remove(path);
+                }
+            });
+            OpenDirectory = new DelegateCommand<string>(path =>
+            {
+                var directory = Path.GetDirectoryName(path);
+
+                if (Directory.Exists(directory))
+                {
+                    Process.Start(directory);
+                }
+                else
+                {
+                    MessageBox.Show(LocalizedStrings.ReportDirectoryNotAvailable);
+
+                    var pathsToRemove = Paths.Where(p => string.Equals(Path.GetDirectoryName(p), directory, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                    foreach (var p in pathsToRemove)
+                    {
+                        Paths.Remove(p);
+                    }
+                }
+            });
         }
 
         private static void SaveFileAs(string path)
@@ -54,7 +87,6 @@ namespace ApiPortVS.ViewModels
         }
 
         private class DelegateCommand<T> : ICommand
-            where T : class
         {
             private readonly Action<T> _action;
 
@@ -71,9 +103,7 @@ namespace ApiPortVS.ViewModels
 
             public void Execute(object parameter)
             {
-                var obj = parameter as T;
-
-                if (obj != null)
+                if (parameter is T obj)
                 {
                     _action(obj);
                 }

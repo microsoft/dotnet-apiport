@@ -13,37 +13,39 @@ using System.Reflection;
 namespace ApiPortVS.Models
 {
     /// <summary>
-    /// The options for ApiPort VS that is persisted
+    /// The options for ApiPort VS that are persisted
     /// </summary>
     public class OptionsModel : NotifyPropertyBase
     {
-        private const string OptionsFileName = "options.dat";
-
-        public static readonly string OptionsFilePath;
+        private static readonly string s_optionsFilePath;
+        private static readonly string s_defaultOutputDirectory;
+        private static readonly string s_defaultOutputName;
 
         private IList<SelectedResultFormat> _formats;
         private IList<TargetPlatform> _platforms;
         private string _outputDirectory;
-        private string _defaultOutputName;
+        private string _outputName;
 
         static OptionsModel()
         {
             var assembly = Assembly.GetExecutingAssembly();
             var directory = Path.GetDirectoryName(assembly.Location);
 
-            OptionsFilePath = Path.Combine(directory, OptionsFileName);
+            s_defaultOutputName = "ApiPortAnalysis";
+            s_defaultOutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
+            s_optionsFilePath = Path.Combine(directory, "options.dat");
         }
 
         public OptionsModel()
         {
             _platforms = Array.Empty<TargetPlatform>();
             _formats = Array.Empty<SelectedResultFormat>();
-            _defaultOutputName = "ApiPortAnalysis";
+            _outputName = s_defaultOutputName;
+            _outputDirectory = s_defaultOutputDirectory;
 
             LastUpdate = DateTimeOffset.MinValue;
-            OutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
         }
-        
+
         public DateTimeOffset LastUpdate { get; set; }
 
         public IList<SelectedResultFormat> Formats
@@ -61,33 +63,22 @@ namespace ApiPortVS.Models
         public string OutputDirectory
         {
             get { return _outputDirectory; }
-            set
-            {
-                UpdateProperty(ref _outputDirectory, value);
-
-                if (!Directory.Exists(_outputDirectory))
-                {
-                    Directory.CreateDirectory(_outputDirectory);
-                }
-            }
+            set { UpdateProperty(ref _outputDirectory, string.IsNullOrWhiteSpace(value) ? _outputDirectory : value); }
         }
 
         public string DefaultOutputName
         {
-            get { return _defaultOutputName; }
-            set
-            {
-                UpdateProperty(ref _defaultOutputName, value);
-            }
+            get { return _outputName; }
+            set { UpdateProperty(ref _outputName, string.IsNullOrWhiteSpace(value) ? s_defaultOutputName : value); }
         }
 
         public static OptionsModel Load()
         {
             try
             {
-                if (File.Exists(OptionsFilePath))
+                if (File.Exists(s_optionsFilePath))
                 {
-                    var bytes = File.ReadAllBytes(OptionsFilePath);
+                    var bytes = File.ReadAllBytes(s_optionsFilePath);
 
                     return bytes.Deserialize<OptionsModel>();
                 }
@@ -104,13 +95,13 @@ namespace ApiPortVS.Models
         {
             try
             {
-                File.WriteAllBytes(OptionsFilePath, this.Serialize());
+                File.WriteAllBytes(s_optionsFilePath, this.Serialize());
 
                 return true;
             }
             catch (IOException)
             {
-                Debug.WriteLine(string.Format(LocalizedStrings.UnableToSaveFileFormat, OptionsFilePath));
+                Debug.WriteLine(string.Format(LocalizedStrings.UnableToSaveFileFormat, s_optionsFilePath));
 
                 return false;
             }
