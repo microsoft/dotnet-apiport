@@ -159,6 +159,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProjectBuilder.cs" />
     <Compile Include="VSThreadingService.cs" />
   </ItemGroup>
   <ItemGroup>
