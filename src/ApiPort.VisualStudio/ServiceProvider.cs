@@ -54,9 +54,9 @@ namespace ApiPortVS
                 .AsSelf();
             builder.RegisterInstance(new AssemblyRedirectResolver(AssemblyDirectory))
                 .AsSelf();
-            builder.RegisterType<ApiPortService>().
-                As<IApiPortService>().
-                WithParameter(TypedParameter.From<string>(DefaultEndpoint))
+            builder.RegisterType<ApiPortService>()
+                .As<IApiPortService>()
+                .WithParameter(TypedParameter.From<string>(DefaultEndpoint))
                 .SingleInstance();
             builder.RegisterType<ApiPortClient>()
                 .AsSelf()
@@ -79,6 +79,7 @@ namespace ApiPortVS
                 .SingleInstance();
             builder.RegisterType<OutputWindowWriter>()
                 .AsSelf()
+                .As<IOutputWindowWriter>()
                 .As<TextWriter>()
                 .SingleInstance();
             builder.RegisterType<TextWriterProgressReporter>()
@@ -122,7 +123,7 @@ namespace ApiPortVS
                 .As<ISourceLineMapper>()
                 .InstancePerLifetimeScope();
 
-            var dte = ((IServiceProvider)serviceProvider).GetService(typeof(DTE)) as DTE;
+            var dte = Package.GetGlobalService(typeof(DTE)) as DTE;
             var version = new Version(dte.Version);
 
             switch (version.Major)
@@ -153,6 +154,8 @@ namespace ApiPortVS
             builder.RegisterInstance(serviceProvider)
                 .As<IResultToolbar>()
                 .As<IServiceProvider>();
+            builder.RegisterType<Microsoft.VisualStudio.Shell.ErrorListProvider>()
+                .AsSelf();
             builder.RegisterType<ErrorListProvider>()
                 .As<IErrorListProvider>()
                 .SingleInstance();

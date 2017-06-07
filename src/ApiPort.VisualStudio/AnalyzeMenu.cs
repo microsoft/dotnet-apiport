@@ -3,6 +3,7 @@
 
 using ApiPortVS.Analyze;
 using ApiPortVS.Common;
+using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
 using Autofac;
 using EnvDTE;
@@ -21,11 +22,11 @@ namespace ApiPortVS
 {
     internal class AnalyzeMenu
     {
-        private readonly OutputWindowWriter _output;
+        private readonly IOutputWindowWriter _output;
         private readonly DTE _dte;
         private readonly ILifetimeScope _scope;
 
-        public AnalyzeMenu(ILifetimeScope scope, DTE dte, OutputWindowWriter output)
+        public AnalyzeMenu(ILifetimeScope scope, DTE dte, IOutputWindowWriter output)
         {
             _scope = scope;
             _dte = dte;
