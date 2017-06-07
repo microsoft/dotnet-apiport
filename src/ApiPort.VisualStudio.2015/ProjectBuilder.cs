@@ -2,6 +2,7 @@
 using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio.ProjectSystem;
+using Microsoft.VisualStudio.ProjectSystem.Build;
 using Microsoft.VisualStudio.ProjectSystem.Designers;
 using Microsoft.VisualStudio.ProjectSystem.Utilities;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -17,7 +18,7 @@ namespace ApiPortVS.VS2015
 {
     public class ProjectBuilder : DefaultProjectBuilder
     {
-        public ProjectBuilder(IVsSolutionBuildManager2 buildManager, IVSThreadingService threadingService, IProjectMapper projectMapper) 
+        public ProjectBuilder(IVsSolutionBuildManager2 buildManager, IVSThreadingService threadingService, IProjectMapper projectMapper)
             : base(buildManager, threadingService, projectMapper)
         { }
 
@@ -37,7 +38,7 @@ namespace ApiPortVS.VS2015
 
             var output = await GetBuildOutputFilesFromCPSAsync(project, cancellationToken).ConfigureAwait(false);
 
-            if (output != null)
+            if (output != null && output.Any())
             {
                 return output;
             }
@@ -80,24 +81,6 @@ namespace ApiPortVS.VS2015
                 return null;
             }
 
-            // There are multiple loaded configurations for this project.
-            // This is true for .NET Core projects that multi-target.
-            // We'll return all those builds so APIPort can analyze them all.
-            var configuredProjects = unconfigured.LoadedConfiguredProjects;
-
-            if (configuredProjects?.Count() > 1)
-            {
-                var bag = new ConcurrentBag<string>();
-
-                foreach (var proj in configuredProjects)
-                {
-                    var keyOutput = await proj.Services.OutputGroups.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
-                    bag.Add(keyOutput);
-                }
-
-                return bag;
-            }
-
             // This is a typical CPS project that builds one component at a time.
             var configured = await unconfigured.GetSuggestedConfiguredProjectAsync().ConfigureAwait(false);
 
@@ -107,9 +90,24 @@ namespace ApiPortVS.VS2015
             }
 
             var outputGroupsService = configured.Services.OutputGroups;
+
             var keyOutputFile = await outputGroupsService.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
 
-            return new[] { keyOutputFile };
+            if (string.IsNullOrEmpty(keyOutputFile))
+            {
+                var builtGroup = await outputGroupsService.GetOutputGroupAsync(Common.Constants.OutputGroups.BuiltProject).ConfigureAwait(false);
+
+                if (builtGroup?.Outputs?.Any() ?? false)
+                {
+                    return builtGroup.Outputs.Select(x => x.Key);
+                }
+            }
+            else
+            {
+                return new[] { keyOutputFile };
+            }
+
+            return null;
         }
 
         private UnconfiguredProject GetUnconfiguredProject(Project project)

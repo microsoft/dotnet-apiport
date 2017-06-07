@@ -90,31 +90,45 @@ namespace ApiPortVS.VS2017
             // We'll return all those builds so APIPort can analyze them all.
             var configuredProjects = unconfigured.LoadedConfiguredProjects;
 
+            var bag = new ConcurrentBag<string>();
+
             if (configuredProjects?.Count() > 1)
             {
-                var bag = new ConcurrentBag<string>();
-
                 foreach (var proj in configuredProjects)
                 {
-                    var keyOutput = await proj.Services.OutputGroups.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
-                    bag.Add(keyOutput);
-                }
+                    try
+                    {
+                        var keyOutput = await proj.Services.OutputGroups.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
 
-                return bag;
+                        if (!string.IsNullOrEmpty(keyOutput))
+                        {
+                            bag.Add(keyOutput);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError($"Could not fetch key output from project configuration {proj.ProjectConfiguration.Name}. Exception: {e}", e);
+                    }
+                }
             }
 
             // This is a typical CPS project that builds one component at a time.
             var configured = await unconfigured.GetSuggestedConfiguredProjectAsync().ConfigureAwait(false);
 
-            if (configured == null)
+            if (configured != null)
             {
-                return null;
+                var outputGroupsService = configured.Services.OutputGroups;
+                var keyOutputFile = await outputGroupsService.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
+
+                if (!string.IsNullOrEmpty(keyOutputFile))
+                {
+                    bag.Add(keyOutputFile);
+                }
             }
 
-            var outputGroupsService = configured.Services.OutputGroups;
-            var keyOutputFile = await outputGroupsService.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
+            var outputs = bag.Where(x => !string.IsNullOrEmpty(x)).Distinct().ToArray();
 
-            return new[] { keyOutputFile };
+            return outputs.Any() ? outputs : null;
         }
 
         private UnconfiguredProject GetUnconfiguredProject(Project project)
