@@ -14,13 +14,16 @@ namespace ApiPortVS.VS2017
                 var componentModel = serviceProvider.GetService(typeof(SComponentModel)) as IComponentModel;
                 var projectServiceAccessor = componentModel.GetService<IProjectServiceAccessor>();
                 return projectServiceAccessor.GetProjectService();
-            });
+            })
+            .SingleInstance();
 
             builder.RegisterAdapter<IProjectService, IProjectThreadingService>(service => service.Services.ThreadingPolicy);
             builder.RegisterType<VSThreadingService>()
-                .As<IVSThreadingService>();
+                .As<IVSThreadingService>()
+                .SingleInstance();
             builder.RegisterType<ProjectBuilder>()
-                .As<IProjectBuilder>();
+                .As<IProjectBuilder>()
+                .SingleInstance();
 
             base.Load(builder);
         }

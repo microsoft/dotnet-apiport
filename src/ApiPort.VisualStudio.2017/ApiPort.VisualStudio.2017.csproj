@@ -167,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ProjectBuilder.cs" />
-    <Compile Include="VS2017Module.cs" />
+    <Compile Include="ServiceProvider.cs" />
     <Compile Include="VSThreadingService.cs" />
   </ItemGroup>
   <ItemGroup>
