@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ProjectBuilder.cs" />
+    <Compile Include="ServiceProvider.cs" />
     <Compile Include="VSThreadingService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
