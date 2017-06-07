@@ -72,8 +72,7 @@ namespace ApiPortVS
             {
                 _output.WriteLine();
                 _output.WriteLine(LocalizedStrings.UnknownError);
-
-                Trace.WriteLine(ex);
+                _output.WriteLine(ex.ToString());
             }
             finally
             {
