@@ -28,8 +28,6 @@ namespace ApiPortVS.VS2015
             builder.RegisterType<ProjectBuilder2015>()
                 .As<IProjectBuilder>()
                 .SingleInstance();
-
-            base.Load(builder);
         }
     }
 }
