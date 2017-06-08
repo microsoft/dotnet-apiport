@@ -1,24 +1,28 @@
-﻿using ApiPortVS.Common;
-using ApiPortVS.Contracts;
-using EnvDTE;
-using Microsoft.VisualStudio.ProjectSystem;
-using Microsoft.VisualStudio.ProjectSystem.Build;
-using Microsoft.VisualStudio.ProjectSystem.Designers;
-using Microsoft.VisualStudio.ProjectSystem.Utilities;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿using ApiPortVS.Contracts;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell.Interop;
+using System.Threading;
+using ApiPortVS.Common;
+using System.Diagnostics;
+using Microsoft.VisualStudio.ProjectSystem;
+using Microsoft.VisualStudio.ProjectSystem.Properties;
+using Microsoft.VisualStudio;
+using System.Collections.Concurrent;
+using Microsoft.VisualStudio.ProjectSystem.Build;
 
-namespace ApiPortVS.VS2015
+namespace ApiPortVS.VS2017
 {
-    public class ProjectBuilder : DefaultProjectBuilder
+    public class ProjectBuilder2015 : DefaultProjectBuilder
     {
-        public ProjectBuilder(IVsSolutionBuildManager2 buildManager, IVSThreadingService threadingService, IProjectMapper projectMapper)
+        public ProjectBuilder2015(
+            IVsSolutionBuildManager2 buildManager,
+            IVSThreadingService threadingService,
+            IProjectMapper projectMapper)
             : base(buildManager, threadingService, projectMapper)
         { }
 
@@ -38,7 +42,7 @@ namespace ApiPortVS.VS2015
 
             var output = await GetBuildOutputFilesFromCPSAsync(project, cancellationToken).ConfigureAwait(false);
 
-            if (output != null && output.Any())
+            if (output != null)
             {
                 return output;
             }
@@ -81,33 +85,50 @@ namespace ApiPortVS.VS2015
                 return null;
             }
 
+            // There are multiple loaded configurations for this project.
+            // This is true for .NET Core projects that multi-target.
+            // We'll return all those builds so APIPort can analyze them all.
+            var configuredProjects = unconfigured.LoadedConfiguredProjects;
+
+            var bag = new ConcurrentBag<string>();
+
+            if (configuredProjects?.Count() > 1)
+            {
+                foreach (var proj in configuredProjects)
+                {
+                    try
+                    {
+                        var keyOutput = await proj.Services.OutputGroups.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
+
+                        if (!string.IsNullOrEmpty(keyOutput))
+                        {
+                            bag.Add(keyOutput);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError($"Could not fetch key output from project configuration {proj.ProjectConfiguration.Name}. Exception: {e}", e);
+                    }
+                }
+            }
+
             // This is a typical CPS project that builds one component at a time.
             var configured = await unconfigured.GetSuggestedConfiguredProjectAsync().ConfigureAwait(false);
 
-            if (configured == null)
+            if (configured != null)
             {
-                return null;
-            }
+                var outputGroupsService = configured.Services.OutputGroups;
+                var keyOutputFile = await outputGroupsService.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
 
-            var outputGroupsService = configured.Services.OutputGroups;
-
-            var keyOutputFile = await outputGroupsService.GetKeyOutputAsync(cancellationToken).ConfigureAwait(false);
-
-            if (string.IsNullOrEmpty(keyOutputFile))
-            {
-                var builtGroup = await outputGroupsService.GetOutputGroupAsync(Common.Constants.OutputGroups.BuiltProject).ConfigureAwait(false);
-
-                if (builtGroup?.Outputs?.Any() ?? false)
+                if (!string.IsNullOrEmpty(keyOutputFile))
                 {
-                    return builtGroup.Outputs.Select(x => x.Key);
+                    bag.Add(keyOutputFile);
                 }
             }
-            else
-            {
-                return new[] { keyOutputFile };
-            }
 
-            return null;
+            var outputs = bag.Where(x => !string.IsNullOrEmpty(x)).Distinct().ToArray();
+
+            return outputs.Any() ? outputs : null;
         }
 
         private UnconfiguredProject GetUnconfiguredProject(Project project)

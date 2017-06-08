@@ -25,7 +25,7 @@ namespace ApiPortVS.VS2015
             builder.RegisterType<VSThreadingService>()
                 .As<IVSThreadingService>()
                 .SingleInstance();
-            builder.RegisterType<ProjectBuilder>()
+            builder.RegisterType<ProjectBuilder2015>()
                 .As<IProjectBuilder>()
                 .SingleInstance();
 

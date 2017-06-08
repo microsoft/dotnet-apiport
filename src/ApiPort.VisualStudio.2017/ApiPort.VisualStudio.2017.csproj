@@ -166,7 +166,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProjectBuilder.cs" />
+    <Compile Include="ProjectBuilder2015.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="VSThreadingService.cs" />
   </ItemGroup>
