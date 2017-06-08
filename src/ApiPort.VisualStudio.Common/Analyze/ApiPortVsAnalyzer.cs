@@ -12,30 +12,31 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using VisualStudio = Microsoft.VisualStudio.Shell;
-
 namespace ApiPortVS.Analyze
 {
     public class ApiPortVsAnalyzer : IVsApiPortAnalyzer
     {
         private readonly ApiPortClient _client;
         private readonly OptionsViewModel _optionsViewModel;
-        private readonly OutputWindowWriter _outputWindow;
+        private readonly IOutputWindowWriter _outputWindow;
         private readonly IProgressReporter _reporter;
         private readonly IReportViewer _viewer;
+        private readonly IVSThreadingService _threadingService;
 
         public ApiPortVsAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
-            OutputWindowWriter outputWindow,
+            IOutputWindowWriter outputWindow,
             IReportViewer viewer,
-            IProgressReporter reporter)
+            IProgressReporter reporter,
+            IVSThreadingService threadingService)
         {
             _client = client;
             _optionsViewModel = optionsViewModel;
             _outputWindow = outputWindow;
             _viewer = viewer;
             _reporter = reporter;
+            _threadingService = threadingService;
         }
 
         public async Task<ReportingResult> WriteAnalysisReportsAsync(
@@ -60,7 +61,7 @@ namespace ApiPortVS.Analyze
             {
                 var issues = _reporter.Issues.ToArray();
 
-                await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await _threadingService.SwitchToMainThreadAsync();
 
                 for (int i = issuesBefore; i < issues.Length; i++)
                 {
@@ -81,7 +82,7 @@ namespace ApiPortVS.Analyze
             {
                 if (invalidPlatform.Versions.Any(v => v.IsSelected))
                 {
-                    await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await _threadingService.SwitchToMainThreadAsync();
 
                     var message = string.Format(LocalizedStrings.InvalidPlatformSelectedFormat, invalidPlatform.Name);
                     _outputWindow.WriteLine(message);
@@ -95,7 +96,7 @@ namespace ApiPortVS.Analyze
 
             if (!targets.Any())
             {
-                await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await _threadingService.SwitchToMainThreadAsync();
 
                 _outputWindow.WriteLine(LocalizedStrings.UsingDefaultTargets);
                 _outputWindow.WriteLine(LocalizedStrings.TargetSelectionGuidance);

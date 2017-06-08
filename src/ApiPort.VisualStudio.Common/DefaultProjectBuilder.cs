@@ -1,35 +1,70 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using static Microsoft.VisualStudio.VSConstants;
+using System;
+using System.Threading;
+using Microsoft.VisualStudio;
+using System.Diagnostics;
 
 namespace ApiPortVS
 {
-    public class ProjectBuilder
+    /// <summary>
+    /// Default project builder that has existed before Common Project System.
+    /// </summary>
+    public class DefaultProjectBuilder : IProjectBuilder
     {
-        private IVsSolutionBuildManager2 _buildManager;
+        protected readonly IVsSolutionBuildManager2 _buildManager;
+        protected readonly IProjectMapper _projectMapper;
+        protected readonly IVSThreadingService _threadingService;
 
-        public ProjectBuilder(IVsSolutionBuildManager2 buildManager)
+        public DefaultProjectBuilder(
+            IVsSolutionBuildManager2 buildManager,
+            IVSThreadingService threadingService,
+            IProjectMapper projectMapper)
         {
+            _projectMapper = projectMapper;
+            _threadingService = threadingService;
             _buildManager = buildManager;
         }
 
-        public Task<bool> BuildAsync(ICollection<Project> projects)
+        public virtual async Task<bool> BuildAsync(IEnumerable<Project> projects)
         {
-            var projectHierarchy = projects.Select(project => project.GetHierarchy()).ToArray();
-            var buildUpdateFlags = Enumerable.Repeat((uint)VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD, projectHierarchy.Length).ToArray();
+            if (projects == null)
+            {
+                throw new ArgumentNullException(nameof(projects));
+            }
+
+            if (!projects.Any())
+            {
+                return true;
+            }
+
+            var bag = new ConcurrentBag<IVsHierarchy>();
+
+            foreach (var project in projects)
+            {
+                var hierarchy = await _projectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
+                bag.Add(hierarchy);
+            }
+
+            var hierarchies = bag.ToArray();
+
+            var buildUpdateFlags = Enumerable.Repeat((uint)VSSOLNBUILDUPDATEFLAGS.SBF_OPERATION_BUILD, hierarchies.Length).ToArray();
 
             // Launches an asynchronous build operation and returns S_OK immediately if the build begins.
             // The result does not indicate completion or success of the build
             var updateErrorCode = _buildManager.StartUpdateSpecificProjectConfigurations(
-                (uint)projects.Count,
-                projectHierarchy,
+                (uint)projects.Count(),
+                hierarchies,
                 null,
                 null,
                 buildUpdateFlags,
@@ -49,7 +84,55 @@ namespace ApiPortVS
                 tcs.SetResult(false);
             }
 
-            return tcs.Task;
+            return await tcs.Task;
+        }
+
+        public virtual async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var configuration = await _projectMapper.GetVsProjectConfigurationAsync(project).ConfigureAwait(false);
+
+            if (configuration == null)
+            {
+                return null;
+            }
+
+            if (!(configuration is IVsProjectCfg2 configuration2))
+            {
+                Trace.TraceError($"IVsCfg returned {configuration.GetType()} is not of the right type. Expected: {nameof(IVsProjectCfg2)}");
+                return null;
+            }
+
+            await _threadingService.SwitchToMainThreadAsync();
+
+            if (ErrorHandler.Failed(configuration2.OpenOutputGroup(Common.Constants.OutputGroups.BuiltProject, out IVsOutputGroup outputGroup)))
+            {
+                Trace.TraceError($"Could not retrieve {nameof(IVsOutputGroup)} from project: {project.Name}");
+                return null;
+            }
+
+            if (!(outputGroup is IVsOutputGroup2 outputGroup2))
+            {
+                Trace.TraceError($"Could not retrieve {nameof(IVsOutputGroup2)} from project: {project.Name}");
+                return null;
+            }
+
+            if (ErrorHandler.Failed(outputGroup2.get_KeyOutputObject(out IVsOutput2 keyGroup)))
+            {
+                Trace.TraceError($"Could not retrieve {nameof(IVsOutput2)} from project: {project.Name}");
+                return null;
+            }
+
+            if (ErrorHandler.Succeeded(keyGroup.get_Property(Common.Constants.MetadataNames.OutputLocation, out object outputLoc)))
+            {
+                return new[] { outputLoc as string };
+            }
+
+            if (ErrorHandler.Succeeded(keyGroup.get_Property(Common.Constants.MetadataNames.FinalOutputPath, out object finalOutputPath)))
+            {
+                return new[] { finalOutputPath as string };
+            }
+
+            return null;
         }
 
         private class ProjectAsyncBuilder : IVsUpdateSolutionEvents
@@ -60,7 +143,7 @@ namespace ApiPortVS
             /// <summary>
             /// A cookie used to track this instance in IVsSolutionBuildManager solution events.
             /// </summary>
-            public uint UpdateSolutionEventsCookie;
+            internal uint UpdateSolutionEventsCookie;
 
             public ProjectAsyncBuilder(IVsSolutionBuildManager manager, TaskCompletionSource<bool> completionSource)
             {

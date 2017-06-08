@@ -2,7 +2,7 @@
 
 namespace ApiPortVS.Reporting
 {
-    internal interface IResultToolbar
+    public interface IResultToolbar
     {
         Task ShowToolbarAsync();
     }

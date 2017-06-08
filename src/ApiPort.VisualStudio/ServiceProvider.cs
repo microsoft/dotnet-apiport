@@ -36,14 +36,9 @@ namespace ApiPortVS
             var builder = new ContainerBuilder();
 
             // VS type registration
-            builder.RegisterType<ErrorListProvider>()
-                .AsSelf()
-                .SingleInstance();
-            builder.RegisterInstance(serviceProvider)
-                .As<IResultToolbar>()
-                .As<IServiceProvider>();
-            builder.Register(_ => Package.GetGlobalService(typeof(SVsWebBrowsingService)))
-                .As<IVsWebBrowsingService>();
+            // Registers all of the Visual Studio Package components.
+            RegisterVisualStudioComponents(builder, serviceProvider);
+
             builder.RegisterType<VsBrowserReportViewer>()
                 .As<IReportViewer>()
                 .SingleInstance();
@@ -53,19 +48,15 @@ namespace ApiPortVS
             builder.RegisterType<ApiPortVsAnalyzer>()
                 .As<IVsApiPortAnalyzer>()
                 .InstancePerLifetimeScope();
-            builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
-                .As<IVsSolutionBuildManager2>();
-            builder.RegisterType<ProjectBuilder>()
-                .AsSelf();
 
             // Service registration
             builder.RegisterInstance(new ProductInformation("ApiPort_VS"))
                 .AsSelf();
             builder.RegisterInstance(new AssemblyRedirectResolver(AssemblyDirectory))
                 .AsSelf();
-            builder.RegisterType<ApiPortService>().
-                As<IApiPortService>().
-                WithParameter(TypedParameter.From<string>(DefaultEndpoint))
+            builder.RegisterType<ApiPortService>()
+                .As<IApiPortService>()
+                .WithParameter(TypedParameter.From<string>(DefaultEndpoint))
                 .SingleInstance();
             builder.RegisterType<ApiPortClient>()
                 .AsSelf()
@@ -88,6 +79,7 @@ namespace ApiPortVS
                 .SingleInstance();
             builder.RegisterType<OutputWindowWriter>()
                 .AsSelf()
+                .As<IOutputWindowWriter>()
                 .As<TextWriter>()
                 .SingleInstance();
             builder.RegisterType<TextWriterProgressReporter>()
@@ -96,8 +88,84 @@ namespace ApiPortVS
             builder.RegisterType<ReportFileWriter>()
                 .As<IFileWriter>()
                 .SingleInstance();
-            builder.RegisterAdapter<IServiceProvider, DTE>(provider => (DTE)provider.GetService(typeof(DTE)));
 
+            builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
+                .As<OutputViewModel>()
+                .SingleInstance();
+
+            // Register menu handlers
+            builder.RegisterType<AnalyzeMenu>()
+                .AsSelf()
+                .SingleInstance();
+            builder.RegisterType<FileListAnalyzer>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProjectAnalyzer>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<COMProjectMapper>()
+                .As<IProjectMapper>()
+                .SingleInstance();
+
+            // Register option pane services
+            builder.RegisterType<OptionsPageControl>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<OptionsViewModel>()
+              .AsSelf()
+              .InstancePerLifetimeScope();
+
+            // Metadata manipulation registrations
+            builder.RegisterType<CciDependencyFinder>()
+                .As<IDependencyFinder>()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<CciSourceLineMapper>()
+                .As<ISourceLineMapper>()
+                .InstancePerLifetimeScope();
+
+            var dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+            var version = new Version(dte.Version);
+
+            if (version.Major == 14)
+            {
+                builder.RegisterModule(new VS2015.ServiceProvider());
+            }
+            else
+            {
+                builder.RegisterModule(new VS2017.ServiceProvider());
+            }
+
+            _container = builder.Build();
+        }
+
+        public object GetService(Type serviceType)
+        {
+            return _container.Resolve(serviceType);
+        }
+
+        public void Dispose()
+        {
+            _container.Dispose();
+        }
+
+        private void RegisterVisualStudioComponents(ContainerBuilder builder, ApiPortVSPackage serviceProvider)
+        {
+            builder.RegisterInstance(serviceProvider)
+                .As<IResultToolbar>()
+                .As<IServiceProvider>();
+            builder.RegisterType<Microsoft.VisualStudio.Shell.ErrorListProvider>()
+                .AsSelf();
+            builder.RegisterType<ErrorListProvider>()
+                .As<IErrorListProvider>()
+                .SingleInstance();
+            builder.Register(_ => Package.GetGlobalService(typeof(SVsWebBrowsingService)))
+                .As<IVsWebBrowsingService>();
+            builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
+                .As<IVsSolutionBuildManager2>();
+            builder.RegisterType<DefaultProjectBuilder>()
+                .As<IProjectBuilder>();
+
+            builder.RegisterAdapter<IServiceProvider, DTE>(provider => (DTE)provider.GetService(typeof(DTE)));
             builder.RegisterAdapter<IServiceProvider, IVsOutputWindowPane>(provider =>
             {
                 var outputWindow = provider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
@@ -119,48 +187,6 @@ namespace ApiPortVS
                 // If a custom window couldn't be opened, open the general purpose window
                 return provider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
             }).SingleInstance();
-            builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
-                .As<OutputViewModel>()
-                .SingleInstance();
-
-            // Register menu handlers
-            builder.RegisterType<AnalyzeMenu>()
-                .AsSelf()
-                .SingleInstance();
-            builder.RegisterType<FileListAnalyzer>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-            builder.RegisterType<ProjectAnalyzer>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            // Register option pane services
-            builder.RegisterType<OptionsPageControl>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-            builder.RegisterType<OptionsViewModel>()
-              .AsSelf()
-              .InstancePerLifetimeScope();
-
-            // Metadata manipulation registrations
-            builder.RegisterType<CciDependencyFinder>()
-                .As<IDependencyFinder>()
-                .InstancePerLifetimeScope();
-            builder.RegisterType<CciSourceLineMapper>()
-                .As<ISourceLineMapper>()
-                .InstancePerLifetimeScope();
-
-            _container = builder.Build();
-        }
-
-        public object GetService(Type serviceType)
-        {
-            return _container.Resolve(serviceType);
-        }
-
-        public void Dispose()
-        {
-            _container.Dispose();
         }
     }
 }
