@@ -61,7 +61,6 @@ namespace ApiPortVS.Analyze
             {
                 var issues = _reporter.Issues.ToArray();
 
-                //await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 await _threadingService.SwitchToMainThreadAsync();
 
                 for (int i = issuesBefore; i < issues.Length; i++)
@@ -83,7 +82,6 @@ namespace ApiPortVS.Analyze
             {
                 if (invalidPlatform.Versions.Any(v => v.IsSelected))
                 {
-                    //await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     await _threadingService.SwitchToMainThreadAsync();
 
                     var message = string.Format(LocalizedStrings.InvalidPlatformSelectedFormat, invalidPlatform.Name);
@@ -98,7 +96,6 @@ namespace ApiPortVS.Analyze
 
             if (!targets.Any())
             {
-                //await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 await _threadingService.SwitchToMainThreadAsync();
 
                 _outputWindow.WriteLine(LocalizedStrings.UsingDefaultTargets);
