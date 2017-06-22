@@ -19,5 +19,6 @@ namespace Microsoft.Fx.Portability
         string ServiceEndpoint { get; }
         string OutputFileName { get; }
         IEnumerable<string> InvalidInputFiles { get; }
+        bool OverwriteOutputFile { get; }
     }
 }

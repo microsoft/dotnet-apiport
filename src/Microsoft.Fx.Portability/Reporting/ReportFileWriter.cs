@@ -51,12 +51,14 @@ namespace Microsoft.Fx.Portability.Reporting
                     await memoryStream.CopyToAsync(destinationStream);
                 }
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                _progressReporter.ReportIssue(string.Format(CultureInfo.InvariantCulture, ex.Message));
                 return false;
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
+                _progressReporter.ReportIssue(string.Format(CultureInfo.InvariantCulture, ex.Message));
                 return false;
             }
 

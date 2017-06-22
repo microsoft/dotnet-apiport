@@ -130,7 +130,7 @@ namespace Microsoft.Fx.Portability
                     }
                 }
 
-                var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format);
+                var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
 
                 if (!string.IsNullOrEmpty(outputPath))
                 {
@@ -169,7 +169,7 @@ namespace Microsoft.Fx.Portability
         /// Writes a report given the output format and filename.
         /// </summary>
         /// <returns>null if unable to write the report otherwise, will return the full path to the report.</returns>
-        private async Task<string> CreateReport(byte[] result, string suppliedOutputFileName, string outputFormat)
+        private async Task<string> CreateReport(byte[] result, string suppliedOutputFileName, string outputFormat, bool overwriteFile)
         {
             var filePath = Path.GetFullPath(suppliedOutputFileName);
             var outputDirectory = Path.GetDirectoryName(filePath);
@@ -181,7 +181,7 @@ namespace Microsoft.Fx.Portability
                 {
                     var extension = await GetExtensionForFormat(outputFormat);
 
-                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwrite: false);
+                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwriteFile);
 
                     if (string.IsNullOrEmpty(filename))
                     {

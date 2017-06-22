@@ -45,5 +45,7 @@ namespace ApiPortVS
         public IEnumerable<string> InvalidInputFiles { get; } = Enumerable.Empty<string>();
 
         public string ServiceEndpoint { get; } = string.Empty;
+
+        public bool OverwriteOutputFile { get; }
     }
 }

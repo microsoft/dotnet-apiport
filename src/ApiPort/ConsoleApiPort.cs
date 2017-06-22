@@ -106,11 +106,14 @@ namespace ApiPort
             var outputPaths = await _apiPortClient.WriteAnalysisReportsAsync(_options);
 
             Console.WriteLine();
-            Console.WriteLine(LocalizedStrings.OutputWrittenTo);
-
-            foreach (var outputPath in outputPaths)
+            if (outputPaths.Any())
             {
-                Console.WriteLine(outputPath);
+                Console.WriteLine(LocalizedStrings.OutputWrittenTo);
+
+                foreach (var outputPath in outputPaths)
+                {
+                    Console.WriteLine(outputPath);
+                }
             }
         }
 

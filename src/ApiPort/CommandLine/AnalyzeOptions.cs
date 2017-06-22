@@ -88,6 +88,9 @@ namespace ApiPort.CommandLine
                 TargetMapFile = options.TargetMap;
                 BreakingChangeSuppressions = options.SuppressBreakingChange;
 
+                //Set OverwriteOutputFile to true if the output file name is explicitly specified 
+                OverwriteOutputFile = string.IsNullOrWhiteSpace(options.Out) ? false : true;
+
                 UpdateRequestFlags(options);
                 UpdateInputAssemblies(options);
             }
