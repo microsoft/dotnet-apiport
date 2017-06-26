@@ -17,6 +17,8 @@ namespace Microsoft.Fx.Portability
     public class ApiPortClient
     {
         private const string Json = "json";
+        // OpenXML can only support 26 columns maximum.
+        private const int MaxNumberOfTargets = 15;
 
         private readonly IApiPortService _apiPortService;
         private readonly IProgressReporter _progressReport;
@@ -106,6 +108,8 @@ namespace Microsoft.Fx.Portability
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
         {
+            ValidateOptions(options);
+
             var jsonAdded = includeResponse ? TryAddJsonToOptions(options, out options) : false;
 
             foreach (var errorInput in options.InvalidInputFiles)
@@ -386,6 +390,23 @@ namespace Microsoft.Fx.Portability
                 };
 
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Ensures that the analysis options are valid.  If they are not,
+        /// throws a <see cref="InvalidApiPortOptionsException"/>
+        /// </summary>
+        private static void ValidateOptions(IApiPortOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            if (options.Targets.Count() > MaxNumberOfTargets)
+            {
+                throw new InvalidApiPortOptionsException(string.Format(LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
             }
         }
 
