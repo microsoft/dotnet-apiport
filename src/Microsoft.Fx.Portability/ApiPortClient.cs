@@ -16,9 +16,14 @@ namespace Microsoft.Fx.Portability
 {
     public class ApiPortClient
     {
+        /// <summary>
+        /// Maximum number of targets that can be submitted to the service at
+        /// a time.
+        /// </summary>
+        /// <remarks>OpenXML supports a maximum of 26 columns.</remarks>
+        public const int MaxNumberOfTargets = 15;
+
         private const string Json = "json";
-        // OpenXML can only support 26 columns maximum.
-        private const int MaxNumberOfTargets = 15;
 
         private readonly IApiPortService _apiPortService;
         private readonly IProgressReporter _progressReport;

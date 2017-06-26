@@ -7,17 +7,20 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPortVS.ViewModels
 {
-    public sealed class OptionsViewModel : NotifyPropertyBase
+    public sealed class OptionsViewModel : NotifyPropertyBase, IDisposable
     {
         private readonly IApiPortService _apiPortService;
         private readonly ITargetMapper _targetMapper;
         private readonly OptionsModel _optionsModel;
+        private TargetPlatformVersion[] _currentVersions = new TargetPlatformVersion[0];
 
+        private bool _hasBeenDisposed = false; // To detect redundant calls
         private bool _hasError;
         private bool _updating;
         private bool _saveMetadata;
@@ -95,6 +98,14 @@ namespace ApiPortVS.ViewModels
             set { UpdateProperty(ref _hasError, value); }
         }
 
+        private string _errorMessage;
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set { UpdateProperty(ref _errorMessage, value); }
+        }
+
+
         public void Save() => _optionsModel.Save();
 
         public IList<TargetPlatform> InvalidTargets { get; set; }
@@ -121,6 +132,7 @@ namespace ApiPortVS.ViewModels
             catch (PortabilityAnalyzerException)
             {
                 HasError = true;
+                ErrorMessage = LocalizedStrings.UnableToContactService;
             }
             finally
             {
@@ -155,6 +167,12 @@ namespace ApiPortVS.ViewModels
         /// <returns>Targets that were removed</returns>
         private async Task UpdateTargetsAsync()
         {
+            // Remove any existing subscribed events
+            foreach (var platform in _currentVersions)
+            {
+                platform.PropertyChanged -= TargetPlatformVersionChanged;
+            }
+
             var targets = await GetTargetsAsync().ConfigureAwait(false);
             var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t =>
             {
@@ -203,6 +221,30 @@ namespace ApiPortVS.ViewModels
 
             InvalidTargets = Targets.Where(p => !reconciledPlatforms.Contains(p)).ToList();
             Targets = reconciledPlatforms;
+            _currentVersions = Targets.SelectMany(x => x.Versions).ToArray();
+
+            foreach (var platform in _currentVersions)
+            {
+                platform.PropertyChanged += TargetPlatformVersionChanged;
+            }
+        }
+
+        private void TargetPlatformVersionChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!string.Equals(nameof(TargetPlatformVersion.IsSelected), e.PropertyName))
+            {
+                return;
+            }
+
+            if (_currentVersions.Count(x => x.IsSelected) > ApiPortClient.MaxNumberOfTargets)
+            {
+                HasError = true;
+                ErrorMessage = string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
+            }
+            else
+            {
+                HasError = false;
+            }
         }
 
         private async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
@@ -219,6 +261,34 @@ namespace ApiPortVS.ViewModels
                 .Select(a => new AvailableTarget { Name = a });
 
             return targetInfos.Concat(uniqueFromTargetMap).ToList();
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (_hasBeenDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                if (_currentVersions != null)
+                {
+                    foreach (var platform in _currentVersions)
+                    {
+                        platform.PropertyChanged -= TargetPlatformVersionChanged;
+                    }
+                }
+
+                _currentVersions = null;
+            }
+
+            _hasBeenDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }
