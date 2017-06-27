@@ -20,7 +20,7 @@ namespace ApiPortVS.ViewModels
         private readonly OptionsModel _optionsModel;
         private TargetPlatformVersion[] _currentVersions = new TargetPlatformVersion[0];
 
-        private bool _hasBeenDisposed = false; // To detect redundant calls
+        private bool _disposed  = false; // To detect redundant calls
         private bool _hasError;
         private bool _updating;
         private bool _saveMetadata;
@@ -265,7 +265,7 @@ namespace ApiPortVS.ViewModels
 
         private void Dispose(bool disposing)
         {
-            if (_hasBeenDisposed)
+            if (_disposed )
             {
                 return;
             }
@@ -283,12 +283,13 @@ namespace ApiPortVS.ViewModels
                 _currentVersions = null;
             }
 
-            _hasBeenDisposed = true;
+            _disposed  = true;
         }
 
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
