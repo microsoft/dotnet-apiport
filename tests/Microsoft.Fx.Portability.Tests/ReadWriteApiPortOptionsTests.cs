@@ -47,6 +47,8 @@ namespace Microsoft.Fx.Portability.Tests
 
             public IEnumerable<string> Targets { get; } = GenerateRandomList(5);
 
+            public bool OverwriteOutputFile { get; }
+
             private static IEnumerable<string> GenerateRandomList(int length)
             {
                 return Enumerable.Range(0, length)

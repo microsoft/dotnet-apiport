@@ -14,6 +14,33 @@ namespace Microsoft.Fx.Portability.Tests
     public class ReportFileWriterTests
     {
         [Fact]
+        public async Task FileExists_OverwriteTrue()
+        {
+            var dir = "dir";
+            var fileName = "file";
+            var extension = ".html";
+
+            var path = Path.Combine(dir, Path.ChangeExtension(fileName, extension));
+
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var fileSystem = Substitute.ForPartsOf<WindowsFileSystem>();
+
+            fileSystem.FileExists(path).Returns(true);
+            fileSystem.CreateFile(Arg.Any<string>()).Returns(x => new MemoryStream());
+
+            var expectedResult = path;
+            var writer = new ReportFileWriter(fileSystem, progressReporter);
+            var report = Encoding.UTF8.GetBytes("This is a test report.");
+
+            var reportPath = await writer.WriteReportAsync(report, extension, dir, fileName, overwrite: true);
+
+            Assert.Equal(expectedResult, reportPath);
+
+            fileSystem.Received(1).CreateFile(Arg.Any<string>());
+            fileSystem.Received().CreateFile(expectedResult);
+        }
+
+        [Fact]
         public async Task UniquelyNamedFileStream_FileExists_AppendsNumberToName()
         {
             var dir = "dir";

@@ -26,6 +26,7 @@ namespace Microsoft.Fx.Portability
             ServiceEndpoint = other.ServiceEndpoint;
             InvalidInputFiles = other.InvalidInputFiles;
             OutputFileName = other.OutputFileName;
+            OverwriteOutputFile = other.OverwriteOutputFile;
         }
 
         public virtual IEnumerable<string> BreakingChangeSuppressions { get; set; }
@@ -47,5 +48,7 @@ namespace Microsoft.Fx.Portability
         public virtual string ServiceEndpoint { get; set; }
 
         public virtual IEnumerable<string> Targets { get; set; }
+
+        public virtual bool OverwriteOutputFile { get; set; }
     }
 }

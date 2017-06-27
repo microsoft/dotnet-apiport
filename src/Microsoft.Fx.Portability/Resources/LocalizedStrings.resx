@@ -224,7 +224,7 @@
     <comment>Warning when we are changing the output file name.</comment>
   </data>
   <data name="OverwriteFile" xml:space="preserve">
-    <value>Replaced output file '{0}'</value>
+    <value>File '{0}' already exists and will be overwritten.</value>
     <comment>Displayed when a file exists and will be overwritten</comment>
   </data>
   <data name="AssemblyHeader" xml:space="preserve">

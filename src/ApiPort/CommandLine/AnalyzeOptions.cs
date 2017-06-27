@@ -82,11 +82,17 @@ namespace ApiPort.CommandLine
             {
                 Description = options.Description;
                 ServiceEndpoint = options.Endpoint;
-                OutputFileName = options.Out;
                 Targets = options.Target;
                 OutputFormats = options.ResultFormat;
                 TargetMapFile = options.TargetMap;
                 BreakingChangeSuppressions = options.SuppressBreakingChange;
+
+                //Set OverwriteOutputFile to true if the output file name is explicitly specified 
+                if(!string.IsNullOrWhiteSpace(options.Out))
+                {
+                    OverwriteOutputFile = true;
+                    OutputFileName = options.Out;
+                }
 
                 UpdateRequestFlags(options);
                 UpdateInputAssemblies(options);
