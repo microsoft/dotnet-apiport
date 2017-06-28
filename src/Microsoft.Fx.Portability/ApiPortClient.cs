@@ -54,6 +54,8 @@ namespace Microsoft.Fx.Portability
         /// <returns>A reporting result for the supplied assemblies</returns>
         public async Task<ReportingResult> AnalyzeAssembliesAsync(IApiPortOptions options)
         {
+            ValidateOptions(options);
+
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
             if (dependencyInfo.UserAssemblies.Any())
