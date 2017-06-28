@@ -130,6 +130,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OptionsViewModelTest.cs" />
     <Compile Include="ProjectBuilderTests.cs" />
     <Compile Include="CciSourceLineMapperTests.cs" />
     <Compile Include="ApiPortVSPackageTests.cs" />

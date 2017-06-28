@@ -5,18 +5,28 @@ using System;
 
 namespace ApiPortVS
 {
-    public class TargetPlatformVersion
+    public class TargetPlatformVersion : NotifyPropertyBase
     {
-        public TargetPlatformVersion()
+        private string _platformName;
+        public string PlatformName
         {
+            get { return _platformName; }
+            set { UpdateProperty(ref _platformName, value); }
         }
 
-        public string PlatformName { get; set; }
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { UpdateProperty(ref _isSelected, value); }
+        }
 
-        public bool IsSelected { get; set; }
-
-        public Version Version { get; set; }
-
+        private Version _version;
+        public Version Version
+        {
+            get { return _version; }
+            set { UpdateProperty(ref _version, value); }
+        }
 
         public override string ToString()
         {

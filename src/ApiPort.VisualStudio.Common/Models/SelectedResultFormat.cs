@@ -1,11 +1,37 @@
-﻿using Microsoft.Fx.Portability;
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Fx.Portability;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ApiPortVS
 {
-    public class SelectedResultFormat : ResultFormatInformation
+    /// <summary>
+    /// The report output format
+    /// </summary>
+    public class SelectedResultFormat : ResultFormatInformation, INotifyPropertyChanged
     {
-        public bool IsSelected { get; set; }
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected == value)
+                {
+                    return;
+                }
+
+                _isSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged([CallerMemberName]string property = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
     }
 }

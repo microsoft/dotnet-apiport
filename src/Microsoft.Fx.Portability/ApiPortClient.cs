@@ -17,7 +17,15 @@ namespace Microsoft.Fx.Portability
 {
     public class ApiPortClient
     {
+        /// <summary>
+        /// Maximum number of targets that can be submitted to the service at
+        /// a time.
+        /// </summary>
+        /// <remarks>OpenXML supports a maximum of 26 columns.</remarks>
+        public const int MaxNumberOfTargets = 15;
+
         private const string Json = "json";
+        private const string Excel = nameof(Excel);
 
         private readonly IApiPortService _apiPortService;
         private readonly IProgressReporter _progressReport;
@@ -47,6 +55,8 @@ namespace Microsoft.Fx.Portability
         /// <returns>A reporting result for the supplied assemblies</returns>
         public async Task<ReportingResult> AnalyzeAssembliesAsync(IApiPortOptions options)
         {
+            ValidateOptions(options);
+
             var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
 
             if (dependencyInfo.UserAssemblies.Any())
@@ -107,6 +117,8 @@ namespace Microsoft.Fx.Portability
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
         {
+            ValidateOptions(options);
+
             var jsonAdded = includeResponse ? TryAddJsonToOptions(options, out options) : false;
 
             foreach (var errorInput in options.InvalidInputFiles)
@@ -399,6 +411,23 @@ namespace Microsoft.Fx.Portability
                 };
 
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Ensures that the analysis options are valid.  If they are not,
+        /// throws a <see cref="InvalidApiPortOptionsException"/>
+        /// </summary>
+        private static void ValidateOptions(IApiPortOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            if (options.Targets.Count() > MaxNumberOfTargets && options.OutputFormats.Contains(Excel, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new InvalidApiPortOptionsException(string.Format(LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
             }
         }
 

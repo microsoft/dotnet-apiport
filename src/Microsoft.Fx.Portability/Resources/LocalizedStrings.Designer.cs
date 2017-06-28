@@ -11,8 +11,8 @@
 namespace Microsoft.Fx.Portability.Resources {
     using System;
     using System.Reflection;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -20,19 +20,19 @@ namespace Microsoft.Fx.Portability.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LocalizedStrings {
-
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal LocalizedStrings() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -46,7 +46,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Alias cannot be equal to a target name: &apos;{0}&apos;.
         /// </summary>
@@ -69,7 +69,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("AliasCanotBeEqualToTargetNameError", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Only single mappings between name and alias are supported.  The following aliases are invalid: {0}.
         /// </summary>
@@ -78,7 +78,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("AliasMappedToMultipleNamesInvalidAliases", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Analyzing compatibility.
         /// </summary>
@@ -87,7 +87,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("AnalyzingCompatibility", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Assembly.
         /// </summary>
@@ -96,7 +96,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("AssemblyHeader", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Available Grouped Targets:.
         /// </summary>
@@ -105,7 +105,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("AvailableGroupedTargets", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Back to Summary.
         /// </summary>
@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("BackToSummary", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Note that simply using a potentially broken API does not mean the app will necessarily suffer from the indicated breaking change. Many breaking changes are scoped to narrow corner-cases, and apps are only affected if they use the API in a very particular way. Breaking changes below have been grouped by scope (major, minor, or edge) depending on how likely the changes are to actually break user code in cases where the given API is used. Please read the &apos;details&apos; column to understand the particular circumstan [rest of string was truncated]&quot;;.
         /// </summary>
@@ -123,7 +123,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("BreakingChangeDisclaimer", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to API Catalog last updated on.
         /// </summary>
@@ -132,7 +132,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("CatalogLastUpdated", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to The given filename [{0}] has a different extension than the output format extension. Changed extension &apos;{1}&apos; to &apos;{2}&apos;..
         /// </summary>
@@ -141,7 +141,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ChangingFileExtension", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Framework Compatibility.
         /// </summary>
@@ -150,7 +150,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("CompatibilityPageTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Computing report..
         /// </summary>
@@ -159,7 +159,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ComputingReport", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Could not write report to directory &apos;{0}&apos; with file name &apos;{1}&apos; and extension &apos;{2}&apos;..
         /// </summary>
@@ -168,7 +168,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("CouldNotWriteReport", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
@@ -177,7 +177,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Details.
         /// </summary>
@@ -186,7 +186,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("DetailsPageTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Detecting assembly references.
         /// </summary>
@@ -195,7 +195,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("DetectingAssemblyReferences", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Duplicate alias: &apos;{0}&apos;.
         /// </summary>
@@ -204,7 +204,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("DuplicateAliasError", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Edge issues are those that will only impact a small minority of customers that use the given API in very specific ways. See issue details for more information..
         /// </summary>
@@ -213,7 +213,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("EdgeCompatIssueDescription", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to {0}, FileVersion:{1}.
         /// </summary>
@@ -222,7 +222,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("FullAssemblyIdentity", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to See &apos;http://go.microsoft.com/fwlink/?LinkId=397652&apos; to learn how to read this table.
         /// </summary>
@@ -231,7 +231,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("HowToReadTheExcelTable", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to In order to specify a version, please use the following format with the &apos;-targets&apos; option:
         ///	(Target Name), Version=(Version).
@@ -241,7 +241,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("HowToSpecifyVersion", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to .NET Portability Report.
         /// </summary>
@@ -250,7 +250,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("HtmlReportTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to There was an unknown error attempting to reach the service.  Please try again..
         /// </summary>
@@ -259,7 +259,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("HttpExceptionMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Identifying assemblies to scan..
         /// </summary>
@@ -268,7 +268,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("IdentifyAssembliesToScan", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to {0} is an invalid assembly..
         /// </summary>
@@ -277,7 +277,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("InvalidAssembly", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unhandled breaking change parse state: {0}.
         /// </summary>
@@ -286,7 +286,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("InvalidBreakingChangeParserState", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Invalid category detected: {0}.
         /// </summary>
@@ -295,7 +295,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("InvalidCategoryDetected", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Invalid data.
         /// </summary>
@@ -304,7 +304,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("InvalidDataMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Invalid file name: &apos;{0}&apos;.
         /// </summary>
@@ -313,7 +313,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("InvalidFileName", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Major issues are those that are likely to impact most customers using the given feature or API..
         /// </summary>
@@ -322,7 +322,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("MajorCompatIssueDescription", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Malformed map: {0}.
         /// </summary>
@@ -331,7 +331,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("MalformedMap", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Member should be defined on a type.
         /// </summary>
@@ -340,7 +340,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("MemberShouldBeDefinedOnTypeException", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Minor issues are those that will only impact customers using the given feature in a particular way. See issue details for more information..
         /// </summary>
@@ -349,7 +349,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("MinorCompatIssueDescription", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Missing assemblies.
         /// </summary>
@@ -358,7 +358,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("MissingAssembliesPageTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Reason.
         /// </summary>
@@ -367,7 +367,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("MissingAssemblyStatus", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to No files were found to upload..
         /// </summary>
@@ -376,16 +376,16 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("NoFilesAvailableToUpload", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to Resource was not found..
+        ///   Looks up a localized string similar to Resource was not found for {0} {1}.
         /// </summary>
         public static string NotFoundException {
             get {
                 return ResourceManager.GetString("NotFoundException", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Not supported.
         /// </summary>
@@ -394,7 +394,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("NotSupported", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Replaced output file &apos;{0}&apos;.
         /// </summary>
@@ -403,7 +403,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("OverwriteFile", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Portability Summary.
         /// </summary>
@@ -412,7 +412,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("PortabilitySummaryPageTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Processed {0}/{1} files..
         /// </summary>
@@ -421,7 +421,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ProcessedFiles", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Processed {0} items..
         /// </summary>
@@ -430,7 +430,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ProcessedItems", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Must only contain letters or digits.
         /// </summary>
@@ -439,7 +439,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ProductInformationInvalidArgument", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to [Done].
         /// </summary>
@@ -448,7 +448,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ProgressReportDone", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to [Failed].
         /// </summary>
@@ -457,16 +457,16 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ProgressReportFailed", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to Proxy authentication required to access: {0}. To resolve, try setting proxy in config.json.
+        ///   Looks up a localized string similar to Proxy authentication required to access: {0}. To resolve, try setting proxy in config.json..
         /// </summary>
         public static string ProxyAuthenticationRequiredMessage {
             get {
                 return ResourceManager.GetString("ProxyAuthenticationRequiredMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Recommended changes.
         /// </summary>
@@ -475,7 +475,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RecommendedChanges", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Request to service is too large. Send fewer assemblies for analysis. Content length: {0} bytes.
         /// </summary>
@@ -484,7 +484,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RequestTooLargeMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset..
         /// </summary>
@@ -493,7 +493,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RetargetingCompatIssueDescriptionPart1", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; on the assembly, using a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/bb398202.aspx&quot;&gt;TargetFrameworkVersion&lt;/a&gt; in the project file, or using older tools at build-time, depending on the particular issue. See issue details [rest of string was truncated]&quot;;.
         /// </summary>
@@ -502,7 +502,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RetargetingCompatIssueDescriptionPart2", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a TargetFrameworkAttribute on the assembly, using a TargetFrameworkVersion in the project file, or using older tools at build-time, depending on the particular issue. See issue details below for more information on how these breaking changes [rest of string was truncated]&quot;;.
         /// </summary>
@@ -511,7 +511,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RetargetingCompatIssueDescriptionPlainText", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Retrieving output formats..
         /// </summary>
@@ -520,7 +520,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RetrievingOutputFormats", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Retrieving targets.
         /// </summary>
@@ -529,7 +529,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RetrievingTargets", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Runtime compatibility issues are those that will occur simply by running code on a new .Net Framework version. These are the variety of breaking changes most likely to impact applications since they cannot be quirked away and do not depend on an application being recompiled..
         /// </summary>
@@ -538,7 +538,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("RuntimeCompatIssueDescription", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Warning: A newer version of the application is available. Please update to the latest version to continue using this service.
         /// </summary>
@@ -547,7 +547,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ServerEndpointDeprecated", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Error: The service endpoint has been deprecated. Please update the application to the latest version..
         /// </summary>
@@ -556,7 +556,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("ServerEndpointMovedPermanently", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Submission Id.
         /// </summary>
@@ -565,7 +565,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("SubmissionId", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Supported: {0}+.
         /// </summary>
@@ -574,7 +574,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("SupportedOn", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to {0} ({1}).
         /// </summary>
@@ -583,7 +583,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("TargetInformationGroups", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Target member.
         /// </summary>
@@ -592,7 +592,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("TargetMemberHeader", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Targets.
         /// </summary>
@@ -601,7 +601,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("Targets", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Target type.
         /// </summary>
@@ -610,7 +610,16 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("TargetTypeHeader", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel output format supports up to {0} targets for analysis at a time..
+        /// </summary>
+        public static string TooManyTargetsMessage {
+            get {
+                return ResourceManager.GetString("TooManyTargetsMessage", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Endpoint requires an authentication token..
         /// </summary>
@@ -619,7 +628,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnauthorizedAccess", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unknown error.  Please make sure you the most up-to-date version.
         /// </summary>
@@ -628,7 +637,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnknownBadRequestMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to There was an unknown error code from the service: &apos;{0}&apos;.  Please make sure you have the most up-to-date version..
         /// </summary>
@@ -637,7 +646,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnknownErrorCodeMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Could not find file: &apos;{0}&apos;.
         /// </summary>
@@ -646,7 +655,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnknownFile", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unknown output format: &apos;{0}&apos;.
         /// </summary>
@@ -655,7 +664,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnknownResultFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unknown target &apos;{0}&apos;.
         /// </summary>
@@ -664,7 +673,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnknownTarget", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unresolved assembly.
         /// </summary>
@@ -673,7 +682,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UnresolvedUsedAssembly", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Used By.
         /// </summary>
@@ -682,7 +691,7 @@ namespace Microsoft.Fx.Portability.Resources {
                 return ResourceManager.GetString("UsedBy", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Writing {0} report.
         /// </summary>

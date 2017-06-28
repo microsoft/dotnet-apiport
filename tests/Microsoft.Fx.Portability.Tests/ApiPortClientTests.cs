@@ -97,5 +97,63 @@ namespace Microsoft.Fx.Portability.Tests
 
             var result = await client.AnalyzeAssembliesAsync(options);
         }
+
+        [Fact]
+        public async Task AnalyzeAssemblies_ThrowsOnInvalidOptions_TargetCount()
+        {
+            var service = Substitute.For<IApiPortService>();
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var targetMapper = Substitute.For<ITargetMapper>();
+            var dependencyFinder = Substitute.For<IDependencyFinder>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var writer = Substitute.For<IFileWriter>();
+
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var options = Substitute.For<IApiPortOptions>();
+            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString()));
+            options.OutputFormats.Returns(new[] { "HTML", "Excel" });
+
+            await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.AnalyzeAssembliesAsync(options));
+        }
+
+        [Fact]
+        public async Task AnalyzeAssemblies_DoesNotThrowsOnInvalidOptions_TargetCount()
+        {
+            var service = Substitute.For<IApiPortService>();
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var targetMapper = Substitute.For<ITargetMapper>();
+            var dependencyFinder = Substitute.For<IDependencyFinder>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var writer = Substitute.For<IFileWriter>();
+
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var options = Substitute.For<IApiPortOptions>();
+            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString()));
+            options.OutputFormats.Returns(new[] { "HTML" });
+
+            var item = await client.AnalyzeAssembliesAsync(options);
+        }
+
+        [Fact]
+        public async Task WriteAnalysisReports_ThrowsOnInvalidOptions_TargetCount()
+        {
+            var service = Substitute.For<IApiPortService>();
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var targetMapper = Substitute.For<ITargetMapper>();
+            var dependencyFinder = Substitute.For<IDependencyFinder>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var writer = Substitute.For<IFileWriter>();
+
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var options = Substitute.For<IApiPortOptions>();
+            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString()));
+            options.OutputFormats.Returns(new[] { "HTML", "Excel" });
+
+            await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options));
+            await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options, true));
+        }
     }
 }

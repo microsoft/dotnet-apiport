@@ -15,40 +15,23 @@
         <utils:TargetPlatformDisplayNameConverter x:Key="TargetPlatformDisplayName" />
     </UserControl.Resources>
 
-    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" KeyboardNavigation.ControlTabNavigation="Local">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <TextBlock DockPanel.Dock="Top" FontSize="11" Foreground="Red"
-                   Text="{x:Static const:LocalizedStrings.UnableToContactService}"
-                   Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"/>
+        <TextBlock FontSize="12" FontWeight="DemiBold" Foreground="Red"
+                   Text="{Binding ErrorMessage, Mode=OneWay}"
+                   Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"
+                   Grid.Row="0" />
 
-        <Grid Margin="0,10,10,5" DockPanel.Dock="Bottom" MinHeight="10" HorizontalAlignment="Stretch" KeyboardNavigation.IsTabStop="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" FontSize="11" HorizontalAlignment="Left"
-                Visibility="{Binding UpdatingPlatforms, Converter={StaticResource HideWhenTrue}}">
-               <Hyperlink Click="RefreshRequested"
-                          AutomationProperties.Name="{x:Static const:LocalizedStrings.Refresh}">
-                  <TextBlock Text="{x:Static const:LocalizedStrings.Refresh}"
-                    ToolTip="{x:Static const:LocalizedStrings.Refresh}"
-                    KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1" />
-               </Hyperlink>
-            </TextBlock>
-
-            <TextBlock Grid.Column="2" FontSize="11" HorizontalAlignment="Right">
-                <TextBlock Background="Transparent" Text="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}"/>
-                <Hyperlink Name="GuidanceLink" RequestNavigate="MoreInformationRequested"
-                           AutomationProperties.Name="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}">
-                    <TextBlock Text="{x:Static const:LocalizedStrings.MoreInformationUrl}"
-                               KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
-                </Hyperlink>
-            </TextBlock>
-        </Grid>
-
-        <GroupBox Header="{x:Static const:LocalizedStrings.GeneralSettings}" BorderBrush="LightGray" IsTabStop="False" DockPanel.Dock="Top">
+        <GroupBox Header="{x:Static const:LocalizedStrings.GeneralSettings}"
+                  BorderBrush="LightGray" IsTabStop="False"
+                  Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -71,7 +54,9 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{x:Static const:LocalizedStrings.OutputFormats}" BorderBrush="LightGray" IsTabStop="False" DockPanel.Dock="Top">
+        <GroupBox Header="{x:Static const:LocalizedStrings.OutputFormats}"
+                  BorderBrush="LightGray" IsTabStop="False"
+                  Grid.Row="2">
             <DockPanel>
                 <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}"
                        Text="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
@@ -106,7 +91,9 @@
             </DockPanel>
         </GroupBox>
 
-        <GroupBox Header="{x:Static const:LocalizedStrings.TargetPlatforms}" BorderBrush="LightGray" IsTabStop="False" DockPanel.Dock="Top">
+        <GroupBox Header="{x:Static const:LocalizedStrings.TargetPlatforms}"
+                  BorderBrush="LightGray" IsTabStop="False"
+                  Grid.Row="3">
             <DockPanel>
                 <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}"
                        Text="{x:Static const:LocalizedStrings.RefreshingPlatforms}"
@@ -152,7 +139,33 @@
             </DockPanel>
         </GroupBox>
 
-        <StackPanel VerticalAlignment="Stretch" DockPanel.Dock="Bottom" KeyboardNavigation.IsTabStop="False"/>
+        <Grid Margin="0,10,10,5" MinHeight="10" HorizontalAlignment="Stretch"
+              KeyboardNavigation.IsTabStop="False"
+              Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-    </DockPanel>
+            <TextBlock Grid.Column="0" FontSize="11" HorizontalAlignment="Left"
+                Visibility="{Binding UpdatingPlatforms, Converter={StaticResource HideWhenTrue}}">
+               <Hyperlink Click="RefreshRequested"
+                          AutomationProperties.Name="{x:Static const:LocalizedStrings.Refresh}">
+                  <TextBlock Text="{x:Static const:LocalizedStrings.Refresh}"
+                    ToolTip="{x:Static const:LocalizedStrings.Refresh}"
+                    KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1" />
+               </Hyperlink>
+            </TextBlock>
+
+            <TextBlock Grid.Column="2" FontSize="11" HorizontalAlignment="Right">
+                <TextBlock Background="Transparent" Text="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}"/>
+                <Hyperlink Name="GuidanceLink" RequestNavigate="MoreInformationRequested"
+                           AutomationProperties.Name="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}">
+                    <TextBlock Text="{x:Static const:LocalizedStrings.MoreInformationUrl}"
+                               KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+    </Grid>
 </UserControl>
