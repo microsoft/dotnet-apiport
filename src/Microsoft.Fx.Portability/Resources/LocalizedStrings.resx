@@ -348,6 +348,6 @@
     <value>Request to service is too large. Send fewer assemblies for analysis. Content length: {0} bytes</value>
   </data>
   <data name="TooManyTargetsMessage" xml:space="preserve">
-    <value>There is a maximum of {0} targets allowed for analysis at a time.</value>
+    <value>Excel output format supports up to {0} targets for analysis at a time.</value>
   </data>
 </root>
