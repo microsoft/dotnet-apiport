@@ -24,7 +24,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock FontSize="14" FontWeight="Bold" Foreground="Red"
+        <TextBlock FontSize="12" FontWeight="DemiBold" Foreground="Red"
                    Text="{Binding ErrorMessage, Mode=OneWay}"
                    Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"
                    Grid.Row="0" />
