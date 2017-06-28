@@ -152,18 +152,13 @@ namespace ApiPortVS.ViewModels
             var response = await _apiPortService.GetResultFormatsAsync().ConfigureAwait(false);
             var current = new HashSet<string>(Formats.Where(f => f.IsSelected).Select(f => f.MimeType), StringComparer.OrdinalIgnoreCase);
 
-            if (current.Count == 0)
+            if (!current.Any())
             {
-                current.Add(ExcelMimeType);
+                var defaultResultFormat = await _apiPortService.GetDefaultResultFormatAsync().ConfigureAwait(false);
+                current.Add(defaultResultFormat.Response.MimeType);
             }
 
-            var formats = response.Response.Select(f => new SelectedResultFormat
-            {
-                DisplayName = f.DisplayName,
-                FileExtension = f.FileExtension,
-                MimeType = f.MimeType,
-                IsSelected = current.Contains(f.MimeType)
-            }).ToList();
+            var formats = response.Response.Select(f => new SelectedResultFormat(f, current.Contains(f.MimeType))).ToList();
 
             UpdateResultFormats(formats);
         }

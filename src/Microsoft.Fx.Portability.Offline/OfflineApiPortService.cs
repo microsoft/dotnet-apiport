@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.Fx.Portability.Reports;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,9 +55,16 @@ namespace Microsoft.Fx.Portability
             return Task.FromResult(serviceResponse);
         }
 
-        public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
+        public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
         {
             var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
+
+            if(!formats?.Any() ?? true)
+            {
+                var defaultFormat = await GetDefaultResultFormatAsync();
+                formats = new[] { defaultFormat.Response.DisplayName };
+            }
+
             var formatSet = new HashSet<string>(formats, StringComparer.OrdinalIgnoreCase);
 
             var result = new List<ReportingResultWithFormat>();
@@ -75,7 +83,7 @@ namespace Microsoft.Fx.Portability
                 }
             }
 
-            return WrapResponse<IEnumerable<ReportingResultWithFormat>>(result);
+            return await WrapResponse<IEnumerable<ReportingResultWithFormat>>(result);
         }
 
         public Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
@@ -83,6 +91,12 @@ namespace Microsoft.Fx.Portability
             var formats = _reportWriters.Select(r => r.Format);
 
             return WrapResponse(formats);
+        }
+
+        public Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
+        {
+            var format = new JsonReportWriter().Format;
+            return WrapResponse(format);
         }
 
         private Task<ServiceResponse<T>> WrapResponse<T>(T data)

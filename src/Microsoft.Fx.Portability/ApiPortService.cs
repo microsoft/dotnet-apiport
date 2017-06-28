@@ -22,6 +22,7 @@ namespace Microsoft.Fx.Portability
             internal const string FxApi = "/api/fxapi";
             internal const string FxApiSearch = "/api/fxapi/search";
             internal const string ResultFormat = "/api/resultformat";
+            internal const string DefaultResultFormat = "/api/resultformat/default";
         }
 
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
@@ -84,7 +85,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format)
         {
-            var formatInformation = await GetResultFormat(format);
+            var formatInformation = await GetResultFormatsAsync(format);
 
             return await _client.CallAsync(HttpMethod.Post, Endpoints.Analyze, a, formatInformation);
         }
@@ -115,7 +116,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ServiceResponse<ReportingResultWithFormat>> GetAnalysisAsync(string submissionId, string format)
         {
-            var formatInformation = await GetResultFormat(new[] { format });
+            var formatInformation = await GetResultFormatsAsync(string.IsNullOrWhiteSpace(format) ? null : new[] { format });
             var submissionUrl = UrlBuilder.Create(Endpoints.Analyze).AddPath(submissionId).Url;
 
             return await _client.CallAsync(HttpMethod.Get, submissionUrl, formatInformation);
@@ -156,29 +157,40 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<IEnumerable<ResultFormatInformation>>(HttpMethod.Get, Endpoints.ResultFormat);
         }
 
+        public async Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
+        {
+            return await _client.CallAsync<ResultFormatInformation>(HttpMethod.Get, Endpoints.DefaultResultFormat);
+        }
+
         public void Dispose()
         {
             _client.Dispose();
         }
 
-        private async Task<IEnumerable<ResultFormatInformation>> GetResultFormat(IEnumerable<string> format)
+        private async Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync(IEnumerable<string> formats)
         {
-            var requestedFormats = new HashSet<string>(format, StringComparer.OrdinalIgnoreCase);
-            var formats = await GetResultFormatsAsync();
-            var formatInformation = formats.Response
-                .Where(r => requestedFormats.Contains(r.DisplayName))
-                .ToList();
-
-            var unknownFormats = requestedFormats
-                .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            if (unknownFormats.Any())
+            if (!formats?.Any() ?? true)   //no "resultFormat" string option provider by user
             {
-                throw new UnknownReportFormatException(unknownFormats);
+                var defaultFormat = await GetDefaultResultFormatAsync();
+                return new[] { defaultFormat.Response };
             }
+            else
+            {
+                var requestedFormats = new HashSet<string>(formats, StringComparer.OrdinalIgnoreCase);
+                var resultFormats = await GetResultFormatsAsync();
+                var formatInformation = resultFormats.Response
+                    .Where(r => requestedFormats.Contains(r.DisplayName));
 
-            return formatInformation;
+                var unknownFormats = requestedFormats
+                    .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase);   
+
+                if (unknownFormats.Any())
+                {
+                    throw new UnknownReportFormatException(unknownFormats);
+                }
+
+                return formatInformation;
+            }
         }
     }
 }

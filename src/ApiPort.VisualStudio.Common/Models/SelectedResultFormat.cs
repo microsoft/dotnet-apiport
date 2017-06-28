@@ -33,5 +33,14 @@ namespace ApiPortVS
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
+
+        public SelectedResultFormat() { }
+        public SelectedResultFormat(ResultFormatInformation format, bool isSelected)
+        {
+            DisplayName = format.DisplayName;
+            MimeType = format.MimeType;
+            FileExtension = format.FileExtension;
+            IsSelected = isSelected;
+        }
     }
 }
