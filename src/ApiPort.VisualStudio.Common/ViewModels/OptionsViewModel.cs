@@ -15,12 +15,15 @@ namespace ApiPortVS.ViewModels
 {
     public sealed class OptionsViewModel : NotifyPropertyBase, IDisposable
     {
+        private const string ExcelMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+        private readonly object _lock = new object();
         private readonly IApiPortService _apiPortService;
         private readonly ITargetMapper _targetMapper;
         private readonly OptionsModel _optionsModel;
         private TargetPlatformVersion[] _currentVersions = new TargetPlatformVersion[0];
 
-        private bool _disposed  = false; // To detect redundant calls
+        private bool _disposed = false; // To detect redundant calls
         private bool _hasError;
         private bool _updating;
         private bool _saveMetadata;
@@ -38,6 +41,10 @@ namespace ApiPortVS.ViewModels
 #else
             SaveMetadata = true;
 #endif
+            PropertyChanged += TargetPlatformAndResultFormatPropertyChanged;
+
+            UpdateResultFormats(optionsModel.Formats);
+            UpdateTargetPlatforms(optionsModel.Platforms);
         }
 
         public IList<SelectedResultFormat> Formats
@@ -56,6 +63,7 @@ namespace ApiPortVS.ViewModels
             set
             {
                 _optionsModel.Platforms = value;
+                _currentVersions = value?.SelectMany(x => x.Versions).ToArray() ?? new TargetPlatformVersion[0];
                 OnPropertyUpdated();
             }
         }
@@ -105,7 +113,6 @@ namespace ApiPortVS.ViewModels
             set { UpdateProperty(ref _errorMessage, value); }
         }
 
-
         public void Save() => _optionsModel.Save();
 
         public IList<TargetPlatform> InvalidTargets { get; set; }
@@ -142,23 +149,45 @@ namespace ApiPortVS.ViewModels
 
         private async Task UpdateResultsAsync()
         {
-            var formats = await _apiPortService.GetResultFormatsAsync().ConfigureAwait(false);
+            var response = await _apiPortService.GetResultFormatsAsync().ConfigureAwait(false);
             var current = new HashSet<string>(Formats.Where(f => f.IsSelected).Select(f => f.MimeType), StringComparer.OrdinalIgnoreCase);
 
             if (current.Count == 0)
             {
-                const string DefaultMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-                current.Add(DefaultMimeType);
+                current.Add(ExcelMimeType);
             }
 
-            Formats = formats.Response.Select(f => new SelectedResultFormat
+            var formats = response.Response.Select(f => new SelectedResultFormat
             {
                 DisplayName = f.DisplayName,
                 FileExtension = f.FileExtension,
                 MimeType = f.MimeType,
                 IsSelected = current.Contains(f.MimeType)
             }).ToList();
+
+            UpdateResultFormats(formats);
+        }
+
+        /// <summary>
+        /// Removes existing event handlers from current <see cref="Formats"/>
+        /// and then adds event handlers to the new formats before setting them.
+        /// </summary>
+        private void UpdateResultFormats(IList<SelectedResultFormat> formats)
+        {
+            lock (_lock)
+            {
+                foreach (var format in Formats)
+                {
+                    format.PropertyChanged -= TargetPlatformAndResultFormatPropertyChanged;
+                }
+
+                Formats = formats;
+
+                foreach (var format in Formats)
+                {
+                    format.PropertyChanged += TargetPlatformAndResultFormatPropertyChanged;
+                }
+            }
         }
 
         /// <summary>
@@ -167,12 +196,6 @@ namespace ApiPortVS.ViewModels
         /// <returns>Targets that were removed</returns>
         private async Task UpdateTargetsAsync()
         {
-            // Remove any existing subscribed events
-            foreach (var platform in _currentVersions)
-            {
-                platform.PropertyChanged -= TargetPlatformVersionChanged;
-            }
-
             var targets = await GetTargetsAsync().ConfigureAwait(false);
             var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t =>
             {
@@ -191,59 +214,80 @@ namespace ApiPortVS.ViewModels
                 };
             });
 
-            var reconciledPlatforms = new List<TargetPlatform>();
+            UpdateTargetPlatforms(canonicalPlatforms);
+        }
 
-            foreach (var canonicalPlatform in canonicalPlatforms)
+        private void UpdateTargetPlatforms(IEnumerable<TargetPlatform> targetPlatforms)
+        {
+            lock (_lock)
             {
-                var existingTargetPlatform = _optionsModel.Platforms
-                    .FirstOrDefault(t => StringComparer.OrdinalIgnoreCase.Equals(t.Name, canonicalPlatform.Name));
-
-                var platform = (existingTargetPlatform?.Equals(canonicalPlatform) ?? false)
-                                    ? existingTargetPlatform
-                                    : canonicalPlatform;
-
-                foreach (var alias in _targetMapper.Aliases)
+                // Remove any existing subscribed events
+                foreach (var platform in _currentVersions)
                 {
-                    foreach (var name in _targetMapper.GetNames(alias))
-                    {
-                        if (String.Equals(platform.Name, name))
-                        {
-                            platform.AlternativeNames.Add(alias);
-                        }
-                    }
+                    platform.PropertyChanged -= TargetPlatformAndResultFormatPropertyChanged;
                 }
 
-                reconciledPlatforms.Add(platform);
-            }
+                var reconciledPlatforms = new List<TargetPlatform>();
 
-            // This will sort the platforms on the 'Name' property
-            reconciledPlatforms.Sort();
+                foreach (var canonicalPlatform in targetPlatforms)
+                {
+                    var existingTargetPlatform = _optionsModel.Platforms
+                        .FirstOrDefault(t => StringComparer.OrdinalIgnoreCase.Equals(t.Name, canonicalPlatform.Name));
 
-            InvalidTargets = Targets.Where(p => !reconciledPlatforms.Contains(p)).ToList();
-            Targets = reconciledPlatforms;
-            _currentVersions = Targets.SelectMany(x => x.Versions).ToArray();
+                    var platform = (existingTargetPlatform?.Equals(canonicalPlatform) ?? false)
+                                        ? existingTargetPlatform
+                                        : canonicalPlatform;
 
-            foreach (var platform in _currentVersions)
-            {
-                platform.PropertyChanged += TargetPlatformVersionChanged;
+                    foreach (var alias in _targetMapper.Aliases)
+                    {
+                        foreach (var name in _targetMapper.GetNames(alias))
+                        {
+                            if (String.Equals(platform.Name, name))
+                            {
+                                platform.AlternativeNames.Add(alias);
+                            }
+                        }
+                    }
+
+                    reconciledPlatforms.Add(platform);
+                }
+
+                // This will sort the platforms on the 'Name' property
+                reconciledPlatforms.Sort();
+
+                InvalidTargets = Targets.Where(p => !reconciledPlatforms.Contains(p)).ToList();
+                Targets = reconciledPlatforms;
+
+                foreach (var platform in _currentVersions)
+                {
+                    platform.PropertyChanged += TargetPlatformAndResultFormatPropertyChanged;
+                }
             }
         }
 
-        private void TargetPlatformVersionChanged(object sender, PropertyChangedEventArgs e)
+        private void TargetPlatformAndResultFormatPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!string.Equals(nameof(TargetPlatformVersion.IsSelected), e.PropertyName))
+            switch (e.PropertyName)
             {
-                return;
-            }
+                // PropertyName is "" or null when the entire object has been updated
+                case null:
+                case "":
+                case nameof(TargetPlatformVersion.IsSelected):
+                case nameof(Targets):
+                case nameof(Formats):
+                    var containsExcel = Formats.Any(x => x.IsSelected && string.Equals(x.MimeType, ExcelMimeType, StringComparison.OrdinalIgnoreCase));
 
-            if (_currentVersions.Count(x => x.IsSelected) > ApiPortClient.MaxNumberOfTargets)
-            {
-                HasError = true;
-                ErrorMessage = string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
-            }
-            else
-            {
-                HasError = false;
+                    if (_currentVersions.Count(x => x.IsSelected) > ApiPortClient.MaxNumberOfTargets && containsExcel)
+                    {
+                        HasError = true;
+                        ErrorMessage = string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
+                    }
+                    else
+                    {
+                        HasError = false;
+                        ErrorMessage = string.Empty;
+                    }
+                    break;
             }
         }
 
@@ -265,25 +309,35 @@ namespace ApiPortVS.ViewModels
 
         private void Dispose(bool disposing)
         {
-            if (_disposed )
+            if (_disposed)
             {
                 return;
             }
 
             if (disposing)
             {
+                PropertyChanged -= TargetPlatformAndResultFormatPropertyChanged;
+
                 if (_currentVersions != null)
                 {
                     foreach (var platform in _currentVersions)
                     {
-                        platform.PropertyChanged -= TargetPlatformVersionChanged;
+                        platform.PropertyChanged -= TargetPlatformAndResultFormatPropertyChanged;
                     }
                 }
 
                 _currentVersions = null;
+
+                if (_optionsModel.Formats != null)
+                {
+                    foreach (var format in _optionsModel.Formats)
+                    {
+                        format.PropertyChanged -= TargetPlatformAndResultFormatPropertyChanged;
+                    }
+                }
             }
 
-            _disposed  = true;
+            _disposed = true;
         }
 
         public void Dispose()
