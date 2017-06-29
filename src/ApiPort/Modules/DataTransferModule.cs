@@ -15,9 +15,6 @@ namespace ApiPort.Modules
                 .As<IApiPortService>()
                 .SingleInstance();
 
-            builder.RegisterInstance("json")
-                .Named<string>(DependencyBuilder.DefaultOutputFormatInstanceName);
-
             base.Load(builder);
         }
     }

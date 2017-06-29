@@ -114,10 +114,7 @@ namespace ApiPort
                     return opts;
                 }
 
-                return new ReadWriteApiPortOptions(opts)
-                {
-                    OutputFormats = new[] { ctx.ResolveNamed<string>(DefaultOutputFormatInstanceName) }
-                };
+                return new ReadWriteApiPortOptions(opts);
             })
             .SingleInstance();
 
@@ -126,10 +123,6 @@ namespace ApiPort
             builder.RegisterType<ApiPortServiceSearcher>()
                 .As<ISearcher<string>>()
                 .SingleInstance();
-
-            // Register the default output format name
-            builder.RegisterInstance("Excel")
-                .Named<string>(DefaultOutputFormatInstanceName);
 
             if (Console.IsOutputRedirected)
             {

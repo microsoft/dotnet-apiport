@@ -16,6 +16,7 @@ namespace Microsoft.Fx.Portability
         Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId);
         Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null);
         Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync();
+        Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync();
         Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds);
     }
 }

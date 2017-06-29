@@ -65,6 +65,14 @@ namespace ApiPort
             return Task.FromResult(response);
         }
 
+        public Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
+        {
+            //s_formats contains one element
+            var response = ServiceResponse.Create(s_formats.First());
+
+            return Task.FromResult(response);
+        }
+
         public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
         {
             var targets = new[]
