@@ -78,6 +78,25 @@ namespace Microsoft.Fx.Portability
             };
         }
 
+        public ApiPortService(string endpoint, HttpMessageHandler httpMessageHandler, ProductInformation info)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint))
+            {
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+            }
+
+            if (info == null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
+            _client = new CompressedHttpClient(info, httpMessageHandler)
+            {
+                BaseAddress = new Uri(endpoint),
+                Timeout = Timeout
+            };
+        }
+
         public async Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
         {
             return await _client.CallAsync<AnalyzeRequest, AnalyzeResponse>(HttpMethod.Post, Endpoints.Analyze, a);
