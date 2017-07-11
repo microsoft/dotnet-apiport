@@ -1,0 +1,17 @@
+[
+  {
+    "DisplayName": "Json",
+    "MimeType": "application/json",
+    "FileExtension": ".json"
+  },
+  {
+    "DisplayName": "HTML",
+    "MimeType": "text/html",
+    "FileExtension": ".html"
+  },
+  {
+    "DisplayName": "Excel",
+    "MimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "FileExtension": ".xlsx"
+  }
+]

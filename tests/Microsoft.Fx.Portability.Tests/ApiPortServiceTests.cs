@@ -4,56 +4,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    /*TODO: This should be Mocking the ApiPortService by adding this functionality into the
-            CompressedHttpClient in order to Mock
-        internal class TestHandler : HttpMessageHandler
-        {
-        private readonly Func<HttpRequestMessage, HttpResponseMessage> _converter;
-
-        public TestHandler(Func<HttpRequestMessage, HttpResponseMessage> converter)
-        {
-            _converter = converter;
-        }
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(_converter(request));
-        }
-    } */
-
     public class ApiPortServiceTests
     {
-        private static readonly ApiPortService s_apiPortService = new ApiPortService(
-            "http://portability.dot.net",
-            new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
-        private static readonly ApiPortService s_oldApiService = new ApiPortService(
-            "http://portability.cloudapp.net",
-            new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests)));
+        private ApiPortService _apiPortService;
 
-        public static IEnumerable<object[]> ApiPortServices
+        public ApiPortServiceTests()
         {
-            get
-            {
-                yield return new object[] { s_apiPortService, EndpointStatus.Alive };
-                yield return new object[] { s_oldApiService, EndpointStatus.Deprecated };
-            }
+            var httpMessageHandler = new TestHandler(HttpRequestConverter);
+            var productInformation = new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests));
+
+            //Create a fake ApiPortService which uses the TestHandler to send back the response message
+            _apiPortService = new ApiPortService("http://localhost", httpMessageHandler, productInformation);
         }
 
         [Fact]
         public void VerifyParameterChecks()
         {
+            string endpoint = null;
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation("")));
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation("")));
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation("")));
         }
 
-        [Theory(Skip = "Skipping because this will ping the live service when running.")]
-        [MemberData("ApiPortServices")]
-        public async Task ApiPortService_GetDocIdsWithValidDocIdAsync(ApiPortService apiPortService, EndpointStatus expectedStatus)
+        [Fact]
+        public async Task ApiPortService_GetDocIdsWithValidDocIdAsync()
         {
             var docIds = new List<string>
             {
@@ -68,28 +50,66 @@ namespace Microsoft.Fx.Portability.Tests
                 "M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String)"
             };
 
-            var serviceResponse = await apiPortService.QueryDocIdsAsync(docIds);
-            var headers = serviceResponse.Headers;
+            var serviceResponse = await _apiPortService.QueryDocIdsAsync(docIds);
             var result = serviceResponse.Response;
 
-            Assert.Equal(expectedStatus, headers.Status);
             Assert.Equal(docIds.Count(), result.Count());
             Assert.Equal(0, docIds.Except(result.Select(r => r.Definition.DocId)).Count());
         }
 
-        [Theory(Skip = "Skipping because this will ping the live service when running.")]
-        [MemberData("ApiPortServices")]
-        public async Task ApiPortService_GetAvailableFormatsAsync(ApiPortService apiPortService, EndpointStatus expectedStatus)
+        [Fact]
+        public async Task ApiPortService_GetAvailableFormatsAsync()
         {
             var expected = new List<string> { "Json", "HTML", "Excel" };
 
-            var serviceResponse = await apiPortService.GetResultFormatsAsync();
-            var headers = serviceResponse.Headers;
+            var serviceResponse = await _apiPortService.GetResultFormatsAsync();
             var result = serviceResponse.Response;
 
-            Assert.Equal(expectedStatus, headers.Status);
             Assert.Equal(expected.Count(), result.Count());
             Assert.Equal(0, expected.Except(result.Select(r => r.DisplayName)).Count());
+        }
+
+        private HttpResponseMessage HttpRequestConverter(HttpRequestMessage request)
+        {
+            string resourceFile = null;
+            var query = request.RequestUri.PathAndQuery;
+            if (string.Equals(query, "/api/resultformat", StringComparison.OrdinalIgnoreCase))
+            {
+                resourceFile = "FormatsHttpContent.json";
+            }
+            else if (string.Equals(query, "/api/fxapi", StringComparison.OrdinalIgnoreCase))
+            {
+                resourceFile = "DocIdsHttpContent.json";
+            }
+            else
+            {
+                return null;
+            }
+
+            var assembly = typeof(ApiPortServiceTests).GetTypeInfo().Assembly;
+            var resourceName = assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceFile));
+            var resourceStream = assembly.GetManifestResourceStream(resourceName);
+
+            var streamContent = new StreamContent(resourceStream);
+            streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            response.Content = streamContent;
+            return response;
+        }
+    }
+
+    internal class TestHandler : HttpMessageHandler
+    {
+        private readonly Func<HttpRequestMessage, HttpResponseMessage> _converter;
+
+        public TestHandler(Func<HttpRequestMessage, HttpResponseMessage> converter)
+        {
+            _converter = converter;
+        }
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(_converter(request));
         }
     }
 }
