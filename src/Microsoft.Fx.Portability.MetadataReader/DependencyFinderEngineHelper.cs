@@ -4,7 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -17,6 +17,8 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private readonly AssemblyReferenceInformation _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
+
+        private AssemblyReferenceInformation _assemblyInfoForPrimitives;
 
         public DependencyFinderEngineHelper(IDependencyFilter assemblyFilter, MetadataReader metadataReader, IAssemblyFile file)
         {
@@ -69,6 +71,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
             }
 
+            // Get the assembly info of System.Object and set it as assembly info for primitives
+            var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
+            _assemblyInfoForPrimitives = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
+            
             // Get member references
             foreach (var handle in _reader.MemberReferences)
             {
@@ -131,8 +137,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 definedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly.Value);
             }
             // If no assembly is set, then the type is either a primitive type or it's in the current assembly.
-            // Mscorlib is special-cased for testing purposes.
-            else if (!memberRefInfo.ParentType.IsPrimitiveType || string.Equals(_currentAssemblyName, "mscorlib", StringComparison.OrdinalIgnoreCase))
+            else if (memberRefInfo.ParentType.IsPrimitiveType)
+            {
+                definedInAssemblyIdentity = _assemblyInfoForPrimitives;
+            }
+            else
             {
                 definedInAssemblyIdentity = _currentAssemblyInfo;
             }
