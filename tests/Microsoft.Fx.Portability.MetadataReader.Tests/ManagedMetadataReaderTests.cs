@@ -200,6 +200,33 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
+        /// <summary>
+        /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42
+        /// </summary>
+        [Fact]
+        public void MultidimensionalPrimitiveArray()
+        {
+            var arrayDocId = "M:System.Int32[0:,0:][0:,0:].#ctor(System.Int32,System.Int32)";
+            var objectDocId = "T:System.Object";
+            var assemblyToTest = TestAssembly.Create("MultidimensionalPrimitiveArray.cs");
+            
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
+
+            var primitiveArray = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, arrayDocId)).Key;
+            Assert.NotNull(primitiveArray);
+            var systemObject = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, objectDocId)).Key;
+            Assert.NotNull(systemObject);
+
+            //Test that the DefinedInAssemblyIdentity of the primitive array is not null/empty and it is the same as the one of System.Object
+            var definedInAssemblyIdentity = primitiveArray.DefinedInAssemblyIdentity;
+
+            var isNullOrWhiteSpace = string.IsNullOrWhiteSpace(definedInAssemblyIdentity);
+            Assert.False(isNullOrWhiteSpace);
+            Assert.Equal(systemObject.DefinedInAssemblyIdentity, definedInAssemblyIdentity);
+        }
+
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
         {
             yield return Tuple.Create("M:System.Diagnostics.DebuggableAttribute.#ctor(System.Diagnostics.DebuggableAttribute.DebuggingModes)", 1);
