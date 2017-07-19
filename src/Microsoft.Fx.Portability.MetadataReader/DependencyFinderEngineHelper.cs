@@ -74,6 +74,11 @@ namespace Microsoft.Fx.Portability.Analyzer
             var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal));
             var systemObjectAssembly = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
 
+            if (systemObjectAssembly == null)
+            {
+                throw new PortabilityAnalyzerException(LocalizedStrings.MissingAssemblyInfo);
+            }
+
             // Get member references
             foreach (var handle in _reader.MemberReferences)
             {
