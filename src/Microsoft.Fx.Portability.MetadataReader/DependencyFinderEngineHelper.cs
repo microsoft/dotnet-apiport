@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,8 +73,15 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             // Get the assembly info of System.Object and set it as assembly info for primitives
-            var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
-            _assemblyInfoForPrimitives = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
+            if (_assemblyFilter is DotNetFrameworkFilter)
+            {
+                var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
+                _assemblyInfoForPrimitives = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
+                if (_assemblyInfoForPrimitives == null)
+                {
+                    throw new PortabilityAnalyzerException(LocalizedStrings.MissingAssemblyInfo);
+                }
+            }
             
             // Get member references
             foreach (var handle in _reader.MemberReferences)
@@ -136,7 +144,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 definedInAssemblyIdentity = _reader.FormatAssemblyInfo(memberRefInfo.ParentType.DefinedInAssembly.Value);
             }
-            // If no assembly is set, then the type is either a primitive type or it's in the current assembly.
             else if (memberRefInfo.ParentType.IsPrimitiveType)
             {
                 definedInAssemblyIdentity = _assemblyInfoForPrimitives;

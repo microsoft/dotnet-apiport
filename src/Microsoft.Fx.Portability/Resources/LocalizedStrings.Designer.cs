@@ -20,7 +20,7 @@ namespace Microsoft.Fx.Portability.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LocalizedStrings {
@@ -360,6 +360,15 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot locate assembly info for System.Object.
+        /// </summary>
+        public static string MissingAssemblyInfo {
+            get {
+                return ResourceManager.GetString("MissingAssemblyInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reason.
         /// </summary>
         public static string MissingAssemblyStatus {
@@ -396,7 +405,7 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replaced output file &apos;{0}&apos;.
+        ///   Looks up a localized string similar to File &apos;{0}&apos; already exists and will be overwritten..
         /// </summary>
         public static string OverwriteFile {
             get {

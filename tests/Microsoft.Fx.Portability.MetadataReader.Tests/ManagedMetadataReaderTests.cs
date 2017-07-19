@@ -210,7 +210,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var objectDocId = "T:System.Object";
             var assemblyToTest = TestAssembly.Create("MultidimensionalPrimitiveArray.cs");
             
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
             var progressReporter = Substitute.For<IProgressReporter>();
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
