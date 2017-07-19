@@ -108,7 +108,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Composition" Version="14.2.19-pre" />
     <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="7.10.6070" />
     <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="14.1.170-pre" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.0.50703" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.14.0">
       <Version>14.3.25407</Version>
     </PackageReference>
