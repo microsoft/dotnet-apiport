@@ -19,8 +19,6 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly AssemblyReferenceInformation _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
 
-        private AssemblyReferenceInformation _assemblyInfoForPrimitives;
-
         public DependencyFinderEngineHelper(IDependencyFilter assemblyFilter, MetadataReader metadataReader, IAssemblyFile file)
         {
             _assemblyFilter = assemblyFilter;
@@ -73,16 +71,14 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             // Get the assembly info of System.Object and set it as assembly info for primitives
-            if (_assemblyFilter is DotNetFrameworkFilter)
+            var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
+            var systemObjectAssembly = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
+
+            if (systemObjectAssembly == null)
             {
-                var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
-                _assemblyInfoForPrimitives = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
-                if (_assemblyInfoForPrimitives == null)
-                {
-                    throw new PortabilityAnalyzerException(LocalizedStrings.MissingAssemblyInfo);
-                }
+                throw new PortabilityAnalyzerException(LocalizedStrings.MissingAssemblyInfo);
             }
-            
+
             // Get member references
             foreach (var handle in _reader.MemberReferences)
             {
@@ -90,10 +86,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                 {
                     var entry = _reader.GetMemberReference(handle);
 
-                    var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry);
+                    var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry, systemObjectAssembly);
                     if (memberReferenceMemberDependency != null)
                     {
-                        this.MemberDependency.Add(memberReferenceMemberDependency);
+                        MemberDependency.Add(memberReferenceMemberDependency);
                     }
                 }
                 catch (BadImageFormatException)
@@ -134,7 +130,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             };
         }
 
-        private MemberDependency GetMemberReferenceMemberDependency(MemberReference memberReference)
+        private MemberDependency GetMemberReferenceMemberDependency(MemberReference memberReference, AssemblyReferenceInformation systemObjectAssembly)
         {
             var provider = new MemberMetadataInfoTypeProvider(_reader);
             var memberRefInfo = provider.GetMemberRefInfo(memberReference);
@@ -146,7 +142,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
             else if (memberRefInfo.ParentType.IsPrimitiveType)
             {
-                definedInAssemblyIdentity = _assemblyInfoForPrimitives;
+                definedInAssemblyIdentity = systemObjectAssembly;
             }
             else
             {
