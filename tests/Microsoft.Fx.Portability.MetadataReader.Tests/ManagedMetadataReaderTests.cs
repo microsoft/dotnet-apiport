@@ -139,7 +139,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.Equal(expected, foundDocIds);
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata reader currently requires dependency filters to say System.Object is in a framework assembly")]
         public void VerifyFilter()
         {
             var expected = new[]
@@ -209,7 +209,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var arrayDocId = "M:System.Int32[0:,0:][0:,0:].#ctor(System.Int32,System.Int32)";
             var objectDocId = "T:System.Object";
             var assemblyToTest = TestAssembly.Create("MultidimensionalPrimitiveArray.cs");
-            
+
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
             var progressReporter = Substitute.For<IProgressReporter>();
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);

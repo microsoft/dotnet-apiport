@@ -4,7 +4,6 @@
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -15,7 +14,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public ReflectionMetadataDependencyFinder(IDependencyFilter assemblyFilter)
         {
-            _assemblyFilter = assemblyFilter;
+            _assemblyFilter = assemblyFilter ?? throw new ArgumentNullException(nameof(assemblyFilter));
         }
 
         public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> files, IProgressReporter _progressReporter)
