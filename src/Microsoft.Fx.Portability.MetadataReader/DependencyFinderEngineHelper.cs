@@ -71,7 +71,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             // Get the assembly info of System.Object and set it as assembly info for primitives
-            var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal));
+            var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
             var systemObjectAssembly = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
 
             if (systemObjectAssembly == null)
