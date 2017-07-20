@@ -5,7 +5,6 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -46,17 +45,33 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public void ComputeData()
         {
+            AssemblyReferenceInformation systemObjectAssembly = null;
+
+            var provider = new MemberMetadataInfoTypeProvider(_reader);
+
             // Get type references
             foreach (var handle in _reader.TypeReferences)
             {
                 try
                 {
                     var entry = _reader.GetTypeReference(handle);
+                    var typeInfo = provider.GetFullName(entry);
+                    var assembly = GetAssembly(typeInfo);
+                    var typeReferenceMemberDependency = CreateMemberDependency(typeInfo, assembly);
 
-                    var typeReferenceMemberDependency = GetTypeReferenceMemberDependency(entry);
                     if (typeReferenceMemberDependency != null)
                     {
                         MemberDependency.Add(typeReferenceMemberDependency);
+                    }
+
+                    // Primitives need to have their assembly set, so we search for a reference to System.Object that is considered a possible framework
+                    // assembly and use that for any primitives that don't have an assembly
+                    if (systemObjectAssembly == null
+                        && string.Equals(typeInfo.Namespace, "System", StringComparison.Ordinal)
+                        && string.Equals(typeInfo.Name, "Object", StringComparison.Ordinal)
+                        && _assemblyFilter.IsFrameworkAssembly(assembly))
+                    {
+                        systemObjectAssembly = assembly;
                     }
                 }
                 catch (BadImageFormatException)
@@ -69,10 +84,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     // that we can successfully decode.
                 }
             }
-
-            // Get the assembly info of System.Object and set it as assembly info for primitives
-            var systemObjectMemberDependency = MemberDependency.FirstOrDefault(t => string.Equals(t.MemberDocId, "T:System.Object", StringComparison.Ordinal) && _assemblyFilter.IsFrameworkAssembly(t.DefinedInAssemblyIdentity));
-            var systemObjectAssembly = systemObjectMemberDependency?.DefinedInAssemblyIdentity;
 
             if (systemObjectAssembly == null)
             {
@@ -104,18 +115,18 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
-        private MemberDependency GetTypeReferenceMemberDependency(TypeReference typeReference)
+        private AssemblyReferenceInformation GetAssembly(MemberMetadataInfo type)
         {
-            var provider = new MemberMetadataInfoTypeProvider(_reader);
-            var typeInfo = provider.GetFullName(typeReference);
-
-            return CreateMemberDependency(typeInfo);
+            return type.DefinedInAssembly.HasValue ? _reader.FormatAssemblyInfo(type.DefinedInAssembly.Value) : _currentAssemblyInfo;
         }
 
         private MemberDependency CreateMemberDependency(MemberMetadataInfo type)
         {
-            var definedInAssembly = type.DefinedInAssembly.HasValue ? _reader.FormatAssemblyInfo(type.DefinedInAssembly.Value) : _currentAssemblyInfo;
+            return CreateMemberDependency(type, GetAssembly(type));
+        }
 
+        private MemberDependency CreateMemberDependency(MemberMetadataInfo type, AssemblyReferenceInformation definedInAssembly)
+        {
             // Apply heuristic to determine if API is most likely defined in a framework assembly
             if (!_assemblyFilter.IsFrameworkAssembly(definedInAssembly))
             {

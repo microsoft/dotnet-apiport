@@ -139,7 +139,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.Equal(expected, foundDocIds);
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata reader currently requires dependency filters to say System.Object is in a framework assembly")]
         public void VerifyFilter()
         {
             var expected = new[]
