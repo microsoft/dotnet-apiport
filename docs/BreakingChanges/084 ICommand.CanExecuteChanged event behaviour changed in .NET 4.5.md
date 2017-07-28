@@ -13,7 +13,7 @@ Minor
 Planned
 
 ### Change Description
-In the .NET Framework 4.5, a CanExecuteChangedEvent was ignored unless the sender of the event was the same object as the object that raised the event. This bug was fixed in .NET Framework 4.5 servcing updates.
+In the .NET Framework 4.5, a CanExecuteChangedEvent was ignored unless the sender of the event was the same object as the object that raised the event. This bug was fixed in .NET Framework 4.5 servicing updates.
 
 - [ ] Quirked
 - [ ] Build-time break

@@ -9,7 +9,7 @@
 //A description of the Scopes can be found at https://msdn.microsoft.com/en-us/library/mt661864(v=vs.110).aspx
 
 ### Version Introduced
-[|Version in which the breaking change first occured|]
+[|Version in which the breaking change first occurred|]
 
 ### Version Reverted
 [|Version in which the breaking change was reverted. If not applicable, please remove|]

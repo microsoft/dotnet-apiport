@@ -19,7 +19,7 @@ In the .NET Framework 4.5, if multiple items are placed in the same TableLayoutP
 - [ ] Build-time break
 
 ### Recommended Action
-This behavior was reverted in a servicing update for the .NET Framework 4.5. Please update the .NET Framework 4.5, or upgrade to .NET Framework 4.5.1 or later, to fix this issue. Alternatively, avoid the ambiguous case of multiple items in the same TableLayourPanel cell.
+This behavior was reverted in a servicing update for the .NET Framework 4.5. Please update the .NET Framework 4.5, or upgrade to .NET Framework 4.5.1 or later, to fix this issue. Alternatively, avoid the ambiguous case of multiple items in the same TableLayoutPanel cell.
 
 ### Affected APIs
 * `M:System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control,System.Int32,System.Int32)`

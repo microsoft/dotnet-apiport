@@ -10,7 +10,7 @@ Transparent
 Not planned
 
 ### Change Description
-Begining in .NET Framework 4.5, `List<T>`'s sort algorithm has changed (to be an introspective sort instead of a quick sort). `List<T>`'s sort has never been stable, but this change may cause different scenarios to sort in unstable ways. That simply means that equivalent items may sort in different orders in subsequent calls of the API.
+Beginning in .NET Framework 4.5, `List<T>`'s sort algorithm has changed (to be an introspective sort instead of a quick sort). `List<T>`'s sort has never been stable, but this change may cause different scenarios to sort in unstable ways. That simply means that equivalent items may sort in different orders in subsequent calls of the API.
 
 - [ ] Quirked
 - [ ] Build-time break

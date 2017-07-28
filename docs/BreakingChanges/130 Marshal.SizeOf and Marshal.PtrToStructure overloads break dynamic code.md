@@ -18,7 +18,7 @@ new overloads of these methods have been added that may be ambiguous to the scri
 - [ ] Build-time break
 
 ### Recommended Action
-Update scripts to clearly indicate which overload shouldbe used. This can typically done by explicitly casting the 
+Update scripts to clearly indicate which overload should be used. This can typically done by explicitly casting the 
 methods' type parameters as `System.Type`. See [this link](https://support.microsoft.com/en-us/kb/2909958/) for more
 detail and examples of how to workaround the issue.
 
