@@ -74,7 +74,7 @@ by performing the following:
 
 ## Configuration
 
-The .NET Portabilty Analyzer can be configured through the Options window.
+The .NET Portability Analyzer can be configured through the Options window.
 Here, you can choose what .NET platforms to perform your analysis against, and
 the file name, location and formats of the analysis report.
 

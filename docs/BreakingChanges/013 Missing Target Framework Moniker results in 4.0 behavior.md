@@ -10,7 +10,7 @@ Major
 Available
 
 ### Change Description
-Applications without a [TargetFrameworkAttribute](https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute(v=vs.110).aspx) applied at the assembly level will automatically run using the semantics (quirks) of the .NET Framework 4.0. To ensure high quality, it is recommended that all binaries be explicitly attributed with a TargetFrameworkAttribute indicating the version of the .NET Framework they were built with. Note that using a target framework moniker in a project file will caues MSBuild to automatically apply a TargetFrameworkAttribute.
+Applications without a [TargetFrameworkAttribute](https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute(v=vs.110).aspx) applied at the assembly level will automatically run using the semantics (quirks) of the .NET Framework 4.0. To ensure high quality, it is recommended that all binaries be explicitly attributed with a TargetFrameworkAttribute indicating the version of the .NET Framework they were built with. Note that using a target framework moniker in a project file will cause MSBuild to automatically apply a TargetFrameworkAttribute.
 
 - [ ] Quirked
 - [ ] Build-time break

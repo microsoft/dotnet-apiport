@@ -13,7 +13,7 @@ Planned
 This change applies to an ItemsControl that does its own virtualization in the
 direction orthogonal to the main scrolling direction (the chief example is
 DataGrid with EnableColumnVirtualization="True").  The outcome of certain 
-horizontal scolling operations has been changed to produce results that are more
+horizontal scrolling operations has been changed to produce results that are more
 intuitive and more analogous to the results of comparable vertical operations.
 
 The operations include "Scroll Here" and "Right Edge", to use the names from the menu
