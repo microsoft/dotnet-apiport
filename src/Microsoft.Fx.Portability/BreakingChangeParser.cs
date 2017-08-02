@@ -43,7 +43,7 @@ namespace Microsoft.Fx.Portability
         /// <returns>BreakingChanges parsed from the markdown</returns>
         public static IEnumerable<BreakingChange> FromMarkdown(Stream stream)
         {
-            // Use a separate overload instead of a default parameter so that binaries built against the older version of 
+            // Use a separate overload instead of a default parameter so that binaries built against the older version of
             // Microsoft.Fx.Portability (without the new FromMarkdown overload) will keep working without recompilation.
             return FromMarkdown(stream, null);
         }
@@ -93,7 +93,7 @@ namespace Microsoft.Fx.Portability
                             int id;
                             if (int.TryParse(splitTitle[0], out id))
                             {
-                                currentBreak.Id = id.ToString();
+                                currentBreak.Id = id.ToString(CultureInfo.InvariantCulture);
                                 currentBreak.Title = splitTitle[1].Trim();
                             }
                             else
@@ -192,7 +192,7 @@ namespace Microsoft.Fx.Portability
                         else if (currentLine.StartsWith("<!--", StringComparison.Ordinal))
                         {
                             var contents = currentLine.Replace("<!--", "").Replace("-->", "");
-                            var startIndex = contents.IndexOf(":");
+                            var startIndex = contents.IndexOf(":", StringComparison.Ordinal);
                             int id;
 
                             // <!-- breaking change id: 144 -->
@@ -200,7 +200,7 @@ namespace Microsoft.Fx.Portability
                                 && startIndex != -1
                                 && int.TryParse(contents.Substring(startIndex + 1), out id))
                             {
-                                currentBreak.Id = id.ToString();
+                                currentBreak.Id = id.ToString(CultureInfo.InvariantCulture);
                             }
 
                             state = ParseState.None;

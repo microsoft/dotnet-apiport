@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -22,7 +23,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override string ToString()
         {
-            return $"{Name}, v{Version}, Targets: [{string.Join(",", ExpandedTargets)}]";
+            FormattableString format = $"{Name}, v{Version}, Targets: [{string.Join(",", ExpandedTargets)}]";
+
+            return format.ToString(CultureInfo.CurrentCulture);
         }
     }
 }

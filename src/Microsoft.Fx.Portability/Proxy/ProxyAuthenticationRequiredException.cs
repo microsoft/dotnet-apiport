@@ -1,11 +1,12 @@
 ﻿using Microsoft.Fx.Portability.Resources;
 using System;
+using System.Globalization;
 using System.Net;
 
 namespace Microsoft.Fx.Portability
 {
     /// <summary>
-    /// Thrown when trying to call the <see cref="Endpoint"/> resulted in <see cref="HttpStatusCode.ProxyAuthenticationRequired"/> 
+    /// Thrown when trying to call the <see cref="Endpoint"/> resulted in <see cref="HttpStatusCode.ProxyAuthenticationRequired"/>
     /// </summary>
     public class ProxyAuthenticationRequiredException : Exception
     {
@@ -30,7 +31,7 @@ namespace Microsoft.Fx.Portability
 
         public override string ToString()
         {
-            var formatted = string.Format(LocalizedStrings.ProxyAuthenticationRequiredMessage, Endpoint);
+            var formatted = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ProxyAuthenticationRequiredMessage, Endpoint);
 
             return formatted + Environment.NewLine + base.ToString();
         }
