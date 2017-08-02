@@ -92,9 +92,17 @@ However, the said XmlResolver property no longer exists in .NET portable framewo
 So we suppress this error until the reporting for CA3053 has been updated to account for .NET portable framework.")]
         private void Load(Stream stream, string path)
         {
+            var readerSettings = new XmlReaderSettings
+            {
+                CheckCharacters = true,
+                CloseInput = false,
+                IgnoreComments = true,
+                IgnoreWhitespace = true,
+            };
+
             try
             {
-                var doc = XDocument.Load(XmlReader.Create(stream));
+                var doc = XDocument.Load(XmlReader.Create(stream, readerSettings));
 
 #if FEATURE_XML_SCHEMA
                 // Validate against schema
@@ -164,7 +172,7 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
         {
             foreach (var group in targets.GroupBy(target => target.Identifier))
             {
-                /*If you specify Windows/8.0 and Windows/8.1 we would need to keep both name and the platform. 
+                /*If you specify Windows/8.0 and Windows/8.1 we would need to keep both name and the platform.
                 Windows 8.0, Windows 8.1
 
                 However if you specify Windows/8.0 and Silverlight/5.0 we would only want to keep the name:
@@ -199,12 +207,12 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
         /// If there are Grouped Targets, like:
         /// Available Grouped Targets:
         /// - Mobile (Windows, Windows Phone, Xamarin.Android, Xamarin.iOS)
-        /// 
+        ///
         /// Then:
         /// GetAlias(".NET Framework") will return ".NET Framework"
         /// GetAlias("Windows") will return "Mobile"
         /// GetAlias("Windows Phone") will return "Mobile"
-        /// 
+        ///
         /// </example>
         /// <param name="targetName">Official target name</param>
         public string GetAlias(string targetName)
@@ -236,7 +244,7 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
         /// </summary>
         /// <param name="aliasString">
         /// Expected input similar to the following:
-        /// 
+        ///
         /// alias1: target1, target2; alias2: target1, target2, target3
         /// </param>
         /// <param name="validate">if true, and exception will be thrown if format is not correct</param>
