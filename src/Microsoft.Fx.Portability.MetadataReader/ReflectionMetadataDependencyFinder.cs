@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -43,7 +44,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 return true;
             }
 
-            _progressReporter.ReportIssue(string.Format(LocalizedStrings.UnknownFile, file.Name));
+            _progressReporter.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownFile, file.Name));
 
             return false;
         }

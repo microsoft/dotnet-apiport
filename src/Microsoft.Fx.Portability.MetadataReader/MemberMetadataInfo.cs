@@ -277,7 +277,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 if (MethodSignature.GenericParameterCount > 0)
                 {
-                    sb.Append($"``{MethodSignature.GenericParameterCount}");
+                    sb.Append(FormattableString.Invariant($"``{MethodSignature.GenericParameterCount}"));
                 }
             }
 

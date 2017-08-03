@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
@@ -90,6 +91,7 @@ namespace Microsoft.Fx.Portability
         /// <param name="metadataReader"></param>
         /// <param name="handle"></param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Security.Cryptography", "CA5354:SHA1CannotBeUsed", Justification = "Public key tokens are calculated using a SHA-1 hash.")]
         private static string FormatPublicKeyToken(this MetadataReader metadataReader, BlobHandle handle)
         {
             byte[] bytes = metadataReader.GetBlobBytes(handle);

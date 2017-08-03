@@ -23,9 +23,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override string ToString()
         {
-            FormattableString format = $"{Name}, v{Version}, Targets: [{string.Join(",", ExpandedTargets)}]";
-
-            return format.ToString(CultureInfo.CurrentCulture);
+            return FormattableString.Invariant($"{Name}, v{Version}, Targets: [{string.Join(",", ExpandedTargets)}]");
         }
     }
 }

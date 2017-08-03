@@ -283,7 +283,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             return new MemberMetadataInfo(elementType)
             {
-                Name = $"{elementType.Name}[]"
+                Name = FormattableString.Invariant($"{elementType.Name}[]")
             };
         }
 
@@ -299,7 +299,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             return new MemberMetadataInfo(elementType)
             {
-                Name = $"{elementType.Name}@"
+                Name = FormattableString.Invariant($"{elementType.Name}@")
             };
         }
 
@@ -309,7 +309,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Type generic arguments are prefixed with `
             return new MemberMetadataInfo
             {
-                Name = $"``{index}",
+                Name = FormattableString.Invariant($"``{index}"),
                 IsGenericInstance = true
             };
         }
@@ -319,7 +319,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             // Type generic arguments are prefixed with `
             return new MemberMetadataInfo
             {
-                Name = $"`{index}",
+                Name = FormattableString.Invariant($"`{index}"),
                 IsGenericInstance = true
             };
         }

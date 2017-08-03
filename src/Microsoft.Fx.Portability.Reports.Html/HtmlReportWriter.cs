@@ -61,7 +61,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         private static string Resolve(string name)
         {
-            var fullName = $"{typeof(HtmlReportWriter).Assembly.GetName().Name}.Resources.{name}.cshtml";
+            var fullName = FormattableString.Invariant($"{typeof(HtmlReportWriter).Assembly.GetName().Name}.Resources.{name}.cshtml");
             using (var template = typeof(HtmlReportWriter).GetTypeInfo().Assembly.GetManifestResourceStream(fullName))
             {
                 if (template == default(Stream))
