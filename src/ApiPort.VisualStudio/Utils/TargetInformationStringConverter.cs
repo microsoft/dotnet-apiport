@@ -19,7 +19,7 @@ namespace ApiPortVS.Utils
                 return string.Empty;
             }
 
-            return string.Format(LocalizedStrings.TargetPlatformVersionFormat, version.PlatformName, version.Version);
+            return string.Format(CultureInfo.InvariantCulture, LocalizedStrings.TargetPlatformVersionFormat, version.PlatformName, version.Version);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

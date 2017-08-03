@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -92,7 +93,7 @@ namespace Microsoft.Fx.Portability
 
                 if (stream == null)
                 {
-                    throw new PortabilityAnalyzerException($"Could not find data file '{path}'. Either ensure the file is accessible during build or place it next to ApiPort at runtime.");
+                    throw new PortabilityAnalyzerException(((FormattableString)$"Could not find data file '{path}'. Either ensure the file is accessible during build or place it next to ApiPort at runtime.").ToString(CultureInfo.CurrentCulture));
                 }
 
                 return stream;

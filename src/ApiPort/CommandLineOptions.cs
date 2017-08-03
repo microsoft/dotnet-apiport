@@ -62,13 +62,13 @@ namespace ApiPort
             if (!string.IsNullOrEmpty(suppliedCommand) && command == null)
             {
                 Console.WriteLine();
-                Program.WriteColorLine($"Unknown command: {suppliedCommand}", ConsoleColor.Red);
+                Program.WriteColorLine(FormattableString.Invariant($"Unknown command: {suppliedCommand}"), ConsoleColor.Red);
             }
             else if (error)
             {
                 Console.WriteLine();
                 // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
-                Program.WriteColorLine($"Invalid parameter passed to {suppliedCommand}", ConsoleColor.Red);
+                Program.WriteColorLine(FormattableString.Invariant($"Invalid parameter passed to {suppliedCommand}"), ConsoleColor.Red);
             }
 
             var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
@@ -87,7 +87,7 @@ namespace ApiPort
             {
                 Console.WriteLine();
                 Console.WriteLine(new string('=', Math.Min(Console.WindowWidth, 100)));
-                Program.WriteColorLine($"{path} {displayCommand.Name} [options]", ConsoleColor.Yellow);
+                Program.WriteColorLine(FormattableString.Invariant($"{path} {displayCommand.Name} [options]"), ConsoleColor.Yellow);
                 Console.WriteLine();
                 Console.WriteLine(displayCommand.HelpMessage);
             }

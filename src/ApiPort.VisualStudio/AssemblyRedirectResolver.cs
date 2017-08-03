@@ -40,7 +40,7 @@ namespace ApiPortVS
             var redirects = assemblyFolder.GetFiles("*.dll")
                 .Select(dll => {
                     var name = AssemblyName.GetAssemblyName(dll.FullName);
-                    var publicKeyToken = name.GetPublicKeyToken().Aggregate("", (s, b) => s += b.ToString("x2"));
+                    var publicKeyToken = name.GetPublicKeyToken().Aggregate("", (s, b) => s += b.ToString("x2", CultureInfo.InvariantCulture));
                     return new AssemblyRedirect(name.Name, name.Version.ToString(), publicKeyToken);
                 });
 

@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -92,7 +93,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             _output.WriteLine("Found docids:");
             _output.WriteLine(string.Join(Environment.NewLine, dependencies.Dependencies.Select(o => o.Key.MemberDocId).OrderBy(o => o)));
 
-            Assert.True(false, $"Could not find docid '{docid}'");
+            Assert.True(false, ((FormattableString)$"Could not find docid '{docid}'").ToString(CultureInfo.CurrentCulture));
         }
 
         [Fact]

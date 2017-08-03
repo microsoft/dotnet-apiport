@@ -20,7 +20,7 @@ namespace ApiPortVS.Utils
 
             if (target.AlternativeNames.Count > 0)
             {
-                return $"{target.Name} ({string.Join(", ", target.AlternativeNames)})";
+                return FormattableString.Invariant($"{target.Name} ({string.Join(", ", target.AlternativeNames)})");
             }
             else
             {

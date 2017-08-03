@@ -92,7 +92,7 @@ namespace ApiPort.Proxy
                 return null;
             }
 
-            if (address.IndexOf("://") == -1)
+            if (address.IndexOf("://", StringComparison.Ordinal) == -1)
             {
                 address = "http://" + address;
             }

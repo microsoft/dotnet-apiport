@@ -37,7 +37,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 return true;
             }
 
-            _progressReport.ReportIssue(string.Format(LocalizedStrings.UnknownFile, file.Name));
+            _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownFile, file.Name));
 
             return false;
         }

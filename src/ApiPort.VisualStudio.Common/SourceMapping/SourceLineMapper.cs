@@ -9,6 +9,7 @@ using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -38,7 +39,7 @@ namespace ApiPortVS.SourceMapping
 
             foreach (var assembly in assemblyPaths)
             {
-                using (var task = _progressReporter.StartTask(string.Format("\t{0}\b\b\b", Path.GetFileName(assembly))))
+                using (var task = _progressReporter.StartTask(string.Format(CultureInfo.InvariantCulture, "\t{0}\b\b\b", Path.GetFileName(assembly))))
                 {
                     try
                     {
@@ -46,7 +47,7 @@ namespace ApiPortVS.SourceMapping
 
                         if (!_fileSystem.FileExists(pdbPath))
                         {
-                            _progressReporter.ReportIssue(string.Format(LocalizedStrings.PdbNotFoundFormat, assembly));
+                            _progressReporter.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.PdbNotFoundFormat, assembly));
                             task.Abort();
                         }
                         else
@@ -62,9 +63,9 @@ namespace ApiPortVS.SourceMapping
                                 // Due to an OutOfMemoryException thrown when trying to parse portable pdb files.
                                 // https://github.com/icsharpcode/ILSpy/issues/789
                                 // There is no public build for https://github.com/Microsoft/cci yet, which supports it.
-                                Trace.TraceError($"OOM while trying to parse pdb file." + Environment.NewLine + ex.ToString());
+                                Trace.TraceError("OOM while trying to parse pdb file." + Environment.NewLine + ex.ToString());
 
-                                _progressReporter.ReportIssue(string.Format(LocalizedStrings.SourceLineMappingNotSupportedPortablePdb, assembly));
+                                _progressReporter.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.SourceLineMappingNotSupportedPortablePdb, assembly));
 
                                 task.Abort();
                             }
