@@ -22,19 +22,20 @@ namespace ApiPortVS
     /// </summary>
     public class DefaultProjectBuilder : IProjectBuilder
     {
-        protected readonly IVsSolutionBuildManager2 _buildManager;
-        protected readonly IProjectMapper _projectMapper;
-        protected readonly IVSThreadingService _threadingService;
+        private readonly IVsSolutionBuildManager2 _buildManager;
+        private readonly IVSThreadingService _threadingService;
 
         public DefaultProjectBuilder(
             IVsSolutionBuildManager2 buildManager,
             IVSThreadingService threadingService,
             IProjectMapper projectMapper)
         {
-            _projectMapper = projectMapper;
+            ProjectMapper = projectMapper;
             _threadingService = threadingService;
             _buildManager = buildManager;
         }
+
+        public IProjectMapper ProjectMapper { get; }
 
         public virtual async Task<bool> BuildAsync(IEnumerable<Project> projects)
         {
@@ -52,7 +53,7 @@ namespace ApiPortVS
 
             foreach (var project in projects)
             {
-                var hierarchy = await _projectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
+                var hierarchy = await ProjectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
                 bag.Add(hierarchy);
             }
 
@@ -89,7 +90,7 @@ namespace ApiPortVS
 
         public virtual async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var configuration = await _projectMapper.GetVsProjectConfigurationAsync(project).ConfigureAwait(false);
+            var configuration = await ProjectMapper.GetVsProjectConfigurationAsync(project).ConfigureAwait(false);
 
             if (configuration == null)
             {
