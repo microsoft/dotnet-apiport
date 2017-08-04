@@ -24,6 +24,15 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
+  <!-- FxCop does not understand this target platform and will output the
+    following errors:
+    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp1.0\ApiPort.dll'
+    MSBUILD : error : CA0052 : No targets were selected.
+    -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.4.0" />
     <PackageReference Include="Autofac.Configuration" Version="4.0.1" />

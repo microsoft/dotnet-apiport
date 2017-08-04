@@ -29,6 +29,8 @@
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <CreateVsixContainer>True</CreateVsixContainer>
+    <!-- Skip FxCop on this project because it does not output any binaries. -->
+    <RunCodeAnalysis>false</RunCodeAnalysis>
 
     <StartAction>Program</StartAction>
     <StartProgram>$(DevEnvDir)\devenv.exe</StartProgram>
