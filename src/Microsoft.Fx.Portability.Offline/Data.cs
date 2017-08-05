@@ -93,7 +93,7 @@ namespace Microsoft.Fx.Portability
 
                 if (stream == null)
                 {
-                    throw new PortabilityAnalyzerException(((FormattableString)$"Could not find data file '{path}'. Either ensure the file is accessible during build or place it next to ApiPort at runtime.").ToString(CultureInfo.CurrentCulture));
+                    throw new PortabilityAnalyzerException(FormattableString.Invariant($"Could not find data file '{path}'. Either ensure the file is accessible during build or place it next to ApiPort at runtime."));
                 }
 
                 return stream;

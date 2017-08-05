@@ -35,7 +35,7 @@ namespace ApiPortVS
             _buildManager = buildManager;
         }
 
-        public IProjectMapper ProjectMapper { get; }
+        protected IProjectMapper ProjectMapper { get; }
 
         public virtual async Task<bool> BuildAsync(IEnumerable<Project> projects)
         {
