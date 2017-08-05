@@ -23,7 +23,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
         [Theory]
         public void CanFindTemplates(string templateName)
         {
-            var fullName = $"{typeof(HtmlReportWriter).Assembly.GetName().Name}.Resources.{templateName}";
+            var fullName = FormattableString.Invariant($"{typeof(HtmlReportWriter).Assembly.GetName().Name}.Resources.{templateName}");
 
             var stream = typeof(HtmlReportWriter).Assembly.GetManifestResourceStream(fullName);
 
@@ -67,7 +67,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
                 var contents = File.ReadAllText(tempFile);
 
                 Assert.True(!string.IsNullOrEmpty(contents));
-                Assert.Contains(response.SubmissionId, contents);
+                Assert.Contains(response.SubmissionId, contents, StringComparison.Ordinal);
             }
             finally
             {

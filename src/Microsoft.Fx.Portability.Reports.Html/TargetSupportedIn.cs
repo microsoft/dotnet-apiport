@@ -8,9 +8,9 @@ namespace Microsoft.Fx.Portability.Reports
 {
     public sealed class TargetSupportedIn
     {
-        public readonly Version SupportedIn;
+        public Version SupportedIn { get; }
 
-        public readonly FrameworkName Target;
+        public FrameworkName Target { get; }
 
         public TargetSupportedIn(FrameworkName target, Version supportedIn)
         {

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 
 namespace Microsoft.Cci.Extensions
@@ -154,7 +155,7 @@ namespace Microsoft.Cci.Extensions
             if (member != null)
                 return member.ContainingType.GetAssemblyReference();
 
-            throw new NotSupportedException(string.Format("Unknown IReference '{0}' so we cannot get assembly reference!", reference.GetType().FullName));
+            throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, "Unknown IReference '{0}' so we cannot get assembly reference!", reference.GetType().FullName));
         }
 
         public static bool IsGenericParameter(this ITypeReference type)
@@ -277,7 +278,7 @@ namespace Microsoft.Cci.Extensions
             if (named != null)
                 return named.Name.Value;
 
-            Contract.Assert(false, String.Format("Fell through cases in TypeExtensions.FullName() Type of reference: {0}", reference.GetType()));
+            Contract.Assert(false, String.Format(CultureInfo.CurrentCulture, "Fell through cases in TypeExtensions.FullName() Type of reference: {0}", reference.GetType()));
             return "<Unknown Reference Type>";
         }
 
@@ -307,7 +308,7 @@ namespace Microsoft.Cci.Extensions
                 return assembly.DocId();
 
             // Include the hash code as well to make it unique so we can use this for a key
-            return "<Unknown Reference Type>" + reference.GetHashCode().ToString();
+            return "<Unknown Reference Type>" + reference.GetHashCode().ToString(CultureInfo.InvariantCulture);
         }
 
         public static IEnumerable<INamespaceDefinition> GetAllNamespaces(this IAssembly assembly)
@@ -431,7 +432,7 @@ namespace Microsoft.Cci.Extensions
                 || reference is IGenericTypeParameterReference
                 || reference is IGenericMethodParameterReference
                 || reference is IFunctionPointerTypeReference,
-                string.Format("Unexpected type reference that we may need to unwrap {0}", (reference != null ? reference.GetType().FullName : "null")));
+                string.Format(CultureInfo.CurrentCulture, "Unexpected type reference that we may need to unwrap {0}", (reference != null ? reference.GetType().FullName : "null")));
 
             return reference;
         }
@@ -557,7 +558,7 @@ namespace Microsoft.Cci.Extensions
 
         public static string GetPublicKeyToken(this AssemblyIdentity identity)
         {
-            return identity.PublicKeyToken.Aggregate("", (s, b) => s += b.ToString("x2"));
+            return identity.PublicKeyToken.Aggregate("", (s, b) => s += b.ToString("x2", CultureInfo.InvariantCulture));
         }
 
         public static bool IsFrameworkAssembly(this AssemblyIdentity identity)

@@ -76,7 +76,7 @@ namespace Microsoft.Fx.Portability.Reporting
 
             if (!string.IsNullOrEmpty(originalExtension) && !originalExtension.Equals(extension, StringComparison.OrdinalIgnoreCase))
             {
-                _progressReporter.ReportIssue(string.Format(LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
+                _progressReporter.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ChangingFileExtension, fileName, originalExtension, extension));
             }
 
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);

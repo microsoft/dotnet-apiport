@@ -427,7 +427,7 @@ namespace Microsoft.Fx.Portability
 
             if (options.Targets.Count() > MaxNumberOfTargets && options.OutputFormats.Contains(Excel, StringComparer.OrdinalIgnoreCase))
             {
-                throw new InvalidApiPortOptionsException(string.Format(LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
+                throw new InvalidApiPortOptionsException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
             }
         }
 

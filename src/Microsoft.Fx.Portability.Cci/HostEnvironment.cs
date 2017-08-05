@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -372,7 +373,7 @@ namespace Microsoft.Cci.Extensions
                 // Call base probe which has logic to check the frameworks installed on the machine
                 result = base.ProbeAssemblyReference(referringUnit, referencedAssembly);
 
-                if (result != null && result.Location != null && !result.Location.StartsWith("unknown"))
+                if (result != null && result.Location != null && !result.Location.StartsWith("unknown", StringComparison.Ordinal))
                     return result;
             }
 
@@ -442,7 +443,7 @@ namespace Microsoft.Cci.Extensions
             var coreAssemblyFile = contractSet.FirstOrDefault(c => Path.GetFileNameWithoutExtension(c).EndsWith(coreAssemblySimpleName, StringComparison.OrdinalIgnoreCase) == true);
             if (string.IsNullOrEmpty(coreAssemblyFile))
             {
-                throw new InvalidOperationException(string.Format("Could not find core assembly '{0}' in the list of contracts.", coreAssemblySimpleName));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Could not find core assembly '{0}' in the list of contracts.", coreAssemblySimpleName));
             }
 
             return coreAssemblyFile;
@@ -555,7 +556,7 @@ namespace Microsoft.Cci.Extensions
                 if (filePath == null)
                 {
                     if (logErrorCallback != null)
-                        logErrorCallback(string.Format("File does not exist {0}", file), LoadErrorTreatment);
+                        logErrorCallback(string.Format(CultureInfo.CurrentCulture, "File does not exist {0}", file), LoadErrorTreatment);
                     continue;
                 }
 
@@ -563,7 +564,7 @@ namespace Microsoft.Cci.Extensions
                 if (assembly == null)
                 {
                     if (logErrorCallback != null)
-                        logErrorCallback(string.Format("Failed to load assembly {0}", filePath), LoadErrorTreatment);
+                        logErrorCallback(string.Format(CultureInfo.CurrentCulture, "Failed to load assembly {0}", filePath), LoadErrorTreatment);
                     continue;
                 }
 
@@ -573,7 +574,7 @@ namespace Microsoft.Cci.Extensions
             if (assemblySet.Count == 0)
             {
                 if (logErrorCallback != null)
-                    logErrorCallback(string.Format("No assemblies loaded for {0}", string.Join(", ", paths)), LoadErrorTreatment);
+                    logErrorCallback(string.Format(CultureInfo.CurrentCulture, "No assemblies loaded for {0}", string.Join(", ", paths)), LoadErrorTreatment);
             }
 
             return new ReadOnlyCollection<IAssembly>(assemblySet);
@@ -625,14 +626,14 @@ namespace Microsoft.Cci.Extensions
                 var matchingAssembly = this.LoadAssembly(matchingIdentity);
                 if ((matchingAssembly == null || matchingAssembly == Dummy.Assembly) && logErrorOrWarningCallback != null)
                 {
-                    string message = string.Format("Failed to find or load matching assembly '{0}'.", identity.Name.Value);
+                    string message = string.Format(CultureInfo.CurrentCulture, "Failed to find or load matching assembly '{0}'.", identity.Name.Value);
                     logErrorOrWarningCallback(message, LoadErrorTreatment);
                     continue;
                 }
 
                 if (!identity.Version.Equals(matchingAssembly.Version) && logErrorOrWarningCallback != null && warnOnVersionMismatch)
                 {
-                    string message = string.Format("Found '{0}' with version '{1}' instead of '{2}'.", identity.Name.Value, matchingAssembly.Version, identity.Version);
+                    string message = string.Format(CultureInfo.CurrentCulture, "Found '{0}' with version '{1}' instead of '{2}'.", identity.Name.Value, matchingAssembly.Version, identity.Version);
                     logErrorOrWarningCallback(message, ErrorTreatment.TreatAsWarning);
                 }
 
@@ -641,7 +642,7 @@ namespace Microsoft.Cci.Extensions
 
                 if (!idPKT.Equals(matchingPKT) && logErrorOrWarningCallback != null)
                 {
-                    string message = string.Format("Found '{0}' with PublicKeyToken '{1}' instead of '{2}'.", identity.Name.Value, matchingPKT, idPKT);
+                    string message = string.Format(CultureInfo.CurrentCulture, "Found '{0}' with PublicKeyToken '{1}' instead of '{2}'.", identity.Name.Value, matchingPKT, idPKT);
                     logErrorOrWarningCallback(message, ErrorTreatment.TreatAsWarning);
                 }
 
@@ -660,7 +661,7 @@ namespace Microsoft.Cci.Extensions
 
                 if (coreIdentity == null)
                 {
-                    throw new InvalidOperationException(String.Format("Could not find core assembly '{0}' in the list of identities.", coreAssemblySimpleName));
+                    throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Could not find core assembly '{0}' in the list of identities.", coreAssemblySimpleName));
                 }
 
                 identities = Enumerable.Concat(new List<AssemblyIdentity>() { coreIdentity }, identities.Where(ai => ai != coreIdentity));

@@ -81,11 +81,12 @@ namespace ApiPort.CommandLine
         {
             foreach (var tag in array.Tags)
             {
-                var newKey = $"{array.ExpectedTag}:{array.Count++}";
+                var newKey = FormattableString.Invariant($"{array.ExpectedTag}:{array.Count++}");
+                var theTag = FormattableString.Invariant($"{tag}=");
 
-                if (arg.StartsWith($"{tag}=", StringComparison.OrdinalIgnoreCase))
+                if (arg.StartsWith(theTag, StringComparison.OrdinalIgnoreCase))
                 {
-                    return arg.Replace($"{tag}=", $"{newKey}=");
+                    return arg.Replace(theTag, FormattableString.Invariant($"{newKey}="));
                 }
                 else if (string.Equals(arg, tag, StringComparison.OrdinalIgnoreCase))
                 {

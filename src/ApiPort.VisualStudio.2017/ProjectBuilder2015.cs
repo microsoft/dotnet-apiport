@@ -65,7 +65,7 @@ namespace ApiPortVS.VS2017
                 throw new ArgumentNullException(nameof(project));
             }
 
-            var hierarchy = await _projectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
+            var hierarchy = await ProjectMapper.GetVsHierarchyAsync(project).ConfigureAwait(false);
 
             if (hierarchy == null)
             {

@@ -72,7 +72,7 @@ namespace ApiPortVS.ViewModels
                     AddExtension = true,
                     CheckPathExists = true,
                     DefaultExt = extension,
-                    Filter = $"*{extension}|*{extension}",
+                    Filter = FormattableString.Invariant($"*{extension}|*{extension}"),
                     FileName = path
                 };
 

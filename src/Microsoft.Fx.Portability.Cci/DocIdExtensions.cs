@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.IO;
 
 namespace Microsoft.Cci.Extensions
@@ -44,7 +46,7 @@ namespace Microsoft.Cci.Extensions
 
         public static string DocId(this AssemblyIdentity assembly)
         {
-            return string.Format("A:{0}", assembly.Name.Value);
+            return string.Format(CultureInfo.InvariantCulture, "A:{0}", assembly.Name.Value);
         }
 
         public static string DocId(this IPlatformInvokeInformation platformInvoke)
@@ -52,7 +54,7 @@ namespace Microsoft.Cci.Extensions
             //return string.Format("I:{0}.{1}", platformInvoke.ImportModule.Name.Value, platformInvoke.ImportName.Value);
 
             // For now so we can use this to match up with the modern sdk names only include the pinvoke name in the identifier.
-            return string.Format("{0}", platformInvoke.ImportName.Value);
+            return string.Format(CultureInfo.InvariantCulture, "{0}", platformInvoke.ImportName.Value);
         }
 
         public static string RefDocId(this IReference reference)
@@ -75,7 +77,7 @@ namespace Microsoft.Cci.Extensions
             if (assembly != null)
                 return assembly.DocId();
 
-            Contract.Assert(false, string.Format("Fell through cases in TypeExtensions.RefDocId() Type of reference: {0}", reference.GetType()));
+            Contract.Assert(false, string.Format(CultureInfo.InvariantCulture, "Fell through cases in TypeExtensions.RefDocId() Type of reference: {0}", reference.GetType()));
             return "<Unknown Reference Type>";
         }
 
@@ -88,7 +90,7 @@ namespace Microsoft.Cci.Extensions
 
             foreach (string id in File.ReadAllLines(docIdsFile))
             {
-                if (string.IsNullOrWhiteSpace(id) || id.StartsWith("#") || id.StartsWith("//"))
+                if (string.IsNullOrWhiteSpace(id) || id.StartsWith("#", StringComparison.Ordinal) || id.StartsWith("//", StringComparison.Ordinal))
                     continue;
 
                 ids.Add(id.Trim());

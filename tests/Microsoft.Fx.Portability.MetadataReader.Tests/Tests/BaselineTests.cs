@@ -3,8 +3,10 @@
 
 using Microsoft.Fx.Portability.Analyzer;
 using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,13 +41,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             var fileName = Path.GetFileNameWithoutExtension(path);
             var version = FileVersionInfo.GetVersionInfo(path);
-            var version_file = $"{fileName}_{version.ProductVersion}.json";
+            var version_file = FormattableString.Invariant($"{fileName}_{version.ProductVersion}.json");
+            var dataFile = FormattableString.Invariant($"Data.{version_file}");
 
-            using (var data = typeof(ManagedMetadataReaderTests).GetTypeInfo().Assembly.GetManifestResourceStream($"Data.{version_file}"))
+            using (var data = typeof(ManagedMetadataReaderTests).GetTypeInfo().Assembly.GetManifestResourceStream(dataFile))
             {
                 if (data == null)
                 {
-                    Assert.True(false, $"Could not find baseline file for {fileName} version={version.ProductVersion}");
+                    Assert.True(false, ((FormattableString)$"Could not find baseline file for {fileName} version={version.ProductVersion}").ToString(CultureInfo.CurrentCulture));
                 }
 
                 return data.Deserialize<IEnumerable<ObjectModel.MemberInfo>>();

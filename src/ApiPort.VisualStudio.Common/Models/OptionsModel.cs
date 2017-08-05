@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -101,7 +102,7 @@ namespace ApiPortVS.Models
             }
             catch (IOException)
             {
-                Debug.WriteLine(string.Format(LocalizedStrings.UnableToSaveFileFormat, s_optionsFilePath));
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnableToSaveFileFormat, s_optionsFilePath));
 
                 return false;
             }

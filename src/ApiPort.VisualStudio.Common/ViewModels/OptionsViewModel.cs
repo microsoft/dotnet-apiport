@@ -8,6 +8,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -275,7 +276,7 @@ namespace ApiPortVS.ViewModels
                     if (_currentVersions.Count(x => x.IsSelected) > ApiPortClient.MaxNumberOfTargets && containsExcel)
                     {
                         HasError = true;
-                        ErrorMessage = string.Format(Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
+                        ErrorMessage = string.Format(CultureInfo.CurrentCulture, Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
                     }
                     else
                     {

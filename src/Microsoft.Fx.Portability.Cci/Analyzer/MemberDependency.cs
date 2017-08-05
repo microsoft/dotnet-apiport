@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
+using System.Globalization;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -55,7 +56,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override string ToString()
         {
-            return string.Format("{0} [{1}]", MemberDocId, CallingAssembly.AssemblyIdentity);
+            return string.Format(CultureInfo.InvariantCulture, "{0} [{1}]", MemberDocId, CallingAssembly.AssemblyIdentity);
         }
 
         public override bool Equals(object obj)

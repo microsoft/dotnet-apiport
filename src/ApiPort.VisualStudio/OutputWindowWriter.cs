@@ -7,6 +7,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace ApiPortVS
         private readonly IVsOutputWindowPane _outputWindow;
 
         public OutputWindowWriter(DTE dte, IVsOutputWindowPane outputWindow)
+            : base(CultureInfo.CurrentCulture)
         {
             _outputWindow = outputWindow;
             _dte = dte;

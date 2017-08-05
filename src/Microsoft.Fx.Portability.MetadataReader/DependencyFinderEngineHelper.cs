@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -136,7 +137,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             return new MemberDependency
             {
                 CallingAssembly = CallingAssembly,
-                MemberDocId = $"T:{type}",
+                MemberDocId = FormattableString.Invariant($"T:{type}"),
                 DefinedInAssemblyIdentity = definedInAssembly
             };
         }
@@ -180,8 +181,8 @@ namespace Microsoft.Fx.Portability.Analyzer
             return new MemberDependency
             {
                 CallingAssembly = CallingAssembly,
-                MemberDocId = $"{GetPrefix(memberReference)}:{memberRefInfo}",
-                TypeDocId = $"T:{memberRefInfo.ParentType}",
+                MemberDocId = FormattableString.Invariant($"{GetPrefix(memberReference)}:{memberRefInfo}"),
+                TypeDocId = FormattableString.Invariant($"T:{memberRefInfo.ParentType}"),
                 IsPrimitive = memberRefInfo.ParentType.IsPrimitiveType,
                 DefinedInAssemblyIdentity = definedInAssemblyIdentity
             };
