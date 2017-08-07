@@ -5,12 +5,13 @@
     <SourceProjectsDirectory>$(RepositoryRootDirectory)src</SourceProjectsDirectory>
   </PropertyGroup>
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
     <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputDrop>
     <OutputIntermediate>$(MSBuildThisFileDirectory)obj\$(Configuration)</OutputIntermediate>
     <NoWarn>1570,1572,1573,1574,1591</NoWarn>
   </PropertyGroup>
-
   <!-- Assembly signing not supported on Linux, yet.
     `CS7027: Error signing output with public key from file` -->
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
