@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.0</TargetFramework>
+    <NonShipping>true</NonShipping>
   </PropertyGroup>
 
   <!-- FxCop does not understand this target platform and will output the
