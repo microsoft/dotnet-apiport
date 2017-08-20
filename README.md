@@ -16,7 +16,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
 2. Building:
    * Visual Studio: `PortabilityTools.sln`
-   * Powershell: `build.ps1 -Configuration Debug -Platform AnyCPU`
+   * Powershell: `.\build.ps1 -Configuration Debug -Platform AnyCPU`
 
 ### Linux/Mac
 
