@@ -143,12 +143,15 @@ namespace ApiPort
             return Task.FromResult(new ServiceResponse<AnalyzeResponse>(new AnalyzeResponse()));
         }
 
+        /// <summary>
+        /// Returns the analysis as <see cref="s_formats"/>. Input <paramref name="formats"/> is ignored.
+        /// </summary>
         public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
         {
-            var result = formats.Select(f => new ReportingResultWithFormat
+            var result = s_formats.Select(f => new ReportingResultWithFormat
             {
-                Data = SendAnalysisAsync(a, f),
-                Format = f
+                Data = SendAnalysisAsync(a, f.DisplayName),
+                Format = f.DisplayName
             });
 
             return Task.FromResult(new ServiceResponse<IEnumerable<ReportingResultWithFormat>>(result.ToList()));
