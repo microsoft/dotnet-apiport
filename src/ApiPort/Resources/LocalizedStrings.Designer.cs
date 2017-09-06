@@ -484,7 +484,7 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was an unexpected error.  Please try again or contact NETAPIPort@Microsoft.com for help..
+        ///   Looks up a localized string similar to There was an unexpected error.  Please try again or contact apiport@microsoft.com for help..
         /// </summary>
         public static string UnknownException {
             get {
