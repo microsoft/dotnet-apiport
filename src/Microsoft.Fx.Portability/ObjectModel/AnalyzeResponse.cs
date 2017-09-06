@@ -30,6 +30,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IList<FrameworkName> Targets { get; set; }
 
+        public IList<NuGetPackageInfo> NuGetPackages { get; set; }
+
         [JsonIgnore]
         public ReportingResult ReportingResult { get; set; }
 

@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -71,9 +72,16 @@ namespace ApiPort.CommandLine
                 ".ildll"
             };
 
-            private readonly ICollection<IAssemblyFile> _inputAssemblies = new SortedSet<IAssemblyFile>(new AssemblyFileComparer());
+            /// <summary>
+            /// All of the input assemblies.
+            /// Key: Assembly file
+            /// Value: Boolean indicating whether the assembly was explicitly
+            ///     specified. True if the it was passed in the command line
+            ///     arguments and false otherwise.
+            /// </summary>
+            private readonly IDictionary<IAssemblyFile, bool> _inputAssemblies = new SortedDictionary<IAssemblyFile, bool>(new AssemblyFileComparer());
 
-            // Case insensitive so that if this is run on a case-sensitive file system, we don't override anything 
+            // Case insensitive so that if this is run on a case-sensitive file system, we don't override anything
             private readonly ICollection<string> _invalidInputFiles = new SortedSet<string>(StringComparer.Ordinal);
 
             public AppCommands Command { get; } = AppCommands.AnalyzeAssemblies;
@@ -87,7 +95,7 @@ namespace ApiPort.CommandLine
                 TargetMapFile = options.TargetMap;
                 BreakingChangeSuppressions = options.SuppressBreakingChange;
 
-                //Set OverwriteOutputFile to true if the output file name is explicitly specified 
+                // Set OverwriteOutputFile to true if the output file name is explicitly specified
                 if(!string.IsNullOrWhiteSpace(options.Out))
                 {
                     OverwriteOutputFile = true;
@@ -98,16 +106,18 @@ namespace ApiPort.CommandLine
                 UpdateInputAssemblies(options);
             }
 
-            public override IEnumerable<IAssemblyFile> InputAssemblies
+            /// <summary>
+            /// All of the input assemblies.
+            /// Key: Assembly file
+            /// Value: Boolean indicating whether the assembly was explicitly
+            ///     specified. True if the it was passed in (ie. command-line
+            ///     arguments) and false otherwise.
+            /// </summary>
+            public override ImmutableDictionary<IAssemblyFile, bool> InputAssemblies
             {
                 get
                 {
-                    return _inputAssemblies;
-                }
-
-                set
-                {
-                    throw new InvalidOperationException();
+                    return _inputAssemblies.ToImmutableDictionary();
                 }
             }
 
@@ -141,7 +151,7 @@ namespace ApiPort.CommandLine
                     RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
                 }
 
-                // If nothing is set, default to ShowNonPortableApis 
+                // If nothing is set, default to ShowNonPortableApis
                 if ((RequestFlags & (AnalyzeRequestFlags.ShowBreakingChanges | AnalyzeRequestFlags.ShowNonPortableApis)) == AnalyzeRequestFlags.None)
                 {
                     RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
@@ -152,30 +162,45 @@ namespace ApiPort.CommandLine
             {
                 foreach (var file in options.File)
                 {
-                    UpdateInputAssemblies(file);
+                    UpdateInputAssemblies(file, isExplicitlySpecified: true);
                 }
             }
 
-            /// <summary> 
-            /// This will search the input given and find all paths 
-            /// </summary> 
-            /// <param name="path">A file and directory path</param> 
-            private void UpdateInputAssemblies(string path)
+            /// <summary>
+            /// This will search the input given and find all paths
+            /// </summary>
+            /// <param name="path">A file and directory path</param>
+            /// <param name="isExplicitlySpecified">Whether the assembly was explicitly specified</param>
+            private void UpdateInputAssemblies(string path, bool isExplicitlySpecified)
             {
                 if (Directory.Exists(path))
                 {
                     foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
                     {
-                        UpdateInputAssemblies(file);
+                        // If the user passes in a whole directory, any assembly we find in there
+                        // was not explicitly passed in.
+                        UpdateInputAssemblies(file, isExplicitlySpecified: false);
                     }
                 }
                 else if (File.Exists(path))
                 {
-                    // Only add files with valid PE extensions to the list of 
-                    // assemblies to analyze since others are not valid assemblies 
+                    // Only add files with valid PE extensions to the list of
+                    // assemblies to analyze since others are not valid assemblies
                     if (HasValidPEExtension(path))
                     {
-                        _inputAssemblies.Add(new FilePathAssemblyFile(path));
+                        var filePath = new FilePathAssemblyFile(path);
+                        if (_inputAssemblies.TryGetValue(filePath, out var isAssemblySpecified))
+                        {
+                            // If the assembly already exists, and it was not
+                            // specified explicitly, in the the case where one
+                            // value does not match the other, we default to
+                            // saying that the assembly is specified.
+                            _inputAssemblies[filePath] = isExplicitlySpecified || isAssemblySpecified;
+                        }
+                        else
+                        {
+                            _inputAssemblies.Add(filePath, isExplicitlySpecified);
+                        }
                     }
                 }
                 else

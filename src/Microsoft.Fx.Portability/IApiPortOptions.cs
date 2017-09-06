@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 
 namespace Microsoft.Fx.Portability
@@ -10,7 +11,12 @@ namespace Microsoft.Fx.Portability
     public interface IApiPortOptions
     {
         string Description { get; }
-        IEnumerable<IAssemblyFile> InputAssemblies { get; }
+
+        /// <summary>
+        /// Key: IAssemblyFile
+        /// Value: true if the file was explicitly specified and false otherwise.
+        /// </summary>
+        ImmutableDictionary<IAssemblyFile, bool> InputAssemblies { get; }
         IEnumerable<string> IgnoredAssemblyFiles { get; }
         AnalyzeRequestFlags RequestFlags { get; }
         IEnumerable<string> Targets { get; }

@@ -4,16 +4,18 @@
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace ApiPortVS
 {
     public class AnalysisOptions : IApiPortOptions
     {
-        public AnalysisOptions(string description, IEnumerable<string> inputAssemblies, IEnumerable<string> targets, IEnumerable<string> formats, bool discardMetadata, string outputFileName)
+        public AnalysisOptions(string description, IEnumerable<string> inputAssemblies, IEnumerable<string> targets, IEnumerable<string> formats, bool discardMetadata, string outputFileName, bool isAssemblySpecified)
         {
             Description = description;
-            InputAssemblies = inputAssemblies.Select(target => new AssemblyFile(target)).ToList();
+            InputAssemblies = inputAssemblies.Select(target => new KeyValuePair<IAssemblyFile, bool>(new AssemblyFile(target), isAssemblySpecified)).ToImmutableDictionary();
+
             Targets = targets.ToList();
             OutputFormats = formats.ToList();
             OutputFileName = outputFileName;
@@ -28,7 +30,7 @@ namespace ApiPortVS
 
         public string Description { get; }
 
-        public IEnumerable<IAssemblyFile> InputAssemblies { get; }
+        public ImmutableDictionary<IAssemblyFile, bool> InputAssemblies { get; }
 
         public AnalyzeRequestFlags RequestFlags { get; }
 

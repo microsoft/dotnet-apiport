@@ -5,7 +5,6 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer
@@ -14,7 +13,6 @@ namespace Microsoft.Fx.Portability.Analyzer
     {
         private readonly IDependencyFilter _assemblyFilter;
         private readonly MetadataReader _reader;
-        private readonly string _assemblyLocation;
 
         private readonly AssemblyReferenceInformation _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
@@ -23,11 +21,11 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             _assemblyFilter = assemblyFilter;
             _reader = metadataReader;
-            _assemblyLocation = file.Name;
 
             MemberDependency = new List<MemberDependency>();
             CallingAssembly = new AssemblyInfo
             {
+                Location = file.Name,
                 AssemblyIdentity = metadataReader.FormatAssemblyInfo().ToString(),
                 FileVersion = file.Version ?? string.Empty,
                 TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty

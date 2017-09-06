@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Versioning;
@@ -16,13 +17,15 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private readonly IApiCatalogLookup _catalog;
         private readonly IApiRecommendations _recommendations;
+        private readonly IPackageFinder _packageFinder;
 
         public DateTimeOffset CatalogLastUpdated { get { return _catalog.LastModified; } }
 
-        public AnalysisEngine(IApiCatalogLookup catalog, IApiRecommendations recommendations)
+        public AnalysisEngine(IApiCatalogLookup catalog, IApiRecommendations recommendations, IPackageFinder packageFinder)
         {
             _catalog = catalog;
             _recommendations = recommendations;
+            _packageFinder = packageFinder;
         }
 
         public IEnumerable<AssemblyInfo> FindBreakingChangeSkippedAssemblies(IEnumerable<FrameworkName> targets, IEnumerable<AssemblyInfo> userAssemblies, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore)
@@ -219,6 +222,74 @@ namespace Microsoft.Fx.Portability.Analysis
 
                 yield return userAsm;
             }
+        }
+
+        public IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfo(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets)
+        {
+            foreach (var assembly in assemblies)
+            {
+                if (_packageFinder.TryFindPackage(assembly, targets, out var packages))
+                {
+                    foreach (var target in targets)
+                    {
+                        var nuGetPackageInfo = new NuGetPackageInfo(assembly, target, packages.ContainsKey(target) ? packages[target] : Enumerable.Empty<NuGetPackageId>());
+                        yield return nuGetPackageInfo;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns a set of assemblies that should be removed if NuGet packages
+        /// exist for all the targets
+        /// </summary>
+        public IEnumerable<string> ComputeAssembliesToRemove(
+            IEnumerable<AssemblyInfo> userAssemblies,
+            IEnumerable<FrameworkName> targets,
+            IEnumerable<NuGetPackageInfo> nugetPackagesForUserAssemblies)
+        {
+            foreach (var assembly in userAssemblies)
+            {
+                // If the user specified this assembly, we want to skip it.
+                if (assembly == default(AssemblyInfo) || assembly.IsExplicitlySpecified)
+                {
+                    continue;
+                }
+
+                bool supportedOnAllTargets = true;
+                foreach (var target in targets)
+                {
+                    var packagesExist = nugetPackagesForUserAssemblies.Any(
+                        p => string.Equals(p.AssemblyInfo, assembly.AssemblyIdentity, StringComparison.Ordinal)
+                        && p.Target == target);
+
+                    if (!packagesExist)
+                    {
+                        supportedOnAllTargets = false;
+                        break;
+                    }
+                }
+                if (supportedOnAllTargets)
+                {
+                    yield return assembly.AssemblyIdentity;
+                }
+            }
+        }
+
+        public IDictionary<MemberInfo, ICollection<AssemblyInfo>> FilterDependencies(IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies, IEnumerable<string> assembliesToRemove)
+        {
+            // Create a new dictionary of dependencies where we remove the assemblies that should be skipped
+            var filteredDependencies = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
+            foreach (var dependency in dependencies)
+            {
+                var newList = dependency.Value.Where(a => !assembliesToRemove.Contains(a.AssemblyIdentity));
+
+                if (newList.Any())
+                {
+                    filteredDependencies.Add(dependency.Key, newList.ToList());
+                }
+            }
+            return filteredDependencies;
         }
 
         private static string GetAssemblyIdentityWithoutCultureAndVersion(string assemblyIdentity)

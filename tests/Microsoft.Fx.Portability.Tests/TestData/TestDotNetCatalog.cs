@@ -3,18 +3,12 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
-using System.Runtime.Versioning;
+using static Microsoft.Fx.Portability.Tests.TestData.TestFrameworks;
 
 namespace Microsoft.Fx.Portability.Tests.TestData
 {
     public class TestDotNetCatalog : DotNetCatalog
     {
-        private static readonly FrameworkName s_windows80 = new FrameworkName("Windows,Version=v8.0");
-        private static readonly FrameworkName s_windows81 = new FrameworkName("Windows,Version=v8.1");
-        private static readonly FrameworkName s_netCore50 = new FrameworkName(".NET Core,Version=v5.0");
-        private static readonly FrameworkName s_net11 = new FrameworkName(".NET Framework,Version=v1.1");
-        private static readonly FrameworkName s_net40 = new FrameworkName(".NET Framework,Version=v4.0");
-
         private static readonly string[] s_frameworkIdentities = new[] {
             "System.Collections, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Collections.Concurrent, PublicKeyToken=b03f5f7f11d50a3a",
@@ -22,11 +16,13 @@ namespace Microsoft.Fx.Portability.Tests.TestData
         };
 
         private static readonly TargetInfo[] s_testSupportedTargets = new[] {
-            new TargetInfo { DisplayName = s_windows80, IsReleased = true },
-            new TargetInfo { DisplayName = s_windows81, IsReleased = true },
-            new TargetInfo { DisplayName = s_netCore50, IsReleased = true },
-            new TargetInfo { DisplayName = s_net11, IsReleased = true },
-            new TargetInfo { DisplayName = s_net40, IsReleased = true },
+            new TargetInfo { DisplayName = Windows80, IsReleased = true },
+            new TargetInfo { DisplayName = Windows81, IsReleased = true },
+            new TargetInfo { DisplayName = NetCore50, IsReleased = true },
+            new TargetInfo { DisplayName = Net11, IsReleased = true },
+            new TargetInfo { DisplayName = Net40, IsReleased = true },
+            new TargetInfo { DisplayName = NetStandard16, IsReleased = true },
+            new TargetInfo { DisplayName = NetStandard20, IsReleased = false },
         };
 
         public TestDotNetCatalog()
@@ -40,8 +36,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
 
         private ApiInfoStorage[] GetApis()
         {
-            var targets11 = new[] { s_windows80, s_netCore50, s_net11 };
-            var targets40 = new[] { s_windows80, s_netCore50, s_net40 };
+            var targets11 = new[] { Windows80, NetCore50, Net11 };
+            var targets40 = new[] { Windows80, NetCore50, Net40, NetStandard16 };
 
             var apis = new[] {
                 new ApiInfoStorage {

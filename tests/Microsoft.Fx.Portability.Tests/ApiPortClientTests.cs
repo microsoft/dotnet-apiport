@@ -7,6 +7,7 @@ using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,7 +74,6 @@ namespace Microsoft.Fx.Portability.Tests
 
             dependencyFinder.FindDependencies(Arg.Any<IEnumerable<IAssemblyFile>>(), Arg.Any<IProgressReporter>()).Returns(r =>
             {
-                var list = r.Arg<IEnumerable<IAssemblyFile>>();
                 var shared = r.Arg<IProgressReporter>();
 
                 var dependencies = Substitute.For<IDependencyInfo>();
@@ -93,7 +93,7 @@ namespace Microsoft.Fx.Portability.Tests
             var options = Substitute.For<IApiPortOptions>();
 
             options.Targets.Returns(Enumerable.Empty<string>());
-            options.InputAssemblies.Returns(Enumerable.Empty<IAssemblyFile>());
+            options.InputAssemblies.Returns(ImmutableDictionary<IAssemblyFile, bool>.Empty);
 
             var result = await client.AnalyzeAssembliesAsync(options);
         }

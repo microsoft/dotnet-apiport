@@ -57,7 +57,8 @@ namespace Microsoft.Fx.Portability
         {
             ValidateOptions(options);
 
-            var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
+            var assemblies = options.InputAssemblies?.Keys ?? Array.Empty<IAssemblyFile>();
+            var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
 
             if (dependencyInfo.UserAssemblies.Any())
             {
@@ -192,7 +193,7 @@ namespace Microsoft.Fx.Portability
                 {
                     filePath = Path.GetFullPath(suppliedOutputFileName);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _progressReport.ReportIssue(string.Format(CultureInfo.InvariantCulture, ex.Message));
                     progressTask.Abort();
@@ -235,7 +236,8 @@ namespace Microsoft.Fx.Portability
         /// <returns>A collection of reports</returns>
         private async Task<MultipleFormatAnalysis> GetAnalysisResultAsync(IApiPortOptions options)
         {
-            var dependencyInfo = _dependencyFinder.FindDependencies(options.InputAssemblies, _progressReport);
+            var assemblies = options.InputAssemblies?.Keys ?? Array.Empty<IAssemblyFile>();
+            var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
 
             if (dependencyInfo.UserAssemblies.Any())
             {
@@ -290,6 +292,21 @@ namespace Microsoft.Fx.Portability
 
         private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyInfo)
         {
+            // Match the dependencyInfo for each user assembly to the given
+            // input assemblies to see whether or not the assembly was explicitly
+            // specified.
+            foreach (var assembly in dependencyInfo.UserAssemblies)
+            {
+                // Windows's file paths are case-insensitive
+                var matchingAssembly = options.InputAssemblies.SingleOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
+
+                // AssemblyInfo is explicitly specified if we found a matching
+                // assembly location in the input dictionary AND the value is
+                // true.
+                assembly.IsExplicitlySpecified = matchingAssembly.Key != default(IAssemblyFile)
+                    && matchingAssembly.Value;
+            }
+
             return new AnalyzeRequest
             {
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
@@ -346,7 +363,8 @@ namespace Microsoft.Fx.Portability
                         response.MissingDependencies,
                         dependencyInfo?.UnresolvedAssemblies,
                         response.UnresolvedUserAssemblies,
-                        dependencyInfo?.AssembliesWithErrors
+                        dependencyInfo?.AssembliesWithErrors,
+                        response.NuGetPackages
                     );
                 }
                 catch (Exception)

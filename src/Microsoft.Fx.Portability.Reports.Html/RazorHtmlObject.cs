@@ -38,6 +38,8 @@ namespace Microsoft.Fx.Portability.Reports
 
         public IOrderedEnumerable<AssemblyInfo> OrderedBreakingChangeSkippedAssemblies { get; private set; }
 
+        public IEnumerable<NuGetPackageInfo> NuGetPackages { get; private set; }
+
         public RazorHtmlObject(AnalyzeResponse response, ITargetMapper targetMapper)
         {
             CatalogBuiltOn = response.CatalogLastUpdated;
@@ -54,6 +56,7 @@ namespace Microsoft.Fx.Portability.Reports
 
             var skippedAssemblies = response.BreakingChangeSkippedAssemblies ?? Enumerable.Empty<AssemblyInfo>();
             OrderedBreakingChangeSkippedAssemblies = skippedAssemblies.OrderBy(a => a.AssemblyIdentity);
+            NuGetPackages = response.NuGetPackages;
         }
 
         private IDictionary<BreakingChange, IEnumerable<MemberInfo>> GetBreakingChangesSummary(IEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> orderedBreakingChangesByAssembly)

@@ -105,13 +105,17 @@ namespace ApiPortVS.Analyze
             // TODO: Allow setting description
             string description = null;
 
+            // NuGet packages referenced in the project system are not
+            // explicitly passed in, so we'll not want to see their portability
+            // statistics.
             return new AnalysisOptions(
                 description,
                 assemblyPaths,
                 targets,
                 formats,
                 !_optionsViewModel.SaveMetadata,
-                reportFileName);
+                reportFileName,
+                isAssemblySpecified: false);
         }
     }
 }
