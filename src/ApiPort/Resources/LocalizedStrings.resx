@@ -183,7 +183,7 @@ go here - http://go.microsoft.com/fwlink/?LinkId=397652</value>
     <value>; </value>
   </data>
   <data name="UnknownException" xml:space="preserve">
-    <value>There was an unexpected error.  Please try again or contact NETAPIPort@Microsoft.com for help.</value>
+    <value>There was an unexpected error.  Please try again or contact apiport@microsoft.com for help.</value>
   </data>
   <data name="TargetsListGrouped" xml:space="preserve">
     <value>- {0} ({1})</value>
