@@ -154,7 +154,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var assemblyToTest = TestAssembly.Create("FilterApis.cs");
             var progressReporter = Substitute.For<IProgressReporter>();
 
-            var files = new[] { new KeyValuePair<IAssemblyFile, bool>(assemblyToTest, false) };
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
             var foundDocIds = dependencies.Dependencies
                 .Select(m => m.Key.MemberDocId)
