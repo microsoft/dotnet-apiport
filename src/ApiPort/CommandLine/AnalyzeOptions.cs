@@ -43,7 +43,7 @@ namespace ApiPort.CommandLine
             return options.Help ? CommonCommands.Help : new AnalyzeCommandLineOption(options);
         }
 
-        private class Options
+        public class Options
         {
             public string Endpoint { get; set; }
             public List<string> File { get; set; } = new List<string>();
@@ -61,7 +61,7 @@ namespace ApiPort.CommandLine
             public string TargetMap { get; set; }
         }
 
-        private class AnalyzeCommandLineOption : ConsoleDefaultApiPortOptions, ICommandLineOptions
+        public class AnalyzeCommandLineOption : ConsoleDefaultApiPortOptions, ICommandLineOptions
         {
             private readonly static string[] s_ValidExtensions = new string[]
             {
