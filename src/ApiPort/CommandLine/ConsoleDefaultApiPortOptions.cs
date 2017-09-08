@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
@@ -75,7 +76,14 @@ namespace ApiPort.CommandLine
             }
         }
 
-        public override IEnumerable<IAssemblyFile> InputAssemblies
+        /// <summary>
+        /// All of the input assemblies.
+        /// Key: Assembly file
+        /// Value: Boolean indicating whether the assembly was explicitly
+        ///     specified. True if it was passed in (ie. command-line
+        ///     arguments) and false otherwise.
+        /// </summary>
+        public override ImmutableDictionary<IAssemblyFile, bool> InputAssemblies
         {
             get { return base.InputAssemblies; }
             set

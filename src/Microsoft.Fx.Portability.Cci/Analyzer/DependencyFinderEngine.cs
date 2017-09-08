@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Cci.Extensions;
+using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.Cci.Extensions;
-using Microsoft.Fx.Portability.ObjectModel;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -121,10 +121,14 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                 // Extract the fileversion and assembly version from the assembly.
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);
-                AssemblyInfo assemblyInfo = new AssemblyInfo();
-                assemblyInfo.AssemblyIdentity = cciAssembly.AssemblyIdentity.Format();
-                assemblyInfo.FileVersion = fileInfo.FileVersion ?? string.Empty;
-                assemblyInfo.TargetFrameworkMoniker = cciAssembly.GetTargetFrameworkMoniker();
+
+                var assemblyInfo = new AssemblyInfo
+                {
+                    Location = cciAssembly.Location,
+                    AssemblyIdentity = cciAssembly.AssemblyIdentity.Format(),
+                    FileVersion = fileInfo.FileVersion ?? string.Empty,
+                    TargetFrameworkMoniker = cciAssembly.GetTargetFrameworkMoniker()
+                };
 
                 // remember this assembly as a user assembly.
                 _userAssemblies.Add(assemblyInfo);

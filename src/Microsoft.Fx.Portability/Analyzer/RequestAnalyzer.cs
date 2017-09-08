@@ -38,10 +38,16 @@ namespace Microsoft.Fx.Portability.Analyzer
             var assemblyIdentities = request?.UserAssemblies.Where(x => x != null && x.AssemblyIdentity != null).Select(a => a.AssemblyIdentity)
                 ?? Enumerable.Empty<string>();
 
-            var userAssemblies = new HashSet<string>(assemblyIdentities, StringComparer.OrdinalIgnoreCase);
+            var nugetPackagesForUserAssemblies = _analysisEngine.GetNuGetPackagesInfo(assemblyIdentities, targets);
+            var assembliesToRemove = new HashSet<string>(_analysisEngine.ComputeAssembliesToRemove(request.UserAssemblies, targets, nugetPackagesForUserAssemblies), StringComparer.OrdinalIgnoreCase);
+
+            var userAssemblies = new HashSet<string>(assemblyIdentities.Where(a => !assembliesToRemove.Contains(a)), StringComparer.OrdinalIgnoreCase);
+
+            // Remove the entries for which nuget packages exist
+            var dependencies = _analysisEngine.FilterDependencies(request.Dependencies, assembliesToRemove);
 
             var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
-                ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, request.Dependencies)
+                ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, dependencies)
                 : new List<MemberInfo>();
 
             var unresolvedAssemblies = request.UnresolvedAssembliesDictionary != null
@@ -58,15 +64,18 @@ namespace Microsoft.Fx.Portability.Analyzer
                 ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, userAssemblies, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
                 : new List<BreakingChangeDependency>();
 
+            var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfo(missingUserAssemblies, targets);
+            var nugetPackages = nugetPackagesForMissingAssemblies.Union(nugetPackagesForUserAssemblies).ToList();
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,
                 request.RequestFlags,
-                request.Dependencies,
+                dependencies,
                 notInAnyTarget,
                 request.UnresolvedAssembliesDictionary,
                 missingUserAssemblies,
-                request.AssembliesWithErrors);
+                request.AssembliesWithErrors,
+                nugetPackages);
 
             return new AnalyzeResponse
             {
@@ -78,7 +87,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 ReportingResult = reportingResult,
                 SubmissionId = submissionId,
                 BreakingChanges = breakingChanges,
-                BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies
+                BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies,
+                NuGetPackages = nugetPackages
             };
         }
     }

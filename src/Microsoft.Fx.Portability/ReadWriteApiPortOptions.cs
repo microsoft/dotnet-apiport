@@ -3,7 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.Immutable;
 
 namespace Microsoft.Fx.Portability
 {
@@ -35,7 +35,7 @@ namespace Microsoft.Fx.Portability
 
         public virtual IEnumerable<string> IgnoredAssemblyFiles { get; set; }
 
-        public virtual IEnumerable<IAssemblyFile> InputAssemblies { get; set; }
+        public virtual ImmutableDictionary<IAssemblyFile, bool> InputAssemblies { get; set; }
 
         public virtual IEnumerable<string> InvalidInputFiles { get; set; }
 

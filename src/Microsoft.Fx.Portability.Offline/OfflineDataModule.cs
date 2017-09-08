@@ -5,7 +5,6 @@ using Autofac;
 using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.Fx.Portability.Reports;
 using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability
@@ -35,6 +34,10 @@ namespace Microsoft.Fx.Portability
 
             builder.RegisterType<OfflineApiRecommendations>()
                 .As<IApiRecommendations>()
+                .SingleInstance();
+
+            builder.RegisterType<OfflinePackageFinder>()
+                .As<IPackageFinder>()
                 .SingleInstance();
 
             builder.RegisterType<TargetNameParser>()

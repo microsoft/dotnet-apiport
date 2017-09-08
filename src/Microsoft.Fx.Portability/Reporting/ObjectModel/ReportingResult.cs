@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         public AnalyzeRequestFlags RequestFlags { get { return _requestFlags; } }
         public IList<FrameworkName> Targets { get { return _targets; } }
         public string SubmissionId { get; private set; }
-
+        public IList<NuGetPackageInfo> NuGetPackages { get; set; }
         public ReportingResult(IList<FrameworkName> targets, IEnumerable<MemberInfo> types, string submissionId, AnalyzeRequestFlags requestFlags)
         {
             _targets = targets;

@@ -21,7 +21,8 @@ namespace Microsoft.Fx.Portability.Reporting
             IList<MemberInfo> missingDependencies,
             IDictionary<string, ICollection<string>> unresolvedAssemblies,
             IList<string> unresolvedUserAssemblies,
-            IEnumerable<string> assembliesWithErrors)
+            IEnumerable<string> assembliesWithErrors,
+            IList<NuGetPackageInfo> nugetPackages)
         {
             var types = allDependencies.Keys.Where(dep => dep.TypeDocId == null);
             ReportingResult result = new ReportingResult(targets, types, submissionId, requestFlags);
@@ -78,6 +79,7 @@ namespace Microsoft.Fx.Portability.Reporting
                 result.SetAssemblyNameMap(assemblyNameMap);
             }
 
+            result.NuGetPackages = nugetPackages;
             return result;
         }
 

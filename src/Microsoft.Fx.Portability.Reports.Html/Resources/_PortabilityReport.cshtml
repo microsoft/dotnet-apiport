@@ -208,3 +208,63 @@
             </p>
         }
 </div>
+
+@if (Model.NuGetPackages != null && Model.NuGetPackages.Any())
+{
+    <div id="nugetpackageinfo">
+        <h3>Available NuGet Packages</h3>
+        @{
+            var nugetColumnHeaders = new List<string>();
+            nugetColumnHeaders.Add("Assembly");
+            nugetColumnHeaders.Add("Framework");
+            nugetColumnHeaders.Add("Package Id");
+            nugetColumnHeaders.Add("Package Version");
+        }
+    
+        <table>
+            <tbody>
+                <tr>
+                    @foreach (var header in nugetColumnHeaders)
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+                @foreach (var nugetPackage in Model.NuGetPackages)
+                {
+                    if (nugetPackage.SupportedPackages != null)
+                    {
+                        foreach (var package in nugetPackage.SupportedPackages)
+                        {
+                            <tr>
+                                <td>@nugetPackage.AssemblyInfo</td>
+                                <td>@nugetPackage.Target.FullName</td>
+                                @if (!string.IsNullOrEmpty(package.Hyperlink))
+                                {
+                                    <td><a href="@package.Hyperlink">@package.PackageId</a></td>
+                                }
+                                else
+                                {
+                                    <td>@package.PackageId</td>
+                                }
+                                <td>@package.Version</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@nugetPackage.AssemblyInfo</td>
+                            <td>@nugetPackage.Target.FullName</td>
+                            <td>Not Supported</td>
+                        </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+
+        <p>
+            <a href="#@LocalizedStrings.PortabilitySummaryPageTitle">@LocalizedStrings.BackToSummary</a>
+        </p>
+    </div>
+}

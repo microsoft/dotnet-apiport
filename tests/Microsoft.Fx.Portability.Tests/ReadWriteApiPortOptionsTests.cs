@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +34,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             public IEnumerable<string> IgnoredAssemblyFiles { get; } = GenerateRandomList(5);
 
-            public IEnumerable<IAssemblyFile> InputAssemblies { get; } = new[] { new TestAssemblyFile() };
+            public ImmutableDictionary<IAssemblyFile, bool> InputAssemblies { get; } = ImmutableDictionary<IAssemblyFile, bool>.Empty.Add(new TestAssemblyFile(), false);
 
             public IEnumerable<string> InvalidInputFiles { get; } = GenerateRandomList(5);
 

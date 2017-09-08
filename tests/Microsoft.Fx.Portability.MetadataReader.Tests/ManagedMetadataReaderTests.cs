@@ -7,7 +7,6 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
@@ -176,7 +175,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var progressReporter = Substitute.For<IProgressReporter>();
-
+            
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
             var foundDocIds = dependencies
