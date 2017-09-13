@@ -66,6 +66,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfo(missingUserAssemblies, targets);
             var nugetPackages = nugetPackagesForMissingAssemblies.Union(nugetPackagesForUserAssemblies).ToList();
+            nugetPackages.Sort(new NuGetPackageInfoComparer());
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,
