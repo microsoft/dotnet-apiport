@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override bool Equals(object obj)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return false;
             }
