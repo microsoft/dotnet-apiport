@@ -176,15 +176,44 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             Assert.Empty(assemblies);
         }
 
-        private static AssemblyInfo GetAssemblyInfo(string assemblyName, string version, bool isExplicitlySpecified)
+        /// <summary>
+        /// Tests that if the flag isExplicitlySpecified is not set in AssemblyInfo,
+        /// it defaults to being true (which means assembly is not removed).
+        /// That is important for compatibility of old ApiPort tool with the service, after 
+        /// 'isExplicitlySpecified' was added.
+        /// </summary>
+        [Fact]
+        public void ComputeAssembliesToRemove_AssemblyFlagNotSet()
         {
-            return GetAssemblyInfo(assemblyName, version, string.Empty, isExplicitlySpecified);
+            // Arrange
+            var userNuGetPackage = GetAssemblyInfo("NugetPackageAssembly", "2.0.5.0");
+            var inputAssemblies = new[] { userNuGetPackage };
+
+            var targets = new[] { Windows81, NetStandard16 };
+            var packageId = new[] { GetNuGetPackage("SomeNuGetPackage", "2.0.1") };
+            var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), Substitute.For<IPackageFinder>());
+
+            var nugetPackageResult = new[]
+            {
+                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, Windows81, packageId),
+                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, NetStandard16, packageId)
+            };
+
+            var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
+
+            Assert.Empty(assemblies);
         }
 
-        private static AssemblyInfo GetAssemblyInfo(string assemblyName, string version, string location, bool isExplicitlySpecified)
+        private static AssemblyInfo GetAssemblyInfo(string assemblyName, string version, bool isExplicitlySpecified)
         {
             var name = new FrameworkName(assemblyName, Version.Parse(version));
             return new AssemblyInfo { AssemblyIdentity = name.ToString(), IsExplicitlySpecified = isExplicitlySpecified };
+        }
+
+        private static AssemblyInfo GetAssemblyInfo(string assemblyName, string version)
+        {
+            var name = new FrameworkName(assemblyName, Version.Parse(version));
+            return new AssemblyInfo { AssemblyIdentity = name.ToString() };
         }
 
         private static NuGetPackageId GetNuGetPackage(string packageId, string version, string url = null)

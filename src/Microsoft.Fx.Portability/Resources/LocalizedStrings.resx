@@ -353,4 +353,16 @@
   <data name="MissingAssemblyInfo" xml:space="preserve">
     <value>Cannot locate assembly info for System.Object</value>
   </data>
+  <data name="FrameworkNameHeader" xml:space="preserve">
+    <value>Framework</value>
+    <comment>Framework name header column in Excel</comment>
+  </data>
+  <data name="PackageIdHeader" xml:space="preserve">
+    <value>PackageId</value>
+    <comment>PackageId header column in Excel</comment>
+  </data>
+  <data name="VersionHeader" xml:space="preserve">
+    <value>Version</value>
+    <comment>Version header column in Excel</comment>
+  </data>
 </root>

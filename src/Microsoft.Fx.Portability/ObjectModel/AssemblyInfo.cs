@@ -54,7 +54,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
         }
 
-        public bool IsExplicitlySpecified { get; set; }
+        public bool IsExplicitlySpecified { get; set; } = true;
 
         public override bool Equals(object obj)
         {
