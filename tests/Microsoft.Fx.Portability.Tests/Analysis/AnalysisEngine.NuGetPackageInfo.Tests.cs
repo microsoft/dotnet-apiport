@@ -179,7 +179,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// <summary>
         /// Tests that if the flag isExplicitlySpecified is not set in AssemblyInfo,
         /// it defaults to being true (which means assembly is not removed).
-        /// That is important for compatibility of old ApiPort tool with the new service, after 
+        /// That is important for compatibility of old ApiPort tool with the service, after 
         /// 'isExplicitlySpecified' was added.
         /// </summary>
         [Fact]
