@@ -20,7 +20,7 @@ namespace Microsoft.Fx.Portability.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LocalizedStrings {
@@ -211,6 +211,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string EdgeCompatIssueDescription {
             get {
                 return ResourceManager.GetString("EdgeCompatIssueDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Framework.
+        /// </summary>
+        public static string FrameworkNameHeader {
+            get {
+                return ResourceManager.GetString("FrameworkNameHeader", resourceCulture);
             }
         }
         
@@ -410,6 +419,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string OverwriteFile {
             get {
                 return ResourceManager.GetString("OverwriteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PackageId.
+        /// </summary>
+        public static string PackageIdHeader {
+            get {
+                return ResourceManager.GetString("PackageIdHeader", resourceCulture);
             }
         }
         
@@ -698,6 +716,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string UsedBy {
             get {
                 return ResourceManager.GetString("UsedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string VersionHeader {
+            get {
+                return ResourceManager.GetString("VersionHeader", resourceCulture);
             }
         }
         
