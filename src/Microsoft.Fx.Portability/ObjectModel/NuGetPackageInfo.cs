@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -18,9 +20,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public NuGetPackageInfo(string assemblyInfo, FrameworkName target, IEnumerable<NuGetPackageId> supportedPackages)
         {
-            AssemblyInfo = assemblyInfo;
-            Target = target;
-            SupportedPackages = supportedPackages?.ToImmutableList() ?? ImmutableList.Create<NuGetPackageId>();
+            AssemblyInfo = assemblyInfo ?? throw new ArgumentNullException(nameof(assemblyInfo));
+            Target = target ?? throw new ArgumentNullException(nameof(target));
+            SupportedPackages = supportedPackages?.OrderBy(x => x.PackageId).ToImmutableList() ?? ImmutableList.Create<NuGetPackageId>();
         }
 
         public override bool Equals(object obj)
@@ -32,8 +34,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
             if (obj is NuGetPackageInfo other)
             {
-                return string.Equals(other.AssemblyInfo, AssemblyInfo, System.StringComparison.Ordinal)
-                && Target.Equals(other.Target);
+                return string.Equals(other.AssemblyInfo, AssemblyInfo, StringComparison.Ordinal)
+                    && Target.Equals(other.Target)
+                    && SupportedPackages.SequenceEqual(other.SupportedPackages);
             }
             return false;
         }
