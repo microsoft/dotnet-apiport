@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <PropertyGroup>
-    <RepositoryRootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))</RepositoryRootDirectory>
-    <SourceProjectsDirectory>$(RepositoryRootDirectory)src</SourceProjectsDirectory>
-  </PropertyGroup>
+
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
-    <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputDrop>
-    <OutputIntermediate>$(MSBuildThisFileDirectory)obj\$(Configuration)</OutputIntermediate>
-    <NoWarn>1570,1572,1573,1574,1591</NoWarn>
+    <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>
+    <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(OutputFullPath)bin\$(Configuration)\</OutputDrop>
+    <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
+    <DocumentationFile>$(OutputPath)$(MSBuildProjectName).xml</DocumentationFile>
+    <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
   <!-- Assembly signing not supported on Linux, yet.
     `CS7027: Error signing output with public key from file` -->
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
@@ -42,4 +46,8 @@
     <PackageTags>.NET portability apiport</PackageTags>
     <Copyright>Copyright 2017</Copyright>
   </PropertyGroup>
+
+  <!-- Some of the project types do not have a pack target. This creates a default empty pack target that will be overridden in supported project types -->
+  <Target Name="Pack">
+  </Target>
 </Project>

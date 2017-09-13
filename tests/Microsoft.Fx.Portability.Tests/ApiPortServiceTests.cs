@@ -28,7 +28,6 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public void VerifyParameterChecks()
         {
-            string endpoint = null;
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation("")));
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation("")));
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation("")));
