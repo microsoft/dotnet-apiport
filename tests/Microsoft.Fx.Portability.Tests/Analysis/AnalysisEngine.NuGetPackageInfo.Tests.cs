@@ -67,8 +67,8 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             var netstandard16Result = nugetPackageResult.Single(x => x.Target == NetStandard16);
             var net11Result = nugetPackageResult.Single(x => x.Target == Net11);
 
-            Assert.Equal(1, windows80Result.SupportedPackages.Count);
-            Assert.Equal(1, netstandard16Result.SupportedPackages.Count);
+            Assert.Single(windows80Result.SupportedPackages);
+            Assert.Single(netstandard16Result.SupportedPackages);
             // We did not have any packages that supported .NET Standard 2.0
             Assert.Empty(net11Result.SupportedPackages);
 
@@ -110,7 +110,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
 
             // Assert
-            Assert.Equal(1, assemblies.Count());
+            Assert.Single(assemblies);
             Assert.Equal(assemblies.First(), userNuGetPackage.AssemblyIdentity);
         }
 
@@ -179,7 +179,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// <summary>
         /// Tests that if the flag isExplicitlySpecified is not set in AssemblyInfo,
         /// it defaults to being true (which means assembly is not removed).
-        /// That is important for compatibility of old ApiPort tool with the service, after 
+        /// That is important for compatibility of old ApiPort tool with the service, after
         /// 'isExplicitlySpecified' was added.
         /// </summary>
         [Fact]

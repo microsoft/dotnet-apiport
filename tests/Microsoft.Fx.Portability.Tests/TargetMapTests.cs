@@ -100,7 +100,7 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public void VerifySingleAliasMapping()
         {
-            Assert.Throws(typeof(AliasMappedToMultipleNamesException), () =>
+            Assert.Throws<AliasMappedToMultipleNamesException>(() =>
             {
                 var map = new TargetMapper();
 
@@ -171,11 +171,7 @@ namespace Microsoft.Fx.Portability.Tests
             var map = new TargetMapper();
             var groupings = "group1: target1,target2; group2 target1, target3";
 
-            try
-            {
-                map.ParseAliasString(groupings, true);
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.Throws<ArgumentOutOfRangeException>(() => map.ParseAliasString(groupings, true));
 
             Assert.Equal("group1", map.GetNames("group1").Single());
             Assert.Equal("group2", map.GetNames("group2").Single());
@@ -184,7 +180,7 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public void ParseInvalidGroupsValidate()
         {
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var map = new TargetMapper();
                 var groupings = "group1 target1,target2; group2: target1, target3";

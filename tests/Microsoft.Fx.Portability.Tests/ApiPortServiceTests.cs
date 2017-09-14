@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability.Tests
             var result = serviceResponse.Response;
 
             Assert.Equal(docIds.Count(), result.Count());
-            Assert.Equal(0, docIds.Except(result.Select(r => r.Definition.DocId)).Count());
+            Assert.Empty(docIds.Except(result.Select(r => r.Definition.DocId)));
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability.Tests
             var result = serviceResponse.Response;
 
             Assert.Equal(expected.Count(), result.Count());
-            Assert.Equal(0, expected.Except(result.Select(r => r.DisplayName)).Count());
+            Assert.Empty(expected.Except(result.Select(r => r.DisplayName)));
         }
 
         private HttpResponseMessage HttpRequestConverter(HttpRequestMessage request)

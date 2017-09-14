@@ -108,6 +108,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         private static void VerifyEmptySerialized<T>()
+            where T : class
         {
             var deserialized = "".Serialize().Deserialize<T>();
 
