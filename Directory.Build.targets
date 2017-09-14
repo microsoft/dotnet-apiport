@@ -50,6 +50,7 @@
     <!-- Set informational version -->
     <InformationVersion>$(VersionData)</InformationVersion>
     <InformationVersion Condition=" '$(VersionSuffix)' != '' ">$(InformationVersion)-$(VersionSuffix)-$(BuildVersion)</InformationVersion>
+    <Version>$(VersionData)-$(VersionSuffix)</Version>
   </PropertyGroup>
 
   <ItemGroup>
