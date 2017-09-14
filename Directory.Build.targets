@@ -76,6 +76,12 @@
     </AssemblyVersionAttribute>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference> 
+  </ItemGroup>
+
   <Target Name="GenerateAssemblyInfoFile" BeforeTargets="BeforeBuild">
     <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
     <WriteCodeFragment AssemblyAttributes="@(AssemblyVersionAttribute)" Language="C#" OutputFile="$(IntermediateOutputPath)\_GlobalAssemblyInfo.g.cs">

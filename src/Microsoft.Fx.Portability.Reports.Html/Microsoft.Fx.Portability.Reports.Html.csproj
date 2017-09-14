@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.10.0" />
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
     <PackageReference Include="RazorEngine" Version="3.6.1" />
   </ItemGroup>
 

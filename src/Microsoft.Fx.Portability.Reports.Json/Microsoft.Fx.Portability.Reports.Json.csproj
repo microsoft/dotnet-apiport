@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>

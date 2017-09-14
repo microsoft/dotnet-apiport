@@ -11,7 +11,6 @@
     <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
     <PackageReference Include="Microsoft.Cci" Version="4.0.0-rc3-24214-00" />
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>

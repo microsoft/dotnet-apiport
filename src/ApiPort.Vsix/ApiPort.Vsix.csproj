@@ -50,7 +50,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.1.192" />
   </ItemGroup>
   <ItemGroup>
