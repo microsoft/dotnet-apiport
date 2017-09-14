@@ -1,19 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <RootNamespace>Microsoft.Fx.Portability</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-
-    <!-- NuGet package description -->
     <Description>Metadata reader for binaries using Microsoft.CCI</Description>
   </PropertyGroup>
 
@@ -22,14 +11,10 @@
     <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
     <PackageReference Include="Microsoft.Cci" Version="4.0.0-rc3-24214-00" />
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
-      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
-      <Name>Microsoft.Fx.Portability</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,5 +23,4 @@
     </Content>
   </ItemGroup>
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>

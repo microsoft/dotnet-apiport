@@ -1,41 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard1.3</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>FEATURE_NETCORE</DefineConstants>
-
-    <!-- NuGet package description -->
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'== 'net451'">
+  <PropertyGroup Condition="'$(TargetFramework)'== 'net46'">
     <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.1" />
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
-    <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.2" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)'== 'netstandard1.3'">
     <PackageReference Include="System.Collections.Immutable" Version="1.2.0" />
+    <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'== 'net46'">
     <PackageReference Include="System.Collections.Immutable" Version="1.1.37" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'== 'net451'">
-    <PackageReference Include="System.Net.Http" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,5 +47,4 @@
     </Content>
   </ItemGroup>
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>

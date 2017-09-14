@@ -61,7 +61,8 @@ if (!(Test-Path $binFolder)) {
     New-Item $binFolder -ItemType Directory
 }
 
-& $root\build\restore.ps1
+& "$root\build\Get-CatalogFile.ps1" $root\.data\catalog.bin
+
 # PortabilityTools.sln understands "Any CPU" not "AnyCPU"
 $PlatformToUse = $Platform
 
@@ -69,18 +70,14 @@ if ($Platform -eq "AnyCPU") {
     $PlatformToUse = "Any CPU"
 }
 
-pushd $root
+Push-Location $root
 
-& $MSBuild PortabilityTools.sln /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
+& $MSBuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity /p:DeployExtension=false 
 
-popd
+Pop-Location
 
 if ($RunTests) {
-    .\build\runtests.ps1 $Configuration
+    & "$root\build\runtests.ps1" $Configuration
 }
 
-if ($CreateNugetPackages) {
-    .\build\postbuild.ps1 $Configuration -CreateNugetPackages
-} else {
-    .\build\postbuild.ps1 $Configuration
-}
+& "$root\build\postbuild.ps1" $Configuration

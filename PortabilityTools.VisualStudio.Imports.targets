@@ -16,7 +16,6 @@
       <VSIXSourceItem Include="$(OutputPath)\System.Buffers.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Collections.NonGeneric.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Console.dll" />
-      <VSIXSourceItem Include="$(OutputPath)\System.Diagnostics.DiagnosticSource.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Globalization.Calendars.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.IO.Compression.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.IO.Compression.ZipFile.dll" />

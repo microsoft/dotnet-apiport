@@ -44,20 +44,22 @@
 
     <!-- Get version info from file -->
     <VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
-    <VersionData>1.0.0</VersionData>
-    <VersionData Condition="Exists('$(VersionFile)')">$([System.IO.File]::ReadAllText($(VersionFile)).Trim())</VersionData>
+    <Version>1.0.0</Version>
+    <Version Condition="Exists('$(VersionFile)')">$([System.IO.File]::ReadAllText($(VersionFile)).Trim())</Version>
 
     <!-- Set informational version -->
-    <InformationVersion>$(VersionData)</InformationVersion>
+    <InformationVersion>$(Version)</InformationVersion>
     <InformationVersion Condition=" '$(VersionSuffix)' != '' ">$(InformationVersion)-$(VersionSuffix)-$(BuildVersion)</InformationVersion>
+    <BasicVersion>$(Version)</BasicVersion>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <AssemblyVersionAttribute Include="System.Reflection.AssemblyVersionAttribute">
-      <_Parameter1>$(VersionData)</_Parameter1>
+      <_Parameter1>$(BasicVersion)</_Parameter1>
     </AssemblyVersionAttribute>
     <AssemblyVersionAttribute Include="System.Reflection.AssemblyFileVersionAttribute">
-      <_Parameter1>$(VersionData)</_Parameter1>
+      <_Parameter1>$(BasicVersion)</_Parameter1>
     </AssemblyVersionAttribute>
     <AssemblyVersionAttribute Include="System.Reflection.AssemblyInformationalVersionAttribute">
       <_Parameter1>$(InformationVersion)</_Parameter1>
@@ -74,6 +76,12 @@
     <AssemblyVersionAttribute Include="System.Reflection.AssemblyCompany">
       <_Parameter1>Microsoft</_Parameter1>
     </AssemblyVersionAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference> 
   </ItemGroup>
 
   <Target Name="GenerateAssemblyInfoFile" BeforeTargets="BeforeBuild">

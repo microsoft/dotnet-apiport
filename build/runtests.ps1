@@ -7,6 +7,7 @@ Param(
     [ValidateSet(2015, 2017)]
     [int]$VisualStudioVersion = 2017
 )
+Write-Host "Running tests"
 
 $ErrorActionPreference = "Stop"
 

@@ -1,22 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
 
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-
-    <!-- NuGet package description -->
     <Description>An HTML formatter for ApiPort reports</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.10.0" />
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" />
     <PackageReference Include="RazorEngine" Version="3.6.1" />
-    <PackageReference Include="System.Net.Http" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,11 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
-      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
-      <Name>Microsoft.Fx.Portability</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>
