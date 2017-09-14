@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EnvDTE100" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Build" Version="14.3.0" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.27" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
     <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="14.0.25424" />
