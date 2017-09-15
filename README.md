@@ -46,8 +46,9 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 | Microsoft.Fx.Portability | Provides common types for API Port |
 | Microsoft.Fx.Portability.MetadataReader | Implements a dependency finder based off of [System.Reflection.Metadata][System.Reflection.Metadata]. The library  will generate DocIds that conform to [these specifications][DocId]. |
 | Microsoft.Fx.Portability.Offline | Provides access to data in an offline setting so network calls are not needed |
-| Microsoft.Fx.Portability.Reporting.Html | Provides an HTML report for ApiPort (used in offline mode) |
-| Microsoft.Fx.Portability.Reporting.Json | Provides a JSON reporter for ApiPort (used in offline mode) |
+| Microsoft.Fx.Portability.Reporting.Excel | Provides support for an Excel spreadsheet report for ApiPort |
+| Microsoft.Fx.Portability.Reporting.Html | Provides support for an HTML report for ApiPort |
+| Microsoft.Fx.Portability.Reporting.Json | Provides support for a JSON reporter for ApiPort |
 
 ### Builds
 
