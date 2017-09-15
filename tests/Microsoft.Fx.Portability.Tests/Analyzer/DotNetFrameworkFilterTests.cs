@@ -18,7 +18,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.True(_assemblyFilter.IsFrameworkAssembly(null));
         }
 
-        // Microsoft public key token 
+        // Microsoft public key token
         [InlineData("b77a5c561934e089", true)]
         [InlineData("b03f5f7f11d50a3a", true)]
         [InlineData("7cec85d7bea7798e", true)]
@@ -26,7 +26,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("24eec0d8c86cda1e", true)]
         [InlineData("0738eb9f132ed756", true)]
         // Microsoft public key token (different case)
-        [InlineData("0738eb9f132ed756", true)]
+        [InlineData("0738eb9F132ed756", true)]
         // Non-Microsoft public key token
         [InlineData("something", false)]
         [Theory]

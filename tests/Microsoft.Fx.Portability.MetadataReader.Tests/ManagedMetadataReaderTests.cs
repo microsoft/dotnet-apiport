@@ -49,7 +49,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void TestForDocId(string source, string docid)
         {
-            TestForDocId(source, docid, false);
+            TestForDocIdHelper(source, docid, false);
         }
 
         [InlineData("Spec.cs", "T:N.X`1")]
@@ -70,10 +70,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void TestForDocIdUnsafe(string source, string docid)
         {
-            TestForDocId(source, docid, true);
+            TestForDocIdHelper(source, docid, true);
         }
 
-        private void TestForDocId(string source, string docid, bool allowUnsafe)
+        private void TestForDocIdHelper(string source, string docid, bool allowUnsafe)
         {
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var assemblyToTest = TestAssembly.Create(source, allowUnsafe);
@@ -175,7 +175,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
             var progressReporter = Substitute.For<IProgressReporter>();
-            
+
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
             var foundDocIds = dependencies

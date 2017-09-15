@@ -13,7 +13,7 @@ namespace ApiPort.Tests
     public class AnalyzeOptionsTests
     {
         /// <summary>
-        /// Test that 'ExplicitlySpecified' flag is correctly set up when a directory is passed 
+        /// Test that 'ExplicitlySpecified' flag is correctly set up when a directory is passed
         /// in command line for analyzing
         /// </summary>
         [Fact]
@@ -81,7 +81,7 @@ namespace ApiPort.Tests
 
             // The scenario tested is when an assembly is passed in twice, once explicitly and once as part of the folder
             // Assert that we test this scenario.
-            Assert.True(Path.GetDirectoryName(currentAssemblyPath).Equals(directoryPath, StringComparison.OrdinalIgnoreCase));
+            Assert.Equal(Path.GetDirectoryName(currentAssemblyPath), directoryPath, StringComparer.OrdinalIgnoreCase);
 
             foreach (var element in analyzeOptions.InputAssemblies)
             {

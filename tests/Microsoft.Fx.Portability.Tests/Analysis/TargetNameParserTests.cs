@@ -20,7 +20,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             // Tests if we actually filter out the public targets based on the default target list in the config
             // We should only have 1 target!
-            Assert.Equal(1, targets.Count());
+            Assert.Single(targets);
             Assert.Equal(TestCatalog.Target1.FullName, targets.First().ToString());
         }
 
@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = parser.MapTargetsToExplicitVersions(Enumerable.Empty<string>());
 
             // We should only have 1 target!
-            Assert.Equal(1, targets.Count());
+            Assert.Single(targets);
             Assert.Equal(TestCatalog.Target1.FullName, targets.First().ToString());
         }
 
@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = parser.MapTargetsToExplicitVersions(new String[] { "target 1, version=1.0" });
 
             // We should only have 1 target!
-            Assert.Equal(1, targets.Count());
+            Assert.Single(targets);
             Assert.Equal("target 1,Version=v1.0", targets.First().ToString());
         }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = parser.MapTargetsToExplicitVersions(Enumerable.Empty<string>());
 
             // We should only have 0 target!
-            Assert.Equal(0, targets.Count());
+            Assert.Empty(targets);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Microsoft.Fx.Portability.Tests
             var targets = parser.MapTargetsToExplicitVersions(new string[] { "Target 3" });
 
             // We should only have 1 target!
-            Assert.Equal(1, targets.Count());
+            Assert.Single(targets);
             Assert.Equal(TestCatalog.Target3.FullName, targets.First().ToString());
         }
 
@@ -96,7 +96,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             var parser = new TargetNameParser(new TestCatalog(), $"TargetNonExistent, version=4.0;{target1}");
 
-            Assert.Equal(1, parser.DefaultTargets.Count());
+            Assert.Single(parser.DefaultTargets);
             Assert.Equal(target1Framework, parser.DefaultTargets.Single());
         }
     }

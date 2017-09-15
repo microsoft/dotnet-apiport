@@ -85,7 +85,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, Enumerable.Empty<AssemblyInfo>()).ToList();
 
             // 1 missing assembly since Microsoft.CSharp is a FX assembly
-            Assert.Equal(1, unreferencedAssms.Count);
+            Assert.Single(unreferencedAssms);
         }
 
         [Fact]
@@ -302,35 +302,35 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             // Vanilla
             var result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.1" }));
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
 
             // Empty ignore targets
             result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new string[0]));
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
 
             // Empty ignore targets with multiple targets
             result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework, framework2 }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new string[0]));
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
 
             // Ignore a different target
             result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.2" }));
-            Assert.Equal(0, result.Count());
+            Assert.Empty(result);
 
             // Ignore some but not all targets
             result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework, framework2 }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.1" }));
-            Assert.Equal(0, result.Count());
+            Assert.Empty(result);
 
             // Ignore all targets
             result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework, framework2 }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(false, new[] { ".NET Framework,Version=v4.5.1", ".NET Framework,Version=v4.5.2" }));
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal("userAsm1, Version=1.0.0.0", result.FirstOrDefault().AssemblyIdentity);
 
             // Ignore different assembly
             result = engine.FindBreakingChangeSkippedAssemblies(new[] { framework }, testData.SelectMany(kvp => kvp.Value).Distinct(), GenerateIgnoreAssemblies(true, new string[0]));
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal("userAsm2, Version=2.0.0.0", result.FirstOrDefault().AssemblyIdentity);
         }
 
@@ -415,7 +415,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), Substitute.For<IPackageFinder>());
 
-            var assembliesToRemove = new [] { userAsm1.AssemblyIdentity, userAsm2.AssemblyIdentity };
+            var assembliesToRemove = new[] { userAsm1.AssemblyIdentity, userAsm2.AssemblyIdentity };
             var result = engine.FilterDependencies(testData, assembliesToRemove);
 
             Assert.False(result.ContainsKey(mi0));
@@ -467,7 +467,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             }
             else
             {
-                Assert.Equal(1, breakingChanges.Count);
+                Assert.Single(breakingChanges);
                 Assert.Equal("5", breakingChanges.First().Break.Id);
             }
         }

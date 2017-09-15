@@ -137,7 +137,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(docIdsToPass);
             Assert.Equal(expectedDocIds.Count, result.Response.Count);
-            Assert.Equal(0, expectedDocIds.Except(result.Response.Select(d => d.Definition.DocId)).Count());
+            Assert.Empty(expectedDocIds.Except(result.Response.Select(d => d.Definition.DocId)));
         }
 
         [Fact]
