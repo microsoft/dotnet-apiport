@@ -50,7 +50,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
+      <AdditionalProperties>TargetFramework=netstandard1.3</AdditionalProperties>
+    </ProjectReference>
   </ItemGroup>
 
   <Target Name="AfterBuild">
