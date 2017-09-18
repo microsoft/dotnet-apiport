@@ -54,6 +54,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.1.192" />
   </ItemGroup>
   <ItemGroup>

@@ -23,26 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Tests\FilterApis.cs" />
-    <EmbeddedResource Include="Tests\Spec.cs" />
-    <EmbeddedResource Include="Tests\NestedGenericTypesWithInvalidNames.cs" />
-    <EmbeddedResource Include="Tests\OpImplicitMethod2Parameter.cs" />
-    <EmbeddedResource Include="Tests\OpImplicitMethod.cs" />
-    <EmbeddedResource Include="Tests\Arglist.cs" />
-    <EmbeddedResource Include="Tests\modopt.dll" />
-    <EmbeddedResource Include="Tests\modopt.il" />
-    <EmbeddedResource Include="Tests\NestedGenericTypes.cs" />
-    <EmbeddedResource Include="Tests\NestedGenericTypes.dll" />
-    <EmbeddedResource Include="Tests\NestedGenericTypes.il" />
-    <EmbeddedResource Include="Tests\NonGenericTypesWithGenericParameters.dll" />
-    <EmbeddedResource Include="Tests\NonGenericTypesWithGenericParameters.il" />
-    <EmbeddedResource Include="Tests\10-generic-params.cs" />
-    <EmbeddedResource Include="Tests\GenericClassMemberWithDifferentGeneric.cs" />
-    <EmbeddedResource Include="Tests\OpExplicit.cs" />
-    <EmbeddedResource Include="Tests\OpImplicit.cs" />
-    <EmbeddedResource Include="Tests\EmptyProject.cs" />
-    <EmbeddedResource Include="Tests\WithGenericsAndReference.cs" />
-    <EmbeddedResource Include="Tests\MultidimensionalPrimitiveArray.cs" />
+    <Compile Remove="Tests\**\*.cs" />
+    <EmbeddedResource Include="Tests\**\*" />
   </ItemGroup>
 
   <ItemGroup>
