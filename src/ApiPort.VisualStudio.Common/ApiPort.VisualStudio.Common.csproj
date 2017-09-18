@@ -47,6 +47,7 @@
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
       <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
       <Name>Microsoft.Fx.Portability</Name>
+      <AdditionalProperties>TargetFramework=net46</AdditionalProperties>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
