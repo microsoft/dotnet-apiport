@@ -89,7 +89,7 @@ namespace Microsoft.Fx.Portability
             }
             else
             {
-                var stream = typeof(Data).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.data." + path);
+                var stream = typeof(Data).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Offline.data." + path);
 
                 if (stream == null)
                 {

@@ -130,12 +130,10 @@ this mode, the solution must be manually built. To do so, please follow these
 steps:
 
 1. Clone the project: `git clone https://github.com/Microsoft/dotnet-apiport`
-2. Build the project: `build.cmd`.
+2. Compile as normal, either using `msbuild` or Visual Studio
+3. If in Visual Studio, set the project `ApiPort.Offline` as the startup project, or if from command line, goto `bin\[Configuration]\ApiPort.Offline` and run `ApiPort.exe` from this directory
 
-    *Note: This command must be used as it gathers the correct assemblies for offline mode. Building in VS does not do this.*
-
-3. Go to `bin\release\ApiPort.Offline`
-4. Run `ApiPort.exe` from this directory as normal.
+### Proxies
 
 If you have issues with proxies, please add your proxy information to the catalog script:
 
