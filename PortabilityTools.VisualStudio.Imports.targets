@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Manually add NuGet dependencies to VSIX, including framework facades. To regenerate this, run the following powershell from ApiPort.Vsix output:
-  
+
   gci *.dll `
     | where Name -notmatch Microsoft.VisualStudio `
     | where Name -notmatch stdole `
@@ -9,7 +9,7 @@
     | where Name -notmatch EnvDTE `
     | where Name -notmatch Microsoft.Build `
     | % { Write-Host "<VSIXSourceItem Include=`"`$(OutputPath)\$($_.Name)`" />" }
- 
+
   -->
   <Target Name="AddToVsixSources" AfterTargets="GetVsixSourceItems">
     <ItemGroup>

@@ -3,7 +3,7 @@
 [assembly: ProvideBindingRedirection(AssemblyName = "Microsoft.Win32.Primitives")]
 
 /* Need to provide a code base attribute for each assembly. To regenerate this, run the following powershell from ApiPort.Vsix output:
- 
+
  gci *.dll `
    | where Name -notmatch Microsoft.VisualStudio `
    | where Name -notmatch stdole `
