@@ -50,7 +50,8 @@ build() {
     echo "Building ApiPort... Configuration: ["$Configuration"]"
 
     pushd src/ApiPort > /dev/null
-    $DotNetExe build -f netcoreapp1.0 -c $Configuration
+    $DotNetExe ApiPort.csproj build -f netcoreapp1.0 -c $Configuration
+    $DotNetExe ApiPort.Offline.csproj build -f netcoreapp1.0 -c $Configuration
     popd > /dev/null
 }
 
