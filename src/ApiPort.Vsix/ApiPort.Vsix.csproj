@@ -19,9 +19,6 @@
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <CreateVsixContainer>True</CreateVsixContainer>
-    <StartAction>Program</StartAction>
-    <StartProgram>$(DevEnvDir)\devenv.exe</StartProgram>
-    <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +40,13 @@
   <PropertyGroup>
     <!-- This project does not output any binaries, so API Scan can be skipped. -->
     <IsPackage>true</IsPackage>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Debugging Settings; Stored in project file instead of .user file to be available to everyone -->
+    <StartAction>Program</StartAction>
+    <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/RootSuffix Exp</StartArguments>
+    <EnableUnmanagedDebugging>False</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">

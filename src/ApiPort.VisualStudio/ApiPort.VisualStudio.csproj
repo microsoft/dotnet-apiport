@@ -17,6 +17,7 @@
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+    <DeployExtension>false</DeployExtension>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Most projects will just inherit this from Directory.Build.props, but since this contains WPF, a temp project is created which causes issues with MSBuildProjectName -->
@@ -39,13 +40,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup>
-    <!-- Debugging Settings; Stored in project file instead of .user file to be available to everyone -->
-    <StartAction>Program</StartAction>
-    <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
-    <StartArguments>/RootSuffix Exp</StartArguments>
-    <EnableUnmanagedDebugging>False</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

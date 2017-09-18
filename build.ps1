@@ -72,7 +72,7 @@ if ($Platform -eq "AnyCPU") {
 
 Push-Location $root
 
-& $MSBuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity /p:DeployExtension=false 
+& $MSBuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
 
 Pop-Location
 

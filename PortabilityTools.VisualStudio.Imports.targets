@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- Manually add NuGet dependencies to VSIX, including framework facades -->
+  <!-- Manually add NuGet dependencies to VSIX, including framework facades. To regenerate this, run the following powershell from ApiPort.Vsix output:
+  
+  gci *.dll `
+    | where Name -notmatch Microsoft.VisualStudio `
+    | where Name -notmatch stdole `
+    | where Name -notmatch vslang `
+    | where Name -notmatch EnvDTE `
+    | where Name -notmatch Microsoft.Build `
+    | % { Write-Host "<VSIXSourceItem Include=`"`$(OutputPath)\$($_.Name)`" />" }
+ 
+  -->
   <Target Name="AddToVsixSources" AfterTargets="GetVsixSourceItems">
     <ItemGroup>
+      <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.2015.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.2017.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.Common.dll" />
       <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.dll" />
       <VSIXSourceItem Include="$(OutputPath)\Autofac.dll" />
       <VSIXSourceItem Include="$(OutputPath)\Microsoft.AspNetCore.WebUtilities.dll" />
@@ -10,12 +23,21 @@
       <VSIXSourceItem Include="$(OutputPath)\Microsoft.Extensions.Primitives.dll" />
       <VSIXSourceItem Include="$(OutputPath)\Microsoft.Fx.Portability.Cci.dll" />
       <VSIXSourceItem Include="$(OutputPath)\Microsoft.Fx.Portability.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\Microsoft.Net.Http.Headers.dll" />
       <VSIXSourceItem Include="$(OutputPath)\Microsoft.Win32.Primitives.dll" />
       <VSIXSourceItem Include="$(OutputPath)\Newtonsoft.Json.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.AppContext.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Buffers.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Collections.Immutable.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Collections.NonGeneric.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Composition.AttributedModel.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Composition.Convention.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Composition.Hosting.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Composition.Runtime.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Composition.TypedParts.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Console.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Diagnostics.FileVersionInfo.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Diagnostics.TraceSource.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Globalization.Calendars.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.IO.Compression.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.IO.Compression.ZipFile.dll" />
@@ -23,12 +45,15 @@
       <VSIXSourceItem Include="$(OutputPath)\System.IO.FileSystem.Primitives.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Net.Http.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Net.Sockets.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Runtime.CompilerServices.Unsafe.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Runtime.InteropServices.RuntimeInformation.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Security.Cryptography.Algorithms.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Security.Cryptography.Encoding.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Security.Cryptography.Primitives.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Security.Cryptography.X509Certificates.dll" />
       <VSIXSourceItem Include="$(OutputPath)\System.Text.Encodings.Web.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Threading.Tasks.Dataflow.dll" />
+      <VSIXSourceItem Include="$(OutputPath)\System.Xml.ReaderWriter.dll" />
     </ItemGroup>
   </Target>
 </Project>
