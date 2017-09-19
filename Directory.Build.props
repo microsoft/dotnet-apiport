@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
-    <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701</NoWarn>
+    <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701,CA0068</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
