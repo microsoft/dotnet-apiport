@@ -187,7 +187,7 @@ namespace Microsoft.Fx.Portability.Tests
 
         private Stream GetBreakingChangeMarkdown(string resourceName)
         {
-            var name = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceName));
+            var name = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
             return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
         }
 

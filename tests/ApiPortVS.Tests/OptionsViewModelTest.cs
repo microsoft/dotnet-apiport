@@ -7,6 +7,7 @@ using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -36,7 +37,7 @@ namespace ApiPortVS.Tests
             var resultFormats = Enumerable.Range(0, 5)
                 .Select(x => new SelectedResultFormat
                 {
-                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString()}",
+                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString(CultureInfo.CurrentCulture)}",
                     FileExtension = $".{x}",
                     MimeType = $"type-{x}"
                 })
@@ -123,7 +124,7 @@ namespace ApiPortVS.Tests
             var resultFormats = Enumerable.Range(0, 5)
                 .Select(x => new SelectedResultFormat
                 {
-                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString()}",
+                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString(CultureInfo.CurrentCulture)}",
                     FileExtension = $".{x}",
                     MimeType = $"type-{x}"
                 })
@@ -224,7 +225,7 @@ namespace ApiPortVS.Tests
             var resultFormats = Enumerable.Range(0, 5)
                 .Select(x => new SelectedResultFormat
                 {
-                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString()}",
+                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString(CultureInfo.CurrentCulture)}",
                     FileExtension = $".{x}",
                     MimeType = $"type-{x}"
                 })

@@ -69,7 +69,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private static string GetText(string fileName)
         {
-            var name = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+            var name = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName, StringComparison.Ordinal));
 
             using (var stream = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceStream(name))
             using (var reader = new StreamReader(stream))

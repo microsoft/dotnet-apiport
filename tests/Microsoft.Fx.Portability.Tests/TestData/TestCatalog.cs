@@ -45,7 +45,7 @@ namespace Microsoft.Fx.Portability.TestData
         {
             foreach (var frameworkName in AllTargets.Keys)
             {
-                if (frameworkName.Identifier.Equals(targetIdentifier))
+                if (frameworkName.Identifier.Equals(targetIdentifier, StringComparison.Ordinal))
                 {
                     return frameworkName;
                 }
