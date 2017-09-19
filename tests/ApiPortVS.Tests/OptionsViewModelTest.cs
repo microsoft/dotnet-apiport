@@ -12,6 +12,8 @@ using System.IO;
 using System.Linq;
 using Xunit;
 
+using static System.FormattableString;
+
 namespace ApiPortVS.Tests
 {
     public class OptionsViewModelTest
@@ -37,15 +39,15 @@ namespace ApiPortVS.Tests
             var resultFormats = Enumerable.Range(0, 5)
                 .Select(x => new SelectedResultFormat
                 {
-                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString(CultureInfo.CurrentCulture)}",
-                    FileExtension = $".{x}",
-                    MimeType = $"type-{x}"
+                    DisplayName = Invariant($"{nameof(SelectedResultFormat.DisplayName)} {x}"),
+                    FileExtension = Invariant($".{x}"),
+                    MimeType = Invariant($"type-{x}")
                 })
                 .ToList();
 
             var platforms = Enumerable.Range(0, 20).Select(platform =>
             {
-                var name = $"Platform {platform}";
+                var name = Invariant($"Platform {platform}");
                 var versions = Enumerable.Range(1, 5)
                     .Select(version => new TargetPlatformVersion
                     {
@@ -124,15 +126,15 @@ namespace ApiPortVS.Tests
             var resultFormats = Enumerable.Range(0, 5)
                 .Select(x => new SelectedResultFormat
                 {
-                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString(CultureInfo.CurrentCulture)}",
-                    FileExtension = $".{x}",
-                    MimeType = $"type-{x}"
+                    DisplayName = Invariant($"{nameof(SelectedResultFormat.DisplayName)} {x}"),
+                    FileExtension = Invariant($".{x}"),
+                    MimeType = Invariant($"type-{x}")
                 })
                 .ToList();
 
             var platforms = Enumerable.Range(0, 20).Select(platform =>
             {
-                var name = $"Platform {platform}";
+                var name = Invariant($"Platform {platform}");
                 var versions = Enumerable.Range(1, 5)
                     .Select(version => new TargetPlatformVersion
                     {
@@ -198,7 +200,7 @@ namespace ApiPortVS.Tests
 
             var platforms = Enumerable.Range(0, 20).Select(platform =>
             {
-                var name = $"Platform {platform}";
+                var name = Invariant($"Platform {platform}");
                 var versions = Enumerable.Range(1, 5)
                     .Select(version => new TargetPlatformVersion
                     {
@@ -225,9 +227,9 @@ namespace ApiPortVS.Tests
             var resultFormats = Enumerable.Range(0, 5)
                 .Select(x => new SelectedResultFormat
                 {
-                    DisplayName = $"{nameof(SelectedResultFormat.DisplayName)} {x.ToString(CultureInfo.CurrentCulture)}",
-                    FileExtension = $".{x}",
-                    MimeType = $"type-{x}"
+                    DisplayName = Invariant($"{nameof(SelectedResultFormat.DisplayName)} {x}"),
+                    FileExtension = Invariant($".{x}"),
+                    MimeType = Invariant($"type-{x}")
                 })
                 .ToList();
 
