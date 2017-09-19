@@ -1,72 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{C0629A8D-7107-46CF-83B8-408E1886AB36}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net46</TargetFramework>
     <RootNamespace>ApiPortVS.VS2017</RootNamespace>
-    <AssemblyName>ApiPort.VisualStudio.2017</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.4.0" />
-    <PackageReference Include="Microsoft.Composition" Version="1.0.27" />
-    <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="14.0.25424" />
-    <PackageReference Include="Microsoft.VisualStudio.Composition" Version="14.2.19-pre" />
-    <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="7.10.6070" />
-    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="15.0.751" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop" Version="7.10.6071" />
-    <PackageReference Include="Microsoft.VisualStudio.TextManager.Interop" Version="7.10.6070" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="15.3.35" />
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="14.1.111" />
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="15.0.26606">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="15.3.224">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
-      <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
-      <Name>ApiPort.VisualStudio.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
-      <Project>{8D84EC23-9977-4CC8-B649-035FFAE9664C}</Project>
-      <Name>Microsoft.Fx.Portability</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ProjectBuilder2015.cs" />
-    <Compile Include="ServiceProvider.cs" />
-    <Compile Include="VSThreadingService.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj" />
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+ </ItemGroup>
+
 </Project>

@@ -1,116 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{60798B82-B273-4D39-AA52-021C7228A0AD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net46</TargetFramework>
     <RootNamespace>ApiPortVS</RootNamespace>
-    <AssemblyName>ApiPort.VisualStudio.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Fx.Portability.Cci\Microsoft.Fx.Portability.Cci.csproj" />
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability.Cci\Microsoft.Fx.Portability.Cci.csproj">
-      <Project>{b0468d19-0f98-49a8-ba28-926331c72e26}</Project>
-      <Name>Microsoft.Fx.Portability.Cci</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj">
-      <Project>{8d84ec23-9977-4cc8-b649-035ffae9664c}</Project>
-      <Name>Microsoft.Fx.Portability</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Analyze\AnalysisOptions.cs" />
-    <Compile Include="Analyze\ApiPortVsAnalyzer.cs" />
-    <Compile Include="Analyze\FileListAnalyzer.cs" />
-    <Compile Include="Analyze\IVsApiPortAnalyzer.cs" />
-    <Compile Include="Analyze\ProjectAnalyzer.cs" />
-    <Compile Include="AssemblyFile.cs" />
-    <Compile Include="COMProjectMapper.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Contracts\IErrorListProvider.cs" />
-    <Compile Include="Contracts\IOutputWindowWriter.cs" />
-    <Compile Include="Contracts\IProjectBuilder.cs" />
-    <Compile Include="Contracts\IProjectMapper.cs" />
-    <Compile Include="Contracts\IReportViewer.cs" />
-    <Compile Include="Contracts\ISourceLineMapper.cs" />
-    <Compile Include="Contracts\ISourceMappedItem.cs" />
-    <Compile Include="Contracts\IVSThreadingService.cs" />
-    <Compile Include="ErrorListProvider.cs" />
-    <Compile Include="IVsHierarchyExtensions.cs" />
-    <Compile Include="Models\CalculatedProject.cs" />
-    <Compile Include="Models\OptionsModel.cs" />
-    <Compile Include="Models\SelectedResultFormat.cs" />
-    <Compile Include="Models\TargetPlatformVersion.cs" />
-    <Compile Include="NotifyPropertyBase.cs" />
-    <Compile Include="Models\TargetPlatform.cs" />
-    <Compile Include="DefaultProjectBuilder.cs" />
-    <Compile Include="Reporting\IResultToolbar.cs" />
-    <Compile Include="SourceLineMapperExtensions.cs" />
-    <Compile Include="SourceMapping\CciMetadataTraverser.cs" />
-    <Compile Include="SourceMapping\CciSourceLineMapper.cs" />
-    <Compile Include="SourceMapping\CodeDocumentNavigator.cs" />
-    <Compile Include="SourceMapping\SourceLineMapper.cs" />
-    <Compile Include="ViewModels\OptionsViewModel.cs" />
-    <Compile Include="ViewModels\OutputViewModel.cs" />
-    <Compile Include="Resources\LocalizedStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LocalizedStrings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="EnvDTE100" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Build" Version="14.3.0" />
-    <PackageReference Include="Microsoft.Composition" Version="1.0.27" />
-    <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="14.0.25424" />
-    <PackageReference Include="Microsoft.VisualStudio.Composition" Version="14.2.19-pre" />
-    <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="7.10.6070" />
-    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="14.1.170-pre" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
+    <PackageReference Include="Microsoft.Build" Version="14.3.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.3.25407" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop" Version="7.10.6071" />
-    <PackageReference Include="Microsoft.VisualStudio.TextManager.Interop" Version="7.10.6070" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="14.1.131" />
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="14.1.111" />
   </ItemGroup>
+
   <ItemGroup>
+    <EmbeddedResource Remove="Resources\LocalizedStrings.resx" />
     <EmbeddedResource Include="Resources\LocalizedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), PortabilityTools.VisualStudio.Imports.targets))\PortabilityTools.VisualStudio.Imports.targets" />
+
+  <ItemGroup>
+    <Compile Update="Resources\LocalizedStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LocalizedStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

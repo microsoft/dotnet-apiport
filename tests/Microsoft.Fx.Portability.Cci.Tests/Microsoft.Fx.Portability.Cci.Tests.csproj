@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-      <EmbeddedResource Include="Tests\EmptyProject.cs" />
-      <EmbeddedResource Include="Tests\WithGenericsAndReference.cs" />
+    <Compile Remove="Tests\**\*.cs" />
+    <EmbeddedResource Include="Tests\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
