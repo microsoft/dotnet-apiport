@@ -78,11 +78,27 @@
     </AssemblyVersionAttribute>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference> 
-  </ItemGroup>
+  <Choose>
+    <When Condition="!$(AssemblyName.ToLower().Contains('test'))">
+      <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
+      </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="MicroBuild.Core" Version="0.2.0">
+          <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
+          <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <IsTestProject>true</IsTestProject>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
 
   <Target Name="GenerateAssemblyInfoFile" BeforeTargets="BeforeBuild">
     <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
@@ -101,4 +117,5 @@
         <Compile Remove="@(EmbeddedResource-> '%(Identity)')" />
     </ItemGroup>
   </Target>
+
 </Project>
