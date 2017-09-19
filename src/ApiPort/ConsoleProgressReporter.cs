@@ -5,6 +5,7 @@ using ApiPort.Resources;
 using Microsoft.Fx.Portability;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -139,7 +140,7 @@ namespace ApiPort
 
                     Console.SetCursorPosition(left, Console.CursorTop);
 
-                    WriteColor(string.Format(LocalizedStrings.ProgressReportInProgress, new string('.', ++count % 4).PadRight(3)), ConsoleColor.Yellow);
+                    WriteColor(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ProgressReportInProgress, new string('.', ++count % 4).PadRight(3)), ConsoleColor.Yellow);
 
                     await Task.Delay(350);
                 }

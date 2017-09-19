@@ -235,7 +235,7 @@ namespace Microsoft.Cci.Extensions
                 if (assembly.AssemblyIdentity.Equals(assembly.CoreAssemblySymbolicIdentity))
                     return assembly.AssemblyIdentity;
 
-                // Adjust the base core assembly identity based on what this assembly believes should be 
+                // Adjust the base core assembly identity based on what this assembly believes should be
                 if (assembly.AssemblyIdentity.Equals(baseCoreAssemblyIdentity))
                     baseCoreAssemblyIdentity = assembly.CoreAssemblySymbolicIdentity;
             }
@@ -250,8 +250,8 @@ namespace Microsoft.Cci.Extensions
             {
                 throw new InvalidOperationException("The Core Assembly can only be set once.");
             }
-            // Lets ignore this if someone passes dummy as nothing good can come from it. We considered making it an error 
-            // but in some logical cases (i.e. facades) the CoreAssembly might be dummy and we don't want to start throwing 
+            // Lets ignore this if someone passes dummy as nothing good can come from it. We considered making it an error
+            // but in some logical cases (i.e. facades) the CoreAssembly might be dummy and we don't want to start throwing
             // in a bunch of cases where if we let it go the right thing will happen.
             if (coreAssembly == Dummy.AssemblyIdentity)
                 return;
@@ -309,7 +309,7 @@ namespace Microsoft.Cci.Extensions
         private static readonly Version s_winmdBclVersion = new Version(255, 255, 255, 255);
         public bool ShouldUnifyToCoreAssembly(AssemblyIdentity assemblyIdentity)
         {
-            // Unify any other potential versions of this core assembly to itself. 
+            // Unify any other potential versions of this core assembly to itself.
             if (assemblyIdentity.Name.UniqueKeyIgnoringCase == this.CoreAssemblySymbolicIdentity.Name.UniqueKeyIgnoringCase)
             {
                 if (assemblyIdentity.PublicKeyToken == null ||
@@ -319,7 +319,7 @@ namespace Microsoft.Cci.Extensions
                 return true;
             }
 
-            // Unify the mscorlib 255.255.255.255 used by winmds back to corefx to avoid the need for yet 
+            // Unify the mscorlib 255.255.255.255 used by winmds back to corefx to avoid the need for yet
             // another facade.
             if (assemblyIdentity.Name.Value == "mscorlib")
             {
@@ -335,8 +335,8 @@ namespace Microsoft.Cci.Extensions
         }
 
         /// <summary>
-        ///  Override ProbeAssemblyReference to ensure we only look in the LibPaths for resolving assemblies and 
-        ///  we don't accidently find some in the GAC or in the framework directory. 
+        ///  Override ProbeAssemblyReference to ensure we only look in the LibPaths for resolving assemblies and
+        ///  we don't accidently find some in the GAC or in the framework directory.
         /// </summary>
         public override AssemblyIdentity ProbeAssemblyReference(IUnit referringUnit, AssemblyIdentity referencedAssembly)
         {
@@ -640,7 +640,7 @@ namespace Microsoft.Cci.Extensions
                 string idPKT = identity.GetPublicKeyToken();
                 string matchingPKT = matchingAssembly.GetPublicKeyToken();
 
-                if (!idPKT.Equals(matchingPKT) && logErrorOrWarningCallback != null)
+                if (!idPKT.Equals(matchingPKT, StringComparison.OrdinalIgnoreCase) && logErrorOrWarningCallback != null)
                 {
                     string message = string.Format(CultureInfo.CurrentCulture, "Found '{0}' with PublicKeyToken '{1}' instead of '{2}'.", identity.Name.Value, matchingPKT, idPKT);
                     logErrorOrWarningCallback(message, ErrorTreatment.TreatAsWarning);

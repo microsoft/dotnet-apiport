@@ -69,11 +69,11 @@ namespace ApiPort
                     if (Int32.TryParse(trimmed, out updatedCount))
                     {
                         count = updatedCount;
-                        WriteColorLine(string.Format("Updated count to {0}", count), ConsoleColor.Yellow);
+                        WriteColorLine($"Updated count to {count}", ConsoleColor.Yellow);
                     }
                     else
                     {
-                        WriteColorLine(string.Format("Invalid number: '{0}'", trimmed), ConsoleColor.Red);
+                        WriteColorLine($"Invalid number: '{trimmed}'", ConsoleColor.Red);
                     }
 
                     continue;
@@ -85,12 +85,12 @@ namespace ApiPort
                 {
                     foreach (var result in results)
                     {
-                        WriteColorLine(string.Format("\"{0}\",", result), ConsoleColor.Cyan);
+                        WriteColorLine($"\"{result}\",", ConsoleColor.Cyan);
                     }
                 }
                 else
                 {
-                    WriteColorLine(string.Format("Did not find anything for search '{0}'", query), ConsoleColor.Yellow);
+                    WriteColorLine($"Did not find anything for search '{query}'", ConsoleColor.Yellow);
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace ApiPort
             e.Cancel = true;
         }
 
-        private static void WriteColorLine(string message, ConsoleColor color)
+        private static void WriteColorLine(FormattableString message, ConsoleColor color)
         {
             var previousColor =
 #if LINUX

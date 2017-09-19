@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -56,7 +57,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
             var selection = sheetView.AppendChild(new Selection());
             selection.SequenceOfReferences = new ListValue<StringValue>() { InnerText = range };
-            selection.ActiveCell = range.Substring(0, range.IndexOf(":"));
+            selection.ActiveCell = range.Substring(0, range.IndexOf(":", StringComparison.Ordinal));
 
             var tableDefPart = worksheet.WorksheetPart.AddNewPart<TableDefinitionPart>();
 
@@ -74,8 +75,8 @@ namespace Microsoft.Fx.OpenXmlExtensions
             tableDefPart.Table = new Table()
             {
                 Id = tableID,
-                Name = tableID.ToString(),
-                DisplayName = "Table" + tableID.ToString()
+                Name = tableID.ToString(CultureInfo.CurrentCulture),
+                DisplayName = "Table" + tableID.ToString(CultureInfo.CurrentCulture)
             };
             tableDefPart.Table.Reference = range;
 
@@ -195,7 +196,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             // Column needs to be 0-based for the GetColumnName method
             var columnCount = row.Descendants<Cell>().Count() - 1;
 
-            return String.Format("{0}{1}", GetColumnName(columnCount), rowCount);
+            return String.Format(CultureInfo.CurrentCulture, "{0}{1}", GetColumnName(columnCount), rowCount);
         }
 
         /// <summary>
@@ -286,11 +287,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             if (columnStart + columnCount > 26)
                 throw new NotSupportedException("Only 26 colums supported overall!!");
 
-            string range = string.Empty;
-
-            range = string.Format("{0}{1}:{2}{3}", (char)(((uint)'A') + columnStart - 1), rowStart, (char)(((uint)'A') + columnStart + columnCount - 2), rowStart + rowCount - 1);
-
-            return range;
+            return string.Format(CultureInfo.CurrentCulture, "{0}{1}:{2}{3}", (char)(((uint)'A') + columnStart - 1), rowStart, (char)(((uint)'A') + columnStart + columnCount - 2), rowStart + rowCount - 1);
         }
     }
 }
