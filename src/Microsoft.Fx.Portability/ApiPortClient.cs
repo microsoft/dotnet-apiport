@@ -124,7 +124,7 @@ namespace Microsoft.Fx.Portability
 
             foreach (var errorInput in options.InvalidInputFiles)
             {
-                _progressReport.ReportIssue(string.Format(LocalizedStrings.InvalidFileName, errorInput));
+                _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidFileName, errorInput));
             }
 
             var results = await GetAnalysisResultAsync(options);
@@ -187,7 +187,7 @@ namespace Microsoft.Fx.Portability
         {
             string filePath = null;
 
-            using (var progressTask = _progressReport.StartTask(string.Format(LocalizedStrings.WritingReport, outputFormat)))
+            using (var progressTask = _progressReport.StartTask(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.WritingReport, outputFormat)))
             {
                 try
                 {
@@ -211,7 +211,7 @@ namespace Microsoft.Fx.Portability
 
                     if (string.IsNullOrEmpty(filename))
                     {
-                        _progressReport.ReportIssue(string.Format(LocalizedStrings.CouldNotWriteReport, outputDirectory, outputFileName, extension));
+                        _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CouldNotWriteReport, outputDirectory, outputFileName, extension));
                         progressTask.Abort();
 
                         return null;

@@ -152,7 +152,7 @@ namespace Microsoft.Fx.Portability.Reports
                     var summaryData = new List<object>() { analysisResult.GetNameForAssemblyInfo(item.SourceAssembly), item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
 
                     // TODO: figure out how to add formatting to cells to show percentages.
-                    summaryData.AddRange(item.UsageData.Select(pui => (object)((pui.PortabilityIndex == 0) ? 0 : double.Parse((pui.PortabilityIndex * 100).ToString("##.##")))));
+                    summaryData.AddRange(item.UsageData.Select(pui => (object)(Math.Round(pui.PortabilityIndex * 100.0, 2))));
                     summaryPage.AddRow(summaryData.ToArray());
                     tableRowCount++;
                 }
