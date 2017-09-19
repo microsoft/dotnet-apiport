@@ -36,7 +36,7 @@ namespace ApiPort
 
                 foreach (var outputFormat in outputFormats)
                 {
-                    Console.WriteLine(string.Format(LocalizedStrings.TargetsListNoVersion, outputFormat));
+                    Console.WriteLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TargetsListNoVersion, outputFormat));
                 }
             }
         }

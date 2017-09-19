@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -170,8 +171,8 @@ namespace ApiPortVS
 
             var header = new StringBuilder();
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            header.AppendLine(string.Format(LocalizedStrings.CopyrightFormat, assemblyVersion));
-            header.AppendLine(string.Concat(LocalizedStrings.MoreInformationAvailableAt, " ", LocalizedStrings.MoreInformationUrl));
+            header.AppendLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CopyrightFormat, assemblyVersion));
+            header.AppendLine(string.Concat(CultureInfo.CurrentCulture, LocalizedStrings.MoreInformationAvailableAt, " ", LocalizedStrings.MoreInformationUrl));
 
             _output.WriteLine(header.ToString());
         }

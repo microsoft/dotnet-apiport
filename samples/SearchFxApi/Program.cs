@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,7 +29,7 @@ namespace SearchFxApi
             }
 
             Console.Write("Enter api number:  ");
-            var index = int.Parse(Console.ReadLine());
+            var index = int.Parse(Console.ReadLine(), CultureInfo.CurrentCulture);
 
             var apiToSearchFor = matchingApis[index];
             var apiInformation = GetApi(analysisService, apiToSearchFor.DocId).Result;

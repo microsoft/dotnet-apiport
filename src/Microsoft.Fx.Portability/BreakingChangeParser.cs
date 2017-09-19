@@ -288,7 +288,7 @@ namespace Microsoft.Fx.Portability
                     break;
                 case ParseState.Notes:
                     // Special-case the fact that 'notes' will often come at the end of a comment section and we don't need the closing --> in the note.
-                    if (currentLine.Trim().Equals("-->")) return;
+                    if (string.Equals("-->", currentLine.Trim(), StringComparison.Ordinal)) return;
                     if (currentBreak.Notes == null)
                     {
                         currentBreak.Notes = currentLine;

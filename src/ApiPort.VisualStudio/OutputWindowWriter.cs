@@ -54,7 +54,7 @@ namespace ApiPortVS
 
         public override void Write(char text)
         {
-            var errCode = _outputWindow.OutputStringThreadSafe(text.ToString());
+            var errCode = _outputWindow.OutputStringThreadSafe(text.ToString(CultureInfo.CurrentCulture));
 
             if (ErrorHandler.Failed(errCode))
             {
