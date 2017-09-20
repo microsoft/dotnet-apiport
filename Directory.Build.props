@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
-    <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701,CA0068</NoWarn>
+    <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,6 +22,14 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
+  </PropertyGroup>
+
+  <!-- FxCop does not understand this target platform and will output an error similar to the following:
+    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp1.0\ApiPort.dll'
+    MSBUILD : error : CA0052 : No targets were selected.
+    -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
 
   <!-- Do not generate AssemblyInfo because we are doing that with the

@@ -243,7 +243,7 @@ namespace Microsoft.Fx.Portability.Proxy
                 if (proxyUri != null)
                 {
                     var proxyAddress = new Uri(proxyUri.AbsoluteUri);
-                    if (string.Equals(proxyAddress.AbsoluteUri, uri.AbsoluteUri, StringComparison.Ordinal))
+                    if (string.Equals(proxyAddress.AbsoluteUri, uri.AbsoluteUri, StringComparison.OrdinalIgnoreCase))
                     {
                         return false;
                     }
