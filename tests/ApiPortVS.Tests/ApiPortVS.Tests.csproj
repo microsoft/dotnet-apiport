@@ -5,6 +5,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <NonShipping>true</NonShipping>
+    <!-- Old style FxCop is failing to run on this project, probably because ApiPort.VisualStudio is an old style csproj -->
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
 
   <ItemGroup>
