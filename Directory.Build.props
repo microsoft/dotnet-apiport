@@ -24,14 +24,6 @@
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
   </PropertyGroup>
 
-  <!-- FxCop does not understand this target platform and will output an error similar to the following:
-    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp1.0\ApiPort.dll'
-    MSBUILD : error : CA0052 : No targets were selected.
-    -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
-
   <!-- Do not generate AssemblyInfo because we are doing that with the
     GenerateAssemblyInfoFile target in dir.targets -->
   <PropertyGroup>
@@ -44,15 +36,19 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  
 
-  <!-- FxCop does not understand this target platform and will output an error similar to the following:
-    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp1.0\ApiPort.dll'
-    MSBUILD : error : CA0052 : No targets were selected.
-    -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
+  <Choose>
+    <When Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">
+      <PropertyGroup>
+        <IsTest>true</IsTest>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <IsTest>false</IsTest>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
 
   <!--NuGet properties-->
   <PropertyGroup>

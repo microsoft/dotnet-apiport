@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
+
   <!-- Depending on whether it is a VSIX or MSIL, choose the correct certificate.
        1) By default, the VSIX project just packages the contents, so
        CopyBuildOutputToOutputDirectory/IncludeAssemblyInVSIXContainer will be
@@ -79,7 +80,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0">
+    <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference> 
   </ItemGroup>

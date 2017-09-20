@@ -68,11 +68,11 @@ if ($findVsVersion) {
     $VsDevCmdBat = $file.Name
 }
 
-pushd $commonToolsPath
+Push-Location $commonToolsPath
 
 $output = cmd /c "$VsDevCmdBat & set"
  
-popd
+Pop-Location
     
 foreach ($line in $output)
 {
