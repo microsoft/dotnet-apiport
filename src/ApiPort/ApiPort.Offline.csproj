@@ -1,56 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <AssemblyName>ApiPort</AssemblyName>
-    <RootNamespace>ApiPort</RootNamespace>
-    <TargetFrameworks>net46;netcoreapp1.0</TargetFrameworks>
-    <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
-    <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
+  <Import Project="ApiPort.props" />
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.4.0" />
-    <PackageReference Include="Autofac.Configuration" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
-    <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BinPlaceContent Include=".\Assets\KnownSafeBreaks.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Properties\version.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.csproj" />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj" />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj" Condition=" '$(TargetFramework)' == 'net46' " />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj" />
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-  </Target>
 </Project>
