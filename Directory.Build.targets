@@ -82,7 +82,10 @@
   <ItemGroup>
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
       <PrivateAssets>All</PrivateAssets>
-    </PackageReference> 
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <Target Name="GenerateAssemblyInfoFile" BeforeTargets="BeforeBuild">
@@ -102,4 +105,5 @@
         <Compile Remove="@(EmbeddedResource-> '%(Identity)')" />
     </ItemGroup>
   </Target>
+
 </Project>
