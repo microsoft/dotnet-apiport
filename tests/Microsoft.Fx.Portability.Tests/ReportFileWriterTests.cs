@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using NSubstitute;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,7 +88,7 @@ namespace Microsoft.Fx.Portability.Tests
             do
             {
                 fileSystem.FileExists(path).Returns(true);
-                var nextFileName = string.Format(fileNameFormat, fileNumber);
+                var nextFileName = string.Format(CultureInfo.CurrentCulture, fileNameFormat, fileNumber);
                 path = Path.Combine(dir, Path.ChangeExtension(nextFileName, extension));
             } while (fileNumber++ < FileExistsCount);
 

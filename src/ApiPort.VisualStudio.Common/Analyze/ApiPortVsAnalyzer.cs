@@ -8,6 +8,7 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,7 +85,7 @@ namespace ApiPortVS.Analyze
                 {
                     await _threadingService.SwitchToMainThreadAsync();
 
-                    var message = string.Format(LocalizedStrings.InvalidPlatformSelectedFormat, invalidPlatform.Name);
+                    var message = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidPlatformSelectedFormat, invalidPlatform.Name);
                     _outputWindow.WriteLine(message);
                 }
             }

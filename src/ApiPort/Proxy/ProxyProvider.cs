@@ -12,9 +12,9 @@ namespace Microsoft.Fx.Portability.Proxy
     /// 1. From a configuration file <see cref="ProxyConstants.ConfigurationFile"/>
     /// 2. From an environment variable <see cref="ProxyConstants.HttpProxy"/>
     /// 3. System provided proxy
-    /// 
+    ///
     /// Looks for the one in the configuration file because the user would
-    /// explicitly want to override their current proxy settings in order 
+    /// explicitly want to override their current proxy settings in order
     /// for the configuration value to be set.
     /// </summary>
     /// <remarks>
@@ -243,7 +243,7 @@ namespace Microsoft.Fx.Portability.Proxy
                 if (proxyUri != null)
                 {
                     var proxyAddress = new Uri(proxyUri.AbsoluteUri);
-                    if (string.Equals(proxyAddress.AbsoluteUri, uri.AbsoluteUri))
+                    if (string.Equals(proxyAddress.AbsoluteUri, uri.AbsoluteUri, StringComparison.OrdinalIgnoreCase))
                     {
                         return false;
                     }

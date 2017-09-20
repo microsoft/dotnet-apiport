@@ -7,6 +7,7 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Versioning;
 using Xunit;
@@ -358,7 +359,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             int expectedID = 3;
             foreach (BreakingChangeDependency bcd in result)
             {
-                Assert.Equal(expectedID.ToString(), bcd.Break.Id);
+                Assert.Equal(expectedID.ToString(CultureInfo.CurrentCulture), bcd.Break.Id);
                 expectedID++;
             }
         }
@@ -387,7 +388,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             int expectedID = 1;
             foreach (BreakingChangeDependency bcd in result)
             {
-                Assert.Equal(expectedID.ToString(), bcd.Break.Id);
+                Assert.Equal(expectedID.ToString(CultureInfo.CurrentCulture), bcd.Break.Id);
                 expectedID++;
             }
         }
@@ -544,7 +545,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
                 BreakingChange bc = new BreakingChange
                 {
                     ApplicableApis = new[] { TestDocId1 },
-                    Id = lastIDUsed.ToString(),
+                    Id = lastIDUsed.ToString(CultureInfo.CurrentCulture),
                     VersionBroken = Version.Parse("4.5"),
                     IsQuirked = true
                 };
@@ -561,7 +562,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
                 BreakingChange bc = new BreakingChange
                 {
                     ApplicableApis = new[] { TestDocId1 },
-                    Id = lastIDUsed.ToString(),
+                    Id = lastIDUsed.ToString(CultureInfo.CurrentCulture),
                     VersionBroken = Version.Parse("4.5"),
                     IsQuirked = false,
                     IsBuildTime = false

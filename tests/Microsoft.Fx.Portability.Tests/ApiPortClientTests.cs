@@ -8,6 +8,7 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -111,7 +112,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
             var options = Substitute.For<IApiPortOptions>();
-            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString()));
+            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString(CultureInfo.CurrentCulture)));
             options.OutputFormats.Returns(new[] { "HTML", "Excel" });
 
             await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.AnalyzeAssembliesAsync(options));
@@ -130,7 +131,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
             var options = Substitute.For<IApiPortOptions>();
-            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString()));
+            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString(CultureInfo.CurrentCulture)));
             options.OutputFormats.Returns(new[] { "HTML" });
 
             var item = await client.AnalyzeAssembliesAsync(options);
@@ -149,7 +150,7 @@ namespace Microsoft.Fx.Portability.Tests
 
             var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
             var options = Substitute.For<IApiPortOptions>();
-            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString()));
+            options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString(CultureInfo.CurrentCulture)));
             options.OutputFormats.Returns(new[] { "HTML", "Excel" });
 
             await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options));

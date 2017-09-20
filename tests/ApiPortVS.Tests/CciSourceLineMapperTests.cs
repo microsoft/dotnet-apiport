@@ -10,6 +10,7 @@ using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using NSubstitute;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Versioning;
 using Xunit;
@@ -34,7 +35,7 @@ namespace ApiPortVS.Tests
             var analysis = Substitute.For<ReportingResult>(new List<FrameworkName>(), new List<MemberInfo>(), string.Empty, AnalyzeRequestFlags.None);
             traverser.GetSourceInfo(new string[] { assemblyName }, analysis);
 
-            var expectedMessage = string.Format(LocalizedStrings.PdbNotFoundFormat, assemblyName);
+            var expectedMessage = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.PdbNotFoundFormat, assemblyName);
             reporter.Received(1).ReportIssue(expectedMessage);
         }
     }

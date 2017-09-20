@@ -12,9 +12,9 @@ using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    public class ApiPortServiceTests
+    public sealed class ApiPortServiceTests : IDisposable
     {
-        private ApiPortService _apiPortService;
+        private readonly ApiPortService _apiPortService;
 
         public ApiPortServiceTests()
         {
@@ -23,6 +23,11 @@ namespace Microsoft.Fx.Portability.Tests
 
             //Create a fake ApiPortService which uses the TestHandler to send back the response message
             _apiPortService = new ApiPortService("http://localhost", httpMessageHandler, productInformation);
+        }
+
+        public void Dispose()
+        {
+            _apiPortService.Dispose();
         }
 
         [Fact]
@@ -86,7 +91,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
 
             var assembly = typeof(ApiPortServiceTests).GetTypeInfo().Assembly;
-            var resourceName = assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceFile));
+            var resourceName = assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceFile, StringComparison.Ordinal));
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
 
             var streamContent = new StreamContent(resourceStream);

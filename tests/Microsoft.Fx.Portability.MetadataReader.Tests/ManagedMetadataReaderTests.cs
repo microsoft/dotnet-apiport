@@ -214,9 +214,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var progressReporter = Substitute.For<IProgressReporter>();
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
-            var primitiveArray = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, arrayDocId)).Key;
+            var primitiveArray = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, arrayDocId, StringComparison.Ordinal)).Key;
             Assert.NotNull(primitiveArray);
-            var systemObject = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, objectDocId)).Key;
+            var systemObject = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, objectDocId, StringComparison.Ordinal)).Key;
             Assert.NotNull(systemObject);
 
             //Test that the DefinedInAssemblyIdentity of the primitive array is not null/empty and it is the same as the one of System.Object
@@ -253,7 +253,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)
             {
-                return string.Equals(_assemblyName, assembly?.Name);
+                return string.Equals(_assemblyName, assembly?.Name, StringComparison.Ordinal);
             }
         }
     }

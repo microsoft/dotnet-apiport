@@ -40,6 +40,7 @@
   <PropertyGroup>
     <!-- This project does not output any binaries, so API Scan can be skipped. -->
     <IsPackage>true</IsPackage>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Debugging Settings; Stored in project file instead of .user file to be available to everyone -->

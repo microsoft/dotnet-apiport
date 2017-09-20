@@ -238,7 +238,7 @@ namespace ApiPortVS.ViewModels
                     {
                         foreach (var name in _targetMapper.GetNames(alias))
                         {
-                            if (String.Equals(platform.Name, name))
+                            if (String.Equals(platform.Name, name, StringComparison.Ordinal))
                             {
                                 platform.AlternativeNames.Add(alias);
                             }

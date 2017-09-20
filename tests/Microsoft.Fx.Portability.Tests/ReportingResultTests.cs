@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Versioning;
 using Xunit;
@@ -18,7 +19,7 @@ namespace Microsoft.Fx.Portability.Tests
             return new MemberInfo
             {
                 TypeDocId = typeDocId,
-                MemberDocId = string.Format("M:{0}.{1}", typeDocId.Substring(2), memberName),
+                MemberDocId = string.Format(CultureInfo.CurrentCulture, "M:{0}.{1}", typeDocId.Substring(2), memberName),
                 IsSupportedAcrossTargets = false
             };
         }
@@ -26,7 +27,7 @@ namespace Microsoft.Fx.Portability.Tests
         private List<FrameworkName> TargetPlatforms(int count)
         {
             return Enumerable.Range(1, count)
-                .Select(n => new FrameworkName(string.Format("Target{0}", n), new Version(1, 0)))
+                .Select(n => new FrameworkName(string.Format(CultureInfo.CurrentCulture, "Target{0}", n), new Version(1, 0)))
                 .ToList();
         }
 

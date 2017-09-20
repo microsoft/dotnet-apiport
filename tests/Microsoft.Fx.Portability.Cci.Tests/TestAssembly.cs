@@ -10,6 +10,8 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
+using static System.FormattableString;
+
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
     internal class TestAssembly
@@ -20,8 +22,8 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private TestAssembly(string assemblyName, string text, IEnumerable<string> referencePaths)
         {
-            var executableName = $"{assemblyName}-{Guid.NewGuid().ToString()}.exe";
-            var path = new FileInfo(Path.Combine(System.IO.Path.GetTempPath(), executableName));
+            var executableName = Invariant($"{assemblyName}-{Guid.NewGuid()}.exe");
+            var path = new FileInfo(Path.Combine(Path.GetTempPath(), executableName));
             _path = path.FullName;
 
             if (path.Exists)
@@ -69,7 +71,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private static string GetText(string fileName)
         {
-            var name = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName));
+            var name = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName, StringComparison.Ordinal));
 
             using (var stream = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceStream(name))
             using (var reader = new StreamReader(stream))
