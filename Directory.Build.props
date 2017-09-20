@@ -37,18 +37,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">
-      <PropertyGroup>
-        <IsTest>true</IsTest>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <IsTest>false</IsTest>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
+  <PropertyGroup>
+    <IsTest>false</IsTest>
+    <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
+  </PropertyGroup>
 
   <!--NuGet properties-->
   <PropertyGroup>
