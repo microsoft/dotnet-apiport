@@ -34,8 +34,20 @@ function Get-DotNetCLI {
 
     Write-Host "Installing .NET CLI"
 
-    &([scriptblock]::Create((Invoke-WebRequest -useb 'https://dot.net/v1/dotnet-install.ps1'))) -Channel 2.0 -InstallDir $DotNetCliDirectory
-    &([scriptblock]::Create((Invoke-WebRequest -useb 'https://dot.net/v1/dotnet-install.ps1'))) -Channel 1.0 -SharedRuntime -InstallDir $DotNetCliDirectory
+    $install = Join-Path $DotNetCliDirectory "dotnet-install.ps1"
+
+    New-Item -Type Directory $DotNetCliDirectory -Force | Out-Null
+    
+    if (!(Test-Path $install)) {
+        Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1' -OutFile $install
+    }
+
+    function Receive-Output {
+        process { Write-Host $_ -foreground Yellow }
+    }
+
+    & $install -Channel 2.0 -InstallDir $DotNetCliDirectory | Receive-Output
+    & $install -Channel 1.0 -SharedRuntime -InstallDir $DotNetCliDirectory | Receive-Output
 
     return $DotNetCli
 }
