@@ -20,38 +20,6 @@ param(
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
 
-# Don't expand .NET CLI cache
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE="true"
-
-function Get-DotNetCLI {
-    $DotNetCliDirectory = [IO.Path]::Combine($root, ".tools", "dotnet")
-    $DotNetCli = Join-Path $DotNetCliDirectory "dotnet.exe"
-
-    if(Test-Path $DotNetCli) {
-        Write-Host ".NET CLI already installed"
-        return $DotNetCli
-    }
-
-    Write-Host "Installing .NET CLI"
-
-    $install = Join-Path $DotNetCliDirectory "dotnet-install.ps1"
-
-    New-Item -Type Directory $DotNetCliDirectory -Force | Out-Null
-    
-    if (!(Test-Path $install)) {
-        Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1' -OutFile $install
-    }
-
-    function Receive-Output {
-        process { Write-Host $_ -foreground Yellow }
-    }
-
-    & $install -Channel 2.0 -InstallDir $DotNetCliDirectory | Receive-Output
-    & $install -Channel 1.0 -SharedRuntime -InstallDir $DotNetCliDirectory | Receive-Output
-
-    return $DotNetCli
-}
-
 function Invoke-Tests() {
     Write-Host "Running tests"
 
@@ -68,7 +36,7 @@ function Invoke-Tests() {
         New-Item $testResults -ItemType Directory
     }
 
-    $cli = Get-DotNetCLI
+    dotnet --version
 
     foreach ($test in $(Get-ChildItem $testFolder | ? { $_.PsIsContainer })) {
         $csprojs = Get-ChildItem $test.FullName -Recurse | ? { $_.Extension -eq ".csproj" }
@@ -78,19 +46,19 @@ function Invoke-Tests() {
 
             Write-Host "Testing $($proj.Name). Output: $trx"
 
-            & $cli test "$($proj.FullName)" --configuration $Configuration --logger "trx;LogFileName=$fullpath" --no-build
+            dotnet test "$($proj.FullName)" --configuration $Configuration --logger "trx;LogFileName=$fullpath" --no-build
         }
     }
 }
 
-function Get-MSBuild {
+function Set-DevEnvironment {
     Write-Host "Getting msbuild"
     $msbuild = "msbuild"
 
     if (Get-Command $msbuild -ErrorAction SilentlyContinue)
     {
         Write-Host "$msbuild is already available"
-        return $msbuild
+        return
     }
 
     $microsoftVisualStudio = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2017"
@@ -136,20 +104,23 @@ function Get-MSBuild {
     if (Get-Command $msbuild -ErrorAction SilentlyContinue)
     {
         Write-Host "Added $msbuild to path"
-        return $msbuild
+        return
     }
 
     Write-Error "Could not find $msbuild"
 }
+
+Set-DevEnvironment
+
+# Show the MSBuild version for failure investigations
+msbuild /version
 
 # Libraries are currently pre-release
 $env:VersionSuffix = $VersionSuffix
 
 $binFolder = [IO.Path]::Combine("bin", $Configuration)
 
-if (!(Test-Path $binFolder)) {
-    New-Item $binFolder -ItemType Directory
-}
+New-Item $binFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 
 & "$root\init.ps1"
 
@@ -162,7 +133,7 @@ if ($Platform -eq "AnyCPU") {
 
 Push-Location $root
 
-& (Get-MSBuild) PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
+& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
 
 Pop-Location
 
