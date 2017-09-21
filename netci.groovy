@@ -21,7 +21,7 @@ def outerloopPlatforms = ['Windows_NT', 'Ubuntu14.04', 'Ubuntu16.04', 'OSX10.12'
                     }
                 }
 
-                Utilities.setMachineAffinity(newJob, os, 'latest-or-auto-dev15-0')
+                Utilities.setMachineAffinity(newJob, os, 'latest-dev15-3')
             } else {
                 newJob.with {
                     steps {
