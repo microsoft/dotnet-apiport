@@ -42,6 +42,7 @@ namespace ApiPortVS.Analyze
 
         public async Task<ReportingResult> WriteAnalysisReportsAsync(
             IEnumerable<string> assemblyPaths,
+            IEnumerable<string> installedPackages,
             IFileWriter reportWriter,
             bool includeJson)
         {
@@ -53,7 +54,7 @@ namespace ApiPortVS.Analyze
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
             var reportFileName = _optionsViewModel.DefaultOutputName;
 
-            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, Path.Combine(reportDirectory, reportFileName)).ConfigureAwait(false);
+            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, installedPackages, Path.Combine(reportDirectory, reportFileName)).ConfigureAwait(false);
             var issuesBefore = _reporter.Issues.Count;
 
             var result = await _client.WriteAnalysisReportsAsync(analysisOptions, includeJson).ConfigureAwait(false);
@@ -75,7 +76,7 @@ namespace ApiPortVS.Analyze
             return result.Result;
         }
 
-        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, string reportFileName)
+        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, IEnumerable<string> referencedNugetPackages, string reportFileName)
         {
             await _optionsViewModel.UpdateAsync().ConfigureAwait(false);
 
@@ -114,6 +115,7 @@ namespace ApiPortVS.Analyze
                 assemblyPaths,
                 targets,
                 formats,
+                referencedNugetPackages,
                 !_optionsViewModel.SaveMetadata,
                 reportFileName,
                 isAssemblySpecified: false);

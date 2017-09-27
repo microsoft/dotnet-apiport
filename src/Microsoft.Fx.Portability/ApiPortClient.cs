@@ -327,7 +327,8 @@ namespace Microsoft.Fx.Portability
                 ApplicationName = options.Description,
                 Version = AnalyzeRequest.CurrentVersion,
                 RequestFlags = options.RequestFlags,
-                BreakingChangesToSuppress = options.BreakingChangeSuppressions
+                BreakingChangesToSuppress = options.BreakingChangeSuppressions,
+                ReferencedNuGetPackages = options.ReferencedNuGetPackages
             };
         }
 

@@ -54,3 +54,4 @@
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\System.Text.Encodings.Web.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\System.Threading.Tasks.Dataflow.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\System.Xml.ReaderWriter.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.VisualStudio.dll")]

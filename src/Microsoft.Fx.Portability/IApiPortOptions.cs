@@ -4,7 +4,6 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 
 namespace Microsoft.Fx.Portability
 {
@@ -26,5 +25,6 @@ namespace Microsoft.Fx.Portability
         string OutputFileName { get; }
         IEnumerable<string> InvalidInputFiles { get; }
         bool OverwriteOutputFile { get; }
+        IEnumerable<string> ReferencedNuGetPackages { get; }
     }
 }

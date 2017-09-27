@@ -6,7 +6,10 @@ using ApiPortVS.Models;
 using ApiPortVS.Resources;
 using EnvDTE;
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.VisualStudio.ComponentModelHost;
+using NuGet.VisualStudio;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -59,6 +62,7 @@ namespace ApiPortVS.Analyze
             // TODO: Add option to include everything in output, not just build artifacts
             var targetAssemblies = new ConcurrentBag<string>();
 
+            var referencedNuGetPackages = new List<string>();
             foreach (var project in projects)
             {
                 var output = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
@@ -73,6 +77,10 @@ namespace ApiPortVS.Analyze
                 {
                     targetAssemblies.Add(file);
                 }
+
+                //get referenced NuGetPackages
+                var projectNugetReferences = GetPackageReferences(project);
+                referencedNuGetPackages = referencedNuGetPackages.Union(projectNugetReferences).ToList();
             }
 
             if (!targetAssemblies.Any())
@@ -80,7 +88,7 @@ namespace ApiPortVS.Analyze
                 throw new PortabilityAnalyzerException(LocalizedStrings.FailedToLocateBuildOutputDir);
             }
 
-            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true).ConfigureAwait(false);
+            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, referencedNuGetPackages, _reportWriter, true).ConfigureAwait(false);
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result)).ConfigureAwait(false);
 
             var dictionary = new ConcurrentBag<CalculatedProject>();
@@ -115,6 +123,26 @@ namespace ApiPortVS.Analyze
             catch
             {
                 return Enumerable.Empty<string>();
+            }
+        }
+
+        private IEnumerable<string> GetPackageReferences(Project project)
+        {
+            var componentModel = (IComponentModel)Microsoft.VisualStudio.Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel));
+            IVsPackageInstallerServices installerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            if (installerServices == null)
+            {
+                yield break;
+            }
+
+            var installedPackages = installerServices.GetInstalledPackages(project);
+
+            foreach (var packageMetadata in installedPackages)
+            {
+                if (!NuGetPackageInfo.IsImplicitlyReferencedPackage(packageMetadata.Id))
+                {
+                    yield return packageMetadata.Id;
+                }
             }
         }
     }

@@ -34,6 +34,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IEnumerable<IgnoreAssemblyInfo> AssembliesToIgnore { get; set; }
 
+        public IEnumerable<string> ReferencedNuGetPackages { get; set; }
+
         public int CompareTo(object obj)
         {
             var analyzeObject = obj as AnalyzeRequest;
