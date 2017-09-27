@@ -34,7 +34,9 @@ namespace Microsoft.Fx.Portability
             ICollection<string> userAssemblies,
             bool ShowRetargettingIssues = false);
 
-        IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfo(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets);
+        IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfoFromAssembly(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets);
+
+        IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfo(IEnumerable<string> referencedNuGetPackages, IEnumerable<FrameworkName> targets);
 
         IEnumerable<string> ComputeAssembliesToRemove(IEnumerable<AssemblyInfo> userAssemblies, IEnumerable<FrameworkName> targets, IEnumerable<NuGetPackageInfo> nugetPackagesForUserAssemblies);
 

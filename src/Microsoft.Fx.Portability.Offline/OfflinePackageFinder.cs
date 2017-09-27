@@ -9,9 +9,15 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public class OfflinePackageFinder : IPackageFinder
     {
-        public bool TryFindPackage(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableDictionary<FrameworkName, IEnumerable<NuGetPackageId>> packages)
+        public bool TryFindPackage(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableList<NuGetPackageInfo> packages)
         {
-            packages = ImmutableDictionary<FrameworkName, IEnumerable<NuGetPackageId>>.Empty;
+            packages = ImmutableList<NuGetPackageInfo>.Empty;
+            return false;
+        }
+
+        public bool TryFindSupportedVersions(string package, IEnumerable<FrameworkName> targets, out ImmutableDictionary<FrameworkName, string> versions)
+        {
+            versions = ImmutableDictionary<FrameworkName, string>.Empty;
             return false;
         }
     }

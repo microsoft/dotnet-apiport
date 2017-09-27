@@ -224,17 +224,37 @@ namespace Microsoft.Fx.Portability.Analysis
             }
         }
 
-        public IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfo(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets)
+        public IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfoFromAssembly(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets)
         {
             foreach (var assembly in assemblies)
             {
                 if (_packageFinder.TryFindPackage(assembly, targets, out var packages))
                 {
-                    foreach (var target in targets)
+                    foreach (var nuGetPackageInfo in packages)
                     {
-                        var nuGetPackageInfo = new NuGetPackageInfo(assembly, target, packages.ContainsKey(target) ? packages[target] : Enumerable.Empty<NuGetPackageId>());
-                        yield return nuGetPackageInfo;
+                        //check if the assembly is set
+                        if (nuGetPackageInfo.AssemblyInfo == null)
+                        {
+                            yield return new NuGetPackageInfo(nuGetPackageInfo.PackageId, nuGetPackageInfo.SupportedVersions, assembly);
+                        }
+                        else
+                        {
+                            yield return nuGetPackageInfo;
+                        }
                     }
+                }
+            }
+        }
+
+        public IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfo(IEnumerable<string> referencedNuGetPackages, IEnumerable<FrameworkName> targets)
+        {
+            foreach (var package in referencedNuGetPackages)
+            {
+                if (_packageFinder.TryFindSupportedVersions(package, targets, out var supportedVersions))
+                {
+                    var nuGetpackageInfo = new NuGetPackageInfo(package, supportedVersions);
+
+                    yield return nuGetpackageInfo;
                 }
             }
         }
@@ -261,7 +281,7 @@ namespace Microsoft.Fx.Portability.Analysis
                 {
                     var packagesExist = nugetPackagesForUserAssemblies.Any(
                         p => string.Equals(p.AssemblyInfo, assembly.AssemblyIdentity, StringComparison.Ordinal)
-                        && p.Target == target);
+                        && p.SupportedVersions.TryGetValue(target, out var version) && !string.IsNullOrEmpty(version));
 
                     if (!packagesExist)
                     {

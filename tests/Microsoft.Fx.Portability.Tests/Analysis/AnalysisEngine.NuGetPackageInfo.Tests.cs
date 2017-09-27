@@ -36,53 +36,43 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             var targets = new[] { Windows80, Net11, NetStandard16 };
             var packageFinder = Substitute.For<IPackageFinder>();
 
-            var nugetPackageWin80 = GetNuGetPackage("TestNuGetPackage", "1.3.4");
-            var nugetPackageNetStandard = GetNuGetPackage("TestNuGetPackage", "10.0.8");
+            var packageId = "TestNuGetPackage";
+            var nugetPackageWin80Version = "1.3.4";  // supported version of the package
+            var nugetPackageNetStandardVersion = "10.0.8";
+
+            var packagesList = new[]
+                    {
+                        new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>() {
+                            {Windows80, nugetPackageWin80Version },
+                            { NetStandard16, nugetPackageNetStandardVersion} })
+                    };
 
             packageFinder.TryFindPackage(nugetPackageAssembly.AssemblyIdentity, targets, out var packages)
-                .Returns(x =>
-                {
-                    // return this value in `out var packages`
-                    x[2] = new Dictionary<FrameworkName, IEnumerable<NuGetPackageId>>
+                    .Returns(x =>
                     {
-                        { Windows80,  new[] { nugetPackageWin80 } },
-                        { NetStandard16,  new[] { nugetPackageNetStandard } }
-                    }
-                    .ToImmutableDictionary();
-                    return true;
-                });
+                        // return this value in `out var packages`
+                        x[2] = packagesList.ToImmutableList();
+                        return true;
+                    });
 
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), packageFinder);
 
             // Act
-            var nugetPackageResult = engine.GetNuGetPackagesInfo(inputAssemblies.Select(x => x.AssemblyIdentity), targets).ToArray();
+            var nugetPackageResult = engine.GetNuGetPackagesInfoFromAssembly(inputAssemblies.Select(x => x.AssemblyIdentity), targets).ToArray();
 
             // Assert
+            Assert.Single(nugetPackageResult);
 
-            // We expect that it was able to locate this particular package and
-            // return a result for each input target framework.
-            Assert.Equal(nugetPackageResult.Count(), targets.Length);
-
-            var windows80Result = nugetPackageResult.Single(x => x.Target == Windows80);
-            var netstandard16Result = nugetPackageResult.Single(x => x.Target == NetStandard16);
-            var net11Result = nugetPackageResult.Single(x => x.Target == Net11);
-
-            Assert.Single(windows80Result.SupportedPackages);
-            Assert.Single(netstandard16Result.SupportedPackages);
+            Assert.Equal(nugetPackageResult[0].SupportedVersions[Windows80], nugetPackageWin80Version);
+            Assert.Equal(nugetPackageResult[0].SupportedVersions[NetStandard16], nugetPackageNetStandardVersion);
             // We did not have any packages that supported .NET Standard 2.0
-            Assert.Empty(net11Result.SupportedPackages);
+            Assert.True(!nugetPackageResult[0].SupportedVersions.TryGetValue(Net11, out var value) || string.IsNullOrEmpty(value));
 
-            Assert.Equal(nugetPackageWin80, windows80Result.SupportedPackages.First());
-            Assert.Equal(nugetPackageNetStandard, netstandard16Result.SupportedPackages.First());
-
-            foreach (var result in nugetPackageResult)
-            {
-                Assert.Equal(result.AssemblyInfo, nugetPackageAssembly.AssemblyIdentity);
-            }
+            Assert.Equal(nugetPackageResult[0].AssemblyInfo, nugetPackageAssembly.AssemblyIdentity);
         }
 
         /// <summary>
-        /// Tests that if an assembly is not explicitly specified, it'll be in the set of assemblies to remove.
+        /// Tests that if an assembly is not explicitly specified, and packages for this assembly are found, it'll be in the set of assemblies to remove.
         /// </summary>
         [Fact]
         public void ComputeAssembliesToRemove_PackageFound()
@@ -97,13 +87,13 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             };
 
             var targets = new[] { Windows81, NetStandard16 };
-            var packageId = new[] { GetNuGetPackage("SomeNuGetPackage", "2.0.1") };
+            var packageId = "SomeNuGetPackage";
+            var packageVersion = "2.0.1";
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), Substitute.For<IPackageFinder>());
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, Windows81, packageId),
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, NetStandard16, packageId)
+                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>() { { Windows81, packageVersion }, { NetStandard16, packageVersion } },userNuGetPackage.AssemblyIdentity)
             };
 
             // Act
@@ -131,15 +121,25 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             };
 
             var targets = new[] { Windows81, NetStandard16 };
-            var packageId = new[] { GetNuGetPackage("SomeNuGetPackage", "2.0.1") };
+            var packageId = "SomeNuGetPackage";
+            var packageVersion = "2.0.1";
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), Substitute.For<IPackageFinder>());
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, Windows81, packageId),
+                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }, { NetStandard16, null } }, userNuGetPackage.AssemblyIdentity)
             };
 
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
+
+            Assert.Empty(assemblies);
+
+            var nugetPackageResult2 = new[]
+            {
+                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }}, userNuGetPackage.AssemblyIdentity)
+            };
+
+            assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
 
             Assert.Empty(assemblies);
         }
@@ -162,13 +162,13 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             };
 
             var targets = new[] { Windows81, NetStandard16 };
-            var packageId = new[] { GetNuGetPackage("SomeNuGetPackage", "2.0.1") };
+            var packageId = "SomeNuGetPackage";
+            var packageVersion = "2.0.1";
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), Substitute.For<IPackageFinder>());
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, Windows81, packageId),
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, NetStandard16, packageId)
+                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }, { NetStandard16, packageVersion } }, userNuGetPackage.AssemblyIdentity)
             };
 
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
@@ -190,13 +190,13 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             var inputAssemblies = new[] { userNuGetPackage };
 
             var targets = new[] { Windows81, NetStandard16 };
-            var packageId = new[] { GetNuGetPackage("SomeNuGetPackage", "2.0.1") };
+            var packageId = "SomeNuGetPackage";
+            var packageVersion = "2.0.1";
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), Substitute.For<IPackageFinder>());
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, Windows81, packageId),
-                new NuGetPackageInfo(userNuGetPackage.AssemblyIdentity, NetStandard16, packageId)
+                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }, { NetStandard16, packageVersion } }, userNuGetPackage.AssemblyIdentity)
             };
 
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
@@ -214,11 +214,6 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         {
             var name = new FrameworkName(assemblyName, Version.Parse(version));
             return new AssemblyInfo { AssemblyIdentity = name.ToString() };
-        }
-
-        private static NuGetPackageId GetNuGetPackage(string packageId, string version, string url = null)
-        {
-            return new NuGetPackageId(packageId, version, url);
         }
     }
 }

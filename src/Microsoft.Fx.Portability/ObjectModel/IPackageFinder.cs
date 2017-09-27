@@ -20,6 +20,17 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// If 'true' is returned, but no packages in the list, it means the package is not supported on the given framework.
         /// If 'false' is returned, it means we don't have any info about that assembly.
         /// </returns>
-        bool TryFindPackage(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableDictionary<FrameworkName, IEnumerable<NuGetPackageId>> packages);
+        bool TryFindPackage(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableList<NuGetPackageInfo> packages);
+
+        /// <summary>
+        /// Find supported versions of a given package
+        /// </summary>
+        /// <param name="package">the package the application uses</param>
+        /// <param name="targets">frameworks that we need to support</param>
+        /// <param name="versions">dictionary of package version and supported frameworks</param>
+        /// <returns>
+        /// If 'false' is returned, it means we don't have any info about that package, don't know if it is supported or not
+        /// </returns>
+        bool TryFindSupportedVersions(string package, IEnumerable<FrameworkName> targets, out ImmutableDictionary<FrameworkName, string> versions);
     }
 }
