@@ -61,10 +61,10 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
             else
             {
-                var nugetPackagesForUserAssemblies = _analysisEngine.GetNuGetPackagesInfo(assemblyIdentities, targets);
+                var nugetPackagesForUserAssemblies = _analysisEngine.GetNuGetPackagesInfoFromAssembly(assemblyIdentities, targets);
                 assembliesToRemove = new HashSet<string>(_analysisEngine.ComputeAssembliesToRemove(request.UserAssemblies, targets, nugetPackagesForUserAssemblies), StringComparer.OrdinalIgnoreCase);
 
-                var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfo(missingUserAssemblies, targets);
+                var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfoFromAssembly(missingUserAssemblies, targets);
                 nugetPackages = nugetPackagesForMissingAssemblies.Union(nugetPackagesForUserAssemblies).ToList();
             }
             nugetPackages.Sort(new NuGetPackageInfoComparer());
