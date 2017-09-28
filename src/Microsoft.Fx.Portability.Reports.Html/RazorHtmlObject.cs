@@ -6,6 +6,7 @@ using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,8 @@ namespace Microsoft.Fx.Portability.Reports
         public IEnumerable<MissingTypeInfo> MissingTypes { get; private set; }
 
         public IOrderedEnumerable<AssemblyUsageInfo> OrderedAssembliesByIdentity { get; private set; }
+
+        public IEnumerable<FrameworkName> Targets { get; private set; }
 
         public ITargetMapper TargetMapper { get; private set; }
 
@@ -50,6 +53,7 @@ namespace Microsoft.Fx.Portability.Reports
             OrderedUnresolvedAssemblies = response.ReportingResult.GetUnresolvedAssemblies().OrderBy(asm => asm.Key);
             OrderedAssembliesByIdentity = response.ReportingResult.GetAssemblyUsageInfo().OrderBy(a => a.SourceAssembly.AssemblyIdentity);
             MissingTypes = response.ReportingResult.GetMissingTypes();
+            Targets = response.Targets;
             TargetHeaders = _targetMapper.GetTargetNames(response.ReportingResult.Targets, true);
             OrderedBreakingChangesByAssembly = GetGroupedBreakingChanges(response.BreakingChanges, response.ReportingResult.GetAssemblyUsageInfo().Select(a => a.SourceAssembly));
             BreakingChangesSummary = GetBreakingChangesSummary(OrderedBreakingChangesByAssembly);

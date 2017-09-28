@@ -8,6 +8,7 @@
 @using Microsoft.Fx.Portability
 @using Microsoft.Fx.Portability.Reporting.ObjectModel
 @using Microsoft.Fx.Portability.Resources
+@using System.Collections.Generic;
 @using System.IO
 @using System.Linq
 @using System.Runtime.Versioning
@@ -214,11 +215,16 @@
     <div id="nugetpackageinfo">
         <h3>Available NuGet Packages</h3>
         @{
+            bool showAssemblyName = Model.NuGetPackages.Any(p => !string.IsNullOrEmpty(p.AssemblyInfo));
+
             var nugetColumnHeaders = new List<string>();
-            nugetColumnHeaders.Add("Assembly");
-            nugetColumnHeaders.Add("Framework");
-            nugetColumnHeaders.Add("Package Id");
-            nugetColumnHeaders.Add("Package Version");
+            nugetColumnHeaders.Add(LocalizedStrings.PackageIdHeader);
+            nugetColumnHeaders.AddRange(Model.TargetHeaders);
+
+            if (showAssemblyName)
+            {
+                nugetColumnHeaders.Add(LocalizedStrings.AssemblyHeader);
+            }
         }
     
         <table>
@@ -229,39 +235,36 @@
                         <th>@header</th>
                     }
                 </tr>
+
                 @foreach (var nugetPackage in Model.NuGetPackages)
                 {
-                    if (nugetPackage.SupportedPackages != null)
-                    {
-                        foreach (var package in nugetPackage.SupportedPackages)
-                        {
-                            <tr>
-                                <td>@nugetPackage.AssemblyInfo</td>
-                                <td>@nugetPackage.Target.FullName</td>
-                                @if (!string.IsNullOrEmpty(package.Hyperlink))
-                                {
-                                    <td><a href="@package.Hyperlink">@package.PackageId</a></td>
-                                }
-                                else
-                                {
-                                    <td>@package.PackageId</td>
-                                }
-                                <td>@package.Version</td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>@nugetPackage.AssemblyInfo</td>
-                            <td>@nugetPackage.Target.FullName</td>
-                            <td>Not Supported</td>
-                        </tr>
+                    <tr>
+                        <td>@nugetPackage.PackageId</td>
 
-                    }
+                        @foreach (var target in Model.Targets)
+                        {
+                            string version = "";
+                            if (nugetPackage.SupportedVersions.TryGetValue(target, out version))
+                            {
+                                <td>@version</td>
+                            }
+                            else
+                            {
+                                <td>@LocalizedStrings.NotSupported</td>
+                            }
+                        }
+
+                        @if (!string.IsNullOrEmpty(nugetPackage.AssemblyInfo))
+                        {
+                            <td>@nugetPackage.AssemblyInfo</td>
+                        }
+                      
+                    </tr>
                 }
+            
             </tbody>
         </table>
+    
 
         <p>
             <a href="#@LocalizedStrings.PortabilitySummaryPageTitle">@LocalizedStrings.BackToSummary</a>
