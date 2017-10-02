@@ -22,7 +22,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         // AssemblyInfo is optional; it is present only when the package Id is "guessed" from the assembly name
         public string AssemblyInfo { get; private set; }
 
-        private static readonly HashSet<string> ImplicitlyReferencedPackages = new HashSet<string>() { "Microsoft.NETCore.App", "NETStandard.Library" };
+        private static readonly HashSet<string> ImplicitlyReferencedPackages = new HashSet<string>(new[] { "Microsoft.NETCore.App", "NETStandard.Library" }, StringComparer.OrdinalIgnoreCase);
 
         public NuGetPackageInfo(string packageId, IDictionary<FrameworkName, string> supportedVersions, string assemblyInfo = null)
         {
