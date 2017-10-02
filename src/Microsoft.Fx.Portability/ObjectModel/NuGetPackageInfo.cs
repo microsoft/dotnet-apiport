@@ -55,7 +55,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             if (!_hashComputed)
             {
-                _hashCode = (AssemblyInfo ?? string.Empty + PackageId ?? string.Empty).GetHashCode();
+                var hash = 17;
+                hash = hash * 23 + (AssemblyInfo ?? string.Empty).GetHashCode();
+                hash = hash * 23 + (PackageId ?? string.Empty).GetHashCode();
+                _hashCode = hash;
                 _hashComputed = true;
             }
             return _hashCode;
