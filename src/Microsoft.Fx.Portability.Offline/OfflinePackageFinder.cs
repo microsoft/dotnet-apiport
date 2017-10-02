@@ -9,7 +9,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public class OfflinePackageFinder : IPackageFinder
     {
-        public bool TryFindPackage(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableList<NuGetPackageInfo> packages)
+        public bool TryFindPackages(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableList<NuGetPackageInfo> packages)
         {
             packages = ImmutableList<NuGetPackageInfo>.Empty;
             return false;

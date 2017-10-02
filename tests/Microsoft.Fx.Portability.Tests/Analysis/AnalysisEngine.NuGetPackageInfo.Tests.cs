@@ -47,7 +47,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
                             { NetStandard16, nugetPackageNetStandardVersion} })
                     };
 
-            packageFinder.TryFindPackage(nugetPackageAssembly.AssemblyIdentity, targets, out var packages)
+            packageFinder.TryFindPackages(nugetPackageAssembly.AssemblyIdentity, targets, out var packages)
                     .Returns(x =>
                     {
                         // return this value in `out var packages`

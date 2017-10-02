@@ -228,7 +228,7 @@ namespace Microsoft.Fx.Portability.Analysis
         {
             foreach (var assembly in assemblies)
             {
-                if (_packageFinder.TryFindPackage(assembly, targets, out var packages))
+                if (_packageFinder.TryFindPackages(assembly, targets, out var packages))
                 {
                     foreach (var nuGetPackageInfo in packages)
                     {
