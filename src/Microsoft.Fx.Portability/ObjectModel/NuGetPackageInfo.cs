@@ -27,7 +27,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public NuGetPackageInfo(string packageId, IDictionary<FrameworkName, string> supportedVersions, string assemblyInfo = null)
         {
             PackageId = packageId ?? throw new ArgumentNullException(nameof(packageId));
-            if(string.IsNullOrWhiteSpace(PackageId))
+            if (string.IsNullOrWhiteSpace(PackageId))
             {
                 throw new ArgumentException(nameof(packageId));
             }
@@ -46,7 +46,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 return string.Equals(other.AssemblyInfo, AssemblyInfo, StringComparison.Ordinal)
                     && string.Equals(other.PackageId, PackageId, StringComparison.Ordinal)
-                    && SupportedVersions.SequenceEqual(other.SupportedVersions);
+                    && SupportedVersions.SequenceEqual(other.SupportedVersions, new SupportedVersionsComparer());
             }
             return false;
         }
@@ -67,6 +67,22 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public static bool IsImplicitlyReferencedPackage(string packageId)
         {
             return ImplicitlyReferencedPackages.Contains(packageId);
+        }
+
+        private class SupportedVersionsComparer : IEqualityComparer<KeyValuePair<FrameworkName, string>>
+        {
+            public bool Equals(KeyValuePair<FrameworkName, string> x, KeyValuePair<FrameworkName, string> y)
+            {
+                return x.Key.Equals(y.Key) && string.Equals(x.Value, y.Value);
+            }
+
+            public int GetHashCode(KeyValuePair<FrameworkName, string> kvp)
+            {
+                var hash = 17;
+                hash = hash * 23 + kvp.Key.GetHashCode();
+                hash = hash * 23 + (kvp.Value ?? string.Empty).GetHashCode();
+                return hash;
+            }
         }
     }
 }
