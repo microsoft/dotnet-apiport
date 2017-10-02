@@ -48,7 +48,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 ? _analysisEngine.FindBreakingChangeSkippedAssemblies(targets, request.UserAssemblies, request.AssembliesToIgnore).ToList()
                 : new List<AssemblyInfo>();
 
-            var userAssemblies = new HashSet<string>(assemblyIdentities);
+            var userAssemblies = new HashSet<string>(assemblyIdentities, StringComparer.OrdinalIgnoreCase);
             var assembliesToRemove = new HashSet<string>();
             var nugetPackages = new List<NuGetPackageInfo>();
 
@@ -69,10 +69,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
             nugetPackages.Sort(new NuGetPackageInfoComparer());
 
-            if (assembliesToRemove.Any())
-            {
-                userAssemblies = new HashSet<string>(assemblyIdentities.Where(a => !assembliesToRemove.Contains(a)), StringComparer.OrdinalIgnoreCase);
-            }
+            userAssemblies.RemoveWhere(a => assembliesToRemove.Contains(a));
 
             var dependencies = _analysisEngine.FilterDependencies(request.Dependencies, assembliesToRemove);
             var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)

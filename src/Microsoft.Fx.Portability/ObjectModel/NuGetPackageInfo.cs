@@ -63,11 +63,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public static bool IsImplicitlyReferencedPackage(string packageId)
         {
-            if (ImplicitlyReferencedPackages.Contains(packageId))
-            {
-                return true;
-            }
-            return false;
+            return ImplicitlyReferencedPackages.Contains(packageId);
         }
     }
 }

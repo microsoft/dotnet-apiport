@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.Reporting;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPortVS.Analyze
@@ -20,7 +21,7 @@ namespace ApiPortVS.Analyze
 
         public async Task AnalyzeProjectAsync(IEnumerable<string> inputAssemblyPaths)
         {
-            await _analyzer.WriteAnalysisReportsAsync(inputAssemblyPaths, null, _reportWriter, false).ConfigureAwait(false);
+            await _analyzer.WriteAnalysisReportsAsync(inputAssemblyPaths, Enumerable.Empty<string>(), _reportWriter, false).ConfigureAwait(false);
         }
     }
 }
