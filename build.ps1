@@ -33,7 +33,7 @@ function Invoke-Tests() {
 
     if (!(Test-Path $testResults)) {
         Write-Host "Creating $testResults folder..."
-        New-Item $testResults -ItemType Directory
+        New-Item $testResults -ItemType Directory | Out-Null
     }
 
     dotnet --version
