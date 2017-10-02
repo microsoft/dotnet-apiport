@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 export HOME=~
 export NUGET_PACKAGES=~/.nuget/packages
 export NUGET_HTTP_CACHE_PATH=~/.local/share/NuGet/v3-cache
@@ -43,7 +44,8 @@ installSDK() {
         mkdir -p $DotNetToolsPath
     fi
 
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 1.0 --install-dir $DotNetSDKPath
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 2.0 --install-dir $DotNetSDKPath
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 1.0 --shared-runtime --install-dir $DotNetSDKPath
 }
 
 build() {

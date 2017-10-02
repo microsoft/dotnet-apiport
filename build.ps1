@@ -1,7 +1,7 @@
 ﻿[CmdletBinding()] # Needed to support -Verbose
 param(
     [Parameter(Position = 0, Mandatory=$true)]
-    [ValidateSet("Release","Debug")]
+    [ValidateSet("Release", "Debug")]
     [string]$Configuration,
 
     [Parameter(Position = 1, Mandatory=$true)]
@@ -9,15 +9,12 @@ param(
     [string]$Platform,
 
     [Parameter(Position = 2)]
-    [ValidateSet("quiet", "minimal", "normal","diagnostic")]
+    [ValidateSet("quiet", "minimal", "normal", "diagnostic")]
     [string]$Verbosity = "normal",
 
     [switch]$RunTests,
 
-    [string]$VersionSuffix = "alpha",
-
-    [ValidateSet(2017)]
-    [int]$VisualStudioVersion = 2017
+    [string]$VersionSuffix = "alpha"
 )
 
 $ErrorActionPreference = "Stop"
@@ -36,21 +33,10 @@ function Invoke-Tests() {
 
     if (!(Test-Path $testResults)) {
         Write-Host "Creating $testResults folder..."
-        New-Item $testResults -ItemType Directory
+        New-Item $testResults -ItemType Directory | Out-Null
     }
 
-    $dotnet = "dotnet.exe"
-    $dotnetCommand = $(Get-Command $dotnet -CommandType Application -ErrorAction Ignore)
-
-    # Possible that the VS Developer Command prompt is not yet set.
-    if ($dotnetCommand -eq $null) {
-        .\build\Set-VsDevEnv.ps1 -VisualstudioVersion $VisualStudioVersion
-        $dotnetCommand = $(Get-Command $dotnet -CommandType Application -ErrorAction Ignore)
-
-        if ($dotnetCommand -eq $null) {
-            Write-Error "Could not set visual studio $VisualStudioVersion environment and locate $dotnet!"
-        }
-    }
+    dotnet --version
 
     foreach ($test in $(Get-ChildItem $testFolder | ? { $_.PsIsContainer })) {
         $csprojs = Get-ChildItem $test.FullName -Recurse | ? { $_.Extension -eq ".csproj" }
@@ -60,45 +46,81 @@ function Invoke-Tests() {
 
             Write-Host "Testing $($proj.Name). Output: $trx"
 
-            & $dotnetCommand test "$($proj.FullName)" --configuration $Configuration --logger "trx;LogFileName=$fullpath" --no-build
+            dotnet test "$($proj.FullName)" --configuration $Configuration --logger "trx;LogFileName=$fullpath" --no-build
         }
     }
 }
 
-& $root\build\Set-VsDevEnv.ps1 -VisualstudioVersion $VisualStudioVersion
+function Set-DevEnvironment {
+    Write-Host "Getting msbuild"
+    $msbuild = "msbuild"
 
-$MSBuildCommand = $(Get-Command "MSBuild.exe" -CommandType Application -ErrorAction Ignore)
+    if (Get-Command $msbuild -ErrorAction SilentlyContinue)
+    {
+        Write-Host "$msbuild is already available"
+        return
+    }
 
-if ($MSBuildCommand -eq $null) {
-    Write-Error "Could not set visual studio $VisualStudioVersion environment and locate msbuild!"
+    $microsoftVisualStudio = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2017"
+
+    if (Test-Path $microsoftVisualStudio) {
+        $installations = Get-ChildItem $microsoftVisualStudio | ? { $_.PsIsContainer }
+
+        foreach ($installation in $installations) {
+            $path = Join-Path $installation.FullName "Common7\Tools\"
+            Write-Host $path
+            if (Test-Path $path) {
+                $commonToolsPath = $path
+                break
+            }
+        }
+    } else {
+        Write-Error "Could not locate: $microsoftVisualStudio. Pass path to $VsDevCmdBat using parameter -VsDevCmdPath."
+    }
+
+    if ([string]::IsNullOrEmpty($commonToolsPath)) {
+        Write-Error "Could not find Common Tools for Visual Studio"
+    }
+
+    $devEnv = Join-Path $commonToolsPath "VSDevCmd.bat"
+
+    if (!(Test-Path $devEnv)) {
+        Write-Error "Could not find VsDevCmd.bat"
+    }
+
+    $output = cmd /c "`"$devEnv`" & set"
+    
+    foreach ($line in $output)
+    {
+        if ($line -match "(?<key>.*?)=(?<value>.*)") {
+            $key = $matches["key"]
+            $value = $matches["value"]
+                
+            Write-Verbose("$key=$value")
+            Set-Item "ENV:\$key" -Value "$value" -Force
+        }
+    }
+    
+    if (Get-Command $msbuild -ErrorAction SilentlyContinue)
+    {
+        Write-Host "Added $msbuild to path"
+        return
+    }
+
+    Write-Error "Could not find $msbuild"
 }
 
-if ($VisualStudioVersion -eq 2017) {
-    $MSBuildVersion = 15
-} elseif ($VisualStudioVersion -eq 2015) {
-    $MSBuildVersion = 14
-} else {
-    Write-Error "This VisualStudio version [$VisualStudioVersion] is not recognized."
-}
+Set-DevEnvironment
 
-$MSBuildCommand = $MSBuildCommand | Where-Object { $_.Version.Major -eq $MSBuildVersion } | Select -First 1
-
-if ($MSBuildCommand -eq $null) {
-    Write-Error "Could not locate MSBuild $MSBuildVersion using Visual Studio $VisualStudioVersion developer command prompt"
-}
-
-$MSBuild = $MSBuildCommand.Path
-
-Write-Host "MSBUILD: $MSBuild"
+# Show the MSBuild version for failure investigations
+msbuild /version
 
 # Libraries are currently pre-release
 $env:VersionSuffix = $VersionSuffix
 
 $binFolder = [IO.Path]::Combine("bin", $Configuration)
 
-if (!(Test-Path $binFolder)) {
-    New-Item $binFolder -ItemType Directory
-}
+New-Item $binFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 
 & "$root\init.ps1"
 
@@ -111,7 +133,7 @@ if ($Platform -eq "AnyCPU") {
 
 Push-Location $root
 
-& $MSBuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
+& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
 
 Pop-Location
 
