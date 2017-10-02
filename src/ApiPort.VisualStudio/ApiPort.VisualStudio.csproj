@@ -19,6 +19,8 @@
     <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
     <!-- The deployed extension will be ApiPort.Vsix -->
     <DeployExtension>false</DeployExtension>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <UseCodebase>true</UseCodebase> 
   </PropertyGroup>
   <PropertyGroup>
     <!-- Most projects will just inherit this from Directory.Build.props, but since this contains WPF, a temp project is created which causes issues with MSBuildProjectName -->
