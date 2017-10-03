@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.config = NuGet.config
 		PortabilityTools.VisualStudio.Imports.targets = PortabilityTools.VisualStudio.Imports.targets
 		README.md = README.md
+		rules.ruleset = rules.ruleset
 	EndProjectSection
 	ProjectSection(FolderGlobals) = preProject
 		global_1json__JSONSchema = http://json.schemastore.org/global
@@ -65,11 +66,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Cc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Reports.Html.Tests", "tests\Microsoft.Fx.Portability.Reports.Html.Tests\Microsoft.Fx.Portability.Reports.Html.Tests.csproj", "{4EDE5B41-A4AD-4BFB-9986-F566FB887A34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort.VisualStudio.2015", "src\ApiPort.VisualStudio.2015\ApiPort.VisualStudio.2015.csproj", "{9DEF460B-6383-4665-839B-C0B5E6BB6A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.2015", "src\ApiPort.VisualStudio.2015\ApiPort.VisualStudio.2015.csproj", "{9DEF460B-6383-4665-839B-C0B5E6BB6A5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort.VisualStudio.2017", "src\ApiPort.VisualStudio.2017\ApiPort.VisualStudio.2017.csproj", "{C0629A8D-7107-46CF-83B8-408E1886AB36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.2017", "src\ApiPort.VisualStudio.2017\ApiPort.VisualStudio.2017.csproj", "{C0629A8D-7107-46CF-83B8-408E1886AB36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort.VisualStudio.Common", "src\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj", "{60798B82-B273-4D39-AA52-021C7228A0AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.Common", "src\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj", "{60798B82-B273-4D39-AA52-021C7228A0AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.Tests", "tests\ApiPort.Tests\ApiPort.Tests.csproj", "{EE708186-6345-486D-9810-17D98439DAAE}"
 EndProject
