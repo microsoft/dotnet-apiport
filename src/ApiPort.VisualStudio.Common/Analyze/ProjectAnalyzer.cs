@@ -29,12 +29,14 @@ namespace ApiPortVS.Analyze
         private readonly IProjectBuilder _builder;
         private readonly IVSThreadingService _threadingService;
         private readonly IProjectMapper _projectMapper;
+        private readonly IOutputWindowWriter _outputWindowWriter;
 
         public ProjectAnalyzer(
             IVsApiPortAnalyzer analyzer,
             IErrorListProvider errorList,
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
+            IOutputWindowWriter outputWindowWriter,
             IFileSystem fileSystem,
             IProjectBuilder builder,
             IProjectMapper projectMapper,
@@ -48,6 +50,7 @@ namespace ApiPortVS.Analyze
             _errorList = errorList;
             _projectMapper = projectMapper;
             _threadingService = threadingService;
+            _outputWindowWriter = outputWindowWriter;
         }
 
         public async Task AnalyzeProjectAsync(ICollection<Project> projects, CancellationToken cancellationToken = default(CancellationToken))
@@ -78,11 +81,7 @@ namespace ApiPortVS.Analyze
                     targetAssemblies.Add(file);
                 }
 
-                var projectNugetReferences = GetPackageReferences(project);
-                if(projectNugetReferences != null)
-                {
-                    referencedNuGetPackages.UnionWith(projectNugetReferences);
-                }
+                referencedNuGetPackages.UnionWith(GetPackageReferences(project));
             }
 
             if (!targetAssemblies.Any())
@@ -134,7 +133,8 @@ namespace ApiPortVS.Analyze
             var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
             if (installerServices == null)
             {
-                return null;
+                _outputWindowWriter.WriteLine(LocalizedStrings.ErrorGettingInstalledPackages);
+                return Enumerable.Empty<string>();
             }
 
             var installedPackages = installerServices.GetInstalledPackages(project);
