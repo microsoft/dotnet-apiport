@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             public bool Equals(KeyValuePair<FrameworkName, string> x, KeyValuePair<FrameworkName, string> y)
             {
-                return x.Key.Equals(y.Key) && string.Equals(x.Value, y.Value);
+                return x.Key.Equals(y.Key) && string.Equals(x.Value, y.Value, StringComparison.Ordinal);
             }
 
             public int GetHashCode(KeyValuePair<FrameworkName, string> kvp)
