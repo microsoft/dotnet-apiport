@@ -30,6 +30,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IList<FrameworkName> Targets { get; set; }
 
+        [JsonIgnore]
         public IList<NuGetPackageInfo> NuGetPackages { get; set; }
 
         [JsonIgnore]
