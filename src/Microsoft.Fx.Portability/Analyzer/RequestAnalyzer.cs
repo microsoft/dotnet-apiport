@@ -69,12 +69,12 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
             nugetPackages.Sort(new NuGetPackageInfoComparer());
 
-            userAssemblies.RemoveWhere(a => assembliesToRemove.Contains(a));
+            userAssemblies.RemoveWhere(assembliesToRemove.Contains);
 
             var dependencies = _analysisEngine.FilterDependencies(request.Dependencies, assembliesToRemove);
             var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
                 ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, dependencies)
-                : new List<MemberInfo>();
+                : Array.Empty<MemberInfo>();
 
             var breakingChanges = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
                 ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, userAssemblies, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
