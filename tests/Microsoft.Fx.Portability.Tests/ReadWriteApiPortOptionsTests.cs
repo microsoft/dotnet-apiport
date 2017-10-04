@@ -50,6 +50,8 @@ namespace Microsoft.Fx.Portability.Tests
 
             public bool OverwriteOutputFile { get; }
 
+            public IEnumerable<string> ReferencedNuGetPackages { get; }
+
             private static IEnumerable<string> GenerateRandomList(int length)
             {
                 return Enumerable.Range(0, length)

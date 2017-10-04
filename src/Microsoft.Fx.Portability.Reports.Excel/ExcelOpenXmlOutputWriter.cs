@@ -79,6 +79,11 @@ namespace Microsoft.Fx.Portability.Reports
                     {
                         GenerateBreakingChangesPage(spreadsheet.AddWorksheet("Breaking Changes"), _breakingChanges);
                     }
+
+                    if (_analysisReport.NuGetPackages?.Any() ?? false)
+                    {
+                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet("Supported Packages"), _analysisReport);
+                    }
                 }
 
                 ms.Position = 0;
@@ -350,6 +355,46 @@ namespace Microsoft.Fx.Portability.Reports
 
             worksheet.AddTable(1, row, 1, header);
             worksheet.AddColumnWidth(10, 10, 30, 30, 20, 10, 10, 10, 10, 30, 30, 10, 10, 10);
+        }
+
+        private void GenerateNuGetInfoPage(Worksheet page, ReportingResult analysisResult)
+        {
+            bool showAssemblyName = analysisResult.NuGetPackages.Any(p => !string.IsNullOrEmpty(p.AssemblyInfo));
+
+            var headerList = new List<string>() { LocalizedStrings.PackageIdHeader };
+
+            headerList.AddRange(_mapper.GetTargetNames(analysisResult.Targets));
+
+            if (showAssemblyName)
+            {
+                headerList.Add(LocalizedStrings.AssemblyHeader);
+            }
+
+            var header = headerList.ToArray();
+            page.AddRow(header);
+
+            int rowCount = 1;
+
+            foreach (var nugetInfo in analysisResult.NuGetPackages)
+            {
+                var rowContent = new List<string>() { nugetInfo.PackageId };
+
+                foreach (var target in analysisResult.Targets)
+                {
+                    var supported = nugetInfo.SupportedVersions.TryGetValue(target, out var version) ? version : LocalizedStrings.NotSupported;
+                    rowContent.Add(supported);
+                }
+
+                if (showAssemblyName && nugetInfo.AssemblyInfo != null)
+                {
+                    rowContent.Add(nugetInfo.AssemblyInfo);
+                }
+                page.AddRow(rowContent.ToArray());
+                rowCount++;
+            }
+
+            page.AddTable(1, rowCount, 1, header.ToArray());
+            page.AddColumnWidth(70, 40, 30, 30);
         }
 
         private object CreateHyperlink(string displayString, string link)

@@ -9,6 +9,7 @@ namespace ApiPortVS.Analyze
     {
         Task<ReportingResult> WriteAnalysisReportsAsync(
             IEnumerable<string> inputAssemblyPaths,
+            IEnumerable<string> installedPackages,
             IFileWriter reportWriter,
             bool includeJson);
     }

@@ -6,7 +6,10 @@ using ApiPortVS.Models;
 using ApiPortVS.Resources;
 using EnvDTE;
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.VisualStudio.ComponentModelHost;
+using NuGet.VisualStudio;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -26,12 +29,14 @@ namespace ApiPortVS.Analyze
         private readonly IProjectBuilder _builder;
         private readonly IVSThreadingService _threadingService;
         private readonly IProjectMapper _projectMapper;
+        private readonly IOutputWindowWriter _outputWindowWriter;
 
         public ProjectAnalyzer(
             IVsApiPortAnalyzer analyzer,
             IErrorListProvider errorList,
             ISourceLineMapper sourceLineMapper,
             IFileWriter reportWriter,
+            IOutputWindowWriter outputWindowWriter,
             IFileSystem fileSystem,
             IProjectBuilder builder,
             IProjectMapper projectMapper,
@@ -45,6 +50,7 @@ namespace ApiPortVS.Analyze
             _errorList = errorList;
             _projectMapper = projectMapper;
             _threadingService = threadingService;
+            _outputWindowWriter = outputWindowWriter;
         }
 
         public async Task AnalyzeProjectAsync(ICollection<Project> projects, CancellationToken cancellationToken = default(CancellationToken))
@@ -59,6 +65,7 @@ namespace ApiPortVS.Analyze
             // TODO: Add option to include everything in output, not just build artifacts
             var targetAssemblies = new ConcurrentBag<string>();
 
+            var referencedNuGetPackages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var project in projects)
             {
                 var output = await _builder.GetBuildOutputFilesAsync(project).ConfigureAwait(false);
@@ -73,6 +80,8 @@ namespace ApiPortVS.Analyze
                 {
                     targetAssemblies.Add(file);
                 }
+
+                referencedNuGetPackages.UnionWith(GetPackageReferences(project));
             }
 
             if (!targetAssemblies.Any())
@@ -80,7 +89,7 @@ namespace ApiPortVS.Analyze
                 throw new PortabilityAnalyzerException(LocalizedStrings.FailedToLocateBuildOutputDir);
             }
 
-            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, _reportWriter, true).ConfigureAwait(false);
+            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, referencedNuGetPackages, _reportWriter, true).ConfigureAwait(false);
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result)).ConfigureAwait(false);
 
             var dictionary = new ConcurrentBag<CalculatedProject>();
@@ -116,6 +125,21 @@ namespace ApiPortVS.Analyze
             {
                 return Enumerable.Empty<string>();
             }
+        }
+
+        private IEnumerable<string> GetPackageReferences(Project project)
+        {
+            var componentModel = (IComponentModel)Microsoft.VisualStudio.Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel));
+            var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            if (installerServices == null)
+            {
+                _outputWindowWriter.WriteLine(LocalizedStrings.ErrorGettingInstalledPackages);
+                return Enumerable.Empty<string>();
+            }
+
+            var installedPackages = installerServices.GetInstalledPackages(project);
+
+            return installedPackages.Where(p => !NuGetPackageInfo.IsImplicitlyReferencedPackage(p.Id)).Select(n => n.Id);
         }
     }
 }

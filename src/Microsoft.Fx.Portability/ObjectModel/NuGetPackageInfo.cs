@@ -14,15 +14,25 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private bool _hashComputed;
         private int _hashCode;
 
-        public string AssemblyInfo { get; private set; }
-        public FrameworkName Target { get; private set; }
-        public ImmutableList<NuGetPackageId> SupportedPackages { get; private set; }
+        public string PackageId { get; private set; }
 
-        public NuGetPackageInfo(string assemblyInfo, FrameworkName target, IEnumerable<NuGetPackageId> supportedPackages)
+        // Dictionary of Framework/version of this package that is supported on that framework
+        public ImmutableDictionary<FrameworkName, string> SupportedVersions { get; private set; }
+
+        // AssemblyInfo is optional; it is present only when the package Id is "guessed" from the assembly name
+        public string AssemblyInfo { get; private set; }
+
+        private static readonly HashSet<string> ImplicitlyReferencedPackages = new HashSet<string>(new[] { "Microsoft.NETCore.App", "NETStandard.Library" }, StringComparer.OrdinalIgnoreCase);
+
+        public NuGetPackageInfo(string packageId, IDictionary<FrameworkName, string> supportedVersions, string assemblyInfo = null)
         {
-            AssemblyInfo = assemblyInfo ?? throw new ArgumentNullException(nameof(assemblyInfo));
-            Target = target ?? throw new ArgumentNullException(nameof(target));
-            SupportedPackages = supportedPackages?.OrderBy(x => x.PackageId).ToImmutableList() ?? ImmutableList.Create<NuGetPackageId>();
+            PackageId = packageId ?? throw new ArgumentNullException(nameof(packageId));
+            if (string.IsNullOrWhiteSpace(PackageId))
+            {
+                throw new ArgumentException(nameof(packageId));
+            }
+            SupportedVersions = supportedVersions?.OrderBy(x => x.Key.FullName).ToImmutableDictionary() ?? ImmutableDictionary.Create<FrameworkName, string>();
+            AssemblyInfo = assemblyInfo;
         }
 
         public override bool Equals(object obj)
@@ -35,8 +45,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
             if (obj is NuGetPackageInfo other)
             {
                 return string.Equals(other.AssemblyInfo, AssemblyInfo, StringComparison.Ordinal)
-                    && Target.Equals(other.Target)
-                    && SupportedPackages.SequenceEqual(other.SupportedPackages);
+                    && string.Equals(other.PackageId, PackageId, StringComparison.Ordinal)
+                    && SupportedVersions.SequenceEqual(other.SupportedVersions, new SupportedVersionsComparer());
             }
             return false;
         }
@@ -45,10 +55,34 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             if (!_hashComputed)
             {
-                _hashCode = (AssemblyInfo ?? string.Empty + Target?.FullName ?? string.Empty).GetHashCode();
+                var hash = 17;
+                hash = hash * 23 + (AssemblyInfo ?? string.Empty).GetHashCode();
+                hash = hash * 23 + (PackageId ?? string.Empty).GetHashCode();
+                _hashCode = hash;
                 _hashComputed = true;
             }
             return _hashCode;
+        }
+
+        public static bool IsImplicitlyReferencedPackage(string packageId)
+        {
+            return ImplicitlyReferencedPackages.Contains(packageId);
+        }
+
+        private class SupportedVersionsComparer : IEqualityComparer<KeyValuePair<FrameworkName, string>>
+        {
+            public bool Equals(KeyValuePair<FrameworkName, string> x, KeyValuePair<FrameworkName, string> y)
+            {
+                return x.Key.Equals(y.Key) && string.Equals(x.Value, y.Value, StringComparison.Ordinal);
+            }
+
+            public int GetHashCode(KeyValuePair<FrameworkName, string> kvp)
+            {
+                var hash = 17;
+                hash = hash * 23 + kvp.Key.GetHashCode();
+                hash = hash * 23 + (kvp.Value ?? string.Empty).GetHashCode();
+                return hash;
+            }
         }
     }
 }

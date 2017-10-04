@@ -38,18 +38,6 @@ namespace Microsoft.Fx.Portability.Analyzer
             var assemblyIdentities = request?.UserAssemblies.Where(x => x != null && x.AssemblyIdentity != null).Select(a => a.AssemblyIdentity)
                 ?? Enumerable.Empty<string>();
 
-            var nugetPackagesForUserAssemblies = _analysisEngine.GetNuGetPackagesInfo(assemblyIdentities, targets);
-            var assembliesToRemove = new HashSet<string>(_analysisEngine.ComputeAssembliesToRemove(request.UserAssemblies, targets, nugetPackagesForUserAssemblies), StringComparer.OrdinalIgnoreCase);
-
-            var userAssemblies = new HashSet<string>(assemblyIdentities.Where(a => !assembliesToRemove.Contains(a)), StringComparer.OrdinalIgnoreCase);
-
-            // Remove the entries for which nuget packages exist
-            var dependencies = _analysisEngine.FilterDependencies(request.Dependencies, assembliesToRemove);
-
-            var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
-                ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, dependencies)
-                : new List<MemberInfo>();
-
             var unresolvedAssemblies = request.UnresolvedAssembliesDictionary != null
                 ? request.UnresolvedAssembliesDictionary.Keys
                 : request.UnresolvedAssemblies;
@@ -60,13 +48,38 @@ namespace Microsoft.Fx.Portability.Analyzer
                 ? _analysisEngine.FindBreakingChangeSkippedAssemblies(targets, request.UserAssemblies, request.AssembliesToIgnore).ToList()
                 : new List<AssemblyInfo>();
 
+            var userAssemblies = new HashSet<string>(assemblyIdentities, StringComparer.OrdinalIgnoreCase);
+            var assembliesToRemove = new HashSet<string>();
+            var nugetPackages = new List<NuGetPackageInfo>();
+
+            // If the request contains the list of referenced NuGet packages (which it should if it comes from Visual Studio), find if there are supported versions for those packages.
+            // If the request does not contain the list of referenced NuGet packages (request comes from command line version of the tool), get package info for user assemblies and for missing assemblies.
+            // Also remove from analysis those user assemblies for which supported packages are found.
+            if (request.ReferencedNuGetPackages != null)
+            {
+                nugetPackages = _analysisEngine.GetNuGetPackagesInfo(request.ReferencedNuGetPackages, targets).ToList();
+            }
+            else
+            {
+                var nugetPackagesForUserAssemblies = _analysisEngine.GetNuGetPackagesInfoFromAssembly(assemblyIdentities, targets);
+                assembliesToRemove = new HashSet<string>(_analysisEngine.ComputeAssembliesToRemove(request.UserAssemblies, targets, nugetPackagesForUserAssemblies), StringComparer.OrdinalIgnoreCase);
+
+                var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfoFromAssembly(missingUserAssemblies, targets);
+                nugetPackages = nugetPackagesForMissingAssemblies.Union(nugetPackagesForUserAssemblies).ToList();
+            }
+            nugetPackages.Sort(new NuGetPackageInfoComparer());
+
+            userAssemblies.RemoveWhere(assembliesToRemove.Contains);
+
+            var dependencies = _analysisEngine.FilterDependencies(request.Dependencies, assembliesToRemove);
+            var notInAnyTarget = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowNonPortableApis)
+                ? _analysisEngine.FindMembersNotInTargets(targets, userAssemblies, dependencies)
+                : Array.Empty<MemberInfo>();
+
             var breakingChanges = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowBreakingChanges)
                 ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, userAssemblies, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
                 : new List<BreakingChangeDependency>();
 
-            var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfo(missingUserAssemblies, targets);
-            var nugetPackages = nugetPackagesForMissingAssemblies.Union(nugetPackagesForUserAssemblies).ToList();
-            nugetPackages.Sort(new NuGetPackageInfoComparer());
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,

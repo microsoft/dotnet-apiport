@@ -27,6 +27,7 @@ namespace Microsoft.Fx.Portability
             InvalidInputFiles = other.InvalidInputFiles;
             OutputFileName = other.OutputFileName;
             OverwriteOutputFile = other.OverwriteOutputFile;
+            ReferencedNuGetPackages = other.ReferencedNuGetPackages;
         }
 
         public virtual IEnumerable<string> BreakingChangeSuppressions { get; set; }
@@ -50,5 +51,7 @@ namespace Microsoft.Fx.Portability
         public virtual IEnumerable<string> Targets { get; set; }
 
         public virtual bool OverwriteOutputFile { get; set; }
+
+        public IEnumerable<string> ReferencedNuGetPackages { get; }
     }
 }

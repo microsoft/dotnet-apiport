@@ -11,7 +11,7 @@ namespace ApiPortVS
 {
     public class AnalysisOptions : IApiPortOptions
     {
-        public AnalysisOptions(string description, IEnumerable<string> inputAssemblies, IEnumerable<string> targets, IEnumerable<string> formats, bool discardMetadata, string outputFileName, bool isAssemblySpecified)
+        public AnalysisOptions(string description, IEnumerable<string> inputAssemblies, IEnumerable<string> targets, IEnumerable<string> formats, IEnumerable<string> referencedNuGetPackages, bool discardMetadata, string outputFileName, bool isAssemblySpecified)
         {
             Description = description;
             InputAssemblies = inputAssemblies.Select(target => new KeyValuePair<IAssemblyFile, bool>(new AssemblyFile(target), isAssemblySpecified)).ToImmutableDictionary();
@@ -25,6 +25,11 @@ namespace ApiPortVS
             if (discardMetadata)
             {
                 RequestFlags |= AnalyzeRequestFlags.NoTelemetry;
+            }
+
+            if (referencedNuGetPackages != null)
+            {
+                ReferencedNuGetPackages = referencedNuGetPackages;
             }
         }
 
@@ -49,5 +54,7 @@ namespace ApiPortVS
         public string ServiceEndpoint { get; } = string.Empty;
 
         public bool OverwriteOutputFile { get; }
+
+        public IEnumerable<string> ReferencedNuGetPackages { get; } = Enumerable.Empty<string>();
     }
 }
