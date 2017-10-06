@@ -12,9 +12,7 @@ param(
     [ValidateSet("quiet", "minimal", "normal", "diagnostic")]
     [string]$Verbosity = "normal",
 
-    [switch]$RunTests,
-
-    [string]$VersionSuffix = "alpha"
+    [switch]$RunTests
 )
 
 $ErrorActionPreference = "Stop"
@@ -114,9 +112,6 @@ Set-DevEnvironment
 
 # Show the MSBuild version for failure investigations
 msbuild /version
-
-# Libraries are currently pre-release
-$env:VersionSuffix = $VersionSuffix
 
 $binFolder = [IO.Path]::Combine("bin", $Configuration)
 
