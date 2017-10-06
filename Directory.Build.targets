@@ -34,51 +34,6 @@
     </Otherwise>
   </Choose>
 
-  <PropertyGroup>
-    <!-- When building from a dev machine, the BuildNumber won't be set, so set it to 0.1 to indicate this is a private build -->
-    <BuildVersion>0</BuildVersion>
-
-    <!-- Get build number from TFS if in automated build -->
-    <!-- Use TF_BUILD_BUILDNUMBER for old XAML style builds -->
-    <BuildVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER.Split('.')[1].TrimStart('0'))</BuildVersion>
-    <BuildVersion>$(BuildVersion.PadLeft(5,"0"))</BuildVersion>
-
-    <!-- Get version info from file -->
-    <VersionFile>$(MSBuildProjectDirectory)\Properties\version.txt</VersionFile>
-    <Version>1.0.0</Version>
-    <Version Condition="Exists('$(VersionFile)')">$([System.IO.File]::ReadAllText($(VersionFile)).Trim())</Version>
-
-    <!-- Set informational version -->
-    <InformationVersion>$(Version)</InformationVersion>
-    <InformationVersion Condition=" '$(VersionSuffix)' != '' ">$(InformationVersion)-$(VersionSuffix)-$(BuildVersion)</InformationVersion>
-    <BasicVersion>$(Version)</BasicVersion>
-    <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyVersionAttribute">
-      <_Parameter1>$(BasicVersion)</_Parameter1>
-    </AssemblyVersionAttribute>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyFileVersionAttribute">
-      <_Parameter1>$(BasicVersion)</_Parameter1>
-    </AssemblyVersionAttribute>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyInformationalVersionAttribute">
-      <_Parameter1>$(InformationVersion)</_Parameter1>
-    </AssemblyVersionAttribute>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyTitle">
-      <_Parameter1>$(AssemblyName)</_Parameter1>
-    </AssemblyVersionAttribute>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyProduct">
-      <_Parameter1>$(AssemblyName)</_Parameter1>
-    </AssemblyVersionAttribute>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyCopyright">
-      <_Parameter1>Copyright 2016</_Parameter1>
-    </AssemblyVersionAttribute>
-    <AssemblyVersionAttribute Include="System.Reflection.AssemblyCompany">
-      <_Parameter1>Microsoft</_Parameter1>
-    </AssemblyVersionAttribute>
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
       <PrivateAssets>All</PrivateAssets>
@@ -86,15 +41,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-
-  <Target Name="GenerateAssemblyInfoFile" BeforeTargets="BeforeBuild">
-    <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
-    <WriteCodeFragment AssemblyAttributes="@(AssemblyVersionAttribute)" Language="C#" OutputFile="$(IntermediateOutputPath)\_GlobalAssemblyInfo.g.cs">
-      <Output TaskParameter="OutputFile" ItemName="Compile" />
-      <Output TaskParameter="OutputFile" ItemName="FileWrites" />
-    </WriteCodeFragment>
-  </Target>
 
   <!-- In .NET Core SDK 1.0-rc3, all *.cs files are implicitly added for compiled.  This includes the test files we embed as resources.
        We explicitly remove them here so that they are not compiled.
