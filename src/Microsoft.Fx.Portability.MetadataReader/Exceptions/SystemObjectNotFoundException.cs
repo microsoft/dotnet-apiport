@@ -14,6 +14,10 @@ namespace Microsoft.Fx.Portability.Analyzer.Exceptions
         public SystemObjectNotFoundException(IEnumerable<AssemblyReferenceInformation> assemblies)
             : base(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MissingSystemObjectAssembly,
                 string.Join(", ", assemblies)))
-        { }
+        {
+            AssembliesReferenced = assemblies;
+        }
+
+        public IEnumerable<AssemblyReferenceInformation> AssembliesReferenced { get; }
     }
 }

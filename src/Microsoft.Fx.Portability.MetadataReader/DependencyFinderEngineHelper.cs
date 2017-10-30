@@ -207,7 +207,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     var assembly = _reader.GetAssemblyReference(handle);
                     return _reader.FormatAssemblyInfo(assembly);
                 })
-                .Where(assembly => _assemblyFilter.IsFrameworkAssembly(assembly));
+                .Where(_assemblyFilter.IsFrameworkAssembly);
 
             var matchingAssembly = microsoftAssemblies.SingleOrDefault(x => s_systemObjectAssemblies.Contains(x.Name));
 
