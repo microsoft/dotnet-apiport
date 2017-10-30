@@ -123,4 +123,8 @@
   <data name="MetadataParsingExceptionMessage" xml:space="preserve">
     <value>An unexpected error was encountered while parsing the metadata for the PE file located at {0}.</value>
   </data>
+  <data name="MissingSystemObjectAssembly" xml:space="preserve">
+    <value>Cannot locate assembly information for System.Object. Microsoft assemblies found are:
+{0}</value>
+  </data>
 </root>

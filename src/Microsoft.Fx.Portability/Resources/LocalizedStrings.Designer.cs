@@ -12,7 +12,6 @@ namespace Microsoft.Fx.Portability.Resources {
     using System;
     using System.Reflection;
     
-    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -365,15 +364,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string MissingAssembliesPageTitle {
             get {
                 return ResourceManager.GetString("MissingAssembliesPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot locate assembly info for System.Object.
-        /// </summary>
-        public static string MissingAssemblyInfo {
-            get {
-                return ResourceManager.GetString("MissingAssemblyInfo", resourceCulture);
             }
         }
         
