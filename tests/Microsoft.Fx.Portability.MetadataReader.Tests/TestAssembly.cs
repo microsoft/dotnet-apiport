@@ -16,12 +16,18 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
     {
         public static IAssemblyFile Create(string source, bool allowUnsafe = false)
         {
-            switch (Path.GetExtension(source).ToLowerInvariant())
+            return Create(source, allowUnsafe, Array.Empty<string>());
+        }
+
+        public static IAssemblyFile Create(string source, bool allowUnsafe, IEnumerable<string> additionalReferences)
+
+        {
+        switch (Path.GetExtension(source).ToLowerInvariant())
             {
                 case ".dll":
                     return new ResourceStreamAssemblyFile(source);
                 case ".cs":
-                    return new CSharpCompileAssemblyFile(source, allowUnsafe);
+                    return new CSharpCompileAssemblyFile(source, allowUnsafe, additionalReferences);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(source), source, "Unknown extension");
             }
@@ -43,6 +49,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 _data = CreateRoslynAssemblyFile(source, allowUnsafe);
             }
 
+            public CSharpCompileAssemblyFile(string source, bool allowUnsafe, IEnumerable<string> additionalReferences)
+            {
+                _data = CreateRoslynAssemblyFile(source, allowUnsafe, additionalReferences);
+            }
+
             public bool Exists { get; }
 
             public string Name { get; }
@@ -53,13 +64,19 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             private static byte[] CreateRoslynAssemblyFile(string source, bool allowUnsafe)
             {
+                return CreateRoslynAssemblyFile(source, allowUnsafe, Array.Empty<string>());
+            }
+
+            private static byte[] CreateRoslynAssemblyFile(string source, bool allowUnsafe, IEnumerable<string> additionalReferences)
+            {
                 var assemblyName = Path.GetFileNameWithoutExtension(source);
                 var text = GetText(source);
 
                 var tfm = CSharpSyntaxTree.ParseText(TFM);
                 var tree = CSharpSyntaxTree.ParseText(text);
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: allowUnsafe);
-                var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, s_references, options);
+                var references = additionalReferences.Select(x => MetadataReference.CreateFromFile(x)).Concat(s_references);
+                var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references, options);
 
                 using (var stream = new MemoryStream())
                 {
