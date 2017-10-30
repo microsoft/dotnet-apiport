@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
@@ -217,6 +218,23 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var isNullOrWhiteSpace = string.IsNullOrWhiteSpace(definedInAssemblyIdentity);
             Assert.False(isNullOrWhiteSpace);
             Assert.Equal(systemObject.DefinedInAssemblyIdentity, definedInAssemblyIdentity);
+        }
+
+        [Fact]
+        public void ThrowsSystemObjectNotFoundException()
+        {
+            var dependencyFilter = Substitute.For<IDependencyFilter>();
+            dependencyFilter.IsFrameworkAssembly(Arg.Any<AssemblyReferenceInformation>()).Returns(false);
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter);
+            var assemblyToTest = TestAssembly.Create("FilterApis.cs", false, new[] { typeof(Image).GetTypeInfo().Assembly.Location });
+            var progressReporter = Substitute.For<IProgressReporter>();
+
+            var exception = Assert.Throws<AggregateException>(() =>
+            {
+                var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
+            });
+
+            Assert.IsType<SystemObjectNotFoundException>(exception.InnerException);
         }
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
