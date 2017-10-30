@@ -13,6 +13,12 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class DependencyFinderEngineHelper
     {
+        private static readonly HashSet<string> s_systemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "mscorlib",
+            "System.Runtime"
+        };
+
         private readonly IDependencyFilter _assemblyFilter;
         private readonly MetadataReader _reader;
 
@@ -195,9 +201,6 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// </summary>
         private AssemblyReferenceInformation GetSystemRuntimeAssemblyInformation()
         {
-            const string mscorlib = nameof(mscorlib);
-            const string SystemRuntime = "System.Runtime";
-
             var microsoftAssemblies = _reader.AssemblyReferences
                 .Select(handle =>
                 {
@@ -206,16 +209,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 })
                 .Where(assembly => _assemblyFilter.IsFrameworkAssembly(assembly));
 
-            var mscorlibAssembly = microsoftAssemblies.SingleOrDefault(x => string.Equals(x.Name, mscorlib, StringComparison.Ordinal));
-            var systemRuntimeAssembly = microsoftAssemblies.SingleOrDefault(x => string.Equals(x.Name, SystemRuntime, StringComparison.Ordinal));
+            var matchingAssembly = microsoftAssemblies.SingleOrDefault(x => s_systemObjectAssemblies.Contains(x.Name));
 
-            if (mscorlibAssembly != default(AssemblyReferenceInformation))
+            if (matchingAssembly != default(AssemblyReferenceInformation))
             {
-                return mscorlibAssembly;
-            }
-            else if (systemRuntimeAssembly != default(AssemblyReferenceInformation))
-            {
-                return systemRuntimeAssembly;
+                return matchingAssembly;
             }
             else
             {
