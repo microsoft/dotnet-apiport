@@ -206,8 +206,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 })
                 .Where(assembly => _assemblyFilter.IsFrameworkAssembly(assembly));
 
-            var mscorlibAssembly = microsoftAssemblies.SingleOrDefault(x => string.Equals(x.Name, mscorlib));
-            var systemRuntimeAssembly = microsoftAssemblies.SingleOrDefault(x => string.Equals(x.Name, SystemRuntime));
+            var mscorlibAssembly = microsoftAssemblies.SingleOrDefault(x => string.Equals(x.Name, mscorlib, StringComparison.Ordinal));
+            var systemRuntimeAssembly = microsoftAssemblies.SingleOrDefault(x => string.Equals(x.Name, SystemRuntime, StringComparison.Ordinal));
 
             if (mscorlibAssembly != default(AssemblyReferenceInformation))
             {
