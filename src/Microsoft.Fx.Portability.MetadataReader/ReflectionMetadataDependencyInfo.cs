@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.Analyzer.Resources;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
@@ -136,8 +137,10 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
                 if (exc is InvalidPEAssemblyException) throw;
+                // Occurs when we cannot find the System.Object assembly.
+                if (exc is SystemObjectNotFoundException) throw;
 
-                // Other exceptions are unexpected, though, and wil benefit from
+                // Other exceptions are unexpected, though, and will benefit from
                 // more details on the scenario that hit them
                 throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MetadataParsingExceptionMessage, file.Name), exc);
             }
