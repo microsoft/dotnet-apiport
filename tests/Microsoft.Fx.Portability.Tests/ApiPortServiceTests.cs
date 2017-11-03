@@ -22,7 +22,7 @@ namespace Microsoft.Fx.Portability.Tests
             var productInformation = new ProductInformation("ApiPort_Tests", typeof(ApiPortServiceTests));
 
             //Create a fake ApiPortService which uses the TestHandler to send back the response message
-            _apiPortService = new ApiPortService("http://localhost", httpMessageHandler, productInformation);
+            _apiPortService = new ApiPortService("localhost", httpMessageHandler, productInformation);
         }
 
         public void Dispose()

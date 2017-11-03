@@ -25,6 +25,8 @@ namespace Microsoft.Fx.Portability
             internal const string DefaultResultFormat = "/api/resultformat/default";
         }
 
+        const string UriScheme = "https";
+
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
         private readonly CompressedHttpClient _client;
 
@@ -39,7 +41,7 @@ namespace Microsoft.Fx.Portability
                 throw new ArgumentNullException(nameof(proxyProvider));
             }
 
-            var uri = new Uri(endpoint);
+            var uri = new UriBuilder(UriScheme, endpoint).Uri;
             var proxy = proxyProvider.GetProxy(uri);
             
             // replace the handler with the proxy aware handler
@@ -59,7 +61,7 @@ namespace Microsoft.Fx.Portability
 
             _client = new CompressedHttpClient(info, messageHandler)
             {
-                BaseAddress = new Uri(endpoint),
+                BaseAddress = new UriBuilder(UriScheme, endpoint).Uri,
                 Timeout = Timeout
             };
         }
@@ -73,7 +75,7 @@ namespace Microsoft.Fx.Portability
 
             _client = new CompressedHttpClient(info)
             {
-                BaseAddress = new Uri(endpoint),
+                BaseAddress = new UriBuilder(UriScheme, endpoint).Uri,
                 Timeout = Timeout
             };
         }
@@ -92,7 +94,7 @@ namespace Microsoft.Fx.Portability
 
             _client = new CompressedHttpClient(info, httpMessageHandler)
             {
-                BaseAddress = new Uri(endpoint),
+                BaseAddress = new UriBuilder(UriScheme, endpoint).Uri,
                 Timeout = Timeout
             };
         }
