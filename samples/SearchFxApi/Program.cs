@@ -14,7 +14,7 @@ namespace SearchFxApi
     {
         private static void Main(string[] args)
         {
-            var analysisService = new ApiPortService("https://portability.dot.net", new ProductInformation("MyAPIQueryProgram"));
+            var analysisService = new ApiPortService("portability.dot.net", new ProductInformation("MyAPIQueryProgram"));
 
             Console.Write("Enter API you want to search for:  ");
             var api = Console.ReadLine();
