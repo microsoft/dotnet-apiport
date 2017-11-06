@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +9,7 @@ namespace Foo
     {
         public static void Test()
         {
-            Image image = Image.FromFile("SomeTestFile.png", true);
+            Uri.TryCreate("randomUri", UriKind.Relative, out Uri testResult);
 
             Console.WriteLine(Microsoft.Bar.Test<int>.Get());
             Console.WriteLine(Other.Test<int>.Get());
