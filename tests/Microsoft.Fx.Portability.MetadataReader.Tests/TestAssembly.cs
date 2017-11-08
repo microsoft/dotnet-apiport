@@ -36,7 +36,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         private class CSharpCompileAssemblyFile : IAssemblyFile
         {
             private static readonly Assembly s_assembly = typeof(CSharpCompileAssemblyFile).GetTypeInfo().Assembly;
-            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).GetTypeInfo().Assembly.Location, typeof(Uri).GetTypeInfo().Assembly.Location }
+            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).GetTypeInfo().Assembly.Location, typeof(Uri).GetTypeInfo().Assembly.Location, typeof(Console).GetTypeInfo().Assembly.Location }
+                                                                     .Distinct()
                                                                      .Select(r => MetadataReference.CreateFromFile(r))
                                                                      .ToList();
 
@@ -75,7 +76,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var tfm = CSharpSyntaxTree.ParseText(TFM);
                 var tree = CSharpSyntaxTree.ParseText(text);
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: allowUnsafe);
-                var references = additionalReferences.Select(x => MetadataReference.CreateFromFile(x)).Concat(s_references);
+                var references = additionalReferences
+                                    .Select(x => MetadataReference.CreateFromFile(x))
+                                    .Concat(s_references);
+
                 var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references, options);
 
                 using (var stream = new MemoryStream())
