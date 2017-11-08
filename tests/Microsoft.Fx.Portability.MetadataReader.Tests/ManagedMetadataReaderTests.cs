@@ -103,12 +103,13 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         public void VerifyDotNetFrameworkFilter()
         {
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
-            var assemblyToTest = TestAssembly.Create("FilterApis.cs", false, new[] { typeof(Image).GetTypeInfo().Assembly.Location });
+            var assemblyToTest = TestAssembly.Create("FilterApis.cs");
 
             var expected = FilterApisDocIds
                 .Concat(new[] {
-                    "M:System.Drawing.Image.FromFile(System.String,System.Boolean)",
-                    "T:System.Drawing.Image"
+                    "M:System.Uri.TryCreate(System.String,System.UriKind,System.Uri@)",
+                    "T:System.Uri",
+                    "T:System.UriKind"
                 })
                 .OrderBy(x => x, StringComparer.Ordinal);
 
@@ -141,7 +142,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             var assemblyName = "FilterApis";
             var dependencyFinder = new ReflectionMetadataDependencyFinder(new AssemblyNameFilter(assemblyName));
-            var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs", false, new[] { typeof(Image).GetTypeInfo().Assembly.Location });
+            var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs");
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
