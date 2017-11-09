@@ -350,9 +350,6 @@
   <data name="TooManyTargetsMessage" xml:space="preserve">
     <value>Excel output format supports up to {0} targets for analysis at a time.</value>
   </data>
-  <data name="MissingAssemblyInfo" xml:space="preserve">
-    <value>Cannot locate assembly info for System.Object</value>
-  </data>
   <data name="FrameworkNameHeader" xml:space="preserve">
     <value>Framework</value>
     <comment>Framework name header column in Excel</comment>

@@ -1,16 +1,25 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
     internal class DependencyFinderEngineHelper
     {
+        private static readonly HashSet<string> s_systemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "mscorlib",
+            "System.Runtime",
+            "System.Private.CoreLib"
+        };
+
         private readonly IDependencyFilter _assemblyFilter;
         private readonly MetadataReader _reader;
 
@@ -44,7 +53,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public void ComputeData()
         {
-            AssemblyReferenceInformation systemObjectAssembly = null;
+            // Primitives need to have their assembly set, so we search for a
+            // reference to System.Object that is considered a possible
+            // framework assembly and use that for any primitives that don't
+            // have an assembly
+            var systemObjectAssembly = GetSystemRuntimeAssemblyInformation();
 
             var provider = new MemberMetadataInfoTypeProvider(_reader);
 
@@ -62,16 +75,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         MemberDependency.Add(typeReferenceMemberDependency);
                     }
-
-                    // Primitives need to have their assembly set, so we search for a reference to System.Object that is considered a possible framework
-                    // assembly and use that for any primitives that don't have an assembly
-                    if (systemObjectAssembly == null
-                        && string.Equals(typeInfo.Namespace, "System", StringComparison.Ordinal)
-                        && string.Equals(typeInfo.Name, "Object", StringComparison.Ordinal)
-                        && _assemblyFilter.IsFrameworkAssembly(assembly))
-                    {
-                        systemObjectAssembly = assembly;
-                    }
                 }
                 catch (BadImageFormatException)
                 {
@@ -82,11 +85,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     // we can skip such malformed references and just analyze those
                     // that we can successfully decode.
                 }
-            }
-
-            if (systemObjectAssembly == null)
-            {
-                throw new PortabilityAnalyzerException(LocalizedStrings.MissingAssemblyInfo);
             }
 
             // Get member references
@@ -196,6 +194,31 @@ namespace Microsoft.Fx.Portability.Analyzer
                     return "M";
                 default:
                     return memberReference.GetKind().ToString();
+            }
+        }
+
+        /// <summary>
+        /// Tries to locate the assembly containing <see cref="System.Object"/>.
+        /// </summary>
+        private AssemblyReferenceInformation GetSystemRuntimeAssemblyInformation()
+        {
+            var microsoftAssemblies = _reader.AssemblyReferences
+                .Select(handle =>
+                {
+                    var assembly = _reader.GetAssemblyReference(handle);
+                    return _reader.FormatAssemblyInfo(assembly);
+                })
+                .Where(_assemblyFilter.IsFrameworkAssembly);
+
+            var matchingAssembly = microsoftAssemblies.SingleOrDefault(x => s_systemObjectAssemblies.Contains(x.Name));
+
+            if (matchingAssembly != default(AssemblyReferenceInformation))
+            {
+                return matchingAssembly;
+            }
+            else
+            {
+                throw new SystemObjectNotFoundException(microsoftAssemblies);
             }
         }
     }
