@@ -113,7 +113,7 @@
     </Content>
     <None Include="source.extension.vsixmanifest" />
     <Resource Include="README.txt" />
-    <Content Include="Resources\API Portability Analyzer Alpha Pre-Release License Terms.rtf">
+    <Content Include="..\..\docs\LicenseTerms\\API Portability Analyzer Alpha Pre-Release License Terms.rtf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
