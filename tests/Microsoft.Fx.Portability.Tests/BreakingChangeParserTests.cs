@@ -130,6 +130,20 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("RandomText2.md"), new BreakingChange[0]);
         }
 
+        [Fact]
+        public void CategoryWithSpace()
+        {
+            var expected = new BreakingChange
+            {
+                Title = "List<T>.ForEach",
+                ImpactScope = BreakingChangeImpact.Minor,
+                VersionBroken = Version.Parse("4.6.2"),
+                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Available
+            };
+
+            ValidateParse(GetBreakingChangeMarkdown("CategoryWithSpaces.md"), expected);
+        }
+
         #endregion
 
         #region Negative Test Cases
@@ -185,7 +199,8 @@ namespace Microsoft.Fx.Portability.Tests
 
         private Stream GetBreakingChangeMarkdown(string resourceName)
         {
-            var name = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
+            var resources = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames();
+            var name = resources.Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
             return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
         }
 
