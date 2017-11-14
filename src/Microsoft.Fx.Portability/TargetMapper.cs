@@ -262,7 +262,7 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
 
             if (validate && groups.Any(g => g.Length != 2))
             {
-                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format(CultureInfo.CurrentCulture, "An alias should be separated from names by '{0}'", AliasTargetSeparator));
+                throw new ArgumentOutOfRangeException(nameof(aliasString), aliasString, string.Format(CultureInfo.CurrentCulture, "An alias should be separated from names by '{0}'", AliasTargetSeparator));
             }
 
             foreach (var group in groups)
