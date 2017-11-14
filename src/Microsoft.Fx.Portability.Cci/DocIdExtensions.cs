@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -77,8 +78,8 @@ namespace Microsoft.Cci.Extensions
             if (assembly != null)
                 return assembly.DocId();
 
-            Contract.Assert(false, string.Format(CultureInfo.InvariantCulture, "Fell through cases in TypeExtensions.RefDocId() Type of reference: {0}", reference.GetType()));
-            return "<Unknown Reference Type>";
+            Contract.Assert(false, string.Format(CultureInfo.CurrentUICulture, LocalizedStrings.FellThroughCasesIn, "DocIdExtensions.RefDocId()", reference.GetType()));
+            return LocalizedStrings.UnknownReferenceType;
         }
 
         public static HashSet<string> ReadDocIds(string docIdsFile)

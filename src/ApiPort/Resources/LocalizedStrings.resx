@@ -309,4 +309,52 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="Credentials_UserName" xml:space="preserve">
     <value>Username:</value>
   </data>
+  <data name="AvailableGroupedTargets" xml:space="preserve">
+    <value>Available Grouped Targets:</value>
+  </data>
+  <data name="ProgressReportDone1" xml:space="preserve">
+    <value>[Done]</value>
+  </data>
+  <data name="ProgressReportFailed1" xml:space="preserve">
+    <value>[Failed]</value>
+  </data>
+  <data name="TooManyTargetsMessage" xml:space="preserve">
+    <value>Excel output format supports up to {0} targets for analysis at a time.</value>
+  </data>
+  <data name="InvalidParameterPassed" xml:space="preserve">
+    <value>Invalid parameter passed to {0}</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>options</value>
+  </data>
+  <data name="ReplEnterQuery" xml:space="preserve">
+    <value>Enter a search query to find possible docids.</value>
+  </data>
+  <data name="ReplInvalidNumber" xml:space="preserve">
+    <value>Invalid number: '{0}'</value>
+  </data>
+  <data name="ReplNoResultsFound" xml:space="preserve">
+    <value>Did not find anything for search '{0}'</value>
+  </data>
+  <data name="ReplOptionCount" xml:space="preserve">
+    <value>#count=</value>
+  </data>
+  <data name="ReplOptionCount_Text" xml:space="preserve">
+    <value>[number]  Display [number] of search results.</value>
+  </data>
+  <data name="ReplOptionExit" xml:space="preserve">
+    <value>#q</value>
+  </data>
+  <data name="ReplOptionExit_Text" xml:space="preserve">
+    <value>Exit the REPL.</value>
+  </data>
+  <data name="ReplOptionsHeader" xml:space="preserve">
+    <value>Options:</value>
+  </data>
+  <data name="ReplUpdatedCount" xml:space="preserve">
+    <value>Updated count to {0}</value>
+  </data>
+  <data name="UnknownCommand" xml:space="preserve">
+    <value>Unknown command: {0}</value>
+  </data>
 </root>

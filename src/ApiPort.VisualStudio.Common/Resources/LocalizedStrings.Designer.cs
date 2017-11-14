@@ -97,6 +97,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot create tool window.
+        /// </summary>
+        public static string CannotCreateToolWindow {
+            get {
+                return ResourceManager.GetString("CannotCreateToolWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to get a reference to the Output window general pane..
         /// </summary>
         public static string CannotReferenceOutputWindow {
@@ -139,6 +148,15 @@ namespace ApiPortVS.Resources {
         public static string CopyrightFormat {
             get {
                 return ResourceManager.GetString("CopyrightFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find AssemblyRedirectResolver. It should have been resolved in the service provider..
+        /// </summary>
+        public static string CouldNotFindAssemblyRedirectResolver {
+            get {
+                return ResourceManager.GetString("CouldNotFindAssemblyRedirectResolver", resourceCulture);
             }
         }
         
@@ -332,6 +350,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Portability Analysis Results.
+        /// </summary>
+        public static string PortabilityAnalysisResults {
+            get {
+                return ResourceManager.GetString("PortabilityAnalysisResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portability Analysis.
         /// </summary>
         public static string PortabilityOutputTitle {
@@ -496,6 +523,15 @@ namespace ApiPortVS.Resources {
         public static string TargetTypeHeader {
             get {
                 return ResourceManager.GetString("TargetTypeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel output format supports up to {0} targets for analysis at a time..
+        /// </summary>
+        public static string TooManyTargetsMessage {
+            get {
+                return ResourceManager.GetString("TooManyTargetsMessage", resourceCulture);
             }
         }
         

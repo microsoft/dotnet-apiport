@@ -404,7 +404,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                     return specification.DecodeSignature(this, null);
                 default:
-                    throw new NotSupportedException("This kind is not supported!");
+                    throw new NotSupportedException(LocalizedStrings.UnsupportedKind);
             }
         }
 

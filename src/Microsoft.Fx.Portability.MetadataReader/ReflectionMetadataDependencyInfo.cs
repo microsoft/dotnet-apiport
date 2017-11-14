@@ -77,7 +77,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                         if (m.DefinedInAssemblyIdentity == null && !dependencies.IsPrimitive)
                         {
-                            throw new InvalidOperationException("All non-primitive types should be defined in an assembly");
+                            throw new InvalidOperationException(LocalizedStrings.NonPrimitiveTypeNotDefinedInAssembly);
                         }
 
                         // Add this memberinfo
@@ -198,7 +198,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private class InvalidPEAssemblyException : Exception
         {
             public InvalidPEAssemblyException(Exception inner)
-                : base("Not a valid assembly", inner)
+                : base(LocalizedStrings.InvalidAssembly, inner)
             { }
         }
 

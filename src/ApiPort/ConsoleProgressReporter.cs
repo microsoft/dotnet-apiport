@@ -178,12 +178,12 @@ namespace ApiPort
 
             public void Abort()
             {
-                EndTask(Microsoft.Fx.Portability.Resources.LocalizedStrings.ProgressReportFailed, ConsoleColor.Red);
+                EndTask(LocalizedStrings.ProgressReportFailed, ConsoleColor.Red);
             }
 
             public void Dispose()
             {
-                EndTask(Microsoft.Fx.Portability.Resources.LocalizedStrings.ProgressReportDone, ConsoleColor.Green);
+                EndTask(LocalizedStrings.ProgressReportDone, ConsoleColor.Green);
             }
 
             private void EndTask(string message, ConsoleColor color)

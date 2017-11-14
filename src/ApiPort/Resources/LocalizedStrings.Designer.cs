@@ -11,8 +11,8 @@
 namespace ApiPort.Resources {
     using System;
     using System.Reflection;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -20,10 +20,10 @@ namespace ApiPort.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LocalizedStrings {
+    internal class LocalizedStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -37,7 +37,7 @@ namespace ApiPort.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
@@ -52,7 +52,7 @@ namespace ApiPort.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Analyze.
         /// </summary>
-        public static string Analyze {
+        internal static string Analyze {
             get {
                 return ResourceManager.GetString("Analyze", resourceCulture);
             }
@@ -73,7 +73,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to API Portability Analyzer.
         /// </summary>
-        public static string ApplicationName {
+        internal static string ApplicationName {
             get {
                 return ResourceManager.GetString("ApplicationName", resourceCulture);
             }
@@ -82,16 +82,25 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Available Aliases:.
         /// </summary>
-        public static string AvailableAliases {
+        internal static string AvailableAliases {
             get {
                 return ResourceManager.GetString("AvailableAliases", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available Grouped Targets:.
+        /// </summary>
+        internal static string AvailableGroupedTargets {
+            get {
+                return ResourceManager.GetString("AvailableGroupedTargets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available output formats:.
         /// </summary>
-        public static string AvailableOutputFormats {
+        internal static string AvailableOutputFormats {
             get {
                 return ResourceManager.GetString("AvailableOutputFormats", resourceCulture);
             }
@@ -100,7 +109,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Available Targets:.
         /// </summary>
-        public static string AvailableTargets {
+        internal static string AvailableTargets {
             get {
                 return ResourceManager.GetString("AvailableTargets", resourceCulture);
             }
@@ -116,7 +125,7 @@ namespace ApiPort.Resources {
         ///  -o, --out VALUE              Output file name
         ///  -d, --description VALUE      Description of the subm [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string CmdAnalyzeHelp {
+        internal static string CmdAnalyzeHelp {
             get {
                 return ResourceManager.GetString("CmdAnalyzeHelp", resourceCulture);
             }
@@ -125,7 +134,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Provides an interactive console search for APIs. Useful to find the docid of a specific API.
         /// </summary>
-        public static string CmdDocId {
+        internal static string CmdDocId {
             get {
                 return ResourceManager.GetString("CmdDocId", resourceCulture);
             }
@@ -134,7 +143,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
         /// </summary>
-        public static string CmdHelpIgnoreAssembliesFile {
+        internal static string CmdHelpIgnoreAssembliesFile {
             get {
                 return ResourceManager.GetString("CmdHelpIgnoreAssembliesFile", resourceCulture);
             }
@@ -143,7 +152,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json.
         /// </summary>
-        public static string CmdHelpNoDefaultIgnoreFile {
+        internal static string CmdHelpNoDefaultIgnoreFile {
             get {
                 return ResourceManager.GetString("CmdHelpNoDefaultIgnoreFile", resourceCulture);
             }
@@ -152,7 +161,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Calculate breaking changes on full .NET Framework.
         /// </summary>
-        public static string CmdHelpShowBreakingChanges {
+        internal static string CmdHelpShowBreakingChanges {
             get {
                 return ResourceManager.GetString("CmdHelpShowBreakingChanges", resourceCulture);
             }
@@ -161,7 +170,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Calculate non-portable APIs.
         /// </summary>
-        public static string CmdHelpShowNonPortableApis {
+        internal static string CmdHelpShowNonPortableApis {
             get {
                 return ResourceManager.GetString("CmdHelpShowNonPortableApis", resourceCulture);
             }
@@ -170,7 +179,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported..
         /// </summary>
-        public static string CmdHelpSuppressBreakingChange {
+        internal static string CmdHelpSuppressBreakingChange {
             get {
                 return ResourceManager.GetString("CmdHelpSuppressBreakingChange", resourceCulture);
             }
@@ -181,7 +190,7 @@ namespace ApiPort.Resources {
         ///
         ///  -h, -?, --help             Show help.
         /// </summary>
-        public static string CmdListOutputFormats {
+        internal static string CmdListOutputFormats {
             get {
                 return ResourceManager.GetString("CmdListOutputFormats", resourceCulture);
             }
@@ -192,7 +201,7 @@ namespace ApiPort.Resources {
         ///
         ///  -h, -?, --help             Show help.
         /// </summary>
-        public static string CmdListTargets {
+        internal static string CmdListTargets {
             get {
                 return ResourceManager.GetString("CmdListTargets", resourceCulture);
             }
@@ -201,7 +210,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The remote server indicated that the previous request was forbidden. Please provide credentials for: {0}.
         /// </summary>
-        public static string Credentials_ForbiddenCredentials {
+        internal static string Credentials_ForbiddenCredentials {
             get {
                 return ResourceManager.GetString("Credentials_ForbiddenCredentials", resourceCulture);
             }
@@ -210,7 +219,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Password:.
         /// </summary>
-        public static string Credentials_Password {
+        internal static string Credentials_Password {
             get {
                 return ResourceManager.GetString("Credentials_Password", resourceCulture);
             }
@@ -219,7 +228,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please provide proxy credentials:.
         /// </summary>
-        public static string Credentials_ProxyCredentials {
+        internal static string Credentials_ProxyCredentials {
             get {
                 return ResourceManager.GetString("Credentials_ProxyCredentials", resourceCulture);
             }
@@ -228,7 +237,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please provide credentials for: {0}.
         /// </summary>
-        public static string Credentials_RequestCredentials {
+        internal static string Credentials_RequestCredentials {
             get {
                 return ResourceManager.GetString("Credentials_RequestCredentials", resourceCulture);
             }
@@ -237,7 +246,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Username:.
         /// </summary>
-        public static string Credentials_UserName {
+        internal static string Credentials_UserName {
             get {
                 return ResourceManager.GetString("Credentials_UserName", resourceCulture);
             }
@@ -246,7 +255,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
-        public static string Description {
+        internal static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
             }
@@ -255,7 +264,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Description of the submission.
         /// </summary>
-        public static string DescriptionHelp {
+        internal static string DescriptionHelp {
             get {
                 return ResourceManager.GetString("DescriptionHelp", resourceCulture);
             }
@@ -264,7 +273,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Analyze request file output does not support this operation.
         /// </summary>
-        public static string FileOutputServiceNotSupported {
+        internal static string FileOutputServiceNotSupported {
             get {
                 return ResourceManager.GetString("FileOutputServiceNotSupported", resourceCulture);
             }
@@ -280,7 +289,7 @@ namespace ApiPort.Resources {
         ///To learn more about how this tool works, including the data we are collecting, 
         ///go here - http://go.microsoft.com/fwlink/?LinkId=397652.
         /// </summary>
-        public static string Header {
+        internal static string Header {
             get {
                 return ResourceManager.GetString("Header", resourceCulture);
             }
@@ -290,7 +299,7 @@ namespace ApiPort.Resources {
         ///   Looks up a localized string similar to Invalid argument was passed in. Please check your command line parameters.
         ///{0}.
         /// </summary>
-        public static string InvalidCommandLineArguments {
+        internal static string InvalidCommandLineArguments {
             get {
                 return ResourceManager.GetString("InvalidCommandLineArguments", resourceCulture);
             }
@@ -300,16 +309,25 @@ namespace ApiPort.Resources {
         ///   Looks up a localized string similar to Unable to parse ignore file &apos;{0}&apos;. Error details:
         ///{1}.
         /// </summary>
-        public static string InvalidIgnoreFile {
+        internal static string InvalidIgnoreFile {
             get {
                 return ResourceManager.GetString("InvalidIgnoreFile", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid parameter passed to {0}.
+        /// </summary>
+        internal static string InvalidParameterPassed {
+            get {
+                return ResourceManager.GetString("InvalidParameterPassed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path to assembly file or directory of assemblies..
         /// </summary>
-        public static string ListOfAssembliesToAnalyze {
+        internal static string ListOfAssembliesToAnalyze {
             get {
                 return ResourceManager.GetString("ListOfAssembliesToAnalyze", resourceCulture);
             }
@@ -318,7 +336,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Use to see what output formats are supported for the generated report..
         /// </summary>
-        public static string ListOutputFormats {
+        internal static string ListOutputFormats {
             get {
                 return ResourceManager.GetString("ListOutputFormats", resourceCulture);
             }
@@ -327,7 +345,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Use to see the available targets against which you can validate your assemblies.
         /// </summary>
-        public static string ListTargets {
+        internal static string ListTargets {
             get {
                 return ResourceManager.GetString("ListTargets", resourceCulture);
             }
@@ -336,16 +354,25 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to If you are running on the mono runtime, you must configure root certificates before using this application.  Please see http://www.mono-project.com/docs/faq/security/.
         /// </summary>
-        public static string MonoWebRequestsFailure {
+        internal static string MonoWebRequestsFailure {
             get {
                 return ResourceManager.GetString("MonoWebRequestsFailure", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to options.
+        /// </summary>
+        internal static string Options {
+            get {
+                return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output file name.
         /// </summary>
-        public static string OutputFileName {
+        internal static string OutputFileName {
             get {
                 return ResourceManager.GetString("OutputFileName", resourceCulture);
             }
@@ -354,7 +381,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Wrote output to file:.
         /// </summary>
-        public static string OutputWrittenTo {
+        internal static string OutputWrittenTo {
             get {
                 return ResourceManager.GetString("OutputWrittenTo", resourceCulture);
             }
@@ -363,7 +390,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Replaced output file &quot;{0}&quot;.
         /// </summary>
-        public static string OverwriteFile {
+        internal static string OverwriteFile {
             get {
                 return ResourceManager.GetString("OverwriteFile", resourceCulture);
             }
@@ -372,34 +399,133 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to [Done].
         /// </summary>
-        public static string ProgressReportDone {
+        internal static string ProgressReportDone {
             get {
                 return ResourceManager.GetString("ProgressReportDone", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Done].
+        /// </summary>
+        internal static string ProgressReportDone1 {
+            get {
+                return ResourceManager.GetString("ProgressReportDone1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Failed].
         /// </summary>
-        public static string ProgressReportFailed {
+        internal static string ProgressReportFailed {
             get {
                 return ResourceManager.GetString("ProgressReportFailed", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Failed].
+        /// </summary>
+        internal static string ProgressReportFailed1 {
+            get {
+                return ResourceManager.GetString("ProgressReportFailed1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [In Progress{0}].
         /// </summary>
-        public static string ProgressReportInProgress {
+        internal static string ProgressReportInProgress {
             get {
                 return ResourceManager.GetString("ProgressReportInProgress", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a search query to find possible docids..
+        /// </summary>
+        internal static string ReplEnterQuery {
+            get {
+                return ResourceManager.GetString("ReplEnterQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid number: &apos;{0}&apos;.
+        /// </summary>
+        internal static string ReplInvalidNumber {
+            get {
+                return ResourceManager.GetString("ReplInvalidNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Did not find anything for search &apos;{0}&apos;.
+        /// </summary>
+        internal static string ReplNoResultsFound {
+            get {
+                return ResourceManager.GetString("ReplNoResultsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #count=.
+        /// </summary>
+        internal static string ReplOptionCount {
+            get {
+                return ResourceManager.GetString("ReplOptionCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [number]  Display [number] of search results..
+        /// </summary>
+        internal static string ReplOptionCount_Text {
+            get {
+                return ResourceManager.GetString("ReplOptionCount_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #q.
+        /// </summary>
+        internal static string ReplOptionExit {
+            get {
+                return ResourceManager.GetString("ReplOptionExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit the REPL..
+        /// </summary>
+        internal static string ReplOptionExit_Text {
+            get {
+                return ResourceManager.GetString("ReplOptionExit_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options:.
+        /// </summary>
+        internal static string ReplOptionsHeader {
+            get {
+                return ResourceManager.GetString("ReplOptionsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated count to {0}.
+        /// </summary>
+        internal static string ReplUpdatedCount {
+            get {
+                return ResourceManager.GetString("ReplUpdatedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The report output format.
         /// </summary>
-        public static string ResultFormatHelp {
+        internal static string ResultFormatHelp {
             get {
                 return ResourceManager.GetString("ResultFormatHelp", resourceCulture);
             }
@@ -408,7 +534,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Targets.
         /// </summary>
-        public static string Targets {
+        internal static string Targets {
             get {
                 return ResourceManager.GetString("Targets", resourceCulture);
             }
@@ -417,7 +543,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Description:.
         /// </summary>
-        public static string TargetsDescription {
+        internal static string TargetsDescription {
             get {
                 return ResourceManager.GetString("TargetsDescription", resourceCulture);
             }
@@ -426,7 +552,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to - {0} ({1}).
         /// </summary>
-        public static string TargetsListGrouped {
+        internal static string TargetsListGrouped {
             get {
                 return ResourceManager.GetString("TargetsListGrouped", resourceCulture);
             }
@@ -435,7 +561,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to - {0}.
         /// </summary>
-        public static string TargetsListNoVersion {
+        internal static string TargetsListNoVersion {
             get {
                 return ResourceManager.GetString("TargetsListNoVersion", resourceCulture);
             }
@@ -444,7 +570,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Name:.
         /// </summary>
-        public static string TargetsName {
+        internal static string TargetsName {
             get {
                 return ResourceManager.GetString("TargetsName", resourceCulture);
             }
@@ -453,7 +579,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The target you want to check against..
         /// </summary>
-        public static string TargetsToCheckAgainst {
+        internal static string TargetsToCheckAgainst {
             get {
                 return ResourceManager.GetString("TargetsToCheckAgainst", resourceCulture);
             }
@@ -462,7 +588,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Versions:.
         /// </summary>
-        public static string TargetsVersion {
+        internal static string TargetsVersion {
             get {
                 return ResourceManager.GetString("TargetsVersion", resourceCulture);
             }
@@ -477,16 +603,34 @@ namespace ApiPort.Resources {
         ///
         ///Versions marked with an asterisk (*) implies that these are default targets if none are submitted..
         /// </summary>
-        public static string TargetUsage {
+        internal static string TargetUsage {
             get {
                 return ResourceManager.GetString("TargetUsage", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excel output format supports up to {0} targets for analysis at a time..
+        /// </summary>
+        internal static string TooManyTargetsMessage {
+            get {
+                return ResourceManager.GetString("TooManyTargetsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown command: {0}.
+        /// </summary>
+        internal static string UnknownCommand {
+            get {
+                return ResourceManager.GetString("UnknownCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was an unexpected error.  Please try again or contact apiport@microsoft.com for help..
         /// </summary>
-        public static string UnknownException {
+        internal static string UnknownException {
             get {
                 return ResourceManager.GetString("UnknownException", resourceCulture);
             }
@@ -495,7 +639,7 @@ namespace ApiPort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to ; .
         /// </summary>
-        public static string VersionListJoin {
+        internal static string VersionListJoin {
             get {
                 return ResourceManager.GetString("VersionListJoin", resourceCulture);
             }

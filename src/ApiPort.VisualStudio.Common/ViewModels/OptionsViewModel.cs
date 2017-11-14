@@ -276,7 +276,7 @@ namespace ApiPortVS.ViewModels
                     if (_currentVersions.Count(x => x.IsSelected) > ApiPortClient.MaxNumberOfTargets && containsExcel)
                     {
                         HasError = true;
-                        ErrorMessage = string.Format(CultureInfo.CurrentCulture, Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
+                        ErrorMessage = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TooManyTargetsMessage, ApiPortClient.MaxNumberOfTargets);
                     }
                     else
                     {

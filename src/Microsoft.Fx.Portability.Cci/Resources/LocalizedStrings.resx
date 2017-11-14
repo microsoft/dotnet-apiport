@@ -117,32 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CalledNameOnUnsupportedDefinition" xml:space="preserve">
+    <value>Called .Name on a currently unsupported type definition!</value>
+  </data>
+  <data name="CoreAssemblyAlreadySet" xml:space="preserve">
+    <value>The Core Assembly can only be set once.</value>
+  </data>
+  <data name="CoreAssemblyNotFoundInContracts" xml:space="preserve">
+    <value>Could not find core assembly '{0}' in the list of contracts.</value>
+  </data>
+  <data name="CoreAssemblyNotFoundInIdentities" xml:space="preserve">
+    <value>Could not find core assembly '{0}' in the list of identities.</value>
+  </data>
   <data name="DetectingAssemblyReferences" xml:space="preserve">
     <value>Detecting assembly references</value>
   </data>
-  <data name="InfiniteTypeParentingRecursion" xml:space="preserve">
-    <value>Two types are defined which serve as each others' scope. This may be the result of assembly obfuscation.</value>
+  <data name="FellThroughCasesIn" xml:space="preserve">
+    <value>Fell through cases in {0} Type of reference: {1}</value>
   </data>
-  <data name="InvalidAssembly" xml:space="preserve">
-    <value>Not a valid assembly</value>
+  <data name="UnexpectedTypeReference" xml:space="preserve">
+    <value>Unexpected type reference that we may need to unwrap {0}</value>
   </data>
-  <data name="InvalidAttributeProlog" xml:space="preserve">
-    <value>Invalid custom attribute prolog.</value>
+  <data name="UnknownFile" xml:space="preserve">
+    <value>Could not find file: '{0}'</value>
   </data>
-  <data name="MetadataParsingExceptionMessage" xml:space="preserve">
-    <value>An unexpected error was encountered while parsing the metadata for the PE file located at {0}.</value>
+  <data name="UnknownIReference" xml:space="preserve">
+    <value>Unknown IReference '{0}' so we cannot get assembly reference!</value>
   </data>
-  <data name="MissingSystemObjectAssembly" xml:space="preserve">
-    <value>Cannot locate assembly information for System.Object. Microsoft assemblies found are:
-{0}</value>
-  </data>
-  <data name="MoreParametersWereRequired" xml:space="preserve">
-    <value>More parameters were required than are available</value>
-  </data>
-  <data name="NonPrimitiveTypeNotDefinedInAssembly" xml:space="preserve">
-    <value>All non-primitive types should be defined in an assembly</value>
-  </data>
-  <data name="UnsupportedKind" xml:space="preserve">
-    <value>This kind is not supported!</value>
+  <data name="UnknownReferenceType" xml:space="preserve">
+    <value>&lt;Unknown Reference Type&gt;</value>
   </data>
 </root>

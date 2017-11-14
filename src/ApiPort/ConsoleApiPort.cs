@@ -80,7 +80,7 @@ namespace ApiPort
                 if (expandableTargets.Any())
                 {
                     Console.WriteLine();
-                    Console.WriteLine(Microsoft.Fx.Portability.Resources.LocalizedStrings.AvailableGroupedTargets);
+                    Console.WriteLine(LocalizedStrings.AvailableGroupedTargets);
 
                     foreach (var item in expandableTargets)
                     {

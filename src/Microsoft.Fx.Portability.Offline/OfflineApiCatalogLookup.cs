@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Offline.Resources;
 using System;
 
 namespace Microsoft.Fx.Portability
@@ -14,7 +15,7 @@ namespace Microsoft.Fx.Portability
 
         private static DotNetCatalog GetData(IProgressReporter progressReporter)
         {
-            using (var progressTask = progressReporter.StartTask("Loading catalog"))
+            using (var progressTask = progressReporter.StartTask(LocalizedStrings.LoadingCatalog))
             {
                 try
                 {

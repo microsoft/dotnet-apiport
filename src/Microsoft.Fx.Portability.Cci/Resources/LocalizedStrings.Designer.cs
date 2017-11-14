@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Fx.Portability.Analyzer.Resources {
+namespace Microsoft.Fx.Portability.Resources {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Fx.Portability.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,6 +62,42 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Called .Name on a currently unsupported type definition!.
+        /// </summary>
+        internal static string CalledNameOnUnsupportedDefinition {
+            get {
+                return ResourceManager.GetString("CalledNameOnUnsupportedDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Core Assembly can only be set once..
+        /// </summary>
+        internal static string CoreAssemblyAlreadySet {
+            get {
+                return ResourceManager.GetString("CoreAssemblyAlreadySet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find core assembly &apos;{0}&apos; in the list of contracts..
+        /// </summary>
+        internal static string CoreAssemblyNotFoundInContracts {
+            get {
+                return ResourceManager.GetString("CoreAssemblyNotFoundInContracts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find core assembly &apos;{0}&apos; in the list of identities..
+        /// </summary>
+        internal static string CoreAssemblyNotFoundInIdentities {
+            get {
+                return ResourceManager.GetString("CoreAssemblyNotFoundInIdentities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detecting assembly references.
         /// </summary>
         internal static string DetectingAssemblyReferences {
@@ -71,75 +107,47 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Two types are defined which serve as each others&apos; scope. This may be the result of assembly obfuscation..
+        ///   Looks up a localized string similar to Fell through cases in {0} Type of reference: {1}.
         /// </summary>
-        internal static string InfiniteTypeParentingRecursion {
+        internal static string FellThroughCasesIn {
             get {
-                return ResourceManager.GetString("InfiniteTypeParentingRecursion", resourceCulture);
+                return ResourceManager.GetString("FellThroughCasesIn", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not a valid assembly.
+        ///   Looks up a localized string similar to Unexpected type reference that we may need to unwrap {0}.
         /// </summary>
-        internal static string InvalidAssembly {
+        internal static string UnexpectedTypeReference {
             get {
-                return ResourceManager.GetString("InvalidAssembly", resourceCulture);
+                return ResourceManager.GetString("UnexpectedTypeReference", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid custom attribute prolog..
+        ///   Looks up a localized string similar to Could not find file: &apos;{0}&apos;.
         /// </summary>
-        internal static string InvalidAttributeProlog {
+        internal static string UnknownFile {
             get {
-                return ResourceManager.GetString("InvalidAttributeProlog", resourceCulture);
+                return ResourceManager.GetString("UnknownFile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unexpected error was encountered while parsing the metadata for the PE file located at {0}..
+        ///   Looks up a localized string similar to Unknown IReference &apos;{0}&apos; so we cannot get assembly reference!.
         /// </summary>
-        internal static string MetadataParsingExceptionMessage {
+        internal static string UnknownIReference {
             get {
-                return ResourceManager.GetString("MetadataParsingExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("UnknownIReference", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot locate assembly information for System.Object. Microsoft assemblies found are:
-        ///{0}.
+        ///   Looks up a localized string similar to &lt;Unknown Reference Type&gt;.
         /// </summary>
-        internal static string MissingSystemObjectAssembly {
+        internal static string UnknownReferenceType {
             get {
-                return ResourceManager.GetString("MissingSystemObjectAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to More parameters were required than are available.
-        /// </summary>
-        internal static string MoreParametersWereRequired {
-            get {
-                return ResourceManager.GetString("MoreParametersWereRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All non-primitive types should be defined in an assembly.
-        /// </summary>
-        internal static string NonPrimitiveTypeNotDefinedInAssembly {
-            get {
-                return ResourceManager.GetString("NonPrimitiveTypeNotDefinedInAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This kind is not supported!.
-        /// </summary>
-        internal static string UnsupportedKind {
-            get {
-                return ResourceManager.GetString("UnsupportedKind", resourceCulture);
+                return ResourceManager.GetString("UnknownReferenceType", resourceCulture);
             }
         }
     }

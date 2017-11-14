@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Resources;
 using System;
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
@@ -20,7 +21,7 @@ namespace Microsoft.Fx.Portability
             var prolog = _valueReader.ReadUInt16();
             if (prolog != 1)
             {
-                throw new BadImageFormatException("Invalid custom attribute prolog.");
+                throw new BadImageFormatException(LocalizedStrings.InvalidAttributeProlog);
             }
         }
 

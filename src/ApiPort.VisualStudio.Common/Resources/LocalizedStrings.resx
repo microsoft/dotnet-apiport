@@ -305,4 +305,16 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
     <value>Error getting package reference info.</value>
     <comment>Error getting package reference info.</comment>
   </data>
+  <data name="TooManyTargetsMessage" xml:space="preserve">
+    <value>Excel output format supports up to {0} targets for analysis at a time.</value>
+  </data>
+  <data name="PortabilityAnalysisResults" xml:space="preserve">
+    <value>Portability Analysis Results</value>
+  </data>
+  <data name="CannotCreateToolWindow" xml:space="preserve">
+    <value>Cannot create tool window</value>
+  </data>
+  <data name="CouldNotFindAssemblyRedirectResolver" xml:space="preserve">
+    <value>Could not find AssemblyRedirectResolver. It should have been resolved in the service provider.</value>
+  </data>
 </root>
