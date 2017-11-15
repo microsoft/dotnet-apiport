@@ -5,7 +5,6 @@ export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 export HOME=~
 export NUGET_PACKAGES=~/.nuget/packages
 export NUGET_HTTP_CACHE_PATH=~/.local/share/NuGet/v3-cache
-export SKIP_VERSION=true
 
 Configuration=Debug
 
