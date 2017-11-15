@@ -38,13 +38,13 @@
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1" Condition=" '$(IsPackage)' != 'true' ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
     <!-- GitVersionTask is not compiled against .NET Core, so importing the targets will
          result in a failure because it will try to resolve Microsoft.Build.Utilities v4.0 -->
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" Condition=" '$(MSBuildRuntimeType)' != 'Core' ">
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" Condition=" '$(MSBuildRuntimeType)' != 'Core' AND '$(IsPackage)' != 'true'">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
