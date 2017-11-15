@@ -43,7 +43,7 @@
     </PackageReference>
 
     <!-- GitVersionTask is not compiled against .NET Core, so importing the targets will
-         result in a failure because it will try to resolve Microsoft.Build.Utilities v4.9 -->
+         result in a failure because it will try to resolve Microsoft.Build.Utilities v4.0 -->
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" Condition=" '$(MSBuildRuntimeType)' != 'Core' ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
