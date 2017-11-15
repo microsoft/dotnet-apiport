@@ -41,7 +41,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012">
+
+    <!-- GitVersionTask is not compiled against .NET Core, so importing the targets will
+         result in a failure because it will try to resolve Microsoft.Build.Utilities v4.9 -->
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" Condition=" '$(MSBuildRuntimeType)' != 'Core' ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
