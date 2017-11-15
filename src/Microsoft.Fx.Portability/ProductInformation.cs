@@ -10,12 +10,8 @@ namespace Microsoft.Fx.Portability
     public class ProductInformation
     {
         public ProductInformation(string name)
-            : this(name, typeof(ProductInformation))
-        { }
-
-        public ProductInformation(string name, Type callerType)
         {
-            var version = GetVersionString(callerType).Replace("-", ".");
+            var version = GetVersionString(typeof(ProductInformation)).Replace("-", ".");
 
             if (!IsValid(name))
             {
