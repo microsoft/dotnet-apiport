@@ -19,7 +19,6 @@
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <CreateVsixContainer>True</CreateVsixContainer>
-    <UpdateVersionProperties>true</UpdateVersionProperties>
     <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
     <NoWarn>CS2008;$(NoWarn)</NoWarn>
   </PropertyGroup>
