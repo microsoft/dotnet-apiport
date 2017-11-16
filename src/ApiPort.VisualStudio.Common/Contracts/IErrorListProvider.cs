@@ -1,4 +1,7 @@
-﻿using ApiPortVS.Models;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPortVS.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
