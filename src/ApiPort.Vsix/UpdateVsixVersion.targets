@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-
-  <Target Name="UpdateVsixVersion" AfterTargets="CopyVsixManifestFile">
+  
+  <Target Name="UpdateVsixVersion" BeforeTargets="CreateVsixContainer">
     <UpdateVersion VsixVersion="$(AssemblyVersion)" VsixFile="$(IntermediateVsixManifest)" />
     <Message Text="Updated $(IntermediateVsixManifest) to $(AssemblyVersion)" />
   </Target>
