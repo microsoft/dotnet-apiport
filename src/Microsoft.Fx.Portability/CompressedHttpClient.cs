@@ -14,22 +14,38 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
 {
     internal class CompressedHttpClient : HttpClient
     {
+        internal const SslProtocols SupportedSSLProtocols = SslProtocols.Tls12;
+
+#if FEATURE_SERVICE_POINT_MANAGER
+        internal const SecurityProtocolType SupportedSecurityProtocols = SecurityProtocolType.Tls12;
+#endif
+
         /// <param name="productName">Product name that will be displayed in the User Agent string of requests</param>
         /// <param name="productVersion">Product version that will be displayed in the User Agent string of requests</param>
         public CompressedHttpClient(ProductInformation info)
-            : this(info, new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
+            : this(info, new HttpClientHandler {
+#if FEATURE_CLIENT_HANDLER_SET_SSL_PROTOCOLS
+                SslProtocols = SupportedSSLProtocols, 
+#endif
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            })
         {
         }
 
         public CompressedHttpClient(ProductInformation info, HttpMessageHandler handler)
             : base(handler)
         {
+#if FEATURE_SERVICE_POINT_MANAGER
+            ServicePointManager.SecurityProtocol = SupportedSecurityProtocols;
+#endif
+
             DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentCulture.ToString());
 
