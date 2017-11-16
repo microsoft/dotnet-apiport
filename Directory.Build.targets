@@ -35,6 +35,10 @@
   </Choose>
 
   <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
