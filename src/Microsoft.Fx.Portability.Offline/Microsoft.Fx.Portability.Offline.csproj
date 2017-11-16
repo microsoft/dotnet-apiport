@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
-    <Warning Text="Could not find catalog.bin. Please run build\restore.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
+    <Warning Text="Could not find catalog.bin. Please run init.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
   </Target>
 
 </Project>

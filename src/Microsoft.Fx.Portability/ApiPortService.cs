@@ -25,8 +25,6 @@ namespace Microsoft.Fx.Portability
             internal const string DefaultResultFormat = "/api/resultformat/default";
         }
 
-        const string UriScheme = "https";
-
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
         private readonly CompressedHttpClient _client;
 
@@ -41,7 +39,11 @@ namespace Microsoft.Fx.Portability
                 throw new ArgumentNullException(nameof(proxyProvider));
             }
 
-            var uri = new UriBuilder(UriScheme, endpoint).Uri;
+            // Create the URI directly from a string (rather than using a hard-coded scheme or port) because 
+            // even though production use of ApiPort should always use HTTPS, developers using a non-production
+            // portability service URL (via the -e command line parameter) may need to specify a different 
+            // scheme or port.
+            var uri = new Uri(endpoint);
             var proxy = proxyProvider.GetProxy(uri);
             
             // replace the handler with the proxy aware handler
@@ -61,7 +63,7 @@ namespace Microsoft.Fx.Portability
 
             _client = new CompressedHttpClient(info, messageHandler)
             {
-                BaseAddress = new UriBuilder(UriScheme, endpoint).Uri,
+                BaseAddress = new Uri(endpoint),
                 Timeout = Timeout
             };
         }
@@ -75,7 +77,7 @@ namespace Microsoft.Fx.Portability
 
             _client = new CompressedHttpClient(info)
             {
-                BaseAddress = new UriBuilder(UriScheme, endpoint).Uri,
+                BaseAddress = new Uri(endpoint),
                 Timeout = Timeout
             };
         }
@@ -94,7 +96,7 @@ namespace Microsoft.Fx.Portability
 
             _client = new CompressedHttpClient(info, httpMessageHandler)
             {
-                BaseAddress = new UriBuilder(UriScheme, endpoint).Uri,
+                BaseAddress = new Uri(endpoint),
                 Timeout = Timeout
             };
         }
