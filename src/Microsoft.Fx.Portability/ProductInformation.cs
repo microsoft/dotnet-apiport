@@ -10,12 +10,10 @@ namespace Microsoft.Fx.Portability
     public class ProductInformation
     {
         public ProductInformation(string name)
-            : this(name, typeof(ProductInformation))
-        { }
-
-        public ProductInformation(string name, Type callerType)
         {
-            var version = GetVersionString(callerType).Replace("-", ".");
+            var assembly = typeof(ProductInformation).GetTypeInfo().Assembly;
+            var info = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            var version = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
             if (!IsValid(name))
             {
@@ -27,21 +25,16 @@ namespace Microsoft.Fx.Portability
                 throw new ArgumentOutOfRangeException(nameof(version), LocalizedStrings.ProductInformationInvalidArgument);
             }
 
+            InformationalVersion = info;
             Name = name;
             Version = version;
         }
 
+        public string InformationalVersion { get; }
+
         public string Name { get; }
 
         public string Version { get; }
-
-        private static string GetVersionString(Type callerType)
-        {
-            var assembly = callerType.GetTypeInfo().Assembly;
-            var info = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-
-            return info?.InformationalVersion ?? "unknown";
-        }
 
         /// <summary>
         /// Verify strings/versions only contain letters, digits, '.', or '_'.  Otherwise, the user agent string may be created incorrectly
