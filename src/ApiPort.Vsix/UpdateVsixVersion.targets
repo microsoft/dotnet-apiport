@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Target Name="UpdateVsixVersion" AfterTargets="GetVersion">
+  <Warning Text="Here: $(GitVersion_InformationalVersion)" />
+  <UpdateVersion VsixVersion="$(GitVersion_Version)" />
+  
+  <UsingTask TaskName="UpdateVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <VsixVersion ParameterType="System.String" Required="true" />
+      <VsixFile ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Xml.Linq" />
+      <Using Namespace="System.Xml.Linq" />
+      <Using Namespace="System.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        try
+        {
+            const string ns = "http://schemas.microsoft.com/developer/vsx-schema/2011";
+            var doc = XDocument.Load(VsixFile);
+            var identity = doc
+                .Root
+                .Descendants(XName.Get("Identity", ns))
+                .Single();
+
+            identity.Attribute("Version").Value = VsixVersion;
+
+            doc.Save(VsixFile);
+        }
+        catch(Exception ex)
+        {
+          Log.LogErrorFromException(ex);
+          return false;
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+  
+  </Target>
+</Project>

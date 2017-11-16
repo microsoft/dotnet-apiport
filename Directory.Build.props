@@ -8,6 +8,7 @@
     <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701</NoWarn>
     <Features>IOperation;$(Features)</Features>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\rules.ruleset</CodeAnalysisRuleSet>
+    <WriteVersionInfoToBuildLog>True</WriteVersionInfoToBuildLog>
   </PropertyGroup>
 
   <PropertyGroup>
