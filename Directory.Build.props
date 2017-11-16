@@ -9,6 +9,7 @@
     <Features>IOperation;$(Features)</Features>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\rules.ruleset</CodeAnalysisRuleSet>
     <WriteVersionInfoToBuildLog>True</WriteVersionInfoToBuildLog>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>

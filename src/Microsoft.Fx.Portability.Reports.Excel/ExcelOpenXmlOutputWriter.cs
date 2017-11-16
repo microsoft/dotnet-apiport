@@ -165,7 +165,6 @@ namespace Microsoft.Fx.Portability.Reports
                 summaryPage.AddConditionalFormatting(6, analysisResult.GetAssemblyUsageInfo().Count(), 3, analysisResult.Targets.Count);
                 summaryPage.AddTable(5, tableRowCount, 1, assemblyInfoHeader.ToArray());
 
-
                 var columnWidths = new List<double>
                 {
                     ColumnWidths.SummaryPage.AssemblyName,
@@ -225,7 +224,6 @@ namespace Microsoft.Fx.Portability.Reports
 
             detailsPageHeader.AddRange(_mapper.GetTargetNames(analysisResult.Targets));
             detailsPageHeader.Add(LocalizedStrings.RecommendedChanges);
-
 
             int detailsRows = 0;
             detailsPage.AddRow(detailsPageHeader.ToArray());

@@ -121,7 +121,6 @@ namespace Microsoft.Fx.Portability.TestData
             get { throw new NotImplementedException(); }
         }
 
-
         public Microsoft.Fx.Portability.ApiDefinition GetApiDefinition(string docId)
         {
             throw new NotImplementedException();

@@ -292,7 +292,6 @@ namespace Microsoft.Cci.Extensions
             if (ShouldUnifyToCoreAssembly(assemblyIdentity))
                 return this.CoreAssemblySymbolicIdentity;
 
-
             if (this.UnifyToLibPath)
                 assemblyIdentity = this.FindUnifiedAssemblyIdentity(assemblyIdentity);
 
