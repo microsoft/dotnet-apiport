@@ -37,7 +37,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Targets.xsd" />
     <EmbeddedResource Update="Resources\LocalizedStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
