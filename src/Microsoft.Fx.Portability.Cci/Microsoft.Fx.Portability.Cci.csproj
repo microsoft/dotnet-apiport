@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <RootNamespace>Microsoft.Fx.Portability</RootNamespace>
+    <RootNamespace>Microsoft.Fx.Portability.Cci</RootNamespace>
     <Description>Metadata reader for binaries using Microsoft.CCI</Description>
   </PropertyGroup>
 
