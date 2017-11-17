@@ -49,6 +49,9 @@ namespace Microsoft.Fx.Portability
             // replace the handler with the proxy aware handler
             var clientHandler = new HttpClientHandler
             {
+#if !FEATURE_SERVICE_POINT_MANAGER
+                SslProtocols = CompressedHttpClient.SupportedSSLProtocols,
+#endif
                 Proxy = proxy,
                 AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
             };
