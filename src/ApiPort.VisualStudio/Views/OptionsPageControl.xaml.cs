@@ -1,9 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
-using System;
+using Microsoft.Fx.Portability;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,16 +21,14 @@ namespace ApiPortVS.Views
         {
             InitializeComponent();
             DataContext = viewModel;
-            GuidanceLink.NavigateUri = new Uri(LocalizedStrings.MoreInformationUrl);
 
             Loaded += async (s, e) => await viewModel.UpdateAsync().ConfigureAwait(false);
             Unloaded += (s, e) => viewModel.Save();
         }
 
-        private void MoreInformationRequested(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(e.Uri.AbsoluteUri);
-        }
+        private void NavigateToPrivacyModel(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.About.OriginalString);
+
+        private void NavigateToMoreInformation(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.About.OriginalString);
 
         private async void RefreshRequested(object sender, RoutedEventArgs e)
         {

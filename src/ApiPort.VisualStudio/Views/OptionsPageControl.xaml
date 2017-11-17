@@ -146,6 +146,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" FontSize="11" HorizontalAlignment="Left"
@@ -159,10 +161,17 @@
             </TextBlock>
 
             <TextBlock Grid.Column="2" FontSize="11" HorizontalAlignment="Right">
-                <TextBlock Background="Transparent" Text="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}"/>
-                <Hyperlink Name="GuidanceLink" RequestNavigate="MoreInformationRequested"
-                           AutomationProperties.Name="{x:Static const:LocalizedStrings.MoreInformationAvailableAt}">
-                    <TextBlock Text="{x:Static const:LocalizedStrings.MoreInformationUrl}"
+                <Hyperlink Name="GuidanceLink" RequestNavigate="NavigateToMoreInformation"
+                           AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutTool}">
+                    <TextBlock Text="{x:Static const:LocalizedStrings.AboutTool}"
+                               KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
+                </Hyperlink>
+            </TextBlock>
+
+            <TextBlock Grid.Column="4" FontSize="11" HorizontalAlignment="Right">
+                <Hyperlink Name="PrivacyLink" RequestNavigate="NavigateToPrivacyModel"
+                           AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutPrivacy}">
+                    <TextBlock Text="{x:Static const:LocalizedStrings.AboutPrivacy}"
                                KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
                 </Hyperlink>
             </TextBlock>

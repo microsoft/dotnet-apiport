@@ -61,6 +61,24 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Privacy Statement.
+        /// </summary>
+        public static string AboutPrivacy {
+            get {
+                return ResourceManager.GetString("AboutPrivacy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Tool.
+        /// </summary>
+        public static string AboutTool {
+            get {
+                return ResourceManager.GetString("AboutTool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Analysis failed..
         /// </summary>
         public static string AnalysisFailed {
@@ -142,7 +160,7 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft (R) .NET Portability Analyzer {0} (alpha)
+        ///   Looks up a localized string similar to Microsoft (R) .NET Portability Analyzer {0}
         ///Copyright (C) Microsoft Corporation. All rights reserved..
         /// </summary>
         public static string CopyrightFormat {
@@ -292,24 +310,6 @@ namespace ApiPortVS.Resources {
         public static string MissingAssemblyStatus {
             get {
                 return ResourceManager.GetString("MissingAssemblyStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to More information is available at.
-        /// </summary>
-        public static string MoreInformationAvailableAt {
-            get {
-                return ResourceManager.GetString("MoreInformationAvailableAt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to http://go.microsoft.com/fwlink/?LinkId=506955.
-        /// </summary>
-        public static string MoreInformationUrl {
-            get {
-                return ResourceManager.GetString("MoreInformationUrl", resourceCulture);
             }
         }
         

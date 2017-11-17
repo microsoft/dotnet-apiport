@@ -286,8 +286,9 @@ namespace ApiPort.Resources {
         ///This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as
         ///Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
         ///
-        ///To learn more about how this tool works, including the data we are collecting, 
-        ///go here - http://go.microsoft.com/fwlink/?LinkId=397652.
+        ///To learn more about how this tool works, including the data we are collecting, visit {2}.
+        ///
+        ///For the full privacy statement, please visit {3}.
         /// </summary>
         internal static string Header {
             get {
