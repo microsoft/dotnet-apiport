@@ -11,8 +11,8 @@
 namespace ApiPort.Resources {
     using System;
     using System.Reflection;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -20,7 +20,7 @@ namespace ApiPort.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LocalizedStrings {
@@ -277,8 +277,9 @@ namespace ApiPort.Resources {
         ///This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as
         ///Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
         ///
-        ///To learn more about how this tool works, including the data we are collecting, 
-        ///go here - http://go.microsoft.com/fwlink/?LinkId=397652.
+        ///To learn more about how this tool works, including the data we are collecting, visit {2}.
+        ///
+        ///For the full privacy statement, please visit {3}.
         /// </summary>
         public static string Header {
             get {

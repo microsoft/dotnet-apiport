@@ -17,7 +17,7 @@ namespace ApiPort
         {
             var productInformation = new ProductInformation("ApiPort_Console");
 
-            Console.WriteLine(LocalizedStrings.Header, LocalizedStrings.ApplicationName, productInformation.InformationalVersion);
+            Console.WriteLine(LocalizedStrings.Header, LocalizedStrings.ApplicationName, productInformation.InformationalVersion, DocumentationLinks.About, DocumentationLinks.PrivacyPolicy);
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
