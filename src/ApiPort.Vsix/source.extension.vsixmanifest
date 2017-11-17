@@ -5,7 +5,7 @@
         <DisplayName>.NET Portability Analyzer</DisplayName>
         <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms</Description>
         <MoreInfo>http://go.microsoft.com/fwlink/?LinkId=506955</MoreInfo>
-        <License>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.rtf</License>
+        <License>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt</License>
         <Icon>Resources\Package.ico</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
         <Tags>code analysis, cross-platform, .NET Framework, .NET, portable, cross platform, Portable Library</Tags>
