@@ -12,6 +12,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <LicenseDocumentDirectory>$(MSBuildThisFileDirectory)\docs\LicenseTerms</LicenseDocumentDirectory>
+    <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE</FullLicenseFile>
     <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>
     <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(OutputFullPath)bin\$(Configuration)\</OutputDrop>
     <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
