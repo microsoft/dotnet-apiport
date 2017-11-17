@@ -48,7 +48,6 @@ namespace Microsoft.Fx.Portability
 
         public string ApiInfoUrl { get; set; }
 
-
         private static EndpointStatus DetermineEndpointStatus(HttpHeaders headers)
         {
             var statusHeader = GetHeaderString(headers, typeof(EndpointStatus).Name);

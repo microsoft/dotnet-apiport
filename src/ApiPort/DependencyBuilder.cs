@@ -135,7 +135,6 @@ namespace ApiPort
                     .SingleInstance();
             }
 
-
             TryLoadOffline(builder);
             TryLoadAutofacConfiguration(builder);
 

@@ -508,7 +508,6 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             return recommendations;
         }
 
-
         private static IApiRecommendations GenerateTestRecommendationsWithoutFixedEntry()
         {
             var recommendations = Substitute.For<IApiRecommendations>();

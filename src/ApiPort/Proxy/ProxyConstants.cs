@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Fx.Portability.Proxy
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+namespace Microsoft.Fx.Portability.Proxy
 {
     /// <summary>
     /// Constants used to fetch proxy settings.

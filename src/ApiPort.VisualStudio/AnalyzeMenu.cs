@@ -104,7 +104,6 @@ namespace ApiPortVS
                 return;
             }
 
-
             menuItem.Visible = projects.Any(p => p.IsDotNetProject());
 
             // Only need to check dependents if menuItem is still visible

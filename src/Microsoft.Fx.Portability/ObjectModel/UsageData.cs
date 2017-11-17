@@ -21,7 +21,6 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public int Index { get; set; }
 
-
         public override bool Equals(object obj)
         {
             var other = obj as UsageData;
