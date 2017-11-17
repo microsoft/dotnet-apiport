@@ -219,12 +219,8 @@
   <data name="HtmlReportTitle" xml:space="preserve">
     <value>.NET Portability Report</value>
   </data>
-  <data name="MoreInformationAvailableAt" xml:space="preserve">
-    <value>More information is available at</value>
-  </data>
-  <data name="MoreInformationUrl" xml:space="preserve">
-    <value>http://go.microsoft.com/fwlink/?LinkId=506955</value>
-    <comment>Link to the blog post announcing this tool's release</comment>
+  <data name="AboutTool" xml:space="preserve">
+    <value>About Tool</value>
   </data>
   <data name="TargetPlatformVersionFormat" xml:space="preserve">
     <value>Target platform {0} {1}.</value>
@@ -248,7 +244,7 @@
     <value>Failed to locate build output files.</value>
   </data>
   <data name="CopyrightFormat" xml:space="preserve">
-    <value>Microsoft (R) .NET Portability Analyzer {0} (alpha)
+    <value>Microsoft (R) .NET Portability Analyzer {0}
 Copyright (C) Microsoft Corporation. All rights reserved.</value>
     <comment>Printed in the output window before analysis</comment>
   </data>
@@ -304,5 +300,8 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="ErrorGettingInstalledPackages" xml:space="preserve">
     <value>Error getting package reference info.</value>
     <comment>Error getting package reference info.</comment>
+  </data>
+  <data name="AboutPrivacy" xml:space="preserve">
+    <value>View Privacy Statement</value>
   </data>
 </root>
