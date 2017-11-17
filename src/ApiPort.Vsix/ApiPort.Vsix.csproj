@@ -71,8 +71,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\docs\LicenseTerms\API Portability Analyzer Alpha Pre-Release License Terms.rtf">
-      <Link>Resources\API Portability Analyzer Alpha Pre-Release License Terms.rtf</Link>
+    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.rtf">
+      <Link>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.rtf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
