@@ -33,6 +33,7 @@
     <EmbeddedResource Include="TestAssets\005- ListT.ForEach.md" />
     <EmbeddedResource Include="TestAssets\006- System.Uri.md" />
     <EmbeddedResource Include="TestAssets\CategoryWithSpaces.md" />
+    <EmbeddedResource Include="TestAssets\CommentsInRecommendedChanges.md" />
     <EmbeddedResource Include="TestAssets\CorruptData.md" />
     <EmbeddedResource Include="TestAssets\DupSections.md" />
     <EmbeddedResource Include="TestAssets\Empty.md" />

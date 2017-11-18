@@ -7,11 +7,19 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Microsoft.Fx.Portability.Tests
 {
     public class BreakingChangeParserTests
     {
+        private readonly ITestOutputHelper _output;
+
+        public BreakingChangeParserTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         #region Positive Test Cases
         [Fact]
         public void VanillaParses()
@@ -144,6 +152,38 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("CategoryWithSpaces.md"), expected);
         }
 
+        [Fact]
+        public void BreakingChangeWithComments()
+        {
+            var expected = new BreakingChange
+            {
+                Title = "ASP.NET Accessibility Improvements in .NET 4.7.3",
+                ImpactScope = BreakingChangeImpact.Minor,
+                VersionBroken = Version.Parse("4.7.3"),
+                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+                IsQuirked = true,
+                IsBuildTime = false,
+                Details = "Starting with the .NET Framework 4.7.1, ASP.NET has improved how ASP.NET Web Controls work with accessibility technology in Visual Studio to better support ASP.NET customers.",
+                Suggestion = @"In order for the Visual Studio Designer to benefit from these changes
+- Install Visual Studio 2017 15.3 or later, which supports the new accessibility features with the following AppContext Switch by default.
+```xml
+<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+<runtime>
+...
+<!-- AppContextSwitchOverrides value attribute is in the form of 'key1=true|false;key2=true|false  -->
+<AppContextSwitchOverrides value=""...;Switch.UseLegacyAccessibilityFeatures=false"" />
+...
+</runtime>
+</configuration>
+```".Replace(Environment.NewLine, "\n")
+            };
+
+
+
+            ValidateParse(GetBreakingChangeMarkdown("CommentsInRecommendedChanges.md"), expected);
+        }
+
         #endregion
 
         #region Negative Test Cases
@@ -200,7 +240,25 @@ namespace Microsoft.Fx.Portability.Tests
         private Stream GetBreakingChangeMarkdown(string resourceName)
         {
             var resources = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames();
-            var name = resources.Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
+            string name = null;
+
+            try
+            {
+                name = resources.Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
+            }
+            catch (InvalidOperationException)
+            {
+                _output.WriteLine("These are the embedded resources:");
+
+                for (int i = 0; i < resources.Length; i++)
+                {
+                    var resource = resources[i];
+                    _output.WriteLine($"\t{i}: {resource}");
+                }
+
+                throw;
+            }
+
             return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
         }
 
