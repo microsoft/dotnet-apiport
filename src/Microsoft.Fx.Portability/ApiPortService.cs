@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Proxy;
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(endpoint))
             {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
             if (proxyProvider == null)
             {
@@ -75,7 +76,7 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(endpoint))
             {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
 
             _client = new CompressedHttpClient(info)
@@ -89,7 +90,7 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(endpoint))
             {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
 
             if (info == null)

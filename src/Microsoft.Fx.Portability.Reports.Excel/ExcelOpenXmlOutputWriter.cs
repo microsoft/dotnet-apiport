@@ -6,7 +6,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Fx.OpenXmlExtensions;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
-using Microsoft.Fx.Portability.Resources;
+using Microsoft.Fx.Portability.Reports.Excel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -80,12 +80,12 @@ namespace Microsoft.Fx.Portability.Reports
 
                     if (_breakingChanges.Any())
                     {
-                        GenerateBreakingChangesPage(spreadsheet.AddWorksheet("Breaking Changes"), _breakingChanges);
+                        GenerateBreakingChangesPage(spreadsheet.AddWorksheet(LocalizedStrings.BreakingChanges), _breakingChanges);
                     }
 
                     if (_analysisReport.NuGetPackages?.Any() ?? false)
                     {
-                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet("Supported Packages"), _analysisReport);
+                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet(LocalizedStrings.SupportedPackages), _analysisReport);
                     }
                 }
 

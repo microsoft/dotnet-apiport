@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
@@ -267,7 +267,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 

@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Reporting;
+using ApiPortVS.Resources;
 using ApiPortVS.Views;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -34,7 +35,7 @@ namespace ApiPortVS
 
             if (_assemblyResolver == default(AssemblyRedirectResolver))
             {
-                throw new InvalidOperationException("Could not find AssemblyRedirectResolver. It should have been resolved in the service provider.");
+                throw new InvalidOperationException(LocalizedStrings.CouldNotFindAssemblyRedirectResolver);
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -53,8 +54,7 @@ namespace ApiPortVS
         {
             base.Initialize();
 
-            OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if (null != mcs)
+            if (GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
             {
                 var menuInitializer = LocalServiceProvider.GetService(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
@@ -109,7 +109,7 @@ namespace ApiPortVS
             ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
             if ((null == window) || (null == window.Frame))
             {
-                throw new NotSupportedException("Cannot create tool window");
+                throw new NotSupportedException(LocalizedStrings.CannotCreateToolWindow);
             }
 
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;

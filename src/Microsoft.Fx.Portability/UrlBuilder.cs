@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Fx.Portability.Resources;
 
 namespace Microsoft.Fx.Portability
 {
@@ -63,7 +64,7 @@ namespace Microsoft.Fx.Portability
         {
             if (_queryStarted)
             {
-                throw new InvalidOperationException("Cannot add to the path once a query has begun");
+                throw new InvalidOperationException(LocalizedStrings.CannotAddToRunningQueryPath);
             }
 
             var newUrl = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", _url, Uri.EscapeDataString(path));

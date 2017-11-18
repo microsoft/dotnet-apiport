@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Cci.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -248,7 +249,7 @@ namespace Microsoft.Cci.Extensions
         {
             if (_coreAssemblyIdentity != null)
             {
-                throw new InvalidOperationException("The Core Assembly can only be set once.");
+                throw new InvalidOperationException(LocalizedStrings.CoreAssemblyAlreadySet);
             }
             // Lets ignore this if someone passes dummy as nothing good can come from it. We considered making it an error
             // but in some logical cases (i.e. facades) the CoreAssembly might be dummy and we don't want to start throwing
@@ -442,7 +443,7 @@ namespace Microsoft.Cci.Extensions
             var coreAssemblyFile = contractSet.FirstOrDefault(c => Path.GetFileNameWithoutExtension(c).EndsWith(coreAssemblySimpleName, StringComparison.OrdinalIgnoreCase) == true);
             if (string.IsNullOrEmpty(coreAssemblyFile))
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Could not find core assembly '{0}' in the list of contracts.", coreAssemblySimpleName));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CoreAssemblyNotFoundInContracts, coreAssemblySimpleName));
             }
 
             return coreAssemblyFile;
@@ -660,7 +661,7 @@ namespace Microsoft.Cci.Extensions
 
                 if (coreIdentity == null)
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Could not find core assembly '{0}' in the list of identities.", coreAssemblySimpleName));
+                    throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.CoreAssemblyNotFoundInIdentities, coreAssemblySimpleName));
                 }
 
                 identities = Enumerable.Concat(new List<AssemblyIdentity>() { coreIdentity }, identities.Where(ai => ai != coreIdentity));

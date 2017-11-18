@@ -117,32 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DetectingAssemblyReferences" xml:space="preserve">
-    <value>Detecting assembly references</value>
+  <data name="AssemblyHeader" xml:space="preserve">
+    <value>Header for assembly name entries</value>
   </data>
-  <data name="InfiniteTypeParentingRecursion" xml:space="preserve">
-    <value>Two types are defined which serve as each others' scope. This may be the result of assembly obfuscation.</value>
+  <data name="BreakingChanges" xml:space="preserve">
+    <value>Breaking Changes</value>
   </data>
-  <data name="InvalidAssembly" xml:space="preserve">
-    <value>Not a valid assembly</value>
+  <data name="CatalogLastUpdated" xml:space="preserve">
+    <value>API Catalog last updated on</value>
   </data>
-  <data name="InvalidAttributeProlog" xml:space="preserve">
-    <value>Invalid custom attribute prolog.</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="MetadataParsingExceptionMessage" xml:space="preserve">
-    <value>An unexpected error was encountered while parsing the metadata for the PE file located at {0}.</value>
+  <data name="DetailsPageTitle" xml:space="preserve">
+    <value>Details</value>
   </data>
-  <data name="MissingSystemObjectAssembly" xml:space="preserve">
-    <value>Cannot locate assembly information for System.Object. Microsoft assemblies found are:
-{0}</value>
+  <data name="HowToReadTheExcelTable" xml:space="preserve">
+    <value>See 'http://go.microsoft.com/fwlink/?LinkId=397652' to learn how to read this table</value>
   </data>
-  <data name="MoreParametersWereRequired" xml:space="preserve">
-    <value>More parameters were required than are available</value>
+  <data name="MissingAssembliesPageTitle" xml:space="preserve">
+    <value>Missing assemblies</value>
   </data>
-  <data name="NonPrimitiveTypeNotDefinedInAssembly" xml:space="preserve">
-    <value>All non-primitive types should be defined in an assembly</value>
+  <data name="MissingAssemblyStatus" xml:space="preserve">
+    <value>Reason</value>
   </data>
-  <data name="UnsupportedKind" xml:space="preserve">
-    <value>This kind is not supported!</value>
+  <data name="NotSupported" xml:space="preserve">
+    <value>Not supported</value>
+  </data>
+  <data name="PackageIdHeader" xml:space="preserve">
+    <value>PackageId</value>
+  </data>
+  <data name="PortabilitySummaryPageTitle" xml:space="preserve">
+    <value>Portability Summary</value>
+  </data>
+  <data name="RecommendedChanges" xml:space="preserve">
+    <value>Recommended changes</value>
+  </data>
+  <data name="SubmissionId" xml:space="preserve">
+    <value>Submission Id</value>
+  </data>
+  <data name="SupportedPackages" xml:space="preserve">
+    <value>Supported Packages</value>
+  </data>
+  <data name="TargetMemberHeader" xml:space="preserve">
+    <value>Target member</value>
+  </data>
+  <data name="Targets" xml:space="preserve">
+    <value>Targets</value>
+  </data>
+  <data name="TargetTypeHeader" xml:space="preserve">
+    <value>Target type</value>
+  </data>
+  <data name="UnresolvedUsedAssembly" xml:space="preserve">
+    <value>Unresolved assembly</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Used By</value>
+  </data>
+  <data name="TooManyColumns" xml:space="preserve">
+    <value>Only 26 colums supported overall!!</value>
   </data>
 </root>

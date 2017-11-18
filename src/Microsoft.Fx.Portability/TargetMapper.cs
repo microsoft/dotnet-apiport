@@ -218,7 +218,7 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
         {
             var pair = _map.FirstOrDefault(i => i.Value.Contains(targetName));
 
-            return pair.Key == null ? targetName : pair.Key;
+            return pair.Key ?? targetName;
         }
 
         public void AddAlias(string alias, string name)
@@ -226,7 +226,7 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
             // Verify aliases do not equal any defined target names
             if (_map.Keys.Contains(name))
             {
-                throw new TargetMapperException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCanotBeEqualToTargetNameError, name));
+                throw new TargetMapperException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, name));
             }
 
             // Create entry if it does not exist
@@ -262,7 +262,8 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
 
             if (validate && groups.Any(g => g.Length != 2))
             {
-                throw new ArgumentOutOfRangeException("aliasString", aliasString, string.Format(CultureInfo.CurrentCulture, "An alias should be separated from names by '{0}'", AliasTargetSeparator));
+                var message = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasShouldBeSeparated, AliasTargetSeparator);
+                throw new ArgumentOutOfRangeException(nameof(aliasString), aliasString, message);
             }
 
             foreach (var group in groups)

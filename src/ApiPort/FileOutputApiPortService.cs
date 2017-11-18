@@ -75,39 +75,8 @@ namespace ApiPort
 
         public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
         {
-            var targets = new[]
-            {
-                new AvailableTarget
-                {
-                    Name = "Target1",
-                    Version = Version.Parse("1.0"),
-                    Description = "Description1"
-                },
-                new AvailableTarget
-                {
-                    Name = "Target1",
-                    Version = Version.Parse("2.0"),
-                    Description = "Description2"
-                },
-                new AvailableTarget
-                {
-                    Name = "Target1",
-                    Version = Version.Parse("3.0"),
-                    Description = "Description3"
-                },
-                new AvailableTarget
-                {
-                    Name = "Target2",
-                    Version = Version.Parse("1.0"),
-                },
-                new AvailableTarget
-                {
-                    Name = "Target2",
-                    Version = Version.Parse("2.0"),
-                },
-            };
-
-            var response = ServiceResponse.Create<IEnumerable<AvailableTarget>>(targets);
+            // returning an empty enumerable because these targets are never used
+            var response = ServiceResponse.Create(Enumerable.Empty<AvailableTarget>());
 
             return Task.FromResult(response);
         }

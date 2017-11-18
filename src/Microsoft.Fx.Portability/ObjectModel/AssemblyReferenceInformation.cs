@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Globalization;
 
@@ -19,7 +20,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             Culture = culture;
             PublicKeyToken = publicKeyToken;
 
-            _string = string.Format(CultureInfo.InvariantCulture, "{0}, Version={1}, Culture={2}, PublicKeyToken={3}", Name, Version, Culture, PublicKeyToken);
+            _string = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AssemblyReferenceInformation, Name, Version, Culture, PublicKeyToken);
         }
 
         public string Name { get; }

@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPort.Resources;
 using Microsoft.Fx.Portability;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,11 +21,11 @@ namespace ApiPort
         public async Task DocIdSearchAsync()
         {
             Console.WriteLine();
-            Console.WriteLine("Enter a search query to find possible docids.");
+            Console.WriteLine(LocalizedStrings.ReplEnterQuery);
             Console.WriteLine();
-            Console.WriteLine("Options:");
-            Console.WriteLine("  #q               Exit the REPL.");
-            Console.WriteLine("  #count=[number]  Display [number] of search results.");
+            Console.WriteLine(LocalizedStrings.ReplOptionsHeader);
+            Console.WriteLine($"  {LocalizedStrings.ReplOptionExit}               {LocalizedStrings.ReplOptionExit_Text}");
+            Console.WriteLine($"  {LocalizedStrings.ReplOptionCount}{LocalizedStrings.ReplOptionCount_Text}");
             Console.WriteLine();
 
             Console.CancelKeyPress += ConsoleCancelKeyPress;
@@ -55,25 +57,24 @@ namespace ApiPort
 
                 var query = rawQuery.Trim();
 
-                if (string.Equals("#q", query, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(LocalizedStrings.ReplOptionExit, query, StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
 
-                const string hashCount = "#count=";
-                if (query.StartsWith(hashCount, StringComparison.OrdinalIgnoreCase))
+                if (query.StartsWith(LocalizedStrings.ReplOptionCount, StringComparison.OrdinalIgnoreCase))
                 {
-                    var trimmed = query.Replace(hashCount, "").Trim();
+                    var trimmed = query.Replace(LocalizedStrings.ReplOptionCount, "").Trim();
                     int updatedCount;
 
                     if (Int32.TryParse(trimmed, out updatedCount))
                     {
                         count = updatedCount;
-                        WriteColorLine($"Updated count to {count}", ConsoleColor.Yellow);
+                        WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ReplUpdatedCount, count), ConsoleColor.Yellow);
                     }
                     else
                     {
-                        WriteColorLine($"Invalid number: '{trimmed}'", ConsoleColor.Red);
+                        WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ReplInvalidNumber, trimmed), ConsoleColor.Red);
                     }
 
                     continue;
@@ -90,7 +91,7 @@ namespace ApiPort
                 }
                 else
                 {
-                    WriteColorLine($"Did not find anything for search '{query}'", ConsoleColor.Yellow);
+                    WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ReplNoResultsFound, query), ConsoleColor.Yellow);
                 }
             }
         }
@@ -100,11 +101,11 @@ namespace ApiPort
             e.Cancel = true;
         }
 
-        private static void WriteColorLine(FormattableString message, ConsoleColor color)
+        private static void WriteColorLine(string message, ConsoleColor color)
         {
             var previousColor =
 #if LINUX
-                // Console.get_ForegroundColor is unsopported by the Linux PAL
+                // Console.get_ForegroundColor is unsupported by the Linux PAL
                 ConsoleColor.White;
 #else // LINUX
                 Console.ForegroundColor;
