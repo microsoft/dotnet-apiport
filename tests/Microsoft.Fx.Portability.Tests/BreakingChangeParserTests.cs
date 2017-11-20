@@ -179,9 +179,16 @@ namespace Microsoft.Fx.Portability.Tests
 ```".Replace(Environment.NewLine, "\n")
             };
 
-
-
             ValidateParse(GetBreakingChangeMarkdown("CommentsInRecommendedChanges.md"), expected);
+        }
+
+        [Fact]
+        public void BreakingChangeMultipleLinks()
+        {
+            var expected = ListTBC.DeepCopy();
+            expected.BugLink = "https://bugrepro.org/id/105";
+
+            ValidateParse(GetBreakingChangeMarkdown("MultipleBugLinks.md"), expected);
         }
 
         #endregion
