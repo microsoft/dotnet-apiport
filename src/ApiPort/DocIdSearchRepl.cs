@@ -20,12 +20,15 @@ namespace ApiPort
 
         public async Task DocIdSearchAsync()
         {
+            var countOption = $"{LocalizedStrings.ReplOptionCount}[{LocalizedStrings.Number}]";
+            var optionColumnWidth = Math.Max(countOption.Length, LocalizedStrings.ReplOptionExit.Length);
+
             Console.WriteLine();
             Console.WriteLine(LocalizedStrings.ReplEnterQuery);
             Console.WriteLine();
             Console.WriteLine(LocalizedStrings.ReplOptionsHeader);
-            Console.WriteLine($"  {LocalizedStrings.ReplOptionExit}               {LocalizedStrings.ReplOptionExit_Text}");
-            Console.WriteLine($"  {LocalizedStrings.ReplOptionCount}{LocalizedStrings.ReplOptionCount_Text}");
+            Console.WriteLine($"  {LocalizedStrings.ReplOptionExit.PadRight(optionColumnWidth)}\t{LocalizedStrings.ReplOptionExit_Text}");
+            Console.WriteLine($"  {countOption.PadRight(optionColumnWidth)}\t{LocalizedStrings.ReplOptionCount_Text}");
             Console.WriteLine();
 
             Console.CancelKeyPress += ConsoleCancelKeyPress;
