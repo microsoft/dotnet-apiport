@@ -138,8 +138,8 @@ There is a .NET Core build of the offline mode, but HTML reports will not be gen
 
 If you have issues with proxies, please add your proxy information to the catalog script:
 
-1. Edit [`.\init.ps1` at line 19](../../init.ps1#L19)
-2. Replace Line 19 with:
+1. Edit [`.\init.ps1`](../../init.ps1)
+2. Replace the line with `Invoke-WebRequest` with:
   - If your proxy uses your default credentials: `Invoke-WebRequest $url -OutFile $OutputPath -Proxy [Proxy Address] -ProxyUseDefaultCredentials`
   - Otherwise: `Invoke-WebRequest $url -OutFile $OutputPath -Proxy [Proxy Address] -ProxyCredential [Credentials]`
 3. Run `build.cmd`
