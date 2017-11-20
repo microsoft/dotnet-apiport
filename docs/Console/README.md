@@ -57,8 +57,8 @@ ApiPort.exe analyze -f C:\git\Application\bin\Debug -b
 The `-b` flag will show any APIs that may have different behavior between
 versions of .NET Framework due to breaking changes that have been made.  The
 entire list of breaking changes in .NET Framework can be found by examining
-[Application Compatibility in the .NET Framework][Breaking Changes]. For the
-list of breaking changes we analyze against, look [here](BreakingChanges.md).
+[Application Compatibility in the .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/application-compatibility). 
+For the list of breaking changes we analyze against, look [here](../HowTo/BreakingChanges.md).
 
 **Analyzing a directory and show any non-portable APIs**
 
@@ -94,8 +94,7 @@ for using the .NET Core application include:
 ## Alternate modes
 
 The tool by default will gather the results and submit to a webservice that will
-analyze the data to determine which APIs need to be addressed. For full details
-on this process, please read the [privacy policy][Privacy Policy].  There are
+analyze the data to determine which APIs need to be addressed. There are
 two alternate modes that can be used to alter this workflow.
 
 ### See the data being transmitted
@@ -130,23 +129,23 @@ this mode, the solution must be manually built. To do so, please follow these
 steps:
 
 1. Clone the project: `git clone https://github.com/Microsoft/dotnet-apiport`
-2. Compile as normal, either using `msbuild` or Visual Studio
-3. If in Visual Studio, set the project `ApiPort.Offline` as the startup project, or if from command line, goto `bin\[Configuration]\ApiPort.Offline` and run `ApiPort.exe` from this directory
+2. Compile using the `build.cmd` or `build.sh` script as normal
+3. If in Visual Studio, set the project `ApiPort.Offline` as the startup project, or if from command line, go to `bin\[Configuration]\ApiPort.Offline\net46\win7-x64` and run `ApiPort.exe` from this directory.
+
+There is a .NET Core build of the offline mode, but HTML reports will not be generated when running on .NET Core. Other than that, the functionality is expected to be the same.
 
 ### Proxies
 
 If you have issues with proxies, please add your proxy information to the catalog script:
 
-1. Edit [`.\build\Get-CatalogFile.ps1` at line 24](https://github.com/Microsoft/dotnet-apiport/blob/master/build/Get-CatalogFile.ps1#L24)
-2. Replace Line 24 with:
+1. Edit [`.\init.ps1`](../../init.ps1)
+2. Replace the line with `Invoke-WebRequest` with:
   - If your proxy uses your default credentials: `Invoke-WebRequest $url -OutFile $OutputPath -Proxy [Proxy Address] -ProxyUseDefaultCredentials`
   - Otherwise: `Invoke-WebRequest $url -OutFile $OutputPath -Proxy [Proxy Address] -ProxyCredential [Credentials]`
 3. Run `build.cmd`
 
 Additional reports can be generated in offline mode. Any implementation of `Microsoft.Fx.Portability.Reporting.IReportWriter` can be
 used. An assembly with the name of `Microsoft.Fx.Portability.Writers.[NAME].dll` will be searched for any available implementations.
-
-Note that offline mode is not supported for .NET Core versions of ApiPort.
 
 [Breaking Changes]: https://msdn.microsoft.com/en-US/library/dn458358(v=vs.110).aspx
 [Issue #2311]: https://github.com/dotnet/cli/issues/2311
