@@ -130,7 +130,7 @@ steps:
 
 1. Clone the project: `git clone https://github.com/Microsoft/dotnet-apiport`
 2. Compile using the `build.cmd` or `build.sh` script as normal
-3. If in Visual Studio, set the project `ApiPort.Offline` as the startup project, or if from command line, goto `bin\[Configuration]\ApiPort.Offline\net46` and run `ApiPort.exe` from this directory.
+3. If in Visual Studio, set the project `ApiPort.Offline` as the startup project, or if from command line, go to `bin\[Configuration]\ApiPort.Offline\net46\win7-x64` and run `ApiPort.exe` from this directory.
 
 There is a .NET Core build of the offline mode, but HTML reports will not be generated when running on .NET Core. Other than that, the functionality is expected to be the same.
 
