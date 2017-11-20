@@ -26,4 +26,4 @@ function DownloadFile($url, $outputPath) {
 
 $address = "https://dotnetportability.blob.core.windows.net/catalog/catalog.bin"
 
-DownloadFile "$address" "$PSScriptRoot\.data\catalog1.bin"
+DownloadFile "$address" "$PSScriptRoot\.data\catalog.bin"
