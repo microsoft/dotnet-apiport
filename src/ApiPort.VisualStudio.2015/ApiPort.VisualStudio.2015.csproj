@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.4.0" />
+    <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="14.0.25424">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

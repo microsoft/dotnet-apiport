@@ -8,25 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="NSubstitute" Version="2.0.3" />
-    <PackageReference Include="System.Reflection.Metadata" Version="1.4.2" />
-    <PackageReference Include="xunit" Version="2.3.0-beta5-build3769" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta5-build3769" />
+    <PackageReference Include="NSubstitute" Version="3.1.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="EnvDTE100" Version="10.0.1" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="15.0.26606" />
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="15.4.27004" />
     <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="7.10.6071" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.Interop" Version="7.10.6071" />
     <PackageReference Include="Microsoft.VisualStudio.TextManager.Interop" Version="7.10.6070" />
     <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="15.3.224" />
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="15.4.4" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta2-build3683" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>

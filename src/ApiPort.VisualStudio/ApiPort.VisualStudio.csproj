@@ -61,10 +61,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.4.0" />
+    <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.1.192" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.5.100" />
     <PackageReference Include="VSLangProj140" Version="14.0.25029" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.3.25407" />
   </ItemGroup>
