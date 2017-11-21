@@ -362,6 +362,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to number.
+        /// </summary>
+        internal static string Number {
+            get {
+                return ResourceManager.GetString("Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to options.
         /// </summary>
         internal static string Options {
@@ -479,7 +488,7 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [number]  Display [number] of search results..
+        ///   Looks up a localized string similar to Display [number] of search results..
         /// </summary>
         internal static string ReplOptionCount_Text {
             get {

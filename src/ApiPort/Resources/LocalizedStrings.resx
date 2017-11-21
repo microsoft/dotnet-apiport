@@ -341,7 +341,7 @@ Versions marked with an asterisk (*) implies that these are default targets if n
     <value>#count=</value>
   </data>
   <data name="ReplOptionCount_Text" xml:space="preserve">
-    <value>[number]  Display [number] of search results.</value>
+    <value>Display [number] of search results.</value>
   </data>
   <data name="ReplOptionExit" xml:space="preserve">
     <value>#q</value>
@@ -357,5 +357,8 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   </data>
   <data name="UnknownCommand" xml:space="preserve">
     <value>Unknown command: {0}</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>number</value>
   </data>
 </root>
