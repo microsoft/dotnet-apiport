@@ -30,23 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="TestAssets\005- ListT.ForEach.md" />
-    <EmbeddedResource Include="TestAssets\006- System.Uri.md" />
-    <EmbeddedResource Include="TestAssets\CategoryWithSpaces.md" />
-    <EmbeddedResource Include="TestAssets\CommentsInRecommendedChanges.md" />
-    <EmbeddedResource Include="TestAssets\CorruptData.md" />
-    <EmbeddedResource Include="TestAssets\DupSections.md" />
-    <EmbeddedResource Include="TestAssets\Empty.md" />
-    <EmbeddedResource Include="TestAssets\MissingApis.md" />
-    <EmbeddedResource Include="TestAssets\MissingData.md" />
-    <EmbeddedResource Include="TestAssets\MultiBreak.md" />
-    <EmbeddedResource Include="TestAssets\PartialData.md" />
-    <EmbeddedResource Include="TestAssets\RandomText.md" />
-    <EmbeddedResource Include="TestAssets\RandomText2.md" />
-    <EmbeddedResource Include="TestAssets\Template.md" />
-    <EmbeddedResource Include="TestAssets\Application.FilterMessage.md" />
-    <EmbeddedResource Include="TestAssets\Json\FormatsHttpContent.json" />
-    <EmbeddedResource Include="TestAssets\Json\DocIdsHttpContent.json" />
+    <EmbeddedResource Include="TestAssets\**\*.md" />
+    <EmbeddedResource Include="TestAssets\**\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
