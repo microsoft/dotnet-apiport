@@ -247,11 +247,11 @@ namespace Microsoft.Fx.Portability.Tests
         private Stream GetBreakingChangeMarkdown(string resourceName)
         {
             var resources = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames();
-            string name = null;
 
             try
             {
-                name = resources.Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
+                var name = resources.Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
+                return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
             }
             catch (InvalidOperationException)
             {
@@ -266,7 +266,6 @@ namespace Microsoft.Fx.Portability.Tests
                 throw;
             }
 
-            return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
         }
 
         #endregion
