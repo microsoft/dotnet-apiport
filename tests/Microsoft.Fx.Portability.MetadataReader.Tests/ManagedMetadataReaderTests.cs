@@ -37,6 +37,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("NestedGenericTypesWithInvalidNames.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator")]
         [InlineData("modopt.dll", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
         [InlineData("modopt.dll", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
+        [InlineData("multiple-mscorlib.exe", "T:System.Func`1")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
