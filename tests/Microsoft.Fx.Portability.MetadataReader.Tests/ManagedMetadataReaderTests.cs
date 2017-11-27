@@ -16,7 +16,7 @@ using Xunit.Abstractions;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
-    public partial class ManagedMetadataReaderTests
+    public class ManagedMetadataReaderTests
     {
         private readonly ITestOutputHelper _output;
 
