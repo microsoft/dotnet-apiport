@@ -232,37 +232,7 @@ For the full privacy statement, please visit {3}</value>
   <data name="CmdAnalyzeHelp" xml:space="preserve">
     <value>Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed 
 for portability concerns or known breaking changes (depending on input parameters) and returns a report that 
-gives a summary of issues and possible steps forward.
-
-  -f, --file VALUE             [Required] Path to assembly file or directory of
-                                 assemblies.
-  -o, --out VALUE              Output file name
-  -d, --description VALUE      Description of the submission
-  -t, --target VALUE           The target you want to check against.
-  -r, --resultFormat VALUE     The report output format
-  -p, --showNonPortableApis    Calculate non-portable APIs
-  -b, --showBreakingChanges    Calculate breaking changes on full .NET Framework
-  -u, --showRetargettingIssues Include the retargetting issues in the reports  
-      --noDefaultIgnoreFile    Do not use the standard assembly ignore list
-                                 when analyzing breaking changes. The default
-                                 ignore list can be found at KnownSafeBreaks.json
-  -i, --ignoreAssemblyFile VALUE
-                               Specifies a json file defining assemblies that
-                                 should not be analyzed for specific targets
-                                 while analyzing breaking changes. This can be
-                                 useful for excluding assemblies that are known
-                                 to not regress on certain .NET Framework
-                                 versions due to breaking changes. Note that,
-                                 currently, this parameter only affects breaking
-                                 change analysis; not portability analysis.
-  -s, --suppressBreakingChange VALUE
-                               Specifies a breaking change (by ID) to suppress
-                                 during breaking change analysis. Any breaking
-                                 changes with IDs specified for suppression will
-                                 not be reported.
-      --targetMap VALUE
-                               Specifies a file to be used to map target names
-  -h, -?, --help               Show help</value>
+gives a summary of issues and possible steps forward.</value>
   </data>
   <data name="CmdListOutputFormats" xml:space="preserve">
     <value>Retrieves a list of output formats that are available in which to receive reports
@@ -270,9 +240,7 @@ gives a summary of issues and possible steps forward.
   -h, -?, --help             Show help</value>
   </data>
   <data name="CmdListTargets" xml:space="preserve">
-    <value>Retrieves a list of targets available to analyze assemblies against
-
-  -h, -?, --help             Show help</value>
+    <value>Retrieves a list of targets available to analyze assemblies against</value>
   </data>
   <data name="FileOutputServiceNotSupported" xml:space="preserve">
     <value>Analyze request file output does not support this operation</value>
@@ -360,5 +328,44 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   </data>
   <data name="Number" xml:space="preserve">
     <value>number</value>
+  </data>
+  <data name="CmdEndpoint" xml:space="preserve">
+    <value>Portability service endpoint</value>
+  </data>
+  <data name="CmdHelpAnalyzeFile" xml:space="preserve">
+    <value>Path to assembly file or directory of assemblies</value>
+  </data>
+  <data name="CmdHelpAnalyzeOut" xml:space="preserve">
+    <value>Output file name</value>
+  </data>
+  <data name="CmdHelpDescription" xml:space="preserve">
+    <value>Description of submission</value>
+  </data>
+  <data name="CmdHelpTarget" xml:space="preserve">
+    <value>The target against which to check portability</value>
+  </data>
+  <data name="CmdIgnoreAssemblyFile" xml:space="preserve">
+    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis and not portability analysis</value>
+  </data>
+  <data name="CmdNoDefaultIgnoreFile" xml:space="preserve">
+    <value>Do not use the standard assembly ignore list when analyzing breaking changes. The default list can be found at KnownSafeBreaks.json</value>
+  </data>
+  <data name="CmdResultFormat" xml:space="preserve">
+    <value>Format to display output results</value>
+  </data>
+  <data name="CmdShowBreakingChanges" xml:space="preserve">
+    <value>Calculate breaking changes across APIs in .NET Framework</value>
+  </data>
+  <data name="CmdShowNonPortableApis" xml:space="preserve">
+    <value>Calculate non-portable APIs</value>
+  </data>
+  <data name="CmdShowRetargettingIssues" xml:space="preserve">
+    <value>Include the retargetting issues in the reports</value>
+  </data>
+  <data name="CmdSuppressBreakingChange" xml:space="preserve">
+    <value>Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported</value>
+  </data>
+  <data name="CmdTargetMap" xml:space="preserve">
+    <value>Specifies a file to be use to map target names</value>
   </data>
 </root>

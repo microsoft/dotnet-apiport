@@ -1,10 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPort.CommandLine;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Xunit;
 
@@ -25,14 +23,13 @@ namespace ApiPort.Tests
                 "-f",
                 directoryPath
             };
+
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            Assert.True(options is AnalyzeOptions.AnalyzeCommandLineOption);
-            var analyzeOptions = options as AnalyzeOptions.AnalyzeCommandLineOption;
+            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.NotEmpty(options.InputAssemblies);
 
-            Assert.True(analyzeOptions.InputAssemblies.Any());
-
-            foreach (var element in analyzeOptions.InputAssemblies)
+            foreach (var element in options.InputAssemblies)
             {
                 // The bool with the meaning of 'ExplicitlySpecified' should be false
                 Assert.False(element.Value);
@@ -50,13 +47,12 @@ namespace ApiPort.Tests
             };
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
-            Assert.True(options is AnalyzeOptions.AnalyzeCommandLineOption);
 
-            var analyzeOptions = options as AnalyzeOptions.AnalyzeCommandLineOption;
-            Assert.True(analyzeOptions.InputAssemblies.Count() == 1);
+            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            var input = Assert.Single(options.InputAssemblies);
 
             // The bool with the meaning of 'ExplicitlySpecified' should be true
-            Assert.True(analyzeOptions.InputAssemblies.First().Value);
+            Assert.True(input.Value);
         }
 
         [Fact]
@@ -74,16 +70,14 @@ namespace ApiPort.Tests
             };
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            Assert.True(options is AnalyzeOptions.AnalyzeCommandLineOption);
-            var analyzeOptions = options as AnalyzeOptions.AnalyzeCommandLineOption;
-
-            Assert.True(analyzeOptions.InputAssemblies.Any());
+            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.NotEmpty(options.InputAssemblies);
 
             // The scenario tested is when an assembly is passed in twice, once explicitly and once as part of the folder
             // Assert that we test this scenario.
             Assert.Equal(Path.GetDirectoryName(currentAssemblyPath), directoryPath, StringComparer.OrdinalIgnoreCase);
 
-            foreach (var element in analyzeOptions.InputAssemblies)
+            foreach (var element in options.InputAssemblies)
             {
                 if (element.Key.Name.Equals(currentAssemblyPath, StringComparison.OrdinalIgnoreCase))
                 {
