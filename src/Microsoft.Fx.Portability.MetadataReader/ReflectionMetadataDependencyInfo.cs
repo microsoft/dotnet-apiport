@@ -19,21 +19,22 @@ namespace Microsoft.Fx.Portability.Analyzer
     {
         private readonly IEnumerable<IAssemblyFile> _inputAssemblies;
         private readonly IDependencyFilter _assemblyFilter;
-
+        private readonly SystemObjectFinder _objectFinder;
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
         private readonly ICollection<string> _assembliesWithError = new ConcurrentHashSet<string>(StringComparer.Ordinal);
         private readonly ICollection<AssemblyInfo> _userAssemblies = new ConcurrentHashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
-        private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter)
+        private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, SystemObjectFinder objectFinder)
         {
             _inputAssemblies = inputAssemblies;
             _assemblyFilter = assemblyFilter;
+            _objectFinder = objectFinder;
         }
 
-        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport)
+        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport, SystemObjectFinder objectFinder)
         {
-            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter);
+            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter, objectFinder);
 
             engine.FindDependencies(progressReport);
 
@@ -124,7 +125,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                     AddReferencedAssemblies(metadataReader);
 
-                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file);
+                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
                     helper.ComputeData();
 
                     // Remember this assembly as a user assembly.

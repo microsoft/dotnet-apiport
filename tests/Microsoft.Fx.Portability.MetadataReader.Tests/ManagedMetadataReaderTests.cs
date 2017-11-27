@@ -6,7 +6,6 @@ using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -17,7 +16,7 @@ using Xunit.Abstractions;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
-    public class ManagedMetadataReaderTests
+    public partial class ManagedMetadataReaderTests
     {
         private readonly ITestOutputHelper _output;
 
@@ -80,7 +79,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private void TestForDocIdHelper(string source, string docid, bool allowUnsafe)
         {
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
+            var filter = new AlwaysTrueDependencyFilter();
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var assemblyToTest = TestAssembly.Create(source, allowUnsafe);
             var progressReporter = Substitute.For<IProgressReporter>();
 
@@ -103,7 +103,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void VerifyDotNetFrameworkFilter()
         {
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
+            var filter = new DotNetFrameworkFilter();
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var assemblyToTest = TestAssembly.Create("FilterApis.cs");
 
             var expected = FilterApisDocIds
@@ -142,7 +143,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             .OrderBy(x => x, StringComparer.Ordinal);
 
             var assemblyName = "FilterApis";
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AssemblyNameFilter(assemblyName));
+            var filter = new AssemblyNameFilter(assemblyName);
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs");
             var progressReporter = Substitute.For<IProgressReporter>();
 
@@ -168,7 +170,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var assemblyToTest = TestAssembly.Create("EmptyProject.cs");
             var expected = EmptyProjectMemberDocId();
 
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
+            var filter = new AlwaysTrueDependencyFilter();
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
@@ -205,7 +208,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var objectDocId = "T:System.Object";
             var assemblyToTest = TestAssembly.Create("MultidimensionalPrimitiveArray.cs");
 
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(new DotNetFrameworkFilter());
+            var filter = new DotNetFrameworkFilter();
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var progressReporter = Substitute.For<IProgressReporter>();
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
 
@@ -227,7 +231,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             var dependencyFilter = Substitute.For<IDependencyFilter>();
             dependencyFilter.IsFrameworkAssembly(Arg.Any<AssemblyReferenceInformation>()).Returns(false);
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter);
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter, new SystemObjectFinder(dependencyFilter));
             var assemblyToTest = TestAssembly.Create("FilterApis.cs", false, new[] { typeof(Image).GetTypeInfo().Assembly.Location });
             var progressReporter = Substitute.For<IProgressReporter>();
 

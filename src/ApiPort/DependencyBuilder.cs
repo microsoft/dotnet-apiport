@@ -107,6 +107,9 @@ namespace ApiPort
             builder.RegisterType<ConsoleApiPort>()
                 .SingleInstance();
 
+            builder.RegisterType<SystemObjectFinder>()
+                .SingleInstance();
+
             builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
             {
                 if (opts.OutputFormats?.Any() == true)

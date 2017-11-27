@@ -25,7 +25,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void UnresolvedAssemblyTest()
         {
-            var finder = new ReflectionMetadataDependencyFinder(new AlwaysTrueDependencyFilter());
+            var filter = new AlwaysTrueDependencyFilter();
+            var finder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var progressReport = Substitute.For<IProgressReporter>();
 
             var path = this.GetType().GetTypeInfo().Assembly.Location;

@@ -10,10 +10,12 @@ namespace Microsoft.Fx.Portability.Analyzer
     public class ReflectionMetadataDependencyFinder : IDependencyFinder
     {
         private readonly IDependencyFilter _assemblyFilter;
+        private readonly SystemObjectFinder _objectFinder;
 
-        public ReflectionMetadataDependencyFinder(IDependencyFilter assemblyFilter)
+        public ReflectionMetadataDependencyFinder(IDependencyFilter assemblyFilter, SystemObjectFinder objectFinder)
         {
             _assemblyFilter = assemblyFilter ?? throw new ArgumentNullException(nameof(assemblyFilter));
+            _objectFinder = objectFinder;
         }
 
         public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> files, IProgressReporter _progressReporter)
@@ -22,7 +24,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 try
                 {
-                    return ReflectionMetadataDependencyInfo.ComputeDependencies(files, _assemblyFilter, _progressReporter);
+                    return ReflectionMetadataDependencyInfo.ComputeDependencies(files, _assemblyFilter, _progressReporter, _objectFinder);
                 }
                 catch (Exception)
                 {
