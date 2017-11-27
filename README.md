@@ -3,7 +3,10 @@
 This repository contains the source code for .NET Portability Analyzer tools and
 dependencies.
 
-[![][BuildStatus]][myget]
+|Branch|Build Status|
+|---|---|
+|master|[![][BuildStatus-Master]][myget]|
+|dev|![][BuildStatus-Dev]|
 
 For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
@@ -12,7 +15,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 ## Using this Repository
 
 ### Windows
-There is a Visual Studio extension available for VS2017 and VS2015: <a href="https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer">NETPortabilityAnalyzer</a>
+There is a Visual Studio extension available for VS2017 and VS2015: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
 
 Download and build yourself:
 1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
@@ -89,7 +92,8 @@ For an overview of all the .NET related projects, have a look at the
 
 This project is licensed under the [MIT license](LICENSE).
 
-[BuildStatus]: https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/484/badge
+[BuildStatus-Master]: https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/484/badge
+[BuildStatus-Dev]: https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/7913/badge
 [Channel 9 Video]: https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer
 [Contributing Guide]: https://github.com/dotnet/corefx/wiki/Contributing
 [Developer Guide]: https://github.com/dotnet/corefx/wiki/Developer-Guide
