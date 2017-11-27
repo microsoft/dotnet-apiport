@@ -25,6 +25,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         switch (Path.GetExtension(source).ToLowerInvariant())
             {
                 case ".dll":
+                case ".exe":
                     return new ResourceStreamAssemblyFile(source);
                 case ".cs":
                     return new CSharpCompileAssemblyFile(source, allowUnsafe, additionalReferences);
