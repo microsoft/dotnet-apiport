@@ -12,9 +12,7 @@ param(
     [ValidateSet("quiet", "minimal", "normal", "diagnostic")]
     [string]$Verbosity = "normal",
 
-    [switch]$RunTests,
-
-    [string]$VersionSuffix = "alpha"
+    [switch]$RunTests
 )
 
 $ErrorActionPreference = "Stop"
@@ -115,9 +113,6 @@ Set-DevEnvironment
 # Show the MSBuild version for failure investigations
 msbuild /version
 
-# Libraries are currently pre-release
-$env:VersionSuffix = $VersionSuffix
-
 $binFolder = [IO.Path]::Combine("bin", $Configuration)
 
 New-Item $binFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
@@ -133,7 +128,7 @@ if ($Platform -eq "AnyCPU") {
 
 Push-Location $root
 
-& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false /flp:logfile=$binFolder\msbuild.log`;verbosity=$Verbosity
+& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false "/bl:$binFolder\msbuild.binlog"
 
 Pop-Location
 

@@ -127,8 +127,9 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as
 Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
 
-To learn more about how this tool works, including the data we are collecting, 
-go here - http://go.microsoft.com/fwlink/?LinkId=397652</value>
+To learn more about how this tool works, including the data we are collecting, visit {2}.
+
+For the full privacy statement, please visit {3}</value>
   </data>
   <data name="ListOfAssembliesToAnalyze" xml:space="preserve">
     <value>Path to assembly file or directory of assemblies.</value>
@@ -308,5 +309,56 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   </data>
   <data name="Credentials_UserName" xml:space="preserve">
     <value>Username:</value>
+  </data>
+  <data name="AvailableGroupedTargets" xml:space="preserve">
+    <value>Available Grouped Targets:</value>
+  </data>
+  <data name="ProgressReportDone1" xml:space="preserve">
+    <value>[Done]</value>
+  </data>
+  <data name="ProgressReportFailed1" xml:space="preserve">
+    <value>[Failed]</value>
+  </data>
+  <data name="TooManyTargetsMessage" xml:space="preserve">
+    <value>Excel output format supports up to {0} targets for analysis at a time.</value>
+  </data>
+  <data name="InvalidParameterPassed" xml:space="preserve">
+    <value>Invalid parameter passed to {0}</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>options</value>
+  </data>
+  <data name="ReplEnterQuery" xml:space="preserve">
+    <value>Enter a search query to find possible docids.</value>
+  </data>
+  <data name="ReplInvalidNumber" xml:space="preserve">
+    <value>Invalid number: '{0}'</value>
+  </data>
+  <data name="ReplNoResultsFound" xml:space="preserve">
+    <value>Did not find anything for search '{0}'</value>
+  </data>
+  <data name="ReplOptionCount" xml:space="preserve">
+    <value>#count=</value>
+  </data>
+  <data name="ReplOptionCount_Text" xml:space="preserve">
+    <value>Display [number] of search results.</value>
+  </data>
+  <data name="ReplOptionExit" xml:space="preserve">
+    <value>#q</value>
+  </data>
+  <data name="ReplOptionExit_Text" xml:space="preserve">
+    <value>Exit the REPL.</value>
+  </data>
+  <data name="ReplOptionsHeader" xml:space="preserve">
+    <value>Options:</value>
+  </data>
+  <data name="ReplUpdatedCount" xml:space="preserve">
+    <value>Updated count to {0}</value>
+  </data>
+  <data name="UnknownCommand" xml:space="preserve">
+    <value>Unknown command: {0}</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>number</value>
   </data>
 </root>

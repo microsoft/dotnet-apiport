@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -287,7 +288,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append("(");
 
                 // Only required parameters should be listed explicitly
-                Debug.Assert(MethodSignature.ParameterTypes.Count() >= MethodSignature.RequiredParameterCount, "More parameters were required than are available");
+                Debug.Assert(MethodSignature.ParameterTypes.Count() >= MethodSignature.RequiredParameterCount, LocalizedStrings.MoreParametersWereRequired);
                 sb.Append(string.Join(",", MethodSignature.ParameterTypes.Select(m => m.ToString()).ToArray(), 0, MethodSignature.RequiredParameterCount));
 
                 // If the method is a varargs method, it should add an '__arglist' parameter

@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AssemblyHeader" xml:space="preserve">
+    <value>Header for assembly name entries</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Back to Summary</value>
+  </data>
+  <data name="BreakingChangeDisclaimer" xml:space="preserve">
+    <value>Note that simply using a potentially broken API does not mean the app will necessarily suffer from the indicated breaking change. Many breaking changes are scoped to narrow corner-cases, and apps are only affected if they use the API in a very particular way. Breaking changes below have been grouped by scope (major, minor, or edge) depending on how likely the changes are to actually break user code in cases where the given API is used. Please read the 'details' column to understand the particular circumstances in which each of the listed APIs may fail.</value>
+  </data>
+  <data name="CatalogLastUpdated" xml:space="preserve">
+    <value>API Catalog last updated on</value>
+  </data>
+  <data name="CompatibilityPageTitle" xml:space="preserve">
+    <value>Framework Compatibility</value>
+  </data>
+  <data name="CouldNotLocate" xml:space="preserve">
+    <value>Could not locate: {0}</value>
+  </data>
+  <data name="EdgeCompatIssueDescription" xml:space="preserve">
+    <value>Edge issues are those that will only impact a small minority of customers that use the given API in very specific ways. See issue details for more information.</value>
+  </data>
+  <data name="ExistingResources" xml:space="preserve">
+    <value>Existing resources:</value>
+  </data>
+  <data name="HtmlReportTitle" xml:space="preserve">
+    <value>.NET Portability Report</value>
+  </data>
+  <data name="MajorCompatIssueDescription" xml:space="preserve">
+    <value>Major issues are those that are likely to impact most customers using the given feature or API.</value>
+  </data>
+  <data name="MinorCompatIssueDescription" xml:space="preserve">
+    <value>Minor issues are those that will only impact customers using the given feature in a particular way. See issue details for more information.</value>
+  </data>
+  <data name="NotSupported" xml:space="preserve">
+    <value>Not supported</value>
+  </data>
+  <data name="PortabilitySummaryPageTitle" xml:space="preserve">
+    <value>Portability Summary</value>
+  </data>
+  <data name="RetargetingCompatIssueDescriptionPart1" xml:space="preserve">
+    <value>Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href="https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx"&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset.</value>
+  </data>
+  <data name="RetargetingCompatIssueDescriptionPart2" xml:space="preserve">
+    <value>These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a &lt;a href="https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx"&gt;TargetFrameworkAttribute&lt;/a&gt; on the assembly, using a &lt;a href="https://msdn.microsoft.com/en-us/library/bb398202.aspx"&gt;TargetFrameworkVersion&lt;/a&gt; in the project file, or using older tools at build-time, depending on the particular issue. See issue details below for more information on how these breaking changes can be avoided.</value>
+  </data>
+  <data name="RetargetingCompatIssueDescriptionPlainText" xml:space="preserve">
+    <value>Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a TargetFrameworkAttribute on the assembly, using a TargetFrameworkVersion in the project file, or using older tools at build-time, depending on the particular issue. See issue details below for more information on how these breaking changes can be avoided.</value>
+  </data>
+  <data name="RuntimeCompatIssueDescription" xml:space="preserve">
+    <value>Runtime compatibility issues are those that will occur simply by running code on a new .Net Framework version. These are the variety of breaking changes most likely to impact applications since they cannot be quirked away and do not depend on an application being recompiled.</value>
+  </data>
+  <data name="SubmissionId" xml:space="preserve">
+    <value>Submission Id</value>
+  </data>
+</root>

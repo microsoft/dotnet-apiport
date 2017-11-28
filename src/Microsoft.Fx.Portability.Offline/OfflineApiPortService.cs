@@ -142,7 +142,7 @@ namespace Microsoft.Fx.Portability
         {
             if (docIds == null)
             {
-                throw new ArgumentNullException("docIds");
+                throw new ArgumentNullException(nameof(docIds));
             }
 
             // return the ApiInformation for all valid Ids

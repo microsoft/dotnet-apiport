@@ -8,9 +8,13 @@
     <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701</NoWarn>
     <Features>IOperation;$(Features)</Features>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\rules.ruleset</CodeAnalysisRuleSet>
+    <WriteVersionInfoToBuildLog>True</WriteVersionInfoToBuildLog>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
+    <LicenseDocumentDirectory>$(MSBuildThisFileDirectory)\docs\LicenseTerms</LicenseDocumentDirectory>
+    <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE</FullLicenseFile>
     <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>
     <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(OutputFullPath)bin\$(Configuration)\</OutputDrop>
     <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
@@ -24,12 +28,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
-  </PropertyGroup>
-
-  <!-- Do not generate AssemblyInfo because we are doing that with the
-    GenerateAssemblyInfoFile target in dir.targets -->
-  <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <!-- Trying to mitigate the number of warnings that the solution contains by

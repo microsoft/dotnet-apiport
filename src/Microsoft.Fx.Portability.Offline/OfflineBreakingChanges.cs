@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Offline.Resources;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +13,7 @@ namespace Microsoft.Fx.Portability
 
         public OfflineBreakingChanges(IProgressReporter progressReporter)
         {
-            using (var progressTask = progressReporter.StartTask("Loading breaking changes"))
+            using (var progressTask = progressReporter.StartTask(LocalizedStrings.LoadingBreakingChanges))
             {
                 try
                 {

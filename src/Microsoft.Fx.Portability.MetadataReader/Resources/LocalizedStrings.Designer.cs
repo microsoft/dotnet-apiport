@@ -11,8 +11,8 @@
 namespace Microsoft.Fx.Portability.Analyzer.Resources {
     using System;
     using System.Reflection;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -20,10 +20,10 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LocalizedStrings {
+    internal class LocalizedStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -37,10 +37,10 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Fx.Portability.MetadataReader.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -52,7 +52,7 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -62,20 +62,84 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detecting assembly references.
+        /// </summary>
+        internal static string DetectingAssemblyReferences {
+            get {
+                return ResourceManager.GetString("DetectingAssemblyReferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Two types are defined which serve as each others&apos; scope. This may be the result of assembly obfuscation..
         /// </summary>
-        public static string InfiniteTypeParentingRecursion {
+        internal static string InfiniteTypeParentingRecursion {
             get {
                 return ResourceManager.GetString("InfiniteTypeParentingRecursion", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not a valid assembly.
+        /// </summary>
+        internal static string InvalidAssembly {
+            get {
+                return ResourceManager.GetString("InvalidAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid custom attribute prolog..
+        /// </summary>
+        internal static string InvalidAttributeProlog {
+            get {
+                return ResourceManager.GetString("InvalidAttributeProlog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unexpected error was encountered while parsing the metadata for the PE file located at {0}..
         /// </summary>
-        public static string MetadataParsingExceptionMessage {
+        internal static string MetadataParsingExceptionMessage {
             get {
                 return ResourceManager.GetString("MetadataParsingExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot locate assembly information for System.Object. Microsoft assemblies found are:
+        ///{0}.
+        /// </summary>
+        internal static string MissingSystemObjectAssembly {
+            get {
+                return ResourceManager.GetString("MissingSystemObjectAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More parameters were required than are available.
+        /// </summary>
+        internal static string MoreParametersWereRequired {
+            get {
+                return ResourceManager.GetString("MoreParametersWereRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All non-primitive types should be defined in an assembly.
+        /// </summary>
+        internal static string NonPrimitiveTypeNotDefinedInAssembly {
+            get {
+                return ResourceManager.GetString("NonPrimitiveTypeNotDefinedInAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This kind is not supported!.
+        /// </summary>
+        internal static string UnsupportedKind {
+            get {
+                return ResourceManager.GetString("UnsupportedKind", resourceCulture);
             }
         }
     }

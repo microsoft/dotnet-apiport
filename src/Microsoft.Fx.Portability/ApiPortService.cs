@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Proxy;
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,19 +33,26 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(endpoint))
             {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
             if (proxyProvider == null)
             {
                 throw new ArgumentNullException(nameof(proxyProvider));
             }
 
+            // Create the URI directly from a string (rather than using a hard-coded scheme or port) because 
+            // even though production use of ApiPort should always use HTTPS, developers using a non-production
+            // portability service URL (via the -e command line parameter) may need to specify a different 
+            // scheme or port.
             var uri = new Uri(endpoint);
             var proxy = proxyProvider.GetProxy(uri);
             
             // replace the handler with the proxy aware handler
             var clientHandler = new HttpClientHandler
             {
+#if !FEATURE_SERVICE_POINT_MANAGER
+                SslProtocols = CompressedHttpClient.SupportedSSLProtocols,
+#endif
                 Proxy = proxy,
                 AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
             };
@@ -68,7 +76,7 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(endpoint))
             {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
 
             _client = new CompressedHttpClient(info)
@@ -82,7 +90,7 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(endpoint))
             {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Must be a valid endpoint");
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
 
             if (info == null)

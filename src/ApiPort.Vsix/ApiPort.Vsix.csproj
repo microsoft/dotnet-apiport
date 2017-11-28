@@ -19,6 +19,8 @@
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <CreateVsixContainer>True</CreateVsixContainer>
+    <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
+    <NoWarn>CS2008;$(NoWarn)</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,13 +52,15 @@
     <EnableUnmanagedDebugging>False</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Resources\PortabilityTools.psd" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+    <None Include="UpdateVsixVersion.targets" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.1.192" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.5.100" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj">
@@ -66,6 +70,22 @@
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt">
+      <Link>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Package.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Preview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)\UpdateVsixVersion.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), PortabilityTools.VisualStudio.Imports.targets))\PortabilityTools.VisualStudio.Imports.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets')" />

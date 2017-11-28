@@ -1,20 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;netstandard1.3</TargetFrameworks>
+    <!--
+      netstandard target must be first to avoid a ResXFileCodeGenerator issue
+      (tracked at https://github.com/dotnet/project-system/issues/1519)
+    -->
+    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <DefineConstants>FEATURE_NETCORE</DefineConstants>
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'== 'net46'">
-    <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA</DefineConstants>
+    <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA;FEATURE_SERVICE_POINT_MANAGER</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.1" />
-    <PackageReference Include="System.Net.Http" Version="4.3.2" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'== 'netstandard1.3'">

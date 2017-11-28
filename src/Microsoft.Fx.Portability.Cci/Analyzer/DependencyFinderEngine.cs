@@ -77,7 +77,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     progressTask.ReportUnitComplete();
                 });
 
-
             _cachedDependencies = dependencies;
         }
 
@@ -117,7 +116,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     // error.
                     yield break;
                 }
-
 
                 // Extract the fileversion and assembly version from the assembly.
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);

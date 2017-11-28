@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Offline.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -93,7 +94,7 @@ namespace Microsoft.Fx.Portability
 
                 if (stream == null)
                 {
-                    throw new PortabilityAnalyzerException(FormattableString.Invariant($"Could not find data file '{path}'. Either ensure the file is accessible during build or place it next to ApiPort at runtime."));
+                    throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentUICulture, LocalizedStrings.DataFileNotFound, path));
                 }
 
                 return stream;

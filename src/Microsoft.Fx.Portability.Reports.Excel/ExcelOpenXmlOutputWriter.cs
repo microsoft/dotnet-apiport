@@ -1,9 +1,12 @@
-﻿using DocumentFormat.OpenXml;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Fx.OpenXmlExtensions;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
-using Microsoft.Fx.Portability.Resources;
+using Microsoft.Fx.Portability.Reports.Excel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -77,12 +80,12 @@ namespace Microsoft.Fx.Portability.Reports
 
                     if (_breakingChanges.Any())
                     {
-                        GenerateBreakingChangesPage(spreadsheet.AddWorksheet("Breaking Changes"), _breakingChanges);
+                        GenerateBreakingChangesPage(spreadsheet.AddWorksheet(LocalizedStrings.BreakingChanges), _breakingChanges);
                     }
 
                     if (_analysisReport.NuGetPackages?.Any() ?? false)
                     {
-                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet("Supported Packages"), _analysisReport);
+                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet(LocalizedStrings.SupportedPackages), _analysisReport);
                     }
                 }
 
@@ -165,7 +168,6 @@ namespace Microsoft.Fx.Portability.Reports
                 summaryPage.AddConditionalFormatting(6, analysisResult.GetAssemblyUsageInfo().Count(), 3, analysisResult.Targets.Count);
                 summaryPage.AddTable(5, tableRowCount, 1, assemblyInfoHeader.ToArray());
 
-
                 var columnWidths = new List<double>
                 {
                     ColumnWidths.SummaryPage.AssemblyName,
@@ -225,7 +227,6 @@ namespace Microsoft.Fx.Portability.Reports
 
             detailsPageHeader.AddRange(_mapper.GetTargetNames(analysisResult.Targets));
             detailsPageHeader.Add(LocalizedStrings.RecommendedChanges);
-
 
             int detailsRows = 0;
             detailsPage.AddRow(detailsPageHeader.ToArray());

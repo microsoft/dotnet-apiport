@@ -64,9 +64,9 @@ namespace Microsoft.Fx.Portability.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Alias cannot be equal to a target name: &apos;{0}&apos;.
         /// </summary>
-        public static string AliasCanotBeEqualToTargetNameError {
+        public static string AliasCannotBeEqualToTargetNameError {
             get {
-                return ResourceManager.GetString("AliasCanotBeEqualToTargetNameError", resourceCulture);
+                return ResourceManager.GetString("AliasCannotBeEqualToTargetNameError", resourceCulture);
             }
         }
         
@@ -80,6 +80,15 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An alias should be separated from names by &apos;{0}&apos;.
+        /// </summary>
+        public static string AliasShouldBeSeparated {
+            get {
+                return ResourceManager.GetString("AliasShouldBeSeparated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Analyzing compatibility.
         /// </summary>
         public static string AnalyzingCompatibility {
@@ -89,47 +98,20 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assembly.
+        ///   Looks up a localized string similar to {0}, Version={1}, Culture={2}, PublicKeyToken={3}.
         /// </summary>
-        public static string AssemblyHeader {
+        public static string AssemblyReferenceInformation {
             get {
-                return ResourceManager.GetString("AssemblyHeader", resourceCulture);
+                return ResourceManager.GetString("AssemblyReferenceInformation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available Grouped Targets:.
+        ///   Looks up a localized string similar to Cannot add to the path once a query has begun.
         /// </summary>
-        public static string AvailableGroupedTargets {
+        public static string CannotAddToRunningQueryPath {
             get {
-                return ResourceManager.GetString("AvailableGroupedTargets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Back to Summary.
-        /// </summary>
-        public static string BackToSummary {
-            get {
-                return ResourceManager.GetString("BackToSummary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Note that simply using a potentially broken API does not mean the app will necessarily suffer from the indicated breaking change. Many breaking changes are scoped to narrow corner-cases, and apps are only affected if they use the API in a very particular way. Breaking changes below have been grouped by scope (major, minor, or edge) depending on how likely the changes are to actually break user code in cases where the given API is used. Please read the &apos;details&apos; column to understand the particular circumstan [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string BreakingChangeDisclaimer {
-            get {
-                return ResourceManager.GetString("BreakingChangeDisclaimer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to API Catalog last updated on.
-        /// </summary>
-        public static string CatalogLastUpdated {
-            get {
-                return ResourceManager.GetString("CatalogLastUpdated", resourceCulture);
+                return ResourceManager.GetString("CannotAddToRunningQueryPath", resourceCulture);
             }
         }
         
@@ -139,15 +121,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string ChangingFileExtension {
             get {
                 return ResourceManager.GetString("ChangingFileExtension", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Framework Compatibility.
-        /// </summary>
-        public static string CompatibilityPageTitle {
-            get {
-                return ResourceManager.GetString("CompatibilityPageTitle", resourceCulture);
             }
         }
         
@@ -170,47 +143,11 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Description.
-        /// </summary>
-        public static string Description {
-            get {
-                return ResourceManager.GetString("Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Details.
-        /// </summary>
-        public static string DetailsPageTitle {
-            get {
-                return ResourceManager.GetString("DetailsPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Detecting assembly references.
-        /// </summary>
-        public static string DetectingAssemblyReferences {
-            get {
-                return ResourceManager.GetString("DetectingAssemblyReferences", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Duplicate alias: &apos;{0}&apos;.
         /// </summary>
         public static string DuplicateAliasError {
             get {
                 return ResourceManager.GetString("DuplicateAliasError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edge issues are those that will only impact a small minority of customers that use the given API in very specific ways. See issue details for more information..
-        /// </summary>
-        public static string EdgeCompatIssueDescription {
-            get {
-                return ResourceManager.GetString("EdgeCompatIssueDescription", resourceCulture);
             }
         }
         
@@ -233,30 +170,12 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to See &apos;http://go.microsoft.com/fwlink/?LinkId=397652&apos; to learn how to read this table.
-        /// </summary>
-        public static string HowToReadTheExcelTable {
-            get {
-                return ResourceManager.GetString("HowToReadTheExcelTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to In order to specify a version, please use the following format with the &apos;-targets&apos; option:
         ///	(Target Name), Version=(Version).
         /// </summary>
         public static string HowToSpecifyVersion {
             get {
                 return ResourceManager.GetString("HowToSpecifyVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .NET Portability Report.
-        /// </summary>
-        public static string HtmlReportTitle {
-            get {
-                return ResourceManager.GetString("HtmlReportTitle", resourceCulture);
             }
         }
         
@@ -324,15 +243,6 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Major issues are those that are likely to impact most customers using the given feature or API..
-        /// </summary>
-        public static string MajorCompatIssueDescription {
-            get {
-                return ResourceManager.GetString("MajorCompatIssueDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Malformed map: {0}.
         /// </summary>
         public static string MalformedMap {
@@ -351,38 +261,11 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minor issues are those that will only impact customers using the given feature in a particular way. See issue details for more information..
+        ///   Looks up a localized string similar to Must be a valid endpoint.
         /// </summary>
-        public static string MinorCompatIssueDescription {
+        public static string MustBeValidEndpoint {
             get {
-                return ResourceManager.GetString("MinorCompatIssueDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Missing assemblies.
-        /// </summary>
-        public static string MissingAssembliesPageTitle {
-            get {
-                return ResourceManager.GetString("MissingAssembliesPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot locate assembly info for System.Object.
-        /// </summary>
-        public static string MissingAssemblyInfo {
-            get {
-                return ResourceManager.GetString("MissingAssemblyInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reason.
-        /// </summary>
-        public static string MissingAssemblyStatus {
-            get {
-                return ResourceManager.GetString("MissingAssemblyStatus", resourceCulture);
+                return ResourceManager.GetString("MustBeValidEndpoint", resourceCulture);
             }
         }
         
@@ -419,24 +302,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string OverwriteFile {
             get {
                 return ResourceManager.GetString("OverwriteFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PackageId.
-        /// </summary>
-        public static string PackageIdHeader {
-            get {
-                return ResourceManager.GetString("PackageIdHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Portability Summary.
-        /// </summary>
-        public static string PortabilitySummaryPageTitle {
-            get {
-                return ResourceManager.GetString("PortabilitySummaryPageTitle", resourceCulture);
             }
         }
         
@@ -495,47 +360,11 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recommended changes.
-        /// </summary>
-        public static string RecommendedChanges {
-            get {
-                return ResourceManager.GetString("RecommendedChanges", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Request to service is too large. Send fewer assemblies for analysis. Content length: {0} bytes.
         /// </summary>
         public static string RequestTooLargeMessage {
             get {
                 return ResourceManager.GetString("RequestTooLargeMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset..
-        /// </summary>
-        public static string RetargetingCompatIssueDescriptionPart1 {
-            get {
-                return ResourceManager.GetString("RetargetingCompatIssueDescriptionPart1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; on the assembly, using a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/bb398202.aspx&quot;&gt;TargetFrameworkVersion&lt;/a&gt; in the project file, or using older tools at build-time, depending on the particular issue. See issue details [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string RetargetingCompatIssueDescriptionPart2 {
-            get {
-                return ResourceManager.GetString("RetargetingCompatIssueDescriptionPart2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a TargetFrameworkAttribute on the assembly, using a TargetFrameworkVersion in the project file, or using older tools at build-time, depending on the particular issue. See issue details below for more information on how these breaking changes [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string RetargetingCompatIssueDescriptionPlainText {
-            get {
-                return ResourceManager.GetString("RetargetingCompatIssueDescriptionPlainText", resourceCulture);
             }
         }
         
@@ -558,15 +387,6 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Runtime compatibility issues are those that will occur simply by running code on a new .Net Framework version. These are the variety of breaking changes most likely to impact applications since they cannot be quirked away and do not depend on an application being recompiled..
-        /// </summary>
-        public static string RuntimeCompatIssueDescription {
-            get {
-                return ResourceManager.GetString("RuntimeCompatIssueDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Warning: A newer version of the application is available. Please update to the latest version to continue using this service.
         /// </summary>
         public static string ServerEndpointDeprecated {
@@ -581,15 +401,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string ServerEndpointMovedPermanently {
             get {
                 return ResourceManager.GetString("ServerEndpointMovedPermanently", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Submission Id.
-        /// </summary>
-        public static string SubmissionId {
-            get {
-                return ResourceManager.GetString("SubmissionId", resourceCulture);
             }
         }
         
@@ -612,29 +423,11 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target member.
-        /// </summary>
-        public static string TargetMemberHeader {
-            get {
-                return ResourceManager.GetString("TargetMemberHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Targets.
         /// </summary>
         public static string Targets {
             get {
                 return ResourceManager.GetString("Targets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Target type.
-        /// </summary>
-        public static string TargetTypeHeader {
-            get {
-                return ResourceManager.GetString("TargetTypeHeader", resourceCulture);
             }
         }
         
@@ -675,15 +468,6 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not find file: &apos;{0}&apos;.
-        /// </summary>
-        public static string UnknownFile {
-            get {
-                return ResourceManager.GetString("UnknownFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unknown output format: &apos;{0}&apos;.
         /// </summary>
         public static string UnknownResultFormat {
@@ -698,24 +482,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string UnknownTarget {
             get {
                 return ResourceManager.GetString("UnknownTarget", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unresolved assembly.
-        /// </summary>
-        public static string UnresolvedUsedAssembly {
-            get {
-                return ResourceManager.GetString("UnresolvedUsedAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Used By.
-        /// </summary>
-        public static string UsedBy {
-            get {
-                return ResourceManager.GetString("UsedBy", resourceCulture);
             }
         }
         

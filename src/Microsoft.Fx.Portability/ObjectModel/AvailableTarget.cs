@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -23,7 +23,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override string ToString()
         {
-            return FormattableString.Invariant($"{Name}, v{Version}, Targets: [{string.Join(",", ExpandedTargets)}]");
+            return FormattableString.Invariant($"{Name}, v{Version}, {LocalizedStrings.Targets}: [{string.Join(",", ExpandedTargets)}]");
         }
     }
 }

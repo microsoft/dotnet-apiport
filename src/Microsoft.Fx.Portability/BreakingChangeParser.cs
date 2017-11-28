@@ -201,9 +201,12 @@ namespace Microsoft.Fx.Portability
                                 && int.TryParse(contents.Substring(startIndex + 1), out id))
                             {
                                 currentBreak.Id = id.ToString(CultureInfo.InvariantCulture);
+                                state = ParseState.None;
                             }
-
-                            state = ParseState.None;
+                            else
+                            {
+                                ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
+                            }
                         }
                         // Otherwise, process according to our current state
                         else
@@ -230,7 +233,10 @@ namespace Microsoft.Fx.Portability
                 case ParseState.None:
                     return;
                 case ParseState.OriginalBug:
-                    currentBreak.BugLink = currentLine.Trim();
+                    if (string.IsNullOrEmpty(currentBreak.BugLink))
+                    {
+                        currentBreak.BugLink = currentLine.Trim();
+                    }
                     break;
                 case ParseState.Scope:
                     BreakingChangeImpact scope;
@@ -318,7 +324,7 @@ namespace Microsoft.Fx.Portability
                     {
                         throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, category));
                     }
-                    currentBreak.Categories.Add(category);
+                    currentBreak.Categories.Add(category.Trim());
                     break;
                 default:
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidBreakingChangeParserState, state.ToString()));

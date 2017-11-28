@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,6 +23,7 @@ namespace ApiPortVS
     internal class AnalyzeMenu
     {
         private readonly IOutputWindowWriter _output;
+        private readonly ProductInformation _productInfo;
         private readonly DTE _dte;
         private readonly ILifetimeScope _scope;
 
@@ -32,6 +32,7 @@ namespace ApiPortVS
             _scope = scope;
             _dte = dte;
             _output = output;
+            _productInfo = new ProductInformation("AnalyzeMenu");
         }
 
         public async void AnalyzeSelectedProjectsAsync(bool includeDependencies)
@@ -104,7 +105,6 @@ namespace ApiPortVS
                 return;
             }
 
-
             menuItem.Visible = projects.Any(p => p.IsDotNetProject());
 
             // Only need to check dependents if menuItem is still visible
@@ -170,9 +170,10 @@ namespace ApiPortVS
             await _output.ClearWindowAsync().ConfigureAwait(false);
 
             var header = new StringBuilder();
-            var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            header.AppendLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CopyrightFormat, assemblyVersion));
-            header.AppendLine(string.Concat(CultureInfo.CurrentCulture, LocalizedStrings.MoreInformationAvailableAt, " ", LocalizedStrings.MoreInformationUrl));
+
+            header.AppendLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CopyrightFormat, _productInfo.Version));
+            header.AppendLine(string.Concat(CultureInfo.CurrentCulture, LocalizedStrings.AboutTool, " ", DocumentationLinks.About));
+            header.AppendLine(string.Concat(CultureInfo.CurrentCulture, LocalizedStrings.AboutPrivacy, " ", DocumentationLinks.PrivacyPolicy));
 
             _output.WriteLine(header.ToString());
         }

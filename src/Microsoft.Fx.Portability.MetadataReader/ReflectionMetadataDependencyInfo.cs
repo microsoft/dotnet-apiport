@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.Analyzer.Resources;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
@@ -18,21 +19,22 @@ namespace Microsoft.Fx.Portability.Analyzer
     {
         private readonly IEnumerable<IAssemblyFile> _inputAssemblies;
         private readonly IDependencyFilter _assemblyFilter;
-
+        private readonly SystemObjectFinder _objectFinder;
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
         private readonly ICollection<string> _assembliesWithError = new ConcurrentHashSet<string>(StringComparer.Ordinal);
         private readonly ICollection<AssemblyInfo> _userAssemblies = new ConcurrentHashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
-        private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter)
+        private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, SystemObjectFinder objectFinder)
         {
             _inputAssemblies = inputAssemblies;
             _assemblyFilter = assemblyFilter;
+            _objectFinder = objectFinder;
         }
 
-        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport)
+        public static ReflectionMetadataDependencyInfo ComputeDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, IProgressReporter progressReport, SystemObjectFinder objectFinder)
         {
-            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter);
+            var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter, objectFinder);
 
             engine.FindDependencies(progressReport);
 
@@ -76,7 +78,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                         if (m.DefinedInAssemblyIdentity == null && !dependencies.IsPrimitive)
                         {
-                            throw new InvalidOperationException("All non-primitive types should be defined in an assembly");
+                            throw new InvalidOperationException(LocalizedStrings.NonPrimitiveTypeNotDefinedInAssembly);
                         }
 
                         // Add this memberinfo
@@ -123,7 +125,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
                     AddReferencedAssemblies(metadataReader);
 
-                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file);
+                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
                     helper.ComputeData();
 
                     // Remember this assembly as a user assembly.
@@ -136,8 +138,10 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
                 if (exc is InvalidPEAssemblyException) throw;
+                // Occurs when we cannot find the System.Object assembly.
+                if (exc is SystemObjectNotFoundException) throw;
 
-                // Other exceptions are unexpected, though, and wil benefit from
+                // Other exceptions are unexpected, though, and will benefit from
                 // more details on the scenario that hit them
                 throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MetadataParsingExceptionMessage, file.Name), exc);
             }
@@ -195,7 +199,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private class InvalidPEAssemblyException : Exception
         {
             public InvalidPEAssemblyException(Exception inner)
-                : base("Not a valid assembly", inner)
+                : base(LocalizedStrings.InvalidAssembly, inner)
             { }
         }
 

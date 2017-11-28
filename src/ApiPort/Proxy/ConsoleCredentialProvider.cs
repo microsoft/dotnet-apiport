@@ -1,4 +1,7 @@
-﻿using ApiPort.Resources;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using ApiPort.Resources;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Proxy;
 using System;

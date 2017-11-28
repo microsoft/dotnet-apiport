@@ -9,8 +9,7 @@ namespace Foo
     {
         public static void Test()
         {
-            Uri uri;
-            Uri.TryCreate("uri", UriKind.RelativeOrAbsolute, out uri);
+            Uri.TryCreate("randomUri", UriKind.Relative, out Uri testResult);
 
             Console.WriteLine(Microsoft.Bar.Test<int>.Get());
             Console.WriteLine(Other.Test<int>.Get());

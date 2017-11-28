@@ -107,6 +107,9 @@ namespace ApiPort
             builder.RegisterType<ConsoleApiPort>()
                 .SingleInstance();
 
+            builder.RegisterType<SystemObjectFinder>()
+                .SingleInstance();
+
             builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
             {
                 if (opts.OutputFormats?.Any() == true)
@@ -134,7 +137,6 @@ namespace ApiPort
                     .As<IProgressReporter>()
                     .SingleInstance();
             }
-
 
             TryLoadOffline(builder);
             TryLoadAutofacConfiguration(builder);

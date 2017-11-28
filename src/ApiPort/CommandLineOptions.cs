@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPort.CommandLine;
+using ApiPort.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -62,13 +64,13 @@ namespace ApiPort
             if (!string.IsNullOrEmpty(suppliedCommand) && command == null)
             {
                 Console.WriteLine();
-                Program.WriteColorLine(FormattableString.Invariant($"Unknown command: {suppliedCommand}"), ConsoleColor.Red);
+                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownCommand, suppliedCommand), ConsoleColor.Red);
             }
             else if (error)
             {
                 Console.WriteLine();
                 // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
-                Program.WriteColorLine(FormattableString.Invariant($"Invalid parameter passed to {suppliedCommand}"), ConsoleColor.Red);
+                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidParameterPassed, suppliedCommand), ConsoleColor.Red);
             }
 
             var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
@@ -87,7 +89,7 @@ namespace ApiPort
             {
                 Console.WriteLine();
                 Console.WriteLine(new string('=', Math.Min(Console.WindowWidth, 100)));
-                Program.WriteColorLine(FormattableString.Invariant($"{path} {displayCommand.Name} [options]"), ConsoleColor.Yellow);
+                Program.WriteColorLine(FormattableString.Invariant($"{path} {displayCommand.Name} [{LocalizedStrings.Options}]"), ConsoleColor.Yellow);
                 Console.WriteLine();
                 Console.WriteLine(displayCommand.HelpMessage);
             }

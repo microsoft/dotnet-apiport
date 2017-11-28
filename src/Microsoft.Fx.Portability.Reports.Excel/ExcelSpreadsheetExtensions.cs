@@ -1,6 +1,10 @@
-﻿using DocumentFormat.OpenXml;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Fx.Portability.Reports.Excel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -285,7 +289,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
             // only support up to 26 columns for now..
 
             if (columnStart + columnCount > 26)
-                throw new NotSupportedException("Only 26 colums supported overall!!");
+            {
+                throw new NotSupportedException(LocalizedStrings.TooManyColumns);
+            }
 
             return string.Format(CultureInfo.CurrentCulture, "{0}{1}:{2}{3}", (char)(((uint)'A') + columnStart - 1), rowStart, (char)(((uint)'A') + columnStart + columnCount - 2), rowStart + rowCount - 1);
         }

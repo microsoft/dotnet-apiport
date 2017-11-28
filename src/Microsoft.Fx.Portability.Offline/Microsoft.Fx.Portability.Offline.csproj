@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.4.0" />
+    <PackageReference Include="Autofac" Version="4.6.2" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -36,8 +36,23 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\LocalizedStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LocalizedStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\LocalizedStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <Target Name="DownloadContent" BeforeTargets="BeforeBuild">
-    <Warning Text="Could not find catalog.bin. Please run build\restore.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
+    <Warning Text="Could not find catalog.bin. Please run init.ps1 to download the file" Condition="!Exists($(CatalogDataFile))" />
   </Target>
 
 </Project>

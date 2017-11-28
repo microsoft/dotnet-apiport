@@ -12,7 +12,6 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         public string DocId { get; set; }
         public string RecommendedChanges { get; protected set; }
 
-
         public MissingInfo(string docId)
         {
             DocId = docId;

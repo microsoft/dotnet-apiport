@@ -7,11 +7,19 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Microsoft.Fx.Portability.Tests
 {
     public class BreakingChangeParserTests
     {
+        private readonly ITestOutputHelper _output;
+
+        public BreakingChangeParserTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         #region Positive Test Cases
         [Fact]
         public void VanillaParses()
@@ -130,8 +138,60 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("RandomText2.md"), new BreakingChange[0]);
         }
 
-        #endregion
+        [Fact]
+        public void CategoryWithSpace()
+        {
+            var expected = new BreakingChange
+            {
+                Title = "List<T>.ForEach",
+                ImpactScope = BreakingChangeImpact.Minor,
+                VersionBroken = Version.Parse("4.6.2"),
+                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Available
+            };
 
+            ValidateParse(GetBreakingChangeMarkdown("CategoryWithSpaces.md"), expected);
+        }
+
+        [Fact]
+        public void BreakingChangeWithComments()
+        {
+            var expected = new BreakingChange
+            {
+                Title = "ASP.NET Accessibility Improvements in .NET 4.7.3",
+                ImpactScope = BreakingChangeImpact.Minor,
+                VersionBroken = Version.Parse("4.7.3"),
+                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+                IsQuirked = true,
+                IsBuildTime = false,
+                Details = "Starting with the .NET Framework 4.7.1, ASP.NET has improved how ASP.NET Web Controls work with accessibility technology in Visual Studio to better support ASP.NET customers.",
+                Suggestion = @"In order for the Visual Studio Designer to benefit from these changes
+- Install Visual Studio 2017 15.3 or later, which supports the new accessibility features with the following AppContext Switch by default.
+```xml
+<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+<runtime>
+...
+<!-- AppContextSwitchOverrides value attribute is in the form of 'key1=true|false;key2=true|false  -->
+<AppContextSwitchOverrides value=""...;Switch.UseLegacyAccessibilityFeatures=false"" />
+...
+</runtime>
+</configuration>
+```".Replace(Environment.NewLine, "\n")
+            };
+
+            ValidateParse(GetBreakingChangeMarkdown("CommentsInRecommendedChanges.md"), expected);
+        }
+
+        [Fact]
+        public void BreakingChangeMultipleLinks()
+        {
+            var expected = ListTBC.DeepCopy();
+            expected.BugLink = "https://bugrepro.org/id/105";
+
+            ValidateParse(GetBreakingChangeMarkdown("MultipleBugLinks.md"), expected);
+        }
+
+        #endregion
 
         #region Negative Test Cases
         // This is intentionally empty as the breaking change parser is never expected
@@ -139,7 +199,6 @@ namespace Microsoft.Fx.Portability.Tests
         // partially correct breaking changes or, in the worst case, an empty set of breaks.
 
         #endregion
-
 
         #region Helper Methods
         private void ValidateParse(Stream markdown, params BreakingChange[] expected)
@@ -187,12 +246,29 @@ namespace Microsoft.Fx.Portability.Tests
 
         private Stream GetBreakingChangeMarkdown(string resourceName)
         {
-            var name = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
-            return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
+            var resources = typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceNames();
+
+            try
+            {
+                var name = resources.Single(n => n.EndsWith(resourceName, StringComparison.Ordinal));
+                return typeof(BreakingChangeParserTests).GetTypeInfo().Assembly.GetManifestResourceStream(name);
+            }
+            catch (InvalidOperationException)
+            {
+                _output.WriteLine("These are the embedded resources:");
+
+                for (int i = 0; i < resources.Length; i++)
+                {
+                    var resource = resources[i];
+                    _output.WriteLine($"\t{i}: {resource}");
+                }
+
+                throw;
+            }
+
         }
 
         #endregion
-
 
         #region Expected Breaking Changes
         public static BreakingChange TemplateBC = new BreakingChange

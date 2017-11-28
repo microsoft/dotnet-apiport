@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
-using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
@@ -13,14 +12,15 @@ namespace Microsoft.Fx.Portability.Analyzer
     {
         private readonly IDependencyFilter _assemblyFilter;
         private readonly MetadataReader _reader;
-
+        private readonly SystemObjectFinder _objectFinder;
         private readonly AssemblyReferenceInformation _currentAssemblyInfo;
         private readonly string _currentAssemblyName;
 
-        public DependencyFinderEngineHelper(IDependencyFilter assemblyFilter, MetadataReader metadataReader, IAssemblyFile file)
+        public DependencyFinderEngineHelper(IDependencyFilter assemblyFilter, MetadataReader metadataReader, IAssemblyFile file, SystemObjectFinder objectFinder)
         {
             _assemblyFilter = assemblyFilter;
             _reader = metadataReader;
+            _objectFinder = objectFinder;
 
             MemberDependency = new List<MemberDependency>();
             CallingAssembly = new AssemblyInfo
@@ -44,7 +44,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public void ComputeData()
         {
-            AssemblyReferenceInformation systemObjectAssembly = null;
+            // Primitives need to have their assembly set, so we search for a
+            // reference to System.Object that is considered a possible
+            // framework assembly and use that for any primitives that don't
+            // have an assembly
+            var systemObjectAssembly = _objectFinder.GetSystemRuntimeAssemblyInformation(_reader);
 
             var provider = new MemberMetadataInfoTypeProvider(_reader);
 
@@ -62,16 +66,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         MemberDependency.Add(typeReferenceMemberDependency);
                     }
-
-                    // Primitives need to have their assembly set, so we search for a reference to System.Object that is considered a possible framework
-                    // assembly and use that for any primitives that don't have an assembly
-                    if (systemObjectAssembly == null
-                        && string.Equals(typeInfo.Namespace, "System", StringComparison.Ordinal)
-                        && string.Equals(typeInfo.Name, "Object", StringComparison.Ordinal)
-                        && _assemblyFilter.IsFrameworkAssembly(assembly))
-                    {
-                        systemObjectAssembly = assembly;
-                    }
                 }
                 catch (BadImageFormatException)
                 {
@@ -82,11 +76,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                     // we can skip such malformed references and just analyze those
                     // that we can successfully decode.
                 }
-            }
-
-            if (systemObjectAssembly == null)
-            {
-                throw new PortabilityAnalyzerException(LocalizedStrings.MissingAssemblyInfo);
             }
 
             // Get member references

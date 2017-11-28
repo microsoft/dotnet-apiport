@@ -8,16 +8,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ApiPort
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
-            var productInformation = new ProductInformation("ApiPort_Console", typeof(Program));
+            var productInformation = new ProductInformation("ApiPort_Console");
 
-            Console.WriteLine(LocalizedStrings.Header, LocalizedStrings.ApplicationName, productInformation.Version);
+            Console.WriteLine(LocalizedStrings.Header, LocalizedStrings.ApplicationName, productInformation.InformationalVersion, DocumentationLinks.About, DocumentationLinks.PrivacyPolicy);
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
@@ -39,24 +40,26 @@ namespace ApiPort
                     switch (options.Command)
                     {
                         case AppCommands.ListTargets:
-                            client.ListTargetsAsync().Wait();
+                            await client.ListTargetsAsync();
                             break;
                         case AppCommands.AnalyzeAssemblies:
-                            client.AnalyzeAssembliesAsync().Wait();
+                            await client.AnalyzeAssembliesAsync();
                             break;
                         case AppCommands.DocIdSearch:
-                            client.RunDocIdSearchAsync().Wait();
+                            await client.RunDocIdSearchAsync();
                             break;
                         case AppCommands.ListOutputFormats:
-                            client.ListOutputFormatsAsync().Wait();
+                            await client.ListOutputFormatsAsync();
                             break;
                     }
 
                     return 0;
                 }
-                catch (Autofac.Core.DependencyResolutionException ex) when (ex.InnerException is PortabilityAnalyzerException)
+                catch (Autofac.Core.DependencyResolutionException ex) when (GetPortabilityException(ex) is PortabilityAnalyzerException p)
                 {
-                    WriteException(ex.InnerException);
+                    Trace.TraceError(ex.ToString());
+
+                    WriteException(p);
                 }
                 catch (PortabilityAnalyzerException ex)
                 {
@@ -119,6 +122,21 @@ namespace ApiPort
                 WriteError(ex.InnerException.ToString());
             }
 #endif // DEBUG
+        }
+
+        private static PortabilityAnalyzerException GetPortabilityException(Exception e)
+        {
+            while (e != null)
+            {
+                if (e is PortabilityAnalyzerException p)
+                {
+                    return p;
+                }
+
+                e = e.InnerException;
+            }
+
+            return null;
         }
 
         private static IEnumerable<Exception> GetRecursiveInnerExceptions(Exception ex)

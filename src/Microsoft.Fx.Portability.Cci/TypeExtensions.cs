@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Cci.Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -155,7 +156,7 @@ namespace Microsoft.Cci.Extensions
             if (member != null)
                 return member.ContainingType.GetAssemblyReference();
 
-            throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, "Unknown IReference '{0}' so we cannot get assembly reference!", reference.GetType().FullName));
+            throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownIReference, reference.GetType().FullName));
         }
 
         public static bool IsGenericParameter(this ITypeReference type)
@@ -255,7 +256,7 @@ namespace Microsoft.Cci.Extensions
             if (nType != null)
                 return nType.Name.Value;
 
-            throw new NotImplementedException("Called .Name on a currently unsupported type definition!");
+            throw new NotImplementedException(LocalizedStrings.CalledNameOnUnsupportedDefinition);
         }
 
         public static string FullName(this IReference reference)
@@ -278,8 +279,8 @@ namespace Microsoft.Cci.Extensions
             if (named != null)
                 return named.Name.Value;
 
-            Contract.Assert(false, String.Format(CultureInfo.CurrentCulture, "Fell through cases in TypeExtensions.FullName() Type of reference: {0}", reference.GetType()));
-            return "<Unknown Reference Type>";
+            Contract.Assert(false, String.Format(CultureInfo.CurrentCulture, LocalizedStrings.FellThroughCasesIn, "TypeExtensions.FullName()", reference.GetType()));
+            return LocalizedStrings.UnknownReferenceType;
         }
 
         public static string GetMethodSignature(this IMethodDefinition method)
@@ -308,7 +309,7 @@ namespace Microsoft.Cci.Extensions
                 return assembly.DocId();
 
             // Include the hash code as well to make it unique so we can use this for a key
-            return "<Unknown Reference Type>" + reference.GetHashCode().ToString(CultureInfo.InvariantCulture);
+            return LocalizedStrings.UnknownReferenceType + reference.GetHashCode().ToString(CultureInfo.InvariantCulture);
         }
 
         public static IEnumerable<INamespaceDefinition> GetAllNamespaces(this IAssembly assembly)
@@ -432,7 +433,7 @@ namespace Microsoft.Cci.Extensions
                 || reference is IGenericTypeParameterReference
                 || reference is IGenericMethodParameterReference
                 || reference is IFunctionPointerTypeReference,
-                string.Format(CultureInfo.CurrentCulture, "Unexpected type reference that we may need to unwrap {0}", (reference != null ? reference.GetType().FullName : "null")));
+                string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnexpectedTypeReference, (reference?.GetType()?.FullName ?? "null")));
 
             return reference;
         }
