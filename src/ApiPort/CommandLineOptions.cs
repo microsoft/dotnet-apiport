@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPort.CommandLine;
 using ApiPort.Resources;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
@@ -15,13 +14,13 @@ namespace ApiPort
 {
     internal static class CommandLineOptions
     {
-        private const string DefaultName = "ApiPortAnalysis";
+        public const string DefaultName = "ApiPortAnalysis";
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
             bool overwriteOutput = false;
             IReadOnlyList<string> file = Array.Empty<string>();
-            string outFile = string.Empty;
+            string outFile = DefaultName;
             string description = string.Empty;
             IReadOnlyList<string> target = Array.Empty<string>();
             IReadOnlyList<string> result = Array.Empty<string>();
@@ -35,38 +34,59 @@ namespace ApiPort
             string endpoint = "https://portability.dot.net";
             AppCommands command = default;
 
-            ArgumentSyntax.Parse(args, syntax =>
+            ArgumentSyntax argSyntax = default;
+            try
             {
-                syntax.DefineCommand("analyze", ref command, AppCommands.AnalyzeAssemblies, LocalizedStrings.CmdAnalyzeHelp);
-                syntax.DefineOptionList("f|file", ref file, LocalizedStrings.CmdHelpAnalyzeFile);
-                syntax.DefineOption("o|out", ref outFile, LocalizedStrings.CmdHelpAnalyzeOut);
-                syntax.DefineOption("d|description", ref description, LocalizedStrings.CmdHelpDescription);
-                syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
-                syntax.DefineOptionList("t|target", ref target, LocalizedStrings.CmdHelpTarget);
-                syntax.DefineOptionList("r|resultFormat", ref result, LocalizedStrings.CmdResultFormat);
-                syntax.DefineOption("p|showNonPortableApis", ref showNonPortableApis, LocalizedStrings.CmdHelpShowNonPortableApis);
-                syntax.DefineOption("b|showBreakingChanges", ref showBreakingChanges, LocalizedStrings.CmdHelpShowBreakingChanges);
-                syntax.DefineOption("u|showRetargettingIssues", ref showRetargettingIssues, LocalizedStrings.CmdShowRetargettingIssues);
-                syntax.DefineOption("noDefaultIgnoreFile", ref noDefaultIgnoreFile, LocalizedStrings.CmdHelpNoDefaultIgnoreFile);
-                syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdHelpIgnoreAssembliesFile);
-                syntax.DefineOptionList("s|suppressBreakingChange", ref suppressBreakingChange, LocalizedStrings.CmdHelpSuppressBreakingChange);
-                syntax.DefineOption("targetMap", ref targetMap, LocalizedStrings.CmdTargetMap);
+                ArgumentSyntax.Parse(args, syntax =>
+                {
+                    syntax.HandleErrors = false;
 
-                syntax.DefineCommand("listTargets", ref command, AppCommands.ListTargets, LocalizedStrings.ListTargets);
-                syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+                    syntax.DefineCommand("analyze", ref command, AppCommands.AnalyzeAssemblies, LocalizedStrings.CmdAnalyzeMessage);
+                    syntax.DefineOptionList("f|file", ref file, LocalizedStrings.CmdAnalyzeFileInput);
+                    syntax.DefineOption("o|out", ref outFile, LocalizedStrings.CmdAnalyzeOutputFileName);
+                    syntax.DefineOption("d|description", ref description, LocalizedStrings.CmdAnalyzeDescription);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+                    syntax.DefineOptionList("t|target", ref target, LocalizedStrings.CmdAnalyzeTarget);
+                    syntax.DefineOptionList("r|resultFormat", ref result, LocalizedStrings.CmdAnalyzeResultFormat);
+                    syntax.DefineOption("p|showNonPortableApis", ref showNonPortableApis, LocalizedStrings.CmdAnalyzeShowNonPortableApis);
+                    syntax.DefineOption("b|showBreakingChanges", ref showBreakingChanges, LocalizedStrings.CmdAnalyzeShowBreakingChanges);
+                    syntax.DefineOption("u|showRetargettingIssues", ref showRetargettingIssues, LocalizedStrings.CmdAnalyzeShowRetargettingIssues);
+                    syntax.DefineOption("force", ref overwriteOutput, LocalizedStrings.OverwriteFile);
+                    syntax.DefineOption("noDefaultIgnoreFile", ref noDefaultIgnoreFile, LocalizedStrings.CmdAnalyzeNoDefaultIgnoreFile);
+                    syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile);
+                    syntax.DefineOptionList("s|suppressBreakingChange", ref suppressBreakingChange, LocalizedStrings.CmdAnalyzeSuppressBreakingChange);
+                    syntax.DefineOption("targetMap", ref targetMap, LocalizedStrings.CmdAnalyzeTargetMap);
 
-                syntax.DefineCommand("listOutputFormats", ref command, AppCommands.ListOutputFormats, LocalizedStrings.ListOutputFormats);
-                syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+                    syntax.DefineCommand("listTargets", ref command, AppCommands.ListTargets, LocalizedStrings.ListTargets);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
 
-                syntax.DefineCommand("docId", ref command, AppCommands.DocIdSearch, LocalizedStrings.CmdDocId);
-                syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
-            });
+                    syntax.DefineCommand("listOutputFormats", ref command, AppCommands.ListOutputFormats, LocalizedStrings.ListOutputFormats);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+
+                    syntax.DefineCommand("docId", ref command, AppCommands.DocIdSearch, LocalizedStrings.CmdDocId);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+
+                    argSyntax = syntax;
+                });
+            }
+            catch (ArgumentSyntaxException e)
+            {
+                Console.WriteLine();
+
+                Console.WriteLine(e.Message);
+
+                if (argSyntax != null)
+                {
+                    Console.WriteLine(argSyntax.GetHelpText());
+                }
+
+                return new ConsoleApiPortOptions(AppCommands.Exit);
+            }
 
             // Set OverwriteOutputFile to true if the output file name is explicitly specified
-            if (!string.IsNullOrWhiteSpace(outFile))
+            if (!string.Equals(DefaultName, outFile, StringComparison.Ordinal))
             {
                 overwriteOutput = true;
-                outFile = DefaultName;
             }
 
             var (inputFiles, invalidFiles) = ProcessInputAssemblies(file);
@@ -81,9 +101,9 @@ namespace ApiPort
                 OutputFileName = outFile,
                 OutputFormats = result,
                 OverwriteOutputFile = overwriteOutput,
-                TargetMapFile = targetMap,
-                ServiceEndpoint = endpoint,
                 RequestFlags = GetRequestFlags(showBreakingChanges, showRetargettingIssues, showNonPortableApis),
+                ServiceEndpoint = endpoint,
+                TargetMapFile = targetMap,
                 Targets = target,
             };
         }

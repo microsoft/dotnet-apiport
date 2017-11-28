@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Analyze" xml:space="preserve">
-    <value>Analyze</value>
-  </data>
   <data name="Header" xml:space="preserve">
     <value>Microsoft (R) {0} v{1}
 Copyright (C) Microsoft Corporation. All rights reserved.
@@ -131,23 +128,11 @@ To learn more about how this tool works, including the data we are collecting, v
 
 For the full privacy statement, please visit {3}</value>
   </data>
-  <data name="ListOfAssembliesToAnalyze" xml:space="preserve">
-    <value>Path to assembly file or directory of assemblies.</value>
-  </data>
   <data name="ListTargets" xml:space="preserve">
     <value>Use to see the available targets against which you can validate your assemblies</value>
   </data>
-  <data name="DescriptionHelp" xml:space="preserve">
-    <value>Description of the submission</value>
-  </data>
-  <data name="OutputFileName" xml:space="preserve">
-    <value>Output file name</value>
-  </data>
   <data name="ProgressReportDone" xml:space="preserve">
     <value>[Done]</value>
-  </data>
-  <data name="TargetsToCheckAgainst" xml:space="preserve">
-    <value>The target you want to check against.</value>
   </data>
   <data name="OutputWrittenTo" xml:space="preserve">
     <value>Wrote output to file:</value>
@@ -158,11 +143,6 @@ For the full privacy statement, please visit {3}</value>
   <data name="AvailableTargets" xml:space="preserve">
     <value>Available Targets:</value>
     <comment>Used to display list of available targets</comment>
-  </data>
-  <data name="InvalidCommandLineArguments" xml:space="preserve">
-    <value>Invalid argument was passed in. Please check your command line parameters.
-{0}</value>
-    <comment>{0} is the message from the parser with the actual error</comment>
   </data>
   <data name="OverwriteFile" xml:space="preserve">
     <value>Replaced output file "{0}"</value>
@@ -192,15 +172,6 @@ For the full privacy statement, please visit {3}</value>
   <data name="MonoWebRequestsFailure" xml:space="preserve">
     <value>If you are running on the mono runtime, you must configure root certificates before using this application.  Please see http://www.mono-project.com/docs/faq/security/</value>
   </data>
-  <data name="ResultFormatHelp" xml:space="preserve">
-    <value>The report output format</value>
-  </data>
-  <data name="Targets" xml:space="preserve">
-    <value>Targets</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
   <data name="ProgressReportInProgress" xml:space="preserve">
     <value>[In Progress{0}]</value>
   </data>
@@ -210,37 +181,23 @@ For the full privacy statement, please visit {3}</value>
   <data name="ListOutputFormats" xml:space="preserve">
     <value>Use to see what output formats are supported for the generated report.</value>
   </data>
-  <data name="CmdHelpShowBreakingChanges" xml:space="preserve">
+  <data name="CmdAnalyzeShowBreakingChanges" xml:space="preserve">
     <value>Calculate breaking changes on full .NET Framework</value>
   </data>
-  <data name="CmdHelpShowNonPortableApis" xml:space="preserve">
+  <data name="CmdAnalyzeShowNonPortableApis" xml:space="preserve">
     <value>Calculate non-portable APIs</value>
   </data>
-  <data name="CmdHelpIgnoreAssembliesFile" xml:space="preserve">
-    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis.</value>
+  <data name="CmdAnalyzeIgnoreAssembliesFile" xml:space="preserve">
+    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis and not portability analysis[</value>
   </data>
-  <data name="InvalidIgnoreFile" xml:space="preserve">
-    <value>Unable to parse ignore file '{0}'. Error details:
-{1}</value>
-  </data>
-  <data name="CmdHelpNoDefaultIgnoreFile" xml:space="preserve">
+  <data name="CmdAnalyzeNoDefaultIgnoreFile" xml:space="preserve">
     <value>Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json</value>
   </data>
-  <data name="CmdHelpSuppressBreakingChange" xml:space="preserve">
+  <data name="CmdAnalyzeSuppressBreakingChange" xml:space="preserve">
     <value>Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported.</value>
   </data>
-  <data name="CmdAnalyzeHelp" xml:space="preserve">
-    <value>Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed 
-for portability concerns or known breaking changes (depending on input parameters) and returns a report that 
-gives a summary of issues and possible steps forward.</value>
-  </data>
-  <data name="CmdListOutputFormats" xml:space="preserve">
-    <value>Retrieves a list of output formats that are available in which to receive reports
-
-  -h, -?, --help             Show help</value>
-  </data>
-  <data name="CmdListTargets" xml:space="preserve">
-    <value>Retrieves a list of targets available to analyze assemblies against</value>
+  <data name="CmdAnalyzeMessage" xml:space="preserve">
+    <value>Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed for portability concerns or known breaking changes (depending on input parameters) and returns a report that gives a summary of issues and possible steps forward.</value>
   </data>
   <data name="FileOutputServiceNotSupported" xml:space="preserve">
     <value>Analyze request file output does not support this operation</value>
@@ -281,21 +238,6 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="AvailableGroupedTargets" xml:space="preserve">
     <value>Available Grouped Targets:</value>
   </data>
-  <data name="ProgressReportDone1" xml:space="preserve">
-    <value>[Done]</value>
-  </data>
-  <data name="ProgressReportFailed1" xml:space="preserve">
-    <value>[Failed]</value>
-  </data>
-  <data name="TooManyTargetsMessage" xml:space="preserve">
-    <value>Excel output format supports up to {0} targets for analysis at a time.</value>
-  </data>
-  <data name="InvalidParameterPassed" xml:space="preserve">
-    <value>Invalid parameter passed to {0}</value>
-  </data>
-  <data name="Options" xml:space="preserve">
-    <value>options</value>
-  </data>
   <data name="ReplEnterQuery" xml:space="preserve">
     <value>Enter a search query to find possible docids.</value>
   </data>
@@ -323,49 +265,31 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="ReplUpdatedCount" xml:space="preserve">
     <value>Updated count to {0}</value>
   </data>
-  <data name="UnknownCommand" xml:space="preserve">
-    <value>Unknown command: {0}</value>
-  </data>
   <data name="Number" xml:space="preserve">
     <value>number</value>
   </data>
   <data name="CmdEndpoint" xml:space="preserve">
     <value>Portability service endpoint</value>
   </data>
-  <data name="CmdHelpAnalyzeFile" xml:space="preserve">
+  <data name="CmdAnalyzeFileInput" xml:space="preserve">
     <value>Path to assembly file or directory of assemblies</value>
   </data>
-  <data name="CmdHelpAnalyzeOut" xml:space="preserve">
+  <data name="CmdAnalyzeOutputFileName" xml:space="preserve">
     <value>Output file name</value>
   </data>
-  <data name="CmdHelpDescription" xml:space="preserve">
+  <data name="CmdAnalyzeDescription" xml:space="preserve">
     <value>Description of submission</value>
   </data>
-  <data name="CmdHelpTarget" xml:space="preserve">
+  <data name="CmdAnalyzeTarget" xml:space="preserve">
     <value>The target against which to check portability</value>
   </data>
-  <data name="CmdIgnoreAssemblyFile" xml:space="preserve">
-    <value>Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis and not portability analysis</value>
-  </data>
-  <data name="CmdNoDefaultIgnoreFile" xml:space="preserve">
-    <value>Do not use the standard assembly ignore list when analyzing breaking changes. The default list can be found at KnownSafeBreaks.json</value>
-  </data>
-  <data name="CmdResultFormat" xml:space="preserve">
+  <data name="CmdAnalyzeResultFormat" xml:space="preserve">
     <value>Format to display output results</value>
   </data>
-  <data name="CmdShowBreakingChanges" xml:space="preserve">
-    <value>Calculate breaking changes across APIs in .NET Framework</value>
-  </data>
-  <data name="CmdShowNonPortableApis" xml:space="preserve">
-    <value>Calculate non-portable APIs</value>
-  </data>
-  <data name="CmdShowRetargettingIssues" xml:space="preserve">
+  <data name="CmdAnalyzeShowRetargettingIssues" xml:space="preserve">
     <value>Include the retargetting issues in the reports</value>
   </data>
-  <data name="CmdSuppressBreakingChange" xml:space="preserve">
-    <value>Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported</value>
-  </data>
-  <data name="CmdTargetMap" xml:space="preserve">
+  <data name="CmdAnalyzeTargetMap" xml:space="preserve">
     <value>Specifies a file to be use to map target names</value>
   </data>
 </root>

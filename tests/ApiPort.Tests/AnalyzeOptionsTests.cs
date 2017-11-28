@@ -37,6 +37,49 @@ namespace ApiPort.Tests
         }
 
         [Fact]
+        public void NoArgs()
+        {
+            var options = CommandLineOptions.ParseCommandLineOptions(Array.Empty<string>());
+
+            Assert.Equal(AppCommands.Exit, options.Command);
+        }
+
+        [Fact]
+        public void AnalyzeNoFile()
+        {
+            var args = "analyze -f".Split(' ');
+
+            var options = CommandLineOptions.ParseCommandLineOptions(args);
+
+            Assert.Equal(AppCommands.Exit, options.Command);
+        }
+
+        [InlineData("analyze -f file.dll", CommandLineOptions.DefaultName)]
+        [InlineData("analyze -f file.dll -o other", "other")]
+        [InlineData("analyze -f file.dll --out other", "other")]
+        [Theory]
+        public void OutputFile(string args, string name)
+        {
+            var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
+
+            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(name, options.OutputFileName);
+        }
+
+        [InlineData("analyze -f file.dll", false)]
+        [InlineData("analyze -f file.dll -o other", true)]
+        [InlineData("analyze -f file.dll --force", true)]
+        [InlineData("analyze -f file.dll -o other --force", true)]
+        [Theory]
+        public void OverwriteFile(string args, bool overwrite)
+        {
+            var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
+
+            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(overwrite, options.OverwriteOutputFile);
+        }
+
+        [Fact]
         public void TestAssemblyFlag_FileName()
         {
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
