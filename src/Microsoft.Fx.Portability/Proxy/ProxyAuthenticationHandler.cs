@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -22,53 +24,26 @@ namespace Microsoft.Fx.Portability.Proxy
         private const string BasicAuthenticationType = "Basic";
 
         private readonly HttpClientHandler _clientHandler;
-        private int _authRetries = 0;
         private readonly IProxyProvider _proxyProvider;
 
         public ProxyAuthenticationHandler(HttpClientHandler httpClientHandler, IProxyProvider proxyProvider)
             : base(httpClientHandler)
         {
-            if (httpClientHandler == null)
-            {
-                throw new ArgumentNullException(nameof(httpClientHandler));
-            }
-            if (proxyProvider == null)
-            {
-                throw new ArgumentNullException(nameof(proxyProvider));
-            }
-
-            _clientHandler = httpClientHandler;
-            _proxyProvider = proxyProvider;
+            _clientHandler = httpClientHandler ?? throw new ArgumentNullException(nameof(httpClientHandler));
+            _proxyProvider = proxyProvider ?? throw new ArgumentNullException(nameof(proxyProvider));
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            int maxAttempts = 0;
-            HttpResponseMessage response = default(HttpResponseMessage);
+            int _attempts = 0;
 
-            while (maxAttempts < MaxAttempts)
+            while (_attempts < MaxAttempts)
             {
                 try
                 {
-                    response = await base.SendAsync(request, cancellationToken);
-
-                    if (response.StatusCode != HttpStatusCode.ProxyAuthenticationRequired)
-                    {
-                        return response;
-                    }
-
-                    if (_clientHandler.Proxy == null || !_proxyProvider.CanUpdateCredentials)
-                    {
-                        return response;
-                    }
-
-                    if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken).ConfigureAwait(false))
-                    {
-                        return response;
-                    }
+                    return await base.SendAsync(request, cancellationToken);
                 }
-                catch (Exception ex)
-                when (ProxyAuthenticationRequired(ex) && _clientHandler.Proxy != null && _proxyProvider.CanUpdateCredentials)
+                catch (Exception ex) when (ProxyAuthenticationRequired(ex))
                 {
                     if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken).ConfigureAwait(false))
                     {
@@ -76,22 +51,14 @@ namespace Microsoft.Fx.Portability.Proxy
                     }
                 }
 
-                maxAttempts++;
+                _attempts++;
             }
 
-            return response;
+            throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, HttpStatusCode.BadRequest));
         }
 
         private Task<bool> AcquireCredentialsAsync(Uri requestUri, CancellationToken cancellationToken)
         {
-            // Limit the number of retries
-            _authRetries++;
-            if (_authRetries >= MaxAttempts)
-            {
-                // user prompting no more
-                return Task.FromResult(false);
-            }
-
             var proxyAddress = _clientHandler.Proxy.GetProxy(requestUri);
 
             // prompt user for proxy credentials.
@@ -99,31 +66,25 @@ namespace Microsoft.Fx.Portability.Proxy
             return _proxyProvider.TryUpdateCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken);
         }
 
-#if FEATURE_NETCORE
         // Returns true if the cause of the exception is proxy authentication failure
-        private static bool ProxyAuthenticationRequired(Exception ex)
+        private bool ProxyAuthenticationRequired(Exception ex)
         {
-            return true;
-        }
-#else
-        // Returns true if the cause of the exception is proxy authentication failure
-        private static bool ProxyAuthenticationRequired(Exception ex)
-        {
+            if (!_proxyProvider.CanUpdateCredentials)
+            {
+                return false;
+            }
+
             if (ex is ProxyAuthenticationRequiredException)
             {
                 return true;
             }
 
-            var response = ExtractResponse(ex);
-            return response?.StatusCode == HttpStatusCode.ProxyAuthenticationRequired;
-        }
+            if (ex.InnerException is WebException webException && webException.Response is HttpWebResponse response)
+            {
+                return response?.StatusCode == HttpStatusCode.ProxyAuthenticationRequired;
+            }
 
-        private static HttpWebResponse ExtractResponse(Exception ex)
-        {
-            var webException = ex.InnerException as WebException;
-            var response = webException?.Response as HttpWebResponse;
-            return response;
+            return false;
         }
-#endif
     }
 }

@@ -6,7 +6,6 @@
       (tracked at https://github.com/dotnet/project-system/issues/1519)
     -->
     <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
-    <DefineConstants>FEATURE_NETCORE</DefineConstants>
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
   </PropertyGroup>
 
