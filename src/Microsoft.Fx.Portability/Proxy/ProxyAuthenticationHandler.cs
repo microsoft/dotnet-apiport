@@ -45,7 +45,11 @@ namespace Microsoft.Fx.Portability.Proxy
                 }
                 catch (Exception ex) when (ProxyAuthenticationRequired(ex))
                 {
-                    if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken).ConfigureAwait(false))
+                    var proxyAddress = _clientHandler.Proxy.GetProxy(request.RequestUri);
+
+                    // prompt user for proxy credentials.
+                    // use the user provided credential to send the request again if it was successful.
+                    if (!await _proxyProvider.TryUpdateCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken).ConfigureAwait(false))
                     {
                         throw;
                     }
@@ -55,15 +59,6 @@ namespace Microsoft.Fx.Portability.Proxy
             }
 
             throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, HttpStatusCode.BadRequest));
-        }
-
-        private Task<bool> AcquireCredentialsAsync(Uri requestUri, CancellationToken cancellationToken)
-        {
-            var proxyAddress = _clientHandler.Proxy.GetProxy(requestUri);
-
-            // prompt user for proxy credentials.
-            // use the user provided credential to send the request again if it was successful.
-            return _proxyProvider.TryUpdateCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken);
         }
 
         // Returns true if the cause of the exception is proxy authentication failure
