@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability.Proxy
                         return response;
                     }
 
-                    if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken))
+                    if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken).ConfigureAwait(false))
                     {
                         return response;
                     }
@@ -70,7 +70,7 @@ namespace Microsoft.Fx.Portability.Proxy
                 catch (Exception ex)
                 when (ProxyAuthenticationRequired(ex) && _clientHandler.Proxy != null && _proxyProvider.CanUpdateCredentials)
                 {
-                    if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken))
+                    if (!await AcquireCredentialsAsync(request.RequestUri, cancellationToken).ConfigureAwait(false))
                     {
                         throw;
                     }
@@ -82,21 +82,21 @@ namespace Microsoft.Fx.Portability.Proxy
             return response;
         }
 
-        private async Task<bool> AcquireCredentialsAsync(Uri requestUri, CancellationToken cancellationToken)
+        private Task<bool> AcquireCredentialsAsync(Uri requestUri, CancellationToken cancellationToken)
         {
             // Limit the number of retries
             _authRetries++;
             if (_authRetries >= MaxAttempts)
             {
                 // user prompting no more
-                return false;
+                return Task.FromResult(false);
             }
 
             var proxyAddress = _clientHandler.Proxy.GetProxy(requestUri);
 
             // prompt user for proxy credentials.
             // use the user provided credential to send the request again if it was successful.
-            return await _proxyProvider.TryUpdateCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken);
+            return _proxyProvider.TryUpdateCredentialsAsync(proxyAddress, _clientHandler.Proxy, CredentialRequestType.Proxy, cancellationToken);
         }
 
 #if FEATURE_NETCORE

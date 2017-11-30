@@ -27,63 +27,12 @@ namespace Microsoft.Fx.Portability
         }
 
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
+
         private readonly CompressedHttpClient _client;
 
-        public ApiPortService(string endpoint, ProductInformation info, IProxyProvider proxyProvider)
+        public ApiPortService(string endpoint, ProductInformation info, IProxyProvider proxyProvider = null)
+            : this(endpoint, BuildMessageHandler(endpoint, proxyProvider), info)
         {
-            if (string.IsNullOrWhiteSpace(endpoint))
-            {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
-            }
-            if (proxyProvider == null)
-            {
-                throw new ArgumentNullException(nameof(proxyProvider));
-            }
-
-            // Create the URI directly from a string (rather than using a hard-coded scheme or port) because 
-            // even though production use of ApiPort should always use HTTPS, developers using a non-production
-            // portability service URL (via the -e command line parameter) may need to specify a different 
-            // scheme or port.
-            var uri = new Uri(endpoint);
-            var proxy = proxyProvider.GetProxy(uri);
-            
-            // replace the handler with the proxy aware handler
-            var clientHandler = new HttpClientHandler
-            {
-#if !FEATURE_SERVICE_POINT_MANAGER
-                SslProtocols = CompressedHttpClient.SupportedSSLProtocols,
-#endif
-                Proxy = proxy,
-                AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
-            };
-
-            // HTTP handler pipeline can be injected here, around the client handler
-            HttpMessageHandler messageHandler = clientHandler;
-
-            if (proxy != null)
-            {
-                messageHandler = new ProxyAuthenticationHandler(clientHandler, proxyProvider);
-            }
-
-            _client = new CompressedHttpClient(info, messageHandler)
-            {
-                BaseAddress = new Uri(endpoint),
-                Timeout = Timeout
-            };
-        }
-
-        public ApiPortService(string endpoint, ProductInformation info)
-        {
-            if (string.IsNullOrWhiteSpace(endpoint))
-            {
-                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
-            }
-
-            _client = new CompressedHttpClient(info)
-            {
-                BaseAddress = new Uri(endpoint),
-                Timeout = Timeout
-            };
         }
 
         public ApiPortService(string endpoint, HttpMessageHandler httpMessageHandler, ProductInformation info)
@@ -209,7 +158,7 @@ namespace Microsoft.Fx.Portability
                     .Where(r => requestedFormats.Contains(r.DisplayName));
 
                 var unknownFormats = requestedFormats
-                    .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase);   
+                    .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase);
 
                 if (unknownFormats.Any())
                 {
@@ -218,6 +167,36 @@ namespace Microsoft.Fx.Portability
 
                 return formatInformation;
             }
+        }
+
+        private static HttpMessageHandler BuildMessageHandler(string endpoint, IProxyProvider proxyProvider)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint))
+            {
+                throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
+            }
+
+            // Create the URI directly from a string (rather than using a hard-coded scheme or port) because 
+            // even though production use of ApiPort should always use HTTPS, developers using a non-production
+            // portability service URL (via the -e command line parameter) may need to specify a different 
+            // scheme or port.
+            var uri = new Uri(endpoint);
+
+            var clientHandler = new HttpClientHandler
+            {
+#if !FEATURE_SERVICE_POINT_MANAGER
+                SslProtocols = CompressedHttpClient.SupportedSSLProtocols,
+#endif
+                Proxy = proxyProvider?.GetProxy(uri),
+                AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
+            };
+
+            if (clientHandler.Proxy == null)
+            {
+                return clientHandler;
+            }
+
+            return new ProxyAuthenticationHandler(clientHandler, proxyProvider);
         }
     }
 }
