@@ -30,27 +30,12 @@ namespace ApiPortVS
             // credentials from its cache and fall back to prompting if necessary. 
             const __VsWebProxyState oldState = __VsWebProxyState.VsWebProxyState_DefaultCredentials;
 
-            var newState = (uint)__VsWebProxyState.VsWebProxyState_NoCredentials;
-            var result = 0;
-
-            // This must be run on the UI thread in case a prompt has to be shown
-            // to retrieve the credentials
+            // This must be run on the UI thread in case a prompt has to be shown to retrieve the credentials
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            result = _vsWebProxy.PrepareWebProxy(uri.OriginalString, (uint)oldState, out newState, fOkToPrompt: 1);
+            var result = _vsWebProxy.PrepareWebProxy(uri.OriginalString, (uint)oldState, out var newState, fOkToPrompt: 1);
 
-            // If result is anything but 0 that most likely means that there was an error
-            // so we will null out the DefaultWebProxy.Credentials so that we don't get
-            // invalid credentials stored for subsequent requests.
-            if (result != 0
-                || newState == (uint)__VsWebProxyState.VsWebProxyState_Abort)
-            {
-                // The user might have clicked cancel, so we don't want to use the currently set
-                // credentials if they are wrong.
-                return false;
-            }
-
-            return true;
+            return result == 0 && newState != (uint)__VsWebProxyState.VsWebProxyState_Abort;
         }
     }
 }

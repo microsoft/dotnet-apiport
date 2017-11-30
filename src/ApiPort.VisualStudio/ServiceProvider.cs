@@ -13,6 +13,7 @@ using Autofac;
 using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -20,7 +21,6 @@ using System;
 using System.IO;
 
 using static Microsoft.VisualStudio.VSConstants;
-using Microsoft.Fx.Portability.Proxy;
 
 namespace ApiPortVS
 {
