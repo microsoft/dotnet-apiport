@@ -13,6 +13,7 @@ using Autofac;
 using EnvDTE;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -54,9 +55,12 @@ namespace ApiPortVS
                 .AsSelf();
             builder.RegisterInstance(new AssemblyRedirectResolver(AssemblyDirectory))
                 .AsSelf();
+            builder.RegisterType<VisualStudioProxyProvider>()
+                .As<IProxyProvider>()
+                .SingleInstance();
             builder.RegisterType<ApiPortService>()
                 .As<IApiPortService>()
-                .WithParameter(TypedParameter.From<string>(DefaultEndpoint))
+                .WithParameter(TypedParameter.From(DefaultEndpoint))
                 .SingleInstance();
             builder.RegisterType<ApiPortClient>()
                 .AsSelf()
@@ -158,6 +162,8 @@ namespace ApiPortVS
             builder.RegisterType<ErrorListProvider>()
                 .As<IErrorListProvider>()
                 .SingleInstance();
+            builder.Register(_ => Package.GetGlobalService(typeof(SVsWebProxy)))
+                .As<IVsWebProxy>();
             builder.Register(_ => Package.GetGlobalService(typeof(SVsWebBrowsingService)))
                 .As<IVsWebBrowsingService>();
             builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
@@ -170,8 +176,7 @@ namespace ApiPortVS
             {
                 var outputWindow = provider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
 
-                IVsOutputWindowPane windowPane;
-                if (outputWindow.GetPane(ref OutputWindowGuid, out windowPane) == S_OK)
+                if (outputWindow.GetPane(ref OutputWindowGuid, out IVsOutputWindowPane windowPane) == S_OK)
                 {
                     return windowPane;
                 }
