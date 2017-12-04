@@ -172,8 +172,8 @@ namespace ApiPortVS
             var header = new StringBuilder();
 
             header.AppendLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CopyrightFormat, _productInfo.Version));
-            header.AppendLine(string.Concat(CultureInfo.CurrentCulture, LocalizedStrings.AboutTool, " ", DocumentationLinks.About));
-            header.AppendLine(string.Concat(CultureInfo.CurrentCulture, LocalizedStrings.AboutPrivacy, " ", DocumentationLinks.PrivacyPolicy));
+            header.AppendLine($"{LocalizedStrings.AboutTool} {DocumentationLinks.About}");
+            header.AppendLine($"{LocalizedStrings.AboutPrivacy} {DocumentationLinks.PrivacyPolicy}");
 
             _output.WriteLine(header.ToString());
         }
