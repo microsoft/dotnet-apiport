@@ -196,7 +196,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset..
+        ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href=&quot;https://docs.microsoft.com/dotnet/api/system.runtime.versioning.targetframeworkattribute&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset..
         /// </summary>
         public static string RetargetingCompatIssueDescriptionPart1 {
             get {
