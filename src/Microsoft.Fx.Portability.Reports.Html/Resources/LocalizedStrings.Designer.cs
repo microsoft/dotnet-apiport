@@ -169,11 +169,29 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PackageId.
+        /// </summary>
+        public static string PackageIdHeader {
+            get {
+                return ResourceManager.GetString("PackageIdHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portability Summary.
         /// </summary>
         public static string PortabilitySummaryPageTitle {
             get {
                 return ResourceManager.GetString("PortabilitySummaryPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommended changes.
+        /// </summary>
+        public static string RecommendedChanges {
+            get {
+                return ResourceManager.GetString("RecommendedChanges", resourceCulture);
             }
         }
         
@@ -219,6 +237,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         public static string SubmissionId {
             get {
                 return ResourceManager.GetString("SubmissionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target type.
+        /// </summary>
+        public static string TargetTypeHeader {
+            get {
+                return ResourceManager.GetString("TargetTypeHeader", resourceCulture);
             }
         }
     }
