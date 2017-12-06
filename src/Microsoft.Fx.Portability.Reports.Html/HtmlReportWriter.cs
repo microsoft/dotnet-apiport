@@ -19,21 +19,18 @@ namespace Microsoft.Fx.Portability.Reports
         private static readonly IRazorEngineService s_razorService = CreateService();
 
         private readonly ITargetMapper _targetMapper;
-        private readonly ResultFormatInformation _formatInformation;
 
         public HtmlReportWriter(ITargetMapper targetMapper)
         {
             _targetMapper = targetMapper;
-
-            _formatInformation = new ResultFormatInformation
-            {
-                DisplayName = "HTML",
-                MimeType = "text/html",
-                FileExtension = ".html"
-            };
         }
 
-        public ResultFormatInformation Format { get { return _formatInformation; } }
+        public ResultFormatInformation Format { get; } = new ResultFormatInformation
+        {
+            DisplayName = "HTML",
+            MimeType = "text/html",
+            FileExtension = ".html"
+        };
 
         public void WriteStream(Stream stream, AnalyzeResponse response)
         {
@@ -74,7 +71,6 @@ namespace Microsoft.Fx.Portability.Reports
                     return reader.ReadToEnd();
                 }
             }
-
         }
 
         public class HtmlHelper
@@ -103,6 +99,21 @@ namespace Microsoft.Fx.Portability.Reports
                 var razor = s_razorService.RunCompile(template, name, typeof(T), model);
 
                 return Raw(razor);
+            }
+
+            public IEncodedString WriteStyledBreakingChangeCount(int breaks, int warningThreshold, int errorThreshold)
+            {
+                var className = "";
+                if (breaks <= warningThreshold)
+                {
+                    className = "NoBreakingChanges";
+                }
+                else
+                {
+                    className = breaks <= errorThreshold ? "FewBreakingChanges" : "ManyBreakingChanges";
+                }
+
+                return Raw($"<span class=\"{className}\">{breaks}</span>");
             }
         }
 

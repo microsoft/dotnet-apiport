@@ -1,0 +1,64 @@
+﻿@*
+   Copyright (c) Microsoft. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+*@
+
+@model Microsoft.Fx.Portability.Reports.Html.CompatibilitySummaryModel
+
+@using Microsoft.Fx.Portability
+@using Microsoft.Fx.Portability.Reports.Html
+@using Microsoft.Fx.Portability.Reports.Html.Resources
+@using System.Linq
+
+@{
+    var majorIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Major && !b.Key.IsRetargeting);
+    var minorIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && !b.Key.IsRetargeting);
+    var edgeIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && !b.Key.IsRetargeting);
+    var totalCompatIssues = majorIssues.Count() + minorIssues.Count() + edgeIssues.Count();
+    var majorRetargetingIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Major && b.Key.IsRetargeting);
+    var minorRetargetingIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && b.Key.IsRetargeting);
+    var edgeRetargetingIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && b.Key.IsRetargeting);
+    var totalRetargetingIssues = majorRetargetingIssues.Count() + minorRetargetingIssues.Count() + edgeRetargetingIssues.Count();
+
+    var runtimeIssuesDivName = "RuntimeIssues" + Model.LoopCounter.ToString();
+    var retargetingIssuesDivName = "RetargetingIssues" + Model.LoopCounter.ToString();
+    var runtimeIssuesButtonName = "Toggle" + runtimeIssuesDivName;
+    var retargetingIssuesButtonName = "Toggle" + retargetingIssuesDivName;
+}
+
+@if (totalCompatIssues + totalRetargetingIssues > 0)
+{
+    <div id="assemblyCompatDetails">
+        @if (Model.Assembly != null)
+        {
+            <h3>
+                <a name="Compat-@Model.Assembly">
+                    <span class="assembly-name">@Model.ReportingResult.GetNameForAssemblyInfo(Model.Assembly)</span>
+                    @if (!string.IsNullOrEmpty(Model.Assembly.TargetFrameworkMoniker))
+                    {
+                        <span class="assembly-tfm">(@Model.Assembly.TargetFrameworkMoniker)</span>
+                    }
+                </a>
+            </h3>
+        }
+        <h3>Runtime Compatibility Issues (@totalCompatIssues) <button class="ToggleButton" id="@runtimeIssuesButtonName">&#8212</button></h3>
+        <div id="@runtimeIssuesDivName">
+            <p>@LocalizedStrings.RuntimeCompatIssueDescription</p>
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel("Major Compatibility Issues", LocalizedStrings.MajorCompatIssueDescription, majorIssues, 0, 2))
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel("Minor Compatibility Issues", LocalizedStrings.MinorCompatIssueDescription, minorIssues, 0, 3))
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel("Edge Compatibility Issues", LocalizedStrings.EdgeCompatIssueDescription, edgeIssues, 0, 100))
+        </div>
+        <h3>Retargeting Compatibility Issues (@totalRetargetingIssues) <button class="ToggleButton" id="@retargetingIssuesButtonName">+</button></h3>
+        <div class="BeginToggledOff" id="@retargetingIssuesDivName">
+            <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart1)</p>
+            <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart2)</p>
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel("Major Retargeting Issues", LocalizedStrings.MajorCompatIssueDescription, majorRetargetingIssues, 0, 2))
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel("Minor Retargeting Issues", LocalizedStrings.MinorCompatIssueDescription, minorRetargetingIssues, 0, 3))
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel("Edge Retargeting Issues", LocalizedStrings.EdgeCompatIssueDescription, edgeRetargetingIssues, 0, 100))
+        </div>
+    </div>
+    <p>
+        <a href="#@LocalizedStrings.CompatibilityPageTitle">@LocalizedStrings.BackToSummary</a>
+    </p>
+    <br />
+}

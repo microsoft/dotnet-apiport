@@ -1,74 +1,17 @@
-﻿<!--
+﻿@*
    Copyright (c) Microsoft. All rights reserved.
    Licensed under the MIT license. See LICENSE file in the project root for full license information.
--->
+*@
 
 @model Microsoft.Fx.Portability.Reports.RazorHtmlObject
 
-@using Microsoft.Fx.Portability.Reporting.ObjectModel
 @using Microsoft.Fx.Portability.Reports.Html.Resources
 @using System.Collections.Generic;
 @using System.IO
 @using System.Linq
-@using System.Runtime.Versioning
 
 @{
     var reportingResult = Model.ReportingResult;
-}
-
-@helper WriteTableDataStringWithStyle(string docId, string data, string cellStyle)
-{
-    <td style="@cellStyle">@data</td>
-    @* TODO: Add back in logic to create URIs when finished abstracting IReportWriter. *@
-    @*
-        var serviceHeaders = Model.ReportingResult.Headers;
-        <td style="@cellStyle">
-            @if (serviceHeaders.HasApiEndpoint)
-            {
-                <a href="@serviceHeaders.GetDocIdUrl(docId).AbsoluteUri">@data</a>
-            }
-            else
-            {
-                @data
-            }
-        </td>
-    *@
-}
-
-@helper WriteTableDataString(string docId, string data)
-{
-    <td>@data</td>
-    @* TODO: Add back in logic to create URIs when finished abstracting IReportWriter. *@
-    @*
-        var serviceHeaders = Model.ReportingResult.Headers;
-        <td>
-            @if (serviceHeaders.HasApiEndpoint)
-            {
-                <a href="@serviceHeaders.GetDocIdUrl(docId).AbsoluteUri">@data</a>
-            }
-            else
-            {
-                @data
-            }
-        </td>*@
-}
-
-@helper WriteTableVersionsRow(IEnumerable<Version> usedVersions)
-{
-    foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(usedVersions))
-    {
-        var className = version.SupportedIn == null || version.Target.Version < version.SupportedIn ? "IconErrorEncoded" : "IconSuccessEncoded";
-        <td class="@className"></td>
-    }
-}
-
-@helper WriteAssembly(Microsoft.Fx.Portability.ObjectModel.AssemblyInfo assembly)
-{
-    <span class="assembly-name">@assembly</span>
-    if (!string.IsNullOrEmpty(assembly.TargetFrameworkMoniker))
-    {
-        <span class="assembly-tfm">(@assembly.TargetFrameworkMoniker)</span>
-    }
 }
 
 <h2 _locid="SummaryTitle">
@@ -88,7 +31,13 @@
         @foreach (var assembly in Model.OrderedAssembliesByIdentity)
         {
             <tr>
-                <td><strong><a href="#@assembly.SourceAssembly">@WriteAssembly(assembly.SourceAssembly)</a></strong></td>
+                <td><strong><a href="#@assembly.SourceAssembly">
+                    <span class="assembly-name">@assembly.SourceAssembly</span>
+                    @if (!string.IsNullOrEmpty(assembly.SourceAssembly.TargetFrameworkMoniker))
+                    {
+                        <span class="assembly-tfm">(@assembly.SourceAssembly.TargetFrameworkMoniker)</span>
+                    }
+                </a></strong></td>
                 @foreach (var usageData in @assembly.UsageData)
                 {
                     <td class="text-center">@usageData.PortabilityIndex.ToString("P2")</td>
@@ -149,7 +98,13 @@
             }
 
             var assemblyName = reportingResult.GetNameForAssemblyInfo(assembly.SourceAssembly);
-            <a name="@assembly.SourceAssembly"><h3>@WriteAssembly(assembly.SourceAssembly)</h3></a>
+            <a name="@assembly.SourceAssembly"><h3>
+                <span class="assembly-name">@assembly.SourceAssembly</span>
+                @if (!string.IsNullOrEmpty(@assembly.SourceAssembly.TargetFrameworkMoniker))
+                {
+                    <span class="assembly-tfm">(@assembly.SourceAssembly.TargetFrameworkMoniker)</span>
+                }
+            </h3></a>
             var usedUnresolvedAssembly = Model.GetUnresolvedAssemblies(assembly);
             if (usedUnresolvedAssembly.Count > 0)
             {
@@ -176,20 +131,28 @@
                     @*  IsMissing  => the type is entirely unsupported
                         !IsMissing => only some members are unsupported *@
                     @foreach (var type in Model.MatchingMissingTypes(assembly))
-                {
+                    {
                     var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);
-                        <tr>
-                            @WriteTableDataString(type.TypeName, name)
-                            @WriteTableVersionsRow(type.TargetVersionStatus)
-                            <td>@type.RecommendedChanges</td>
-                        </tr>
+                    <tr>
+                        <td>@name</td>
+                        @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(type.TargetVersionStatus))
+                        {
+                            var className = version.SupportedIn == null || version.Target.Version < version.SupportedIn ? "IconErrorEncoded" : "IconSuccessEncoded";
+                            <td class="@className"></td>
+                        }
+                        <td>@type.RecommendedChanges</td>
+                    </tr>
                         @*write a row for each of the type's missing members*@
                     foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
                     {
                         var formattedName = member.MemberName.Substring(type.TypeName.Length + 1);
                         <tr>
-                            @WriteTableDataStringWithStyle(member.DocId, formattedName, "padding-left:2em")
-                            @WriteTableVersionsRow(member.TargetVersionStatus)
+                            <td style="padding-left:2em">@formattedName</td>
+                            @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(member.TargetVersionStatus))
+                            {
+                                var className = version.SupportedIn == null || version.Target.Version < version.SupportedIn ? "IconErrorEncoded" : "IconSuccessEncoded";
+                                <td class="@className"></td>
+                            }
                             <td>@member.RecommendedChanges</td>
                         </tr>
                     }
