@@ -169,6 +169,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PackageId.
+        /// </summary>
+        public static string PackageIdHeader {
+            get {
+                return ResourceManager.GetString("PackageIdHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portability Summary.
         /// </summary>
         public static string PortabilitySummaryPageTitle {
@@ -178,7 +187,16 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset..
+        ///   Looks up a localized string similar to Recommended changes.
+        /// </summary>
+        public static string RecommendedChanges {
+            get {
+                return ResourceManager.GetString("RecommendedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href=&quot;https://docs.microsoft.com/dotnet/api/system.runtime.versioning.targetframeworkattribute&quot;&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset..
         /// </summary>
         public static string RetargetingCompatIssueDescriptionPart1 {
             get {
@@ -219,6 +237,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         public static string SubmissionId {
             get {
                 return ResourceManager.GetString("SubmissionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target type.
+        /// </summary>
+        public static string TargetTypeHeader {
+            get {
+                return ResourceManager.GetString("TargetTypeHeader", resourceCulture);
             }
         }
     }

@@ -153,11 +153,17 @@
   <data name="NotSupported" xml:space="preserve">
     <value>Not supported</value>
   </data>
+  <data name="PackageIdHeader" xml:space="preserve">
+    <value>PackageId</value>
+  </data>
   <data name="PortabilitySummaryPageTitle" xml:space="preserve">
     <value>Portability Summary</value>
   </data>
+  <data name="RecommendedChanges" xml:space="preserve">
+    <value>Recommended changes</value>
+  </data>
   <data name="RetargetingCompatIssueDescriptionPart1" xml:space="preserve">
-    <value>Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href="https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx"&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset.</value>
+    <value>Retargeting compatibility issues are breaking changes that only manifest when code is targeted to run on a newer .Net Framework version. This can happen if an application does not have a &lt;a href="https://docs.microsoft.com/dotnet/api/system.runtime.versioning.targetframeworkattribute"&gt;TargetFrameworkAttribute&lt;/a&gt; or when the application is rebuilt with a newer toolset.</value>
   </data>
   <data name="RetargetingCompatIssueDescriptionPart2" xml:space="preserve">
     <value>These issues are less impactful than runtime compatibility issues because they can typically be worked around easily, either by using a &lt;a href="https://msdn.microsoft.com/en-us/library/system.runtime.versioning.targetframeworkattribute%28v=vs.110%29.aspx"&gt;TargetFrameworkAttribute&lt;/a&gt; on the assembly, using a &lt;a href="https://msdn.microsoft.com/en-us/library/bb398202.aspx"&gt;TargetFrameworkVersion&lt;/a&gt; in the project file, or using older tools at build-time, depending on the particular issue. See issue details below for more information on how these breaking changes can be avoided.</value>
@@ -170,5 +176,8 @@
   </data>
   <data name="SubmissionId" xml:space="preserve">
     <value>Submission Id</value>
+  </data>
+  <data name="TargetTypeHeader" xml:space="preserve">
+    <value>Target type</value>
   </data>
 </root>
