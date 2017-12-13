@@ -79,6 +79,20 @@ namespace ApiPort.Tests
             Assert.Equal(overwrite, options.OverwriteOutputFile);
         }
 
+        [InlineData("listTargets", AppCommands.ListTargets)]
+        [InlineData("listtargets", AppCommands.ListTargets)]
+        [InlineData("listOutputFormats", AppCommands.ListOutputFormats)]
+        [InlineData("listoutputFormats", AppCommands.ListOutputFormats)]
+        [InlineData("docId", AppCommands.DocIdSearch)]
+        [InlineData("docid", AppCommands.DocIdSearch)]
+        [Theory]
+        public void SimpleCommandTests(string args, AppCommands command)
+        {
+            var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
+
+            Assert.Equal(command, options.Command);
+        }
+
         [Fact]
         public void TestAssemblyFlag_FileName()
         {
