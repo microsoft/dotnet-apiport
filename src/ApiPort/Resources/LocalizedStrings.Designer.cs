@@ -62,15 +62,6 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Analyze.
-        /// </summary>
-        internal static string Analyze {
-            get {
-                return ResourceManager.GetString("Analyze", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to API Portability Analyzer.
         /// </summary>
         internal static string ApplicationName {
@@ -116,18 +107,119 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed 
-        ///for portability concerns or known breaking changes (depending on input parameters) and returns a report that 
-        ///gives a summary of issues and possible steps forward.
-        ///
-        ///  -f, --file VALUE             [Required] Path to assembly file or directory of
-        ///                                 assemblies.
-        ///  -o, --out VALUE              Output file name
-        ///  -d, --description VALUE      Description of the subm [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Description of submission.
         /// </summary>
-        internal static string CmdAnalyzeHelp {
+        internal static string CmdAnalyzeDescription {
             get {
-                return ResourceManager.GetString("CmdAnalyzeHelp", resourceCulture);
+                return ResourceManager.GetString("CmdAnalyzeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to assembly file or directory of assemblies.
+        /// </summary>
+        internal static string CmdAnalyzeFileInput {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeFileInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis and not portability analysis[.
+        /// </summary>
+        internal static string CmdAnalyzeIgnoreAssembliesFile {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeIgnoreAssembliesFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed for portability concerns or known breaking changes (depending on input parameters) and returns a report that gives a summary of issues and possible steps forward..
+        /// </summary>
+        internal static string CmdAnalyzeMessage {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json.
+        /// </summary>
+        internal static string CmdAnalyzeNoDefaultIgnoreFile {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeNoDefaultIgnoreFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output file name.
+        /// </summary>
+        internal static string CmdAnalyzeOutputFileName {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeOutputFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format to display output results.
+        /// </summary>
+        internal static string CmdAnalyzeResultFormat {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeResultFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate breaking changes on full .NET Framework.
+        /// </summary>
+        internal static string CmdAnalyzeShowBreakingChanges {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeShowBreakingChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate non-portable APIs.
+        /// </summary>
+        internal static string CmdAnalyzeShowNonPortableApis {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeShowNonPortableApis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include the retargetting issues in the reports.
+        /// </summary>
+        internal static string CmdAnalyzeShowRetargettingIssues {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeShowRetargettingIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported..
+        /// </summary>
+        internal static string CmdAnalyzeSuppressBreakingChange {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeSuppressBreakingChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The target against which to check portability.
+        /// </summary>
+        internal static string CmdAnalyzeTarget {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies a file to be use to map target names.
+        /// </summary>
+        internal static string CmdAnalyzeTargetMap {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeTargetMap", resourceCulture);
             }
         }
         
@@ -141,69 +233,11 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis; not portability analysis..
+        ///   Looks up a localized string similar to Portability service endpoint.
         /// </summary>
-        internal static string CmdHelpIgnoreAssembliesFile {
+        internal static string CmdEndpoint {
             get {
-                return ResourceManager.GetString("CmdHelpIgnoreAssembliesFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json.
-        /// </summary>
-        internal static string CmdHelpNoDefaultIgnoreFile {
-            get {
-                return ResourceManager.GetString("CmdHelpNoDefaultIgnoreFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Calculate breaking changes on full .NET Framework.
-        /// </summary>
-        internal static string CmdHelpShowBreakingChanges {
-            get {
-                return ResourceManager.GetString("CmdHelpShowBreakingChanges", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Calculate non-portable APIs.
-        /// </summary>
-        internal static string CmdHelpShowNonPortableApis {
-            get {
-                return ResourceManager.GetString("CmdHelpShowNonPortableApis", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported..
-        /// </summary>
-        internal static string CmdHelpSuppressBreakingChange {
-            get {
-                return ResourceManager.GetString("CmdHelpSuppressBreakingChange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Retrieves a list of output formats that are available in which to receive reports
-        ///
-        ///  -h, -?, --help             Show help.
-        /// </summary>
-        internal static string CmdListOutputFormats {
-            get {
-                return ResourceManager.GetString("CmdListOutputFormats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Retrieves a list of targets available to analyze assemblies against
-        ///
-        ///  -h, -?, --help             Show help.
-        /// </summary>
-        internal static string CmdListTargets {
-            get {
-                return ResourceManager.GetString("CmdListTargets", resourceCulture);
+                return ResourceManager.GetString("CmdEndpoint", resourceCulture);
             }
         }
         
@@ -253,24 +287,6 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Description.
-        /// </summary>
-        internal static string Description {
-            get {
-                return ResourceManager.GetString("Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Description of the submission.
-        /// </summary>
-        internal static string DescriptionHelp {
-            get {
-                return ResourceManager.GetString("DescriptionHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Analyze request file output does not support this operation.
         /// </summary>
         internal static string FileOutputServiceNotSupported {
@@ -293,44 +309,6 @@ namespace ApiPort.Resources {
         internal static string Header {
             get {
                 return ResourceManager.GetString("Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid argument was passed in. Please check your command line parameters.
-        ///{0}.
-        /// </summary>
-        internal static string InvalidCommandLineArguments {
-            get {
-                return ResourceManager.GetString("InvalidCommandLineArguments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to parse ignore file &apos;{0}&apos;. Error details:
-        ///{1}.
-        /// </summary>
-        internal static string InvalidIgnoreFile {
-            get {
-                return ResourceManager.GetString("InvalidIgnoreFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid parameter passed to {0}.
-        /// </summary>
-        internal static string InvalidParameterPassed {
-            get {
-                return ResourceManager.GetString("InvalidParameterPassed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Path to assembly file or directory of assemblies..
-        /// </summary>
-        internal static string ListOfAssembliesToAnalyze {
-            get {
-                return ResourceManager.GetString("ListOfAssembliesToAnalyze", resourceCulture);
             }
         }
         
@@ -371,24 +349,6 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to options.
-        /// </summary>
-        internal static string Options {
-            get {
-                return ResourceManager.GetString("Options", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Output file name.
-        /// </summary>
-        internal static string OutputFileName {
-            get {
-                return ResourceManager.GetString("OutputFileName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Wrote output to file:.
         /// </summary>
         internal static string OutputWrittenTo {
@@ -416,29 +376,11 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Done].
-        /// </summary>
-        internal static string ProgressReportDone1 {
-            get {
-                return ResourceManager.GetString("ProgressReportDone1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to [Failed].
         /// </summary>
         internal static string ProgressReportFailed {
             get {
                 return ResourceManager.GetString("ProgressReportFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [Failed].
-        /// </summary>
-        internal static string ProgressReportFailed1 {
-            get {
-                return ResourceManager.GetString("ProgressReportFailed1", resourceCulture);
             }
         }
         
@@ -533,24 +475,6 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The report output format.
-        /// </summary>
-        internal static string ResultFormatHelp {
-            get {
-                return ResourceManager.GetString("ResultFormatHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Targets.
-        /// </summary>
-        internal static string Targets {
-            get {
-                return ResourceManager.GetString("Targets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Description:.
         /// </summary>
         internal static string TargetsDescription {
@@ -587,15 +511,6 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The target you want to check against..
-        /// </summary>
-        internal static string TargetsToCheckAgainst {
-            get {
-                return ResourceManager.GetString("TargetsToCheckAgainst", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Versions:.
         /// </summary>
         internal static string TargetsVersion {
@@ -616,24 +531,6 @@ namespace ApiPort.Resources {
         internal static string TargetUsage {
             get {
                 return ResourceManager.GetString("TargetUsage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Excel output format supports up to {0} targets for analysis at a time..
-        /// </summary>
-        internal static string TooManyTargetsMessage {
-            get {
-                return ResourceManager.GetString("TooManyTargetsMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown command: {0}.
-        /// </summary>
-        internal static string UnknownCommand {
-            get {
-                return ResourceManager.GetString("UnknownCommand", resourceCulture);
             }
         }
         

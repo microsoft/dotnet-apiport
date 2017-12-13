@@ -1,100 +1,217 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPort.CommandLine;
 using ApiPort.Resources;
+using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Collections.Immutable;
+using System.CommandLine;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
 namespace ApiPort
 {
-    internal abstract class CommandLineOptions
+    internal static class CommandLineOptions
     {
-        public abstract string Name { get; }
-
-        public abstract string HelpMessage { get; }
-
-        public abstract ICommandLineOptions Parse(IEnumerable<string> args);
-
-        private static IDictionary<string, CommandLineOptions> s_possibleCommands =
-            new CommandLineOptions[] { new AnalyzeOptions(), new ListTargetsOptions(), new ListOutputFormatOptions(), new DocIdSearchOptions() }
-            .ToDictionary(o => o.Name, o => o, StringComparer.OrdinalIgnoreCase);
+        public const string DefaultName = "ApiPortAnalysis";
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
-            if (args.Length == 0)
-            {
-                return ShowHelp();
-            }
+            bool overwriteOutput = false;
+            IReadOnlyList<string> file = Array.Empty<string>();
+            string outFile = DefaultName;
+            string description = string.Empty;
+            IReadOnlyList<string> target = Array.Empty<string>();
+            IReadOnlyList<string> result = Array.Empty<string>();
+            bool showNonPortableApis = true;
+            bool showBreakingChanges = false;
+            bool showRetargettingIssues = false;
+            bool noDefaultIgnoreFile = false;
+            IReadOnlyList<string> ignoreAssemblyFile = Array.Empty<string>();
+            IReadOnlyList<string> suppressBreakingChange = Array.Empty<string>();
+            string targetMap = string.Empty;
+            string endpoint = "https://portability.dot.net";
+            AppCommand command = default;
 
-            var inputCommand = args[0];
-
+            ArgumentSyntax argSyntax = default;
             try
             {
-                var option = s_possibleCommands.Single(c => c.Key.StartsWith(inputCommand, StringComparison.OrdinalIgnoreCase));
-                var output = option.Value.Parse(args.Skip(1));
-
-                if (output.Command == AppCommands.Help)
+                ArgumentSyntax.Parse(args, syntax =>
                 {
-                    ShowHelp(inputCommand);
+                    syntax.HandleErrors = false;
 
-                    return CommonCommands.Exit;
+                    syntax.DefineCommand("analyze", ref command, AppCommand.AnalyzeAssemblies, LocalizedStrings.CmdAnalyzeMessage);
+                    syntax.DefineOptionList("f|file", ref file, LocalizedStrings.CmdAnalyzeFileInput);
+                    syntax.DefineOption("o|out", ref outFile, LocalizedStrings.CmdAnalyzeOutputFileName);
+                    syntax.DefineOption("d|description", ref description, LocalizedStrings.CmdAnalyzeDescription);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+                    syntax.DefineOptionList("t|target", ref target, LocalizedStrings.CmdAnalyzeTarget);
+                    syntax.DefineOptionList("r|resultFormat", ref result, LocalizedStrings.CmdAnalyzeResultFormat);
+                    syntax.DefineOption("p|showNonPortableApis", ref showNonPortableApis, LocalizedStrings.CmdAnalyzeShowNonPortableApis);
+                    syntax.DefineOption("b|showBreakingChanges", ref showBreakingChanges, LocalizedStrings.CmdAnalyzeShowBreakingChanges);
+                    syntax.DefineOption("u|showRetargettingIssues", ref showRetargettingIssues, LocalizedStrings.CmdAnalyzeShowRetargettingIssues);
+                    syntax.DefineOption("force", ref overwriteOutput, LocalizedStrings.OverwriteFile);
+                    syntax.DefineOption("noDefaultIgnoreFile", ref noDefaultIgnoreFile, LocalizedStrings.CmdAnalyzeNoDefaultIgnoreFile);
+                    syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile);
+                    syntax.DefineOptionList("s|suppressBreakingChange", ref suppressBreakingChange, LocalizedStrings.CmdAnalyzeSuppressBreakingChange);
+                    syntax.DefineOption("targetMap", ref targetMap, LocalizedStrings.CmdAnalyzeTargetMap);
+
+                    syntax.DefineCommand("listTargets", ref command, AppCommand.ListTargets, LocalizedStrings.ListTargets);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+
+                    syntax.DefineCommand("listOutputFormats", ref command, AppCommand.ListOutputFormats, LocalizedStrings.ListOutputFormats);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+
+                    syntax.DefineCommand("docId", ref command, AppCommand.DocIdSearch, LocalizedStrings.CmdDocId);
+                    syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+
+                    argSyntax = syntax;
+                });
+            }
+            catch (ArgumentSyntaxException e)
+            {
+                Console.WriteLine();
+
+                Console.WriteLine(e.Message);
+
+                if (argSyntax != null)
+                {
+                    Console.WriteLine(argSyntax.GetHelpText());
                 }
 
-                return output;
+                return new ConsoleApiPortOptions(AppCommand.Exit);
             }
-            catch (FormatException)
+
+            // Set OverwriteOutputFile to true if the output file name is explicitly specified
+            if (!string.Equals(DefaultName, outFile, StringComparison.Ordinal))
             {
-                return ShowHelp(inputCommand, true);
+                overwriteOutput = true;
             }
-            catch (InvalidOperationException)
+
+            var (inputFiles, invalidFiles) = ProcessInputAssemblies(file);
+
+            return new ConsoleApiPortOptions(command)
             {
-                return ShowHelp(inputCommand, true);
-            }
+                BreakingChangeSuppressions = suppressBreakingChange,
+                Description = description,
+                IgnoredAssemblyFiles = ignoreAssemblyFile,
+                InputAssemblies = inputFiles,
+                InvalidInputFiles = invalidFiles,
+                OutputFileName = outFile,
+                OutputFormats = result,
+                OverwriteOutputFile = overwriteOutput,
+                RequestFlags = GetRequestFlags(showBreakingChanges, showRetargettingIssues, showNonPortableApis),
+                ServiceEndpoint = endpoint,
+                TargetMapFile = targetMap,
+                Targets = target,
+            };
         }
 
-        private static ICommandLineOptions ShowHelp(string suppliedCommand = null, bool error = false)
+        private static AnalyzeRequestFlags GetRequestFlags(bool showBreakingChanges, bool showRetargettingIssues, bool showNonPortableApis)
         {
-            var command = s_possibleCommands.Select(c => c.Value).FirstOrDefault(c => string.Equals(c.Name, suppliedCommand, StringComparison.OrdinalIgnoreCase));
+            var requestFlags = default(AnalyzeRequestFlags);
 
-            if (!string.IsNullOrEmpty(suppliedCommand) && command == null)
+            if (showBreakingChanges)
             {
-                Console.WriteLine();
-                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownCommand, suppliedCommand), ConsoleColor.Red);
-            }
-            else if (error)
-            {
-                Console.WriteLine();
-                // TODO: Get invalid parameter (Microsoft.Framework.Configuration currently does not surface this)
-                Program.WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidParameterPassed, suppliedCommand), ConsoleColor.Red);
+                requestFlags |= AnalyzeRequestFlags.ShowBreakingChanges;
             }
 
-            var location = typeof(CommandLineOptions).GetTypeInfo().Assembly.Location;
-            var path =
-#if NETCORE
-                // The assembly's file name will have an incorrect extension if the entry point is a host
-                // However ConsoleHost will share a file name with the assembly, so the name without
-                // extension will still be correct.
-                Path.GetFileNameWithoutExtension(Path.GetFullPath(location));
-#else // NETCORE
-                Path.GetFileName(Path.GetFullPath(location));
-#endif // NETCORE
-
-            var displayCommands = command == null ? s_possibleCommands.Select(c => c.Value) : new[] { command };
-            foreach (var displayCommand in displayCommands)
+            if (showRetargettingIssues)
             {
-                Console.WriteLine();
-                Console.WriteLine(new string('=', Math.Min(Console.WindowWidth, 100)));
-                Program.WriteColorLine(FormattableString.Invariant($"{path} {displayCommand.Name} [{LocalizedStrings.Options}]"), ConsoleColor.Yellow);
-                Console.WriteLine();
-                Console.WriteLine(displayCommand.HelpMessage);
+                requestFlags |= AnalyzeRequestFlags.ShowRetargettingIssues;
+                requestFlags |= AnalyzeRequestFlags.ShowBreakingChanges;
             }
 
-            return CommonCommands.Exit;
+            if (showNonPortableApis)
+            {
+                requestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
+            }
+
+            // If nothing is set, default to ShowNonPortableApis
+            if ((requestFlags & (AnalyzeRequestFlags.ShowBreakingChanges | AnalyzeRequestFlags.ShowNonPortableApis)) == AnalyzeRequestFlags.None)
+            {
+                requestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
+            }
+
+            return requestFlags;
+        }
+
+        private static (ImmutableDictionary<IAssemblyFile, bool>, IReadOnlyCollection<string>) ProcessInputAssemblies(IEnumerable<string> files)
+        {
+            var s_ValidExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ".dll",
+                ".exe",
+                ".winmd",
+                ".ilexe",
+                ".ildll"
+            };
+
+            var inputAssemblies = new SortedDictionary<IAssemblyFile, bool>(AssemblyFileComparer.Instance);
+            var invalidInputFiles = new List<string>();
+
+            void ProcessInputAssemblies(string path, bool isExplicitlySpecified)
+            {
+                bool HasValidPEExtension(string assemblyLocation)
+                {
+                    return s_ValidExtensions.Contains(Path.GetExtension(assemblyLocation));
+                }
+
+                if (Directory.Exists(path))
+                {
+                    foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+                    {
+                        // If the user passes in a whole directory, any assembly we find in there
+                        // was not explicitly passed in.
+                        ProcessInputAssemblies(file, isExplicitlySpecified: false);
+                    }
+                }
+                else if (File.Exists(path))
+                {
+                    // Only add files with valid PE extensions to the list of
+                    // assemblies to analyze since others are not valid assemblies
+                    if (HasValidPEExtension(path))
+                    {
+                        var filePath = new FilePathAssemblyFile(path);
+                        if (inputAssemblies.TryGetValue(filePath, out var isAssemblySpecified))
+                        {
+                            // If the assembly already exists, and it was not
+                            // specified explicitly, in the the case where one
+                            // value does not match the other, we default to
+                            // saying that the assembly is specified.
+                            inputAssemblies[filePath] = isExplicitlySpecified || isAssemblySpecified;
+                        }
+                        else
+                        {
+                            inputAssemblies.Add(filePath, isExplicitlySpecified);
+                        }
+                    }
+                }
+                else
+                {
+                    invalidInputFiles.Add(path);
+                }
+            }
+
+            foreach (var file in files)
+            {
+                ProcessInputAssemblies(file, isExplicitlySpecified: true);
+            }
+
+            return (inputAssemblies.ToImmutableDictionary(), invalidInputFiles);
+        }
+
+        private class ConsoleApiPortOptions : ReadWriteApiPortOptions, ICommandLineOptions
+        {
+            public ConsoleApiPortOptions(AppCommand command)
+            {
+                Command = command;
+            }
+
+            public AppCommand Command { get; }
+
+            public string TargetMapFile { get; set; }
         }
     }
 }

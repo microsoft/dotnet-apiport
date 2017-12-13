@@ -3,7 +3,7 @@
 
 namespace ApiPort
 {
-    public enum AppCommands
+    public enum AppCommand
     {
         ListTargets,
         AnalyzeAssemblies,

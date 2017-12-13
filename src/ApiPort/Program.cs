@@ -22,7 +22,7 @@ namespace ApiPort
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            if (options.Command == AppCommands.Exit)
+            if (options.Command == AppCommand.Exit)
             {
                 return -1;
             }
@@ -39,16 +39,16 @@ namespace ApiPort
 
                     switch (options.Command)
                     {
-                        case AppCommands.ListTargets:
+                        case AppCommand.ListTargets:
                             await client.ListTargetsAsync();
                             break;
-                        case AppCommands.AnalyzeAssemblies:
+                        case AppCommand.AnalyzeAssemblies:
                             await client.AnalyzeAssembliesAsync();
                             break;
-                        case AppCommands.DocIdSearch:
+                        case AppCommand.DocIdSearch:
                             await client.RunDocIdSearchAsync();
                             break;
-                        case AppCommands.ListOutputFormats:
+                        case AppCommand.ListOutputFormats:
                             await client.ListOutputFormatsAsync();
                             break;
                     }
