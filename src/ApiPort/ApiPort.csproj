@@ -17,8 +17,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CommandLine\" />
-  </ItemGroup>
-
 </Project>
