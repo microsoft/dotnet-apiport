@@ -26,7 +26,7 @@ namespace ApiPort.Tests
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
 
             foreach (var element in options.InputAssemblies)
@@ -41,7 +41,7 @@ namespace ApiPort.Tests
         {
             var options = CommandLineOptions.ParseCommandLineOptions(Array.Empty<string>());
 
-            Assert.Equal(AppCommands.Exit, options.Command);
+            Assert.Equal(AppCommand.Exit, options.Command);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace ApiPort.Tests
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            Assert.Equal(AppCommands.Exit, options.Command);
+            Assert.Equal(AppCommand.Exit, options.Command);
         }
 
         [InlineData("analyze -f file.dll", CommandLineOptions.DefaultName)]
@@ -62,7 +62,7 @@ namespace ApiPort.Tests
         {
             var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
 
-            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.Equal(name, options.OutputFileName);
         }
 
@@ -75,15 +75,15 @@ namespace ApiPort.Tests
         {
             var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
 
-            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.Equal(overwrite, options.OverwriteOutputFile);
         }
 
-        [InlineData("listTargets", AppCommands.ListTargets)]
-        [InlineData("listOutputFormats", AppCommands.ListOutputFormats)]
-        [InlineData("docId", AppCommands.DocIdSearch)]
+        [InlineData("listTargets", AppCommand.ListTargets)]
+        [InlineData("listOutputFormats", AppCommand.ListOutputFormats)]
+        [InlineData("docId", AppCommand.DocIdSearch)]
         [Theory]
-        public void SimpleCommandTests(string args, AppCommands command)
+        public void SimpleCommandTests(string args, AppCommand command)
         {
             var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
 
@@ -102,7 +102,7 @@ namespace ApiPort.Tests
 
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             var input = Assert.Single(options.InputAssemblies);
 
             // The bool with the meaning of 'ExplicitlySpecified' should be true
@@ -124,7 +124,7 @@ namespace ApiPort.Tests
             };
             var options = CommandLineOptions.ParseCommandLineOptions(args);
 
-            Assert.Equal(AppCommands.AnalyzeAssemblies, options.Command);
+            Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
 
             // The scenario tested is when an assembly is passed in twice, once explicitly and once as part of the folder

@@ -32,7 +32,7 @@ namespace ApiPort
             IReadOnlyList<string> suppressBreakingChange = Array.Empty<string>();
             string targetMap = string.Empty;
             string endpoint = "https://portability.dot.net";
-            AppCommands command = default;
+            AppCommand command = default;
 
             ArgumentSyntax argSyntax = default;
             try
@@ -41,7 +41,7 @@ namespace ApiPort
                 {
                     syntax.HandleErrors = false;
 
-                    syntax.DefineCommand("analyze", ref command, AppCommands.AnalyzeAssemblies, LocalizedStrings.CmdAnalyzeMessage);
+                    syntax.DefineCommand("analyze", ref command, AppCommand.AnalyzeAssemblies, LocalizedStrings.CmdAnalyzeMessage);
                     syntax.DefineOptionList("f|file", ref file, LocalizedStrings.CmdAnalyzeFileInput);
                     syntax.DefineOption("o|out", ref outFile, LocalizedStrings.CmdAnalyzeOutputFileName);
                     syntax.DefineOption("d|description", ref description, LocalizedStrings.CmdAnalyzeDescription);
@@ -57,13 +57,13 @@ namespace ApiPort
                     syntax.DefineOptionList("s|suppressBreakingChange", ref suppressBreakingChange, LocalizedStrings.CmdAnalyzeSuppressBreakingChange);
                     syntax.DefineOption("targetMap", ref targetMap, LocalizedStrings.CmdAnalyzeTargetMap);
 
-                    syntax.DefineCommand("listTargets", ref command, AppCommands.ListTargets, LocalizedStrings.ListTargets);
+                    syntax.DefineCommand("listTargets", ref command, AppCommand.ListTargets, LocalizedStrings.ListTargets);
                     syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
 
-                    syntax.DefineCommand("listOutputFormats", ref command, AppCommands.ListOutputFormats, LocalizedStrings.ListOutputFormats);
+                    syntax.DefineCommand("listOutputFormats", ref command, AppCommand.ListOutputFormats, LocalizedStrings.ListOutputFormats);
                     syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
 
-                    syntax.DefineCommand("docId", ref command, AppCommands.DocIdSearch, LocalizedStrings.CmdDocId);
+                    syntax.DefineCommand("docId", ref command, AppCommand.DocIdSearch, LocalizedStrings.CmdDocId);
                     syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
 
                     argSyntax = syntax;
@@ -80,7 +80,7 @@ namespace ApiPort
                     Console.WriteLine(argSyntax.GetHelpText());
                 }
 
-                return new ConsoleApiPortOptions(AppCommands.Exit);
+                return new ConsoleApiPortOptions(AppCommand.Exit);
             }
 
             // Set OverwriteOutputFile to true if the output file name is explicitly specified
@@ -204,12 +204,12 @@ namespace ApiPort
 
         private class ConsoleApiPortOptions : ReadWriteApiPortOptions, ICommandLineOptions
         {
-            public ConsoleApiPortOptions(AppCommands command)
+            public ConsoleApiPortOptions(AppCommand command)
             {
                 Command = command;
             }
 
-            public AppCommands Command { get; }
+            public AppCommand Command { get; }
 
             public string TargetMapFile { get; set; }
         }
