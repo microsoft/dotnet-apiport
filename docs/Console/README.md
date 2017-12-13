@@ -99,27 +99,14 @@ two alternate modes that can be used to alter this workflow.
 
 ### See the data being transmitted
 
-The first option is to output the request to a file. This will result in an
-output that shows what data is being transmitted to the service, but provides no
-details as to API portability or breaking changes. This is a good option if you
-would like to see what data will be collected.
-
-In order to enable this mode, create a file `autofac.json` and place it in the
-same directory as `ApiPort.exe`. Add the following contents:
-
-```json
-{
-  "defaultAssembly": "ApiPort",
-  "modules": [
-    {
-      "type": "ApiPort.Modules.DataTransferModule"
-    }
-  ]
-}
+```
+ApiPort.exe dump -f [path to file or directory]
 ```
 
-Now, when you run, it will output a file (ie. `ApiPortAnalysis.json`) with the information that is sent to
-the .NET Portability service.
+The `dump` command will output the data that would otherwise be sent to the service.
+This is a good option if you would like to see what data will be collected. A file,
+which by default is `ApiPortAnalysis.json`, will be created with the information that
+would sent to the .NET Portability service.
 
 ### Run the tool in an offline mode
 

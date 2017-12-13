@@ -43,6 +43,7 @@ namespace ApiPort
                             await client.ListTargetsAsync();
                             break;
                         case AppCommand.AnalyzeAssemblies:
+                        case AppCommand.DumpAnalysis:
                             await client.AnalyzeAssembliesAsync();
                             break;
                         case AppCommand.DocIdSearch:

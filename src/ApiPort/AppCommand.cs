@@ -8,6 +8,7 @@ namespace ApiPort
         ListTargets,
         AnalyzeAssemblies,
         ListOutputFormats,
+        DumpAnalysis,
         DocIdSearch,
         Help,
         Exit

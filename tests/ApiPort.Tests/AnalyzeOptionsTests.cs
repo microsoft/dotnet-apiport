@@ -18,13 +18,7 @@ namespace ApiPort.Tests
         public void TestAssemblyFlag_Directory()
         {
             var directoryPath = Directory.GetCurrentDirectory();
-            var args = new string[3] {
-                "analyze",
-                "-f",
-                directoryPath
-            };
-
-            var options = CommandLineOptions.ParseCommandLineOptions(args);
+            var options = GetOptions($"analyze -f {directoryPath}");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
@@ -47,11 +41,24 @@ namespace ApiPort.Tests
         [Fact]
         public void AnalyzeNoFile()
         {
-            var args = "analyze -f".Split(' ');
-
-            var options = CommandLineOptions.ParseCommandLineOptions(args);
+            var options = GetOptions("analyze -f");
 
             Assert.Equal(AppCommand.Exit, options.Command);
+        }
+
+        [InlineData("dump -f file.dll", "file.dll", CommandLineOptions.DefaultName)]
+        [InlineData("dump -f file.dll -o out.json", "file.dll", "out.json")]
+        [Theory]
+        public void DumpAnalysis(string args, string file, string output)
+        {
+            var options = GetOptions(args);
+
+            Assert.Equal(AppCommand.DumpAnalysis, options.Command);
+            Assert.Equal(output, options.OutputFileName);
+
+            // It will be in the invalid list because it cannot be found
+            var input = Assert.Single(options.InvalidInputFiles);
+            Assert.Equal(file, input);
         }
 
         [InlineData("analyze -f file.dll", CommandLineOptions.DefaultName)]
@@ -73,7 +80,7 @@ namespace ApiPort.Tests
         [Theory]
         public void OverwriteFile(string args, bool overwrite)
         {
-            var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
+            var options = GetOptions(args);
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.Equal(overwrite, options.OverwriteOutputFile);
@@ -85,7 +92,7 @@ namespace ApiPort.Tests
         [Theory]
         public void SimpleCommandTests(string args, AppCommand command)
         {
-            var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
+            var options = GetOptions(args);
 
             Assert.Equal(command, options.Command);
         }
@@ -94,13 +101,7 @@ namespace ApiPort.Tests
         public void TestAssemblyFlag_FileName()
         {
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
-            var args = new string[3] {
-                "analyze",
-                "-f",
-                currentAssemblyPath
-            };
-
-            var options = CommandLineOptions.ParseCommandLineOptions(args);
+            var options = GetOptions($"analyze -f {currentAssemblyPath}");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             var input = Assert.Single(options.InputAssemblies);
@@ -115,14 +116,7 @@ namespace ApiPort.Tests
             var directoryPath = Directory.GetCurrentDirectory();
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
 
-            var args = new string[5] {
-                "analyze",
-                "-f",
-                directoryPath,
-                "-f",
-                currentAssemblyPath
-            };
-            var options = CommandLineOptions.ParseCommandLineOptions(args);
+            var options = GetOptions($"analyze -f {directoryPath} -f {currentAssemblyPath}");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
@@ -142,6 +136,11 @@ namespace ApiPort.Tests
                     Assert.False(element.Value);
                 }
             }
+        }
+
+        private static ICommandLineOptions GetOptions(string args)
+        {
+            return CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
         }
     }
 }
