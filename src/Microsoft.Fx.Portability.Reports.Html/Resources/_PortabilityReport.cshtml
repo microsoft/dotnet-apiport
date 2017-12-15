@@ -138,8 +138,7 @@
                         <td>@name</td>
                         @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(type.TargetVersionStatus))
                         {
-                            var className = version.SupportedIn == null || version.Target.Version < version.SupportedIn ? "IconErrorEncoded" : "IconSuccessEncoded";
-                            <td class="@className"></td>
+                            @Html.TargetSupportCell(version);
                         }
                         <td>@type.RecommendedChanges</td>
                     </tr>
@@ -151,8 +150,7 @@
                             <td style="padding-left:2em">@formattedName</td>
                             @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(member.TargetVersionStatus))
                             {
-                                var className = version.SupportedIn == null || version.Target.Version < version.SupportedIn ? "IconErrorEncoded" : "IconSuccessEncoded";
-                                <td class="@className"></td>
+                                @Html.TargetSupportCell(version);
                             }
                             <td>@member.RecommendedChanges</td>
                         </tr>

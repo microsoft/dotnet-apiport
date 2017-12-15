@@ -1,7 +1,9 @@
 ﻿@*
-   Copyright (c) Microsoft. All rights reserved.
-   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+    Copyright (c) Microsoft. All rights reserved.
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 *@
+
+@using Microsoft.Fx.Portability.Reports.Html.Resources
 
 <script>
     // Toggle the element controlled by a toggle button on or off
@@ -12,16 +14,19 @@
         if (currentClass === null) {
             // If the element has no class, then it's on. Turn it off.
             element.setAttribute('class', 'ToggledOff');
+            this.setAttribute('title', '@LocalizedStrings.Expand');
             this.innerHTML = '+';
         }
         else if (currentClass.search(/\bToggledOff\b/) > -1) {
             // If it has ToggledOff as a class, then it's off. Turn it on.
             element.setAttribute('class', currentClass.replace(/\bToggledOff\b/, '').trim());
+            this.setAttribute('title', '@LocalizedStrings.Collapse');
             this.innerHTML = '&#8212';
         }
         else {
             // If it doesn't have ToggledOff as a class, then it's on. Turn it off.
             element.setAttribute('class', currentClass.concat(' ToggledOff').trim());
+            this.setAttribute('title', '@LocalizedStrings.Expand');
             this.innerHTML = '+';
         }
     }
@@ -77,7 +82,7 @@
         for (var table = 0; table < tables.length; table++) {
             var rows = tables[table].getElementsByTagName('tr');
             if (style === '') { // show all rows
-                for(var row = 0; row < rows.length; row++)
+                for (var row = 0; row < rows.length; row++)
                     if (rows[row].style.display === 'none') rows[row].style.display = style; // show previously hidden rows
             } else {
                 var row = 1;
@@ -111,7 +116,7 @@
                         typeRow.style.display = style; // hide the type row
                         rows[j].style.display = style;  // hide the blank separator row
                     }
-                    row = j+1;
+                    row = j + 1;
                 }
             }
         }

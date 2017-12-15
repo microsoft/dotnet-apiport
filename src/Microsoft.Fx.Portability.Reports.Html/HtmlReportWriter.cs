@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System;
 using Microsoft.Fx.Portability.Reports.Html;
+using Microsoft.Fx.Portability.Reports.Html.Resources;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -99,6 +100,17 @@ namespace Microsoft.Fx.Portability.Reports
                 var razor = s_razorService.RunCompile(template, name, typeof(T), model);
 
                 return Raw(razor);
+            }
+
+            public IEncodedString TargetSupportCell(TargetSupportedIn supportStatus)
+            {
+                var supported = supportStatus.SupportedIn != null
+                             && supportStatus.Target.Version >= supportStatus.SupportedIn;
+
+                var className = supported ? "IconSuccessEncoded" : "IconErrorEncoded";
+                var title = supported ? LocalizedStrings.Supported : LocalizedStrings.NotSupported;
+
+                return Raw($"<td class=\"{className}\" title=\"{title}\"></td>");
             }
 
             public IEncodedString WriteStyledBreakingChangeCount(int breaks, int warningThreshold, int errorThreshold)
