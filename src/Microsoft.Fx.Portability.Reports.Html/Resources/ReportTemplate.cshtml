@@ -5,12 +5,7 @@
 
 @model Microsoft.Fx.Portability.Reports.RazorHtmlObject
 
-@using Microsoft.Fx.Portability
-@using Microsoft.Fx.Portability.Reporting.ObjectModel
 @using Microsoft.Fx.Portability.Reports.Html.Resources
-@using System.IO
-@using System.Linq
-@using System.Runtime.Versioning
 
 @{
     ViewBag.Title = LocalizedStrings.HtmlReportTitle;
@@ -55,7 +50,7 @@
             </p>
 
             <div id="toc">
-                <h2>Contents</h2>
+                <h2>@LocalizedStrings.Contents</h2>
                 <ul>
                     @if (includeBreakingChanges)
                     {

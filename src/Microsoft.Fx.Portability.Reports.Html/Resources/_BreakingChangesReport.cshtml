@@ -19,21 +19,21 @@
     <a name="@LocalizedStrings.CompatibilityPageTitle"></a>@LocalizedStrings.CompatibilityPageTitle
 </h2>
 <div id="summary-compat-byassembly">
-    <h3 class="compat-subheader">Per Assembly Overview:</h3>
+    <h3 class="compat-subheader">@LocalizedStrings.PerAssemblyOverview</h3>
     <table>
         <tbody>
             <tr>
                 <th rowspan="2">@LocalizedStrings.AssemblyHeader</th>
-                <th colspan="3" class="textCentered"><abbr title="@LocalizedStrings.RuntimeCompatIssueDescription">Runtime Issues</abbr></th>
-                <th colspan="3" class="textCentered"><abbr title="@LocalizedStrings.RetargetingCompatIssueDescriptionPlainText">Retargeting Issues</abbr></th>
+                <th colspan="3" class="textCentered"><abbr title="@LocalizedStrings.RuntimeCompatIssueDescription">@LocalizedStrings.RuntimeIssues</abbr></th>
+                <th colspan="3" class="textCentered"><abbr title="@LocalizedStrings.RetargetingCompatIssueDescriptionPlainText">@LocalizedStrings.RetargetingIssues</abbr></th>
             </tr>
             <tr>
-                <th><abbr title="@LocalizedStrings.MajorCompatIssueDescription">Major</abbr></th>
-                <th><abbr title="@LocalizedStrings.MinorCompatIssueDescription">Minor</abbr></th>
-                <th><abbr title="@LocalizedStrings.EdgeCompatIssueDescription">Edge</abbr></th>
-                <th><abbr title="@LocalizedStrings.MajorCompatIssueDescription">Major</abbr></th>
-                <th><abbr title="@LocalizedStrings.MinorCompatIssueDescription">Minor</abbr></th>
-                <th><abbr title="@LocalizedStrings.EdgeCompatIssueDescription">Edge</abbr></th>
+                <th><abbr title="@LocalizedStrings.MajorCompatIssueDescription">@LocalizedStrings.Major</abbr></th>
+                <th><abbr title="@LocalizedStrings.MinorCompatIssueDescription">@LocalizedStrings.Minor</abbr></th>
+                <th><abbr title="@LocalizedStrings.EdgeCompatIssueDescription">@LocalizedStrings.Edge</abbr></th>
+                <th><abbr title="@LocalizedStrings.MajorCompatIssueDescription">@LocalizedStrings.Major</abbr></th>
+                <th><abbr title="@LocalizedStrings.MinorCompatIssueDescription">@LocalizedStrings.Minor</abbr></th>
+                <th><abbr title="@LocalizedStrings.EdgeCompatIssueDescription">@LocalizedStrings.Edge</abbr></th>
             </tr>
 
             @*Writing the summary body information here.*@
@@ -85,10 +85,10 @@
 @if (Model.OrderedBreakingChangeSkippedAssemblies.Count() > 0)
 {
     <div id="summary-compat-skippedassemblies">
-        <h3 class="compat-subheader">Ignored Assemblies:</h3>
+        <h3 class="compat-subheader">@LocalizedStrings.IgnoredAssemblies</h3>
         <table>
             <tr>
-                <th>Assembly</th>
+                <th>@LocalizedStrings.Assembly</th>
             </tr>
             @foreach (AssemblyInfo assembly in Model.OrderedBreakingChangeSkippedAssemblies)
             {
@@ -106,7 +106,7 @@
     </div>
 }
 <div id="summary-compat-bybreakingchange">
-    <h3 class="compat-subheader">Submission Overview:</h3>
+    <h3 class="compat-subheader">@LocalizedStrings.SubmissionOverview</h3>
 
     @Html.Partial("_CompatibilitySummary", new CompatibilitySummaryModel(Model.BreakingChangesSummary, null, null, 0))
 </div>
