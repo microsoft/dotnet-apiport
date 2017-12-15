@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-    <PackageReference Include="RazorEngine" Version="3.10.0" />
+    <PackageReference Include="RazorEngine" Version="4.5.1-alpha002" />
   </ItemGroup>
 
   <ItemGroup>
