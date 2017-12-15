@@ -292,4 +292,7 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="CmdAnalyzeTargetMap" xml:space="preserve">
     <value>Specifies a file to be use to map target names</value>
   </data>
+  <data name="CmdDumpAnalysis" xml:space="preserve">
+    <value>Write the analysis request to the output file without sending any data to the service</value>
+  </data>
 </root>

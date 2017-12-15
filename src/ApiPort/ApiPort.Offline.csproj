@@ -2,6 +2,10 @@
 
   <Import Project="ApiPort.props" />
 
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);FEATURE_OFFLINE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.csproj" />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj" />

@@ -3,6 +3,10 @@
   <Import Project="ApiPort.props" />
 
   <ItemGroup>
+    <Compile Remove="DependencyBuilder.Offline.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Resources\LocalizedStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

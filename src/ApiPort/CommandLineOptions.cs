@@ -57,6 +57,12 @@ namespace ApiPort
                     syntax.DefineOptionList("s|suppressBreakingChange", ref suppressBreakingChange, LocalizedStrings.CmdAnalyzeSuppressBreakingChange);
                     syntax.DefineOption("targetMap", ref targetMap, LocalizedStrings.CmdAnalyzeTargetMap);
 
+#if !FEATURE_OFFLINE
+                    syntax.DefineCommand("dump", ref command, AppCommand.DumpAnalysis, LocalizedStrings.CmdDumpAnalysis);
+                    syntax.DefineOptionList("f|file", ref file, LocalizedStrings.CmdAnalyzeFileInput);
+                    syntax.DefineOption("o|out", ref outFile, LocalizedStrings.CmdAnalyzeOutputFileName);
+#endif
+
                     syntax.DefineCommand("listTargets", ref command, AppCommand.ListTargets, LocalizedStrings.ListTargets);
                     syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
 

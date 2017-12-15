@@ -233,6 +233,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Write the analysis request to the output file without sending any data to the service.
+        /// </summary>
+        internal static string CmdDumpAnalysis {
+            get {
+                return ResourceManager.GetString("CmdDumpAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portability service endpoint.
         /// </summary>
         internal static string CmdEndpoint {
