@@ -57,12 +57,11 @@
 </table>
 <div id="details">
         <h3>@LocalizedStrings.HideRows</h3>
-        <form>
+        <label>@LocalizedStrings.HideRowsWithNoProblems
             <input type="checkbox" id="row_visibility_checkbox" onchange="ToggleRowVisibility(this)">
-            <label for="row_visibility_checkbox">@LocalizedStrings.HideRowsWithNoProblems</label>
-        </form>
+        </label>
 
-        @{ 
+        @{
             var detailColumnHeaders = new List<string>();
             detailColumnHeaders.Add(LocalizedStrings.TargetTypeHeader);
             detailColumnHeaders.AddRange(Model.TargetHeaders);
@@ -187,7 +186,7 @@
                 nugetColumnHeaders.Add(LocalizedStrings.AssemblyHeader);
             }
         }
-    
+
         <table>
             <tbody>
                 <tr>
@@ -219,13 +218,13 @@
                         {
                             <td>@nugetPackage.AssemblyInfo</td>
                         }
-                      
+
                     </tr>
                 }
-            
+
             </tbody>
         </table>
-    
+
 
         <p>
             <a href="#@LocalizedStrings.PortabilitySummaryPageTitle">@LocalizedStrings.BackToSummary</a>
