@@ -46,11 +46,15 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static const:LocalizedStrings.DefaultOutputDirectory}" />
-                <TextBlock Grid.Column="2" Grid.Row="0" AutomationProperties.HelpText="{Binding OutputDirectory}" Text="{Binding OutputDirectory}" />
-                <Button Grid.Column="4" Grid.Row="0" Content="..." Click="UpdateDirectoryClick" />
-
+                <TextBlock Grid.Column="2" Grid.Row="0" AutomationProperties.HelpText="{Binding OutputDirectory}"
+                           Text="{Binding OutputDirectory}" />
+                <Button Grid.Column="4" Grid.Row="0" Content="..." Click="UpdateDirectoryClick"
+                        AutomationProperties.Name="{x:Static const:LocalizedStrings.SelectDefaultOutputDirectory}"
+                        KeyboardNavigation.TabIndex="0" />
                 <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static const:LocalizedStrings.DefaultFileName}" />
-                <TextBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding DefaultOutputName, Mode=TwoWay}" />
+                <TextBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding DefaultOutputName, Mode=TwoWay}"
+                         AutomationProperties.Name="{x:Static const:LocalizedStrings.DefaultReportFilename}"
+                         KeyboardNavigation.TabIndex="1" />
             </Grid>
         </GroupBox>
 
