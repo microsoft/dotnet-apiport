@@ -113,7 +113,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw($"<td class=\"{className}\" title=\"{title}\"></td>");
             }
 
-            public IEncodedString WriteStyledBreakingChangeCount(int breaks, int warningThreshold, int errorThreshold)
+            public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
             {
                 var className = "";
                 if (breaks <= warningThreshold)
@@ -125,7 +125,7 @@ namespace Microsoft.Fx.Portability.Reports
                     className = breaks <= errorThreshold ? "FewBreakingChanges" : "ManyBreakingChanges";
                 }
 
-                return Raw($"<span class=\"{className}\">{breaks}</span>");
+                return Raw($"<td class=\"textCentered {className}\">{breaks}</td>");
             }
         }
 

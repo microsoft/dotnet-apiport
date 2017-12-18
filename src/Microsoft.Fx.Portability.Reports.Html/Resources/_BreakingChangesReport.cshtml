@@ -50,14 +50,11 @@
                     var minorRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Minor && b.Key.IsRetargeting);
                     var edgeRetargetingIssues = breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && b.Key.IsRetargeting);
 
-                    // Determine if the row is important or not (based on issue counts)
-                    var rowClass = (majorIssues.Count() > 0 || minorIssues.Count() > 0) ? string.Empty : "lowPriRow";
-
                     // Create a link to compat details if they will exist
                     var link = (majorIssues.Count() + minorIssues.Count() + edgeIssues.Count() + majorRetargetingIssues.Count() + minorRetargetingIssues.Count() + edgeRetargetingIssues.Count()) > 0 ?
                                 "#Compat-" + assembly :
                                 "#" + LocalizedStrings.CompatibilityPageTitle;
-                    <tr class="@rowClass">
+                    <tr>
                         <td>
                             <strong>
                                 <a href="@link">
@@ -69,12 +66,12 @@
                                 </a>
                             </strong>
                         </td>
-                        <td class="textCentered">@Html.WriteStyledBreakingChangeCount(majorIssues.Count(), 0, 2)</td>
-                        <td class="textCentered">@Html.WriteStyledBreakingChangeCount(minorIssues.Count(), 0, 3)</td>
-                        <td class="textCentered">@Html.WriteStyledBreakingChangeCount(edgeIssues.Count(), 0, 100)</td>
-                        <td class="textCentered">@Html.WriteStyledBreakingChangeCount(majorRetargetingIssues.Count(), 0, 2)</td>
-                        <td class="textCentered">@Html.WriteStyledBreakingChangeCount(minorRetargetingIssues.Count(), 0, 3)</td>
-                        <td class="textCentered">@Html.WriteStyledBreakingChangeCount(edgeRetargetingIssues.Count(), 0, 100)</td>
+                        @Html.BreakingChangeCountCell(majorIssues.Count(), 0, 2)
+                        @Html.BreakingChangeCountCell(minorIssues.Count(), 0, 3)
+                        @Html.BreakingChangeCountCell(edgeIssues.Count(), 0, 100)
+                        @Html.BreakingChangeCountCell(majorRetargetingIssues.Count(), 0, 2)
+                        @Html.BreakingChangeCountCell(minorRetargetingIssues.Count(), 0, 3)
+                        @Html.BreakingChangeCountCell(edgeRetargetingIssues.Count(), 0, 100)
                     </tr>
                 }
             }

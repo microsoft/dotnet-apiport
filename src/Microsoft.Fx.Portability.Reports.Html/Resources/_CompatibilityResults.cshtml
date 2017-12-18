@@ -11,8 +11,8 @@
 @using System.Globalization
 @using System.Linq
 
-<h4><abbr title="@Model.Description">@Model.Name</abbr> - @Html.WriteStyledBreakingChangeCount(Model.Breaks.Count(), Model.WarningThreshold, Model.ErrorThreshold)</h4>
-<div id="BreakDetails" class="BreakDetails">
+<h4><abbr title="@Model.Description">@Model.Name</abbr> - @Model.Breaks.Count()</h4>
+<div class="BreakDetails">
     @if (Model.Breaks.Count() > 0)
     {
         <table>
