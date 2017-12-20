@@ -113,9 +113,7 @@ namespace Microsoft.Fx.Portability
                 throw new UnknownTargetException(content);
             }
 
-            //Trace.TraceError(string.Format("Unknown HttpStatusCode.BadRequest: {0} [{1}]", response.ReasonPhrase, content));
-
-            throw new PortabilityAnalyzerException(LocalizedStrings.UnknownBadRequestMessage);
+            throw new PortabilityAnalyzerException(LocalizedStrings.BadRequestMessage);
         }
 
         private async Task<ServiceResponse<TResponse>> CallInternalAsync<TResponse>(HttpRequestMessage request)
