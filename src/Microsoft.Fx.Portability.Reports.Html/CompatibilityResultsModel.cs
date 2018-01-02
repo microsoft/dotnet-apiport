@@ -8,11 +8,11 @@ namespace Microsoft.Fx.Portability.Reports.Html
 {
     public class CompatibilityResultsModel
     {
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> Breaks { get; private set; }
-        public int WarningThreshold { get; private set; }
-        public int ErrorThreshold { get; private set; }
+        public string Name { get; }
+        public string Description { get; }
+        public IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> Breaks { get; }
+        public int WarningThreshold { get; }
+        public int ErrorThreshold { get; }
 
         public CompatibilityResultsModel(string name, string description, IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> breaks, int warningThreshold, int errorThreshold)
         {
