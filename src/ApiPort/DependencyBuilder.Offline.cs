@@ -15,6 +15,7 @@ namespace ApiPort
         static partial void RegisterOfflineModule(ContainerBuilder builder)
         {
             builder.RegisterModule(new OfflineDataModule(DefaultOutputFormatInstanceName));
+            TryLoadReportWriters(builder);
         }
 
         private static void TryLoadReportWriters(ContainerBuilder builder)
