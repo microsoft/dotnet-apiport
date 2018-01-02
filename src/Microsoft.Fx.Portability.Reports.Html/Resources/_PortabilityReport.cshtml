@@ -132,34 +132,34 @@
                         !IsMissing => only some members are unsupported *@
                     @foreach (var type in Model.MatchingMissingTypes(assembly))
                     {
-                    var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);
-                    <tr>
-                        <td>@name</td>
-                        @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(type.TargetVersionStatus))
-                        {
-                            @Html.TargetSupportCell(version);
-                        }
-                        <td>@type.RecommendedChanges</td>
-                    </tr>
-                        @*write a row for each of the type's missing members*@
-                    foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
-                    {
-                        var formattedName = member.MemberName.Substring(type.TypeName.Length + 1);
+                        var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);
                         <tr>
-                            <td style="padding-left:2em">@formattedName</td>
-                            @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(member.TargetVersionStatus))
+                            <td>@name</td>
+                            @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(type.TargetVersionStatus))
                             {
                                 @Html.TargetSupportCell(version);
                             }
-                            <td>@member.RecommendedChanges</td>
+                            <td>@type.RecommendedChanges</td>
                         </tr>
-                    }
-                    <tr>
-                        @foreach (var column in detailColumnHeaders)
+                        @*write a row for each of the type's missing members*@
+                        foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
                         {
-                            <td>&nbsp;</td>
+                            var formattedName = member.MemberName.Substring(type.TypeName.Length + 1);
+                            <tr>
+                                <td style="padding-left:2em">@formattedName</td>
+                                @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(member.TargetVersionStatus))
+                                {
+                                    @Html.TargetSupportCell(version);
+                                }
+                                <td>@member.RecommendedChanges</td>
+                            </tr>
                         }
-                    </tr>
+                        <tr>
+                            @foreach (var column in detailColumnHeaders)
+                            {
+                                <td>&nbsp;</td>
+                            }
+                        </tr>
                     }
                 </tbody>
             </table>
