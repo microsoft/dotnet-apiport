@@ -20,18 +20,19 @@ namespace Microsoft.Fx.Portability.Reports
         private static readonly IRazorEngineService s_razorService = CreateService();
 
         private readonly ITargetMapper _targetMapper;
+        private static readonly ResultFormatInformation _formatInformation = new ResultFormatInformation
+        {
+            DisplayName = "HTML",
+            MimeType = "text/html",
+            FileExtension = ".html"
+        };
 
         public HtmlReportWriter(ITargetMapper targetMapper)
         {
             _targetMapper = targetMapper;
         }
 
-        public ResultFormatInformation Format { get; } = new ResultFormatInformation
-        {
-            DisplayName = "HTML",
-            MimeType = "text/html",
-            FileExtension = ".html"
-        };
+        public ResultFormatInformation Format => _formatInformation;
 
         public void WriteStream(Stream stream, AnalyzeResponse response)
         {
