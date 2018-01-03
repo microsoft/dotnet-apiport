@@ -15,9 +15,10 @@ namespace ApiPort
         static partial void RegisterOfflineModule(ContainerBuilder builder)
         {
             builder.RegisterModule(new OfflineDataModule(DefaultOutputFormatInstanceName));
+            LoadReportWriters(builder);
         }
 
-        private static void TryLoadReportWriters(ContainerBuilder builder)
+        private static void LoadReportWriters(ContainerBuilder builder)
         {
             foreach (var path in Directory.EnumerateFiles(GetApplicationDirectory(), "Microsoft.Fx.Portability.Reports.*.dll"))
             {
