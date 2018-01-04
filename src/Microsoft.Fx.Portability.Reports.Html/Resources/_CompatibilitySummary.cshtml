@@ -20,10 +20,10 @@
     var edgeRetargetingIssues = Model.Breaks.Where(b => b.Key.ImpactScope == BreakingChangeImpact.Edge && b.Key.IsRetargeting);
     var totalRetargetingIssues = majorRetargetingIssues.Count() + minorRetargetingIssues.Count() + edgeRetargetingIssues.Count();
 
-    var runtimeIssuesDivName = "RuntimeIssues" + Model.LoopCounter.ToString();
-    var retargetingIssuesDivName = "RetargetingIssues" + Model.LoopCounter.ToString();
-    var runtimeIssuesButtonName = "Toggle" + runtimeIssuesDivName;
-    var retargetingIssuesButtonName = "Toggle" + retargetingIssuesDivName;
+    var runtimeIssuesDivId = Guid.NewGuid().ToString();
+    var retargetingIssuesDivId = Guid.NewGuid().ToString();
+    var runtimeIssuesButtonId = "Toggle" + runtimeIssuesDivId;
+    var retargetingIssuesButtonId = "Toggle" + retargetingIssuesDivId;
 }
 
 @if (totalCompatIssues + totalRetargetingIssues > 0)
@@ -43,9 +43,9 @@
         }
         <h3>
             @LocalizedStrings.RuntimeCompatibilityIssues (@totalCompatIssues)
-            <button class="ToggleButton" id="@runtimeIssuesButtonName" title="@LocalizedStrings.Collapse">&#8212</button>
+            <button class="ToggleButton" id="@runtimeIssuesButtonId" title="@LocalizedStrings.Collapse">&#8212</button>
         </h3>
-            <div id="@runtimeIssuesDivName">
+            <div id="@runtimeIssuesDivId">
                 <p>@LocalizedStrings.RuntimeCompatIssueDescription</p>
                 @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MajorCompatibilityIssues, LocalizedStrings.MajorCompatIssueDescription, majorIssues, 0, 2))
                 @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MinorCompatibilityIssues, LocalizedStrings.MinorCompatIssueDescription, minorIssues, 0, 3))
@@ -53,9 +53,9 @@
             </div>
         <h3>
             @LocalizedStrings.RetargetingCompatibilityIssues (@totalRetargetingIssues)
-            <button class="ToggleButton" id="@retargetingIssuesButtonName" title="@LocalizedStrings.Expand">+</button>
+            <button class="ToggleButton" id="@retargetingIssuesButtonId" title="@LocalizedStrings.Expand">+</button>
         </h3>
-        <div class="BeginToggledOff" id="@retargetingIssuesDivName">
+        <div class="BeginToggledOff" id="@retargetingIssuesDivId">
             <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart1)</p>
             <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart2)</p>
             @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MajorRetargetingIssues, LocalizedStrings.MajorCompatIssueDescription, majorRetargetingIssues, 0, 2))

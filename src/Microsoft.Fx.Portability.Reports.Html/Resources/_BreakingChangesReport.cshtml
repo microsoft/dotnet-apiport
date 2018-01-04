@@ -105,15 +105,13 @@
 <div id="summary-compat-bybreakingchange">
     <h3 class="compat-subheader">@LocalizedStrings.SubmissionOverview</h3>
 
-    @Html.Partial("_CompatibilitySummary", new CompatibilitySummaryModel(Model.BreakingChangesSummary, null, null, 0))
+    @Html.Partial("_CompatibilitySummary", new CompatibilitySummaryModel(Model.BreakingChangesSummary, null, null))
 </div>
 <div id="CompatDetails">
     @{
-        var loopCounter = 1;
-
         foreach (var kvp in Model.OrderedBreakingChangesByAssembly)
         {
-            @Html.Partial("_CompatibilitySummary", new CompatibilitySummaryModel(kvp.Value, kvp.Key, reportingResult, loopCounter++))
+            @Html.Partial("_CompatibilitySummary", new CompatibilitySummaryModel(kvp.Value, kvp.Key, reportingResult))
         }
     }
 </div>
