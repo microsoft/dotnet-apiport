@@ -1,16 +1,11 @@
-﻿<!--
+﻿@*
    Copyright (c) Microsoft. All rights reserved.
    Licensed under the MIT license. See LICENSE file in the project root for full license information.
--->
+*@
 
 @model Microsoft.Fx.Portability.Reports.RazorHtmlObject
 
-@using Microsoft.Fx.Portability
-@using Microsoft.Fx.Portability.Reporting.ObjectModel
 @using Microsoft.Fx.Portability.Reports.Html.Resources
-@using System.IO
-@using System.Linq
-@using System.Runtime.Versioning
 
 @{
     ViewBag.Title = LocalizedStrings.HtmlReportTitle;
@@ -21,7 +16,7 @@
 }
 
 <!DOCTYPE html>
-<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<html lang="en-us" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
 <head>
     <meta content="en-us" http-equiv="Content-Language" />
     <meta content="text/html; charset=utf-16" http-equiv="Content-Type" />
@@ -55,7 +50,7 @@
             </p>
 
             <div id="toc">
-                <h2>Contents</h2>
+                <h2>@LocalizedStrings.Contents</h2>
                 <ul>
                     @if (includeBreakingChanges)
                     {

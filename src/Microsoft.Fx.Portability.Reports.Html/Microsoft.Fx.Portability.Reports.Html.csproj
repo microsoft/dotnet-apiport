@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-    <PackageReference Include="RazorEngine" Version="3.10.0" />
+    <PackageReference Include="RazorEngine" Version="4.5.1-alpha002" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,11 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\_PortabilityReport.cshtml" />
-    <EmbeddedResource Include="Resources\ReportTemplate.cshtml" />
-    <EmbeddedResource Include="Resources\_Scripts.cshtml" />
-    <EmbeddedResource Include="Resources\_Styles.cshtml" />
-    <EmbeddedResource Include="Resources\_BreakingChangesReport.cshtml" />
+    <EmbeddedResource Include="Resources\*.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
