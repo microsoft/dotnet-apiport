@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.csproj" />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj" />
-    <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj" Condition=" '$(TargetFramework)' == 'net46' " />
+    <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj" Condition=" '$(TargetFramework)' == 'net461' " />
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj" />
   </ItemGroup>
 

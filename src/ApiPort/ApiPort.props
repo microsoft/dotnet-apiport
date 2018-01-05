@@ -14,7 +14,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
   </PropertyGroup>
