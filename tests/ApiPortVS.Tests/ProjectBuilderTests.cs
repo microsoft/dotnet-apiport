@@ -56,7 +56,7 @@ namespace ApiPortVS.Tests
         private static IVsSolutionBuildManager2 BuildManagerWhichReturns(int returnForUpdate)
         {
             var buildManager = Substitute.For<IVsSolutionBuildManager2>();
-            buildManager.StartUpdateSpecificProjectConfigurations(default(uint), null, null, null, null, null, default(uint), default(int))
+            buildManager.StartUpdateSpecificProjectConfigurations(default, null, null, null, null, null, default, default)
                         .ReturnsForAnyArgs(returnForUpdate);
 
             uint cookie;
