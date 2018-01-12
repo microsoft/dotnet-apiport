@@ -8,7 +8,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class BreakingChangeTests
     {
         [Fact]
-        public void EqualityTests()
+        public static void EqualityTests()
         {
             var breakingChangeSame1 = new BreakingChange { Id = "id1" };
             var breakingChangeSame2 = new BreakingChange { Id = "id1" };

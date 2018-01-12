@@ -15,7 +15,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class TargetMapTest
     {
         [Fact]
-        public void UnknownTarget()
+        public static void UnknownTarget()
         {
             var map = new TargetMapper();
 
@@ -23,7 +23,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void TwoItems()
+        public static void TwoItems()
         {
             var map = new TargetMapper();
 
@@ -34,7 +34,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AliasList()
+        public static void AliasList()
         {
             var map = new TargetMapper();
 
@@ -46,7 +46,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AliasEqualsTarget()
+        public static void AliasEqualsTarget()
         {
             var map = new TargetMapper();
 
@@ -66,7 +66,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void CaseInsensitiveAlias()
+        public static void CaseInsensitiveAlias()
         {
             var map = new TargetMapper();
 
@@ -78,7 +78,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void UndefinedAlias()
+        public static void UndefinedAlias()
         {
             var map = new TargetMapper();
             var alias = "alias";
@@ -87,7 +87,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void CaseInsensitiveTarget()
+        public static void CaseInsensitiveTarget()
         {
             var map = new TargetMapper();
 
@@ -98,7 +98,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void VerifySingleAliasMapping()
+        public static void VerifySingleAliasMapping()
         {
             Assert.Throws<AliasMappedToMultipleNamesException>(() =>
             {
@@ -112,7 +112,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void VerifySingleAliasMappingValid()
+        public static void VerifySingleAliasMappingValid()
         {
             var map = new TargetMapper();
 
@@ -123,7 +123,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void ParseGroupings1Group()
+        public static void ParseGroupings1Group()
         {
             var map = new TargetMapper();
             var groupings = "group1: target1,target2";
@@ -134,7 +134,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void ParseGroupings2Groups()
+        public static void ParseGroupings2Groups()
         {
             var map = new TargetMapper();
             var groupings = "group1: target1,target2; group2: target1, target3";
@@ -146,7 +146,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void ParseGroupingsNull()
+        public static void ParseGroupingsNull()
         {
             var map = new TargetMapper();
 
@@ -154,7 +154,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void ParseInvalidGroups()
+        public static void ParseInvalidGroups()
         {
             var map = new TargetMapper();
             var groupings = "group1 target1,target2; group2: target1, target3";
@@ -166,7 +166,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void ParseInvalidGroupsValidateAtomicOperation()
+        public static void ParseInvalidGroupsValidateAtomicOperation()
         {
             var map = new TargetMapper();
             var groupings = "group1: target1,target2; group2 target1, target3";
@@ -178,7 +178,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void ParseInvalidGroupsValidate()
+        public static void ParseInvalidGroupsValidate()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
@@ -190,7 +190,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void LoadXmlFromFile()
+        public static void LoadXmlFromFile()
         {
             var map = new TargetMapper();
 
@@ -198,7 +198,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void LoadXmlFromDefault()
+        public static void LoadXmlFromDefault()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -225,7 +225,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlNoTargets()
+        public static void XmlNoTargets()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -238,7 +238,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlWithAlias()
+        public static void XmlWithAlias()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -252,7 +252,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlAliasSameAsName()
+        public static void XmlAliasSameAsName()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -275,7 +275,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlDuplicateAlias()
+        public static void XmlDuplicateAlias()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -290,7 +290,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlMalformedXml()
+        public static void XmlMalformedXml()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -314,7 +314,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlNotInSchema()
+        public static void XmlNotInSchema()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -341,7 +341,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlGetAlias()
+        public static void XmlGetAlias()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -356,7 +356,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlGetAliasMultipleAliases()
+        public static void XmlGetAliasMultipleAliases()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -371,7 +371,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void XmlGetNameMultipleAliases()
+        public static void XmlGetNameMultipleAliases()
         {
             var xml = @"<ApiTool>
         <Targets>
@@ -387,7 +387,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void GetTargetNamesForDistinctTargets()
+        public static void GetTargetNamesForDistinctTargets()
         {
             var mapper = new TargetMapper();
             mapper.AddAlias("Mobile", "Windows Phone");
@@ -408,7 +408,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void GetTargetNamesForMultipleTargetVersions()
+        public static void GetTargetNamesForMultipleTargetVersions()
         {
             var mapper = new TargetMapper();
             mapper.AddAlias("Mobile", "Windows Phone");
@@ -441,7 +441,7 @@ namespace Microsoft.Fx.Portability.Tests
                 targetNamesWithVersions);
         }
 
-        private void AreCollectionsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
+        private static void AreCollectionsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
             var expectedList = expected.OrderBy(k => k).ToList();
             var actualList = actual.OrderBy(k => k).ToList();
@@ -449,7 +449,7 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Equal<List<T>>(expectedList, actualList);
         }
 
-        private TargetMapper LoadXml(string config)
+        private static TargetMapper LoadXml(string config)
         {
             using (var ms = new MemoryStream())
             using (var writer = new StreamWriter(ms) { AutoFlush = true })

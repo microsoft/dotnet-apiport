@@ -28,7 +28,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
             return other != null && StringComparer.Ordinal.Equals(other.DocId, DocId);
         }
 
-        protected string GenerateTargetStatusMessage(Version version)
+        protected static string GenerateTargetStatusMessage(Version version)
         {
             if (version == null)
             {

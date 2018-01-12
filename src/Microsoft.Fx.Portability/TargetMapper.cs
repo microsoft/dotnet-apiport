@@ -48,7 +48,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private bool IsValidPath(string path)
+        private static bool IsValidPath(string path)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private IEnumerable<string> GetPossibleFileLocations(string path)
+        private static IEnumerable<string> GetPossibleFileLocations(string path)
         {
             yield return path;
 

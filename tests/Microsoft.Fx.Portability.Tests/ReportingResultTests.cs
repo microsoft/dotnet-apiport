@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability.Tests
 {
     public class ReportingResultTests
     {
-        private MemberInfo MissingMember(string typeDocId, string memberName)
+        private static MemberInfo MissingMember(string typeDocId, string memberName)
         {
             return new MemberInfo
             {
@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability.Tests
             };
         }
 
-        private List<FrameworkName> TargetPlatforms(int count)
+        private static List<FrameworkName> TargetPlatforms(int count)
         {
             return Enumerable.Range(1, count)
                 .Select(n => new FrameworkName(string.Format(CultureInfo.CurrentCulture, "Target{0}", n), new Version(1, 0)))
@@ -32,7 +32,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddMissingDependency_MissingMemberOfSupportedType_TypeIsNotMarkedMissing()
+        public static void AddMissingDependency_MissingMemberOfSupportedType_TypeIsNotMarkedMissing()
         {
             var targets = TargetPlatforms(2);
             var type = new MemberInfo
@@ -59,7 +59,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddMissingDependency_MemberOfUnidentifiedType_TypeAddedToMissingTypes()
+        public static void AddMissingDependency_MemberOfUnidentifiedType_TypeAddedToMissingTypes()
         {
             var targets = TargetPlatforms(2);
             var typeDocId = "T:Spam.Spam";
@@ -78,7 +78,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddMissingDependency_MemberOfUnidentifiedType_TypeInheritsMemberTargetStatus()
+        public static void AddMissingDependency_MemberOfUnidentifiedType_TypeInheritsMemberTargetStatus()
         {
             var targets = TargetPlatforms(2);
             var typeDocId = "T:Spam.Spam";

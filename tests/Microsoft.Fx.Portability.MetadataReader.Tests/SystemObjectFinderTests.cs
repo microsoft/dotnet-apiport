@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
     public class SystemObjectFinderTests
     {
         [Fact]
-        public void MultipleMscorlibReferencesFound()
+        public static void MultipleMscorlibReferencesFound()
         {
             var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
             var file = TestAssembly.Create("multiple-mscorlib.exe");

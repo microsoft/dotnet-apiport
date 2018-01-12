@@ -175,7 +175,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             };
         }
 
-        private string GetPrefix(MemberReference memberReference)
+        private static string GetPrefix(MemberReference memberReference)
         {
             switch (memberReference.GetKind())
             {

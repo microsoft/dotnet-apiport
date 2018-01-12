@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
     public class CciAnalyzerTests
     {
         [Fact]
-        public void FindDependencies()
+        public static void FindDependencies()
         {
             var cci = new CciDependencyFinder();
             var path = new TestAssemblyFile(TestAssembly.EmptyProject);

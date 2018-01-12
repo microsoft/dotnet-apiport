@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void VerifyParameterChecks()
+        public static void VerifyParameterChecks()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation("")));
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation("")));
@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Empty(expected.Except(result.Select(r => r.DisplayName)));
         }
 
-        private HttpResponseMessage HttpRequestConverter(HttpRequestMessage request)
+        private static HttpResponseMessage HttpRequestConverter(HttpRequestMessage request)
         {
             string resourceFile = null;
             var query = request.RequestUri.PathAndQuery;

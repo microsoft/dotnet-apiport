@@ -165,7 +165,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         [Fact]
-        public void EmptyProject()
+        public static void EmptyProject()
         {
             var assemblyToTest = TestAssembly.Create("EmptyProject.cs");
             var expected = EmptyProjectMemberDocId();
@@ -202,7 +202,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42
         /// </summary>
         [Fact]
-        public void MultidimensionalPrimitiveArray()
+        public static void MultidimensionalPrimitiveArray()
         {
             var arrayDocId = "M:System.Int32[0:,0:][0:,0:].#ctor(System.Int32,System.Int32)";
             var objectDocId = "T:System.Object";
@@ -227,7 +227,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         [Fact]
-        public void ThrowsSystemObjectNotFoundException()
+        public static void ThrowsSystemObjectNotFoundException()
         {
             var dependencyFilter = Substitute.For<IDependencyFilter>();
             dependencyFilter.IsFrameworkAssembly(Arg.Any<AssemblyReferenceInformation>()).Returns(false);

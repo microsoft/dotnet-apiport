@@ -20,7 +20,7 @@ namespace ApiPortVS.Tests
     public class CciSourceLineMapperTests
     {
         [Fact]
-        public void FindMissingTypeReferences_PdbNotFound_ReportedToTextOutput()
+        public static void FindMissingTypeReferences_PdbNotFound_ReportedToTextOutput()
         {
             var assemblyName = "assemblyPath";
             var fileSystem = Substitute.For<IFileSystem>();

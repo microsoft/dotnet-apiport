@@ -10,7 +10,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
     public class AssemblyReferenceInformationTests
     {
         [Fact]
-        public void EqualityTests()
+        public static void EqualityTests()
         {
             var assemblyInfo1 = new AssemblyReferenceInformation("name", Version.Parse("4.0"), "neutral", "1234");
             var assemblyInfo2 = new AssemblyReferenceInformation("Name", Version.Parse("4.0"), "neutral", "1234");

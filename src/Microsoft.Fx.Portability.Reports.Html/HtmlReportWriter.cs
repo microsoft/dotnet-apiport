@@ -77,17 +77,17 @@ namespace Microsoft.Fx.Portability.Reports
 
         public class HtmlHelper
         {
-            public string ConvertMarkdownToHtml(string markdown)
+            public static string ConvertMarkdownToHtml(string markdown)
             {
                 return CommonMark.CommonMarkConverter.Convert(markdown);
             }
 
-            public IEncodedString Raw(string rawString)
+            public static IEncodedString Raw(string rawString)
             {
                 return new RawString(rawString);
             }
 
-            public IEncodedString Partial(string name)
+            public static IEncodedString Partial(string name)
             {
                 var template = Resolve(name);
                 var razor = s_razorService.RunCompile(template, name);
@@ -95,7 +95,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw(razor);
             }
 
-            public IEncodedString Partial<T>(string name, T model)
+            public static IEncodedString Partial<T>(string name, T model)
             {
                 var template = Resolve(name);
                 var razor = s_razorService.RunCompile(template, name, typeof(T), model);
@@ -103,7 +103,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw(razor);
             }
 
-            public IEncodedString TargetSupportCell(TargetSupportedIn supportStatus)
+            public static IEncodedString TargetSupportCell(TargetSupportedIn supportStatus)
             {
                 var supported = supportStatus.SupportedIn != null
                              && supportStatus.Target.Version >= supportStatus.SupportedIn;
@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw($"<td class=\"{className}\" title=\"{title}\"></td>");
             }
 
-            public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
+            public static IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
             {
                 var className = "";
                 if (breaks <= warningThreshold)

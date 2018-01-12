@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             };
 
         [Fact]
-        public void FindUnreferencedAssemblies_AllNulls()
+        public static void FindUnreferencedAssemblies_AllNulls()
         {
             var engine = new AnalysisEngine(null, null, null);
 
@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindUnreferencedAssemblies_SpecifiedAssembliesNull()
+        public static void FindUnreferencedAssemblies_SpecifiedAssembliesNull()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var recommendations = Substitute.For<IApiRecommendations>();
@@ -45,7 +45,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindUnreferencedAssemblies_NoUnreferencedAssemblies()
+        public static void FindUnreferencedAssemblies_NoUnreferencedAssemblies()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var recommendations = Substitute.For<IApiRecommendations>();
@@ -59,7 +59,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindUnreferencedAssemblies_UnreferencedAssemblies_1()
+        public static void FindUnreferencedAssemblies_UnreferencedAssemblies_1()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
@@ -75,7 +75,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindUnreferencedAssemblies_UnreferencedAssemblies_2()
+        public static void FindUnreferencedAssemblies_UnreferencedAssemblies_2()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
@@ -90,7 +90,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInSpecifiedList()
+        public static void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInSpecifiedList()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
@@ -106,7 +106,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInUnrefList()
+        public static void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInUnrefList()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
@@ -125,7 +125,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         #endregion
 
         [Fact]
-        public void FindMembersNotInTargets_AllNull()
+        public static void FindMembersNotInTargets_AllNull()
         {
             var engine = new AnalysisEngine(null, null, null);
 
@@ -133,7 +133,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindMembersNotInTargets_1()
+        public static void FindMembersNotInTargets_1()
         {
             var testData = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
@@ -167,7 +167,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindMembersNotInTargetsWithSuppliedAssembly()
+        public static void FindMembersNotInTargetsWithSuppliedAssembly()
         {
             var testData = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
@@ -201,7 +201,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FindMembersNotInTargets_2()
+        public static void FindMembersNotInTargets_2()
         {
             // No member information passed through.
             var testData = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
@@ -218,7 +218,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesFullFrameworkAfterBreakBeforeFix()
+        public static void BreakingChangesFullFrameworkAfterBreakBeforeFix()
         {
             TestBreakingChangeWithFixedEntry(Version.Parse("4.5.1"), false);
             TestBreakingChangeWithoutFixedEntry(Version.Parse("4.5.1"), false);
@@ -226,7 +226,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesFullFrameworkOnBreakingVersion()
+        public static void BreakingChangesFullFrameworkOnBreakingVersion()
         {
             TestBreakingChangeWithFixedEntry(Version.Parse("4.5"), false);
             TestBreakingChangeWithoutFixedEntry(Version.Parse("4.5"), false);
@@ -234,7 +234,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesFullFrameworkOnFix()
+        public static void BreakingChangesFullFrameworkOnFix()
         {
             TestBreakingChangeWithFixedEntry(Version.Parse("4.5.2"), true);
             TestBreakingChangeWithoutFixedEntry(Version.Parse("4.5.2"), false);
@@ -242,7 +242,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesFullFrameworkAfterFix()
+        public static void BreakingChangesFullFrameworkAfterFix()
         {
             TestBreakingChangeWithFixedEntry(Version.Parse("4.5.3"), true);
             TestBreakingChangeWithoutFixedEntry(Version.Parse("4.5.3"), false);
@@ -250,7 +250,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesFullFrameworkBeforeBreak()
+        public static void BreakingChangesFullFrameworkBeforeBreak()
         {
             TestBreakingChangeWithFixedEntry(Version.Parse("4.0"), true);
             TestBreakingChangeWithoutFixedEntry(Version.Parse("4.0"), true);
@@ -258,7 +258,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesNotFullFramework()
+        public static void BreakingChangesNotFullFramework()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var recommendations = GenerateTestRecommendationsWithFixedEntry();
@@ -273,7 +273,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesWithAssemblyIgnores()
+        public static void BreakingChangesWithAssemblyIgnores()
         {
             TestBreakingChangeWithIgnoreList(Version.Parse("4.5"), false, Enumerable.Empty<AssemblyInfo>());
             TestBreakingChangeWithIgnoreList(Version.Parse("4.5"), true, new AssemblyInfo[] { new AssemblyInfo() { AssemblyIdentity = "userAsm1, Version=1.0.0.0" } });
@@ -282,7 +282,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangesWithSuppressions()
+        public static void BreakingChangesWithSuppressions()
         {
             TestBreakingChangeWithSuppression(Version.Parse("4.5"), false, Enumerable.Empty<string>());
             TestBreakingChangeWithSuppression(Version.Parse("4.5"), false, new[] { "15" });
@@ -291,7 +291,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void BreakingChangeIgnoreSelection()
+        public static void BreakingChangeIgnoreSelection()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var recommendations = GenerateTestRecommendationsWithFixedEntry();
@@ -336,7 +336,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void ShowRetargettingIssuesFalseShouldReturnOnlyRuntimeIssues()
+        public static void ShowRetargettingIssuesFalseShouldReturnOnlyRuntimeIssues()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var recommendations = GenerateTestRecommendationsForShowRetargetting(2, 3);
@@ -365,7 +365,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void ShowRetargettingIssuesTrueShouldReturnRuntimeAndRetargettingIssues()
+        public static void ShowRetargettingIssuesTrueShouldReturnRuntimeAndRetargettingIssues()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
             var recommendations = GenerateTestRecommendationsForShowRetargetting(2, 3);
@@ -394,7 +394,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         [Fact]
-        public void FilterDependencies()
+        public static void FilterDependencies()
         {
             var testData = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
 

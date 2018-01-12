@@ -113,7 +113,7 @@ namespace ApiPortVS.VS2015
             return null;
         }
 
-        private UnconfiguredProject GetUnconfiguredProject(Project project)
+        private static UnconfiguredProject GetUnconfiguredProject(Project project)
         {
             return (project as IVsBrowseObjectContext)?.UnconfiguredProject;
         }

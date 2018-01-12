@@ -9,7 +9,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
     public class DiagnosticAnalyzerInfoTests
     {
         [Fact]
-        public void NullIdReturnsNegativeOne()
+        public static void NullIdReturnsNegativeOne()
         {
             var diagnosticAnalyzerInfo = new DiagnosticAnalyzerInfo
             {
@@ -21,7 +21,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void EmptyIdReturnsNegativeOne()
+        public static void EmptyIdReturnsNegativeOne()
         {
             var diagnosticAnalyzerInfo = new DiagnosticAnalyzerInfo
             {
@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void ExpectedIdFormatWithTrailingCharacterReturnsIntId()
+        public static void ExpectedIdFormatWithTrailingCharacterReturnsIntId()
         {
             var diagnosticAnalyzerInfo = new DiagnosticAnalyzerInfo
             {
@@ -45,7 +45,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void ExpectedIdFormatWithoutTrailingCharacterReturnsIntId()
+        public static void ExpectedIdFormatWithoutTrailingCharacterReturnsIntId()
         {
             var diagnosticAnalyzerInfo = new DiagnosticAnalyzerInfo
             {
@@ -57,7 +57,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void NoNumberIdReturnsNegativeOne()
+        public static void NoNumberIdReturnsNegativeOne()
         {
             var diagnosticAnalyzerInfo = new DiagnosticAnalyzerInfo
             {

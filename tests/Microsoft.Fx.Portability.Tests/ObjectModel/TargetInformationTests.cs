@@ -16,7 +16,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
     public class TargetInformationTests
     {
         [Fact]
-        public void NotNullExpandedTargets()
+        public static void NotNullExpandedTargets()
         {
             var info = new TargetInformation();
 
@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void ToStringNoExpandedTargets()
+        public static void ToStringNoExpandedTargets()
         {
             const string name = "name";
             var info = new TargetInformation { Name = name };
@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void ToStringWithExpandedTargets()
+        public static void ToStringWithExpandedTargets()
         {
             const string group = "name";
             const string expanded1 = "expanded1";

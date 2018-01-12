@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class SerializationTests
     {
         [Fact]
-        public void SerializeAnalyzeRequest()
+        public static void SerializeAnalyzeRequest()
         {
             var request = new AnalyzeRequest
             {
@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void SerializeAnalyzeResponse()
+        public static void SerializeAnalyzeResponse()
         {
             var response = new AnalyzeResponse
             {
@@ -47,7 +47,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void SerializeProjectSubmission()
+        public static void SerializeProjectSubmission()
         {
             var submission1 = new ProjectSubmission { Name = "test1", Length = 10, SubmittedDate = new DateTime(10, 1, 4) };
             var submission2 = new ProjectSubmission { Name = "test2", Length = 11, SubmittedDate = new DateTime(10, 2, 4) };
@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void TestFrameworkNames()
+        public static void TestFrameworkNames()
         {
             VerifySerialization(new FrameworkName("name", new Version("1.2.3.4")));
             VerifySerialization(new FrameworkName("name", new Version("1.2.3.0")));
@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void TestVersion()
+        public static void TestVersion()
         {
             VerifySerialization(new Version("1.2.3.4"));
             VerifySerialization(new Version("1.2.3.0"));
@@ -84,7 +84,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void TestEmptyValues()
+        public static void TestEmptyValues()
         {
             VerifyEmptySerialized<AnalyzeRequest>();
             VerifyEmptySerialized<FrameworkName>();

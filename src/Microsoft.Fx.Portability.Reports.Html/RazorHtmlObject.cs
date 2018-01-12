@@ -63,7 +63,7 @@ namespace Microsoft.Fx.Portability.Reports
             NuGetPackages = response.NuGetPackages;
         }
 
-        private IDictionary<BreakingChange, IEnumerable<MemberInfo>> GetBreakingChangesSummary(IEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> orderedBreakingChangesByAssembly)
+        private static IDictionary<BreakingChange, IEnumerable<MemberInfo>> GetBreakingChangesSummary(IEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> orderedBreakingChangesByAssembly)
         {
             return orderedBreakingChangesByAssembly
                 .SelectMany(o => o.Value)
@@ -72,7 +72,7 @@ namespace Microsoft.Fx.Portability.Reports
                 .ToDictionary(o => o.Key, o => o.Value);
         }
 
-        private IOrderedEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> GetGroupedBreakingChanges(IList<BreakingChangeDependency> breakingChanges, IEnumerable<AssemblyInfo> assembliesToInclude)
+        private static IOrderedEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> GetGroupedBreakingChanges(IList<BreakingChangeDependency> breakingChanges, IEnumerable<AssemblyInfo> assembliesToInclude)
         {
             Dictionary<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>> ret = new Dictionary<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>();
 
@@ -117,7 +117,7 @@ namespace Microsoft.Fx.Portability.Reports
                 .ThenBy(x => x.Key);
         }
 
-        public string RemoveTypeOrMemberPrefix(string assemblyName)
+        public static string RemoveTypeOrMemberPrefix(string assemblyName)
         {
             string[] split = assemblyName.Split(new string[] { ":" }, 2, StringSplitOptions.RemoveEmptyEntries);
             return split.Length == 2 ? split[1] : split[0];

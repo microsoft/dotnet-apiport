@@ -18,7 +18,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         /// Tests that the parent recommended change can be obtained if the docId's does not.
         /// </summary>
         [Fact]
-        public void GetRecommendedChange_Parent()
+        public static void GetRecommendedChange_Parent()
         {
             var docId = "Property:Foo";
             var matchingParentDocId = "Class:Test";
@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         /// Tests that string.Empty is returned if a recommended change is not found.
         /// </summary>
         [Fact]
-        public void GetRecommendedChange_DoesNotExist()
+        public static void GetRecommendedChange_DoesNotExist()
         {
             var docId = "Property:Foo";
             var ancestors = new[] { "Class:Test", "Namespace:MyTestNamespace" };
@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void GetRecommendedChange_NoAncestors()
+        public static void GetRecommendedChange_NoAncestors()
         {
             var docId = "Namespace:MyTestNamespace";
             var ancestors = new string[0];
@@ -82,7 +82,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         /// returned if we have multiple matching ones).
         /// </summary>
         [Fact]
-        public void GetRecommendedChange_FirstMatchingRecommendation()
+        public static void GetRecommendedChange_FirstMatchingRecommendation()
         {
             var recommendedChanges = new[]
             {
@@ -113,7 +113,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         /// Tests that the parent Breaking change can be obtained if the docId's does not.
         /// </summary>
         [Fact]
-        public void GetBreakingChange_Parent()
+        public static void GetBreakingChange_Parent()
         {
             var docId = "Property:Foo";
             var matchingParentDocId = "Class:Test";
@@ -140,7 +140,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         /// Tests that string.Empty is returned if a Breaking change is not found.
         /// </summary>
         [Fact]
-        public void GetBreakingChange_DoesNotExist()
+        public static void GetBreakingChange_DoesNotExist()
         {
             var docId = "Property:Foo";
             var ancestors = new[] { "Class:Test", "Namespace:MyTestNamespace" };
@@ -158,7 +158,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void GetBreakingChange_NoAncestors()
+        public static void GetBreakingChange_NoAncestors()
         {
             var docId = "Namespace:MyTestNamespace";
             var ancestors = new string[0];
@@ -180,7 +180,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         /// returned if we have multiple matching ones).
         /// </summary>
         [Fact]
-        public void GetBreakingChange_FirstMatchingRecommendation()
+        public static void GetBreakingChange_FirstMatchingRecommendation()
         {
             var breakingChanges = new Dictionary<string, IEnumerable<BreakingChange>>(StringComparer.Ordinal)
             {

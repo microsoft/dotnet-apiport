@@ -184,7 +184,7 @@ namespace Microsoft.Fx.Portability.Reports
             summaryPage.AddRow(LocalizedStrings.HowToReadTheExcelTable);
         }
 
-        private void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, ReportingResult analysisResult)
+        private static void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, ReportingResult analysisResult)
         {
             List<string> missingAssembliesPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.UsedBy, LocalizedStrings.MissingAssemblyStatus };
             int detailsRows = 0;
@@ -408,7 +408,7 @@ namespace Microsoft.Fx.Portability.Reports
             };
         }
 
-        private object AddSubmissionLink(string submissionId)
+        private static object AddSubmissionLink(string submissionId)
         {
             return submissionId;
 
@@ -430,7 +430,7 @@ namespace Microsoft.Fx.Portability.Reports
 #endif
         }
 
-        private object AddLink(string docId)
+        private static object AddLink(string docId)
         {
             return docId;
 
