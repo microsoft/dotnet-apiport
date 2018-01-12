@@ -8,7 +8,7 @@ __Features__
 
 * Analysis of a single project, solution, or binaries
 * Analysis against multiple .NET platforms simultaneously
-* Generation of multiple analysis reports in different formats. Supported 
+* Generation of multiple analysis reports in different formats. Supported
 formats are:
     * JSON
     * HTML
@@ -44,7 +44,7 @@ performing the following:
 
 After the analysis is complete, if there are any APIs that are not supported on
 the selected platforms, check the "Output" window.  There should be some
-informational messages containing the API that is not supported and the line 
+informational messages containing the API that is not supported and the line
 mapping in source code.  If you double-click on that message, it will take you
 to that location in source.
 
@@ -98,9 +98,9 @@ A list of changes can be found in the [Changelog](Changelog.md).
 [BinaryAnalysis]: img/analyzeToolbar.png
 [OptionsPane]: img/optionsPanel.png
 [PlatformPortability]: ../HowTo/PlatformPortability.md
-[PrivacyPolicy]: ../LicenseTerms/Microsoft%20.NET%20Portability%20Analyzer%20Privacy%20Statement.txt
+[PrivacyPolicy]: ../LicenseTerms/Microsoft%20.NET%20Portability%20Analyzer%20CLI%20Privacy%20Statement.txt
 [ReportToolWindow]: img/report.toolWindow.png
 [SampleReport]: img/analysisReport.png
 [SolutionExplorer-ContextMenu]: img/analysisContextMenu.png
 [SourceCodeMapping]: img/sourceMapping.output.png
-[VSGallery]: https://visualstudiogallery.msdn.microsoft.com/1177943e-cfb7-4822-a8a6-e56c7905292b
+[VSGallery]: https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer

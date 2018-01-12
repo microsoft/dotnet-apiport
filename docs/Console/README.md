@@ -3,15 +3,13 @@
 The console tool helps you determine how flexible your application.  The tool
 understands the following commands:
 
-  * `ApiPort.exe analyze <options>`
-    * Analyzes the portability of an application
-    * [Examples](#apiportexe-analyze-scenarios)
-  * `ApiPort.exe listTargets`
-    * Lists .NET platforms available for analysis
-  * `ApiPort.exe listOutputFormats`
-    * Lists available report output formats
-  * `ApiPort.exe DocIdSearch <options>`
-    * Searches for matching docIds
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| analyze | Analyzes the portability of an application | [Examples](#apiportexe-analyze-scenarios) |
+| listTargets | Lists .NET platforms available for analysis | `ApiPort.exe listTargets` |
+| listOutputFormats | Lists available report output formats |`ApiPort.exe listOutputFormats` |
+| docId | Searches for matching docIds | `ApiPort.exe docId <options>` |
+| dump | Outputs the analysis request that will be sent to the service | [Example](#see-the-data-being-transmitted) |
 
 ## `ApiPort.exe analyze` Scenarios
 
@@ -43,7 +41,8 @@ report format**
 ApiPort.exe analyze -f C:\git\Application\bin\Debug
 ```
 
-This will analyze all assemblies that exist under `C:\git\Application\bin\Debug`
+This will analyze all
+assemblies that exist under `C:\git\Application\bin\Debug`
 recursively, and analyzes those assemblies against the default .NET platforms.
 (**Note:** The default platforms can be obtained by running `ApiPort.exe
 listTargets` and looking for targets that have an (\*) in them.)
@@ -57,7 +56,7 @@ ApiPort.exe analyze -f C:\git\Application\bin\Debug -b
 The `-b` flag will show any APIs that may have different behavior between
 versions of .NET Framework due to breaking changes that have been made.  The
 entire list of breaking changes in .NET Framework can be found by examining
-[Application Compatibility in the .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/application-compatibility). 
+[Application Compatibility in the .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/application-compatibility).
 For the list of breaking changes we analyze against, look [here](../HowTo/BreakingChanges.md).
 
 **Analyzing a directory and show any non-portable APIs**
