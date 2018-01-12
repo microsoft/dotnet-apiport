@@ -66,17 +66,5 @@ namespace ApiPortVS.Tests
 
             return buildManager;
         }
-
-        private static DefaultProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager2 buildManager)
-        {
-            var project = Substitute.For<Project>();
-            var projectMapper = Substitute.For<IProjectMapper>();
-            var threading = Substitute.For<IVSThreadingService>();
-
-            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, projectMapper);
-            projectBuilder.BuildAsync(new List<Project> { project });
-
-            return projectBuilder;
-        }
     }
 }
