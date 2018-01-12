@@ -77,17 +77,21 @@ namespace Microsoft.Fx.Portability.Reports
 
         public class HtmlHelper
         {
-            public static string ConvertMarkdownToHtml(string markdown)
+            // Disabling warning because marking this as static results in Razor
+            // compilation errors when generating the Razor page.
+#pragma warning disable CA1822 // Mark members as static
+
+            public string ConvertMarkdownToHtml(string markdown)
             {
                 return CommonMark.CommonMarkConverter.Convert(markdown);
             }
 
-            public static IEncodedString Raw(string rawString)
+            public IEncodedString Raw(string rawString)
             {
                 return new RawString(rawString);
             }
 
-            public static IEncodedString Partial(string name)
+            public IEncodedString Partial(string name)
             {
                 var template = Resolve(name);
                 var razor = s_razorService.RunCompile(template, name);
@@ -95,7 +99,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw(razor);
             }
 
-            public static IEncodedString Partial<T>(string name, T model)
+            public IEncodedString Partial<T>(string name, T model)
             {
                 var template = Resolve(name);
                 var razor = s_razorService.RunCompile(template, name, typeof(T), model);
@@ -103,7 +107,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw(razor);
             }
 
-            public static IEncodedString TargetSupportCell(TargetSupportedIn supportStatus)
+            public IEncodedString TargetSupportCell(TargetSupportedIn supportStatus)
             {
                 var supported = supportStatus.SupportedIn != null
                              && supportStatus.Target.Version >= supportStatus.SupportedIn;
@@ -114,7 +118,7 @@ namespace Microsoft.Fx.Portability.Reports
                 return Raw($"<td class=\"{className}\" title=\"{title}\"></td>");
             }
 
-            public static IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
+            public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
             {
                 var className = "";
                 if (breaks <= warningThreshold)
@@ -128,6 +132,7 @@ namespace Microsoft.Fx.Portability.Reports
 
                 return Raw($"<td class=\"textCentered {className}\">{breaks}</td>");
             }
+#pragma warning restore CA1822 // Mark members as static
         }
 
         public abstract class HtmlSupportTemplateBase<T> : TemplateBase<T>

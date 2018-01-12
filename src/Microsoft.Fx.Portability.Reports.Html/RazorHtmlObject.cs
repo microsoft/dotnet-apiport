@@ -117,7 +117,11 @@ namespace Microsoft.Fx.Portability.Reports
                 .ThenBy(x => x.Key);
         }
 
-        public static string RemoveTypeOrMemberPrefix(string assemblyName)
+        // Disabling warning because marking this as static results in Razor
+        // compilation errors when generating the Razor page.
+#pragma warning disable CA1822 // Mark members as static
+        public string RemoveTypeOrMemberPrefix(string assemblyName)
+#pragma warning restore CA1822 // Mark members as static
         {
             string[] split = assemblyName.Split(new string[] { ":" }, 2, StringSplitOptions.RemoveEmptyEntries);
             return split.Length == 2 ? split[1] : split[0];
