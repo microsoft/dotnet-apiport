@@ -8,7 +8,7 @@ understands the following commands:
 | analyze | Analyzes the portability of an application | [Examples](#apiportexe-analyze-scenarios) |
 | listTargets | Lists .NET platforms available for analysis | `ApiPort.exe listTargets` |
 | listOutputFormats | Lists available report output formats |`ApiPort.exe listOutputFormats` |
-| docIdSearch | Searches for matching docIds | `ApiPort.exe docIdSearch <options>` |
+| docId | Searches for matching docIds | `ApiPort.exe docId <options>` |
 | dump | Outputs the analysis request that will be sent to the service | [Example](#see-the-data-being-transmitted) |
 
 ## `ApiPort.exe analyze` Scenarios
