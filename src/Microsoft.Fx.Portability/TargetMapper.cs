@@ -106,8 +106,17 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
 #if FEATURE_XML_SCHEMA
                 // Validate against schema
                 var schemas = new XmlSchemaSet();
-                schemas.Add(null, XmlReader.Create(typeof(TargetMapper).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Targets.xsd")));
-                doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
+                using (var xsdStream = typeof(TargetMapper).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Targets.xsd"))
+                {
+                    var xmlReaderSettings = new XmlReaderSettings
+                    {
+                        DtdProcessing = DtdProcessing.Prohibit,
+                        XmlResolver = null
+                    };
+
+                    schemas.Add(null, XmlReader.Create(xsdStream, xmlReaderSettings));
+                    doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
+                }
 #endif
 
                 foreach (var item in doc.Descendants("Target"))
