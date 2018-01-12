@@ -16,7 +16,7 @@ namespace Microsoft.Fx.Portability
         {
             if (string.IsNullOrWhiteSpace(docId))
             {
-                throw new ArgumentNullException("docId");
+                throw new ArgumentNullException(nameof(docId));
             }
 
             Definition = catalog.GetApiDefinition(docId);
