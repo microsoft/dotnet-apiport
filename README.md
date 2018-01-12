@@ -6,7 +6,7 @@ dependencies.
 |Branch|Build Status|
 |---|---|
 |master|[![][BuildStatus-Master]][myget]|
-|dev|![][BuildStatus-Dev]|
+|dev|[![][BuildStatus-Dev]][myget]|
 
 For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
@@ -17,7 +17,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 ### Windows
 There is a Visual Studio extension available for VS2017 and VS2015: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
 
-Download and build yourself:
+Download and build for yourself:
 1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
 2. Building:
    * Visual Studio: `PortabilityTools.sln`
@@ -37,19 +37,18 @@ Download and build yourself:
 * [Introduction](docs/HowTo)
 * [Platform Portability](docs/HowTo/PlatformPortability.md)
 * [Breaking Changes](docs/HowTo/BreakingChanges.md)
-* [.NET Portability Analyzer (Console application)](docs/Console/README.md)
+* [.NET Portability Analyzer (Console application)](docs/Console)
     * [.NET Core application](docs/Console/README.md#using-net-core-application)
-* [.NET Portability Analyzer (Visual Studio extension)](docs/VSExtension/README.md)
+* [.NET Portability Analyzer (Visual Studio extension)](docs/VSExtension)
 
 ## Projects
 
 | Project | Description |
 | :------ | :---------- |
-| ApiPort | Console tool to access portability webservice |
-| ApiPort.Core | Cross-platform .NET Core application |
+| ApiPort | Cross-platform console tool to access portability service |
 | ApiPort.Vsix | Visual Studio Extension |
 | Microsoft.Fx.Portability | Provides common types for API Port |
-| Microsoft.Fx.Portability.MetadataReader | Implements a dependency finder based off of [System.Reflection.Metadata][System.Reflection.Metadata]. The library  will generate DocIds that conform to [these specifications][DocId]. |
+| Microsoft.Fx.Portability.MetadataReader | Implements a dependency finder based off of [System.Reflection.Metadata][System.Reflection.Metadata]. The library will generate DocIds that conform to [these specifications][DocId]. |
 | Microsoft.Fx.Portability.Offline | Provides access to data in an offline setting so network calls are not needed |
 | Microsoft.Fx.Portability.Reporting.Excel | Provides support for an Excel spreadsheet report for ApiPort |
 | Microsoft.Fx.Portability.Reporting.Html | Provides support for an HTML report for ApiPort |
@@ -57,12 +56,15 @@ Download and build yourself:
 
 ### Builds
 
-The libraries are continuously published to [dotnet-apiport MyGet gallery][myget]. The Visual Studio extension is published to [Open VSIX Gallery][VSIX Gallery].  The latest version number of each library can be seen in that gallery.
+|     | Location |
+| :--- | :--- |
+| Libraries | [MyGet][myget] |
+| Visual Studio Extension |  [Open VSIX Gallery][VSIX Gallery] |
 
 ## How to Engage, Contribute and Provide Feedback
 
 Here are some ways to contribute:
-* [Update/Add recommended changes](docs/RecommendedChanges/README.md)
+* [Update/Add recommended changes](docs/RecommendedChanges)
 * Try things out!
 * File issues
 * Join in design conversations
@@ -73,15 +75,9 @@ Want to get more familiar with what's going on in the code?
 Looking for something to work on? The list of [up-for-grabs issues][Issues-Open]
 is a great place to start.
 
-We're re-using the same contributing approach as .NET Core. You can check out
-the .NET Core [contributing guide][Contributing Guide] at the corefx repo wiki
-for more details.
-
 * [How to Contribute][Contributing Guide]
     * [Contributing Guide][Contributing Guide]
     * [Developer Guide][Developer Guide]
-
-You are also encouraged to start a discussion on the .NET Foundation forums!
 
 ## Related Projects
 
