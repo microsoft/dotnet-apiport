@@ -55,7 +55,7 @@ namespace ApiPort
                     .As<IApiPortService>()
                     .SingleInstance();
             }
-            else if (options.Command == AppCommand.AnalyzeAssemblies)
+            else
             {
                 builder.Register(context =>
                     new ApiPortService(
