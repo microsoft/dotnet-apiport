@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop"
+
 function DownloadFile($url, $outputPath) {
 	Write-Host "Attempt to download to $outputPath"
 
@@ -20,10 +22,10 @@ function DownloadFile($url, $outputPath) {
 
 		Write-Host "Downloaded $OutputPath"
 	} catch {
-		Write-Host "Failed to download '$url'"
+		Write-Error "Failed to download '$url'. $($Error[0])"
 	}
 }
 
-$address = "https://dotnetportability.blob.core.windows.net/catalog/catalog.bin"
+$address = "https://portability.blob.core.windows.net/catalog/catalog.bin"
 
 DownloadFile "$address" "$PSScriptRoot\.data\catalog.bin"

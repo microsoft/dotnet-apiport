@@ -28,7 +28,7 @@ prebuild() {
 
     if [[ ! -e $catalog ]]; then
         echo "Downloading catalog.bin..."
-        curl --output $catalog "https://dotnetportability.blob.core.windows.net/catalog/catalog.bin"
+        curl --output $catalog "https://portability.blob.core.windows.net/catalog/catalog.bin"
     fi
 }
 
