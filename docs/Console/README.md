@@ -3,15 +3,13 @@
 The console tool helps you determine how flexible your application.  The tool
 understands the following commands:
 
-  * `ApiPort.exe analyze <options>`
-    * Analyzes the portability of an application
-    * [Examples](#apiportexe-analyze-scenarios)
-  * `ApiPort.exe listTargets`
-    * Lists .NET platforms available for analysis
-  * `ApiPort.exe listOutputFormats`
-    * Lists available report output formats
-  * `ApiPort.exe DocIdSearch <options>`
-    * Searches for matching docIds
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| analyze | Analyzes the portability of an application | [Examples](#apiportexe-analyze-scenarios) |
+| listTargets | Lists .NET platforms available for analysis | `ApiPort.exe listTargets` |
+| listOutputFormats | Lists available report output formats |`ApiPort.exe listOutputFormats` |
+| docId | Searches for matching docIds | `ApiPort.exe docId <options>` |
+| dump | Outputs the analysis request that will be sent to the service | [Example](#see-the-data-being-transmitted) |
 
 ## `ApiPort.exe analyze` Scenarios
 
@@ -43,7 +41,8 @@ report format**
 ApiPort.exe analyze -f C:\git\Application\bin\Debug
 ```
 
-This will analyze all assemblies that exist under `C:\git\Application\bin\Debug`
+This will analyze all
+assemblies that exist under `C:\git\Application\bin\Debug`
 recursively, and analyzes those assemblies against the default .NET platforms.
 (**Note:** The default platforms can be obtained by running `ApiPort.exe
 listTargets` and looking for targets that have an (\*) in them.)
@@ -57,7 +56,7 @@ ApiPort.exe analyze -f C:\git\Application\bin\Debug -b
 The `-b` flag will show any APIs that may have different behavior between
 versions of .NET Framework due to breaking changes that have been made.  The
 entire list of breaking changes in .NET Framework can be found by examining
-[Application Compatibility in the .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/application-compatibility). 
+[Application Compatibility in the .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/application-compatibility).
 For the list of breaking changes we analyze against, look [here](../HowTo/BreakingChanges.md).
 
 **Analyzing a directory and show any non-portable APIs**
@@ -99,27 +98,14 @@ two alternate modes that can be used to alter this workflow.
 
 ### See the data being transmitted
 
-The first option is to output the request to a file. This will result in an
-output that shows what data is being transmitted to the service, but provides no
-details as to API portability or breaking changes. This is a good option if you
-would like to see what data will be collected.
-
-In order to enable this mode, create a file `autofac.json` and place it in the
-same directory as `ApiPort.exe`. Add the following contents:
-
-```json
-{
-  "defaultAssembly": "ApiPort",
-  "modules": [
-    {
-      "type": "ApiPort.Modules.DataTransferModule"
-    }
-  ]
-}
+```
+ApiPort.exe dump -f [path to file or directory]
 ```
 
-Now, when you run, it will output a file (ie. `ApiPortAnalysis.json`) with the information that is sent to
-the .NET Portability service.
+The `dump` command will output the data that would otherwise be sent to the service.
+This is a good option if you would like to see what data will be collected. A file,
+which by default is `ApiPortAnalysis.json`, will be created with the information that
+would sent to the .NET Portability service.
 
 ### Run the tool in an offline mode
 

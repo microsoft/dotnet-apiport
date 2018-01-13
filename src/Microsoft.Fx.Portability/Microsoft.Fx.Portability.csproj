@@ -6,12 +6,11 @@
       (tracked at https://github.com/dotnet/project-system/issues/1519)
     -->
     <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
-    <DefineConstants>FEATURE_NETCORE</DefineConstants>
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'== 'net46'">
-    <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA;FEATURE_SERVICE_POINT_MANAGER</DefineConstants>
+    <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA;FEATURE_SERVICE_POINT_MANAGER;FEATURE_WEBEXCEPTION</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

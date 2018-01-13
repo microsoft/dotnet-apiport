@@ -197,6 +197,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default report file name.
+        /// </summary>
+        public static string DefaultReportFilename {
+            get {
+                return ResourceManager.GetString("DefaultReportFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Details.
         /// </summary>
         public static string DetailsPageTitle {
@@ -242,7 +251,7 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to General.
+        ///   Looks up a localized string similar to General settings.
         /// </summary>
         public static string GeneralSettings {
             get {
@@ -436,6 +445,15 @@ namespace ApiPortVS.Resources {
         public static string SelectAssemblyFiles {
             get {
                 return ResourceManager.GetString("SelectAssemblyFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select default output directory.
+        /// </summary>
+        public static string SelectDefaultOutputDirectory {
+            get {
+                return ResourceManager.GetString("SelectDefaultOutputDirectory", resourceCulture);
             }
         }
         

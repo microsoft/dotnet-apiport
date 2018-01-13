@@ -107,6 +107,15 @@ namespace Microsoft.Fx.Portability.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad request. Please make sure you have the most up-to-date version of this tool..
+        /// </summary>
+        public static string BadRequestMessage {
+            get {
+                return ResourceManager.GetString("BadRequestMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot add to the path once a query has begun.
         /// </summary>
         public static string CannotAddToRunningQueryPath {
@@ -446,15 +455,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string UnauthorizedAccess {
             get {
                 return ResourceManager.GetString("UnauthorizedAccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown error.  Please make sure you the most up-to-date version.
-        /// </summary>
-        public static string UnknownBadRequestMessage {
-            get {
-                return ResourceManager.GetString("UnknownBadRequestMessage", resourceCulture);
             }
         }
         

@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System;
 using Microsoft.Fx.Portability.Reports.Html;
+using Microsoft.Fx.Portability.Reports.Html.Resources;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -19,21 +20,19 @@ namespace Microsoft.Fx.Portability.Reports
         private static readonly IRazorEngineService s_razorService = CreateService();
 
         private readonly ITargetMapper _targetMapper;
-        private readonly ResultFormatInformation _formatInformation;
+        private static readonly ResultFormatInformation _formatInformation = new ResultFormatInformation
+        {
+            DisplayName = "HTML",
+            MimeType = "text/html",
+            FileExtension = ".html"
+        };
 
         public HtmlReportWriter(ITargetMapper targetMapper)
         {
             _targetMapper = targetMapper;
-
-            _formatInformation = new ResultFormatInformation
-            {
-                DisplayName = "HTML",
-                MimeType = "text/html",
-                FileExtension = ".html"
-            };
         }
 
-        public ResultFormatInformation Format { get { return _formatInformation; } }
+        public ResultFormatInformation Format => _formatInformation;
 
         public void WriteStream(Stream stream, AnalyzeResponse response)
         {
@@ -74,7 +73,6 @@ namespace Microsoft.Fx.Portability.Reports
                     return reader.ReadToEnd();
                 }
             }
-
         }
 
         public class HtmlHelper
@@ -103,6 +101,32 @@ namespace Microsoft.Fx.Portability.Reports
                 var razor = s_razorService.RunCompile(template, name, typeof(T), model);
 
                 return Raw(razor);
+            }
+
+            public IEncodedString TargetSupportCell(TargetSupportedIn supportStatus)
+            {
+                var supported = supportStatus.SupportedIn != null
+                             && supportStatus.Target.Version >= supportStatus.SupportedIn;
+
+                var className = supported ? "IconSuccessEncoded" : "IconErrorEncoded";
+                var title = supported ? LocalizedStrings.Supported : LocalizedStrings.NotSupported;
+
+                return Raw($"<td class=\"{className}\" title=\"{title}\"></td>");
+            }
+
+            public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
+            {
+                var className = "";
+                if (breaks <= warningThreshold)
+                {
+                    className = "NoBreakingChanges";
+                }
+                else
+                {
+                    className = breaks <= errorThreshold ? "FewBreakingChanges" : "ManyBreakingChanges";
+                }
+
+                return Raw($"<td class=\"textCentered {className}\">{breaks}</td>");
             }
         }
 

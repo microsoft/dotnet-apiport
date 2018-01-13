@@ -141,8 +141,8 @@
   <data name="HttpExceptionMessage" xml:space="preserve">
     <value>There was an unknown error attempting to reach the service.  Please try again.</value>
   </data>
-  <data name="UnknownBadRequestMessage" xml:space="preserve">
-    <value>Unknown error.  Please make sure you the most up-to-date version</value>
+  <data name="BadRequestMessage" xml:space="preserve">
+    <value>Bad request. Please make sure you have the most up-to-date version of this tool.</value>
     <comment>BadRequest status code is returned for many issues.  If it is unknown, display the returned information.</comment>
   </data>
   <data name="UnknownErrorCodeMessage" xml:space="preserve">
