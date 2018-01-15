@@ -160,6 +160,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        public static string Connection {
+            get {
+                return ResourceManager.GetString("Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft (R) .NET Portability Analyzer {0}
         ///Copyright (C) Microsoft Corporation. All rights reserved..
         /// </summary>
@@ -211,6 +220,24 @@ namespace ApiPortVS.Resources {
         public static string DetailsPageTitle {
             get {
                 return ResourceManager.GetString("DetailsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL to the portability service endpoint.
+        /// </summary>
+        public static string EndpointDescription {
+            get {
+                return ResourceManager.GetString("EndpointDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service Endpoint.
+        /// </summary>
+        public static string EndpointDisplayName {
+            get {
+                return ResourceManager.GetString("EndpointDisplayName", resourceCulture);
             }
         }
         

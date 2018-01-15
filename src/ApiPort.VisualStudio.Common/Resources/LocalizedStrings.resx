@@ -322,4 +322,13 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="SelectDefaultOutputDirectory" xml:space="preserve">
     <value>Select default output directory</value>
   </data>
+  <data name="Connection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="EndpointDescription" xml:space="preserve">
+    <value>URL to the portability service endpoint</value>
+  </data>
+  <data name="EndpointDisplayName" xml:space="preserve">
+    <value>Service Endpoint</value>
+  </data>
 </root>
