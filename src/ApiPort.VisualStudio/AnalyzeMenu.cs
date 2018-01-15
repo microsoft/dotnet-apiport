@@ -31,7 +31,7 @@ namespace ApiPortVS
         {
             _scope = scope;
             _dte = dte;
-            _output = output;
+            _output = output ?? throw new ArgumentNullException(LocalizedStrings.UnableToResolveOutputWindow);
             _productInfo = new ProductInformation("AnalyzeMenu");
         }
 

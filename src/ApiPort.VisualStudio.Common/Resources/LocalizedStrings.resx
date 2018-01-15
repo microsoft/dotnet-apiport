@@ -334,4 +334,13 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="UnableToResolveIApiPortServiceError" xml:space="preserve">
     <value>Unable to resolve IApiPortService.</value>
   </data>
+  <data name="InvalidEndpointGiven" xml:space="preserve">
+    <value>Unable to update service endpoint. Invalid endpoint given: {0}</value>
+  </data>
+  <data name="UnableToResolveOutputWindow" xml:space="preserve">
+    <value>Unable to resolve Portability analysis output window.</value>
+  </data>
+  <data name="UpdatingEndpoint" xml:space="preserve">
+    <value>Updating service endpoint to {0}.</value>
+  </data>
 </root>

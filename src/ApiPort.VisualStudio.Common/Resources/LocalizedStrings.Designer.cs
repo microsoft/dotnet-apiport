@@ -314,6 +314,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to update service endpoint. Invalid endpoint given: {0}.
+        /// </summary>
+        public static string InvalidEndpointGiven {
+            get {
+                return ResourceManager.GetString("InvalidEndpointGiven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid platform {0} selected..
         /// </summary>
         public static string InvalidPlatformSelectedFormat {
@@ -617,6 +626,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to resolve Portability analysis output window..
+        /// </summary>
+        public static string UnableToResolveOutputWindow {
+            get {
+                return ResourceManager.GetString("UnableToResolveOutputWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to save file {0}..
         /// </summary>
         public static string UnableToSaveFileFormat {
@@ -640,6 +658,15 @@ namespace ApiPortVS.Resources {
         public static string UnresolvedUsedAssembly {
             get {
                 return ResourceManager.GetString("UnresolvedUsedAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating service endpoint to {0}..
+        /// </summary>
+        public static string UpdatingEndpoint {
+            get {
+                return ResourceManager.GetString("UpdatingEndpoint", resourceCulture);
             }
         }
         
