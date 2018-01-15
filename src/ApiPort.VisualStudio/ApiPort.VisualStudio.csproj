@@ -75,6 +75,9 @@
     <Compile Include="Utils\PathToFileNameConverter.cs" />
     <Compile Include="Utils\TargetPlatformDisplayNameConverter.cs" />
     <Compile Include="Utils\TargetInformationStringConverter.cs" />
+    <Compile Include="Views\AdvancedOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Views\AnalysisOutputToolWindow.cs" />
     <Compile Include="Views\AnalysisOutputToolWindowControl.xaml.cs">
       <DependentUpon>AnalysisOutputToolWindowControl.xaml</DependentUpon>

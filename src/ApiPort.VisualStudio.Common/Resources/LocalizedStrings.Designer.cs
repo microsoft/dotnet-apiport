@@ -608,6 +608,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to resolve IApiPortService..
+        /// </summary>
+        public static string UnableToResolveIApiPortServiceError {
+            get {
+                return ResourceManager.GetString("UnableToResolveIApiPortServiceError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to save file {0}..
         /// </summary>
         public static string UnableToSaveFileFormat {

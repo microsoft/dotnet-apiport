@@ -331,4 +331,7 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="EndpointDisplayName" xml:space="preserve">
     <value>Service Endpoint</value>
   </data>
+  <data name="UnableToResolveIApiPortServiceError" xml:space="preserve">
+    <value>Unable to resolve IApiPortService.</value>
+  </data>
 </root>
