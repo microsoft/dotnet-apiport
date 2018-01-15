@@ -35,6 +35,10 @@ namespace Microsoft.Fx.Portability
             _apiRecommendations = apiRecommendations;
         }
 
+        public Uri Endpoint => default;
+
+        public void UpdateEndpoint(Uri uri) => throw new NotSupportedException();
+
         public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
         {
             var targets = _lookup

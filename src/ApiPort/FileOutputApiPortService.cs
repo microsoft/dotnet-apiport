@@ -34,6 +34,10 @@ namespace ApiPort
             _progress = progress;
         }
 
+        public Uri Endpoint => default;
+
+        public void UpdateEndpoint(Uri uri) => _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
+
         public Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);

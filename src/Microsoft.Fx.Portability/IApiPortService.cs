@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.ObjectModel;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,6 +10,17 @@ namespace Microsoft.Fx.Portability
 {
     public interface IApiPortService
     {
+        /// <summary>
+        /// Gets the portability service endpoint
+        /// </summary>
+        Uri Endpoint { get; }
+
+        /// <summary>
+        /// Updates the service endpoint
+        /// </summary>
+        /// <param name="uri">Base uri for the service endpoint</param>
+        void UpdateEndpoint(Uri uri);
+
         Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync();
         Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a);
         Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format);
