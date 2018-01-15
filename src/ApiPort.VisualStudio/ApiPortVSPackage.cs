@@ -20,6 +20,7 @@ namespace ApiPortVS
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)] // load when a solution is opened
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "General", 110, 113, true)]
+    [ProvideOptionPage(typeof(AdvancedOptionsPage), ".NET Portability Analyzer", "Advanced", 110, 114, true)]
     [ProvideToolWindow(typeof(AnalysisOutputToolWindow))]
     public class ApiPortVSPackage : Package, IResultToolbar
     {
