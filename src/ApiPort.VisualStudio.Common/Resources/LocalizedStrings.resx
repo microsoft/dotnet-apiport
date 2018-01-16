@@ -322,4 +322,25 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="SelectDefaultOutputDirectory" xml:space="preserve">
     <value>Select default output directory</value>
   </data>
+  <data name="Connection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="EndpointDescription" xml:space="preserve">
+    <value>URL to the portability service endpoint</value>
+  </data>
+  <data name="EndpointDisplayName" xml:space="preserve">
+    <value>Service Endpoint</value>
+  </data>
+  <data name="UnableToResolveIApiPortServiceError" xml:space="preserve">
+    <value>Unable to resolve IApiPortService.</value>
+  </data>
+  <data name="InvalidEndpointGiven" xml:space="preserve">
+    <value>Unable to update service endpoint. Invalid endpoint given: {0}</value>
+  </data>
+  <data name="UnableToResolveOutputWindow" xml:space="preserve">
+    <value>Unable to resolve Portability analysis output window.</value>
+  </data>
+  <data name="UpdatingEndpoint" xml:space="preserve">
+    <value>Updating service endpoint to {0}.</value>
+  </data>
 </root>

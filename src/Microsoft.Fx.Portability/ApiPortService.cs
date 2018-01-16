@@ -27,31 +27,54 @@ namespace Microsoft.Fx.Portability
         }
 
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
-
-        private readonly CompressedHttpClient _client;
+        private readonly IProxyProvider _proxyProvider;
+        private readonly ProductInformation _productInformation;
+        private CompressedHttpClient _client;
 
         public ApiPortService(string endpoint, ProductInformation info, IProxyProvider proxyProvider = null)
             : this(endpoint, BuildMessageHandler(endpoint, proxyProvider), info)
         {
+            _proxyProvider = proxyProvider;
         }
 
-        public ApiPortService(string endpoint, HttpMessageHandler httpMessageHandler, ProductInformation info)
+        /// <summary>
+        /// This is a test ctor. We don't expose this ctor because we would not
+        /// be able to use <see cref="UpdateEndpoint(Uri)"/>. When we dispose
+        /// of the original client, <paramref name="httpMessageHandler"/> is
+        /// also disposed consequently, we have no way to recreate it.
+        /// </summary>
+        internal ApiPortService(string endpoint, HttpMessageHandler httpMessageHandler, ProductInformation info)
         {
-            if (string.IsNullOrWhiteSpace(endpoint))
+            if (string.IsNullOrWhiteSpace(endpoint)
+                || !Uri.TryCreate(endpoint, UriKind.Absolute, out Uri serviceEndpoint))
             {
                 throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
             }
 
-            if (info == null)
+            if (httpMessageHandler == default(HttpMessageHandler))
             {
-                throw new ArgumentNullException(nameof(info));
+                throw new ArgumentNullException(nameof(httpMessageHandler));
             }
 
-            _client = new CompressedHttpClient(info, httpMessageHandler)
+            _productInformation = info ?? throw new ArgumentNullException(nameof(info));
+            _client = CreateHttpClient(serviceEndpoint, info, httpMessageHandler);
+        }
+
+        public Uri Endpoint { get { return _client.BaseAddress; } }
+
+        public void UpdateEndpoint(Uri uri)
+        {
+            if (uri == default)
             {
-                BaseAddress = new Uri(endpoint),
-                Timeout = Timeout
-            };
+                throw new ArgumentNullException(nameof(uri));
+            }
+
+            if (_client != default(CompressedHttpClient))
+            {
+                _client.Dispose();
+            }
+
+            _client = CreateHttpClient(uri, _productInformation, BuildMessageHandler(uri.ToString(), _proxyProvider));
         }
 
         public async Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
@@ -138,10 +161,7 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<ResultFormatInformation>(HttpMethod.Get, Endpoints.DefaultResultFormat);
         }
 
-        public void Dispose()
-        {
-            _client.Dispose();
-        }
+        public void Dispose() => _client?.Dispose();
 
         private async Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync(IEnumerable<string> formats)
         {
@@ -168,6 +188,13 @@ namespace Microsoft.Fx.Portability
                 return formatInformation;
             }
         }
+
+        private static CompressedHttpClient CreateHttpClient(Uri uri, ProductInformation info, HttpMessageHandler messageHandler) =>
+            new CompressedHttpClient(info, messageHandler)
+            {
+                BaseAddress = uri,
+                Timeout = Timeout
+            };
 
         private static HttpMessageHandler BuildMessageHandler(string endpoint, IProxyProvider proxyProvider)
         {

@@ -14,6 +14,7 @@ namespace Microsoft.Fx.Portability.Tests
 {
     public sealed class ApiPortServiceTests : IDisposable
     {
+        private readonly Uri _defaultEndpoint = new Uri("http://localhost");
         private readonly ApiPortService _apiPortService;
 
         public ApiPortServiceTests()
@@ -22,7 +23,7 @@ namespace Microsoft.Fx.Portability.Tests
             var productInformation = new ProductInformation("ApiPort_Tests");
 
             //Create a fake ApiPortService which uses the TestHandler to send back the response message
-            _apiPortService = new ApiPortService("http://localhost", httpMessageHandler, productInformation);
+            _apiPortService = new ApiPortService(_defaultEndpoint.ToString(), httpMessageHandler, productInformation);
         }
 
         public void Dispose()
@@ -71,6 +72,19 @@ namespace Microsoft.Fx.Portability.Tests
 
             Assert.Equal(expected.Count(), result.Count());
             Assert.Empty(expected.Except(result.Select(r => r.DisplayName)));
+        }
+
+        [Fact]
+        public void GetEndpointTest() => Assert.Equal(_defaultEndpoint, _apiPortService.Endpoint);
+
+        [Fact]
+        public void UpdateEndpointTest()
+        {
+            var newEndpoint = new Uri("https://test.realm.net");
+
+            _apiPortService.UpdateEndpoint(newEndpoint);
+
+            Assert.Equal(newEndpoint, _apiPortService.Endpoint);
         }
 
         private HttpResponseMessage HttpRequestConverter(HttpRequestMessage request)
