@@ -37,17 +37,17 @@
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    
+
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta004">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1" Condition=" '$(IsPackage)' != 'true' ">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" Condition=" '$(IsPackage)' != 'true' ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
