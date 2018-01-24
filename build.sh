@@ -44,7 +44,7 @@ installSDK() {
         mkdir -p $DotNetToolsPath
     fi
 
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 2.0 --install-dir $DotNetSDKPath
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current --install-dir $DotNetSDKPath
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 1.0 --shared-runtime --install-dir $DotNetSDKPath
 }
 
