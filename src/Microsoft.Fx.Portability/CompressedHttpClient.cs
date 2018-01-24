@@ -104,7 +104,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private async Task ProcessBadRequestAsync(HttpResponseMessage response)
+        private static async Task ProcessBadRequestAsync(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync();
 
@@ -131,7 +131,7 @@ namespace Microsoft.Fx.Portability
             return new ServiceResponse<TResponse>(result, response.Headers);
         }
 
-        private async Task<byte[]> ReadStreamToEnd(Stream stream)
+        private static async Task<byte[]> ReadStreamToEnd(Stream stream)
         {
             using (var ms = new MemoryStream())
             {

@@ -152,7 +152,7 @@ namespace ApiPortVS
             _container.Dispose();
         }
 
-        private void RegisterVisualStudioComponents(ContainerBuilder builder, ApiPortVSPackage serviceProvider)
+        private static void RegisterVisualStudioComponents(ContainerBuilder builder, ApiPortVSPackage serviceProvider)
         {
             builder.RegisterInstance(serviceProvider)
                 .As<IResultToolbar>()

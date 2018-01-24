@@ -16,7 +16,7 @@ namespace ApiPortVS.Tests
     public class ProjectBuilderTests
     {
         [Fact]
-        public void Build_VsFailsToStartBuild_TaskResultSetFalse()
+        public static void Build_VsFailsToStartBuild_TaskResultSetFalse()
         {
             var buildManager = BuildManagerWhichReturns(VSConstants.S_FALSE);
             var project = Substitute.For<Project>();
@@ -36,7 +36,7 @@ namespace ApiPortVS.Tests
         }
 
         [Fact]
-        public void Build_BuildCompletedSuccessfully_TaskResultSetTrue()
+        public static void Build_BuildCompletedSuccessfully_TaskResultSetTrue()
         {
             var buildManager = BuildManagerWhichReturns(VSConstants.S_OK);
             var project = Substitute.For<Project>();
@@ -53,10 +53,10 @@ namespace ApiPortVS.Tests
                 .AdviseUpdateSolutionEvents(Arg.Any<IVsUpdateSolutionEvents>(), out pdwCookie);
         }
 
-        private IVsSolutionBuildManager2 BuildManagerWhichReturns(int returnForUpdate)
+        private static IVsSolutionBuildManager2 BuildManagerWhichReturns(int returnForUpdate)
         {
             var buildManager = Substitute.For<IVsSolutionBuildManager2>();
-            buildManager.StartUpdateSpecificProjectConfigurations(default(uint), null, null, null, null, null, default(uint), default(int))
+            buildManager.StartUpdateSpecificProjectConfigurations(default, null, null, null, null, null, default, default)
                         .ReturnsForAnyArgs(returnForUpdate);
 
             uint cookie;
@@ -65,18 +65,6 @@ namespace ApiPortVS.Tests
                 .ReturnsForAnyArgs(4);
 
             return buildManager;
-        }
-
-        private DefaultProjectBuilder ProjectBuilderAfterBuildHasBegun(IVsSolutionBuildManager2 buildManager)
-        {
-            var project = Substitute.For<Project>();
-            var projectMapper = Substitute.For<IProjectMapper>();
-            var threading = Substitute.For<IVSThreadingService>();
-
-            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, projectMapper);
-            projectBuilder.BuildAsync(new List<Project> { project });
-
-            return projectBuilder;
         }
     }
 }

@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using NSubstitute;
 using System.Globalization;
 using System.IO;
@@ -15,7 +14,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class ReportFileWriterTests
     {
         [Fact]
-        public async Task FileExists_OverwriteTrue()
+        public static async Task FileExists_OverwriteTrue()
         {
             var dir = "dir";
             var fileName = "file";
@@ -42,7 +41,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task UniquelyNamedFileStream_FileExists_AppendsNumberToName()
+        public static async Task UniquelyNamedFileStream_FileExists_AppendsNumberToName()
         {
             var dir = "dir";
             var fileName = "file";
@@ -69,7 +68,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task UniquelyNamedFileStream_NumberedFileExists_IncrementsNumberInNewName()
+        public static async Task UniquelyNamedFileStream_NumberedFileExists_IncrementsNumberInNewName()
         {
             const int FileExistsCount = 11;
             var dir = "dir";
@@ -104,7 +103,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task VerifyReportHTMLContents()
+        public static async Task VerifyReportHTMLContents()
         {
             var dir = "dir";
             var fileName = "file";
@@ -135,7 +134,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task DoNotUpdateExtensionIfInputExtensionIsEmpty()
+        public static async Task DoNotUpdateExtensionIfInputExtensionIsEmpty()
         {
             var dir = "dir";
             var fileName = "file.test";

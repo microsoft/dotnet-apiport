@@ -99,7 +99,7 @@ namespace Microsoft.Fx.Portability
             return WrapResponse(format);
         }
 
-        private Task<ServiceResponse<T>> WrapResponse<T>(T data)
+        private static Task<ServiceResponse<T>> WrapResponse<T>(T data)
         {
             var response = new ServiceResponse<T>(data);
 
@@ -111,12 +111,12 @@ namespace Microsoft.Fx.Portability
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
+        public static Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
+        public static Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
         {
             throw new NotImplementedException();
         }

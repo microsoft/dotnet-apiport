@@ -120,7 +120,7 @@ namespace ApiPortVS.SourceMapping
                 .Select(t => t.Item1);
         }
 
-        private IEnumerable<Version> GetTargetStatus(MissingInfo missingInfo)
+        private static IEnumerable<Version> GetTargetStatus(MissingInfo missingInfo)
         {
             var memberInfo = missingInfo as MissingMemberInfo;
             var typeInfo = missingInfo as MissingTypeInfo;

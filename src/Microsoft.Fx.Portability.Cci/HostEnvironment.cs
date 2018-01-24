@@ -438,7 +438,7 @@ namespace Microsoft.Cci.Extensions
             return host.LoadAssemblies(paths);
         }
 
-        private string GetCoreAssemblyFile(string coreAssemblySimpleName, IEnumerable<string> contractSet)
+        private static string GetCoreAssemblyFile(string coreAssemblySimpleName, IEnumerable<string> contractSet)
         {
             var coreAssemblyFile = contractSet.FirstOrDefault(c => Path.GetFileNameWithoutExtension(c).EndsWith(coreAssemblySimpleName, StringComparison.OrdinalIgnoreCase) == true);
             if (string.IsNullOrEmpty(coreAssemblyFile))
@@ -519,7 +519,7 @@ namespace Microsoft.Cci.Extensions
             TraceErrorWithLevel(LoadErrorTreatment, format, arguments);
         }
 
-        public void TraceErrorWithLevel(ErrorTreatment level, string format, params object[] arguments)
+        public static void TraceErrorWithLevel(ErrorTreatment level, string format, params object[] arguments)
         {
             switch (level)
             {

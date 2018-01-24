@@ -41,7 +41,7 @@ namespace ApiPortVS.Reporting
             }
         }
 
-        private bool IsHtml(string url)
+        private static bool IsHtml(string url)
         {
             var extension = Path.GetExtension(url);
 

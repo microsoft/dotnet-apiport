@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
     public class NuGetPackageInfoTests
     {
         [Fact]
-        public void NuGetPackageInfoCreated()
+        public static void NuGetPackageInfoCreated()
         {
             var assemblyInfo = "MyDll, Version=1.5.3";
             var frameworkName = new FrameworkName("SomeFramework", Version.Parse("5.6.7.2"));
@@ -28,7 +28,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void Equality()
+        public static void Equality()
         {
             // Set up
             var assemblyName = "MyNuGetPackage, Version=1.0.4";
@@ -50,7 +50,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         [Fact]
-        public void InvalidConstruction()
+        public static void InvalidConstruction()
         {
             var assemblyInfo = "MyDll, Version=1.5.3";
             var frameworkName = new FrameworkName("SomeFramework", Version.Parse("5.6.7.2"));

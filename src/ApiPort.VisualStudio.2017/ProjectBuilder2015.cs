@@ -134,7 +134,7 @@ namespace ApiPortVS.VS2017
             return outputs.Any() ? outputs : null;
         }
 
-        private UnconfiguredProject GetUnconfiguredProject(Project project)
+        private static UnconfiguredProject GetUnconfiguredProject(Project project)
         {
             return (project as IVsBrowseObjectContext)?.UnconfiguredProject;
         }

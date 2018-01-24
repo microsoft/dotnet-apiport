@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         [InlineData("M:System.Collections.Concurrent.ConcurrentBag`1.get_Count", "P:System.Collections.Concurrent.ConcurrentBag`1.Count;T:System.Collections.Concurrent.ConcurrentBag`1;N:System.Collections.Concurrent")]
         [InlineData("T:System.Collections.Concurrent.ConcurrentBag`1", "N:System.Collections.Concurrent")]
         [Theory]
-        public void GetAncestorsTest(string docId, string ancestors)
+        public static void GetAncestorsTest(string docId, string ancestors)
         {
             var dotnetCatalog = new TestDotNetCatalog();
             var catalog = new CloudApiCatalogLookup(dotnetCatalog);
@@ -32,7 +32,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         [InlineData("N:System.Collections.Concurrent")]
         [InlineData("N:NonExistentDocId")]
         [Theory]
-        public void GetAncestorsTestEmpty(string docId)
+        public static void GetAncestorsTestEmpty(string docId)
         {
             var dotnetCatalog = new TestDotNetCatalog();
             var catalog = new CloudApiCatalogLookup(dotnetCatalog);

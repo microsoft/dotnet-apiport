@@ -131,7 +131,7 @@ namespace Microsoft.Fx.Portability.Proxy
         /// <summary>
         /// Gets the proxy from environment variables.
         /// </summary>
-        private IWebProxy GetWebProxyFromEnvironment()
+        private static IWebProxy GetWebProxyFromEnvironment()
         {
             // Try reading from the environment variable http_proxy. This would be specified as http://<username>:<password>@proxy.com
             var host = Environment.GetEnvironmentVariable(ProxyConstants.HttpProxy);
@@ -206,7 +206,7 @@ namespace Microsoft.Fx.Portability.Proxy
             }
         }
 
-        private T GetValueFromProxyConfiguration<T>(IConfigurationRoot configuration, params string[] pathSegments)
+        private static T GetValueFromProxyConfiguration<T>(IConfigurationRoot configuration, params string[] pathSegments)
             where T : class
         {
             var concatonatedWithProxy = new[] { ProxyConstants.ProxySection }.Concat(pathSegments);

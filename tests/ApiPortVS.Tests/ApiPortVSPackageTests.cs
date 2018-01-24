@@ -14,7 +14,7 @@ namespace ApiPortVS.Tests
     public class ApiPortVSPackageTests
     {
         [Fact]
-        public void FileHasAnalyzableExtension_FileIsExe_ReturnsTrue()
+        public static void FileHasAnalyzableExtension_FileIsExe_ReturnsTrue()
         {
             var filename = "analyzable.exe";
 
@@ -26,7 +26,7 @@ namespace ApiPortVS.Tests
         }
 
         [Fact]
-        public void FileHasAnalyzableExtension_FileIsDll_ReturnsTrue()
+        public static void FileHasAnalyzableExtension_FileIsDll_ReturnsTrue()
         {
             var filename = "analyzable.dll";
 
@@ -38,7 +38,7 @@ namespace ApiPortVS.Tests
         }
 
         [Fact]
-        public void FileHasAnalyzableExtension_FilenameContainsVshost_ReturnsFalse()
+        public static void FileHasAnalyzableExtension_FilenameContainsVshost_ReturnsFalse()
         {
             var filename = "analyzable.vshost.exe";
 
@@ -49,7 +49,7 @@ namespace ApiPortVS.Tests
             Assert.False(result);
         }
 
-        private ProjectAnalyzer GetProjectAnalyzer()
+        private static ProjectAnalyzer GetProjectAnalyzer()
         {
             var threadingService = Substitute.For<IVSThreadingService>();
 

@@ -201,7 +201,7 @@ namespace Microsoft.Fx.Portability.Tests
         #endregion
 
         #region Helper Methods
-        private void ValidateParse(Stream markdown, params BreakingChange[] expected)
+        private static void ValidateParse(Stream markdown, params BreakingChange[] expected)
         {
             BreakingChange[] actual = BreakingChangeParser.FromMarkdown(markdown).ToArray();
             markdown.Dispose();
@@ -214,7 +214,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
         }
 
-        private void TestEquality(BreakingChange expected, BreakingChange actual)
+        private static void TestEquality(BreakingChange expected, BreakingChange actual)
         {
             if (expected == null)
             {

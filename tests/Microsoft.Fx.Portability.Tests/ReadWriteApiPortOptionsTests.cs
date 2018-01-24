@@ -15,7 +15,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class ReadWriteApiPortOptionsTests
     {
         [Fact]
-        public void AllPropertiesCopied()
+        public static void AllPropertiesCopied()
         {
             var options = new TestOptions();
             var wrappedOptions = new ReadWriteApiPortOptions(options);

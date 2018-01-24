@@ -177,7 +177,7 @@ namespace Microsoft.Fx.Portability.Analysis
         /// <summary>
         /// Computes a list of strings that describe the status of the api on all the targets (not supported or version when it was introduced)
         /// </summary>
-        private bool IsSupportedAcrossTargets(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets, out List<Version> targetStatus)
+        private static bool IsSupportedAcrossTargets(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets, out List<Version> targetStatus)
         {
             targetStatus = new List<Version>();
             bool isSupported = true;
