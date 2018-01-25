@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Header for assembly name entries.
+        ///   Looks up a localized string similar to Assembly Name.
         /// </summary>
         internal static string AssemblyHeader {
             get {

@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssemblyHeader" xml:space="preserve">
-    <value>Header for assembly name entries</value>
+    <value>Assembly Name</value>
+    <comment>Header for assembly name entries</comment>
   </data>
   <data name="BreakingChanges" xml:space="preserve">
     <value>Breaking Changes</value>
