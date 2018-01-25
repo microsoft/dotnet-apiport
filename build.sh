@@ -60,7 +60,7 @@ build() {
 runTest() {
     ls $1/*.csproj | while read file
     do
-        if awk -F: '/<TargetFramework>netcoreapp1\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
+        if awk -F: '/<TargetFramework>netcoreapp[1-9]\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
             echo "Testing "$file
             $DotNetExe test $file -c $Configuration --logger trx
         else
