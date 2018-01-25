@@ -309,7 +309,7 @@ namespace Microsoft.Fx.Portability
                     }
                     break;
                 case ParseState.Categories:
-                    if (string.IsNullOrWhiteSpace(currentLine) || currentLine.StartsWith("<!--"))
+                    if (string.IsNullOrWhiteSpace(currentLine) || currentLine.StartsWith("<!--", StringComparison.Ordinal))
                     {
                         break;
                     }
