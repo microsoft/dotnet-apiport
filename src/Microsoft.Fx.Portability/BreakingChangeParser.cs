@@ -191,21 +191,18 @@ namespace Microsoft.Fx.Portability
                         // Comments.
                         else if (currentLine.StartsWith("<!--", StringComparison.Ordinal))
                         {
-                            var contents = currentLine.Replace("<!--", "").Replace("-->", "");
-                            var startIndex = contents.IndexOf(":", StringComparison.Ordinal);
-                            int id;
+                            // change IDs are in comments, e.g. <!-- breaking change id: 144 -->
+                            string id = currentLine.Split()
+                                .FirstOrDefault(token => int.TryParse(token, out _));
 
-                            // <!-- breaking change id: 144 -->
-                            if (contents.IndexOf("breaking change id", StringComparison.OrdinalIgnoreCase) != -1
-                                && startIndex != -1
-                                && int.TryParse(contents.Substring(startIndex + 1), out id))
+                            if (id == null)
                             {
-                                currentBreak.Id = id.ToString(CultureInfo.InvariantCulture);
-                                state = ParseState.None;
+                                ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
                             }
                             else
                             {
-                                ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
+                                currentBreak.Id = id;
+                                state = ParseState.None;
                             }
                         }
                         // Otherwise, process according to our current state
@@ -312,19 +309,24 @@ namespace Microsoft.Fx.Portability
                     }
                     break;
                 case ParseState.Categories:
-                    // Trim md list and code markers, as well as comment tags (in case the categories section is followed by a comment)
-                    var category = currentLine.Trim().TrimStart('*', '-', '!', '<', '>');
-                    if (string.IsNullOrWhiteSpace(category)) break;
+                    if (string.IsNullOrWhiteSpace(currentLine) || currentLine.StartsWith("<!--"))
+                    {
+                        break;
+                    }
+
+                    // If a list of allowed categories was provided, make sure that the category found is on the list
+                    if (!allowedCategories?.Contains(currentLine, StringComparer.OrdinalIgnoreCase) ?? false)
+                    {
+                        throw new InvalidOperationException(
+                            string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, currentLine)
+                        );
+                    }
+
                     if (currentBreak.Categories == null)
                     {
                         currentBreak.Categories = new List<string>();
                     }
-                    // If a list of allowed categories was provided, make sure that the category found is on the list
-                    if (!allowedCategories?.Contains(category, StringComparer.OrdinalIgnoreCase) ?? false)
-                    {
-                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, category));
-                    }
-                    currentBreak.Categories.Add(category.Trim());
+                    currentBreak.Categories.Add(currentLine);
                     break;
                 default:
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidBreakingChangeParserState, state.ToString()));

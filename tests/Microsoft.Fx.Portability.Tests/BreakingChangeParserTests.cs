@@ -27,6 +27,8 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("Template.md"), TemplateBC);
             ValidateParse(GetBreakingChangeMarkdown("005- ListT.ForEach.md"), ListTBC);
             ValidateParse(GetBreakingChangeMarkdown("006- System.Uri.md"), UriBC);
+            ValidateParse(GetBreakingChangeMarkdown("long-path-support.md"), LongPathSupportBC);
+            ValidateParse(GetBreakingChangeMarkdown("opt-in-break-to-revert-from-different-4_5-sql-generation-to-simpler-4_0-sql-generation.md"), OptionalBC);
         }
 
         [Fact]
@@ -191,6 +193,15 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("MultipleBugLinks.md"), expected);
         }
 
+        [Fact]
+        public void CommentsInCategories()
+        {
+            var result = BreakingChangeParser.FromMarkdown(
+                GetBreakingChangeMarkdown("opt-in-break-to-revert-from-different-4_5-sql-generation-to-simpler-4_0-sql-generation.md")
+            ).Single();
+
+            Assert.Equal(1, result.Categories.Count);
+        }
         #endregion
 
         #region Negative Test Cases
@@ -226,6 +237,7 @@ namespace Microsoft.Fx.Portability.Tests
                 Assert.NotNull(actual);
             }
 
+            Assert.Equal(expected.Categories, actual.Categories);
             Assert.Equal(expected.Id, actual.Id, StringComparer.Ordinal);
             Assert.Equal(expected.Title, actual.Title, StringComparer.Ordinal);
             Assert.Equal(expected.Details, actual.Details, StringComparer.Ordinal);
@@ -265,7 +277,6 @@ namespace Microsoft.Fx.Portability.Tests
 
                 throw;
             }
-
         }
 
         #endregion
@@ -329,6 +340,36 @@ namespace Microsoft.Fx.Portability.Tests
             Notes = "Changes IRI parsing, requires access to parameters to detect\nSource analyzer status: Pri 1, source done (AlPopa)"
         };
 
+        public static BreakingChange LongPathSupportBC = new BreakingChange
+        {
+            Id = "162",
+            Title = "Long path support",
+            ImpactScope = BreakingChangeImpact.Minor,
+            VersionBroken = new Version(4, 6, 2),
+            Details = "Starting with apps that target the .NET Framework 4.6.2, long paths (of up to\n32K characters) are supported, and the 260-character (or `MAX_PATH`) limitation\non path lengths has been removed.\n\nFor apps that are recompiled to target the .NET Framework 4.6.2, code paths that\npreviously threw a <xref:System.IO.PathTooLongException?displayProperty=name>\nbecause a path exceeded 260 characters will now throw a\n<xref:System.IO.PathTooLongException?displayProperty=name> only under the\nfollowing conditions:\n\n- The length of the path is greater than <xref:System.Int16.MaxValue> (32,767) characters.\n- The operating system returns `COR_E_PATHTOOLONG` or its equivalent.\n\nFor apps that target the .NET Framework 4.6.1 and earlier versions, the runtime\nautomatically throws a\n<xref:System.IO.PathTooLongException?displayProperty=name> whenever a path\nexceeds 260 characters.",
+            IsQuirked = true,
+            IsBuildTime = false,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Investigating,
+            Suggestion = "For apps that target the .NET Framework 4.6.2, you can opt out of long path\nsupport if it is not desirable by adding the following to the `<runtime>`\nsection of your `app.config` file:\n\n```xml\n<runtime>\n<AppContextSwitchOverrides value=\"Switch.System.IO.BlockLongPaths=true\" />\n</runtime>\n```\n\nFor apps that target earlier versions of the .NET Framework but run on the .NET\nFramework 4.6.2 or later, you can opt in to long path support by adding the\nfollowing to the `<runtime>` section of your `app.config` file:\n\n```xml\n<runtime>\n<AppContextSwitchOverrides value=\"Switch.System.IO.BlockLongPaths=false\" />\n</runtime>\n```",
+            ApplicableApis = new List<string>(),
+            BugLink = "195340",
+            Categories = new[] { "Core" }
+        };
+
+        public static BreakingChange OptionalBC = new BreakingChange
+        {
+            Id = "50",
+            Title = "Opt-in break to revert from different 4.5 SQL generation to simpler 4.0 SQL generation",
+            ImpactScope = BreakingChangeImpact.Transparent,
+            VersionBroken = new Version(4, 5, 2),
+            Details = "Queries that produce JOIN statements and contain a call to a limiting operation without first using OrderBy now produce simpler SQL. After upgrading to .NET Framework 4.5, these queries produced more complicated SQL than previous versions.",
+            IsQuirked = false,
+            IsBuildTime = false,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+            Suggestion = "This feature is disabled by default. If Entity Framework generates extra JOIN statements that cause performance degradation, you can enable this feature by adding the following entry to the `<appSettings>` section of the application configuration (app.config) file:\n\n```xml\n<add key=\"EntityFramework_SimplifyLimitOperations\" value=\"true\" />\n```",
+            ApplicableApis = new List<string>(),
+            Categories = new[] { "Entity Framework" }
+        };
         #endregion
     }
 }
