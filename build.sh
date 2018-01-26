@@ -45,15 +45,14 @@ installSDK() {
     fi
 
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current --install-dir $DotNetSDKPath
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 1.0 --shared-runtime --install-dir $DotNetSDKPath
 }
 
 build() {
     echo "Building ApiPort... Configuration: ["$Configuration"]"
 
     pushd src/ApiPort > /dev/null
-    $DotNetExe build ApiPort.csproj -f netcoreapp1.0 -c $Configuration
-    $DotNetExe build ApiPort.Offline.csproj -f netcoreapp1.0 -c $Configuration
+    $DotNetExe build ApiPort.csproj -f netcoreapp2.0 -c $Configuration
+    $DotNetExe build ApiPort.Offline.csproj -f netcoreapp2.0 -c $Configuration
     popd > /dev/null
 }
 

@@ -7,8 +7,8 @@
       netcoreapp target must be first to avoid a ResXFileCodeGenerator issue
       (tracked at https://github.com/dotnet/project-system/issues/1519)
     -->
-    <TargetFrameworks>netcoreapp1.0;net461</TargetFrameworks>
-    <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
+    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+    <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;ubuntu.14.04-x64;ubuntu.17.04-x64</RuntimeIdentifiers>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <IsPackable>false</IsPackable>

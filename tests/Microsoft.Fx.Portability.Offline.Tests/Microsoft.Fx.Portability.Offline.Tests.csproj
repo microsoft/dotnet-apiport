@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <NonShipping>true</NonShipping>
   </PropertyGroup>
 
   <!-- FxCop does not understand this target platform and will output the
     following errors:
-    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp1.0\ApiPort.dll'
+    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp2.0\ApiPort.dll'
     MSBUILD : error : CA0052 : No targets were selected.
     -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
 

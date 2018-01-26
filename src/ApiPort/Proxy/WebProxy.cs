@@ -30,12 +30,7 @@ namespace ApiPort.Proxy
 
         public WebProxy(Uri proxyAddress)
         {
-            if (proxyAddress == null)
-            {
-                throw new ArgumentNullException(nameof(proxyAddress));
-            }
-
-            ProxyAddress = proxyAddress;
+            ProxyAddress = proxyAddress ?? throw new ArgumentNullException(nameof(proxyAddress));
         }
 
         public Uri ProxyAddress { get; }
@@ -83,9 +78,19 @@ namespace ApiPort.Proxy
 
         private static string WildcardToRegex(string pattern)
         {
-            return Regex.Escape(pattern)
-                .Replace(@"\*", ".*?")
-                .Replace(@"\?", ".");
+            string Replace(string content, string oldValue, string newValue)
+            {
+#if NETCOREAPP2_0
+                return content.Replace(oldValue, newValue, StringComparison.Ordinal);
+#else
+                return content.Replace(oldValue, newValue);
+#endif
+            };
+
+            return Replace(
+                    Replace(Regex.Escape(pattern), @"\*", ".*?"),
+                    @"\?",
+                    ".");
         }
 
         private static Uri CreateProxyUri(string address)
