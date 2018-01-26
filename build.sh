@@ -44,7 +44,7 @@ installSDK() {
         mkdir -p $DotNetToolsPath
     fi
 
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 2.0 --install-dir $DotNetSDKPath
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current --install-dir $DotNetSDKPath
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 1.0 --shared-runtime --install-dir $DotNetSDKPath
 }
 
@@ -60,7 +60,7 @@ build() {
 runTest() {
     ls $1/*.csproj | while read file
     do
-        if awk -F: '/<TargetFramework>netcoreapp1\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
+        if awk -F: '/<TargetFramework>netcoreapp[1-9]\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
             echo "Testing "$file
             $DotNetExe test $file -c $Configuration --logger trx
         else

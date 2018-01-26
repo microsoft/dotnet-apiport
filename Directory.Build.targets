@@ -47,9 +47,13 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
-    <!-- TODO: Remove IncludeCodeAnalysisPackages when our CI machine supports
-    VS2017 15.5. See Directory.Build.props for more info. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1" Condition=" '$(IsPackage)' != 'true' and '$(IncludeCodeAnalysisPackages)' == 'true' ">
+    <!-- Enforcing the same compiler toolset to be used on desktop builds.
+      https://github.com/dotnet/roslyn-analyzers/issues/1533#issuecomment-358733030 -->
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" Condition="'$(OS)' == 'Windows_NT'">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" Condition=" '$(IsPackage)' != 'true' ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
