@@ -7,6 +7,7 @@ using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -145,8 +146,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         {
             var expectedDocIds = new List<string>
             {
-                $"T:{ValidDocId.ToUpper()}0" ,
-                $"M:{ValidDocId.ToUpper()}1",
+                $"T:{ValidDocId.ToUpper(CultureInfo.InvariantCulture)}0" ,
+                $"M:{ValidDocId.ToUpper(CultureInfo.InvariantCulture)}1",
                 $"P:{ValidDocId}0"
             };
 

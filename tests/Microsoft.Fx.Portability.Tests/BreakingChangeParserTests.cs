@@ -178,7 +178,7 @@ namespace Microsoft.Fx.Portability.Tests
 ...
 </runtime>
 </configuration>
-```".Replace(Environment.NewLine, "\n")
+```".Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture)
             };
 
             ValidateParse(GetBreakingChangeMarkdown("CommentsInRecommendedChanges.md"), expected);
