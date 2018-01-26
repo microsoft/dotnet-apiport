@@ -193,15 +193,6 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("MultipleBugLinks.md"), expected);
         }
 
-        [Fact]
-        public void CommentsInCategories()
-        {
-            var result = BreakingChangeParser.FromMarkdown(
-                GetBreakingChangeMarkdown("opt-in-break-to-revert-from-different-4_5-sql-generation-to-simpler-4_0-sql-generation.md")
-            ).Single();
-
-            Assert.Equal(1, result.Categories.Count);
-        }
         #endregion
 
         #region Negative Test Cases
