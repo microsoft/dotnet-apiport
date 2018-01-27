@@ -97,7 +97,7 @@ namespace ApiPortVS
             ContextMenuItemBeforeQueryStatus(sender, _dte.Solution.GetProjects(), false);
         }
 
-        private void ContextMenuItemBeforeQueryStatus(object sender, IEnumerable<Project> projects, bool checkDependencies)
+        private static void ContextMenuItemBeforeQueryStatus(object sender, IEnumerable<Project> projects, bool checkDependencies)
         {
             var menuItem = sender as Microsoft.VisualStudio.Shell.OleMenuCommand;
             if (menuItem == null)

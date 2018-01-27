@@ -243,7 +243,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private string GetDocIdSafeMemberName(string name)
+        private static string GetDocIdSafeMemberName(string name)
         {
             char[] newName = new char[name.Length];
             for (int i = 0; i < name.Length; i++)
@@ -318,7 +318,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             return sb.ToString();
         }
 
-        private bool CalculateGenericArgsOffset(string displayName, int pos, out int numGenericArgs, out int offsetStringAfterGenericMarker)
+        private static bool CalculateGenericArgsOffset(string displayName, int pos, out int numGenericArgs, out int offsetStringAfterGenericMarker)
         {
             Debug.Assert(displayName[pos] == '`');
 

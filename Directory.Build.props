@@ -22,14 +22,6 @@
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
-  <!-- TODO: Remove this when our CI machine supports 15.5.
-  See: https://github.com/dotnet/dotnet-ci/issues/905
-  Our CI builds have VS2017 15.3 installed and our release builds have VS2017 15.5
-  installed. This results in a conflict when we change Microsoft.CodeAnalysis.FxCopAnalyzers from 2.3.0-beta1 to 2.6.0 in Directory.Build.targets. -->
-  <PropertyGroup>
-    <IncludeCodeAnalysisPackages Condition="'$(IncludeCodeAnalysisPackages)' == ''">true</IncludeCodeAnalysisPackages>
-  </PropertyGroup>
-
   <!-- Assembly signing not supported on Linux, yet.
     `CS7027: Error signing output with public key from file` -->
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">

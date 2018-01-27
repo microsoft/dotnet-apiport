@@ -15,7 +15,7 @@ namespace ApiPort.Tests
         /// in command line for analyzing
         /// </summary>
         [Fact]
-        public void TestAssemblyFlag_Directory()
+        public static void TestAssemblyFlag_Directory()
         {
             var directoryPath = Directory.GetCurrentDirectory();
             var options = GetOptions($"analyze -f {directoryPath}");
@@ -31,7 +31,7 @@ namespace ApiPort.Tests
         }
 
         [Fact]
-        public void NoArgs()
+        public static void NoArgs()
         {
             var options = CommandLineOptions.ParseCommandLineOptions(Array.Empty<string>());
 
@@ -39,7 +39,7 @@ namespace ApiPort.Tests
         }
 
         [Fact]
-        public void AnalyzeNoFile()
+        public static void AnalyzeNoFile()
         {
             var options = GetOptions("analyze -f");
 
@@ -49,7 +49,7 @@ namespace ApiPort.Tests
         [InlineData("dump -f file.dll", "file.dll", CommandLineOptions.DefaultName)]
         [InlineData("dump -f file.dll -o out.json", "file.dll", "out.json")]
         [Theory]
-        public void DumpAnalysis(string args, string file, string output)
+        public static void DumpAnalysis(string args, string file, string output)
         {
             var options = GetOptions(args);
 
@@ -65,7 +65,7 @@ namespace ApiPort.Tests
         [InlineData("analyze -f file.dll -o other", "other")]
         [InlineData("analyze -f file.dll --out other", "other")]
         [Theory]
-        public void OutputFile(string args, string name)
+        public static void OutputFile(string args, string name)
         {
             var options = CommandLineOptions.ParseCommandLineOptions(args.Split(' '));
 
@@ -78,7 +78,7 @@ namespace ApiPort.Tests
         [InlineData("analyze -f file.dll --force", true)]
         [InlineData("analyze -f file.dll -o other --force", true)]
         [Theory]
-        public void OverwriteFile(string args, bool overwrite)
+        public static void OverwriteFile(string args, bool overwrite)
         {
             var options = GetOptions(args);
 
@@ -90,7 +90,7 @@ namespace ApiPort.Tests
         [InlineData("listOutputFormats", AppCommand.ListOutputFormats)]
         [InlineData("docId", AppCommand.DocIdSearch)]
         [Theory]
-        public void SimpleCommandTests(string args, AppCommand command)
+        public static void SimpleCommandTests(string args, AppCommand command)
         {
             var options = GetOptions(args);
 
@@ -98,7 +98,7 @@ namespace ApiPort.Tests
         }
 
         [Fact]
-        public void TestAssemblyFlag_FileName()
+        public static void TestAssemblyFlag_FileName()
         {
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
             var options = GetOptions($"analyze -f {currentAssemblyPath}");
@@ -111,7 +111,7 @@ namespace ApiPort.Tests
         }
 
         [Fact]
-        public void TestAssemblyFlag_DirectoryAndFileName()
+        public static void TestAssemblyFlag_DirectoryAndFileName()
         {
             var directoryPath = Directory.GetCurrentDirectory();
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;

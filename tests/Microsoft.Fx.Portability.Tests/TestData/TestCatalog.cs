@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.TestData
             return AllTargets.Values;
         }
 
-        public string GetApiMetadata(string docId, string metadataKey)
+        public static string GetApiMetadata(string docId, string metadataKey)
         {
             return string.Empty;
         }

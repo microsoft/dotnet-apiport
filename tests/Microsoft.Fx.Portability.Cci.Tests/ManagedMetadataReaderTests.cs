@@ -15,19 +15,19 @@ namespace Microsoft.Fx.Portability.Cci.Tests
         private readonly static string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
 
         [Fact]
-        public void EmptyProject()
+        public static void EmptyProject()
         {
             CompareFinders(s_emptyProjectPath);
         }
 
         [Fact]
-        public void WithGenericsAndReference()
+        public static void WithGenericsAndReference()
         {
             CompareFinders(s_withGenericsAndReferencePath);
         }
 
         [Fact]
-        public void WithGenericsAndReferenceAndEmptyProject()
+        public static void WithGenericsAndReferenceAndEmptyProject()
         {
             CompareFinders(s_withGenericsAndReferencePath, s_emptyProjectPath);
         }

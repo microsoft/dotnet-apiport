@@ -56,7 +56,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         {
             int pos = DocId.IndexOf("T:", StringComparison.Ordinal);
             if (pos == -1)
-                throw new ArgumentException(LocalizedStrings.MemberShouldBeDefinedOnTypeException, "docId");
+                throw new ArgumentException(LocalizedStrings.MemberShouldBeDefinedOnTypeException, nameof(docId));
 
             TypeName = DocId.Substring(pos);
             MissingMembers = new HashSet<MissingMemberInfo>();

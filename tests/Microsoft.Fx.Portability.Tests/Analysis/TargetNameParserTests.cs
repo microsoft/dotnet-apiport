@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class TargetNameParserTests
     {
         [Fact]
-        public void NoSpecifiedTargets()
+        public static void NoSpecifiedTargets()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             var targets = parser.MapTargetsToExplicitVersions(null);
@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void NoSpecifiedTargets_2()
+        public static void NoSpecifiedTargets_2()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             var targets = parser.MapTargetsToExplicitVersions(Enumerable.Empty<string>());
@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void CaseInsensitive()
+        public static void CaseInsensitive()
         {
             var parser = new TargetNameParser(new TestCatalog(), String.Empty);
             var targets = parser.MapTargetsToExplicitVersions(new String[] { "target 1, version=1.0" });
@@ -47,7 +47,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void NoSpecifiedDefaultTargets()
+        public static void NoSpecifiedDefaultTargets()
         {
             var parser = new TargetNameParser(new TestCatalog(), String.Empty);
             var targets = parser.MapTargetsToExplicitVersions(Enumerable.Empty<string>());
@@ -57,7 +57,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void UnReleasedTarget()
+        public static void UnReleasedTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             var targets = parser.MapTargetsToExplicitVersions(new string[] { "Target 3" });
@@ -68,28 +68,28 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void NonExistentSpecifiedTarget()
+        public static void NonExistentSpecifiedTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             Assert.Throws<UnknownTargetException>(() => parser.MapTargetsToExplicitVersions(new string[] { "Foo" }));
         }
 
         [Fact]
-        public void NonExistentSpecifiedVersionOnKnownTarget()
+        public static void NonExistentSpecifiedVersionOnKnownTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             Assert.Throws<UnknownTargetException>(() => parser.MapTargetsToExplicitVersions(new string[] { "Target 1, version=2.0" }));
         }
 
         [Fact]
-        public void NonExistentSpecifiedVersionOnKnownTargetWithAvailableTarget()
+        public static void NonExistentSpecifiedVersionOnKnownTargetWithAvailableTarget()
         {
             var parser = new TargetNameParser(new TestCatalog(), "Target 1, version=1.0");
             Assert.Throws<UnknownTargetException>(() => parser.MapTargetsToExplicitVersions(new string[] { "Target 1, version=2.0", "Target 1, version=1.0" }));
         }
 
         [Fact]
-        public void NonExistentDefaultTarget()
+        public static void NonExistentDefaultTarget()
         {
             var target1 = "Target 1, version=1.0";
             var target1Framework = new FrameworkName(target1);

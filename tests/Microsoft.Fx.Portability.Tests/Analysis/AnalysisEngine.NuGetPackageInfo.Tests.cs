@@ -23,7 +23,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// Tests that given a set of assemblies, the correct nuget package is returned.
         /// </summary>
         [Fact]
-        public void TestGetNugetPackageInfo()
+        public static void TestGetNugetPackageInfo()
         {
             // Arrange
             var nugetPackageAssembly = GetAssemblyInfo("NugetPackageAssembly", "2.0.5.0", isExplicitlySpecified: false);
@@ -75,7 +75,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// Tests that if an assembly is not explicitly specified, and packages for this assembly are found, it'll be in the set of assemblies to remove.
         /// </summary>
         [Fact]
-        public void ComputeAssembliesToRemove_PackageFound()
+        public static void ComputeAssembliesToRemove_PackageFound()
         {
             // Arrange
             var userNuGetPackage = GetAssemblyInfo("NugetPackageAssembly", "2.0.5.0", isExplicitlySpecified: false);
@@ -109,7 +109,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// the given targets... we shouldn't remove it.
         /// </summary>
         [Fact]
-        public void ComputeAssembliesToRemove_PackageNotFound()
+        public static void ComputeAssembliesToRemove_PackageNotFound()
         {
             // Arrange
             var userNuGetPackage = GetAssemblyInfo("NugetPackageAssembly", "2.0.5.0", isExplicitlySpecified: false);
@@ -150,7 +150,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// removed.
         /// </summary>
         [Fact]
-        public void ComputeAssembliesToRemove_AssemblyExplicitlyPassedIn()
+        public static void ComputeAssembliesToRemove_AssemblyExplicitlyPassedIn()
         {
             // Arrange
             var userNuGetPackage = GetAssemblyInfo("NugetPackageAssembly", "2.0.5.0", isExplicitlySpecified: true);
@@ -183,7 +183,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
         /// 'isExplicitlySpecified' was added.
         /// </summary>
         [Fact]
-        public void ComputeAssembliesToRemove_AssemblyFlagNotSet()
+        public static void ComputeAssembliesToRemove_AssemblyFlagNotSet()
         {
             // Arrange
             var userNuGetPackage = GetAssemblyInfo("NugetPackageAssembly", "2.0.5.0");

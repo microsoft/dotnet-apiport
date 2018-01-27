@@ -135,7 +135,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         private void GenerateSummaryPage(Worksheet summaryPage, ReportingResult analysisResult)
         {
-            var targetNames = _mapper.GetTargetNames(analysisResult.Targets);
+            var targetNames = _mapper.GetTargetNames(analysisResult.Targets, alwaysIncludeVersion: true);
 
             // This is the submission id
             summaryPage.AddRow(LocalizedStrings.SubmissionId, AddSubmissionLink(analysisResult.SubmissionId));
@@ -184,7 +184,7 @@ namespace Microsoft.Fx.Portability.Reports
             summaryPage.AddRow(LocalizedStrings.HowToReadTheExcelTable);
         }
 
-        private void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, ReportingResult analysisResult)
+        private static void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, ReportingResult analysisResult)
         {
             List<string> missingAssembliesPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.UsedBy, LocalizedStrings.MissingAssemblyStatus };
             int detailsRows = 0;
@@ -225,7 +225,7 @@ namespace Microsoft.Fx.Portability.Reports
                 detailsPageHeader.Add(LocalizedStrings.AssemblyHeader);
             }
 
-            detailsPageHeader.AddRange(_mapper.GetTargetNames(analysisResult.Targets));
+            detailsPageHeader.AddRange(_mapper.GetTargetNames(analysisResult.Targets, alwaysIncludeVersion: true));
             detailsPageHeader.Add(LocalizedStrings.RecommendedChanges);
 
             int detailsRows = 0;
@@ -408,7 +408,7 @@ namespace Microsoft.Fx.Portability.Reports
             };
         }
 
-        private object AddSubmissionLink(string submissionId)
+        private static object AddSubmissionLink(string submissionId)
         {
             return submissionId;
 
@@ -430,7 +430,7 @@ namespace Microsoft.Fx.Portability.Reports
 #endif
         }
 
-        private object AddLink(string docId)
+        private static object AddLink(string docId)
         {
             return docId;
 

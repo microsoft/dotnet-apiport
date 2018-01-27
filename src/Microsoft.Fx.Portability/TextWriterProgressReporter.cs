@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Microsoft.Fx.Portability
 {
-    public class TextWriterProgressReporter : IProgressReporter
+    public sealed class TextWriterProgressReporter : IProgressReporter
     {
         private readonly List<string> _issuesReported = new List<string>();
         private readonly TextWriter _textWriter;

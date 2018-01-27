@@ -10,7 +10,7 @@ namespace Microsoft.Fx.Portability.Tests
     public class UrlBuilderTest
     {
         [Fact]
-        public void NoParameters()
+        public static void NoParameters()
         {
             var url = UrlBuilder.Create("test").Url;
 
@@ -18,7 +18,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddQueryParam()
+        public static void AddQueryParam()
         {
             var url = UrlBuilder.Create("test").AddQuery("name", "value").Url;
 
@@ -26,7 +26,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddNullableQueryParam()
+        public static void AddNullableQueryParam()
         {
             int? value = 5;
 
@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddNullableQueryParamNull()
+        public static void AddNullableQueryParamNull()
         {
             int? value = null;
 
@@ -46,7 +46,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddQueryListNull()
+        public static void AddQueryListNull()
         {
             var url = UrlBuilder.Create("test").AddQuery("name", "value").AddQueryList("test", null).Url;
 
@@ -54,7 +54,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddQueryList1Item()
+        public static void AddQueryList1Item()
         {
             var list = new[] { "test1" };
 
@@ -64,7 +64,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddQueryListMultiple()
+        public static void AddQueryListMultiple()
         {
             var list = new[] { "test1", "test2", "test3" };
             var url = UrlBuilder.Create("test").AddQuery("name", "value").AddQueryList("test", list).Url;
@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddQueryListMultipleNullItem()
+        public static void AddQueryListMultipleNullItem()
         {
             var list = new[] { "test1", null, "test3" };
             var url = UrlBuilder.Create("test").AddQuery("name", "value").AddQueryList("test", list).Url;
@@ -82,7 +82,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddODataParam()
+        public static void AddODataParam()
         {
             var url = UrlBuilder.Create("test").AddODataQuery("top", 10).Url;
 
@@ -90,7 +90,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void HttpEncodeValues()
+        public static void HttpEncodeValues()
         {
             var url = UrlBuilder.Create("test").AddQuery("name with spaces", "value with spaces").Url;
 
@@ -98,7 +98,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void HttpEncodeValuesOData()
+        public static void HttpEncodeValuesOData()
         {
             var url = UrlBuilder.Create("test").AddODataQuery("name with spaces", "value with spaces").Url;
 
@@ -106,7 +106,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void AddPath()
+        public static void AddPath()
         {
             var url = UrlBuilder.Create("test").AddPath("blah ");
 
@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public void NullObject()
+        public static void NullObject()
         {
             var original = UrlBuilder.Create("test");
             var withNull = original.AddQuery("null", null);

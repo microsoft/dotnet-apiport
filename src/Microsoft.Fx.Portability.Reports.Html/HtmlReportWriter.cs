@@ -77,6 +77,10 @@ namespace Microsoft.Fx.Portability.Reports
 
         public class HtmlHelper
         {
+            // Disabling warning because marking this as static results in Razor
+            // compilation errors when generating the Razor page.
+#pragma warning disable CA1822 // Mark members as static
+
             public string ConvertMarkdownToHtml(string markdown)
             {
                 return CommonMark.CommonMarkConverter.Convert(markdown);
@@ -128,6 +132,7 @@ namespace Microsoft.Fx.Portability.Reports
 
                 return Raw($"<td class=\"textCentered {className}\">{breaks}</td>");
             }
+#pragma warning restore CA1822 // Mark members as static
         }
 
         public abstract class HtmlSupportTemplateBase<T> : TemplateBase<T>

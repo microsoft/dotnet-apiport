@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ApiPort
 {
-    public class ConsoleProgressReporter : IProgressReporter
+    public sealed class ConsoleProgressReporter : IProgressReporter
     {
         private readonly List<string> _issuesReported = new List<string>();
         private readonly List<ConsoleProgressTask> _progressTasks = new List<ConsoleProgressTask>();

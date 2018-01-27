@@ -18,7 +18,7 @@ namespace Microsoft.Fx.Portability.Tests
 {
     public class ApiPortClientTests
     {
-        private Task<ServiceResponse<T>> CreateResponse<T>(T result)
+        private static Task<ServiceResponse<T>> CreateResponse<T>(T result)
         {
             var response = new ServiceResponse<T>(result, EndpointStatus.Alive);
 
@@ -100,7 +100,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task AnalyzeAssemblies_ThrowsOnInvalidOptions_TargetCount()
+        public static async Task AnalyzeAssemblies_ThrowsOnInvalidOptions_TargetCount()
         {
             var service = Substitute.For<IApiPortService>();
             var progressReporter = Substitute.For<IProgressReporter>();
@@ -119,7 +119,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task AnalyzeAssemblies_DoesNotThrowsOnInvalidOptions_TargetCount()
+        public static async Task AnalyzeAssemblies_DoesNotThrowsOnInvalidOptions_TargetCount()
         {
             var service = Substitute.For<IApiPortService>();
             var progressReporter = Substitute.For<IProgressReporter>();
@@ -138,7 +138,7 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task WriteAnalysisReports_ThrowsOnInvalidOptions_TargetCount()
+        public static async Task WriteAnalysisReports_ThrowsOnInvalidOptions_TargetCount()
         {
             var service = Substitute.For<IApiPortService>();
             var progressReporter = Substitute.For<IProgressReporter>();

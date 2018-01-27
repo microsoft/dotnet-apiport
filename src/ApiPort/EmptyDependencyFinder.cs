@@ -17,12 +17,12 @@ namespace ApiPort
             return new EmptyDependencyInfo();
         }
 
-        public IDependencyInfo FindDependencies(IEnumerable<FileInfo> inputAssemblyPaths, IProgressReporter progressReport)
+        public static IDependencyInfo FindDependencies(IEnumerable<FileInfo> inputAssemblyPaths, IProgressReporter progressReport)
         {
             return new EmptyDependencyInfo();
         }
 
-        public IDependencyInfo FindDependencies(byte[] file, IProgressReporter progressReport)
+        public static IDependencyInfo FindDependencies(byte[] file, IProgressReporter progressReport)
         {
             return new EmptyDependencyInfo();
         }

@@ -184,7 +184,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// </summary>
         /// <param name="peReader"></param>
         /// <returns></returns>
-        private MetadataReader GetMetadataReader(PEReader peReader)
+        private static MetadataReader GetMetadataReader(PEReader peReader)
         {
             try
             {

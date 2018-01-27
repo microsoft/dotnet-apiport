@@ -26,7 +26,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
         [InlineData("_CompatibilityResults.cshtml")]
         [InlineData("_CompatibilitySummary.cshtml")]
         [Theory]
-        public void CanFindTemplates(string templateName)
+        public static void CanFindTemplates(string templateName)
         {
             var fullName = FormattableString.Invariant($"{typeof(HtmlReportWriter).Assembly.GetName().Name}.Resources.{templateName}");
 
@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
         }
 
         [Fact]
-        public void CreatesHtmlReport()
+        public static void CreatesHtmlReport()
         {
             var mapper = Substitute.For<ITargetMapper>();
             var writer = new HtmlReportWriter(mapper);

@@ -42,21 +42,21 @@ namespace Microsoft.Fx.Portability
             return string.Empty;
         }
 
-        public string GetGenericInstance(string genericType, ImmutableArray<string> typestrings)
+        public static string GetGenericInstance(string genericType, ImmutableArray<string> typestrings)
         {
             return string.Empty;
         }
 
         public string GetGenericInstantiation(string genericType, ImmutableArray<string> typeArguments) => throw new NotImplementedException();
 
-        public string GetGenericMethodParameter(int index)
+        public static string GetGenericMethodParameter(int index)
         {
             return string.Empty;
         }
 
         public string GetGenericMethodParameter(object genericContext, int index) => throw new NotImplementedException();
 
-        public string GetGenericTypeParameter(int index)
+        public static string GetGenericTypeParameter(int index)
         {
             return string.Empty;
         }

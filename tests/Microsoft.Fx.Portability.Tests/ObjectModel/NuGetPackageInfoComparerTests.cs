@@ -12,7 +12,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
     public class NuGetPackageInfoComparerTests
     {
         [Fact]
-        public void SortingTest()
+        public static void SortingTest()
         {
             var target1 = NetStandard16;
             var target2 = Net40;
