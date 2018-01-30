@@ -33,7 +33,8 @@ namespace Microsoft.Fx.Portability
             OriginalBug,
             Notes,
             SourceAnalyzerStatus,
-            Categories
+            Categories,
+            Comment
         }
 
         /// <summary>
@@ -191,20 +192,26 @@ namespace Microsoft.Fx.Portability
                         // Comments.
                         else if (currentLine.StartsWith("<!--", StringComparison.Ordinal))
                         {
-                            // change IDs are in comments, e.g. <!-- breaking change id: 144 -->
-                            string id = currentLine.Split()
-                                .FirstOrDefault(token => int.TryParse(token, out _));
-
-                            if (id == null)
+                            if (state == ParseState.Suggestion)
                             {
+                                // suggestions may contain comments; these are part of the suggestion
                                 ParseNonStateChange(currentBreak, state, currentLine, allowedCategories);
+                            }
+                            else if (currentLine.EndsWith("-->", StringComparison.Ordinal))
+                            {
+                                // change IDs are in single-line comments, e.g. <!-- breaking change id: 144 -->
+                                string id = currentLine.Split()
+                                    .FirstOrDefault(token => int.TryParse(token, out _));
+                                currentBreak.Id = currentBreak.Id ?? id;
+                                state = ParseState.None;
                             }
                             else
                             {
-                                currentBreak.Id = id;
-                                state = ParseState.None;
+                                // this line begins a multi-line comment not part of a suggestion
+                                state = ParseState.Comment;
                             }
                         }
+
                         // Otherwise, process according to our current state
                         else
                         {
@@ -327,6 +334,13 @@ namespace Microsoft.Fx.Portability
                         currentBreak.Categories = new List<string>();
                     }
                     currentBreak.Categories.Add(currentLine);
+                    break;
+                case ParseState.Comment:
+                    // ignore multi-line comments
+                    if (currentLine.EndsWith("-->", StringComparison.Ordinal))
+                    {
+                        state = ParseState.None;
+                    }
                     break;
                 default:
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidBreakingChangeParserState, state.ToString()));

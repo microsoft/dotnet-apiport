@@ -29,6 +29,7 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("006- System.Uri.md"), UriBC);
             ValidateParse(GetBreakingChangeMarkdown("long-path-support.md"), LongPathSupportBC);
             ValidateParse(GetBreakingChangeMarkdown("opt-in-break-to-revert-from-different-4_5-sql-generation-to-simpler-4_0-sql-generation.md"), OptionalBC);
+            ValidateParse(GetBreakingChangeMarkdown("wpf-pointer-based-touch-stack.md"), PointerStackBC);
         }
 
         [Fact]
@@ -361,6 +362,22 @@ namespace Microsoft.Fx.Portability.Tests
             ApplicableApis = new List<string>(),
             Categories = new[] { "Entity Framework" }
         };
+
+        public static BreakingChange PointerStackBC = new BreakingChange
+        {
+            Id = "172",
+            Title = "WPF Pointer-Based Touch Stack",
+            ImpactScope = BreakingChangeImpact.Edge,
+            VersionBroken = new Version(4, 7),
+            Details = "This change adds the ability to enable an optional WM_POINTER based WPF touch/stylus stack.  Developers that do not explicitly enable this should see no change in WPF touch/stylus behavior.\n\nCurrent Known Issues With optional WM_POINTER based touch/stylus stack:\n- No support for real-time inking.\n- While inking and StylusPlugins will still work, they will be processed on the UI Thread which can lead to poor performance.\n- Behavioral changes due to changes in promotion from touch/stylus events to mouse events\n- Manipulation may behave differently\n- Drag/Drop will not show appropriate feedback for touch input\n- This does not affect stylus input\n- Drag/Drop can no longer be initiated on touch/stylus events\n- This can potentially hang the application until mouse input is detected.\n- Instead, developers should initiate drag and drop from mouse events.",
+            IsQuirked = true,
+            IsBuildTime = false,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+            Suggestion = "Developers who wish to enable this stack can add/merge the following to their application's App.config file:\n\n```xml\n<configuration>\n<runtime>\n<AppContextSwitchOverrides value=\"Switch.System.Windows.Input.Stylus.EnablePointerSupport=true\"/>\n</runtime>\n</configuration>\n```\n\nRemoving this or setting the value to false will turn this optional stack off.\n\nPlease note that this stack is available only on Windows 10 Creators Update and above.",
+            ApplicableApis = new List<string>(),
+            Categories = new[] { "Windows Presentation Foundation (WPF)" }
+        };
+
         #endregion
     }
 }
