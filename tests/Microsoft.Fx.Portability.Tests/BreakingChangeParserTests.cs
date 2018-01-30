@@ -29,6 +29,8 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("006- System.Uri.md"), UriBC);
             ValidateParse(GetBreakingChangeMarkdown("long-path-support.md"), LongPathSupportBC);
             ValidateParse(GetBreakingChangeMarkdown("opt-in-break-to-revert-from-different-4_5-sql-generation-to-simpler-4_0-sql-generation.md"), OptionalBC);
+            ValidateParse(GetBreakingChangeMarkdown("wpf-pointer-based-touch-stack.md"), PointerStackBC);
+            ValidateParse(GetBreakingChangeMarkdown("ASPNET-accessibility-improvement.md"), AccessibilityBC);
         }
 
         [Fact]
@@ -152,36 +154,6 @@ namespace Microsoft.Fx.Portability.Tests
             };
 
             ValidateParse(GetBreakingChangeMarkdown("CategoryWithSpaces.md"), expected);
-        }
-
-        [Fact]
-        public void BreakingChangeWithComments()
-        {
-            var expected = new BreakingChange
-            {
-                Title = "ASP.NET Accessibility Improvements in .NET 4.7.3",
-                ImpactScope = BreakingChangeImpact.Minor,
-                VersionBroken = Version.Parse("4.7.3"),
-                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
-                IsQuirked = true,
-                IsBuildTime = false,
-                Details = "Starting with the .NET Framework 4.7.1, ASP.NET has improved how ASP.NET Web Controls work with accessibility technology in Visual Studio to better support ASP.NET customers.",
-                Suggestion = @"In order for the Visual Studio Designer to benefit from these changes
-- Install Visual Studio 2017 15.3 or later, which supports the new accessibility features with the following AppContext Switch by default.
-```xml
-<?xml version=""1.0"" encoding=""utf-8""?>
-<configuration>
-<runtime>
-...
-<!-- AppContextSwitchOverrides value attribute is in the form of 'key1=true|false;key2=true|false  -->
-<AppContextSwitchOverrides value=""...;Switch.UseLegacyAccessibilityFeatures=false"" />
-...
-</runtime>
-</configuration>
-```".Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture)
-            };
-
-            ValidateParse(GetBreakingChangeMarkdown("CommentsInRecommendedChanges.md"), expected);
         }
 
         [Fact]
@@ -361,6 +333,46 @@ namespace Microsoft.Fx.Portability.Tests
             ApplicableApis = new List<string>(),
             Categories = new[] { "Entity Framework" }
         };
+
+        public static BreakingChange PointerStackBC = new BreakingChange
+        {
+            Id = "172",
+            Title = "WPF Pointer-Based Touch Stack",
+            ImpactScope = BreakingChangeImpact.Edge,
+            VersionBroken = new Version(4, 7),
+            Details = "This change adds the ability to enable an optional WM_POINTER based WPF touch/stylus stack.  Developers that do not explicitly enable this should see no change in WPF touch/stylus behavior.\n\nCurrent Known Issues With optional WM_POINTER based touch/stylus stack:\n- No support for real-time inking.\n- While inking and StylusPlugins will still work, they will be processed on the UI Thread which can lead to poor performance.\n- Behavioral changes due to changes in promotion from touch/stylus events to mouse events\n- Manipulation may behave differently\n- Drag/Drop will not show appropriate feedback for touch input\n- This does not affect stylus input\n- Drag/Drop can no longer be initiated on touch/stylus events\n- This can potentially hang the application until mouse input is detected.\n- Instead, developers should initiate drag and drop from mouse events.",
+            IsQuirked = true,
+            IsBuildTime = false,
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+            Suggestion = "Developers who wish to enable this stack can add/merge the following to their application's App.config file:\n\n```xml\n<configuration>\n<runtime>\n<AppContextSwitchOverrides value=\"Switch.System.Windows.Input.Stylus.EnablePointerSupport=true\"/>\n</runtime>\n</configuration>\n```\n\nRemoving this or setting the value to false will turn this optional stack off.\n\nPlease note that this stack is available only on Windows 10 Creators Update and above.",
+            ApplicableApis = new List<string>(),
+            Categories = new[] { "Windows Presentation Foundation (WPF)" }
+        };
+
+        public static BreakingChange AccessibilityBC = new BreakingChange
+        {
+            Title = "ASP.NET Accessibility Improvements in .NET 4.7.1",
+            ImpactScope = BreakingChangeImpact.Minor,
+            VersionBroken = Version.Parse("4.7.1"),
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+            IsQuirked = true,
+            IsBuildTime = false,
+            Details = "Starting with the .NET Framework 4.7.1, ASP.NET has improved how ASP.NET Web Controls work with accessibility technology in Visual Studio to better support ASP.NET customers.",
+            Suggestion = @"In order for the Visual Studio Designer to benefit from these changes
+- Install Visual Studio 2017 15.3 or later, which supports the new accessibility features with the following AppContext Switch by default.
+```xml
+<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+<runtime>
+...
+<!-- AppContextSwitchOverrides value attribute is in the form of 'key1=true|false;key2=true|false  -->
+<AppContextSwitchOverrides value=""...;Switch.UseLegacyAccessibilityFeatures=false"" />
+...
+</runtime>
+</configuration>
+```".Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture)
+        };
+
         #endregion
     }
 }
