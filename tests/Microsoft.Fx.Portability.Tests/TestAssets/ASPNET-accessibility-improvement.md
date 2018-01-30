@@ -1,10 +1,10 @@
-## ASP.NET Accessibility Improvements in .NET 4.7.3
+## ASP.NET Accessibility Improvements in .NET 4.7.1
 
 ### Scope
 Minor
 
 ### Version Introduced
-4.7.3
+4.7.1
 
 ### Source Analyzer Status
 NotPlanned

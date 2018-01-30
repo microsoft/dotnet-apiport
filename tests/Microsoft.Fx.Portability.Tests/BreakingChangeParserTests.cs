@@ -30,6 +30,7 @@ namespace Microsoft.Fx.Portability.Tests
             ValidateParse(GetBreakingChangeMarkdown("long-path-support.md"), LongPathSupportBC);
             ValidateParse(GetBreakingChangeMarkdown("opt-in-break-to-revert-from-different-4_5-sql-generation-to-simpler-4_0-sql-generation.md"), OptionalBC);
             ValidateParse(GetBreakingChangeMarkdown("wpf-pointer-based-touch-stack.md"), PointerStackBC);
+            ValidateParse(GetBreakingChangeMarkdown("ASPNET-accessibility-improvement.md"), AccessibilityBC);
         }
 
         [Fact]
@@ -153,36 +154,6 @@ namespace Microsoft.Fx.Portability.Tests
             };
 
             ValidateParse(GetBreakingChangeMarkdown("CategoryWithSpaces.md"), expected);
-        }
-
-        [Fact]
-        public void BreakingChangeWithComments()
-        {
-            var expected = new BreakingChange
-            {
-                Title = "ASP.NET Accessibility Improvements in .NET 4.7.3",
-                ImpactScope = BreakingChangeImpact.Minor,
-                VersionBroken = Version.Parse("4.7.3"),
-                SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
-                IsQuirked = true,
-                IsBuildTime = false,
-                Details = "Starting with the .NET Framework 4.7.1, ASP.NET has improved how ASP.NET Web Controls work with accessibility technology in Visual Studio to better support ASP.NET customers.",
-                Suggestion = @"In order for the Visual Studio Designer to benefit from these changes
-- Install Visual Studio 2017 15.3 or later, which supports the new accessibility features with the following AppContext Switch by default.
-```xml
-<?xml version=""1.0"" encoding=""utf-8""?>
-<configuration>
-<runtime>
-...
-<!-- AppContextSwitchOverrides value attribute is in the form of 'key1=true|false;key2=true|false  -->
-<AppContextSwitchOverrides value=""...;Switch.UseLegacyAccessibilityFeatures=false"" />
-...
-</runtime>
-</configuration>
-```".Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture)
-            };
-
-            ValidateParse(GetBreakingChangeMarkdown("CommentsInRecommendedChanges.md"), expected);
         }
 
         [Fact]
@@ -376,6 +347,30 @@ namespace Microsoft.Fx.Portability.Tests
             Suggestion = "Developers who wish to enable this stack can add/merge the following to their application's App.config file:\n\n```xml\n<configuration>\n<runtime>\n<AppContextSwitchOverrides value=\"Switch.System.Windows.Input.Stylus.EnablePointerSupport=true\"/>\n</runtime>\n</configuration>\n```\n\nRemoving this or setting the value to false will turn this optional stack off.\n\nPlease note that this stack is available only on Windows 10 Creators Update and above.",
             ApplicableApis = new List<string>(),
             Categories = new[] { "Windows Presentation Foundation (WPF)" }
+        };
+
+        public static BreakingChange AccessibilityBC = new BreakingChange
+        {
+            Title = "ASP.NET Accessibility Improvements in .NET 4.7.1",
+            ImpactScope = BreakingChangeImpact.Minor,
+            VersionBroken = Version.Parse("4.7.1"),
+            SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.NotPlanned,
+            IsQuirked = true,
+            IsBuildTime = false,
+            Details = "Starting with the .NET Framework 4.7.1, ASP.NET has improved how ASP.NET Web Controls work with accessibility technology in Visual Studio to better support ASP.NET customers.",
+            Suggestion = @"In order for the Visual Studio Designer to benefit from these changes
+- Install Visual Studio 2017 15.3 or later, which supports the new accessibility features with the following AppContext Switch by default.
+```xml
+<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+<runtime>
+...
+<!-- AppContextSwitchOverrides value attribute is in the form of 'key1=true|false;key2=true|false  -->
+<AppContextSwitchOverrides value=""...;Switch.UseLegacyAccessibilityFeatures=false"" />
+...
+</runtime>
+</configuration>
+```".Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture)
         };
 
         #endregion
