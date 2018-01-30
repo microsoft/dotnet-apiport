@@ -1,6 +1,11 @@
 assembly-versioning-scheme: MajorMinorPatchTag
 mode: ContinuousDeployment
-branches: {}
+branches:
+  master:
+    tag: alpha
+    prevent-increment-of-merged-branch-version: true
+  dev:
+    tag: unstable
 next-version: 2.4
 ignore:
   sha: []
