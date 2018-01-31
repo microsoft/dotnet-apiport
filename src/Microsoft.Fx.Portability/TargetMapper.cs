@@ -84,11 +84,6 @@ namespace Microsoft.Fx.Portability
             Load(stream, null);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Xml", "CA3053:UseXmlSecureResolver",
-            Justification = @"For the call to XmlReader.Create() below, CA3053 recommends setting the
-XmlReaderSettings.XmlResolver property to either null or an instance of XmlSecureResolver.
-However, the said XmlResolver property no longer exists in .NET portable framework (i.e. core framework) which means there is no way to set it.
-So we suppress this error until the reporting for CA3053 has been updated to account for .NET portable framework.")]
         private void Load(Stream stream, string path)
         {
             var readerSettings = new XmlReaderSettings
@@ -97,6 +92,10 @@ So we suppress this error until the reporting for CA3053 has been updated to acc
                 CloseInput = false,
                 IgnoreComments = true,
                 IgnoreWhitespace = true,
+                DtdProcessing = DtdProcessing.Prohibit,
+#if NET46
+                XmlResolver = null
+#endif
             };
 
             try
