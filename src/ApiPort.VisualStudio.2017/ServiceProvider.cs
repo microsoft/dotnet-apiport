@@ -24,7 +24,7 @@ namespace ApiPortVS.VS2017
             builder.RegisterType<VSThreadingService>()
                 .As<IVSThreadingService>()
                 .SingleInstance();
-            builder.RegisterType<ProjectBuilder2015>()
+            builder.RegisterType<ProjectBuilder2017>()
                 .As<IProjectBuilder>()
                 .SingleInstance();
         }

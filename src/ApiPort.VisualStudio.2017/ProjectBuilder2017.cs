@@ -1,28 +1,27 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPortVS.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EnvDTE;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.Threading;
 using ApiPortVS.Common;
-using System.Diagnostics;
+using ApiPortVS.Contracts;
+using EnvDTE;
 using Microsoft.VisualStudio.ProjectSystem;
-using Microsoft.VisualStudio.ProjectSystem.Properties;
-using Microsoft.VisualStudio;
-using System.Collections.Concurrent;
 using Microsoft.VisualStudio.ProjectSystem.Build;
+using Microsoft.VisualStudio.ProjectSystem.Properties;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 
 namespace ApiPortVS.VS2017
 {
-    public class ProjectBuilder2015 : DefaultProjectBuilder
+    public class ProjectBuilder2017 : DefaultProjectBuilder
     {
-        public ProjectBuilder2015(
+        public ProjectBuilder2017(
             IVsSolutionBuildManager2 buildManager,
             IVSThreadingService threadingService,
             IProjectMapper projectMapper)
@@ -36,7 +35,7 @@ namespace ApiPortVS.VS2017
         /// https://github.com/Microsoft/visualfsharp/blob/master/vsintegration/tests/unittests/Tests.ProjectSystem.Miscellaneous.fs#L168-L182
         /// </summary>
         /// <returns>null if it is unable to retrieve VS configuration objects</returns>
-        public override async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default)
         {
             if (project == null)
             {
@@ -61,7 +60,7 @@ namespace ApiPortVS.VS2017
         /// project is not a CPS project.</returns>
         private async Task<IEnumerable<string>> GetBuildOutputFilesFromCPSAsync(
             Project project,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             if (project == null)
             {
@@ -72,7 +71,7 @@ namespace ApiPortVS.VS2017
 
             if (hierarchy == null)
             {
-                Trace.TraceWarning($"Unable to locate {nameof(IVsHierarchy)} for {project.Name}");
+                Trace.TraceWarning(ToCurrentCulture($"Unable to locate {nameof(IVsHierarchy)} for {project.Name}"));
                 return null;
             }
 
@@ -110,7 +109,7 @@ namespace ApiPortVS.VS2017
                     }
                     catch (Exception e)
                     {
-                        Trace.TraceError($"Could not fetch key output from project configuration {proj.ProjectConfiguration.Name}. Exception: {e}", e);
+                        Trace.TraceError(ToCurrentCulture($"Could not fetch key output from project configuration {proj.ProjectConfiguration.Name}. Exception: {e}"), e);
                     }
                 }
             }

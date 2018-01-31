@@ -12,6 +12,7 @@ using System.Text;
 using System;
 using Microsoft.Fx.Portability.Reports.Html;
 using Microsoft.Fx.Portability.Reports.Html.Resources;
+using static System.FormattableString;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -115,7 +116,7 @@ namespace Microsoft.Fx.Portability.Reports
                 var className = supported ? "IconSuccessEncoded" : "IconErrorEncoded";
                 var title = supported ? LocalizedStrings.Supported : LocalizedStrings.NotSupported;
 
-                return Raw($"<td class=\"{className}\" title=\"{title}\"></td>");
+                return Raw(Invariant($"<td class=\"{className}\" title=\"{title}\"></td>"));
             }
 
             public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
@@ -130,7 +131,7 @@ namespace Microsoft.Fx.Portability.Reports
                     className = breaks <= errorThreshold ? "FewBreakingChanges" : "ManyBreakingChanges";
                 }
 
-                return Raw($"<td class=\"textCentered {className}\">{breaks}</td>");
+                return Raw(Invariant($"<td class=\"textCentered {className}\">{breaks}</td>"));
             }
 #pragma warning restore CA1822 // Mark members as static
         }
