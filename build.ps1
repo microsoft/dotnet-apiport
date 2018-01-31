@@ -87,18 +87,18 @@ function Set-DevEnvironment {
     }
 
     $output = cmd /c "`"$devEnv`" & set"
-    
+
     foreach ($line in $output)
     {
         if ($line -match "(?<key>.*?)=(?<value>.*)") {
             $key = $matches["key"]
             $value = $matches["value"]
-                
+
             Write-Verbose("$key=$value")
             Set-Item "ENV:\$key" -Value "$value" -Force
         }
     }
-    
+
     if (Get-Command $msbuild -ErrorAction SilentlyContinue)
     {
         Write-Host "Added $msbuild to path"
@@ -128,7 +128,7 @@ if ($Platform -eq "AnyCPU") {
 
 Push-Location $root
 
-& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false "/bl:$binFolder\msbuild.binlog"
+& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m:1 /v:m /nr:false "/bl:$binFolder\msbuild.binlog"
 
 Pop-Location
 

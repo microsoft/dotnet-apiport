@@ -2,10 +2,17 @@ assembly-versioning-scheme: MajorMinorPatchTag
 mode: ContinuousDeployment
 branches:
   master:
+    regex: master
     tag: alpha
     prevent-increment-of-merged-branch-version: true
   dev:
+    regex: dev(elop)?(ment)?$
     tag: unstable
+  pull-request:
+    regex: (pull|pull\-requests|pr)[/-]
+    mode: ContinuousDelivery
+    tag: pr
+    prevent-increment-of-merged-branch-version: false
 next-version: 2.4
 ignore:
   sha: []
