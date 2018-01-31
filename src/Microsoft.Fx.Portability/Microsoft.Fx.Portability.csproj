@@ -5,13 +5,13 @@
       netstandard target must be first to avoid a ResXFileCodeGenerator issue
       (tracked at https://github.com/dotnet/project-system/issues/1519)
     -->
-    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net46</TargetFrameworks>
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
     <!-- Adding this to properly suppress CA3053. -->
     <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'== 'net46'">
+  <PropertyGroup Condition="'$(TargetFramework)'== 'net46' OR '$(TargetFramework)'== 'netstandard2.0' ">
     <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA;FEATURE_SERVICE_POINT_MANAGER;FEATURE_WEBEXCEPTION</DefineConstants>
   </PropertyGroup>
 
