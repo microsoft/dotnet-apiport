@@ -100,9 +100,13 @@ namespace Microsoft.Fx.Portability
 #endif
             };
 
+            XmlReader xmlReader = null;
+            XmlReader xmlSchemaReader = null;
+
             try
             {
-                var doc = XDocument.Load(XmlReader.Create(stream, readerSettings));
+                xmlReader = XmlReader.Create(stream, readerSettings);
+                var doc = XDocument.Load(xmlReader);
 
 #if FEATURE_XML_SCHEMA
                 // Validate against schema
@@ -115,9 +119,9 @@ namespace Microsoft.Fx.Portability
                         XmlResolver = null
                     };
 
-                    var reader = XmlReader.Create(xsdStream, xmlReaderSettings);
+                    xmlSchemaReader = XmlReader.Create(xsdStream, xmlReaderSettings);
 
-                    schemas.Add(null, reader);
+                    schemas.Add(null, xmlSchemaReader);
                     doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
                 }
 #endif
@@ -134,7 +138,6 @@ namespace Microsoft.Fx.Portability
                         throw new TargetMapperException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, path));
                     }
 #endif
-
                     AddAlias(alias, name);
                 }
             }
@@ -148,6 +151,11 @@ namespace Microsoft.Fx.Portability
                 }
 
                 throw new TargetMapperException(message, e);
+            }
+            finally
+            {
+                xmlReader.Dispose();
+                xmlSchemaReader?.Dispose();
             }
         }
 
