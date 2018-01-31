@@ -84,6 +84,8 @@ namespace Microsoft.Fx.Portability
             Load(stream, null);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Xml", "CA3053:UseXmlSecureResolver",
+            Justification = @"We have set this in line 99 and 115. This is a false positive. https://msdn.microsoft.com/en-us/library/mt661872.aspx")]
         private void Load(Stream stream, string path)
         {
             var readerSettings = new XmlReaderSettings
@@ -113,7 +115,9 @@ namespace Microsoft.Fx.Portability
                         XmlResolver = null
                     };
 
-                    schemas.Add(null, XmlReader.Create(xsdStream, xmlReaderSettings));
+                    var reader = XmlReader.Create(xsdStream, xmlReaderSettings);
+
+                    schemas.Add(null, reader);
                     doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
                 }
 #endif

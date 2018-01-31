@@ -7,6 +7,8 @@
     -->
     <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
+    <!-- Adding this to properly suppress CA3053. -->
+    <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'== 'net46'">
