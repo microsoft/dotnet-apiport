@@ -5,17 +5,16 @@ using ApiPortVS.Common;
 using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio.ProjectSystem;
-using Microsoft.VisualStudio.ProjectSystem.Build;
 using Microsoft.VisualStudio.ProjectSystem.Designers;
 using Microsoft.VisualStudio.ProjectSystem.Utilities;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 
 namespace ApiPortVS.VS2015
 {
@@ -57,7 +56,7 @@ namespace ApiPortVS.VS2015
         /// project is not a CPS project.</returns>
         private async Task<IEnumerable<string>> GetBuildOutputFilesFromCPSAsync(
             Project project,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             if (project == null)
             {
@@ -68,7 +67,7 @@ namespace ApiPortVS.VS2015
 
             if (hierarchy == null)
             {
-                Trace.TraceWarning($"Unable to locate {nameof(IVsHierarchy)} for {project.Name}");
+                Trace.TraceWarning(ToCurrentCulture($"Unable to locate {nameof(IVsHierarchy)} for {project.Name}"));
                 return null;
             }
 

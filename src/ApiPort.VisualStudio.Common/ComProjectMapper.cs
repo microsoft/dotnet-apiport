@@ -9,6 +9,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using VisualStudio = Microsoft.VisualStudio.Shell;
+using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 
 namespace ApiPortVS
 {
@@ -67,18 +68,18 @@ namespace ApiPortVS
 
             if (getConfigurationProvider == null)
             {
-                Trace.TraceError($"Could not retrieve {nameof(IVsGetCfgProvider)} from project: {project.Name}");
+                Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsGetCfgProvider)} from project: {project.Name}"));
                 return null;
             }
 
             if (ErrorHandler.Failed(getConfigurationProvider.GetCfgProvider(out IVsCfgProvider provider)))
             {
-                Trace.TraceError($"Could not retrieve {nameof(IVsCfgProvider)} from project: {project.Name}");
+                Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsCfgProvider)} from project: {project.Name}"));
                 return null;
             }
             if (!(provider is IVsCfgProvider2))
             {
-                Trace.TraceError($"IVsCfgProvider returned {provider.GetType()} is not of the right type. Expected: {nameof(IVsCfgProvider2)}");
+                Trace.TraceError(ToCurrentCulture($"IVsCfgProvider returned {provider.GetType()} is not of the right type. Expected: {nameof(IVsCfgProvider2)}"));
                 return null;
             }
 
@@ -87,7 +88,7 @@ namespace ApiPortVS
 
             if (ErrorHandler.Failed(provider2.GetCfgOfName(activeConfiguration.ConfigurationName, activeConfiguration.PlatformName, out IVsCfg configuration)))
             {
-                Trace.TraceError($"Could not retrieve {nameof(IVsCfg)} from project: {project.Name}");
+                Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsCfg)} from project: {project.Name}"));
                 return null;
             }
 

@@ -7,6 +7,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 
 namespace ApiPort
 {
@@ -20,15 +21,15 @@ namespace ApiPort
 
         public async Task DocIdSearchAsync()
         {
-            var countOption = $"{LocalizedStrings.ReplOptionCount}[{LocalizedStrings.Number}]";
+            var countOption = ToCurrentCulture($"{LocalizedStrings.ReplOptionCount}[{LocalizedStrings.Number}]");
             var optionColumnWidth = Math.Max(countOption.Length, LocalizedStrings.ReplOptionExit.Length);
 
             Console.WriteLine();
             Console.WriteLine(LocalizedStrings.ReplEnterQuery);
             Console.WriteLine();
             Console.WriteLine(LocalizedStrings.ReplOptionsHeader);
-            Console.WriteLine($"  {LocalizedStrings.ReplOptionExit.PadRight(optionColumnWidth)}\t{LocalizedStrings.ReplOptionExit_Text}");
-            Console.WriteLine($"  {countOption.PadRight(optionColumnWidth)}\t{LocalizedStrings.ReplOptionCount_Text}");
+            Console.WriteLine(ToCurrentCulture($"  {LocalizedStrings.ReplOptionExit.PadRight(optionColumnWidth)}\t{LocalizedStrings.ReplOptionExit_Text}"));
+            Console.WriteLine(ToCurrentCulture($"  {countOption.PadRight(optionColumnWidth)}\t{LocalizedStrings.ReplOptionCount_Text}"));
             Console.WriteLine();
 
             Console.CancelKeyPress += ConsoleCancelKeyPress;
@@ -95,7 +96,7 @@ namespace ApiPort
                 {
                     foreach (var result in results)
                     {
-                        WriteColorLine($"\"{result}\",", ConsoleColor.Cyan);
+                        WriteColorLine(ToCurrentCulture($"\"{result}\","), ConsoleColor.Cyan);
                     }
                 }
                 else

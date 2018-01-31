@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using static Microsoft.VisualStudio.VSConstants;
+using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 using System;
 using System.Threading;
 using Microsoft.VisualStudio;
@@ -99,7 +100,7 @@ namespace ApiPortVS
 
             if (!(configuration is IVsProjectCfg2 configuration2))
             {
-                Trace.TraceError($"IVsCfg returned {configuration.GetType()} is not of the right type. Expected: {nameof(IVsProjectCfg2)}");
+                Trace.TraceError(ToCurrentCulture($"IVsCfg returned {configuration.GetType()} is not of the right type. Expected: {nameof(IVsProjectCfg2)}"));
                 return null;
             }
 
@@ -107,19 +108,19 @@ namespace ApiPortVS
 
             if (ErrorHandler.Failed(configuration2.OpenOutputGroup(Common.Constants.OutputGroups.BuiltProject, out IVsOutputGroup outputGroup)))
             {
-                Trace.TraceError($"Could not retrieve {nameof(IVsOutputGroup)} from project: {project.Name}");
+                Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsOutputGroup)} from project: {project.Name}"));
                 return null;
             }
 
             if (!(outputGroup is IVsOutputGroup2 outputGroup2))
             {
-                Trace.TraceError($"Could not retrieve {nameof(IVsOutputGroup2)} from project: {project.Name}");
+                Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsOutputGroup2)} from project: {project.Name}"));
                 return null;
             }
 
             if (ErrorHandler.Failed(outputGroup2.get_KeyOutputObject(out IVsOutput2 keyGroup)))
             {
-                Trace.TraceError($"Could not retrieve {nameof(IVsOutput2)} from project: {project.Name}");
+                Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsOutput2)} from project: {project.Name}"));
                 return null;
             }
 
