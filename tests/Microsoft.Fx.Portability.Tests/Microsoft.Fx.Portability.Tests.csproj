@@ -12,6 +12,7 @@
     -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DefineConstants>$(DefineConstants);FEATURE_XML_SCHEMA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
