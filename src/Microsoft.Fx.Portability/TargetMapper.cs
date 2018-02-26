@@ -95,47 +95,50 @@ namespace Microsoft.Fx.Portability
                 IgnoreComments = true,
                 IgnoreWhitespace = true,
                 DtdProcessing = DtdProcessing.Prohibit,
-#if NET46
+#if !NETSTANDARD1_3
                 XmlResolver = null
 #endif
             };
 
             try
             {
-                var doc = XDocument.Load(XmlReader.Create(stream, readerSettings));
+                using (var xmlReader = XmlReader.Create(stream, readerSettings))
+                {
+                    var doc = XDocument.Load(xmlReader);
 
 #if FEATURE_XML_SCHEMA
-                // Validate against schema
-                var schemas = new XmlSchemaSet();
-                using (var xsdStream = typeof(TargetMapper).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Targets.xsd"))
-                {
-                    var xmlReaderSettings = new XmlReaderSettings
+                    // Validate against schema on targets where schema is supported
+                    using (var xsdStream = typeof(TargetMapper).Assembly.GetManifestResourceStream("Microsoft.Fx.Portability.Targets.xsd"))
                     {
-                        DtdProcessing = DtdProcessing.Prohibit,
-                        XmlResolver = null
-                    };
+                        var xmlReaderSettings = new XmlReaderSettings
+                        {
+                            DtdProcessing = DtdProcessing.Prohibit,
+                            XmlResolver = null
+                        };
 
-                    var reader = XmlReader.Create(xsdStream, xmlReaderSettings);
-
-                    schemas.Add(null, reader);
-                    doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
-                }
-#endif
-
-                foreach (var item in doc.Descendants("Target"))
-                {
-                    var alias = (string)item.Attribute("Alias");
-                    var name = (string)item.Attribute("Name");
-
-#if !FEATURE_XML_SCHEMA
-                    // We must manually check this now that schema validation is not available
-                    if (alias == null || name == null)
-                    {
-                        throw new TargetMapperException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, path));
+                        using (var xmlSchemaReader = XmlReader.Create(xsdStream, xmlReaderSettings))
+                        {
+                            var schemas = new XmlSchemaSet();
+                            schemas.Add(null, xmlSchemaReader);
+                            doc.Validate(schemas, (s, e) => { throw new TargetMapperException(e.Message, e.Exception); });
+                        }
                     }
 #endif
 
-                    AddAlias(alias, name);
+                    foreach (var item in doc.Descendants("Target"))
+                    {
+                        var alias = (string)item.Attribute("Alias");
+                        var name = (string)item.Attribute("Name");
+
+#if !FEATURE_XML_SCHEMA
+                        // We must manually check this now that schema validation is not available
+                        if (alias == null || name == null)
+                        {
+                            throw new TargetMapperException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, path));
+                        }
+#endif
+                        AddAlias(alias, name);
+                    }
                 }
             }
             catch (XmlException e)
@@ -158,15 +161,13 @@ namespace Microsoft.Fx.Portability
         /// <returns>target name</returns>
         public ICollection<string> GetNames(string aliasName)
         {
-            ICollection<string> result;
-
-            if (_map.TryGetValue(aliasName, out result))
+            if (_map.TryGetValue(aliasName, out var result))
             {
                 return new ReadOnlyCollection<string>(result.ToList());
             }
             else
             {
-                return new ReadOnlyCollection<string>(new List<string> { aliasName });
+                return new ReadOnlyCollection<string>(new[] { aliasName });
             }
         }
 
