@@ -15,6 +15,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private static readonly HashSet<string> s_systemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
         {
             "mscorlib",
+            "netstandard",
             "System.Runtime",
             "System.Private.CoreLib"
         };

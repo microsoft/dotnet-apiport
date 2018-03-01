@@ -24,7 +24,8 @@ namespace Microsoft.Fx.Portability.Analyzer
             "0738eb9f132ed756", // Mono
             "ddd0da4d3e678217", // Component model
             "84e04ff9cfb79065", // Mono Android
-            "842cf8be1de50553"  // Xamarin.iOS
+            "842cf8be1de50553", // Xamarin.iOS
+            "cc7b13ffcd2ddd51"  // NetStandard
         }, StringComparer.OrdinalIgnoreCase);
 
         private static readonly IEnumerable<string> s_frameworkAssemblyNamePrefixes = new[]
