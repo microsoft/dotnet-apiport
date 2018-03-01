@@ -30,10 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj" />
-    <ProjectReference Include="..\..\src\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj" />
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability.Cci\Microsoft.Fx.Portability.Cci.csproj" />
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\..\..\src\ApiPort\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj" />
+    <ProjectReference Include="..\..\..\src\ApiPort\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability.Cci\Microsoft.Fx.Portability.Cci.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
   <ItemGroup>

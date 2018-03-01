@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\..\src\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
 </Project>
