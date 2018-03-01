@@ -58,7 +58,7 @@ steps:
   inputs:
     solution: PortabilityTools.sln
     vsVersion: 15.0
-    msbuildArgs: '/t:build /bl'
+    msbuildArgs: '/t:build /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
