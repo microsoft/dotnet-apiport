@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ApiPort\ApiPort.csproj" />
+    <ProjectReference Include="..\..\..\src\ApiPort\ApiPort\ApiPort.csproj" />
   </ItemGroup>
 
 </Project>
