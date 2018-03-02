@@ -31,5 +31,29 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
             }
         }
+
+        /// <summary>
+        /// Test that SystemObjectFinder works even for netstandard facade 
+        /// assemblies that may not have references to mscorlib or system.runtime
+        /// </summary>
+        [Fact]
+        public static void NetstandardReferencesOnly()
+        {
+            var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
+            var file = TestAssembly.Create("OnlyNetStandardReference.dll");
+
+            using (var stream = file.OpenRead())
+            using (var peFile = new PEReader(stream))
+            {
+                var metadataReader = peFile.GetMetadataReader();
+
+                var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
+
+                Assert.Equal("netstandard", assemblyInfo.Name);
+                Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
+                Assert.Equal("neutral", assemblyInfo.Culture);
+                Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+            }
+        }
     }
 }
