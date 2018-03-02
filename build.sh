@@ -50,7 +50,7 @@ installSDK() {
 build() {
     echo "Building ApiPort... Configuration: ["$Configuration"]"
 
-    pushd src/ApiPort > /dev/null
+    pushd src/ApiPort/ApiPort > /dev/null
     $DotNetExe build ApiPort.csproj -f netcoreapp2.0 -c $Configuration
     $DotNetExe build ApiPort.Offline.csproj -f netcoreapp2.0 -c $Configuration
     popd > /dev/null

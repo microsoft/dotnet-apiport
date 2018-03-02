@@ -1,38 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <NonShipping>true</NonShipping>
   </PropertyGroup>
 
-  <!-- FxCop does not understand this target platform and will output the
-    following errors:
-    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp2.0\ApiPort.dll'
-    MSBUILD : error : CA0052 : No targets were selected.
-    -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <DefineConstants>$(DefineConstants);FEATURE_XML_SCHEMA</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.4.0" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.5.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.Diagnostics.FileVersionInfo " Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\PortabilityTools.snk" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="TestAssets\**\*.md" />
-    <EmbeddedResource Include="TestAssets\**\*.json" />
+    <Compile Remove="Tests\**\*.cs" />
+    <EmbeddedResource Include="Tests\**\*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,7 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
 </Project>
