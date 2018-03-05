@@ -10,6 +10,8 @@ queue:
   - vstest
 
 variables:
+  BuildConfiguration: 'Release'
+  BuildPlatform: 'any cpu'
   SigningType: 'Test'
   TeamName: 'dotnet-apiport'
 
