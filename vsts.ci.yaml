@@ -11,6 +11,7 @@ queue:
 
 variables:
   SigningType: 'Test'
+  TeamName: 'dotnet-apiport'
 
 steps:
 - task: PowerShell@1
