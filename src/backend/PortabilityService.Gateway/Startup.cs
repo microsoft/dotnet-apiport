@@ -10,6 +10,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using PortabilityServiceGateway.Reliability;
 using System.Net.Http;
+using PortabilityService.Gateway.Middleware;
 
 namespace PortabilityServiceGateway
 {
@@ -63,8 +64,14 @@ namespace PortabilityServiceGateway
                 app.UseDeveloperExceptionPage();
             }
 
+            var ocelotConfiguration = new OcelotPipelineConfiguration
+            {
+                // Work around https://github.com/ThreeMammals/Ocelot/issues/263
+                PreQueryStringBuilderMiddleware = ContentHeaderForwardingMiddleware.ForwardContentHeaders
+            };
+
             // Ocelot must be the last middleware in the pipeline
-            app.UseOcelot().Wait();
+            app.UseOcelot(ocelotConfiguration).Wait();
 
             logger.LogInformation("Middleware pipeline configured");
         }
