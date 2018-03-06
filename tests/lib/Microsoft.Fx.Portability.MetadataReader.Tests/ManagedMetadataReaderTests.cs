@@ -7,10 +7,8 @@ using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -34,20 +32,20 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("OpImplicitMethod2Parameter.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method_2Parameter`1.op_Implicit(`0,`0)")]
         [InlineData("OpExplicit.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit`1.op_Explicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpExplicit{`0}")]
         [InlineData("NestedGenericTypesWithInvalidNames.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator")]
-        [InlineData("modopt.dll", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
-        [InlineData("modopt.dll", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
+        [InlineData("modopt.il", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
+        [InlineData("modopt.il", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
 
         // IL can, bizarrely, define non-generic types that take generic paratmers
-        [InlineData("NonGenericTypesWithGenericParameters.dll", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
-        [InlineData("NonGenericTypesWithGenericParameters.dll", "M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})")]
+        [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
+        [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})")]
 
         // The IL version of this test includes a nested generic type in which the outer type is closed by the inner one is open
         // This is not possible to construct in C#, but was being encoded incorrectly by the metadata reader parser.
-        [InlineData("NestedGenericTypes.dll", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)")]
-        [InlineData("NestedGenericTypes.dll", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
+        [InlineData("NestedGenericTypes.il", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)")]
+        [InlineData("NestedGenericTypes.il", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
 
         [Theory]
         public void TestForDocId(string source, string docid)
@@ -80,7 +78,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             var filter = new AlwaysTrueDependencyFilter();
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
-            var assemblyToTest = TestAssembly.Create(source, allowUnsafe);
+            var assemblyToTest = TestAssembly.Create(source, _output, allowUnsafe);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
@@ -104,7 +102,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         {
             var filter = new DotNetFrameworkFilter();
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
-            var assemblyToTest = TestAssembly.Create("FilterApis.cs");
+            var assemblyToTest = TestAssembly.Create("FilterApis.cs", _output);
 
             var expected = FilterApisDocIds
                 .Concat(new[] {
@@ -144,7 +142,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var assemblyName = "FilterApis";
             var filter = new AssemblyNameFilter(assemblyName);
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
-            var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs");
+            var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
@@ -164,9 +162,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         [Fact]
-        public static void EmptyProject()
+        public void EmptyProject()
         {
-            var assemblyToTest = TestAssembly.Create("EmptyProject.cs");
+            var assemblyToTest = TestAssembly.Create("EmptyProject.cs", _output);
             var expected = EmptyProjectMemberDocId();
 
             var filter = new AlwaysTrueDependencyFilter();
@@ -201,11 +199,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42
         /// </summary>
         [Fact]
-        public static void MultidimensionalPrimitiveArray()
+        public void MultidimensionalPrimitiveArray()
         {
             var arrayDocId = "M:System.Int32[0:,0:][0:,0:].#ctor(System.Int32,System.Int32)";
             var objectDocId = "T:System.Object";
-            var assemblyToTest = TestAssembly.Create("MultidimensionalPrimitiveArray.cs");
+            var assemblyToTest = TestAssembly.Create("MultidimensionalPrimitiveArray.cs", _output);
 
             var filter = new DotNetFrameworkFilter();
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
@@ -226,12 +224,12 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         [Fact]
-        public static void ThrowsSystemObjectNotFoundException()
+        public void ThrowsSystemObjectNotFoundException()
         {
             var dependencyFilter = Substitute.For<IDependencyFilter>();
             dependencyFilter.IsFrameworkAssembly(Arg.Any<AssemblyReferenceInformation>()).Returns(false);
             var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter, new SystemObjectFinder(dependencyFilter));
-            var assemblyToTest = TestAssembly.Create("FilterApis.cs", false, new[] { typeof(Image).GetTypeInfo().Assembly.Location });
+            var assemblyToTest = TestAssembly.Create("FilterApis.cs", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var exception = Assert.Throws<AggregateException>(() =>
