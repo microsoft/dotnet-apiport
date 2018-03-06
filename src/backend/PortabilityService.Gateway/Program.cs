@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace PortabilityServiceGateway
+namespace PortabilityService.Gateway
 {
     public class Program
     {

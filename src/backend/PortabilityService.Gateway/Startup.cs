@@ -8,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using PortabilityServiceGateway.Reliability;
-using System.Net.Http;
 using PortabilityService.Gateway.Middleware;
+using PortabilityService.Gateway.Reliability;
+using System.Net.Http;
 
-namespace PortabilityServiceGateway
+namespace PortabilityService.Gateway
 {
     public class Startup
     {

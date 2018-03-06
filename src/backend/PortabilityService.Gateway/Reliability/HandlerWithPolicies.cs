@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PortabilityServiceGateway.Reliability
+namespace PortabilityService.Gateway.Reliability
 {
     internal class HandlerWithPolicies : DelegatingHandler
     {
