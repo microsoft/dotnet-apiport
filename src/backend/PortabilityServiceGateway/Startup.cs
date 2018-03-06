@@ -5,46 +5,68 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Logging;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using PortabilityServiceGateway.Reliability;
+using System.Net.Http;
 
 namespace PortabilityServiceGateway
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
+            LoggerFactory = loggerFactory;
         }
 
         public IConfiguration Configuration { get; }
+        public ILoggerFactory LoggerFactory { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            // Register a ResiliencePoliciesFactory and then use it to create
+            // and register the Policy[] to be used
+            services.AddTransient<ResiliencePoliciesFactory>();
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<ResiliencePoliciesFactory>().CreatePolicies());
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Portability Service", Version = "v1" });
-            });
+            services.AddScoped<DelegatingHandler, HandlerWithPolicies>();
+
+            services.AddOcelot(Configuration.GetSection("Gateway"))
+                    .AddCacheManager(c =>
+                    {
+                        c.WithDictionaryHandle();
+                    })
+                    .AddDelegatingHandler(() =>
+                    {
+                        // Ocelot comes with built-in QoS options, but they're not very customizable,
+                        // so this adds custom Polly policy to retry, circuit break, and timeout.
+
+                        // Doesn't get dependencies from DI due to
+                        // https://github.com/ThreeMammals/Ocelot/issues/259
+                        var policiesFactory = new ResiliencePoliciesFactory(LoggerFactory.CreateLogger<ResiliencePoliciesFactory>(), Configuration);
+                        return new HandlerWithPolicies(policiesFactory.CreatePolicies());
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var logger = LoggerFactory.CreateLogger<Startup>();
+
             if (env.IsDevelopment())
             {
+                logger.LogInformation("Enabling developer exception page middleware");
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            // Ocelot must be the last middleware in the pipeline
+            app.UseOcelot().Wait();
 
-            // Add Swagger middleware for exposing swagger.json and the Swagger UI
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Portability Service");
-            });
+            logger.LogInformation("Middleware pipeline configured");
         }
     }
 }
