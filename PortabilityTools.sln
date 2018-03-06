@@ -86,7 +86,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{CB5759DE-9D7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{44608D3A-F12E-4714-A198-896C6262B103}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityServiceGateway", "src\backend\PortabilityServiceGateway\PortabilityServiceGateway.csproj", "{80CBA796-42C1-48EF-A9EF-3232C5EEEADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Gateway", "src\backend\PortabilityService.Gateway\PortabilityService.Gateway.csproj", "{80CBA796-42C1-48EF-A9EF-3232C5EEEADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
