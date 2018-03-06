@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      netstandard target must be first to avoid a ResXFileCodeGenerator issue
+      (tracked at https://github.com/dotnet/project-system/issues/1519)
+    -->
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net46</TargetFrameworks>
+    <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
+    <!-- Adding this to properly suppress CA3053. -->
+    <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'== 'net46' OR '$(TargetFramework)'== 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);FEATURE_SERIALIZABLE;FEATURE_ASSEMBLY_LOCATION;FEATURE_XML_SCHEMA;FEATURE_SERVICE_POINT_MANAGER;FEATURE_WEBEXCEPTION</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'== 'netstandard1.3'">
+    <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <Compile Update="Resources\LocalizedStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Targets.xsd" />
+    <EmbeddedResource Update="Resources\LocalizedStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\version.txt">
+      <Pack>false</Pack>
+    </Content>
+  </ItemGroup>
+
+</Project>
