@@ -2,21 +2,27 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.ObjectModel;
-using NSubstitute;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
     public class SystemObjectFinderTests
     {
+        private readonly ITestOutputHelper _output;
+
+        public SystemObjectFinderTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Fact]
-        public static void MultipleMscorlibReferencesFound()
+        public void MultipleMscorlibReferencesFound()
         {
             var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
-            var file = TestAssembly.Create("multiple-mscorlib.exe");
+            var file = TestAssembly.Create("multiple-mscorlib.il", _output);
 
             using (var stream = file.OpenRead())
             using (var peFile = new PEReader(stream))
@@ -37,10 +43,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         /// assemblies that may not have references to mscorlib or system.runtime
         /// </summary>
         [Fact]
-        public static void NetstandardReferencesOnly()
+        public void NetstandardReferencesOnly()
         {
             var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
-            var file = TestAssembly.Create("OnlyNetStandardReference.dll");
+            var file = TestAssembly.Create("OnlyNetStandardReference.il", _output);
 
             using (var stream = file.OpenRead())
             using (var peFile = new PEReader(stream))
