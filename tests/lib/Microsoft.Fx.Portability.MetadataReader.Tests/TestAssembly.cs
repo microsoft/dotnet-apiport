@@ -3,6 +3,7 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,7 +27,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 case ".exe":
                     return new ResourceStreamAssemblyFile(source, output);
                 case ".cs":
-                    return new CSharpCompileAssemblyFile(source, allowUnsafe, additionalReferences ?? Enumerable.Empty<string>(), output);
+                    return new CSharpCompileAssemblyFile(source, allowUnsafe, additionalReferences, output);
                 case ".il":
                     return new ILStreamAssemblyFile(source, output);
                 default:
@@ -50,7 +51,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 : base(source, output)
             {
                 _allowUnsafe = allowUnsafe;
-                _additionalReferences = additionalReferences;
+                _additionalReferences = additionalReferences ?? Enumerable.Empty<string>();
             }
 
             public override Stream OpenRead()
@@ -59,11 +60,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var text = GetText();
 
                 var tfm = CSharpSyntaxTree.ParseText(TFM);
-                var tree = CSharpSyntaxTree.ParseText(text);
+                var tree = CSharpSyntaxTree.ParseText(GetText());
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: _allowUnsafe);
                 var references = _additionalReferences
-                                    .Select(x => MetadataReference.CreateFromFile(x))
-                                    .Concat(s_references);
+                    .Select(x => MetadataReference.CreateFromFile(x))
+                    .Concat(s_references);
 
                 var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references, options);
 
@@ -82,12 +83,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 return stream;
             }
 
-            private string GetText()
+            private SourceText GetText()
             {
                 using (var stream = base.OpenRead())
-                using (var reader = new StreamReader(stream))
                 {
-                    return reader.ReadToEnd();
+                    return SourceText.From(stream);
                 }
             }
         }
