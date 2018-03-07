@@ -6,10 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
-using Newtonsoft.Json;
 using System;
-using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -43,22 +40,12 @@ namespace Functions
         {
             try
             {
-                var body = await DecompressContent(content);
-                return JsonConvert.DeserializeObject<AnalyzeRequest>(body, DataExtensions.JsonSettings);
+                var stream = await content.ReadAsStreamAsync();
+                return DataExtensions.DecompressToObject<AnalyzeRequest>(stream);
             }
             catch
             {
                 return null;
-            }
-        }
-
-        public static async Task<string> DecompressContent(HttpContent content)
-        {
-            var contentStream = await content.ReadAsStreamAsync();
-            using (var gzstream = new GZipStream(contentStream, CompressionMode.Decompress))
-            using (var reader = new StreamReader(gzstream))
-            {
-                return await reader.ReadToEndAsync();
             }
         }
     }
