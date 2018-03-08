@@ -13,6 +13,9 @@ namespace PortabilityService.Gateway.Middleware
     /// </summary>
     public class ContentHeaderForwardingMiddleware
     {
+        // Ocelot currently only forwards Content-Type and request headers (as opposed to content headers)
+        // https://github.com/dotnet/corefx/blob/master/src/System.Net.Http/src/System/Net/Http/Headers/KnownHeaders.cs
+        // These are common content headers that we may need to forward manually.
         static readonly string[] ContentHeaders = new string[] { "Content-Encoding", "Content-Language" };
 
         public static async Task ForwardContentHeaders(DownstreamContext context, Func<Task> next)

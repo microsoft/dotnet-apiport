@@ -35,7 +35,7 @@ namespace PortabilityService.Gateway
             // Clear default providers
             loggingBuilder.ClearProviders();
 
-            // Create Serilog configuration from config
+            // Create Serilog configuration from app configuration
             var serilogLoggerConfiguration = new LoggerConfiguration()
                 .ReadFrom.Configuration(config);
             

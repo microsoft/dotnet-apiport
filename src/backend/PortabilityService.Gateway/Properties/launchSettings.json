@@ -2,7 +2,6 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
-    "launchUrl": "http://localhost:2747/swagger",
     "iisExpress": {
       "applicationUrl": "http://localhost:2747",
       "sslPort": 0
@@ -11,15 +10,14 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "PortabilityServiceGateway": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "http://localhost:2748/swagger",
+      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
