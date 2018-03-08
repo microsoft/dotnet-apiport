@@ -23,20 +23,17 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <th>ID</th>
                     <th>API</th>
                     <th>Details</th>
                     <th>Recommendation</th>
                     <th class="NarrowHeader"><div>Quirked</div></th>
                     <th class="NarrowHeader"><div>Version Introduced</div></th>
                     <th class="NarrowHeader"><div>Version Reverted</div></th>
-                    <th class="NarrowHeader"><div>Analyzer Status</div></th>
                     <th class="NarrowHeader"><div>Link</div></th>
                 </tr>
                 @foreach (KeyValuePair<BreakingChange, IEnumerable<MemberInfo>> b in Model.Breaks)
                 {
                     <tr>
-                        <td>@b.Key.Id</td>
                         <td class="MemberNames">
                             <ul>
                                 @* .Distinct because the members can appear multiple times if they exist in multiple referenced assemblies *@
@@ -54,7 +51,6 @@
                         <td>@b.Key.IsQuirked</td>
                         <td>@b.Key.VersionBroken</td>
                         <td>@b.Key.VersionFixed</td>
-                        <td>@b.Key.SourceAnalyzerStatus</td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(b.Key.Link))
                             {
