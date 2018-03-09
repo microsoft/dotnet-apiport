@@ -67,16 +67,15 @@
         font-size: 10pt;
     }
 
-    table th {
+    th {
         background: #E7E7E8;
-        text-align: left;
         text-decoration: none;
         font-weight: normal;
         vertical-align: bottom;
         padding: 3px 6px 3px 6px;
     }
 
-    table td {
+    td {
         vertical-align: top;
         padding: 3px 6px 5px 5px;
         margin: 0px;
@@ -84,38 +83,12 @@
         background: #F7F7F8;
     }
 
-    .BreakDetails table {
-        table-layout: fixed;
-        width: 100%;
-        word-wrap: break-word;
+    .breakDetails {
+        min-width: 300px;
     }
 
-    .BreakingChangeID {
-        width: 35px;
-    }
-
-    .APIColumn {
-        width: 20%;
-    }
-
-    .LongDescriptionColumn {
-        width: 30%;
-    }
-
-    th.NarrowHeader {
-        height: 68px;
-    }
-
-    .NarrowHeader div {
-        height: 100%;
-        width: 68px;
-        min-width: 68px;
-        word-wrap: normal;
-        transform: rotate(-90deg);
-        -webkit-transform: rotate(-90deg); /* Safari/Chrome */
-        -moz-transform: rotate(-90deg); /* Firefox */
-        -o-transform: rotate(-90deg); /* Opera */
-        -ms-transform: rotate(-90deg); /* IE 9 */
+    .BreakingChangeTable {
+        margin-left: 30px;
     }
 
     .NoBreakingChanges {
@@ -137,10 +110,6 @@
         -webkit-box-shadow: inset 0px 0px 0px 2px #dd0000;
         box-shadow: inset 0px 0px 0px 2px #dd0000;
         font-weight: bold;
-    }
-
-    .BreakDetails {
-        margin-left: 30px;
     }
 
     .CompatMessage {
@@ -186,10 +155,6 @@
         text-align: center;
     }
 
-    /* The message cells in message tables should take up all avaliable space */
-    .messageCell {
-        width: 100%;
-    }
 
     /* Padding around the content after the h1 */
     #content {
@@ -200,11 +165,6 @@
     #overview table {
         width: auto;
         max-width: 75%;
-    }
-
-    /* The messages tables are always 97% width */
-    #messages table {
-        width: 97%;
     }
 
     /* All Icons */

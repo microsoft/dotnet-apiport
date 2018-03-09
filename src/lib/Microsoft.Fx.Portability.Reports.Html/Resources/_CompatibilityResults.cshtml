@@ -12,25 +12,27 @@
 @using System.Linq
 
 <h4><abbr title="@Model.Description">@Model.Name</abbr> - @Model.Breaks.Count()</h4>
-<div class="BreakDetails">
+<div class="BreakingChangeTable">
     @if (Model.Breaks.Count() > 0)
     {
         <table>
-            <colgroup>
-                <col span="1" class="BreakingChangeID">
-                <col span="1" class="APIColumn">
-                <col span="2" class="LongDescriptionColumn">
-            </colgroup>
-            <tbody>
+            <thead>
+                <tr>
+                    <th colspan="4"></th>
+                    <th colspan="2">Version</th>
+                    <th colspan="1"></th>
+                </tr>
                 <tr>
                     <th>API</th>
                     <th>Details</th>
                     <th>Recommendation</th>
-                    <th class="NarrowHeader"><div>Quirked</div></th>
-                    <th class="NarrowHeader"><div>Version Introduced</div></th>
-                    <th class="NarrowHeader"><div>Version Reverted</div></th>
-                    <th class="NarrowHeader"><div>Link</div></th>
+                    <th><div>Quirked</div></th>
+                    <th><div>Introduced</div></th>
+                    <th><div>Reverted</div></th>
+                    <th><div>Link</div></th>
                 </tr>
+            </thead>
+            <tbody>
                 @foreach (KeyValuePair<BreakingChange, IEnumerable<MemberInfo>> b in Model.Breaks)
                 {
                     <tr>
@@ -46,11 +48,11 @@
                                 }
                             </ul>
                         </td>
-                        <td>@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Details));}</td>
+                        <td class="breakDetails">@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Details));}</td>
                         <td>@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Suggestion));}</td>
-                        <td>@b.Key.IsQuirked</td>
-                        <td>@b.Key.VersionBroken</td>
-                        <td>@b.Key.VersionFixed</td>
+                        <td class="textCentered">@b.Key.IsQuirked</td>
+                        <td class="textCentered">@b.Key.VersionBroken</td>
+                        <td class="textCentered">@b.Key.VersionFixed</td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(b.Key.Link))
                             {
