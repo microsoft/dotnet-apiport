@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,8 @@ namespace PortabilityService.Gateway
 {
     public class Startup
     {
+        const string HEALTH_CHECK_PATH = "/hc";
+
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
@@ -53,6 +56,23 @@ namespace PortabilityService.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Add a single non-reroute endpoint that orchestrators can use to know if 
+            // this service is up and ready
+            app.Use(async (context, next) =>
+            {
+                // If the request path matches the health check path,
+                // return a healthy acknowledgement
+                if (context.Request.Path == HEALTH_CHECK_PATH)
+                {
+                    context.Response.Headers.Add("Content-Type", "application/json");
+                    await context.Response.WriteAsync("{\"status\":\"Healthy\"}");
+                    return;
+                }
+
+                // Otherwise, proceed with Ocelot's rerouting middleware
+                await next();
+            });
 
             var ocelotConfiguration = new OcelotPipelineConfiguration
             {
