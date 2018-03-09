@@ -27,19 +27,22 @@ namespace PortabilityService.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Register services required by Ocelot (API gateway library)
             services.AddOcelot(Configuration.GetSection("Gateway"))
                     .AddCacheManager(c =>
                     {
+                        // Include in-memory caching so to reduce downstream traffic
                         c.WithDictionaryHandle();
                     });
 
             // Ocelot comes with built-in QoS options, but they're not very customizable,
             // so this adds custom Polly policy to retry, circuit break, and timeout.
             // Works around https://github.com/ThreeMammals/Ocelot/issues/264
+            // Once that issue is resolved, the custom IQoSProviderFactory can be 
+            // removed (and replaced by reroute-specific delegating handlers)
             var qosProviderService = services.FirstOrDefault(d => d.ServiceType == typeof(IQoSProviderFactory));
             services.Remove(qosProviderService);
 
-            services.AddSingleton<PortabilityServiceQoSProviderFactory>();
             services.AddSingleton<IQoSProviderFactory, PortabilityServiceQoSProviderFactory>();
         }
 

@@ -20,6 +20,9 @@ namespace PortabilityService.Gateway.Reliability
             _loggerFactory = loggerFactory;
         }
 
+        // Creates IQoSProviders for reroutes
+        // If the reroute has QoS settings, creates a PortabilityServiceQoSProvider
+        // Otherwise, provides a no-op QoS provider
         public IQoSProvider Get(DownstreamReRoute reRoute)
         {
             if (reRoute.IsQos)
