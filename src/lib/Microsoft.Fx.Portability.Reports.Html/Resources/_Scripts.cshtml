@@ -11,24 +11,30 @@
         var elementName = this.id.substr(6);
         var element = document.getElementById(elementName);
         var currentClass = element.getAttribute('class');
+        var sectionLabelId = this.getAttribute('aria-labelledby').split(' ')[0];
         if (currentClass === null) {
             // If the element has no class, then it's on. Turn it off.
             element.setAttribute('class', 'ToggledOff');
             this.setAttribute('title', '@LocalizedStrings.Expand');
             this.innerHTML = '+';
+            var newLabel = sectionLabelId + ' @LocalizedStrings.Expand';
         }
         else if (currentClass.search(/\bToggledOff\b/) > -1) {
             // If it has ToggledOff as a class, then it's off. Turn it on.
             element.setAttribute('class', currentClass.replace(/\bToggledOff\b/, '').trim());
             this.setAttribute('title', '@LocalizedStrings.Collapse');
             this.innerHTML = '&#8212';
+            var newLabel = sectionLabelId + ' @LocalizedStrings.Collapse';
         }
         else {
             // If it doesn't have ToggledOff as a class, then it's on. Turn it off.
             element.setAttribute('class', currentClass.concat(' ToggledOff').trim());
             this.setAttribute('title', '@LocalizedStrings.Expand');
             this.innerHTML = '+';
+            var newLabel = sectionLabelId + ' @LocalizedStrings.Expand';
         }
+
+        this.setAttribute('aria-labelledby', newLabel);
     }
 
     // Hook up toggle buttons' click events

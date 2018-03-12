@@ -84,6 +84,11 @@
         background: #F7F7F8;
     }
 
+    .CompatIssuesHeader {
+        display: inline-block;
+        margin-right: 6px;
+    }
+
     .breakDetails {
         min-width: 300px;
     }
@@ -154,6 +159,15 @@
     /* Center text, used in the over views cells that contain message level counts */
     .textCentered {
         text-align: center;
+    }
+
+    /* invisible text for use in screen reader labels */
+    span.invisibleText {
+        height: 1px;
+        width: 1px;
+        position: absolute;
+        overflow: hidden;
+        top: -10px;
     }
 
     /*

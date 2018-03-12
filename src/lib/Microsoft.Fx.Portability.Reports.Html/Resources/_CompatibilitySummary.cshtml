@@ -21,6 +21,8 @@
     var totalRetargetingIssues = majorRetargetingIssues.Count() + minorRetargetingIssues.Count() + edgeRetargetingIssues.Count();
 
     var runtimeIssuesDivId = Guid.NewGuid().ToString();
+    var runtimeHeaderDivId = Guid.NewGuid().ToString();
+    var retargetingHeaderDivId = Guid.NewGuid().ToString();
     var retargetingIssuesDivId = Guid.NewGuid().ToString();
     var runtimeIssuesButtonId = "Toggle" + runtimeIssuesDivId;
     var retargetingIssuesButtonId = "Toggle" + retargetingIssuesDivId;
@@ -28,6 +30,10 @@
 
 @if (totalCompatIssues + totalRetargetingIssues > 0)
 {
+    @* role attributes are required for IE to allow a span reference in aria-labelledby *@
+    <span class="invisibleText" id="@LocalizedStrings.Collapse" role="">@LocalizedStrings.Collapse</span>
+    <span class="invisibleText" id="@LocalizedStrings.Expand" role="">@LocalizedStrings.Expand</span>
+
     <div>
         @if (Model.Assembly != null)
         {
@@ -42,18 +48,18 @@
             </h3>
         }
         <h3>
-            @LocalizedStrings.RuntimeCompatibilityIssues (@totalCompatIssues)
-            <button class="ToggleButton" id="@runtimeIssuesButtonId" title="@LocalizedStrings.Collapse">&#8212</button>
+            <span class="CompatIssuesHeader" id="@runtimeHeaderDivId" role="">@LocalizedStrings.RuntimeCompatibilityIssues (@totalCompatIssues)</span>
+            <button class="ToggleButton" id="@runtimeIssuesButtonId" title="@LocalizedStrings.Collapse" aria-labelledby="@runtimeHeaderDivId @LocalizedStrings.Collapse">&#8212</button>
         </h3>
-            <div id="@runtimeIssuesDivId">
-                <p>@LocalizedStrings.RuntimeCompatIssueDescription</p>
-                @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MajorCompatibilityIssues, LocalizedStrings.MajorCompatIssueDescription, majorIssues, 0, 2))
-                @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MinorCompatibilityIssues, LocalizedStrings.MinorCompatIssueDescription, minorIssues, 0, 3))
-                @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.EdgeCompatibilityIssues, LocalizedStrings.EdgeCompatIssueDescription, edgeIssues, 0, 100))
-            </div>
+        <div id="@runtimeIssuesDivId">
+            <p>@LocalizedStrings.RuntimeCompatIssueDescription</p>
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MajorCompatibilityIssues, LocalizedStrings.MajorCompatIssueDescription, majorIssues, 0, 2))
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.MinorCompatibilityIssues, LocalizedStrings.MinorCompatIssueDescription, minorIssues, 0, 3))
+            @Html.Partial("_CompatibilityResults", new CompatibilityResultsModel(LocalizedStrings.EdgeCompatibilityIssues, LocalizedStrings.EdgeCompatIssueDescription, edgeIssues, 0, 100))
+        </div>
         <h3>
-            @LocalizedStrings.RetargetingCompatibilityIssues (@totalRetargetingIssues)
-            <button class="ToggleButton" id="@retargetingIssuesButtonId" title="@LocalizedStrings.Expand">+</button>
+            <div class="CompatIssuesHeader" id="@retargetingHeaderDivId" role="">@LocalizedStrings.RetargetingCompatibilityIssues (@totalRetargetingIssues)</div>
+            <button class="ToggleButton" id="@retargetingIssuesButtonId" title="@LocalizedStrings.Expand" aria-labelledby="@retargetingHeaderDivId @LocalizedStrings.Expand">+</button>
         </h3>
         <div class="BeginToggledOff" id="@retargetingIssuesDivId">
             <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart1)</p>
