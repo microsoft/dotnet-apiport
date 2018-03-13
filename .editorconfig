@@ -1,8 +1,0 @@
-# 4 space indentation
-[*.cs]
-indent_style = space
-indent_size = 4
-
-[*.ps1]
-indent_style = space
-indent_size = 4

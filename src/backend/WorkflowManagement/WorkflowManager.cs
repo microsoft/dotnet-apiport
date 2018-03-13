@@ -18,7 +18,7 @@ namespace WorkflowManagement
     /// </summary>
     public class WorkflowManager
     {
-        IWorkflowAction[] actions;
+        readonly IWorkflowAction[] actions;
         static WorkflowManager manager;
 
         public static WorkflowManager GetInstance(IWorkflowActionFactory actionFactory)
