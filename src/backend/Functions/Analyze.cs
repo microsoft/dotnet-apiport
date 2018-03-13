@@ -3,7 +3,7 @@
 
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using Newtonsoft.Json;
@@ -14,27 +14,37 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using WorkflowManagement;
+
 namespace Functions
 {
     public static class Analyze
     {
+        //Allows ActionFactory to be "injected" as needed, such as with a mock action factory when the function is called through tests
+        public static Func<IWorkflowActionFactory> GetActionFactory { get; set; } = () => new WorkflowActionFactory();
+
         [FunctionName("analyze")]
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
-            TraceWriter log)
+            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, ILogger log)
         {
             var analyzeRequest = await DeserializeRequest(req.Content);
             if (analyzeRequest == null)
             {
-                log.Error("invalid request");
+                log.LogError("invalid request");
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
             var submissionId = Guid.NewGuid().ToString();
-            log.Info($"created submission id {submissionId}");
+            log.LogInformation($"created submission id {submissionId}");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(submissionId);
+
+            var workflowMgr = WorkflowManager.GetInstance(GetActionFactory());
+            var msg = workflowMgr.GetFirstStage(submissionId);
+            workflowMessageQueue.Add(msg);
+            log.LogInformation($"queuing new message {msg.SubmissionId}, stage {msg.Stage}");
 
             return response;
         }

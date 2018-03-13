@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C991F5FC-04B5-420C-98A0-80974AA946F7}"
 	ProjectSection(SolutionItems) = preProject
@@ -90,7 +90,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{0189
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{DE3F5141-1F37-45F6-9A63-697E05E9BF8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions.Tests", "tests\backend\Functions.Tests\Functions.Tests.csproj", "{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions.Tests", "tests\backend\Functions.Tests\Functions.Tests.csproj", "{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowManagement", "WorkflowManagement\WorkflowManagement.csproj", "{B0A25428-F947-467A-9526-7F5AB7FA291B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1200,6 +1202,54 @@ Global
 		{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
 		{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
 		{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|ARM.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|x64.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Debug|x86.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|ARM.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|ARM.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|x64.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|x64.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|x86.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Osx_Release|x86.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|ARM.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|x64.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Release|x86.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|ARM.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|x64.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Debug|x86.Build.0 = Debug|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|ARM.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|ARM.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|x64.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
+		{B0A25428-F947-467A-9526-7F5AB7FA291B}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1235,6 +1285,7 @@ Global
 		{018983AE-8D15-4205-9E55-EDC5033146AB} = {6234AABE-C4F3-4094-9C0D-FFD589235DBE}
 		{DE3F5141-1F37-45F6-9A63-697E05E9BF8F} = {7DC7AA2C-0401-495B-B42C-32F44085EBE6}
 		{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48} = {DE3F5141-1F37-45F6-9A63-697E05E9BF8F}
+		{B0A25428-F947-467A-9526-7F5AB7FA291B} = {018983AE-8D15-4205-9E55-EDC5033146AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E8B2DB2-4847-4909-8631-A995D50F10EF}
