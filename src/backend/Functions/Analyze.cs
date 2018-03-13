@@ -1,19 +1,18 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Fx.Portability;
-using Microsoft.Fx.Portability.ObjectModel;
-using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
+using Newtonsoft.Json;
 using WorkflowManagement;
 
 namespace Functions
@@ -53,22 +52,12 @@ namespace Functions
         {
             try
             {
-                var body = await DecompressContent(content);
-                return JsonConvert.DeserializeObject<AnalyzeRequest>(body, DataExtensions.JsonSettings);
+                var stream = await content.ReadAsStreamAsync();
+                return DataExtensions.DecompressToObject<AnalyzeRequest>(stream);
             }
             catch
             {
                 return null;
-            }
-        }
-
-        public static async Task<string> DecompressContent(HttpContent content)
-        {
-            var contentStream = await content.ReadAsStreamAsync();
-            using (var gzstream = new GZipStream(contentStream, CompressionMode.Decompress))
-            using (var reader = new StreamReader(gzstream))
-            {
-                return await reader.ReadToEndAsync();
             }
         }
     }

@@ -4,9 +4,9 @@
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.Extensions.Logging.Abstractions;
-using WorkflowManagement;
 using Functions.Tests.Mock;
+using WorkflowManagement;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Functions.Tests
 {
@@ -24,7 +24,7 @@ namespace Functions.Tests
             Assert.Single(workflowQueue.Items);
             var msg = (WorkflowQueueMessage)workflowQueue.Items[0];
             Assert.Equal(submissionId, msg.SubmissionId);
-            Assert.Equal(WorkflowStage.Report, ((WorkflowQueueMessage)workflowQueue.Items[0]).Stage);
+            Assert.Equal(WorkflowStage.Report, msg.Stage);
 
             workflowQueue.Items.Clear();
             await ProcessWorkflowQueue.Run(new WorkflowQueueMessage() { SubmissionId = submissionId, Stage = WorkflowStage.Report }, workflowQueue, NullLogger.Instance);
@@ -37,10 +37,7 @@ namespace Functions.Tests
             workflowQueue.Items.Clear();
             await ProcessWorkflowQueue.Run(new WorkflowQueueMessage() { SubmissionId = submissionId, Stage = WorkflowStage.Telemetry }, workflowQueue, NullLogger.Instance);
 
-            Assert.Single(workflowQueue.Items);
-            msg = (WorkflowQueueMessage)workflowQueue.Items[0];
-            Assert.Equal(submissionId, msg.SubmissionId);
-            Assert.Equal(WorkflowStage.Finished, msg.Stage);
+            Assert.Empty(workflowQueue.Items);
         }
     }
 }

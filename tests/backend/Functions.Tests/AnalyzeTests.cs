@@ -1,23 +1,20 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Xunit;
-using Microsoft.Extensions.Logging.Abstractions;
-using WorkflowManagement;
 using Functions.Tests.Mock;
+using WorkflowManagement;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Functions.Tests
 {
     public class AnalyzeTests
     {
-        public static Func<IWorkflowActionFactory> GetActionFactory { get; set; } = () => new MockActionFactory();
-
         [Fact]
         public static async Task ReturnsBadRequestForMalformedContent()
         {
