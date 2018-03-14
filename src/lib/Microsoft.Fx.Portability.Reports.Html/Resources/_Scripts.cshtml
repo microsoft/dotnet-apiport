@@ -6,41 +6,40 @@
 @using Microsoft.Fx.Portability.Reports.Html.Resources
 
 <script>
-    // Toggle the element controlled by a toggle button on or off
-    function toggle(caller) {
-        var elementName = this.id.substr(6);
-        var element = document.getElementById(elementName);
-        var currentClass = element.getAttribute('class');
-        var sectionLabelId = this.getAttribute('aria-labelledby').split(' ')[0];
-        if (currentClass === null) {
-            // If the element has no class, then it's on. Turn it off.
-            element.setAttribute('class', 'ToggledOff');
-            this.setAttribute('title', '@LocalizedStrings.Expand');
-            this.innerHTML = '+';
-            var newLabel = sectionLabelId + ' @LocalizedStrings.Expand';
-        }
-        else if (currentClass.search(/\bToggledOff\b/) > -1) {
-            // If it has ToggledOff as a class, then it's off. Turn it on.
-            element.setAttribute('class', currentClass.replace(/\bToggledOff\b/, '').trim());
-            this.setAttribute('title', '@LocalizedStrings.Collapse');
-            this.innerHTML = '&#8212';
-            var newLabel = sectionLabelId + ' @LocalizedStrings.Collapse';
+    function ToggleDivVisibility(caller) {
+        // extract the generated id (the guid following hide-/show-)
+        var targetId = this.id.substr(5);
+
+        // hide/show the div with that id
+        var targetDiv = document.getElementById(targetId);
+        var currentClass = targetDiv.getAttribute('class');
+        if (this.id.slice(0, 4) === 'show') { // String.prototype.startsWith unavailable in IE
+            // remove the ToggledOff class
+            var newClass = currentClass.replace(/\bToggledOff\b/, '').trim();
+            var buttonToFocus = document.getElementById('hide-' + targetId);
         }
         else {
-            // If it doesn't have ToggledOff as a class, then it's on. Turn it off.
-            element.setAttribute('class', currentClass.concat(' ToggledOff').trim());
-            this.setAttribute('title', '@LocalizedStrings.Expand');
-            this.innerHTML = '+';
-            var newLabel = sectionLabelId + ' @LocalizedStrings.Expand';
+            // add the ToggledOff class
+            var newClass = currentClass === null
+                ? 'ToggledOff'
+                : currentClass.concat(' ToggledOff').trim();
+            var buttonToFocus = document.getElementById('show-' + targetId);
         }
+        targetDiv.setAttribute('class', newClass);
 
-        this.setAttribute('aria-labelledby', newLabel);
+        // hide the clicked button
+        this.style.display = 'none';
+
+        // show, focus the other button
+        // (screen readers will read the newly-focused element)
+        buttonToFocus.style.display = 'inline-block';
+        buttonToFocus.focus();
     }
 
     // Hook up toggle buttons' click events
     var toggleButtons = document.getElementsByClassName('ToggleButton');
     for (var i = 0; i < toggleButtons.length; i++) {
-        toggleButtons[i].addEventListener('click', toggle);
+        toggleButtons[i].addEventListener('click', ToggleDivVisibility);
     }
 
     // Turn off any elements that should begin collapsed. Note that this is done with the extra
@@ -79,7 +78,6 @@
         // Refresh the rows because showing columns could make error cells visible.
         ToggleRowVisibility(document.getElementById('row_visibility_checkbox'));
     }
-
 
     function ToggleRowVisibility(element){
         var style = element.checked ? 'none' : '';

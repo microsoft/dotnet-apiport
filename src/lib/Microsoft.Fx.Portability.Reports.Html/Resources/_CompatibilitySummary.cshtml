@@ -24,8 +24,6 @@
     var runtimeHeaderDivId = Guid.NewGuid().ToString();
     var retargetingHeaderDivId = Guid.NewGuid().ToString();
     var retargetingIssuesDivId = Guid.NewGuid().ToString();
-    var runtimeIssuesButtonId = "Toggle" + runtimeIssuesDivId;
-    var retargetingIssuesButtonId = "Toggle" + retargetingIssuesDivId;
 }
 
 @if (totalCompatIssues + totalRetargetingIssues > 0)
@@ -49,7 +47,8 @@
         }
         <h3>
             <span class="CompatIssuesHeader" id="@runtimeHeaderDivId" role="">@LocalizedStrings.RuntimeCompatibilityIssues (@totalCompatIssues)</span>
-            <button class="ToggleButton" id="@runtimeIssuesButtonId" title="@LocalizedStrings.Collapse" aria-labelledby="@runtimeHeaderDivId @LocalizedStrings.Collapse">&#8212</button>
+            <button class="ToggleButton" id="hide-@runtimeIssuesDivId" title="@LocalizedStrings.Collapse" aria-labelledby="@runtimeHeaderDivId @LocalizedStrings.Collapse">&#8212</button>
+            <button class="ToggleButton" id="show-@runtimeIssuesDivId" title="@LocalizedStrings.Expand" aria-labelledby="@runtimeHeaderDivId @LocalizedStrings.Expand" style="display: none">+</button>
         </h3>
         <div id="@runtimeIssuesDivId">
             <p>@LocalizedStrings.RuntimeCompatIssueDescription</p>
@@ -59,7 +58,8 @@
         </div>
         <h3>
             <div class="CompatIssuesHeader" id="@retargetingHeaderDivId" role="">@LocalizedStrings.RetargetingCompatibilityIssues (@totalRetargetingIssues)</div>
-            <button class="ToggleButton" id="@retargetingIssuesButtonId" title="@LocalizedStrings.Expand" aria-labelledby="@retargetingHeaderDivId @LocalizedStrings.Expand">+</button>
+            <button class="ToggleButton" id="hide-@retargetingIssuesDivId" title="@LocalizedStrings.Collapse" aria-labelledby="@retargetingHeaderDivId @LocalizedStrings.Collapse" style="display: none">&#8212</button>
+            <button class="ToggleButton" id="show-@retargetingIssuesDivId" title="@LocalizedStrings.Expand" aria-labelledby="@retargetingHeaderDivId @LocalizedStrings.Expand">+</button>
         </h3>
         <div class="BeginToggledOff" id="@retargetingIssuesDivId">
             <p>@Html.Raw(LocalizedStrings.RetargetingCompatIssueDescriptionPart1)</p>
