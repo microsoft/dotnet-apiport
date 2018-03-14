@@ -11,8 +11,8 @@ namespace Functions
 {
     public static class ProcessWorkflowQueue
     {
-        //Allows ActionFactory to be "injected" as needed, such as with a mock action factory when the function is called through tests
-        public static Func<IWorkflowActionFactory> GetActionFactory { get; set; } = () => new WorkflowActionFactory();
+        //Allows WorkflowManager to be "injected" as needed, such as with a mock action factory when the function is called through tests
+        public static Func<WorkflowManager> GetWorkflowManager { get; set; } = () => new WorkflowManager();
 
         [FunctionName("ProcessWorkflowQueue")]
         public static async Task Run([QueueTrigger("apiportworkflowqueue")]WorkflowQueueMessage workflowMessage, 
@@ -20,7 +20,7 @@ namespace Functions
         {
             log.LogInformation($"processing message {workflowMessage.SubmissionId}, stage {workflowMessage.Stage}");
 
-            var workflowMgr = WorkflowManager.GetInstance(GetActionFactory());
+            var workflowMgr = GetWorkflowManager();
             var nextMsg = await workflowMgr.ExecuteActionsToNextStage(workflowMessage);
 
             log.LogInformation($"queueing new message {workflowMessage.SubmissionId}, stage {nextMsg.Stage}");

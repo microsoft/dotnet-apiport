@@ -7,6 +7,5 @@ namespace WorkflowManagement
     {
         public WorkflowStage Stage { get; set; }
         public string SubmissionId { get; set; }
-
     }
 }

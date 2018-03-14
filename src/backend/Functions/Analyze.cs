@@ -20,7 +20,7 @@ namespace Functions
     public static class Analyze
     {
         //Allows ActionFactory to be "injected" as needed, such as with a mock action factory when the function is called through tests
-        public static Func<IWorkflowActionFactory> GetActionFactory { get; set; } = () => new WorkflowActionFactory();
+        public static Func<WorkflowManager> GetWorkflowManager { get; set; } = () => new WorkflowManager();
 
         [FunctionName("analyze")]
         public static async Task<HttpResponseMessage> Run(
@@ -40,7 +40,7 @@ namespace Functions
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(submissionId);
 
-            var workflowMgr = WorkflowManager.GetInstance(GetActionFactory());
+            var workflowMgr = GetWorkflowManager();
             var msg = workflowMgr.GetFirstStage(submissionId);
             workflowMessageQueue.Add(msg);
             log.LogInformation($"queuing new message {msg.SubmissionId}, stage {msg.Stage}");

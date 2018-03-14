@@ -4,9 +4,10 @@
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using Functions.Tests.Mock;
+using NSubstitute;
 using WorkflowManagement;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Azure.WebJobs;
 
 namespace Functions.Tests
 {
@@ -15,29 +16,26 @@ namespace Functions.Tests
         [Fact]
         public static async Task ProcessQueueMessageStages()
         {
-            ProcessWorkflowQueue.GetActionFactory = () => new MockActionFactory();
-            var workflowQueue = new MockCollector<WorkflowQueueMessage>();
+            IWorkflowAction[] workflowActions = new IWorkflowAction[3];
+            workflowActions[(int)WorkflowStage.Analyze] = Substitute.For<IWorkflowAction>();
+            workflowActions[(int)WorkflowStage.Report] = Substitute.For<IWorkflowAction>();
+            workflowActions[(int)WorkflowStage.Telemetry] = Substitute.For<IWorkflowAction>();
+
+            ProcessWorkflowQueue.GetWorkflowManager = () => new WorkflowManager(workflowActions);
+      
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var submissionId = new Guid().ToString();
 
             await ProcessWorkflowQueue.Run(new WorkflowQueueMessage() { SubmissionId = submissionId, Stage = WorkflowStage.Analyze }, workflowQueue, NullLogger.Instance);
+            workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId && x.Stage == WorkflowStage.Report));
+            workflowQueue.ClearReceivedCalls();
 
-            Assert.Single(workflowQueue.Items);
-            var msg = (WorkflowQueueMessage)workflowQueue.Items[0];
-            Assert.Equal(submissionId, msg.SubmissionId);
-            Assert.Equal(WorkflowStage.Report, msg.Stage);
-
-            workflowQueue.Items.Clear();
             await ProcessWorkflowQueue.Run(new WorkflowQueueMessage() { SubmissionId = submissionId, Stage = WorkflowStage.Report }, workflowQueue, NullLogger.Instance);
+            workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId && x.Stage == WorkflowStage.Telemetry));
+            workflowQueue.ClearReceivedCalls();
 
-            Assert.Single(workflowQueue.Items);
-            msg = (WorkflowQueueMessage)workflowQueue.Items[0];
-            Assert.Equal(submissionId, msg.SubmissionId);
-            Assert.Equal(WorkflowStage.Telemetry, msg.Stage);
-
-            workflowQueue.Items.Clear();
             await ProcessWorkflowQueue.Run(new WorkflowQueueMessage() { SubmissionId = submissionId, Stage = WorkflowStage.Telemetry }, workflowQueue, NullLogger.Instance);
-
-            Assert.Empty(workflowQueue.Items);
+            workflowQueue.DidNotReceive().Add(Arg.Any<WorkflowQueueMessage>());
         }
     }
 }

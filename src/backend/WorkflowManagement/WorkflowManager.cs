@@ -21,17 +21,18 @@ namespace WorkflowManagement
         readonly IWorkflowAction[] actions;
         static WorkflowManager manager;
 
-        public static WorkflowManager GetInstance(IWorkflowActionFactory actionFactory)
+        public WorkflowManager()
         {
-            if (manager == null)
-            {
-                manager = new WorkflowManager(actionFactory.CreateActions());
-            }
+            IWorkflowAction[] workflowActions = new IWorkflowAction[3];
 
-            return manager;
+            workflowActions[(int)WorkflowStage.Analyze] = new AnalyzeAction();
+            workflowActions[(int)WorkflowStage.Report] = new ReportAction();
+            workflowActions[(int)WorkflowStage.Telemetry] = new TelemetryAction();
+
+            actions = workflowActions;
         }
 
-        private WorkflowManager(IWorkflowAction[] workflowActions)
+        public WorkflowManager(IWorkflowAction[] workflowActions)
         {
             actions = workflowActions;
         }

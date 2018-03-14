@@ -7,9 +7,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Xunit;
-using Functions.Tests.Mock;
 using WorkflowManagement;
 using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using Microsoft.Azure.WebJobs;
 
 namespace Functions.Tests
 {
@@ -21,7 +22,7 @@ namespace Functions.Tests
             var request = PostFromConsoleApiPort;
             request.Content = new StringContent("{ \"json\": \"json\" }");
 
-            var response = await Analyze.Run(request, new MockCollector<WorkflowQueueMessage>(), NullLogger.Instance);
+            var response = await Analyze.Run(request, Substitute.For<ICollector<WorkflowQueueMessage>>(), NullLogger.Instance);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -29,7 +30,7 @@ namespace Functions.Tests
         [Fact]
         public static async Task ReturnsGuidForCompressedAnalyzeRequest()
         {
-            Analyze.GetActionFactory = () => new MockActionFactory();
+            Analyze.GetWorkflowManager = () => new WorkflowManager();
 
             var gzippedAnalyzeRequest = typeof(AnalyzeTests).Assembly
                 .GetManifestResourceStream("Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
@@ -40,17 +41,14 @@ namespace Functions.Tests
             request.Content.Headers.Add("Content-Encoding", "gzip");
             request.Content.Headers.Add("Content-Type", "application/json");
 
-            var workflowQueue = new MockCollector<WorkflowQueueMessage>();
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var response = await Analyze.Run(request, workflowQueue, NullLogger.Instance);
             var body = await response.Content.ReadAsStringAsync();
 
             Guid submissionId;
             Assert.True(Guid.TryParse(body, out submissionId));
 
-            Assert.Single(workflowQueue.Items);
-            var msg = (WorkflowQueueMessage)workflowQueue.Items[0];
-            Assert.Equal(submissionId.ToString(), msg.SubmissionId);
-            Assert.Equal(WorkflowStage.Analyze, msg.Stage);
+            workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId.ToString() && x.Stage == WorkflowStage.Analyze));
         }
 
         private static HttpRequestMessage PostFromConsoleApiPort
