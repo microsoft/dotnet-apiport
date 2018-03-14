@@ -19,17 +19,17 @@
             <thead>
                 <tr>
                     <th colspan="4"></th>
-                    <th colspan="2">Version</th>
+                    <th colspan="2">@LocalizedStrings.Version</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
-                    <th>API</th>
-                    <th>Details</th>
-                    <th>Recommendation</th>
-                    <th><div>Quirked</div></th>
-                    <th><div>Introduced</div></th>
-                    <th><div>Reverted</div></th>
-                    <th><div>Link</div></th>
+                    <th>@LocalizedStrings.API</th>
+                    <th>@LocalizedStrings.Details</th>
+                    <th>@LocalizedStrings.Recommendation</th>
+                    <th><div>@LocalizedStrings.Quirked</div></th>
+                    <th><div>@LocalizedStrings.Introduced</div></th>
+                    <th><div>@LocalizedStrings.Reverted</div></th>
+                    <th><div>@LocalizedStrings.Link</div></th>
                 </tr>
             </thead>
             <tbody>
@@ -56,7 +56,7 @@
                         <td>
                             @if (!string.IsNullOrWhiteSpace(b.Key.Link))
                             {
-                                <a href="@b.Key.Link">More info</a>
+                                <a href="@b.Key.Link">@LocalizedStrings.MoreInfo</a>
                             }
                         </td>
                     </tr>
