@@ -35,14 +35,12 @@
     <div>
         @if (Model.Assembly != null)
         {
-            <h3>
-                <a name="Compat-@Model.Assembly">
+            <h3 id="Compat-@Model.Assembly" tabindex="0">
                     <span class="assembly-name">@Model.ReportingResult.GetNameForAssemblyInfo(Model.Assembly)</span>
                     @if (!string.IsNullOrEmpty(Model.Assembly.TargetFrameworkMoniker))
                     {
                         <span class="assembly-tfm">(@Model.Assembly.TargetFrameworkMoniker)</span>
                     }
-                </a>
             </h3>
         }
         <h3>
