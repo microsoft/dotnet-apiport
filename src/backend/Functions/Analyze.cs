@@ -25,7 +25,8 @@ namespace Functions
         [FunctionName("analyze")]
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
-            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, ILogger log)
+            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, 
+            ILogger log)
         {
             var analyzeRequest = await DeserializeRequest(req.Content);
             if (analyzeRequest == null)

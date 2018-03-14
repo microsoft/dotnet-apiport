@@ -16,7 +16,8 @@ namespace Functions
 
         [FunctionName("ProcessWorkflowQueue")]
         public static async Task Run([QueueTrigger("apiportworkflowqueue")]WorkflowQueueMessage workflowMessage, 
-            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, ILogger log)
+            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, 
+            ILogger log)
         {
             log.LogInformation($"processing message {workflowMessage.SubmissionId}, stage {workflowMessage.Stage}");
 
