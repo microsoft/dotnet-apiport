@@ -20,7 +20,7 @@ namespace PortabilityService.Gateway
     {
         const string HEALTH_CHECK_PATH = "/hc";
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }

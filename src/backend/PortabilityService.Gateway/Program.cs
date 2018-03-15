@@ -58,7 +58,7 @@ namespace PortabilityService.Gateway
             {
                 // In non-dev environments, add an App Insights sink
                 serilogLoggerConfiguration = serilogLoggerConfiguration
-                                                .WriteTo.ApplicationInsightsTraces(config[APP_INSIGHTS_KEY_KEY]);
+                    .WriteTo.ApplicationInsightsTraces(config[APP_INSIGHTS_KEY_KEY]);
             }
 
             // Add the Serilog logging provider

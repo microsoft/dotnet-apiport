@@ -37,23 +37,23 @@ namespace PortabilityService.Gateway.Reliability
             // Retry failed requests
             // TODO : Ocelot does not currently allow more policies to be added.
             //        Update Ocelot to allow this and then add this policy.
-            var _retryCount = 3; // options.RetryCount;
-            var _retryBaseDelay = 0.5; // options.RetryBaseDelay
+            var retryCount = 3; // options.RetryCount;
+            var retryBaseDelay = 0.5; // options.RetryBaseDelay
             var standardRetryPolicy = Policy
                 .Handle<HttpRequestException>()
                 .Or<TimeoutException>()
                 .Or<TimeoutRejectedException>()
                 .OrResult<HttpResponseMessage>(response => ReportsServerError(response))
                 // Number of times to retry and backoff function
-                .WaitAndRetryAsync(_retryCount, i => TimeSpan.FromSeconds(Math.Pow(2, i) * _retryBaseDelay),
-                (failureResult, waitDuration, retryCount, context) =>
-                {
-                    // Log warning if retries don't work
-                    _logger.LogWarning("Retrying ({retryCount}) after {waitDuration} due to: {error}",
-                        retryCount,
-                        waitDuration,
-                        GetError(failureResult));
-                });
+                .WaitAndRetryAsync(retryCount, i => TimeSpan.FromSeconds(Math.Pow(2, i) * retryBaseDelay),
+                    (failureResult, waitDuration, count, context) =>
+                    {
+                        // Log warning if retries don't work
+                        _logger.LogWarning("Retrying ({retryCount}) after {waitDuration} due to: {error}",
+                            count,
+                            waitDuration,
+                            GetError(failureResult));
+                    });
 
             // Stop trying requests that repeatedly fail
             var circuitBreakerPolicy = Policy
@@ -65,23 +65,23 @@ namespace PortabilityService.Gateway.Reliability
                 //        to use an arbitrary PolicyWrap or at least IEnumerable<IPolicy>.
                 // .OrResult<HttpResponseMessage>(response => ReportsServerError(response))
                 .CircuitBreakerAsync(options.ExceptionsAllowedBeforeBreaking, TimeSpan.FromMilliseconds(options.DurationOfBreak),
-                (exception, duration) =>
-                {
-                    // Log warning when circuit break is opened
-                    _logger.LogWarning("Circuit breaker opened for {circuitBreakerDuration} due to: {error}",
-                        duration,
-                        exception);
-                },
-                () =>
-                {
-                    // Log informational message when the circuit breaker resets
-                    _logger.LogInformation("Circuit breaker closed");
-                },
-                () =>
-                {
-                    // Log informational message when the circuit breaker is half-opem
-                    _logger.LogInformation("Circuit half-open");
-                });
+                    (exception, duration) =>
+                    {
+                        // Log warning when circuit break is opened
+                        _logger.LogWarning("Circuit breaker opened for {circuitBreakerDuration} due to: {error}",
+                            duration,
+                            exception);
+                    },
+                    () =>
+                    {
+                        // Log informational message when the circuit breaker resets
+                        _logger.LogInformation("Circuit breaker closed");
+                    },
+                    () =>
+                    {
+                        // Log informational message when the circuit breaker is half-open
+                        _logger.LogInformation("Circuit half-open");
+                    });
 
             // Stop waiting on requests after a period of time
             var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromMilliseconds(options.TimeoutValue), options.TimeoutStrategy,
