@@ -49,14 +49,10 @@ namespace PortabilityService.Gateway.Reliability
                 (failureResult, waitDuration, retryCount, context) =>
                 {
                     // Log warning if retries don't work
-                    _logger.LogWarning("Retrying ({retryCount}) after {waitDuration} seconds due to: {error}",
+                    _logger.LogWarning("Retrying ({retryCount}) after {waitDuration} due to: {error}",
                         retryCount,
-                        waitDuration.TotalSeconds,
-                        GetErrorMessage(failureResult));
-                    if (failureResult.Exception != null)
-                    {
-                        _logger.LogTrace("Full exception: {exception}", failureResult.Exception.ToString());
-                    }
+                        waitDuration,
+                        GetError(failureResult));
                 });
 
             // Stop trying requests that repeatedly fail
@@ -72,13 +68,9 @@ namespace PortabilityService.Gateway.Reliability
                 (exception, duration) =>
                 {
                     // Log warning when circuit break is opened
-                    _logger.LogWarning("Circuit breaker opened for {circuitBreakerDuration}ms due to: {error}",
-                        duration.TotalMilliseconds,
-                        $"[{exception.GetType().Name}] {exception.Message}");
-                    if (exception != null)
-                    {
-                        _logger.LogTrace("Full exception: {exception}", exception.ToString());
-                    }
+                    _logger.LogWarning("Circuit breaker opened for {circuitBreakerDuration} due to: {error}",
+                        duration,
+                        exception);
                 },
                 () =>
                 {
@@ -95,17 +87,17 @@ namespace PortabilityService.Gateway.Reliability
             var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromMilliseconds(options.TimeoutValue), options.TimeoutStrategy,
                 (context, timespan, timedOutAction) =>
                 {
-                    _logger.LogWarning("Downstream call timed out after {timeout}ms", timespan.TotalMilliseconds);
+                    _logger.LogWarning("Downstream call timed out after {timeout}", timespan);
                     return Task.CompletedTask;
                 });
 
             return new CircuitBreaker(/*standardRetryPolicy,*/ circuitBreakerPolicy, timeoutPolicy);
         }
 
-        private static string GetErrorMessage(DelegateResult<HttpResponseMessage> failureResult) =>
+        private static object GetError(DelegateResult<HttpResponseMessage> failureResult) =>
             (failureResult.Exception != null) ?
-                $"[{failureResult.Exception.GetType().Name}] {failureResult.Exception.Message}" :
-                $"Response [{failureResult.Result.StatusCode}] {failureResult.Result.ReasonPhrase}";
+                failureResult.Exception :
+                (object)failureResult.Result;
 
         private static bool ReportsServerError(HttpResponseMessage response) => ((int)response.StatusCode) / 100 == 5;
 
