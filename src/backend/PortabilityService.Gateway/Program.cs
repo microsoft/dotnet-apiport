@@ -16,16 +16,16 @@ namespace PortabilityService.Gateway
 
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var webHostBuilder = CreateWebHost(args);
+            webHostBuilder.Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder CreateWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseApplicationInsights()
                 .ConfigureAppConfiguration(ConfigureAppConfiguration)
                 .ConfigureLogging(ConfigureLogging)
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
 
         /// <summary>
         /// Configures app configuration specific to the API Gateway service

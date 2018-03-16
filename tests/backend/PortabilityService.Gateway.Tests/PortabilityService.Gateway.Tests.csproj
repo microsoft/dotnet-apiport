@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +16,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\backend\PortabilityService.Gateway\PortabilityService.Gateway.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Include config files in output so that tests can use them without having to be in the src folder -->
+    <Content Include="*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
