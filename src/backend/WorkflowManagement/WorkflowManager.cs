@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Threading.Tasks;
 
 namespace WorkflowManagement
@@ -21,28 +22,53 @@ namespace WorkflowManagement
         readonly IWorkflowAction[] actions;
         static WorkflowManager manager;
 
-        public WorkflowManager()
+        /// <returns></returns>
+        public static WorkflowManager Initialize(IWorkflowAction[] workflowActions)
         {
-            IWorkflowAction[] workflowActions = new IWorkflowAction[3];
+            if (manager == null)
+            {
+                manager = new WorkflowManager(workflowActions);
+            }
 
-            workflowActions[(int)WorkflowStage.Analyze] = new AnalyzeAction();
-            workflowActions[(int)WorkflowStage.Report] = new ReportAction();
-            workflowActions[(int)WorkflowStage.Telemetry] = new TelemetryAction();
+            return manager;
+        }
 
+        public static WorkflowManager Initialize()
+        {
+            if (manager == null)
+            {
+                manager = new WorkflowManager();
+            }
+
+            return manager;
+        }
+
+        private WorkflowManager()
+        {
+            actions = new IWorkflowAction[Enum.GetValues(typeof(WorkflowStage)).Length-1];
+
+            AddAction<AnalyzeAction>();
+            AddAction<ReportAction>();
+            AddAction<TelemetryAction>();
+        }
+
+        private WorkflowManager(IWorkflowAction[] workflowActions)
+        {
             actions = workflowActions;
         }
 
-        public WorkflowManager(IWorkflowAction[] workflowActions)
+        private void AddAction<T>() where T : IWorkflowAction, new()
         {
-            actions = workflowActions;
+            T action = new T();
+            actions[(int)action.CurrentStage] = action;
         }
 
         /// <summary>
         /// Gets the first message used to start a workflow for a submission.
         /// </summary>
-        public WorkflowQueueMessage GetFirstStage(string submissionId)
+        public static WorkflowQueueMessage GetFirstStage(string submissionId)
         {
-            return new WorkflowQueueMessage() { SubmissionId = submissionId, Stage = WorkflowStage.Analyze };
+            return new WorkflowQueueMessage(submissionId, WorkflowStage.Analyze);
         }
 
         /// <summary>
@@ -51,25 +77,10 @@ namespace WorkflowManagement
         /// </summary>
         public async Task<WorkflowQueueMessage> ExecuteActionsToNextStage(WorkflowQueueMessage currentMsg)
         {
-            //Execute the action for the current stage
-            await actions[(int)currentMsg.Stage].Execute(currentMsg.SubmissionId);
+            //Execute the action
+            WorkflowStage nextStage = await actions[(int)currentMsg.Stage].ExecuteAsync(currentMsg.SubmissionId);
 
-            //Determine which stage in the workflow the submission moves to next
-            WorkflowStage nextStage;
-            switch (currentMsg.Stage)
-            {
-                case WorkflowStage.Analyze:
-                    nextStage = WorkflowStage.Report;
-                    break;
-                case WorkflowStage.Report:
-                    nextStage = WorkflowStage.Telemetry;
-                    break;
-                default:
-                    nextStage = WorkflowStage.Finished;
-                    break;
-            }
-
-            return new WorkflowQueueMessage() { SubmissionId = currentMsg.SubmissionId, Stage = nextStage };
+            return new WorkflowQueueMessage(currentMsg.SubmissionId, nextStage);
         }
     }
 }

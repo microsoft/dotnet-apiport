@@ -11,23 +11,19 @@ namespace Functions
 {
     public static class ProcessWorkflowQueue
     {
-        //Allows WorkflowManager to be "injected" as needed, such as with a mock action factory when the function is called through tests
-        public static Func<WorkflowManager> GetWorkflowManager { get; set; } = () => new WorkflowManager();
-
         [FunctionName("ProcessWorkflowQueue")]
-        public static async Task Run([QueueTrigger("apiportworkflowqueue")]WorkflowQueueMessage workflowMessage, 
-            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, 
+        public static async Task Run([QueueTrigger("apiportworkflowqueue")]WorkflowQueueMessage workflowMessage,
+            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue,
             ILogger log)
         {
-            log.LogInformation($"processing message {workflowMessage.SubmissionId}, stage {workflowMessage.Stage}");
+            log.LogInformation("Processing message {SubmissionId}, stage {Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
 
-            var workflowMgr = GetWorkflowManager();
+            var workflowMgr = WorkflowManager.Initialize();
             var nextMsg = await workflowMgr.ExecuteActionsToNextStage(workflowMessage);
-
-            log.LogInformation($"queueing new message {workflowMessage.SubmissionId}, stage {nextMsg.Stage}");
 
             if (nextMsg.Stage != WorkflowStage.Finished)
             {
+                log.LogInformation("Queueing new message {SubmissionId}, stage {Stage}", workflowMessage.SubmissionId, nextMsg.Stage);
                 workflowMessageQueue.Add(nextMsg);
             }
         }

@@ -5,7 +5,14 @@ namespace WorkflowManagement
 {
     public class WorkflowQueueMessage
     {
-        public WorkflowStage Stage { get; set; }
-        public string SubmissionId { get; set; }
+        public WorkflowStage Stage { get; }
+
+        public string SubmissionId { get; }
+
+        public WorkflowQueueMessage(string submissionId, WorkflowStage stage)
+        {
+            Stage = stage;
+            SubmissionId = submissionId;
+        }
     }
 }

@@ -30,8 +30,6 @@ namespace Functions.Tests
         [Fact]
         public static async Task ReturnsGuidForCompressedAnalyzeRequest()
         {
-            Analyze.GetWorkflowManager = () => new WorkflowManager();
-
             var gzippedAnalyzeRequest = typeof(AnalyzeTests).Assembly
                 .GetManifestResourceStream("Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
 
@@ -41,12 +39,12 @@ namespace Functions.Tests
             request.Content.Headers.Add("Content-Encoding", "gzip");
             request.Content.Headers.Add("Content-Type", "application/json");
 
+            WorkflowManager.Initialize();
             var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var response = await Analyze.Run(request, workflowQueue, NullLogger.Instance);
             var body = await response.Content.ReadAsStringAsync();
 
-            Guid submissionId;
-            Assert.True(Guid.TryParse(body, out submissionId));
+            Assert.True(Guid.TryParse(body, out var submissionId));
 
             workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId.ToString() && x.Stage == WorkflowStage.Analyze));
         }

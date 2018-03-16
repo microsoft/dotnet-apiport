@@ -7,6 +7,13 @@ namespace WorkflowManagement
 {
     public interface IWorkflowAction
     {
-        Task Execute(string submissionId); 
+        /// <summary>
+        /// Returns the next stage after executing the workflow action.
+        Task<WorkflowStage> ExecuteAsync(string submissionId);
+
+        /// <summary>
+        /// Gets the current stage.
+        /// </summary>
+        WorkflowStage CurrentStage { get; }
     }
 }

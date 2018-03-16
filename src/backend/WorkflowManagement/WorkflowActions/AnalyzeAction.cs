@@ -7,10 +7,17 @@ namespace WorkflowManagement
 {
     class AnalyzeAction : IWorkflowAction
     {
-        public async Task Execute(string submissionId)
+        public async Task<WorkflowStage> ExecuteAsync(string submissionId)
         {
-            //TODO: Update to call Analysis Engine Service
+            // TODO: Update to call Analysis Engine
             await Task.Delay(5);
+
+            return WorkflowStage.Report;
+        }
+
+        public WorkflowStage CurrentStage
+        {
+            get { return WorkflowStage.Analyze; }
         }
     }
 }

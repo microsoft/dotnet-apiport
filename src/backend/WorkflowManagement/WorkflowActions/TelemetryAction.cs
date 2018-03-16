@@ -7,10 +7,17 @@ namespace WorkflowManagement
 {
     class TelemetryAction : IWorkflowAction
     {
-        public async Task Execute(string submissionId)
+        public async Task<WorkflowStage> ExecuteAsync(string submissionId)
         {
             // TODO: Update to call Telemetry Collection Service
             await Task.Delay(5);
+
+            return WorkflowStage.Finished;
+        }
+
+        public WorkflowStage CurrentStage
+        {
+            get { return WorkflowStage.Telemetry; }
         }
     }
 }

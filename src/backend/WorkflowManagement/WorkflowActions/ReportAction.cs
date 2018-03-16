@@ -7,10 +7,17 @@ namespace WorkflowManagement
 {
     class ReportAction : IWorkflowAction
     {
-        public async Task Execute(string submissionId)
+        public async Task<WorkflowStage> ExecuteAsync(string submissionId)
         {
             // TODO: Update to call Report Generator Service
             await Task.Delay(5);
+
+            return WorkflowStage.Telemetry;
+        }
+
+        public WorkflowStage CurrentStage
+        {
+            get { return WorkflowStage.Report;  }
         }
     }
 }
