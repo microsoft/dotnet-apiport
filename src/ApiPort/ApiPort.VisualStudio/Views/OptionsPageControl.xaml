@@ -4,15 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:const="clr-namespace:ApiPortVS.Resources;assembly=ApiPort.VisualStudio.Common"
-             xmlns:utils="clr-namespace:ApiPortVS.Utils"
              mc:Ignorable="d"
-             d:DesignHeight="283.5" d:DesignWidth="640" >
-
+             d:DesignHeight="283.5" d:DesignWidth="640">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <utils:HideWhenTrueBoolConverter x:Key="HideWhenTrue" />
-        <utils:TargetInformationStringConverter x:Key="TargetInformationString" />
-        <utils:TargetPlatformDisplayNameConverter x:Key="TargetPlatformDisplayName" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/ResourceDictionary.xaml" />
+                <ResourceDictionary Source="../Resources/UtilsResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
@@ -24,52 +24,65 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock FontSize="12" FontWeight="DemiBold" Foreground="Red"
+        <TextBlock FontWeight="DemiBold"
                    Text="{Binding ErrorMessage, Mode=OneWay}"
                    Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"
                    Grid.Row="0" />
 
         <GroupBox Header="{x:Static const:LocalizedStrings.GeneralSettings}"
-                  BorderBrush="LightGray" IsTabStop="False"
+                  Style="{DynamicResource GroupBoxStyle}"
+                  IsTabStop="False"
                   Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
+                    <RowDefinition />
                     <RowDefinition Height="10" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static const:LocalizedStrings.DefaultOutputDirectory}" />
-                <TextBlock Grid.Column="2" Grid.Row="0" AutomationProperties.HelpText="{Binding OutputDirectory}"
-                           Text="{Binding OutputDirectory}" />
-                <Button Grid.Column="4" Grid.Row="0" Content="..." Click="UpdateDirectoryClick"
+                <TextBlock Text="{x:Static const:LocalizedStrings.DefaultOutputDirectory}"
+                           Style="{DynamicResource ContentTextBlockStyle}"
+                           AutomationProperties.Name="{x:Static const:LocalizedStrings.DefaultOutputDirectory}"
+                           Grid.Column="0" Grid.Row="0" />
+                <TextBlock Text="{Binding OutputDirectory}"
+                           Style="{DynamicResource ContentTextBlockStyle}"
+                           AutomationProperties.HelpText="{Binding OutputDirectory}"
+                           Grid.Column="2" Grid.Row="0" />
+                <Button Content="..."
+                        Click="UpdateDirectoryClick"
                         AutomationProperties.Name="{x:Static const:LocalizedStrings.SelectDefaultOutputDirectory}"
-                        KeyboardNavigation.TabIndex="0" />
-                <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static const:LocalizedStrings.DefaultFileName}" />
-                <TextBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding DefaultOutputName, Mode=TwoWay}"
+                        KeyboardNavigation.TabIndex="0"
+                        Grid.Column="4" Grid.Row="0" />
+                <TextBlock Text="{x:Static const:LocalizedStrings.DefaultFileName}"
+                           Style="{DynamicResource ContentTextBlockStyle}"
+                           Grid.Column="0" Grid.Row="2" />
+                <TextBox Text="{Binding DefaultOutputName, Mode=TwoWay}"
                          AutomationProperties.Name="{x:Static const:LocalizedStrings.DefaultReportFilename}"
-                         KeyboardNavigation.TabIndex="1" />
+                         KeyboardNavigation.TabIndex="1"
+                         Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" />
             </Grid>
         </GroupBox>
 
         <GroupBox Header="{x:Static const:LocalizedStrings.OutputFormats}"
-                  BorderBrush="LightGray" IsTabStop="False"
+                  Style="{DynamicResource GroupBoxStyle}"
+                  IsTabStop="False"
                   Grid.Row="2">
             <DockPanel>
                 <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}"
-                       Text="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
-                       KeyboardNavigation.IsTabStop="false" KeyboardNavigation.TabIndex="0" Margin="0,5,0,5"/>
-
+                           Text="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
+                           Style="{DynamicResource ContentTextBlockStyle}"
+                           AutomationProperties.Name="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
+                           KeyboardNavigation.IsTabStop="false" 
+                           KeyboardNavigation.TabIndex="0" Margin="0,5"/>
                 <ItemsControl ItemsSource="{Binding Path=Formats, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  Background="Transparent" BorderBrush="Transparent"
-                                  Visibility="{Binding Path=UpdatingPlatforms, Mode=OneWay, Converter={StaticResource HideWhenTrue}}"
-                                  KeyboardNavigation.IsTabStop="False">
+                              Visibility="{Binding Path=UpdatingPlatforms, Mode=OneWay, Converter={StaticResource HideWhenTrue}}"
+                              KeyboardNavigation.IsTabStop="False">
 
                     <ItemsControl.ItemContainerStyle>
                         <Style>
@@ -82,13 +95,14 @@
                             <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding DisplayName}"
-                                     KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
-                                     Padding="3,0,10,3"
-                                     AutomationProperties.Name="{Binding DisplayName}" />
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                      Content="{Binding DisplayName}"
+                                      KeyboardNavigation.IsTabStop="True"
+                                      KeyboardNavigation.TabIndex="1"
+                                      AutomationProperties.Name="{Binding DisplayName}"
+                                      Padding="3,0,10,3" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -96,19 +110,23 @@
         </GroupBox>
 
         <GroupBox Header="{x:Static const:LocalizedStrings.TargetPlatforms}"
-                  BorderBrush="LightGray" IsTabStop="False"
+                  Style="{DynamicResource GroupBoxStyle}"
+                  IsTabStop="False"
                   Grid.Row="3">
             <DockPanel>
                 <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}"
-                       Text="{x:Static const:LocalizedStrings.RefreshingPlatforms}"
-                       KeyboardNavigation.IsTabStop="false" KeyboardNavigation.TabIndex="0" Margin="0,5,0,5"/>
+                           Text="{x:Static const:LocalizedStrings.RefreshingPlatforms}"
+                           KeyboardNavigation.IsTabStop="false"
+                           KeyboardNavigation.TabIndex="0"
+                           Margin="0,5,0,5"/>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto" KeyboardNavigation.IsTabStop="False" IsTabStop="False">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              KeyboardNavigation.IsTabStop="False"
+                              IsTabStop="False">
                     <ItemsControl ItemsSource="{Binding Path=Targets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  Background="Transparent" BorderBrush="Transparent" Name="platformList"
                                   Visibility="{Binding Path=UpdatingPlatforms, Mode=OneWay, Converter={StaticResource HideWhenTrue}}"
+                                  Background="Transparent" BorderBrush="Transparent"
                                   KeyboardNavigation.IsTabStop="False">
-
                         <ItemsControl.ItemContainerStyle>
                             <Style>
                                 <Setter Property="Control.Margin" Value="5,5,0,0" />
@@ -118,9 +136,13 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
-                                    <TextBlock Text="{Binding Converter={StaticResource TargetPlatformDisplayName}}" DockPanel.Dock="Top" />
-                                    <ItemsControl ItemsSource="{Binding Path=Versions}" Margin="10,5,0,0"
-                                                  KeyboardNavigation.DirectionalNavigation="Local" KeyboardNavigation.IsTabStop="False">
+                                    <TextBlock Text="{Binding Converter={StaticResource TargetPlatformDisplayName}}"
+                                               Style="{DynamicResource ContentTextBlockStyle}"
+                                               DockPanel.Dock="Top" />
+                                    <ItemsControl ItemsSource="{Binding Path=Versions}"
+                                                  Margin="10,5,0,0"
+                                                  KeyboardNavigation.DirectionalNavigation="Local"
+                                                  KeyboardNavigation.IsTabStop="False">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" />
@@ -128,10 +150,12 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding Version}"
-                                                          KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1"
-                                                          Padding="3,0,10,3"
-                                                          AutomationProperties.Name="{Binding Converter={StaticResource TargetInformationString}}" />
+                                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                          Content="{Binding Version}"
+                                                          KeyboardNavigation.IsTabStop="True"
+                                                          KeyboardNavigation.TabIndex="1"
+                                                          AutomationProperties.Name="{Binding Converter={StaticResource TargetInformationString}}"
+                                                          Padding="3,0,10,3" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
@@ -149,34 +173,39 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" FontSize="11" HorizontalAlignment="Left"
-                Visibility="{Binding UpdatingPlatforms, Converter={StaticResource HideWhenTrue}}">
+            <TextBlock HorizontalAlignment="Left"
+                       Visibility="{Binding UpdatingPlatforms, Converter={StaticResource HideWhenTrue}}"
+                       Grid.Column="0">
                <Hyperlink Click="RefreshRequested"
                           AutomationProperties.Name="{x:Static const:LocalizedStrings.Refresh}">
                   <TextBlock Text="{x:Static const:LocalizedStrings.Refresh}"
-                    ToolTip="{x:Static const:LocalizedStrings.Refresh}"
-                    KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="1" />
+                             ToolTip="{x:Static const:LocalizedStrings.Refresh}"
+                             KeyboardNavigation.IsTabStop="True"
+                             KeyboardNavigation.TabIndex="1" />
                </Hyperlink>
             </TextBlock>
 
             <TextBlock Grid.Column="2" FontSize="11" HorizontalAlignment="Right">
-                <Hyperlink Name="GuidanceLink" RequestNavigate="NavigateToMoreInformation"
+                <Hyperlink RequestNavigate="NavigateToMoreInformation"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutTool}">
                     <TextBlock Text="{x:Static const:LocalizedStrings.AboutTool}"
-                               KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
+                               KeyboardNavigation.IsTabStop="True"
+                               KeyboardNavigation.TabIndex="0"/>
                 </Hyperlink>
             </TextBlock>
 
-            <TextBlock Grid.Column="4" FontSize="11" HorizontalAlignment="Right">
-                <Hyperlink Name="PrivacyLink" RequestNavigate="NavigateToPrivacyModel"
+            <TextBlock Grid.Column="4"
+                       HorizontalAlignment="Right">
+                <Hyperlink RequestNavigate="NavigateToPrivacyModel"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutPrivacy}">
                     <TextBlock Text="{x:Static const:LocalizedStrings.AboutPrivacy}"
-                               KeyboardNavigation.IsTabStop="True" KeyboardNavigation.TabIndex="0"/>
+                               KeyboardNavigation.IsTabStop="True"
+                               KeyboardNavigation.TabIndex="0"/>
                 </Hyperlink>
             </TextBlock>
         </Grid>
