@@ -29,11 +29,19 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                    FontWeight="Bold"
                    Grid.Row="0"/>
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <ListView ItemsSource="{Binding Paths}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          IsTabStop="False">
+                <ListView ItemsSource="{Binding Paths}"
+                          HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Stretch"
+                          KeyboardNavigation.TabNavigation="Continue"
+                          IsTabStop="False">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,5">
+                            <Grid Margin="0,5"
+                                  KeyboardNavigation.TabNavigation="Continue"
+                                  KeyboardNavigation.IsTabStop="false">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
@@ -45,12 +53,14 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                            Margin="5,0"
                                            Grid.Column="0"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                            KeyboardNavigation.TabNavigation="Continue"
                                             Grid.Column="2">
                                     <TextBlock Margin="5,0">
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.OpenFile}"
                                                    CommandParameter="{Binding}">
                                             <TextBlock Text="{x:Static const:LocalizedStrings.OpenReport}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenReport}"
+                                                       KeyboardNavigation.IsTabStop="true"
                                                        Style="{DynamicResource ContentTextBlockStyle}" />
                                         </Hyperlink>
                                     </TextBlock>
@@ -58,6 +68,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenDirectory}" CommandParameter="{Binding}">
                                             <TextBlock Text="{x:Static const:LocalizedStrings.OpenDirectory}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenDirectory}"
+                                                       KeyboardNavigation.IsTabStop="true"
                                                        Style="{DynamicResource ContentTextBlockStyle}" />
                                         </Hyperlink>
                                     </TextBlock>
@@ -65,6 +76,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SaveAs}" CommandParameter="{Binding}">
                                             <TextBlock Text="{x:Static const:LocalizedStrings.SaveAs}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.SaveAs}"
+                                                       KeyboardNavigation.IsTabStop="true"
                                                        Style="{DynamicResource ContentTextBlockStyle}" />
                                         </Hyperlink>
                                     </TextBlock>
