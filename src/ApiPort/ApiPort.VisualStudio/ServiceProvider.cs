@@ -21,6 +21,8 @@ using System;
 using System.IO;
 
 using static Microsoft.VisualStudio.VSConstants;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ApiPortVS
 {
@@ -93,9 +95,13 @@ namespace ApiPortVS
                 .As<IFileWriter>()
                 .SingleInstance();
 
-            builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
+            builder.Register(GetOutputViewModel)
                 .As<OutputViewModel>()
                 .SingleInstance();
+
+            //builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
+            //    .As<OutputViewModel>()
+            //    .SingleInstance();
 
             // Register menu handlers
             builder.RegisterType<AnalyzeMenu>()
@@ -192,6 +198,29 @@ namespace ApiPortVS
                 // If a custom window couldn't be opened, open the general purpose window
                 return provider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
             }).SingleInstance();
+        }
+
+        private static OutputViewModel GetOutputViewModel(IComponentContext context)
+        {
+            var viewModel = context.Resolve<OptionsViewModel>();
+
+            if (string.IsNullOrEmpty(viewModel.OutputDirectory))
+            {
+                return new OutputViewModel();
+            }
+
+            var directory = new DirectoryInfo(viewModel.OutputDirectory);
+            var validExtensions = new HashSet<string>(viewModel.Formats.Select(x => x.FileExtension).Distinct());
+            var matchAnything = validExtensions.Count == 0;
+
+            var validReports = directory.EnumerateFiles().Where(x => matchAnything || validExtensions.Contains(x.Extension));
+
+            if (!directory.Exists || !validReports.Any())
+            {
+                return new OutputViewModel();
+            }
+
+            return new OutputViewModel(validReports.Select(x => x.FullName));
         }
     }
 }

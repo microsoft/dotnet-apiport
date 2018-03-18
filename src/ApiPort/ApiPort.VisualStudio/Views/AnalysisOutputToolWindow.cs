@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Resources;
+using ApiPortVS.ViewModels;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Runtime.InteropServices;
@@ -27,12 +28,16 @@ namespace ApiPortVS
         /// </summary>
         public AnalysisOutputToolWindow() : base(null)
         {
+            var viewModel = ApiPortVSPackage.LocalServiceProvider.GetService(typeof(OutputViewModel)) as OutputViewModel;
             this.Caption = LocalizedStrings.PortabilityAnalysisResults;
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
-            this.Content = new AnalysisOutputToolWindowControl();
+            var control = new AnalysisOutputToolWindowControl();
+            control.DataContext = viewModel;
+
+            this.Content = control;
         }
     }
 }
