@@ -99,10 +99,6 @@ namespace ApiPortVS
                 .As<OutputViewModel>()
                 .SingleInstance();
 
-            //builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
-            //    .As<OutputViewModel>()
-            //    .SingleInstance();
-
             // Register menu handlers
             builder.RegisterType<AnalyzeMenu>()
                 .AsSelf()
