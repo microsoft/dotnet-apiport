@@ -14,6 +14,13 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.DialogTextBrushKey}}" />
     </Style>
 
+    <!-- For the tool window because it has a different colour scheme than the options page. -->
+    <Style x:Key="ToolWindowTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource VsFont.EnvironmentFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource VsFont.EnvironmentFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
+    </Style>
+    
     <!-- Group Box -->
     <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
         <Setter Property="BorderBrush" Value="{DynamicResource CommonControls.CheckBoxBorder}" />

@@ -25,17 +25,20 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Text="{x:Static const:LocalizedStrings.AvailableReports}"
+                   Style="{DynamicResource ToolWindowTextBlockStyle}"
                    Margin="5"
                    FontWeight="Bold"
                    Grid.Row="0"/>
         <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto"
+                          Background="Transparent"
                           IsTabStop="False">
                 <ListView ItemsSource="{Binding Paths}"
                           HorizontalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
                           KeyboardNavigation.TabNavigation="Continue"
+                          Background="Transparent"
                           IsTabStop="False">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -49,7 +52,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Path=., Converter={StaticResource PathToFileNameConverter}}"
                                            AutomationProperties.Name="{Binding Path=., Converter={StaticResource PathToFileNameConverter}}"
-                                           Style="{DynamicResource ContentTextBlockStyle}"
+                                           Style="{DynamicResource ToolWindowTextBlockStyle}"
                                            Margin="5,0"
                                            Grid.Column="0"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
@@ -61,7 +64,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                             <TextBlock Text="{x:Static const:LocalizedStrings.OpenReport}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenReport}"
                                                        KeyboardNavigation.IsTabStop="true"
-                                                       Style="{DynamicResource ContentTextBlockStyle}" />
+                                                       Style="{DynamicResource ToolWindowTextBlockStyle}" />
                                         </Hyperlink>
                                     </TextBlock>
                                     <TextBlock Margin="5,0">
@@ -69,7 +72,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                             <TextBlock Text="{x:Static const:LocalizedStrings.OpenDirectory}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenDirectory}"
                                                        KeyboardNavigation.IsTabStop="true"
-                                                       Style="{DynamicResource ContentTextBlockStyle}" />
+                                                       Style="{DynamicResource ToolWindowTextBlockStyle}" />
                                         </Hyperlink>
                                     </TextBlock>
                                     <TextBlock Margin="5,0">
@@ -77,7 +80,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                             <TextBlock Text="{x:Static const:LocalizedStrings.SaveAs}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.SaveAs}"
                                                        KeyboardNavigation.IsTabStop="true"
-                                                       Style="{DynamicResource ContentTextBlockStyle}" />
+                                                       Style="{DynamicResource ToolWindowTextBlockStyle}" />
                                         </Hyperlink>
                                     </TextBlock>
                                 </StackPanel>
