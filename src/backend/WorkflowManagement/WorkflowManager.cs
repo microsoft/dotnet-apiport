@@ -45,6 +45,7 @@ namespace WorkflowManagement
 
         private WorkflowManager()
         {
+            //TODO: When DI is implemented, change this to use that
             actions = new IWorkflowAction[Enum.GetValues(typeof(WorkflowStage)).Length-1];
 
             AddAction<AnalyzeAction>();
