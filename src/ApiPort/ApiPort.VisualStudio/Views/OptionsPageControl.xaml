@@ -190,7 +190,8 @@
                </Hyperlink>
             </TextBlock>
 
-            <TextBlock Grid.Column="2" FontSize="11" HorizontalAlignment="Right">
+            <TextBlock Grid.Column="2"
+                       HorizontalAlignment="Right">
                 <Hyperlink RequestNavigate="NavigateToMoreInformation"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutTool}">
                     <TextBlock Text="{x:Static const:LocalizedStrings.AboutTool}"
