@@ -1,14 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Azure.WebJobs.Host;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Xunit;
+using WorkflowManagement;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using Microsoft.Azure.WebJobs;
 
 namespace Functions.Tests
 {
@@ -20,7 +22,7 @@ namespace Functions.Tests
             var request = PostFromConsoleApiPort;
             request.Content = new StringContent("{ \"json\": \"json\" }");
 
-            var response = await Analyze.Run(request, new DoNothingTraceWriter());
+            var response = await Analyze.Run(request, Substitute.For<ICollector<WorkflowQueueMessage>>(), NullLogger.Instance);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -37,10 +39,14 @@ namespace Functions.Tests
             request.Content.Headers.Add("Content-Encoding", "gzip");
             request.Content.Headers.Add("Content-Type", "application/json");
 
-            var response = await Analyze.Run(request, new DoNothingTraceWriter());
+            WorkflowManager.Initialize();
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
+            var response = await Analyze.Run(request, workflowQueue, NullLogger.Instance);
             var body = await response.Content.ReadAsStringAsync();
 
-            Assert.True(Guid.TryParse(body, out var _));
+            Assert.True(Guid.TryParse(body, out var submissionId));
+
+            workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId.ToString() && x.Stage == WorkflowStage.Analyze));
         }
 
         private static HttpRequestMessage PostFromConsoleApiPort
@@ -56,15 +62,6 @@ namespace Functions.Tests
 
                 return req;
             }
-        }
-
-        private class DoNothingTraceWriter : TraceWriter
-        {
-            public DoNothingTraceWriter() : base(TraceLevel.Off)
-            { }
-
-            public override void Trace(TraceEvent traceEvent)
-            { }
         }
     }
 }
