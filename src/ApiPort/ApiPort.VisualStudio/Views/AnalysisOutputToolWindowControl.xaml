@@ -35,6 +35,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                           Background="Transparent"
                           IsTabStop="False">
                 <ListView ItemsSource="{Binding Paths}"
+                          ItemContainerStyle="{DynamicResource ToolWindowListBoxItemStyle}"
                           HorizontalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
                           KeyboardNavigation.TabNavigation="Continue"
