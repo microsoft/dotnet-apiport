@@ -1,0 +1,255 @@
+﻿{
+  "Gateway": {
+    "ReRoutes": [
+      {
+        "RouteDescription": "Analyze Service Redirect",
+        "DownstreamPathTemplate": "/api/analyze",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/analyze",
+        "UpstreamHttpMethod": [ "POST" ],
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 180000
+        },
+        "RateLimitOptions": {
+          "ClientWhitelist": [],
+          "EnableRateLimiting": true,
+          "Period": "15s",
+          "PeriodTimespan": 15,
+          "Limit": 10
+        }
+      },
+
+      {
+        "RouteDescription": "WebHook Service Redirect",
+        "DownstreamPathTemplate": "/api/hooks/{path}",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/hooks/{path}",
+        "UpstreamHttpMethod": [ "GET", "POST" ]
+      },
+
+      {
+        "RouteDescription": "ToolsData Service Redirect",
+        "DownstreamPathTemplate": "/api/toolsData/{path}",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/toolsData/{path}",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 6000
+        }
+      },
+
+      {
+        "RouteDescription": "FxApi Service Redirect",
+        "DownstreamPathTemplate": "/api/fxapi",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/fxapi",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 5000
+        }
+      },
+      {
+        "RouteDescription": "FxApi Search Service Redirect",
+        "DownstreamPathTemplate": "/api/fxapi/search",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/fxapi/search",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 5000
+        }
+      },
+      {
+        "RouteDescription": "FxApi (POST) Service Redirect",
+        "DownstreamPathTemplate": "/api/fxapi",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/fxapi",
+        "UpstreamHttpMethod": [ "POST" ],
+        "RateLimitOptions": {
+          "ClientWhitelist": [],
+          "EnableRateLimiting": true,
+          "Period": "10s",
+          "PeriodTimespan": 10,
+          "Limit": 10
+        },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 60000
+        }
+      },
+
+      {
+        "RouteDescription": "Data Service Redirect",
+        "DownstreamPathTemplate": "/api/data",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/data",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 10000
+        }
+      },
+      {
+        "RouteDescription": "Breaking Change Data Service Redirect",
+        "DownstreamPathTemplate": "/api/data/BreakingChanges",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/data/BreakingChanges",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 5000
+        }
+      },
+      {
+        "RouteDescription": "Data Update Service Redirect",
+        "DownstreamPathTemplate": "/api/data",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/data",
+        "UpstreamHttpMethod": [ "PUT" ],
+        "RateLimitOptions": {
+          "ClientWhitelist": [],
+          "EnableRateLimiting": true,
+          "Period": "10s",
+          "PeriodTimespan": 10,
+          "Limit": 10
+        },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 60000
+        }
+      },
+
+      {
+        "RouteDescription": "ResultFormat Service Redirect",
+        "DownstreamPathTemplate": "/api/resultformat",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/resultformat",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 5000
+        }
+      },
+      {
+        "RouteDescription": "Default ResultFormat Service Redirect",
+        "DownstreamPathTemplate": "/api/resultformat/default",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/resultformat/default",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 5000
+        }
+      },
+
+      {
+        "RouteDescription": "Target Service Redirect",
+        "DownstreamPathTemplate": "/api/target",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "portability.dot.net",
+            "Port": 443
+          }
+        ],
+        "UpstreamPathTemplate": "/api/target",
+        "UpstreamHttpMethod": [ "GET" ],
+        "FileCacheOptions": { "TtlSeconds": 5 },
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 3,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 5000
+        }
+      }
+    ],
+    "GlobalConfiguration": {
+      "RequestIdKey": "Correlation-Id"
+    }
+  }
+}
