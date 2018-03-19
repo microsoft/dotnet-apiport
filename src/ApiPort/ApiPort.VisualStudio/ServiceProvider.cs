@@ -206,16 +206,21 @@ namespace ApiPortVS
 
             if (string.IsNullOrEmpty(viewModel.OutputDirectory))
             {
-                return new OutputViewModel();
             }
 
             var directory = new DirectoryInfo(viewModel.OutputDirectory);
+
+            if (!directory.Exists)
+            {
+                return new OutputViewModel();
+            }
+
             var validExtensions = new HashSet<string>(viewModel.Formats.Select(x => x.FileExtension).Distinct());
             var matchAnything = validExtensions.Count == 0;
 
             var validReports = directory.EnumerateFiles().Where(x => matchAnything || validExtensions.Contains(x.Extension));
 
-            if (!directory.Exists || !validReports.Any())
+            if (!validReports.Any())
             {
                 return new OutputViewModel();
             }
