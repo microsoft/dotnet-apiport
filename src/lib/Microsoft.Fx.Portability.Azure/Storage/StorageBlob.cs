@@ -6,6 +6,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,10 +47,10 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             }
 
             byte[] content = request.SerializeAndCompress();
-            var containerPath = $"{currentDate.Day.ToString("00")}/{uniqueId}";
+            var containerPath = $"{currentDate.Day.ToString("00", CultureInfo.InvariantCulture)}/{uniqueId}";
 
             CloudBlockBlob blob = container.GetBlockBlobReference(containerPath);
-            blob.Metadata.Add("Version", request.Version.ToString());
+            blob.Metadata.Add("Version", request.Version.ToString(CultureInfo.InvariantCulture));
             await blob.UploadFromByteArrayAsync(content, 0, content.Length);
             await blob.SetMetadataAsync();
             return true;
@@ -124,7 +125,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         private static string GetContainerName(int month, int year)
         {
-            string containerName = string.Format("container{0}{1}", year, month.ToString("00"));
+            string containerName = string.Format(CultureInfo.InvariantCulture, "container{0}{1}", year, month.ToString("00", CultureInfo.InvariantCulture));
             return containerName;
         }
 
