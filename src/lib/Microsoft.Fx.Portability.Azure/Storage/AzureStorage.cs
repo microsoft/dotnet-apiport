@@ -5,7 +5,6 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Azure.Storage
@@ -17,7 +16,18 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         public AzureStorage(CloudStorageAccount storageAccount)
         {
+            _storageAccount = storageAccount;
+            _blob = new StorageBlob(storageAccount);
+        }
 
+        public Task<bool> SaveToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
+        {
+            return _blob.SaveToBlobAsync(submissionId, analyzeRequest);
+        }
+
+        public Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId)
+        {
+            return _blob.RetrieveFromBlobAsync(uniqueId);
         }
 
         public Task AddJobToQueueAsync(string submissionId)
@@ -35,17 +45,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             throw new NotImplementedException();
         }
 
-        public Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IEnumerable<string>> RetrieveSubmissionIdsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SaveToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
         {
             throw new NotImplementedException();
         }
