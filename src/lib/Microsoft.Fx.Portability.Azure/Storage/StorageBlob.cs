@@ -101,16 +101,13 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         private async Task<IEnumerable<CloudBlockBlob>> GetBlobsAsync()
         {
-            return await Task.Run(() =>
-            {
-                CloudBlobClient blobClient = _storageAccount.CreateCloudBlobClient();
-
-                var query = blobClient
-                    .ListContainers(prefix: "container")
-                    .SelectMany(o => o.ListBlobs())
-                    .OfType<CloudBlockBlob>();
-                return query;
-            });
+            var blobClient = _storageAccount.CreateCloudBlobClient();
+            var containers = await blobClient.ListContainersAsync(prefix: "container").ConfigureAwait(false);
+            var blobTasks = containers.Select(c => c.ListBlobsAsync());
+            var blobs = await Task.WhenAll(blobTasks).ConfigureAwait(false);
+            var query = blobs.SelectMany(b => b)
+                .OfType<CloudBlockBlob>();
+            return query;
         }
 
         public static string GetCurrentMonthContainerName()
