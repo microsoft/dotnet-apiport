@@ -100,7 +100,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Workflow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Azure", "src\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj", "{A761180A-067A-4238-AA66-5BB27A59B792}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.AnalysisEngine", "src\backend\PortabilityService.AnalysisEngine\PortabilityService.AnalysisEngine.csproj", "{0B1CB15D-ADE9-4D6C-B338-E616AF173212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationService", "src\backend\PortabilityService.ConfigurationService\PortabilityService.ConfigurationService.csproj", "{B21C19FC-2BA4-40C9-B4B6-4B92661AB1F6}"
 EndProject
@@ -1370,6 +1372,54 @@ Global
 		{A761180A-067A-4238-AA66-5BB27A59B792}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
 		{A761180A-067A-4238-AA66-5BB27A59B792}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
 		{A761180A-067A-4238-AA66-5BB27A59B792}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|ARM.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|x64.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Debug|x86.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|ARM.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|x64.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Debug|x86.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|Any CPU.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|ARM.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|ARM.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|x64.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|x64.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|x86.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Osx_Release|x86.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|ARM.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|x64.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|x64.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Release|x86.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|ARM.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|x64.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Debug|x86.Build.0 = Debug|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|Any CPU.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|ARM.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|ARM.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|x64.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -1648,6 +1698,7 @@ Global
 		{43836132-9694-40F5-8C6A-2C9F30B774E1} = {DE3F5141-1F37-45F6-9A63-697E05E9BF8F}
 		{4F94AAB7-29C8-46B0-B41D-83A4779544DE} = {018983AE-8D15-4205-9E55-EDC5033146AB}
 		{A761180A-067A-4238-AA66-5BB27A59B792} = {D66AC566-3B80-46F0-8687-3C5F4D203F1A}
+		{0B1CB15D-ADE9-4D6C-B338-E616AF173212} = {018983AE-8D15-4205-9E55-EDC5033146AB}
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142} = {018983AE-8D15-4205-9E55-EDC5033146AB}
 		{B21C19FC-2BA4-40C9-B4B6-4B92661AB1F6} = {018983AE-8D15-4205-9E55-EDC5033146AB}
 		{3F71D970-3C1A-457D-8709-10AFF582360B} = {DE3F5141-1F37-45F6-9A63-697E05E9BF8F}
