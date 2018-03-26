@@ -32,6 +32,22 @@ namespace Functions
             var submissionId = Guid.NewGuid().ToString();
             log.LogInformation("Created submission id {SubmissionId}", submissionId);
 
+            var storageManager = StorageManager.Initialize();
+            try
+            {
+                var saved = await storageManager.Storage.SaveToBlobAsync(analyzeRequest, submissionId);
+                if (!saved)
+                {
+                    log.LogError("Analyze request not saved to storage for submission {submissionId}", submissionId);
+                    return req.CreateResponse(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError("Error occurs when saving analyze request to storage for submission {submissionId}: {exception}", submissionId, ex);
+                return req.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(submissionId);
 
