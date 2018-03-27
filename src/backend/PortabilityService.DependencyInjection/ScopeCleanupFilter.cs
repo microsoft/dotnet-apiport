@@ -44,7 +44,7 @@ namespace DependencyInjection
         public Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken) =>
             Task.CompletedTask;
 
-        private void RemoveScope(Guid id)
+        private static void RemoveScope(Guid id)
         {
             if (InjectBindingProvider.Scopes.TryRemove(id, out var scope))
             {

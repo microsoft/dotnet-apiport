@@ -48,7 +48,7 @@ namespace DependencyInjection
             registry.RegisterExtension(typeof(IFunctionExceptionFilter), filter);
         }
 
-        private void RegisterServices(IServiceCollection services)
+        private static void RegisterServices(IServiceCollection services)
         {
             var connection = Environment.GetEnvironmentVariable("Connection")
                 ?? "UseDevelopmentStorage=true";
@@ -56,7 +56,7 @@ namespace DependencyInjection
             services.AddScoped<IStorage, AzureStorage>(CreateStorage);
         }
 
-        private AzureStorage CreateStorage(IServiceProvider arg)
+        private static AzureStorage CreateStorage(IServiceProvider arg)
         {
             var account = arg.GetService<CloudStorageAccount>();
             return new AzureStorage(account);
