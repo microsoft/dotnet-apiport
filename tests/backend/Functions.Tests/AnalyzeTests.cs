@@ -23,18 +23,22 @@ namespace Functions.Tests
         [Fact]
         public static async Task ReturnsBadRequestForMalformedContent()
         {
+            // Arrange
             var request = PostFromConsoleApiPort;
             request.Content = new StringContent("{ \"json\": \"json\" }");
-
             var storage = Substitute.For<IStorage>();
+
+            // Act
             var response = await Analyze.Run(request, Substitute.For<ICollector<WorkflowQueueMessage>>(), storage, NullLogger.Instance);
 
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
         public static async Task ReturnsGuidForCompressedAnalyzeRequest()
         {
+            // Arrange
             var gzippedAnalyzeRequest = typeof(AnalyzeTests).Assembly
                 .GetManifestResourceStream("Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
 
@@ -48,7 +52,11 @@ namespace Functions.Tests
             var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var storage = Substitute.For<IStorage>();
             storage.SaveToBlobAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<string>()).Returns(Task.FromResult(true));
+
+            // Act
             var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
+
+            // Assert
             var body = await response.Content.ReadAsStringAsync();
 
             Assert.True(Guid.TryParse(body, out var submissionId));
@@ -59,6 +67,7 @@ namespace Functions.Tests
         [Fact]
         public static async Task SavedRequestMatchesOriginal()
         {
+            // Arrange
             var gzippedAnalyzeRequestStream = typeof(AnalyzeTests).Assembly
                 .GetManifestResourceStream("Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
 
@@ -75,8 +84,11 @@ namespace Functions.Tests
             WorkflowManager.Initialize();
             var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var storage = new TestStorage();
+
+            // Act
             var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
 
+            // Assert
             Assert.Equal(expectedStream.ToArray(), storage.Stored);
         }
 

@@ -27,6 +27,7 @@ using Microsoft.Fx.Portability.Azure.Storage;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.WindowsAzure.Storage;
 using System;
+using System.Configuration;
 
 namespace DependencyInjection
 {
@@ -35,7 +36,9 @@ namespace DependencyInjection
         public virtual void Initialize(ExtensionConfigContext context)
         {
             var services = new ServiceCollection();
+
             RegisterServices(services);
+
             var serviceProvider = services.BuildServiceProvider(true);
 
             context
@@ -44,14 +47,17 @@ namespace DependencyInjection
 
             var registry = context.Config.GetService<IExtensionRegistry>();
             var filter = new ScopeCleanupFilter();
+
             registry.RegisterExtension(typeof(IFunctionInvocationFilter), filter);
             registry.RegisterExtension(typeof(IFunctionExceptionFilter), filter);
         }
 
         private static void RegisterServices(IServiceCollection services)
         {
-            var connection = Environment.GetEnvironmentVariable("Connection")
+            // TODO: retrieve setting from configuration service
+            var connection = ConfigurationManager.AppSettings["CloudStorageConnectionString"]
                 ?? "UseDevelopmentStorage=true";
+
             services.AddSingleton(CloudStorageAccount.Parse(connection));
             services.AddScoped<IStorage, AzureStorage>(CreateStorage);
         }
@@ -59,6 +65,7 @@ namespace DependencyInjection
         private static AzureStorage CreateStorage(IServiceProvider arg)
         {
             var account = arg.GetService<CloudStorageAccount>();
+
             return new AzureStorage(account);
         }
     }

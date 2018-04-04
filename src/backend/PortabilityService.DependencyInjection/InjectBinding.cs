@@ -28,7 +28,6 @@ using System.Threading.Tasks;
 
 namespace DependencyInjection
 {
-
     public class InjectBinding : IBinding
     {
         private readonly Type _type;
@@ -45,12 +44,11 @@ namespace DependencyInjection
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
             Task.FromResult((IValueProvider)new InjectValueProvider(value));
 
-        public async Task<IValueProvider> BindAsync(BindingContext context)
+        public Task<IValueProvider> BindAsync(BindingContext context)
         {
-            await Task.Yield();
             var scope = InjectBindingProvider.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => _serviceProvider.CreateScope());
             var value = scope.ServiceProvider.GetRequiredService(_type);
-            return await BindAsync(value, context.ValueContext);
+            return BindAsync(value, context.ValueContext);
         }
 
         public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor();

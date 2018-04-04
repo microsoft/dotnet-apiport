@@ -7,7 +7,6 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,13 +14,11 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 {
     public class StorageBlob
     {
-        private static readonly Version StorageVersion = new Version(1, 0, 0, 0);
-
         private readonly CloudStorageAccount _storageAccount;
 
         public StorageBlob(CloudStorageAccount storageAccount)
         {
-            _storageAccount = storageAccount;
+            _storageAccount = storageAccount ?? throw new ArgumentNullException(nameof(storageAccount));
         }
 
         /// <summary>
@@ -37,50 +34,24 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         /// <returns></returns>
         public async Task<bool> SaveToBlobAsync(string uniqueId, AnalyzeRequest request)
         {
-            DateTime currentDate = DateTime.Now;
-            string containerName = GetCurrentMonthContainerName(currentDate);
-            CloudBlobContainer container = await GetBlobContainerAsync(containerName);
+            var currentDate = DateTime.Now;
+            var containerName = GetCurrentMonthContainerName(currentDate);
+            var container = await GetBlobContainerAsync(containerName).ConfigureAwait(false);
 
             if (container == null)
             {
-                return false;
+                throw new InvalidOperationException("Azure CloubBlobContainer is not expected to be null");
             }
 
-            byte[] content = request.SerializeAndCompress();
+            var content = request.SerializeAndCompress();
             var containerPath = $"{currentDate.Day.ToString("00", CultureInfo.InvariantCulture)}/{uniqueId}";
+            var blob = container.GetBlockBlobReference(containerPath);
 
-            CloudBlockBlob blob = container.GetBlockBlobReference(containerPath);
             blob.Metadata.Add("Version", request.Version.ToString(CultureInfo.InvariantCulture));
-            await blob.UploadFromByteArrayAsync(content, 0, content.Length);
-            await blob.SetMetadataAsync();
+            await blob.UploadFromByteArrayAsync(content, 0, content.Length).ConfigureAwait(false);
+            await blob.SetMetadataAsync().ConfigureAwait(false);
+
             return true;
-        }
-
-        public async Task<AnalyzeRequest> RetrieveFromBlobAsync(string uniqueId, string containerName)
-        {
-            CloudBlobContainer container = await GetBlobContainerAsync(containerName);
-            CloudBlockBlob blob = container.GetBlockBlobReference(uniqueId);
-
-            using (var blobStream = new MemoryStream())
-            {
-                await blob.DownloadToStreamAsync(blobStream);
-
-                var blobData = blobStream.ToArray();
-
-                return blobData.DecompressToObject<AnalyzeRequest>();
-            }
-        }
-
-        public async Task<IEnumerable<string>> RetrieveRequestIdsAsync()
-        {
-            var blobs = await GetBlobsAsync();
-            List<string> results = new List<string>();
-            foreach (var blob in blobs)
-            {
-                results.Add(blob.Name);
-            }
-
-            return results;
         }
 
         public async Task<AnalyzeRequest> RetrieveFromBlobAsync(string uniqueId)
@@ -105,14 +76,9 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             var containers = await blobClient.ListContainersAsync(prefix: "container").ConfigureAwait(false);
             var blobTasks = containers.Select(c => c.ListBlobsAsync());
             var blobs = await Task.WhenAll(blobTasks).ConfigureAwait(false);
-            var query = blobs.SelectMany(b => b)
-                .OfType<CloudBlockBlob>();
-            return query;
-        }
 
-        public static string GetCurrentMonthContainerName()
-        {
-            return GetCurrentMonthContainerName(DateTime.Now);
+            return blobs.SelectMany(b => b)
+                .OfType<CloudBlockBlob>();
         }
 
         public static string GetCurrentMonthContainerName(DateTime currentDate)
@@ -122,23 +88,19 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         private static string GetContainerName(int month, int year)
         {
-            string containerName = string.Format(CultureInfo.InvariantCulture, "container{0}{1}", year, month.ToString("00", CultureInfo.InvariantCulture));
-            return containerName;
-        }
-
-        public async Task<CloudBlobContainer> GetCurrentContainerAsync()
-        {
-            DateTime currentDate = DateTime.Now;
-            return await GetBlobContainerAsync(GetCurrentMonthContainerName(currentDate));
+            return string.Format(CultureInfo.InvariantCulture, "container{0}{1}", year, month.ToString("00", CultureInfo.InvariantCulture));
         }
 
         private async Task<CloudBlobContainer> GetBlobContainerAsync(string containerName)
         {
-            CloudBlobClient blobClient = _storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer catalogContainer = blobClient.GetContainerReference(containerName);
-            if (await catalogContainer.CreateIfNotExistsAsync())
+            var blobClient = _storageAccount.CreateCloudBlobClient();
+            var catalogContainer = blobClient.GetContainerReference(containerName);
+
+            if (await catalogContainer.CreateIfNotExistsAsync().ConfigureAwait(false))
             {
-                await catalogContainer.SetPermissionsAsync(new BlobContainerPermissions() { PublicAccess = BlobContainerPublicAccessType.Off });
+                await catalogContainer
+                    .SetPermissionsAsync(new BlobContainerPermissions() { PublicAccess = BlobContainerPublicAccessType.Off })
+                    .ConfigureAwait(false);
             }
 
             return catalogContainer;

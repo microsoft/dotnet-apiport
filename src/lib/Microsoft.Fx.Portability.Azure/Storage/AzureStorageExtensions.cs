@@ -17,10 +17,13 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         {
             BlobContinuationToken continuationToken = null;
             var results = new List<CloudBlobContainer>();
+
             do
             {
                 var segment = await cloudBlobClient.ListContainersSegmentedAsync(continuationToken).ConfigureAwait(false);
+
                 continuationToken = segment.ContinuationToken;
+
                 if (string.IsNullOrEmpty(prefix))
                 {
                     results.AddRange(segment.Results);
@@ -44,9 +47,11 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         {
             BlobContinuationToken continuationToken = null;
             var results = new List<IListBlobItem>();
+
             do
             {
                 var segment = await cloudBlobContainer.ListBlobsSegmentedAsync(continuationToken).ConfigureAwait(false);
+
                 continuationToken = segment.ContinuationToken;
                 results.AddRange(segment.Results);
             } while (continuationToken != null);

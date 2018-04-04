@@ -12,11 +12,9 @@ namespace Microsoft.Fx.Portability.Azure.Storage
     public class AzureStorage : IStorage
     {
         private readonly StorageBlob _blob;
-        private CloudStorageAccount _storageAccount;
 
         public AzureStorage(CloudStorageAccount storageAccount)
         {
-            _storageAccount = storageAccount;
             _blob = new StorageBlob(storageAccount);
         }
 
