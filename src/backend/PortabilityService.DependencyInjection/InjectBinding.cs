@@ -44,6 +44,7 @@ namespace DependencyInjection
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
             Task.FromResult((IValueProvider)new InjectValueProvider(value));
 
+        /// <remarks>The added scopes will be released in <see cref="ScopeCleanupFilter"/></remarks>
         public Task<IValueProvider> BindAsync(BindingContext context)
         {
             var scope = InjectBindingProvider.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => _serviceProvider.CreateScope());

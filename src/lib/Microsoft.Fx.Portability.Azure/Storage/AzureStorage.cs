@@ -15,6 +15,11 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         public AzureStorage(CloudStorageAccount storageAccount)
         {
+            if (storageAccount == null)
+            {
+                throw new ArgumentNullException(nameof(storageAccount));
+            }
+
             _blob = new StorageBlob(storageAccount);
         }
 
