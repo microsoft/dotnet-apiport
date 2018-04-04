@@ -3,7 +3,7 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureWebJobsDashboard": "",
-    "WorkflowQueueName": "apiportworkflowqueue"
-  },
-  "CloudStorageConnectionString": "UseDevelopmentStorage=true"
+    "WorkflowQueueName": "apiportworkflowqueue",
+    "CloudStorageConnectionString": "UseDevelopmentStorage=true"
+  }
 }
