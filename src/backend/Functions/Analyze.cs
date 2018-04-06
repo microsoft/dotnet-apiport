@@ -22,14 +22,15 @@ namespace Functions
             [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, 
             ILogger log)
         {
+            var submissionId = Guid.NewGuid().ToString();
+
             var analyzeRequest = await DeserializeRequest(req.Content);
             if (analyzeRequest == null)
             {
-                log.LogError("invalid request");
+                log.LogError("Invalid request {SubmissionId}", submissionId);
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            var submissionId = Guid.NewGuid().ToString();
             log.LogInformation("Created submission id {SubmissionId}", submissionId);
 
             var response = req.CreateResponse(HttpStatusCode.OK);

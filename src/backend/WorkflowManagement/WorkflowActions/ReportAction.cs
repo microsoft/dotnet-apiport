@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WorkflowManagement
 {
     class ReportAction : IWorkflowAction
     {
-        public async Task<WorkflowStage> ExecuteAsync(string submissionId)
+        public async Task<WorkflowStage> ExecuteAsync(string submissionId, CancellationToken cancelToken)
         {
             // TODO: Update to call Report Generator Service
             await Task.Delay(5);

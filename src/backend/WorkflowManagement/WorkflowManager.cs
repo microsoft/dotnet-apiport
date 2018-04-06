@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WorkflowManagement
@@ -76,10 +77,10 @@ namespace WorkflowManagement
         /// Executes the action for the current stage in the workflow. After the action completes,
         /// returns a message for the next stage in the queue. 
         /// </summary>
-        public async Task<WorkflowQueueMessage> ExecuteActionsToNextStage(WorkflowQueueMessage currentMsg)
+        public async Task<WorkflowQueueMessage> ExecuteActionsToNextStage(WorkflowQueueMessage currentMsg, CancellationToken cancelToken)
         {
             //Execute the action
-            WorkflowStage nextStage = await actions[(int)currentMsg.Stage].ExecuteAsync(currentMsg.SubmissionId);
+            WorkflowStage nextStage = await actions[(int)currentMsg.Stage].ExecuteAsync(currentMsg.SubmissionId, cancelToken);
 
             return new WorkflowQueueMessage(currentMsg.SubmissionId, nextStage);
         }

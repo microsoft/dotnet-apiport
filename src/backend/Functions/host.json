@@ -1,2 +1,8 @@
 {
+  "queues": {
+    //Do not allow the function to be automatically rerun if a failure occurs; instead, when a failure occurs, we expect the user will rerun the tool with their submission.
+    "maxDequeueCount": 1
+  },
+ 
+   "functionTimeout": "00:01:00"
 }
