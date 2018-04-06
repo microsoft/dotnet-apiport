@@ -24,7 +24,7 @@
 
   <!-- Assembly signing not supported on Linux, yet: `CS7027: Error signing output with public key from file`
        The Functions assembly can't be signed because the Azure Functions SDK has unsigned dependencies. -->
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND !$(MSBuildProjectName.StartsWith('Functions'))">
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND !$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>

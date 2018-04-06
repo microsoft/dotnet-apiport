@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\backend\Functions\Functions.csproj" />
-    <ProjectReference Include="..\..\..\src\backend\WorkflowManagement\WorkflowManagement.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\PortabilityService.Functions\PortabilityService.Functions.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\PortabilityService.WorkflowManagement\PortabilityService.WorkflowManagement.csproj" />
     <EmbeddedResource Include="Resources\**\*" />
   </ItemGroup>
 

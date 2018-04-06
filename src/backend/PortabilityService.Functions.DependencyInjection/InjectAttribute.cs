@@ -23,7 +23,7 @@
 using Microsoft.Azure.WebJobs.Description;
 using System;
 
-namespace DependencyInjection
+namespace PortabilityService.Functions.DependencyInjection
 {
     [Binding]
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]

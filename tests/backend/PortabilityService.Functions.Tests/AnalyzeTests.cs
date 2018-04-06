@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
+using PortabilityService.WorkflowManagement;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,10 +14,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using WorkflowManagement;
 using Xunit;
 
-namespace Functions.Tests
+namespace PortabilityService.Functions.Tests
 {
     public class AnalyzeTests
     {
@@ -40,7 +40,7 @@ namespace Functions.Tests
         {
             // Arrange
             var gzippedAnalyzeRequest = typeof(AnalyzeTests).Assembly
-                .GetManifestResourceStream("Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
+                .GetManifestResourceStream("PortabilityService.Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
 
             var request = PostFromConsoleApiPort;
             request.SetConfiguration(new HttpConfiguration());
@@ -69,7 +69,7 @@ namespace Functions.Tests
         {
             // Arrange
             var gzippedAnalyzeRequestStream = typeof(AnalyzeTests).Assembly
-                .GetManifestResourceStream("Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
+                .GetManifestResourceStream("PortabilityService.Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
 
             var expectedStream = new MemoryStream();
             gzippedAnalyzeRequestStream.CopyTo(expectedStream);

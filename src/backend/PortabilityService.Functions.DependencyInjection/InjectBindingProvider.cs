@@ -20,36 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Azure.WebJobs.Host.Bindings;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace DependencyInjection
+namespace PortabilityService.Functions.DependencyInjection
 {
-    public class ScopeCleanupFilter : IFunctionInvocationFilter, IFunctionExceptionFilter
+    public class InjectBindingProvider : IBindingProvider
     {
-        public Task OnExceptionAsync(FunctionExceptionContext exceptionContext, CancellationToken cancellationToken)
-        {
-            RemoveScope(exceptionContext.FunctionInstanceId);
-            return Task.CompletedTask;
-        }
+        public static readonly ConcurrentDictionary<Guid, IServiceScope> Scopes =
+            new ConcurrentDictionary<Guid, IServiceScope>();
 
-        public Task OnExecutedAsync(FunctionExecutedContext executedContext, CancellationToken cancellationToken)
-        {
-            RemoveScope(executedContext.FunctionInstanceId);
-            return Task.CompletedTask;
-        }
+        private readonly IServiceProvider _serviceProvider;
 
-        public Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken) =>
-            Task.CompletedTask;
+        public InjectBindingProvider(IServiceProvider serviceProvider) =>
+            _serviceProvider = serviceProvider;
 
-        private static void RemoveScope(Guid id)
+        public Task<IBinding> TryCreateAsync(BindingProviderContext context)
         {
-            if (InjectBindingProvider.Scopes.TryRemove(id, out var scope))
-            {
-                scope.Dispose();
-            }
+            IBinding binding = new InjectBinding(_serviceProvider, context.Parameter.ParameterType);
+            return Task.FromResult(binding);
         }
     }
 }

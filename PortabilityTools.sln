@@ -88,21 +88,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{CB5759DE-9D7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Gateway", "src\backend\PortabilityService.Gateway\PortabilityService.Gateway.csproj", "{80CBA796-42C1-48EF-A9EF-3232C5EEEADD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions", "src\backend\Functions\Functions.csproj", "{19B2E869-AB85-472F-A93E-976ACD687355}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Functions", "src\backend\PortabilityService.Functions\PortabilityService.Functions.csproj", "{19B2E869-AB85-472F-A93E-976ACD687355}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{018983AE-8D15-4205-9E55-EDC5033146AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{DE3F5141-1F37-45F6-9A63-697E05E9BF8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions.Tests", "tests\backend\Functions.Tests\Functions.Tests.csproj", "{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Functions.Tests", "tests\backend\PortabilityService.Functions.Tests\PortabilityService.Functions.Tests.csproj", "{CE644844-BE5D-4B95-9C3E-4DEDFCD19C48}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Gateway.Tests", "tests\backend\PortabilityService.Gateway.Tests\PortabilityService.Gateway.Tests.csproj", "{43836132-9694-40F5-8C6A-2C9F30B774E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowManagement", "src\backend\WorkflowManagement\WorkflowManagement.csproj", "{4F94AAB7-29C8-46B0-B41D-83A4779544DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.WorkflowManagement", "src\backend\PortabilityService.WorkflowManagement\PortabilityService.WorkflowManagement.csproj", "{4F94AAB7-29C8-46B0-B41D-83A4779544DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Azure", "src\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj", "{A761180A-067A-4238-AA66-5BB27A59B792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.DependencyInjection", "src\backend\PortabilityService.DependencyInjection\PortabilityService.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
