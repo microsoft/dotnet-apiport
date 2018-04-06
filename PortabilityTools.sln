@@ -1452,7 +1452,6 @@ Global
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
 		{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
-======= end
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
