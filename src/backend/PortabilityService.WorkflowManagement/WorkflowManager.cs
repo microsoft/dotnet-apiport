@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace WorkflowManagement
+namespace PortabilityService.WorkflowManagement
 {
     public enum WorkflowStage
     {

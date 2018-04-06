@@ -26,7 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace DependencyInjection
+namespace PortabilityService.Functions.DependencyInjection
 {
     public class InjectBinding : IBinding
     {

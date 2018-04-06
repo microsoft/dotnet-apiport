@@ -3,7 +3,7 @@
 
 using System.Threading.Tasks;
 
-namespace WorkflowManagement
+namespace PortabilityService.WorkflowManagement
 {
     public interface IWorkflowAction
     {

@@ -1,19 +1,19 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using DependencyInjection;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
-using WorkflowManagement;
+using PortabilityService.Functions.DependencyInjection;
+using PortabilityService.WorkflowManagement;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace Functions
+namespace PortabilityService.Functions
 {
     public static class Analyze
     {

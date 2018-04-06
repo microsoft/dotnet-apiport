@@ -29,7 +29,7 @@ using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Configuration;
 
-namespace DependencyInjection
+namespace PortabilityService.Functions.DependencyInjection
 {
     public class InjectConfiguration : IExtensionConfigProvider
     {
