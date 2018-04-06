@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DependencyInjection;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,8 @@ namespace Functions
         [FunctionName("analyze")]
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
-            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue, 
+            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue,
+            [Inject]IStorage storage,
             ILogger log)
         {
             var analyzeRequest = await DeserializeRequest(req.Content);
@@ -31,6 +33,21 @@ namespace Functions
 
             var submissionId = Guid.NewGuid().ToString();
             log.LogInformation("Created submission id {SubmissionId}", submissionId);
+
+            try
+            {
+                var saved = await storage.SaveToBlobAsync(analyzeRequest, submissionId);
+                if (!saved)
+                {
+                    log.LogError("Analyze request not saved to storage for submission {submissionId}", submissionId);
+                    return req.CreateResponse(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError("Error occurs when saving analyze request to storage for submission {submissionId}: {exception}", submissionId, ex);
+                return req.CreateResponse(HttpStatusCode.InternalServerError);
+            }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(submissionId);
