@@ -47,10 +47,10 @@ namespace Microsoft.Fx.Portability
             return Task.FromResult(response);
         }
 
-        public Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
+        public Task<ServiceResponse<AnalyzeResult>> SendAnalysisAsync(AnalyzeRequest a)
         {
             var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
-            var serviceResponse = new ServiceResponse<AnalyzeResponse>(response);
+            var serviceResponse = new ServiceResponse<AnalyzeResult>(response);
 
             return Task.FromResult(serviceResponse);
         }
@@ -111,7 +111,7 @@ namespace Microsoft.Fx.Portability
             throw new NotImplementedException();
         }
 
-        public static Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
+        public static Task<ServiceResponse<AnalyzeResult>> GetAnalysisAsync(string submissionId)
         {
             throw new NotImplementedException();
         }

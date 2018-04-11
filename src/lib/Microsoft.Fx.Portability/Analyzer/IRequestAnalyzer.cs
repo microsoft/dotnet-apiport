@@ -7,6 +7,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     public interface IRequestAnalyzer
     {
-        AnalyzeResponse AnalyzeRequest(AnalyzeRequest request, string submissionId);
+        AnalyzeResult AnalyzeRequest(AnalyzeRequest request, string submissionId);
     }
 }

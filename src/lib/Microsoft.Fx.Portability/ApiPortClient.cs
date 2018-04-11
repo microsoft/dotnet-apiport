@@ -130,13 +130,13 @@ namespace Microsoft.Fx.Portability
             var results = await GetAnalysisResultAsync(options);
             var outputPaths = new List<string>();
 
-            AnalyzeResponse response = null;
+            AnalyzeResult result = null;
 
-            foreach (var result in results.Results)
+            foreach (var reportingResult in results.Results)
             {
-                if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(Json, reportingResult.Format, StringComparison.OrdinalIgnoreCase))
                 {
-                    response = result.Data?.Deserialize<AnalyzeResponse>();
+                    result = reportingResult.Data?.Deserialize<AnalyzeResult>();
 
                     if (jsonAdded)
                     {
@@ -144,7 +144,7 @@ namespace Microsoft.Fx.Portability
                     }
                 }
 
-                var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
+                var outputPath = await CreateReport(reportingResult.Data, options.OutputFileName, reportingResult.Format, options.OverwriteOutputFile);
 
                 if (!string.IsNullOrEmpty(outputPath))
                 {
@@ -155,7 +155,7 @@ namespace Microsoft.Fx.Portability
             return new ReportingResultPaths
             {
                 Paths = outputPaths,
-                Result = GetReportingResult(results.Request, response, results.Info)
+                Result = GetReportingResult(results.Request, result, results.Info)
             };
         }
 
@@ -248,15 +248,15 @@ namespace Microsoft.Fx.Portability
                 {
                     try
                     {
-                        var results = await _apiPortService.SendAnalysisAsync(request, options.OutputFormats);
+                        var result = await _apiPortService.SendAnalysisAsync(request, options.OutputFormats);
 
-                        CheckEndpointStatus(results.Headers.Status);
+                        CheckEndpointStatus(result.Headers.Status);
 
                         return new MultipleFormatAnalysis
                         {
                             Info = dependencyInfo,
                             Request = request,
-                            Results = results.Response
+                            Results = result.Response
                         };
                     }
                     catch (Exception)
@@ -345,9 +345,9 @@ namespace Microsoft.Fx.Portability
             return GetReportingResult(request, fullResponse.Response, dependencyInfo);
         }
 
-        private ReportingResult GetReportingResult(AnalyzeRequest request, AnalyzeResponse response, IDependencyInfo dependencyInfo)
+        private ReportingResult GetReportingResult(AnalyzeRequest request, AnalyzeResult result, IDependencyInfo dependencyInfo)
         {
-            if (response == null)
+            if (result == null)
             {
                 return null;
             }
@@ -357,15 +357,15 @@ namespace Microsoft.Fx.Portability
                 try
                 {
                     return _reportGenerator.ComputeReport(
-                        response.Targets,
-                        response.SubmissionId,
+                        result.Targets,
+                        result.SubmissionId,
                         request.RequestFlags,
                         dependencyInfo?.Dependencies,
-                        response.MissingDependencies,
+                        result.MissingDependencies,
                         dependencyInfo?.UnresolvedAssemblies,
-                        response.UnresolvedUserAssemblies,
+                        result.UnresolvedUserAssemblies,
                         dependencyInfo?.AssembliesWithErrors,
-                        response.NuGetPackages
+                        result.NuGetPackages
                     );
                 }
                 catch (Exception)
@@ -376,7 +376,7 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private async Task<ServiceResponse<AnalyzeResponse>> RetrieveResultAsync(AnalyzeRequest request)
+        private async Task<ServiceResponse<AnalyzeResult>> RetrieveResultAsync(AnalyzeRequest request)
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
             {

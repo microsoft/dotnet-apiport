@@ -34,10 +34,10 @@ namespace ApiPort
             _progress = progress;
         }
 
-        public Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
+        public Task<ServiceResponse<AnalyzeResult>> GetAnalysisAsync(string submissionId)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var result = ServiceResponse.Create(new AnalyzeResponse());
+            var result = ServiceResponse.Create(new AnalyzeResult());
 
             return Task.FromResult(result);
         }
@@ -105,11 +105,11 @@ namespace ApiPort
             return Task.FromResult(response);
         }
 
-        public Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
+        public Task<ServiceResponse<AnalyzeResult>> SendAnalysisAsync(AnalyzeRequest a)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
 
-            return Task.FromResult(new ServiceResponse<AnalyzeResponse>(new AnalyzeResponse()));
+            return Task.FromResult(new ServiceResponse<AnalyzeResult>(new AnalyzeResult()));
         }
 
         /// <summary>

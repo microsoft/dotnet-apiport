@@ -35,13 +35,13 @@ namespace Microsoft.Fx.Portability.Reports
 
         public ResultFormatInformation Format => _formatInformation;
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public void WriteStream(Stream stream, AnalyzeResult result)
         {
             const string ReportTemplateName = "ReportTemplate";
 
             using (var writer = new StreamWriter(stream))
             {
-                var reportObject = new RazorHtmlObject(response, _targetMapper);
+                var reportObject = new RazorHtmlObject(result, _targetMapper);
                 var mainTemplate = Resolve(ReportTemplateName);
                 var razor = s_razorService.RunCompile(mainTemplate, ReportTemplateName, typeof(RazorHtmlObject), reportObject);
 

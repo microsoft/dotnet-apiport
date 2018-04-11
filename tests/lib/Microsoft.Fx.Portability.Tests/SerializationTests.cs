@@ -31,9 +31,9 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public static void SerializeAnalyzeResponse()
+        public static void SerializeAnalyzeResult()
         {
-            var response = new AnalyzeResponse
+            var response = new AnalyzeResult
             {
                 MissingDependencies = new List<MemberInfo> { new MemberInfo { MemberDocId = "doc1" }, new MemberInfo { MemberDocId = "doc2" } },
                 SubmissionId = Guid.NewGuid().ToString(),
@@ -41,9 +41,9 @@ namespace Microsoft.Fx.Portability.Tests
                 UnresolvedUserAssemblies = new List<string> { "assembly1", "assembly2", "assembly3" }
             };
 
-            var newtonsoft = response.Serialize().Deserialize<AnalyzeResponse>();
+            var newtonsoft = response.Serialize().Deserialize<AnalyzeResult>();
 
-            CompareAnalyzeResponse(response, newtonsoft);
+            CompareAnalyzeResult(response, newtonsoft);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Equal(request.Version, deserialized.Version);
         }
 
-        private static void CompareAnalyzeResponse(AnalyzeResponse response, AnalyzeResponse deserialized)
+        private static void CompareAnalyzeResult(AnalyzeResult response, AnalyzeResult deserialized)
         {
             CollectionAssertAreEquivalent(response.MissingDependencies, deserialized.MissingDependencies);
             Assert.Equal(response.SubmissionId, deserialized.SubmissionId);

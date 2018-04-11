@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             _reportGenerator = reportGenerator;
         }
 
-        public AnalyzeResponse AnalyzeRequest(AnalyzeRequest request, string submissionId)
+        public AnalyzeResult AnalyzeRequest(AnalyzeRequest request, string submissionId)
         {
             // Get the list of targets we should consider in the analysis
             var targets = _targetNameParser
@@ -91,7 +91,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 request.AssembliesWithErrors,
                 nugetPackages);
 
-            return new AnalyzeResponse
+            return new AnalyzeResult
             {
                 CatalogLastUpdated = _analysisEngine.CatalogLastUpdated,
                 ApplicationName = request.ApplicationName,

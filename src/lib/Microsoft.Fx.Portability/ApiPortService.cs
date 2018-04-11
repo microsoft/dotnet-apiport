@@ -54,9 +54,9 @@ namespace Microsoft.Fx.Portability
             };
         }
 
-        public async Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
+        public async Task<ServiceResponse<AnalyzeResult>> SendAnalysisAsync(AnalyzeRequest a)
         {
-            return await _client.CallAsync<AnalyzeRequest, AnalyzeResponse>(HttpMethod.Post, Endpoints.Analyze, a);
+            return await _client.CallAsync<AnalyzeRequest, AnalyzeResult>(HttpMethod.Post, Endpoints.Analyze, a);
         }
 
         public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format)
@@ -83,11 +83,11 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<UsageDataCollection>(HttpMethod.Get, usedApiUrl);
         }
 
-        public async Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
+        public async Task<ServiceResponse<AnalyzeResult>> GetAnalysisAsync(string submissionId)
         {
             var submissionUrl = UrlBuilder.Create(Endpoints.Analyze).AddPath(submissionId).Url;
 
-            return await _client.CallAsync<AnalyzeResponse>(HttpMethod.Get, submissionUrl);
+            return await _client.CallAsync<AnalyzeResult>(HttpMethod.Get, submissionUrl);
         }
 
         public async Task<ServiceResponse<ReportingResultWithFormat>> GetAnalysisAsync(string submissionId, string format)
