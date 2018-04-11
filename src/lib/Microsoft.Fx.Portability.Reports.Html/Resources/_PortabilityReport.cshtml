@@ -61,10 +61,8 @@
 </table>
 <div id="details">
     <h3>@LocalizedStrings.HideRows</h3>
-    <label>@LocalizedStrings.HideRowsWithNoProblems
-        <input type="checkbox" id="row_visibility_checkbox" onchange="ToggleRowVisibility(this)">
-    </label>
-
+    <input type="checkbox" id="row_visibility_checkbox" onchange="ToggleRowVisibility(this)">
+    <label for="row_visibility_checkbox">@LocalizedStrings.HideRowsWithNoProblems</label>
     @{
         var detailColumnHeaders = new List<string>();
         detailColumnHeaders.Add(LocalizedStrings.TargetTypeHeader);
