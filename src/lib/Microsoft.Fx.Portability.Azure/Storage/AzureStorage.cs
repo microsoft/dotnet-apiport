@@ -43,11 +43,6 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<UsageData>> GetUsageDataAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IEnumerable<string>> RetrieveSubmissionIdsAsync()
         {
             throw new NotImplementedException();

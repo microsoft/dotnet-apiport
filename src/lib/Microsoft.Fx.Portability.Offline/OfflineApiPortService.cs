@@ -48,27 +48,6 @@ namespace Microsoft.Fx.Portability
             return Task.FromResult(targets);
         }
 
-        public async Task<ReportingResultWithFormat> SendAnalysisAsync(AnalyzeRequest analyzeRequest, string format)
-        {
-            var response = _requestAnalyzer.AnalyzeRequest(analyzeRequest, Guid.NewGuid().ToString());
-
-            format = format ?? (await GetDefaultResultFormatAsync()).DisplayName;
-
-            var writer = _reportWriters
-                .First(w => w.Format.DisplayName.Equals(format, StringComparison.OrdinalIgnoreCase));
-
-            using (var ms = new MemoryStream())
-            {
-                writer.WriteStream(ms, response);
-
-                return new ReportingResultWithFormat
-                {
-                    Format = writer.Format.DisplayName,
-                    Data = ms.ToArray()
-                };
-            }
-        }
-
         public Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync()
         {
             var formats = _reportWriters.Select(r => r.Format);

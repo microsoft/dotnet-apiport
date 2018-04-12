@@ -160,11 +160,6 @@ namespace PortabilityService.Functions.Tests
                 throw new NotImplementedException();
             }
 
-            public Task<IEnumerable<UsageData>> GetUsageDataAsync()
-            {
-                throw new NotImplementedException();
-            }
-
             public Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId)
             {
                 throw new NotImplementedException();
