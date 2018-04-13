@@ -20,8 +20,8 @@ namespace PortabilityService.Functions
         {
             Action<WorkflowQueueMessage> cancelAsync = (msg) =>
             {
-                log.LogError("Timeout during workflow action execution.SubmissionId: { msg.SubmissionId}, Stage: { msg.Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
-                throw new TimeoutException($"Timeout during workflow action execution. SubmissionId: {msg.SubmissionId} Stage: {msg.Stage}.");
+                log.LogError("Timeout during workflow action execution. SubmissionId: {SubmissionId} Stage: {Stage}.", msg.SubmissionId, msg.Stage);
+                throw new TimeoutException($"Timeout during workflow action execution. SubmissionId: {msg.SubmissionId}, Stage: {msg.Stage}");
             };
 
             //This cancellation token will let us know if this function has timed out.  When it times out, throw an exception so that the 
@@ -29,6 +29,7 @@ namespace PortabilityService.Functions
             //we can treat a function timeout as an ordinary failure which requires that the end-user resubmit their submission for analysis.
             if (!cancelToken.IsCancellationRequested)
             {
+                cancelToken.ThrowIfCancellationRequested()
                 using (CancellationTokenRegistration ctr = cancelToken.Register(() => cancelAsync(workflowMessage)))
                 {
                     log.LogInformation("Processing message {SubmissionId}, stage {Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
@@ -49,7 +50,7 @@ namespace PortabilityService.Functions
             }
             else
             {
-                log.LogError("Timeout before workflow action started.SubmissionId: { msg.SubmissionId}, Stage: { msg.Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
+                log.LogError("Timeout before workflow action started.SubmissionId: {SubmissionId}, Stage: {Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
                 throw new TimeoutException($"Timeout before workflow action started. SubmissionId test: {workflowMessage.SubmissionId} Stage: {workflowMessage.Stage}.");
             }
         }
