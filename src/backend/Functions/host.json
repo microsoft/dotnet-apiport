@@ -4,5 +4,5 @@
     "maxDequeueCount": 1
   },
  
-   "functionTimeout": "00:01:00"
+   "functionTimeout": "00:05:00"
 }

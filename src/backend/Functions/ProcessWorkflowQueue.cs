@@ -31,7 +31,6 @@ namespace Functions
             {
                 using (CancellationTokenRegistration ctr = cancelToken.Register(() => cancelAsync(workflowMessage)))
                 {
-
                     log.LogInformation("Processing message {SubmissionId}, stage {Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
 
                     var workflowMgr = WorkflowManager.Initialize();

@@ -12,7 +12,7 @@ namespace WorkflowManagement
         {
             // TODO: Update to call Analysis Service
             await Task.Delay(5);
-   
+
             return WorkflowStage.Report;
         }
 

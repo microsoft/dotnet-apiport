@@ -24,8 +24,7 @@ namespace Functions
         {
             var submissionId = Guid.NewGuid().ToString();
 
-            var analyzeRequest = await DeserializeRequest(req.Content);
-            if (analyzeRequest == null)
+            if (await DeserializeRequest(req.Content) == null)
             {
                 log.LogError("Invalid request {SubmissionId}", submissionId);
                 return req.CreateResponse(HttpStatusCode.BadRequest);
@@ -33,15 +32,23 @@ namespace Functions
 
             log.LogInformation("Created submission id {SubmissionId}", submissionId);
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(submissionId);
+            try
+            {
+                var workflowMgr = WorkflowManager.Initialize();
+                var msg = WorkflowManager.GetFirstStage(submissionId);
+                workflowMessageQueue.Add(msg);
+                log.LogInformation("Queuing new workflow message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
 
-            var workflowMgr = WorkflowManager.Initialize();
-            var msg = WorkflowManager.GetFirstStage(submissionId);
-            workflowMessageQueue.Add(msg);
-            log.LogInformation("Queuing new message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent(submissionId);
 
-            return response;
+                return response;
+            }
+            catch (Exception e)
+            {
+                log.LogError(new EventId(), e, $"Internal server error {submissionId}");
+                return req.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
         }
 
         public static async Task<AnalyzeRequest> DeserializeRequest(HttpContent content)
