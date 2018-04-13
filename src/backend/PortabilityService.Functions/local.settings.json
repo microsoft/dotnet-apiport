@@ -1,0 +1,9 @@
+﻿{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "",
+    "WorkflowQueueName": "apiportworkflowqueue",
+    "CloudStorageConnectionString": "UseDevelopmentStorage=true"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "Gateway": {
+    "ReRoutes": [
+      {
+        "RouteDescription": "Test Redirect",
+        "DownstreamPathTemplate": "/GoodPath",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 4321
+          }
+        ],
+        "UpstreamPathTemplate": "/PathExists",
+        "UpstreamHttpMethod": [ "GET" ]
+      },
+      {
+        "RouteDescription": "Test Redirect",
+        "DownstreamPathTemplate": "/GoodPath",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 4321
+          }
+        ],
+        "UpstreamPathTemplate": "/PathExistsQoS",
+        "UpstreamHttpMethod": [ "GET" ],
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 2,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 10000
+        }
+      },
+      {
+        "RouteDescription": "Test Redirect",
+        "DownstreamPathTemplate": "/GoodPath",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 4321
+          }
+        ],
+        "UpstreamPathTemplate": "/PathExistsEmptyQoS",
+        "UpstreamHttpMethod": [ "GET" ],
+        "QoSOptions": {}
+      },
+      {
+        "RouteDescription": "Test Redirect",
+        "DownstreamPathTemplate": "/BadPath",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 1000
+          }
+        ],
+        "UpstreamPathTemplate": "/PathDoesNotExist",
+        "UpstreamHttpMethod": [ "GET" ],
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 2,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 10000
+        }
+      },
+      {
+        "RouteDescription": "Test Redirect",
+        "DownstreamPathTemplate": "/GoodPath",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 4321
+          }
+        ],
+        "UpstreamPathTemplate": "/PathExistsButIsSlow",
+        "UpstreamHttpMethod": [ "GET" ],
+        "QoSOptions": {
+          "ExceptionsAllowedBeforeBreaking": 2,
+          "DurationOfBreak": 10000,
+          "TimeoutValue": 10
+        }
+      }
+    ]
+  }
+}

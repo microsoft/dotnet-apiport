@@ -1,0 +1,10 @@
+# 4 space indentation
+[*.cs]
+indent_style = space
+indent_size = 4
+# .NET formatting settings
+dotnet_sort_system_directives_first = false
+
+[*.ps1]
+indent_style = space
+indent_size = 4
