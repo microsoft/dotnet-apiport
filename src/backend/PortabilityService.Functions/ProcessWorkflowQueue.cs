@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using WorkflowManagement;
+using PortabilityService.WorkflowManagement;
 
-namespace Functions
+namespace PortabilityService.Functions
 {
     public static class ProcessWorkflowQueue
     {
@@ -26,7 +26,7 @@ namespace Functions
 
             //This cancellation token will let us know if this function has timed out.  When it times out, throw an exception so that the 
             //function completes with a failure.  This will ensure that the message is removed from apiportworkflowqueue and automatically added to apiportworkflowqueue-poison so that
-            //we can treat a function timeout as an ordinary failure where the end user must resubmit their submission for analysis.
+            //we can treat a function timeout as an ordinary failure which requires that the end-user resubmit their submission for analysis.
             if (!cancelToken.IsCancellationRequested)
             {
                 using (CancellationTokenRegistration ctr = cancelToken.Register(() => cancelAsync(workflowMessage)))

@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using PortabilityService.WorkflowManagement;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using NSubstitute;
-using WorkflowManagement;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Azure.WebJobs;
 
-namespace Functions.Tests
+namespace PortabilityService.Functions.Tests
 {
     public class ProcessWorkflowQueueTests
     {

@@ -8,8 +8,10 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.10" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj" />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
-    <ProjectReference Include="..\WorkflowManagement\WorkflowManagement.csproj" />
+    <ProjectReference Include="..\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\PortabilityService.WorkflowManagement\PortabilityService.WorkflowManagement.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
