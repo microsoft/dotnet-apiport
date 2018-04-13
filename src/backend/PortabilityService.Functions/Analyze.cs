@@ -24,40 +24,41 @@ namespace PortabilityService.Functions
             [Inject]IStorage storage,
             ILogger log)
         {
+            var submissionId = Guid.NewGuid().ToString();
             var analyzeRequest = await DeserializeRequest(req.Content);
+
             if (analyzeRequest == null)
             {
-                log.LogError("invalid request");
+                log.LogError("Invalid request {SubmissionId}", submissionId);
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            var submissionId = Guid.NewGuid().ToString();
-            log.LogInformation("Created submission id {SubmissionId}", submissionId);
-
             try
             {
+                log.LogInformation("Created submission id {SubmissionId}", submissionId);
+
                 var saved = await storage.SaveToBlobAsync(analyzeRequest, submissionId);
                 if (!saved)
                 {
                     log.LogError("Analyze request not saved to storage for submission {submissionId}", submissionId);
                     return req.CreateResponse(HttpStatusCode.InternalServerError);
                 }
+
+                var workflowMgr = WorkflowManager.Initialize();
+                var msg = WorkflowManager.GetFirstStage(submissionId);
+                workflowMessageQueue.Add(msg);
+                log.LogInformation("Queuing new workflow message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
+
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent(submissionId);
+
+                return response;
             }
             catch (Exception ex)
             {
-                log.LogError("Error occurs when saving analyze request to storage for submission {submissionId}: {exception}", submissionId, ex);
-                return req.CreateResponse(HttpStatusCode.InternalServerError);
+                log.LogError("Error occurred during analyze request for submission {submissionId}: {exception}", submissionId, ex);
+                return req.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
-
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(submissionId);
-
-            var workflowMgr = WorkflowManager.Initialize();
-            var msg = WorkflowManager.GetFirstStage(submissionId);
-            workflowMessageQueue.Add(msg);
-            log.LogInformation("Queuing new message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
-
-            return response;
         }
 
         public static async Task<AnalyzeRequest> DeserializeRequest(HttpContent content)
