@@ -4,7 +4,8 @@ import jobs.generation.Utilities;
 def project = GithubProject
 def branch = GithubBranchName
 def configurationGroups = ['Debug', 'Release']
-def outerloopPlatforms = ['Windows_NT', 'Ubuntu14.04', 'Ubuntu16.04', 'OSX10.12']
+def outerloopPlatforms = ['Windows_NT']
+// TODO: Add these back in when we support non-Windows: 'Ubuntu14.04', 'Ubuntu16.04', 'OSX10.12'
 
 // Generate the builds for debug and release, commit and PRJob
 [true, false].each { isPR -> // Defines a closure over true and false, value assigned to isPR
