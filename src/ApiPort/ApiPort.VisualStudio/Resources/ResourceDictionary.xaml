@@ -14,6 +14,23 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.DialogTextBrushKey}}" />
     </Style>
 
+    <Style x:Key="HyperlinkFocusVisualStyleKey">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle SnapsToDevicePixels="true"
+                               Margin="0"
+                               Stroke="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                               StrokeDashArray="1 2" StrokeThickness="1" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ToolWindowHyperlinkStyle" TargetType="Hyperlink">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource HyperlinkFocusVisualStyleKey}" />
+    </Style>
+
     <!-- For the tool window because it has a different colour scheme than the options page. -->
     <Style x:Key="ToolWindowTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource VsFont.EnvironmentFontFamily}" />

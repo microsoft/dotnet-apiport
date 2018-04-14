@@ -62,7 +62,8 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                             Grid.Column="2">
                                     <TextBlock Margin="5,0">
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.OpenFile}"
-                                                   CommandParameter="{Binding}">
+                                                   CommandParameter="{Binding}"
+                                                   Style="{DynamicResource ToolWindowHyperlinkStyle}">
                                             <TextBlock Text="{x:Static const:LocalizedStrings.OpenReport}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenReport}"
                                                        KeyboardNavigation.IsTabStop="true"
@@ -70,7 +71,9 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                         </Hyperlink>
                                     </TextBlock>
                                     <TextBlock Margin="5,0">
-                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenDirectory}" CommandParameter="{Binding}">
+                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenDirectory}"
+                                                   CommandParameter="{Binding}"
+                                                   Style="{DynamicResource ToolWindowHyperlinkStyle}">
                                             <TextBlock Text="{x:Static const:LocalizedStrings.OpenDirectory}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenDirectory}"
                                                        KeyboardNavigation.IsTabStop="true"
@@ -78,7 +81,9 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                         </Hyperlink>
                                     </TextBlock>
                                     <TextBlock Margin="5,0">
-                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SaveAs}" CommandParameter="{Binding}">
+                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SaveAs}"
+                                                   CommandParameter="{Binding}"
+                                                   Style="{DynamicResource ToolWindowHyperlinkStyle}">
                                             <TextBlock Text="{x:Static const:LocalizedStrings.SaveAs}"
                                                        AutomationProperties.Name="{x:Static const:LocalizedStrings.SaveAs}"
                                                        KeyboardNavigation.IsTabStop="true"
