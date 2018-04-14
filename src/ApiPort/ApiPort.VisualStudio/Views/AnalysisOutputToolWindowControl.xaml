@@ -25,6 +25,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Text="{x:Static const:LocalizedStrings.AvailableReports}"
+                   AutomationProperties.Name="{x:Static const:LocalizedStrings.AvailableReports}"
                    Style="{DynamicResource ToolWindowTextBlockStyle}"
                    Margin="5"
                    FontWeight="Bold"
