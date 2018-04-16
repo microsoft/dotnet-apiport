@@ -1,0 +1,21 @@
+﻿{
+  "PortabilityServiceSettings": {
+    "Logging": {
+      "IncludeScopes": false,
+      "Debug": {
+        "LogLevel": {
+          "Default": "Warning"
+        }
+      },
+      "Console": {
+        "LogLevel": {
+          "Default": "Warning"
+        }
+      }
+    },
+    "ServiceUrls": {
+      "ConfigurationService": "http://portabilityconfigurationservice",
+      "PortabilityService": "http://portabilityService"
+    }
+  }
+}

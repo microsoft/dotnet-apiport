@@ -1,0 +1,22 @@
+﻿{
+  "Root": {
+    "RootGroup1": {
+      "SettingBool": false,
+      "Group1": {
+        "Group1": {
+          "SettingString1": "Value for setting string 1"
+        }
+      },
+      "Group2": {
+        "Group1": {
+          "SettingString2": "Value for setting string 2"
+        }
+      }
+    },
+    "RootGroup2": {
+      "Setting1Url": "http://portabilityconfigservice",
+      "Setting2Url": "http://portabilityService"
+    },
+    "SettingString0" : "Value for setting string 0"
+  }
+}
