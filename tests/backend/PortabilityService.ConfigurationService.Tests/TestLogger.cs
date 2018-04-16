@@ -3,6 +3,7 @@
 
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -17,7 +18,7 @@ namespace PortabilityService.ConfigurationService.Tests
         private const string LogFormat = "[{0}] -- {1}";
         private const string LogFormatWithPrefix = "[{0}] -- {1}: {2}";
 
-        public List<string> LoggedMessages { get; private set; } = new List<string>();
+        public ConcurrentBag<string> LoggedMessages { get; private set; } = new ConcurrentBag<string>();
 
         public IDisposable BeginScope<TState>(TState state)
         {

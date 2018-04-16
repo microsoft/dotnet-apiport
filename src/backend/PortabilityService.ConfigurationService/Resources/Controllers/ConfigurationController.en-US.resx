@@ -129,6 +129,9 @@
   <data name="ReturningSettingName" xml:space="preserve">
     <value>Returning value of {0} for setting {1}.</value>
   </data>
+  <data name="SectionNameMustStartWithBaseSectionName" xml:space="preserve">
+    <value>Invalid section name. The section name must start with {0}!</value>
+  </data>
   <data name="SectionNameNullOrEmpty" xml:space="preserve">
     <value>Section name cannot be null or empty!</value>
   </data>

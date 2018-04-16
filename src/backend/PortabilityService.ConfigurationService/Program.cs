@@ -52,10 +52,13 @@ namespace PortabilityService.ConfigurationService
         /// </summary>
         private static void ConfigureLogging(WebHostBuilderContext context, ILoggingBuilder loggingBuilder)
         {
+            loggingBuilder.AddConfiguration(context.Configuration.GetSection("PortabilityServiceSettings:Logging"));
+
+            loggingBuilder.AddConsole();
+
             if (context.HostingEnvironment.IsDevelopment())
             {
                 loggingBuilder.AddDebug();
-                loggingBuilder.AddConsole();
             }
             else
             {

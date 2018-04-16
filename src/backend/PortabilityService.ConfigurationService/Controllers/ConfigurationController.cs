@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ConfigurationControllerResources = PortabilityService.ConfigurationService.Resources.Controllers.ConfigurationController;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +15,8 @@ namespace PortabilityService.ConfigurationService.Controllers
     [Route("api/[controller]")]
     public class ConfigurationController : Controller
     {
+        private const string LogMessageFormat = "{ActionName}: {ErrorMessage}";
+
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IStringLocalizer<ConfigurationController> _localizer;
@@ -46,7 +47,7 @@ namespace PortabilityService.ConfigurationService.Controllers
         [HttpGet]
         public ObjectResult Get()
         {
-            _logger.LogInformation(BuildLogMessage(nameof(Get), _localizer[nameof(ConfigurationControllerResources.ReturningAllConfigSettings)].Value));
+            _logger.LogInformation(LogMessageFormat, nameof(Get), _localizer["ReturningAllConfigSettings"].Value);
             return Ok(_configuration.GetSection(_baseConfigSectionName).AsEnumerable());
         }
 
@@ -55,12 +56,19 @@ namespace PortabilityService.ConfigurationService.Controllers
         {
             if (string.IsNullOrEmpty(sectionName))
             {
-                var errorMessage = _localizer[nameof(ConfigurationControllerResources.SectionNameNullOrEmpty)].Value;
-                _logger.LogError(BuildLogMessage(nameof(GetSection), errorMessage));
+                var errorMessage = _localizer["SectionNameNullOrEmpty"].Value;
+                _logger.LogError(LogMessageFormat, nameof(GetSection), errorMessage);
                 return BadRequest(errorMessage);
             }
 
-            _logger.LogInformation(BuildLogMessage(nameof(GetSection), _localizer[nameof(ConfigurationControllerResources.ReturningSectionSettings), sectionName].Value));
+            if (SectionNameDoesNotStartsWithBaseSectionName(sectionName))
+            {
+                var errorMessage = _localizer["SectionNameMustStartWithBaseSectionName", _baseConfigSectionName].Value;
+                _logger.LogError(LogMessageFormat, nameof(GetSection), errorMessage);
+                return BadRequest(errorMessage);
+            }
+
+            _logger.LogInformation(LogMessageFormat, nameof(GetSection), _localizer["ReturningSectionSettings", sectionName].Value);
             return Ok(_configuration.GetSection(sectionName));
         }
 
@@ -69,12 +77,19 @@ namespace PortabilityService.ConfigurationService.Controllers
         {
             if (string.IsNullOrEmpty(sectionName))
             {
-                var errorMessage = _localizer[nameof(ConfigurationControllerResources.SectionNameNullOrEmpty)].Value;
-                _logger.LogError(BuildLogMessage(nameof(GetSectionSettingsList), errorMessage));
+                var errorMessage = _localizer["SectionNameNullOrEmpty"].Value;
+                _logger.LogError(LogMessageFormat, nameof(GetSectionSettingsList), errorMessage);
                 return BadRequest(errorMessage);
             }
 
-            _logger.LogInformation(BuildLogMessage(nameof(GetSection), _localizer[nameof(ConfigurationControllerResources.ReturningSectionSettings), sectionName].Value));
+            if (SectionNameDoesNotStartsWithBaseSectionName(sectionName))
+            {
+                var errorMessage = _localizer["SectionNameMustStartWithBaseSectionName", _baseConfigSectionName].Value;
+                _logger.LogError(LogMessageFormat, nameof(GetSectionSettingsList), errorMessage);
+                return BadRequest(errorMessage);
+            }
+
+            _logger.LogInformation(LogMessageFormat, nameof(GetSectionSettingsList), _localizer["ReturningSectionSettings", sectionName].Value);
             return Ok(_configuration.GetSection(sectionName).AsEnumerable());
         }
 
@@ -83,33 +98,33 @@ namespace PortabilityService.ConfigurationService.Controllers
         {
             if (string.IsNullOrEmpty(settingName))
             {
-                var errorMessage = _localizer[nameof(ConfigurationControllerResources.SettingNameNull)].Value;
-                _logger.LogError(BuildLogMessage(nameof(GetSetting), errorMessage));
+                var errorMessage = _localizer["SettingNameNull"].Value;
+                _logger.LogError(LogMessageFormat, nameof(GetSetting), errorMessage);
                 return BadRequest(errorMessage);
             }
 
             var settingValue = _configuration.GetValue<string>(settingName);
             if (settingValue == null)
             {
-                var errorMessage = _localizer[nameof(ConfigurationControllerResources.SettingNameNotValid), settingName].Value;
-                _logger.LogError(BuildLogMessage(nameof(GetSetting), errorMessage));
+                var errorMessage = _localizer["SettingNameNotValid", settingName].Value;
+                _logger.LogError(LogMessageFormat, nameof(GetSetting), errorMessage);
                 return NotFound(errorMessage);
             }
 
-            _logger.LogInformation(BuildLogMessage(nameof(GetSetting), _localizer[nameof(ConfigurationControllerResources.ReturningSettingName), settingValue, settingName].Value));
+            _logger.LogInformation(LogMessageFormat, nameof(GetSetting), _localizer["ReturningSettingName", settingValue, settingName].Value);
             return Ok(settingValue);
         }
 
         [HttpGet("environment")]
         public ObjectResult GetEnvironment()
         {
-            _logger.LogInformation(BuildLogMessage(nameof(GetEnvironment), _localizer[nameof(ConfigurationControllerResources.ReturningEnvironment), _hostingEnvironment.EnvironmentName].Value));
+            _logger.LogInformation(LogMessageFormat, nameof(GetEnvironment), _localizer["ReturningEnvironment", _hostingEnvironment.EnvironmentName].Value);
             return Ok(_hostingEnvironment.EnvironmentName);
         }
 
         /// <summary>
-        /// Builds up a message that will be returned with an http result
+        /// Returns whether the section name starts with the base section name that was used when constructing the ConfigurationController
         /// </summary>
-        private static string BuildLogMessage(string methodName, string message) => $"{methodName}: {message}";
+        private bool SectionNameDoesNotStartsWithBaseSectionName(string sectionName) => !sectionName.StartsWith(_baseConfigSectionName, StringComparison.OrdinalIgnoreCase);
     }
 }

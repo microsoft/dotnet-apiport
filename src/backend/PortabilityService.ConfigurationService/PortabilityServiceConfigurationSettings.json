@@ -2,15 +2,8 @@
   "PortabilityServiceSettings": {
     "Logging": {
       "IncludeScopes": false,
-      "Debug": {
-        "LogLevel": {
-          "Default": "Warning"
-        }
-      },
-      "Console": {
-        "LogLevel": {
-          "Default": "Warning"
-        }
+      "LogLevel": {
+        "Default": "Warning"
       }
     },
     "ServiceUrls": {

@@ -20,7 +20,7 @@ namespace PortabilityService.ConfigurationService.Tests
 {
     public partial class ConfigurationControllerTests
     {
-        private const string NonExisting = "NonExisting";
+        private const string NonExisting = "Root:NonExisting";
 
         // string constants representing logged messages from the controller method calls
         private const string BaseConfigSectionName = "Root";
@@ -29,6 +29,7 @@ namespace PortabilityService.ConfigurationService.Tests
         private const string SettingNameNullOrEmpty = "Setting name cannot be null or empty!";
         private const string ReturningSectionSettingsMessage = "Returning section settings for section {0}.";
         private const string NonExistingSettingMessage = "NonExistingSetting is not a valid configuration setting!";
+        private const string SectionNotStartingWithBaseMessage = "Invalid section name. The section name must start with Root!";
         private const string ReturningSettingName = "Returning value of {0} for setting {1}.";
         private const string ReturningEnvironmentMessage = "Returning environment setting of {0}.";
 
@@ -104,6 +105,11 @@ namespace PortabilityService.ConfigurationService.Tests
             { new KeyValuePair<string, string>("Root:RootGroup1:Group1", null)},
             { new KeyValuePair<string, string>("Root:RootGroup1:Group1:Group1", null)},
             { new KeyValuePair<string, string>("Root:RootGroup1:Group1:Group1:SettingString1", "Value for setting string 1")},
+            { new KeyValuePair<string, string>("Root:ArraySettings", null)},
+            { new KeyValuePair<string, string>("Root:ArraySettings:1", null)},
+            { new KeyValuePair<string, string>("Root:ArraySettings:1:ArraySetting2", "ArraySetting2")},
+            { new KeyValuePair<string, string>("Root:ArraySettings:0", null)},
+            { new KeyValuePair<string, string>("Root:ArraySettings:0:ArraySetting1", "ArraySetting1")},
         };
 
         [Theory, MemberData(nameof(NullOrEmptyTestData))]
@@ -170,7 +176,7 @@ namespace PortabilityService.ConfigurationService.Tests
             new[]
             {
                 new object[] { NonExisting, new List<string>() },
-                new object[] { "Root", new List<string> { "RootGroup1", "RootGroup2", "SettingString0" } },
+                new object[] { "Root", new List<string> { "ArraySettings", "RootGroup1", "RootGroup2", "SettingString0" } },
                 new object[] { "Root:RootGroup2", new List<string> { "Setting1Url", "Setting2Url" } }
             };
 
@@ -187,7 +193,7 @@ namespace PortabilityService.ConfigurationService.Tests
             // assert
             var keyValueResult = ((IEnumerable<KeyValuePair<string, string>>)objectResult.Value).First();
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
-            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSection), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, NonExisting)) }, testLogger.LoggedMessages);
+            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSectionSettingsList), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, NonExisting)) }, testLogger.LoggedMessages);
             Assert.Equal(NonExisting, keyValueResult.Key);
             Assert.Null(keyValueResult.Value);
         }
@@ -206,8 +212,36 @@ namespace PortabilityService.ConfigurationService.Tests
 
             // assert
             Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
-            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSection), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, sectionName)) }, testLogger.LoggedMessages);
+            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSectionSettingsList), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, sectionName)) }, testLogger.LoggedMessages);
             Assert.Equal(result.Value, CreateAllConfigEnum().Where(s => s.Key.StartsWith(sectionName, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [Fact]
+        public void GetSectionNotStartingWithBaseSectionNameReturnsBadRequest()
+        {
+            // arrange
+            var testLogger = CreateTestLogger();
+            var controller = CreateTestConfigurationController(_configuration, _stringLocalizer, testLogger);
+
+            // act
+            var result = controller.GetSection("NonExistingSetting");
+
+            // assert
+            VerifyCallResult(testLogger, result, StatusCodes.Status400BadRequest, SectionNotStartingWithBaseMessage, new List<string> { testLogger.GetLogString(LogLevel.Error, nameof(ConfigurationController.GetSection), SectionNotStartingWithBaseMessage) });
+        }
+
+        [Fact]
+        public void GetSectionSettingsListNotStartingWithBaseSectionNameReturnsBadRequest()
+        {
+            // arrange
+            var testLogger = CreateTestLogger();
+            var controller = CreateTestConfigurationController(_configuration, _stringLocalizer, testLogger);
+
+            // act
+            var result = controller.GetSectionSettingsList("NonExistingSetting");
+
+            // assert
+            VerifyCallResult(testLogger, result, StatusCodes.Status400BadRequest, SectionNotStartingWithBaseMessage, new List<string> { testLogger.GetLogString(LogLevel.Error, nameof(ConfigurationController.GetSectionSettingsList), SectionNotStartingWithBaseMessage) });
         }
 
         [Fact]

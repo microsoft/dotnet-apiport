@@ -17,6 +17,10 @@
       "Setting1Url": "http://portabilityconfigservice",
       "Setting2Url": "http://portabilityService"
     },
-    "SettingString0" : "Value for setting string 0"
+    "SettingString0": "Value for setting string 0",
+    "ArraySettings": [
+      { "ArraySetting1": "ArraySetting1" },
+      { "ArraySetting2": "ArraySetting2" }
+    ]
   }
 }
