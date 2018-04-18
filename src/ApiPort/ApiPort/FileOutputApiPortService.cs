@@ -81,14 +81,6 @@ namespace ApiPort
             return Task.FromResult(response);
         }
 
-        public Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = default(int?), int? top = default(int?), UsageDataFilter? filter = default(UsageDataFilter?), IEnumerable<string> targets = null)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(new UsageDataCollection());
-
-            return Task.FromResult(response);
-        }
-
         public Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
