@@ -35,8 +35,6 @@ namespace Microsoft.Fx.Portability
         private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
         private readonly IFileWriter _writer;
 
-        public ITargetMapper TargetMapper { get { return _targetMapper; } }
-
         public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore, IFileWriter writer)
         {
             _apiPortService = apiPortService;
@@ -46,32 +44,6 @@ namespace Microsoft.Fx.Portability
             _reportGenerator = reportGenerator;
             _assembliesToIgnore = assembliesToIgnore;
             _writer = writer;
-        }
-
-        /// <summary>
-        /// Analyzes assemblies provided by options
-        /// </summary>
-        /// <param name="options"></param>
-        /// <returns>A reporting result for the supplied assemblies</returns>
-        public async Task<ReportingResult> AnalyzeAssembliesAsync(IApiPortOptions options)
-        {
-            ValidateOptions(options);
-
-            var assemblies = options.InputAssemblies?.Keys ?? Array.Empty<IAssemblyFile>();
-            var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
-
-            if (dependencyInfo.UserAssemblies.Any())
-            {
-                AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
-
-                return await GetResultFromServiceAsync(request, dependencyInfo);
-            }
-            else
-            {
-                _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
-
-                return null;
-            }
         }
 
         /// <summary>
@@ -332,19 +304,6 @@ namespace Microsoft.Fx.Portability
             };
         }
 
-        /// <summary>
-        /// Gets the Portability of an application as a ReportingResult.
-        /// </summary>
-        /// <returns>Set of APIs/assemblies that are not portable/missing.</returns>
-        private async Task<ReportingResult> GetResultFromServiceAsync(AnalyzeRequest request, IDependencyInfo dependencyInfo)
-        {
-            var fullResponse = await RetrieveResultAsync(request);
-
-            CheckEndpointStatus(fullResponse.Headers.Status);
-
-            return GetReportingResult(request, fullResponse.Response, dependencyInfo);
-        }
-
         private ReportingResult GetReportingResult(AnalyzeRequest request, AnalyzeResponse response, IDependencyInfo dependencyInfo)
         {
             if (response == null)
@@ -367,22 +326,6 @@ namespace Microsoft.Fx.Portability
                         dependencyInfo?.AssembliesWithErrors,
                         response.NuGetPackages
                     );
-                }
-                catch (Exception)
-                {
-                    progressTask.Abort();
-                    throw;
-                }
-            }
-        }
-
-        private async Task<ServiceResponse<AnalyzeResponse>> RetrieveResultAsync(AnalyzeRequest request)
-        {
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
-            {
-                try
-                {
-                    return await _apiPortService.SendAnalysisAsync(request);
                 }
                 catch (Exception)
                 {
