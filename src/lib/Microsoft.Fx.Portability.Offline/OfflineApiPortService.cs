@@ -24,6 +24,8 @@ namespace Microsoft.Fx.Portability
         private readonly ISearcher<string> _searcher;
         private readonly IApiRecommendations _apiRecommendations;
 
+        private AnalyzeRequest AnalyzeRequest { get; set; }
+
         public OfflineApiPortService(IApiCatalogLookup lookup, IRequestAnalyzer requestAnalyzer, ITargetMapper mapper, ICollection<IReportWriter> reportWriters, ITargetNameParser targetNameParser, IApiRecommendations apiRecommendations)
         {
             _lookup = lookup;
@@ -35,98 +37,88 @@ namespace Microsoft.Fx.Portability
             _apiRecommendations = apiRecommendations;
         }
 
-        public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
+        public Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
         {
             var targets = _lookup
                 .GetPublicTargets()
                 .Select(target => new AvailableTarget { Name = target.Identifier, Version = target.Version, IsSet = _defaultTargets.Contains(target) })
-                .OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase);
+                .OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase)
+                .AsEnumerable();
 
-            var response = new ServiceResponse<IEnumerable<AvailableTarget>>(targets);
-
-            return Task.FromResult(response);
+            return Task.FromResult(targets);
         }
 
-        public Task<ServiceResponse<AnalyzeResult>> SendAnalysisAsync(AnalyzeRequest a)
+        public async Task<ReportingResultWithFormat> SendAnalysisAsync(AnalyzeRequest analyzeRequest, string format)
         {
-            var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
-            var serviceResponse = new ServiceResponse<AnalyzeResult>(response);
+            var response = _requestAnalyzer.AnalyzeRequest(analyzeRequest, Guid.NewGuid().ToString());
 
-            return Task.FromResult(serviceResponse);
-        }
+            format = format ?? (await GetDefaultResultFormatAsync()).DisplayName;
 
-        public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
-        {
-            var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
+            var writer = _reportWriters
+                .First(w => w.Format.DisplayName.Equals(format, StringComparison.OrdinalIgnoreCase));
 
-            if(!formats?.Any() ?? true)
+            using (var ms = new MemoryStream())
             {
-                var defaultFormat = await GetDefaultResultFormatAsync();
-                formats = new[] { defaultFormat.Response.DisplayName };
-            }
+                writer.WriteStream(ms, response);
 
-            var formatSet = new HashSet<string>(formats, StringComparer.OrdinalIgnoreCase);
-
-            var result = new List<ReportingResultWithFormat>();
-
-            foreach (var writer in _reportWriters.Where(w => formatSet.Contains(w.Format.DisplayName)))
-            {
-                using (var ms = new MemoryStream())
+                return new ReportingResultWithFormat
                 {
-                    writer.WriteStream(ms, response);
-
-                    result.Add(new ReportingResultWithFormat
-                    {
-                        Format = writer.Format.DisplayName,
-                        Data = ms.ToArray()
-                    });
-                }
+                    Format = writer.Format.DisplayName,
+                    Data = ms.ToArray()
+                };
             }
-
-            return await WrapResponse<IEnumerable<ReportingResultWithFormat>>(result);
         }
 
-        public Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
+        public Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync()
         {
             var formats = _reportWriters.Select(r => r.Format);
 
-            return WrapResponse(formats);
+            return Task.FromResult(formats);
         }
 
-        public Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
+        public Task<ResultFormatInformation> GetDefaultResultFormatAsync()
         {
             var format = new JsonReportWriter().Format;
-            return WrapResponse(format);
+
+            return Task.FromResult(format);
         }
 
-        private static Task<ServiceResponse<T>> WrapResponse<T>(T data)
+        public Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest)
         {
-            var response = new ServiceResponse<T>(data);
+            // IApiPortService separates requesting analysis from retrieving reports, which
+            // is awkward for this offline implementation, so this method stores the request
+            // for use in GetReportingResultAsync, and returns an empty AnalyzeResponse.
+            AnalyzeRequest = analyzeRequest;
 
-            return Task.FromResult(response);
+            return Task.FromResult(new AnalyzeResponse());
         }
 
-        public Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = null, int? top = null, UsageDataFilter? filter = null, IEnumerable<string> targets = null)
+        public async Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
+        {
+            var response = _requestAnalyzer.AnalyzeRequest(AnalyzeRequest, Guid.NewGuid().ToString());
+
+            format = format ?? await GetDefaultResultFormatAsync();
+
+            var writer = _reportWriters.First(w => w.Format.Equals(format));
+
+            using (var ms = new MemoryStream())
+            {
+                writer.WriteStream(ms, response);
+
+                return new ReportingResultWithFormat
+                {
+                    Format = writer.Format.DisplayName,
+                    Data = ms.ToArray()
+                };
+            }
+        }
+
+        public Task<ApiInformation> GetApiInformationAsync(string docId)
         {
             throw new NotImplementedException();
         }
 
-        public static Task<ServiceResponse<AnalyzeResult>> GetAnalysisAsync(string submissionId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Task<ServiceResponse<byte[]>> GetAnalysisAsync(string submissionId, string format)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null)
+        public async Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null)
         {
             var queryResult = await _searcher.SearchAsync(query, top ?? 10);
 
@@ -135,10 +127,10 @@ namespace Microsoft.Fx.Portability
                 .ToList()
                 .AsReadOnly();
 
-            return new ServiceResponse<IReadOnlyCollection<ApiDefinition>>(result);
+            return result;
         }
 
-        public Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
+        public Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds)
         {
             if (docIds == null)
             {
@@ -153,27 +145,7 @@ namespace Microsoft.Fx.Portability
                         .ToList()
                         .AsReadOnly();
 
-            return Task.FromResult(new ServiceResponse<IReadOnlyCollection<ApiInformation>>(result));
-        }
-
-        private async Task<IEnumerable<ResultFormatInformation>> GetResultFormatAsync(IEnumerable<string> format)
-        {
-            var requestedFormats = new HashSet<string>(format, StringComparer.OrdinalIgnoreCase);
-            var formats = await GetResultFormatsAsync();
-            var formatInformation = formats.Response
-                .Where(r => requestedFormats.Contains(r.DisplayName))
-                .ToList();
-
-            var unknownFormats = requestedFormats
-                .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            if (unknownFormats.Any())
-            {
-                throw new UnknownReportFormatException(unknownFormats);
-            }
-
-            return formatInformation;
+            return Task.FromResult((IReadOnlyCollection<ApiInformation>)result);
         }
     }
 }

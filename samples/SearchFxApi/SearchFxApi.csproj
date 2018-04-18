@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>

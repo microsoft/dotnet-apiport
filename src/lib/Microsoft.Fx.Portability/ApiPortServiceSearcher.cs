@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability
         {
             var result = await _service.SearchFxApiAsync(query, numberOfHits);
 
-            return result.Response
+            return result
                 .Select(r => r.DocId)
                 .ToList();
         }

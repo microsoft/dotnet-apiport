@@ -29,126 +29,71 @@ namespace ApiPort
 
         private readonly IProgressReporter _progress;
 
+        private AnalyzeRequest AnalyzeRequest { get; set; }
+
         public FileOutputApiPortService(IProgressReporter progress)
         {
             _progress = progress;
         }
 
-        public Task<ServiceResponse<AnalyzeResult>> GetAnalysisAsync(string submissionId)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var result = ServiceResponse.Create(new AnalyzeResult());
-
-            return Task.FromResult(result);
-        }
-
-        public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> GetAnalysisAsync(string submissionId, IEnumerable<string> format)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var result = ServiceResponse.Create(Enumerable.Empty<ReportingResultWithFormat>());
-
-            return Task.FromResult(result);
-        }
-
-        public Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(new ApiInformation());
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
-        {
-            var response = ServiceResponse.Create(s_formats);
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
-        {
-            // s_formats contains one element
-            var response = ServiceResponse.Create(s_formats.First());
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
-        {
-            // returning an empty enumerable because these targets are never used
-            var response = ServiceResponse.Create(Enumerable.Empty<AvailableTarget>());
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = default(int?), int? top = default(int?), UsageDataFilter? filter = default(UsageDataFilter?), IEnumerable<string> targets = null)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(new UsageDataCollection());
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(s_emptyQueryDocIds);
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = default(int?))
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(s_emptySearchResults);
-
-            return Task.FromResult(response);
-        }
-
-        public Task<ServiceResponse<AnalyzeResult>> SendAnalysisAsync(AnalyzeRequest a)
+        public Task<ApiInformation> GetApiInformationAsync(string docId)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
 
-            return Task.FromResult(new ServiceResponse<AnalyzeResult>(new AnalyzeResult()));
+            return Task.FromResult(new ApiInformation());
         }
 
-        /// <summary>
-        /// Returns the analysis as <see cref="s_formats"/>. Input <paramref name="formats"/> is ignored.
-        /// </summary>
-        public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
+        public Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds)
         {
-            var result = s_formats.Select(f => new ReportingResultWithFormat
-            {
-                Data = SendAnalysisAsync(a, f.DisplayName),
-                Format = f.DisplayName
-            });
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
 
-            return Task.FromResult(new ServiceResponse<IEnumerable<ReportingResultWithFormat>>(result.ToList()));
+            return Task.FromResult(s_emptyQueryDocIds);
         }
 
-        private byte[] SendAnalysisAsync(AnalyzeRequest a, string format)
+        public Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = default)
         {
-            var sortedAnalyzeRequest = new AnalyzeRequest
-            {
-                RequestFlags = a.RequestFlags,
-                Dependencies = a.Dependencies
-                    .OrderBy(t => t.Key.MemberDocId)
-                    .ThenBy(t => t.Key.TypeDocId)
-                    .ToDictionary(t => t.Key, t => t.Value.OrderBy(tt => tt.AssemblyIdentity).ToList() as ICollection<AssemblyInfo>),
-                UnresolvedAssemblies = new SortedSet<string>(a.UnresolvedAssemblies, StringComparer.Ordinal),
-                UnresolvedAssembliesDictionary = a.UnresolvedAssembliesDictionary
-                    .OrderBy(t => t.Key)
-                    .ToDictionary(t => t.Key, t => new SortedSet<string>(t.Value) as ICollection<string>),
-                UserAssemblies = new SortedSet<AssemblyInfo>(a.UserAssemblies),
-                AssembliesWithErrors = new SortedSet<string>(a.AssembliesWithErrors, StringComparer.Ordinal),
-                Targets = new SortedSet<string>(a.Targets, StringComparer.Ordinal),
-                ApplicationName = a.ApplicationName,
-                Version = a.Version,
-                BreakingChangesToSuppress = new SortedSet<string>(a.BreakingChangesToSuppress ?? Enumerable.Empty<string>(), StringComparer.Ordinal),
-                AssembliesToIgnore = a.AssembliesToIgnore.OrderBy(i => i.AssemblyIdentity)
-            };
+            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
 
-            return sortedAnalyzeRequest.Serialize();
+            return Task.FromResult(s_emptySearchResults);
         }
+
+        public Task<ResultFormatInformation> GetDefaultResultFormatAsync() => Task.FromResult(s_formats.Single());
+
+        public Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync() => Task.FromResult(s_formats);
+
+        public Task<IEnumerable<AvailableTarget>> GetTargetsAsync() => Task.FromResult(Enumerable.Empty<AvailableTarget>());
+
+        public Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest)
+        {
+            // IApiPortService separates requesting analysis from retrieving reports, which
+            // is awkward for this offline implementation, so this method stores the request
+            // for use in GetReportingResultAsync, and returns an empty AnalyzeResponse.
+            AnalyzeRequest = SortedAnalyzeRequest(analyzeRequest);
+
+            return Task.FromResult(new AnalyzeResponse());
+        }
+
+        private static AnalyzeRequest SortedAnalyzeRequest(AnalyzeRequest analyzeRequest) => new AnalyzeRequest
+        {
+            RequestFlags = analyzeRequest.RequestFlags,
+            Dependencies = analyzeRequest.Dependencies
+                .OrderBy(t => t.Key.MemberDocId)
+                .ThenBy(t => t.Key.TypeDocId)
+                .ToDictionary(t => t.Key, t => t.Value.OrderBy(tt => tt.AssemblyIdentity).ToList() as ICollection<AssemblyInfo>),
+            UnresolvedAssemblies = new SortedSet<string>(analyzeRequest.UnresolvedAssemblies, StringComparer.Ordinal),
+            UnresolvedAssembliesDictionary = analyzeRequest.UnresolvedAssembliesDictionary
+                .OrderBy(t => t.Key)
+                .ToDictionary(t => t.Key, t => new SortedSet<string>(t.Value) as ICollection<string>),
+            UserAssemblies = new SortedSet<AssemblyInfo>(analyzeRequest.UserAssemblies),
+            AssembliesWithErrors = new SortedSet<string>(analyzeRequest.AssembliesWithErrors, StringComparer.Ordinal),
+            Targets = new SortedSet<string>(analyzeRequest.Targets, StringComparer.Ordinal),
+            ApplicationName = analyzeRequest.ApplicationName,
+            Version = analyzeRequest.Version,
+            BreakingChangesToSuppress = new SortedSet<string>(analyzeRequest.BreakingChangesToSuppress ?? Enumerable.Empty<string>(), StringComparer.Ordinal),
+            AssembliesToIgnore = analyzeRequest.AssembliesToIgnore.OrderBy(i => i.AssemblyIdentity)
+        };
+
+        public Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
+            => Task.FromResult(new ReportingResultWithFormat { Data = AnalyzeRequest.Serialize(), Format = format.DisplayName });
     }
 }

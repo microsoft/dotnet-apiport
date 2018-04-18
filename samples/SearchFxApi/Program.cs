@@ -14,7 +14,7 @@ namespace SearchFxApi
     {
         private static void Main(string[] args)
         {
-            var analysisService = new ApiPortService("https://portability.dot.net", new ProductInformation("MyAPIQueryProgram"));
+            var analysisService = new ApiPortService("https://portability.dot.net", new ProductInformation("MyAPIQueryProgram"), null);
 
             Console.Write("Enter API you want to search for:  ");
             var api = Console.ReadLine();
@@ -48,13 +48,13 @@ namespace SearchFxApi
         private static async Task<IReadOnlyList<ApiDefinition>> FindMatchingApis(IApiPortService service, string api)
         {
             var response = await service.SearchFxApiAsync(api, top: 20);
-            return response.Response.ToList();
+            return response.ToList();
         }
 
         private static async Task<ApiInformation> GetApi(IApiPortService service, string apiDocId)
         {
             var response = await service.GetApiInformationAsync(apiDocId);
-            return response.Response;
+            return response;
         }
     }
 }

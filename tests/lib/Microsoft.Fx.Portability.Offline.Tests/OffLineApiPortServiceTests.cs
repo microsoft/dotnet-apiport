@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             var expectedDocIds = new List<string>();
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(expectedDocIds);
-            Assert.Empty(result.Response);
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -58,8 +58,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(expectedDocIds);
-            Assert.Equal(expectedDocIds.Count, result.Response.Count);
-            Assert.Empty(expectedDocIds.Except(result.Response.Select(r => r.Definition.DocId)));
+            Assert.Equal(expectedDocIds.Count, result.Count);
+            Assert.Empty(expectedDocIds.Except(result.Select(r => r.Definition.DocId)));
         }
 
         [Fact]
@@ -72,8 +72,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(expectedDocIds);
-            Assert.Equal(expectedDocIds.Count, result.Response.Count);
-            Assert.Empty(expectedDocIds.Except(result.Response.Select(r => r.Definition.DocId)));
+            Assert.Equal(expectedDocIds.Count, result.Count);
+            Assert.Empty(expectedDocIds.Except(result.Select(r => r.Definition.DocId)));
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(expectedDocIds);
-            Assert.Empty(result.Response);
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -111,8 +111,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(docIdsToPass);
-            Assert.Equal(expectedDocIds.Count, result.Response.Count);
-            Assert.Empty(expectedDocIds.Except(result.Response.Select(d => d.Definition.DocId)));
+            Assert.Equal(expectedDocIds.Count, result.Count);
+            Assert.Empty(expectedDocIds.Except(result.Select(d => d.Definition.DocId)));
         }
 
         [Fact]
@@ -137,8 +137,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(docIdsToPass);
-            Assert.Equal(expectedDocIds.Count, result.Response.Count);
-            Assert.Empty(expectedDocIds.Except(result.Response.Select(d => d.Definition.DocId)));
+            Assert.Equal(expectedDocIds.Count, result.Count);
+            Assert.Empty(expectedDocIds.Except(result.Select(d => d.Definition.DocId)));
         }
 
         [Fact]
@@ -152,8 +152,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(expectedDocIds);
-            Assert.Equal(1, result.Response.Count);
-            Assert.Equal($"P:{ValidDocId}0", result.Response.First().Definition.DocId);
+            Assert.Equal(1, result.Count);
+            Assert.Equal($"P:{ValidDocId}0", result.First().Definition.DocId);
         }
 
         [Fact]
@@ -180,8 +180,8 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             };
 
             var result = await _OfflineApiPortService.QueryDocIdsAsync(docIdsToPass);
-            Assert.Equal(expectedDocIds.Count, result.Response.Count);
-            Assert.Empty(expectedDocIds.Except(result.Response.Select(r => r.Definition.DocId)));
+            Assert.Equal(expectedDocIds.Count, result.Count);
+            Assert.Empty(expectedDocIds.Except(result.Select(r => r.Definition.DocId)));
         }
 
         private static IRequestAnalyzer CreateRequestAnalyzer()

@@ -9,14 +9,13 @@ namespace Microsoft.Fx.Portability
 {
     public interface IApiPortService
     {
-        Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync();
-        Task<ServiceResponse<AnalyzeResult>> SendAnalysisAsync(AnalyzeRequest a);
-        Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format);
-        Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = null, int? top = null, UsageDataFilter? filter = null, IEnumerable<string> targets = null);
-        Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId);
-        Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null);
-        Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync();
-        Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync();
-        Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds);
+        Task<ApiInformation> GetApiInformationAsync(string docId);
+        Task<ResultFormatInformation> GetDefaultResultFormatAsync();
+        Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format);
+        Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync();
+        Task<IEnumerable<AvailableTarget>> GetTargetsAsync();
+        Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds);
+        Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest);
+        Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null);
     }
 }

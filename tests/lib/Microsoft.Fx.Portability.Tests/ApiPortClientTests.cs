@@ -18,13 +18,6 @@ namespace Microsoft.Fx.Portability.Tests
 {
     public class ApiPortClientTests
     {
-        private static Task<ServiceResponse<T>> CreateResponse<T>(T result)
-        {
-            var response = new ServiceResponse<T>(result, EndpointStatus.Alive);
-
-            return Task.FromResult(response);
-        }
-
         [Fact]
         public async Task ListTargetsTest()
         {
@@ -37,7 +30,7 @@ namespace Microsoft.Fx.Portability.Tests
             var writer = Substitute.For<IFileWriter>();
 
             var apiPortService = Substitute.For<IApiPortService>();
-            apiPortService.GetTargetsAsync().Returns(CreateResponse<IEnumerable<AvailableTarget>>(targets.AsReadOnly()));
+            apiPortService.GetTargetsAsync().Returns(targets.AsReadOnly());
 
             var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
 
