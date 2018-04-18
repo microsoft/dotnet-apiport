@@ -1,0 +1,16 @@
+﻿{
+  "PortabilityServiceSettings": {
+    "Logging": {
+      "IncludeScopes": false,
+      "LogLevel": {
+        "Default": "Debug",
+        "System": "Information",
+        "Microsoft": "Information"
+      }
+    },
+    "ServiceUrls": {
+      "ConfigurationService": "http://localhost:1443",
+      "PortabilityService": "http://localhost:5001"
+    }
+  }
+}
