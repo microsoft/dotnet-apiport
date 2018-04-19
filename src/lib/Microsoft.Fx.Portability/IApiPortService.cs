@@ -12,7 +12,6 @@ namespace Microsoft.Fx.Portability
         Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync();
         Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a);
         Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format);
-        Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = null, int? top = null, UsageDataFilter? filter = null, IEnumerable<string> targets = null);
         Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId);
         Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null);
         Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync();

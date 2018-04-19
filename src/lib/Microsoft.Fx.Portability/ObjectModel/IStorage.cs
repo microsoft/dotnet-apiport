@@ -13,6 +13,5 @@ namespace Microsoft.Fx.Portability.ObjectModel
         Task<IEnumerable<string>> RetrieveSubmissionIdsAsync();
         Task AddJobToQueueAsync(string submissionId);
         IEnumerable<ProjectSubmission> GetProjectSubmissions();
-        Task<IEnumerable<UsageData>> GetUsageDataAsync();
     }
 }
