@@ -22,9 +22,22 @@
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
-  <!-- Assembly signing not supported on Linux, yet: `CS7027: Error signing output with public key from file`
-       The Functions assembly can't be signed because the Azure Functions SDK has unsigned dependencies. -->
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND !$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">
+  <PropertyGroup>
+    <IsTest>false</IsTest>
+    <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
+  </PropertyGroup>
+
+  <!-- Conditions where the assemblies are not signed:
+    1. Assembly signing not supported on Linux, yet: `CS7027: Error signing output with public key from file`
+    2. The Functions assembly can't be signed because the Azure Functions SDK has unsigned dependencies
+    3. Test projects are not signed -->
+  <PropertyGroup>
+    <ShouldSignAssembly>true</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="'$(OS)' != 'Windows_NT' OR !$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">false</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="$(IsTest)">false</ShouldSignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
@@ -35,11 +48,6 @@
     our PRs because of the CI builds -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <IsTest>false</IsTest>
-    <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
   </PropertyGroup>
 
   <!--NuGet properties-->
