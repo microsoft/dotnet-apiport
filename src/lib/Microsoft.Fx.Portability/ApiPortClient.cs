@@ -129,15 +129,13 @@ namespace Microsoft.Fx.Portability
             };
         }
 
-        public async Task<IEnumerable<string>> GetResultFormatsAsync()
+        public Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync()
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
             {
                 try
                 {
-                    var outputFormats = await _apiPortService.GetResultFormatsAsync();
-
-                    return outputFormats.Select(format => format.DisplayName).ToList();
+                    return Task.FromResult(AvailableReportFormats.Values.AsEnumerable());
                 }
                 catch (Exception)
                 {
@@ -146,6 +144,22 @@ namespace Microsoft.Fx.Portability
                 }
             }
         }
+
+        private Dictionary<string, ResultFormatInformation> AvailableReportFormats
+        {
+            get
+            {
+                if (_availableReportFormats == null)
+                {
+                    var outputFormats = _apiPortService.GetResultFormatsAsync().GetAwaiter().GetResult();
+                    _availableReportFormats = outputFormats
+                        .ToDictionary(key => key.DisplayName, value => value, StringComparer.OrdinalIgnoreCase);
+                }
+
+                return _availableReportFormats;
+            }
+        }
+        private Dictionary<string, ResultFormatInformation> _availableReportFormats;
 
         /// <summary>
         /// Writes a report given the output format and filename.
@@ -173,7 +187,7 @@ namespace Microsoft.Fx.Portability
                 var outputFileName = Path.GetFileName(filePath);
                 try
                 {
-                    var extension = await GetExtensionForFormat(outputFormat);
+                    var extension = GetExtensionForFormat(outputFormat);
 
                     var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwriteFile);
 
@@ -217,9 +231,10 @@ namespace Microsoft.Fx.Portability
             }
 
             var request = GenerateRequest(options, dependencyInfo);
-
             var analyzeResponse = await RequestAnalysisAsync(request);
-            var reports = await GetReportsAsync(analyzeResponse);
+
+            var reportFormats = options.OutputFormats.Select(displayName => AvailableReportFormats[displayName]);
+            var reports = await GetReportsAsync(analyzeResponse, reportFormats);
 
             var results = new MultipleFormatAnalysis
             {
@@ -250,21 +265,15 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private async Task<IEnumerable<ReportingResultWithFormat>> GetReportsAsync(AnalyzeResponse analyzeResponse)
+        private async Task<IEnumerable<ReportingResultWithFormat>> GetReportsAsync(AnalyzeResponse analyzeResponse, IEnumerable<ResultFormatInformation> reportFormats)
         {
             using (var progressTask = _progressReport.StartTask("Retrieving report..."))
             {
+                var reportTasks = reportFormats
+                    .Select(async format => await _apiPortService.GetReportingResultAsync(analyzeResponse, format));
                 try
                 {
-                    var json = new ResultFormatInformation
-                    {
-                        DisplayName = "Json",
-                        MimeType = "application/json",
-                        FileExtension = ".json"
-                    };
-                    var response = await _apiPortService.GetReportingResultAsync(analyzeResponse, json);
-
-                    return new[] { response };
+                    return await Task.WhenAll(reportTasks);
                 }
                 catch
                 {
@@ -274,17 +283,14 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private async Task<string> GetExtensionForFormat(string format)
+        private string GetExtensionForFormat(string format)
         {
-            var outputFormats = await _apiPortService.GetResultFormatsAsync();
-            var outputFormat = outputFormats.FirstOrDefault(f => f.DisplayName.Equals(format, StringComparison.OrdinalIgnoreCase));
-
-            if (outputFormat == null)
+            if (!AvailableReportFormats.TryGetValue(format, out var formatInformation))
             {
                 throw new UnknownReportFormatException(format);
             }
 
-            return outputFormat.FileExtension;
+            return formatInformation.FileExtension;
         }
 
         private AnalyzeRequest GenerateRequest(IApiPortOptions options, IDependencyInfo dependencyInfo)
@@ -393,7 +399,7 @@ namespace Microsoft.Fx.Portability
         /// Ensures that the analysis options are valid.  If they are not,
         /// throws a <see cref="InvalidApiPortOptionsException"/>
         /// </summary>
-        private static void ValidateOptions(IApiPortOptions options)
+        private void ValidateOptions(IApiPortOptions options)
         {
             if (options == null)
             {
@@ -403,6 +409,12 @@ namespace Microsoft.Fx.Portability
             if (options.Targets.Count() > MaxNumberOfTargets && options.OutputFormats.Contains(Excel, StringComparer.OrdinalIgnoreCase))
             {
                 throw new InvalidApiPortOptionsException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
+            }
+
+            var unknownFormats = options.OutputFormats.Where(format => !AvailableReportFormats.ContainsKey(format));
+            if (unknownFormats.Any())
+            {
+                throw new UnknownReportFormatException(unknownFormats);
             }
         }
 
