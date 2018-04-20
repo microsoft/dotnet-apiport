@@ -33,9 +33,9 @@ namespace PortabilityService.Functions
 
             switch (req.Headers.Accept.ToString())
             {
-                case "application/json":
+                case MediaType.Json:
                     return JsonReport(req);
-                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                case MediaType.Excel:
                     return ExcelReport(req);
                 default:
                     return req.CreateResponse(HttpStatusCode.UnsupportedMediaType);
@@ -68,7 +68,7 @@ namespace PortabilityService.Functions
             using (var sr = new StreamReader(stream))
             {
                 var json = sr.ReadToEnd();
-                var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                var content = new StringContent(json, System.Text.Encoding.UTF8, MediaType.Json);
                 response.Content = content;
             }
 
@@ -86,7 +86,7 @@ namespace PortabilityService.Functions
 
                 var content = new ByteArrayContent(bytes);
                 response.Content = content;
-                response.Content.Headers.Add("Content-Type", request.Headers.Accept.ToString());
+                response.Content.Headers.Add("Content-Type", MediaType.Excel);
             }
 
             return response;
