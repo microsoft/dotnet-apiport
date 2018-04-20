@@ -100,13 +100,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Gateway.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.WorkflowManagement", "src\backend\PortabilityService.WorkflowManagement\PortabilityService.WorkflowManagement.csproj", "{4F94AAB7-29C8-46B0-B41D-83A4779544DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Azure", "src\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj", "{A761180A-067A-4238-AA66-5BB27A59B792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Azure", "src\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj", "{A761180A-067A-4238-AA66-5BB27A59B792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationService", "src\backend\PortabilityService.ConfigurationService\PortabilityService.ConfigurationService.csproj", "{B21C19FC-2BA4-40C9-B4B6-4B92661AB1F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationService.Tests", "tests\backend\PortabilityService.ConfigurationService.Tests\PortabilityService.ConfigurationService.Tests.csproj", "{3F71D970-3C1A-457D-8709-10AFF582360B}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1552,6 +1554,54 @@ Global
 		{3F71D970-3C1A-457D-8709-10AFF582360B}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
 		{3F71D970-3C1A-457D-8709-10AFF582360B}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
 		{3F71D970-3C1A-457D-8709-10AFF582360B}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|ARM.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|x64.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Debug|x86.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|ARM.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|ARM.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|x64.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|x64.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|x86.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Osx_Release|x86.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|ARM.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|x64.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Release|x86.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|ARM.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|x64.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Debug|x86.Build.0 = Debug|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|ARM.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|ARM.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|x64.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
+		{A6A572F0-FD11-497E-9C0F-0AA21C6F9C8B}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
