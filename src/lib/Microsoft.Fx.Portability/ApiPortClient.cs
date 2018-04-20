@@ -234,6 +234,12 @@ namespace Microsoft.Fx.Portability
             var analyzeResponse = await RequestAnalysisAsync(request);
 
             var reportFormats = options.OutputFormats.Select(displayName => AvailableReportFormats[displayName]);
+            if (!reportFormats.Any())
+            {
+                var defaultFormat = await _apiPortService.GetDefaultResultFormatAsync();
+                reportFormats = new[] { defaultFormat };
+            }
+
             var reports = await GetReportsAsync(analyzeResponse, reportFormats);
 
             var results = new MultipleFormatAnalysis
