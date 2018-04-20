@@ -46,7 +46,7 @@
     <ShouldSignAssembly Condition="$(IsTest)">false</ShouldSignAssembly>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="$(ShouldSignAssembly)">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
