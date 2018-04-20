@@ -44,6 +44,7 @@ namespace PortabilityService.Functions
 
         public static bool ValidAccessKey(HttpRequestMessage request)
         {
+            // TODO generate and persist a new unique key in Analyze, validate it here
             var authHeader = request.Headers.Authorization;
             if (authHeader == null || !authHeader.Scheme.Equals("Bearer", StringComparison.Ordinal))
             {
