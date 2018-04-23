@@ -6,8 +6,7 @@ Based on docs [here](https://github.com/Azure/seabreeze-preview-pr/blob/master/d
 1. Install [SeaBreeze CLI](https://github.com/Azure/seabreeze-preview-pr/blob/master/docs/conceptual-docs/cli-setup.md).
 1. `az login`
 1. `az account set --subscription "<subscriptionName>"`
-1. `az sbz deployment create --resource-group <resourceGroupName> --template-uri <template uri>`
-    1. Note that the template URI [must currently be a remote file](https://github.com/Azure/seabreeze-preview-pr/issues/82).
+1. `az sbz deployment create --resource-group <resourceGroupName> --template-file sampleapp.json`
 1. `az sbz app list -o table`
     1. Confirm the app was created successfully.
 1. `az sbz network list`
