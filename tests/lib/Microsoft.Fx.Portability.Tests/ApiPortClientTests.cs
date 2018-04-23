@@ -55,5 +55,24 @@ namespace Microsoft.Fx.Portability.Tests
             await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options));
             await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options, true));
         }
+
+        [Fact]
+        public static async Task WriteAnalysisReportsThrowsForUnknownOutputFormat()
+        {
+            var service = Substitute.For<IApiPortService>();
+            service.GetResultFormatsAsync().Returns(new[] { new ResultFormatInformation { DisplayName = "foo" } });
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var targetMapper = Substitute.For<ITargetMapper>();
+            var dependencyFinder = Substitute.For<IDependencyFinder>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var writer = Substitute.For<IFileWriter>();
+
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var options = Substitute.For<IApiPortOptions>();
+            options.OutputFormats.Returns(new[] { "bar" });
+
+            await Assert.ThrowsAsync<UnknownReportFormatException>(async () => await client.WriteAnalysisReportsAsync(options));
+        }
     }
 }
