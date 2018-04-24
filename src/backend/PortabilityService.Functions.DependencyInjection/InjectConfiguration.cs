@@ -55,8 +55,12 @@ namespace PortabilityService.Functions.DependencyInjection
         private static void RegisterServices(IServiceCollection services)
         {
             // TODO: retrieve setting from configuration service
-            var connection = ConfigurationManager.AppSettings["CloudStorageConnectionString"]
-                ?? "UseDevelopmentStorage=true";
+            var connection = ConfigurationManager.AppSettings["CloudStorageConnectionString"];
+
+            if (string.IsNullOrEmpty(connection))
+            {
+                throw new Exception("Analyze request storage connection string is not specified");
+            }
 
             services.AddSingleton(CloudStorageAccount.Parse(connection));
             services.AddScoped<IStorage, AzureStorage>(CreateStorage);

@@ -20,7 +20,7 @@ namespace PortabilityService.Functions
         [FunctionName("analyze")]
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
-            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue,
+            [Queue("%WorkflowQueueName%")]ICollector<WorkflowQueueMessage> workflowMessageQueue,
             [Inject]IStorage storage,
             ILogger log)
         {
