@@ -26,6 +26,14 @@
     <IsTest>false</IsTest>
     <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
   </PropertyGroup>
+  <PropertyGroup>
+    <IsFunctionsProject>false</IsFunctionsProject>
+    <IsFunctionsProject Condition="$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">true</IsFunctionsProject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsOnWindows>false</IsOnWindows>
+    <IsOnWindows Condition="'$(OS)' == 'Windows_NT'">true</IsOnWindows>
+  </PropertyGroup>
 
   <!-- Conditions where the assemblies are not signed:
     1. Assembly signing not supported on Linux, yet: `CS7027: Error signing output with public key from file`
@@ -33,11 +41,12 @@
     3. Test projects are not signed -->
   <PropertyGroup>
     <ShouldSignAssembly>true</ShouldSignAssembly>
-    <ShouldSignAssembly Condition="'$(OS)' != 'Windows_NT' OR !$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">false</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="!$(IsOnWindows)">false</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="$(IsFunctionsProject)">false</ShouldSignAssembly>
     <ShouldSignAssembly Condition="$(IsTest)">false</ShouldSignAssembly>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="$(ShouldSignAssembly)">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
