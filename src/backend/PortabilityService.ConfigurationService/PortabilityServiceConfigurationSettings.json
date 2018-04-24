@@ -1,14 +1,22 @@
 ﻿{
   "PortabilityServiceSettings": {
-    "Logging": {
-      "IncludeScopes": false,
-      "LogLevel": {
-        "Default": "Warning"
-      }
-    },
     "ServiceUrls": {
       "ConfigurationService": "http://portabilityconfigurationservice",
       "PortabilityService": "http://portabilityService"
+    },
+    "ApplicationInsights": {
+      "InstrumentationKey": "<AI-Key-Goes-Here>"
+    },
+    "Serilog": {
+      "MinimumLevel": "Warning",
+      "WriteTo": [
+        {
+          "Name": "Console",
+          "Args": {
+            "outputTemplate": "{Timestamp:HH:mm:ss} {Level:u3} | {RequestId} - {Message}{NewLine}{Exception}"
+          }
+        }
+      ]
     }
   }
 }
