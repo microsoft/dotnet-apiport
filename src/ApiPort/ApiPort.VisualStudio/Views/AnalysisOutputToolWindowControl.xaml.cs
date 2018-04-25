@@ -8,16 +8,12 @@ namespace ApiPortVS
 {
     public partial class AnalysisOutputToolWindowControl : UserControl
     {
-        public static OutputViewModel Model { get; } = new OutputViewModel();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalysisOutputToolWindowControl"/> class.
         /// </summary>
         public AnalysisOutputToolWindowControl()
         {
             this.InitializeComponent();
-
-            DataContext = Model;
         }
     }
 }

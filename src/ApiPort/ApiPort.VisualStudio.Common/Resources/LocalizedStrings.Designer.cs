@@ -106,6 +106,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available reports:.
+        /// </summary>
+        public static string AvailableReports {
+            get {
+                return ResourceManager.GetString("AvailableReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to summary.
         /// </summary>
         public static string BackToSummary {
@@ -341,6 +350,24 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Directory.
+        /// </summary>
+        public static string OpenDirectory {
+            get {
+                return ResourceManager.GetString("OpenDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Report.
+        /// </summary>
+        public static string OpenReport {
+            get {
+                return ResourceManager.GetString("OpenReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output formats.
         /// </summary>
         public static string OutputFormats {
@@ -436,6 +463,15 @@ namespace ApiPortVS.Resources {
         public static string ReportNotAvailable {
             get {
                 return ResourceManager.GetString("ReportNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save As.
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
             }
         }
         
