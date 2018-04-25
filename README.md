@@ -15,7 +15,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 ## Using this Repository
 
 ### Windows
-There is a Visual Studio extension available for VS2017 and VS2015: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
+There is a Visual Studio extension available for VS2017: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
 
 Download and build for yourself:
 1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
