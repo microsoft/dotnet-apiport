@@ -199,11 +199,6 @@ namespace ApiPortVS
         private static OutputViewModel GetOutputViewModel(IComponentContext context)
         {
             var viewModel = context.Resolve<OptionsViewModel>();
-
-            if (string.IsNullOrEmpty(viewModel.OutputDirectory))
-            {
-            }
-
             var directory = new DirectoryInfo(viewModel.OutputDirectory);
 
             if (!directory.Exists)
@@ -212,11 +207,12 @@ namespace ApiPortVS
             }
 
             var validExtensions = new HashSet<string>(viewModel.Formats.Select(x => x.FileExtension).Distinct());
-            var matchAnything = validExtensions.Count == 0;
 
-            var validReports = directory.EnumerateFiles().Where(x => matchAnything || validExtensions.Contains(x.Extension));
+            var validReports = directory.EnumerateFiles().Where(x => validExtensions.Contains(x.Extension));
 
-            if (!validReports.Any())
+            // If there are no report file extensions we support,
+            // or if there are no matching reports, return a new view model
+            if (!validExtensions.Any() || !validReports.Any())
             {
                 return new OutputViewModel();
             }
