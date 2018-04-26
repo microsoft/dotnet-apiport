@@ -40,6 +40,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                           HorizontalContentAlignment="Stretch"
                           KeyboardNavigation.TabNavigation="Continue"
                           Background="Transparent"
+                          IsVisibleChanged="ListView_IsVisibleChanged"
                           IsTabStop="False">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
