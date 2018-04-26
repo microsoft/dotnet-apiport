@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary 
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,30 +14,13 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.DialogTextBrushKey}}" />
     </Style>
 
-    <Style x:Key="HyperlinkFocusVisualStyleKey">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle SnapsToDevicePixels="true"
-                               Margin="0"
-                               Stroke="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                               StrokeDashArray="1 2" StrokeThickness="1" />
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="ToolWindowHyperlinkStyle" TargetType="Hyperlink">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource HyperlinkFocusVisualStyleKey}" />
-    </Style>
-
     <!-- For the tool window because it has a different colour scheme than the options page. -->
     <Style x:Key="ToolWindowTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource VsFont.EnvironmentFontFamily}" />
         <Setter Property="FontSize" Value="{DynamicResource VsFont.EnvironmentFontSize}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
     </Style>
-
+    
     <!-- Group Box -->
     <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
         <Setter Property="BorderBrush" Value="{DynamicResource CommonControls.CheckBoxBorder}" />
