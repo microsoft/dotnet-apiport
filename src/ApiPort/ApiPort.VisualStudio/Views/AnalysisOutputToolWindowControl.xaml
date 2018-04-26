@@ -25,23 +25,27 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Text="{x:Static const:LocalizedStrings.AvailableReports}"
-                   AutomationProperties.Name="{x:Static const:LocalizedStrings.AvailableReports}"
                    Style="{DynamicResource ToolWindowTextBlockStyle}"
                    Margin="5"
                    FontWeight="Bold"
                    Grid.Row="0"/>
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
+            <ScrollViewer AutomationProperties.Name="{x:Static const:LocalizedStrings.AvailableReports}"
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto"
                           Background="Transparent"
                           IsTabStop="False">
                 <ListView ItemsSource="{Binding Paths}"
-                          ItemContainerStyle="{DynamicResource ToolWindowListBoxItemStyle}"
                           HorizontalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
                           KeyboardNavigation.TabNavigation="Continue"
                           Background="Transparent"
                           IsTabStop="False">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="AutomationProperties.Name" Value="{Binding Path=., Converter={StaticResource PathToFileNameConverter}}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,5"
