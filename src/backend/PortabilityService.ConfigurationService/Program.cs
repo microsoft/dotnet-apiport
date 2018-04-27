@@ -5,11 +5,14 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace PortabilityService.ConfigurationService
 {
     public class Program
     {
+        const string APP_INSIGHTS_KEY_KEY = "ApplicationInsights:InstrumentationKey";
+
         public static void Main(string[] args)
         {
             BuildWebHost(args).Run();
@@ -52,18 +55,25 @@ namespace PortabilityService.ConfigurationService
         /// </summary>
         private static void ConfigureLogging(WebHostBuilderContext context, ILoggingBuilder loggingBuilder)
         {
-            loggingBuilder.AddConfiguration(context.Configuration.GetSection("PortabilityServiceSettings:Logging"));
+            var env = context.HostingEnvironment;
+            var config = context.Configuration;
 
-            loggingBuilder.AddConsole();
+            // Clear default providers
+            loggingBuilder.ClearProviders();
 
-            if (context.HostingEnvironment.IsDevelopment())
+            // Create Serilog configuration from app configuration
+            var serilogLoggerConfiguration = new LoggerConfiguration()
+                .ReadFrom.Configuration(config.GetSection("PortabilityServiceSettings"));
+
+            if (!env.IsDevelopment())
             {
-                loggingBuilder.AddDebug();
+                // In non-dev environments, add an App Insights sink
+                serilogLoggerConfiguration = serilogLoggerConfiguration
+                    .WriteTo.ApplicationInsightsTraces(config[APP_INSIGHTS_KEY_KEY]);
             }
-            else
-            {
-                // TODO: Add Application insights here
-            }
+
+            // Add the Serilog logging provider
+            loggingBuilder.AddSerilog(serilogLoggerConfiguration.CreateLogger());
         }
     }
 }

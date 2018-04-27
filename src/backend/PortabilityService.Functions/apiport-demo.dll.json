@@ -1,0 +1,267 @@
+﻿{
+  "SubmissionId": "09989d50-745d-4edb-ac4a-d08c64766298",
+  "ApplicationName": "",
+  "CatalogLastUpdated": "2018-03-06T18:38:44.5190526+00:00",
+  "MissingDependencies": [
+    {
+      "DefinedInAssemblyIdentity": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.Net.ServicePointManager",
+      "TypeDocId": null,
+      "RecommendedChanges": "Use System.Net.HttpClient or WinHttpHandler instead.",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.Runtime.Serialization.Json.DataContractJsonSerializer.#ctor(System.Type)",
+      "TypeDocId": "T:System.Runtime.Serialization.Json.DataContractJsonSerializer",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "3.5",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.IO.Ports.SerialPort.#ctor",
+      "TypeDocId": "T:System.IO.Ports.SerialPort",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "2.0",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.IO.Ports.SerialPort",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "2.0",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "T:System.Net.PeerToPeer.Collaboration.PeerApplication",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "3.5",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.Runtime.Serialization.XmlObjectSerializer",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "3.0",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.#ctor",
+      "TypeDocId": "T:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.Xml.XmlTextWriter",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Deserialize(System.IO.Stream)",
+      "TypeDocId": "T:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "M:System.Web.Security.MachineKey.Decode(System.String,System.Web.Security.MachineKeyProtection)",
+      "TypeDocId": "T:System.Web.Security.MachineKey",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "4.0",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.Runtime.Serialization.XmlObjectSerializer.WriteObject(System.Xml.XmlWriter,System.Object)",
+      "TypeDocId": "T:System.Runtime.Serialization.XmlObjectSerializer",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "3.0",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.Xml.XmlTextWriter.#ctor(System.String,System.Text.Encoding)",
+      "TypeDocId": "T:System.Xml.XmlTextWriter",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "M:System.Net.PeerToPeer.Collaboration.PeerApplication.#ctor",
+      "TypeDocId": "T:System.Net.PeerToPeer.Collaboration.PeerApplication",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "3.5",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.AppDomainSetup.get_DynamicBase",
+      "TypeDocId": "T:System.AppDomainSetup",
+      "RecommendedChanges": "Remove usage.",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.AppDomainSetup.#ctor",
+      "TypeDocId": "T:System.AppDomainSetup",
+      "RecommendedChanges": "Remove usage.",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "M:System.Net.ServicePointManager.set_SecurityProtocol(System.Net.SecurityProtocolType)",
+      "TypeDocId": "T:System.Net.ServicePointManager",
+      "RecommendedChanges": "Use System.Net.HttpClient or WinHttpHandler instead.",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.Runtime.Serialization.Json.DataContractJsonSerializer",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "3.5",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "T:System.Web.Security.MachineKey",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "4.0",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "T:System.Web.Security.MachineKeyProtection",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "4.0",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.AppDomainSetup",
+      "TypeDocId": null,
+      "RecommendedChanges": "Remove usage.",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "MemberDocId": "T:System.Net.SecurityProtocolType",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "1.1",
+        "2.0"
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "M:System.Web.Security.MachineKey.Encode(System.Byte[],System.Web.Security.MachineKeyProtection)",
+      "TypeDocId": "T:System.Web.Security.MachineKey",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        "4.0",
+        null
+      ]
+    }
+  ],
+  "UnresolvedUserAssemblies": [],
+  "Targets": [
+    ".NET Framework,Version=v4.7.1",
+    ".NET Standard,Version=v1.6"
+  ],
+  "BreakingChanges": [],
+  "BreakingChangeSkippedAssemblies": []
+}

@@ -1,16 +1,22 @@
 ﻿{
   "PortabilityServiceSettings": {
-    "Logging": {
-      "IncludeScopes": false,
-      "LogLevel": {
-        "Default": "Debug",
-        "System": "Information",
-        "Microsoft": "Information"
-      }
-    },
     "ServiceUrls": {
       "ConfigurationService": "http://localhost:1443",
       "PortabilityService": "http://localhost:5001"
+    },
+    "Serilog": {
+      "MinimumLevel": "Information",
+      "WriteTo": [
+        {
+          "Name": "Console",
+          "Args": {
+            "outputTemplate": "{Timestamp:HH:mm:ss} {Level:u3} | {RequestId} - {Message}{NewLine}{Exception}"
+          }
+        },
+        {
+          "Name": "Debug"
+        }
+      ]
     }
   }
 }

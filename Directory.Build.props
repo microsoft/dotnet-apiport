@@ -22,9 +22,31 @@
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
-  <!-- Assembly signing not supported on Linux, yet: `CS7027: Error signing output with public key from file`
-       The Functions assembly can't be signed because the Azure Functions SDK has unsigned dependencies. -->
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND !$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">
+  <PropertyGroup>
+    <IsTest>false</IsTest>
+    <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsFunctionsProject>false</IsFunctionsProject>
+    <IsFunctionsProject Condition="$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">true</IsFunctionsProject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsOnWindows>false</IsOnWindows>
+    <IsOnWindows Condition="'$(OS)' == 'Windows_NT'">true</IsOnWindows>
+  </PropertyGroup>
+
+  <!-- Conditions where the assemblies are not signed:
+    1. Assembly signing not supported on Linux, yet: `CS7027: Error signing output with public key from file`
+    2. The Functions assembly can't be signed because the Azure Functions SDK has unsigned dependencies
+    3. Test projects are not signed -->
+  <PropertyGroup>
+    <ShouldSignAssembly>true</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="!$(IsOnWindows)">false</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="$(IsFunctionsProject)">false</ShouldSignAssembly>
+    <ShouldSignAssembly Condition="$(IsTest)">false</ShouldSignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(ShouldSignAssembly)">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\PortabilityTools.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);FEATURE_STRONGNAMESIGNING</DefineConstants>
@@ -35,11 +57,6 @@
     our PRs because of the CI builds -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <IsTest>false</IsTest>
-    <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
   </PropertyGroup>
 
   <!--NuGet properties-->

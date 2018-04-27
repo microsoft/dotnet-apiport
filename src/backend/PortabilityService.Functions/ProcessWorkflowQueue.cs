@@ -13,8 +13,8 @@ namespace PortabilityService.Functions
     public static class ProcessWorkflowQueue
     {
         [FunctionName("ProcessWorkflowQueue")]
-        public static async Task Run([QueueTrigger("apiportworkflowqueue")]WorkflowQueueMessage workflowMessage,
-            [Queue("apiportworkflowqueue")]ICollector<WorkflowQueueMessage> workflowMessageQueue,
+        public static async Task Run([QueueTrigger("%WorkflowQueueName%")]WorkflowQueueMessage workflowMessage,
+            [Queue("%WorkflowQueueName%")]ICollector<WorkflowQueueMessage> workflowMessageQueue,
             ILogger log,
             CancellationToken cancelToken)
         {
