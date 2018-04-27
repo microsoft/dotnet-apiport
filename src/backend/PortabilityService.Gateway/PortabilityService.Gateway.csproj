@@ -3,12 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
-    <!-- Temporarily include ASP.NET Core framework files in publish output to work
-         around an issue where Windows ASP.NET Core libraries are not correctly populated
-         in 2.0 Windows aspnetcore base Docker images
-         https://github.com/aspnet/aspnet-docker/issues/412 -->
-    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
-
     <!-- Ocelot is not signed and there's no reason for a service assembly
         (as opposed to a library) to need a strong name signature -->
     <SignAssembly>false</SignAssembly>
