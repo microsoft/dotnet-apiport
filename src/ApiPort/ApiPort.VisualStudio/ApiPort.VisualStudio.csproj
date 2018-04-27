@@ -64,9 +64,10 @@
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.5.100" />
-    <PackageReference Include="VSLangProj140" Version="14.0.25029" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.3.25407" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="15.6.27413" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.6.170" />
+    <PackageReference Include="VSLangProj140" Version="14.0.25030" />
+    <PackageReference Include="VSLangProj150" Version="15.0.26229" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyRedirectResolver.cs" />

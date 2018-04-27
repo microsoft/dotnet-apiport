@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.5.100" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.6.170" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj">
