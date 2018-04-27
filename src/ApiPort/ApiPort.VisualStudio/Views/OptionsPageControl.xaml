@@ -55,6 +55,7 @@
                            AutomationProperties.HelpText="{Binding OutputDirectory}"
                            Grid.Column="2" Grid.Row="0" />
                 <Button Content="..."
+                        Name="UpdateDirectoryButton"
                         Click="UpdateDirectoryClick"
                         AutomationProperties.Name="{x:Static const:LocalizedStrings.SelectDefaultOutputDirectory}"
                         KeyboardNavigation.TabIndex="0"

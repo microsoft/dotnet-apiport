@@ -48,6 +48,8 @@ namespace ApiPortVS.Views
                     ViewModel.OutputDirectory = dialog.SelectedPath;
                 }
             }
+
+            UpdateDirectoryButton.Focus();
         }
     }
 }
