@@ -72,6 +72,7 @@
     <Compile Include="AssemblyRedirectResolver.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
+    <Compile Include="StatusBarProgressReporter.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
     <Compile Include="Utils\TargetPlatformDisplayNameConverter.cs" />
     <Compile Include="Utils\TargetInformationStringConverter.cs" />
