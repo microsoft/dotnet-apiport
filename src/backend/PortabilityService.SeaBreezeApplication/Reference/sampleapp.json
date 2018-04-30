@@ -1,0 +1,126 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location of the resources."
+      }
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-03-01-privatepreview",
+      "name": "SbzVotingNetwork",
+      "type": "Microsoft.ServiceFabric/networks",
+      "location": "[parameters('location')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "Private network for application",
+        "addressPrefix": "10.0.0.4/22",
+        "ingressConfig": {
+          "qosLevel": "bronze",
+          "layer4": [
+            {
+              "publicPort": "80",
+              "applicationName": "SbzVoting",
+              "serviceName": "VotingWeb",
+              "endpointName": "Endpoint1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2018-03-01-privatepreview",
+      "name": "SbzVoting",
+      "type": "Microsoft.ServiceFabric/applications",
+      "location": "[parameters('location')]",
+      "properties": {
+        "description": "Voting SeaBreeze!",
+        "services": [
+          {
+            "name": "VotingWeb",
+            "properties": {
+              "description": "Seabreeze Voting Web service.",
+              "osType": "linux",
+              "codePackages": [
+                {
+                  "name": "VotingWeb.Code",
+                  "image": "seabreeze/votingfrontend:1.0-Linux",
+                  "endpoints": [
+                    {
+                      "name": "Endpoint1",
+                      "port": 80
+                    }
+                  ],
+                  "environmentVariables": [
+                    {
+                      "name": "Voting_BackendHostName",
+                      "value": "votingdata"
+                    },
+                    {
+                      "name": "Voting_BackendHostPort",
+                      "value": "8080"
+                    }
+                  ],
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memoryInGB": 1
+                    }
+                  }
+                }
+              ],
+              "replicaCount": 1,
+              "networkRefs": [
+                {
+                  "name": "[resourceId('Microsoft.ServiceFabric/networks', 'SbzVotingNetwork')]"
+                }
+              ]
+            }
+          },
+          {
+            "name": "VotingData",
+            "properties": {
+              "description": "Seabreeze Voting Data service.",
+              "osType": "linux",
+              "codePackages": [
+                {
+                  "name": "VotingData.Code",
+                  "image": "seabreeze/votingdata:1.0-Linux",
+                  "endpoints": [
+                    {
+                      "name": "Endpoint1",
+                      "port": 8080
+                    }
+                  ],
+                  "environmentVariables": [
+                    {
+                      "name": "ASPNETCORE_URLS",
+                      "value": "http://*:8080"
+                    }
+                  ],
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memoryInGB": 1
+                    }
+                  }
+                }
+              ],
+              "replicaCount": 1,
+              "networkRefs": [
+                {
+                  "name": "[resourceId('Microsoft.ServiceFabric/networks', 'SbzVotingNetwork')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

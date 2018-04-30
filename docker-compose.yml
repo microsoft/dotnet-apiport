@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  portabilityservice.gateway:
+    image: ${DOCKER_REGISTRY}portabilityservice-gateway:${PORTABILITYSERVICE_VERSION:-latest}
+    build:
+      context: .
+      dockerfile: src/backend/PortabilityService.Gateway/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - portabilityservice.configurationservice
+    environment:
+      - ConfigurationService_Url=http://portabilityservice.configurationservice
+
+  portabilityservice.configurationservice:
+    image: ${DOCKER_REGISTRY}portabilityservice-configurationservice:${PORTABILITYSERVICE_VERSION:-latest}
+    build:
+      context: .
+      dockerfile: src/backend/PortabilityService.ConfigurationService/Dockerfile
+    ports:
+      - "80"
