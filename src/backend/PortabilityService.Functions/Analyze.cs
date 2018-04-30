@@ -73,16 +73,16 @@ namespace PortabilityService.Functions
         public static HttpResponseMessage ResponseWithServiceHeaders(HttpRequestMessage request, string submissionId)
         {
             var accessKey = GetAccessKey(submissionId);
-            var resultsUrl = new Uri(request.RequestUri, $"/api/results/{submissionId}");
+            var reportUrl = new Uri(request.RequestUri, $"/api/report/{submissionId}");
             var content = new AnalyzeResponse
             {
                 ResultAuthToken = accessKey,
-                ResultUrl = resultsUrl,
+                ResultUrl = reportUrl,
                 SubmissionId = submissionId
             };
 
             var response = request.CreateResponse(HttpStatusCode.Created, content);
-            response.Headers.Location = resultsUrl;
+            response.Headers.Location = reportUrl;
             response.Headers.Add(typeof(EndpointStatus).Name, EndpointStatus.Alive.ToString());
 
             return response;

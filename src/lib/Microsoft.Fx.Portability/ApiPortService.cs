@@ -25,8 +25,8 @@ namespace Microsoft.Fx.Portability
             internal const string UsedApi = "/api/usage";
             internal const string FxApi = "/api/fxapi";
             internal const string FxApiSearch = "/api/fxapi/search";
-            internal const string ResultFormat = "/api/resultformat";
-            internal const string DefaultResultFormat = "/api/resultformat/default";
+            internal const string ResultFormat = "/api/reportformat";
+            internal const string DefaultResultFormat = "/api/reportformat/default";
         }
 
         private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(5);
