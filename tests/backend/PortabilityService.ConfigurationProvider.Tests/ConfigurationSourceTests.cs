@@ -13,13 +13,13 @@ namespace PortabilityService.ConfigurationProvider.Tests
         [Fact]
         public static void CtorHttpClientAndNullConfigurationSectionThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PortabilityServiceConfigurationSource(new HttpClient(), null));
+            Assert.Throws<ArgumentNullException>(() => new PortabilityServiceConfigurationSource(new HttpClient(), null, false));
         }
 
         [Fact]
         public static void CtorConfigurationSectionAndNullHttpClientThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PortabilityServiceConfigurationSource((HttpClient)null, "TestSection"));
+            Assert.Throws<ArgumentNullException>(() => new PortabilityServiceConfigurationSource((HttpClient)null, "TestSection", false));
         }
     }
 }

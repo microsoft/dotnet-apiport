@@ -11,13 +11,15 @@ namespace PortabilityService.ConfigurationProvider
     {
         private readonly string _configurationSection;
         private readonly HttpClient _httpClient;
+        private readonly bool _optional;
 
-        public PortabilityServiceConfigurationSource(HttpClient httpClient, string configurationSection)
+        public PortabilityServiceConfigurationSource(HttpClient httpClient, string configurationSection = ConfigurationProviderConstants.PortabilityServiceConfigurationRoot, bool optional = false)
         {
-            _configurationSection = configurationSection ?? throw new ArgumentNullException(nameof(configurationSection));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _configurationSection = configurationSection ?? throw new ArgumentNullException(nameof(configurationSection));
+            _optional = optional;
         }
 
-        public IConfigurationProvider Build(IConfigurationBuilder builder) => new PortabilityServiceConfigurationProvider(_httpClient, _configurationSection);            
+        public IConfigurationProvider Build(IConfigurationBuilder builder) => new PortabilityServiceConfigurationProvider(_httpClient, _configurationSection, _optional);
     }
 }
