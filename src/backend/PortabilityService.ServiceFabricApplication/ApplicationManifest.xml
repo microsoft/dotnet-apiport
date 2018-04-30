@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApplicationManifest 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns="http://schemas.microsoft.com/2011/01/fabric" ApplicationTypeName="PortabilityServiceType" ApplicationTypeVersion="v1">
+    <ServiceManifestImport>
+        <ServiceManifestRef ServiceManifestName="portabilityservice.configurationservicePkg" ServiceManifestVersion="v1"/>
+        <Policies>
+            <ContainerHostPolicies CodePackageRef="portabilityservice.configurationservice.Code">
+                <RepositoryCredentials AccountName="portabilityservice" Password="puog8z6hZiPliuzAp=DQEqBdLK9EKETL"/>
+                <PortBinding ContainerPort="80" EndpointRef="portabilityservice.configurationserviceEndpoint"/>
+            </ContainerHostPolicies>
+            <ServicePackageResourceGovernancePolicy/>
+        </Policies>
+    </ServiceManifestImport>
+    <ServiceManifestImport>
+        <ServiceManifestRef ServiceManifestName="portabilityservice.gatewayPkg" ServiceManifestVersion="v1"/>
+        <EnvironmentOverrides CodePackageRef="portabilityservice.gateway.Code">
+            <EnvironmentVariable Name="ConfigurationService_Url" Value="http://portabilityservice.configurationservice"/>
+        </EnvironmentOverrides>
+        <Policies>
+            <ContainerHostPolicies CodePackageRef="portabilityservice.gateway.Code">
+                <RepositoryCredentials AccountName="portabilityservice" Password="puog8z6hZiPliuzAp=DQEqBdLK9EKETL"/>
+                <PortBinding ContainerPort="80" EndpointRef="portabilityservice.gatewayEndpoint"/>
+            </ContainerHostPolicies>
+            <ServicePackageResourceGovernancePolicy/>
+        </Policies>
+    </ServiceManifestImport>
+    <DefaultServices>
+        <Service Name="portabilityservice.configurationservice" ServiceDnsName="portabilityservice.configurationservice" ServicePackageActivationMode="ExclusiveProcess">
+            <StatelessService ServiceTypeName="portabilityservice.configurationserviceType">
+                <SingletonPartition/>
+            </StatelessService>
+        </Service>
+        <Service Name="portabilityservice.gateway" ServiceDnsName="portabilityservice.gateway" ServicePackageActivationMode="ExclusiveProcess">
+            <StatelessService ServiceTypeName="portabilityservice.gatewayType">
+                <SingletonPartition/>
+            </StatelessService>
+        </Service>
+    </DefaultServices>
+</ApplicationManifest>
