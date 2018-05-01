@@ -6,9 +6,11 @@ using Microsoft.Fx.Portability.Resources;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -177,8 +179,42 @@ namespace Microsoft.Fx.Portability.Tests
             var analyzeResponse = new AnalyzeResponse
             {
                 ResultAuthToken = expectedAuthToken,
-                ResultUrl = new Uri("http://localhost"),
+                ResultUrl = new Uri("http://localhost")
             };
+            var service = new ApiPortService("http://localhost", handler, new ProductInformation(""), Substitute.For<IProgressReporter>());
+
+            await service.GetReportingResultAsync(analyzeResponse, new ResultFormatInformation { MimeType = "foo/bar" });
+        }
+
+        [Theory]
+        [InlineData(100d)]
+        [InlineData(200d)]
+        [InlineData(300d)]
+        public async Task RespectsRetryAfterHeaderWhenGettingReport(double msBeforeRetry)
+        {
+            var stopwatch = new Stopwatch();
+            var handler = new TestHandler(request =>
+            {
+                if (!stopwatch.IsRunning) // this is the first request
+                {
+                    var response = new HttpResponseMessage(HttpStatusCode.Accepted);
+                    response.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromMilliseconds(msBeforeRetry));
+                    stopwatch.Start();
+
+                    return response;
+                }
+
+                stopwatch.Stop();
+                var percentError = Math.Abs(stopwatch.ElapsedMilliseconds - msBeforeRetry) / msBeforeRetry;
+
+                Assert.True(percentError < 0.2d);
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("{}")
+                };
+            });
+            var analyzeResponse = new AnalyzeResponse { ResultUrl = new Uri("http://localhost") };
             var service = new ApiPortService("http://localhost", handler, new ProductInformation(""), Substitute.For<IProgressReporter>());
 
             await service.GetReportingResultAsync(analyzeResponse, new ResultFormatInformation { MimeType = "foo/bar" });

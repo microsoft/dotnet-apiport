@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace PortabilityService.Functions
 {
@@ -28,7 +29,12 @@ namespace PortabilityService.Functions
             // simulate report generation taking some time
             if (new Random().Next(10) < 4)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                // TODO this should return 202 only when the analyze request has been received; 
+                // if it has not, an error e.g. 404 is more appropriate
+                var response = req.CreateResponse(HttpStatusCode.Accepted);
+                response.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(2d));
+
+                return response;
             }
 
             switch (req.Headers.Accept.ToString())

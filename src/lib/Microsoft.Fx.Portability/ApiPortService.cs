@@ -123,33 +123,54 @@ namespace Microsoft.Fx.Portability
             var deadline = DateTime.Now + Timeout;
             while (DateTime.Now < deadline)
             {
-                try
+                var (retryDelta, reportingResult) = await GetReportAsync(analyzeResponse, format);
+                if (reportingResult.HasValue)
                 {
-                    return await GetReportAsync(analyzeResponse, format);
+                    return reportingResult.Value;
                 }
-                catch (NotFoundException)
+
+                if (!retryDelta.HasValue)
                 {
-                    await Task.Delay(3000);
+                    throw new PortabilityAnalyzerException(LocalizedStrings.HttpExceptionMessage);
                 }
+
+                await Task.Delay(retryDelta.Value);
             }
 
             throw new TimeoutException(LocalizedStrings.TimedOut);
         }
 
-        private async Task<ReportingResultWithFormat> GetReportAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
+        private async Task<(TimeSpan? retryDelta, ReportingResultWithFormat? result)> GetReportAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
         {
             using (var request = new HttpRequestMessage(HttpMethod.Get, analyzeResponse.ResultUrl.ToString()))
             {
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(format.MimeType));
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", analyzeResponse.ResultAuthToken);
 
-                var data = await SendAsync(request);
-
-                return new ReportingResultWithFormat
+                using (var response = await _client.SendAsync(request))
                 {
-                    Data = data,
-                    Format = format.DisplayName
-                };
+                    ReportEndpointDeprecation(response);
+
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.Accepted:
+                            var retryDelta = response.Headers.RetryAfter.Delta;
+                            return (retryDelta, null);
+                        case HttpStatusCode.OK:
+                            var data = await response.Content.ReadAsByteArrayAsync();
+                            var result = new ReportingResultWithFormat
+                            {
+                                Data = data,
+                                Format = format.DisplayName
+                            };
+                            return (null, result);
+                    }
+
+                    await ThrowErrorCodeExceptionAsync(request, response);
+                    
+                    // the compiler doesn't know ThrowErrorCodeExceptionAsync always throws
+                    throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
+                }
             }
         }
 
@@ -157,58 +178,62 @@ namespace Microsoft.Fx.Portability
         {
             using (var response = await _client.SendAsync(request))
             {
-                if (EndpointDeprecated(response))
-                {
-                    _progressReporter.ReportIssue(LocalizedStrings.ServerEndpointDeprecated);
-                }
+                ReportEndpointDeprecation(response);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var content = await response.Content.ReadAsByteArrayAsync();
-
-                    return content;
+                    return await response.Content.ReadAsByteArrayAsync();
                 }
-
-                switch (response.StatusCode)
+                else
                 {
-                    case HttpStatusCode.BadRequest:
-                        await ProcessBadRequestAsync(response);
-                        break; // ProcessBadRequestAsync always throws but the compiler does not detect it
-                    case HttpStatusCode.MovedPermanently:
-                        throw new MovedPermanentlyException();
-                    case HttpStatusCode.NotFound:
-                        // Estimated maximum allowed content from the portability service in bytes
-                        const long estimatedMaximumAllowedContentLength = 31457280;
+                    await ThrowErrorCodeExceptionAsync(request, response);
 
-                        var contentLength = request.Content?.Headers?.ContentLength;
-
-                        if (contentLength.HasValue && contentLength.Value >= estimatedMaximumAllowedContentLength)
-                        {
-                            throw new RequestTooLargeException(contentLength.Value);
-                        }
-                        else
-                        {
-                            throw new NotFoundException(request.Method, request.RequestUri);
-                        }
-                    case HttpStatusCode.Unauthorized:
-                        throw new UnauthorizedEndpointException();
-                    case HttpStatusCode.ProxyAuthenticationRequired:
-                        throw new ProxyAuthenticationRequiredException(request.RequestUri);
+                    // the compiler doesn't know ThrowErrorCodeExceptionAsync always throws
+                    throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
                 }
-
-                throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
             }
         }
 
-        private static bool EndpointDeprecated(HttpResponseMessage response)
+        private void ReportEndpointDeprecation(HttpResponseMessage response)
         {
-            if (!response.Headers.TryGetValues(typeof(EndpointStatus).Name, out var headers))
+            if (response.Headers.TryGetValues(typeof(EndpointStatus).Name, out var headers) &&
+                Enum.TryParse(headers.Single(), out EndpointStatus status) &&
+                status == EndpointStatus.Deprecated)
             {
-                return false;
+                _progressReporter.ReportIssue(LocalizedStrings.ServerEndpointDeprecated);
+            }
+        }
+
+        private static async Task ThrowErrorCodeExceptionAsync(HttpRequestMessage request, HttpResponseMessage response)
+        {
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.BadRequest:
+                    await ProcessBadRequestAsync(response);
+                    break; // ProcessBadRequestAsync always throws but the compiler does not detect it
+                case HttpStatusCode.MovedPermanently:
+                    throw new MovedPermanentlyException();
+                case HttpStatusCode.NotFound:
+                    // Estimated maximum allowed content from the portability service in bytes
+                    const long estimatedMaximumAllowedContentLength = 31457280;
+
+                    var contentLength = request.Content?.Headers?.ContentLength;
+
+                    if (contentLength.HasValue && contentLength.Value >= estimatedMaximumAllowedContentLength)
+                    {
+                        throw new RequestTooLargeException(contentLength.Value);
+                    }
+                    else
+                    {
+                        throw new NotFoundException(request.Method, request.RequestUri);
+                    }
+                case HttpStatusCode.Unauthorized:
+                    throw new UnauthorizedEndpointException();
+                case HttpStatusCode.ProxyAuthenticationRequired:
+                    throw new ProxyAuthenticationRequiredException(request.RequestUri);
             }
 
-            return Enum.TryParse(headers.Single(), out EndpointStatus status) &&
-                   status == EndpointStatus.Deprecated;
+            throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
         }
 
         private static async Task ProcessBadRequestAsync(HttpResponseMessage response)
