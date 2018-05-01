@@ -65,18 +65,6 @@ namespace Microsoft.Fx.Portability.Tests
         }
 
         [Fact]
-        public async Task ApiPortService_GetAvailableFormatsAsync()
-        {
-            var expected = new List<string> { "Json", "HTML", "Excel" };
-
-            var serviceResponse = await _apiPortService.GetResultFormatsAsync();
-            var result = serviceResponse;
-
-            Assert.Equal(expected.Count(), result.Count());
-            Assert.Empty(expected.Except(result.Select(r => r.DisplayName)));
-        }
-
-        [Fact]
         public async Task CompressesAnalyzeRequest()
         {
             var handler = new TestHandler(request =>
