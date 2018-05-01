@@ -10,7 +10,8 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
              xmlns:const="clr-namespace:ApiPortVS.Resources;assembly=ApiPort.VisualStudio.Common"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
-             Name="PortabilityResultsToolbar">
+             Name="PortabilityResultsToolbar"
+             Style="{DynamicResource AnalysisOutputToolWindowStyle}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

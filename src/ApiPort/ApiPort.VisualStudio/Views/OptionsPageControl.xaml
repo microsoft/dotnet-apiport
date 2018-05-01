@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:const="clr-namespace:ApiPortVS.Resources;assembly=ApiPort.VisualStudio.Common"
              mc:Ignorable="d"
-             d:DesignHeight="283.5" d:DesignWidth="640">
+             d:DesignHeight="283.5" d:DesignWidth="640"
+             Style="{DynamicResource OptionsPageStyle}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,7 +31,6 @@
                    Grid.Row="0" />
 
         <GroupBox Header="{x:Static const:LocalizedStrings.GeneralSettings}"
-                  Style="{DynamicResource GroupBoxStyle}"
                   IsTabStop="False"
                   Grid.Row="1">
             <Grid>
@@ -47,11 +47,9 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="{x:Static const:LocalizedStrings.DefaultOutputDirectory}"
-                           Style="{DynamicResource ContentTextBlockStyle}"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.DefaultOutputDirectory}"
                            Grid.Column="0" Grid.Row="0" />
                 <TextBlock Text="{Binding OutputDirectory}"
-                           Style="{DynamicResource ContentTextBlockStyle}"
                            AutomationProperties.HelpText="{Binding OutputDirectory}"
                            Grid.Column="2" Grid.Row="0" />
                 <Button Content="..."
@@ -61,7 +59,6 @@
                         KeyboardNavigation.TabIndex="0"
                         Grid.Column="4" Grid.Row="0" />
                 <TextBlock Text="{x:Static const:LocalizedStrings.DefaultFileName}"
-                           Style="{DynamicResource ContentTextBlockStyle}"
                            Grid.Column="0" Grid.Row="2" />
                 <TextBox Text="{Binding DefaultOutputName, Mode=TwoWay}"
                          AutomationProperties.Name="{x:Static const:LocalizedStrings.DefaultReportFilename}"
@@ -71,13 +68,11 @@
         </GroupBox>
 
         <GroupBox Header="{x:Static const:LocalizedStrings.OutputFormats}"
-                  Style="{DynamicResource GroupBoxStyle}"
                   IsTabStop="False"
                   Grid.Row="2">
             <DockPanel>
                 <TextBlock Visibility="{Binding UpdatingPlatforms, Converter={StaticResource BoolToVisibility}}"
                            Text="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
-                           Style="{DynamicResource ContentTextBlockStyle}"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.RefreshingOutputFormats}"
                            KeyboardNavigation.IsTabStop="false" 
                            KeyboardNavigation.TabIndex="0" Margin="0,5"/>
@@ -111,7 +106,6 @@
         </GroupBox>
 
         <GroupBox Header="{x:Static const:LocalizedStrings.TargetPlatforms}"
-                  Style="{DynamicResource GroupBoxStyle}"
                   IsTabStop="False"
                   Grid.Row="3">
             <DockPanel>
@@ -138,7 +132,6 @@
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
                                     <TextBlock Text="{Binding Converter={StaticResource TargetPlatformDisplayName}}"
-                                               Style="{DynamicResource ContentTextBlockStyle}"
                                                DockPanel.Dock="Top" />
                                     <ItemsControl ItemsSource="{Binding Path=Versions}"
                                                   Margin="10,5,0,0"
