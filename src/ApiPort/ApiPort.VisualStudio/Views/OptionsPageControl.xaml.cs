@@ -43,11 +43,13 @@ namespace ApiPortVS.Views
         {
             _statusBar.SetText(LocalizedStrings.RefreshingPlatforms);
 
-            await ViewModel.UpdateAsync(force: force).ConfigureAwait(false);
+            // using a local here to capture ViewModel on the UI thread
+            var viewModel = ViewModel;
+            await viewModel.UpdateAsync(force: force).ConfigureAwait(false);
 
-            if (ViewModel.HasError)
+            if (viewModel.HasError)
             {
-                _statusBar.SetText(ViewModel.ErrorMessage);
+                _statusBar.SetText(viewModel.ErrorMessage);
             }
             else
             {
@@ -68,6 +70,8 @@ namespace ApiPortVS.Views
                     ViewModel.OutputDirectory = dialog.SelectedPath;
                 }
             }
+
+            UpdateDirectoryButton.Focus();
         }
     }
 }

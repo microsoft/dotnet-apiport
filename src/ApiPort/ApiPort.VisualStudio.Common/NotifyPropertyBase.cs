@@ -4,12 +4,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace ApiPortVS
 {
     public class NotifyPropertyBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly SynchronizationContext _context;
+
+        public NotifyPropertyBase()
+        {
+            _context = new DispatcherSynchronizationContext(Dispatcher.CurrentDispatcher);
+        }
 
         protected void UpdateProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
@@ -23,11 +31,19 @@ namespace ApiPortVS
 
         protected void OnPropertyUpdated([CallerMemberName]string propertyName = "")
         {
-            var handler = PropertyChanged;
-
-            if (handler != null)
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged == null)
             {
-                handler(this, new PropertyChangedEventArgs(propertyName));
+                return;
+            }
+
+            if (_context == SynchronizationContext.Current)
+            {
+                propertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            else
+            {
+                _context.Post(_ => propertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName)), null);
             }
         }
     }
