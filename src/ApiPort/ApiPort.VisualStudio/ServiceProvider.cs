@@ -132,14 +132,7 @@ namespace ApiPortVS
             var dte = Package.GetGlobalService(typeof(DTE)) as DTE;
             var version = new Version(dte.Version);
 
-            if (version.Major == 14)
-            {
-                builder.RegisterModule(new VS2015.ServiceProvider());
-            }
-            else
-            {
-                builder.RegisterModule(new VS2017.ServiceProvider());
-            }
+            builder.RegisterModule(new VS2017.ServiceProvider());
 
             _container = builder.Build();
         }
