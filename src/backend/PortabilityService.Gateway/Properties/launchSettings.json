@@ -12,6 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": false,
       "environmentVariables": {
+        "PortabilityConfigurationServiceUrl": "http://localhost:1443",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -19,6 +20,7 @@
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
+        "PortabilityConfigurationServiceUrl": "http://localhost:1443",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:2748"
