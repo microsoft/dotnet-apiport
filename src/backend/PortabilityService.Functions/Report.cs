@@ -29,8 +29,9 @@ namespace PortabilityService.Functions
             // simulate report generation taking some time
             if (new Random().Next(10) < 4)
             {
-                // TODO this should return 202 only when the analyze request has been received; 
-                // if it has not, an error e.g. 404 is more appropriate
+                // TODO this should return 202 only when the analyze request is known to have been received,
+                // 404 otherwise (e.g. when the client tries to get the report before its analyze request
+                // has propagated)
                 var response = req.CreateResponse(HttpStatusCode.Accepted);
                 response.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(2d));
 

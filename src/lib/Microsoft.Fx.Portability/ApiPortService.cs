@@ -29,7 +29,8 @@ namespace Microsoft.Fx.Portability
             internal const string DefaultResultFormat = "/api/reportformat/default";
         }
 
-        private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(5);
+        private static readonly TimeSpan DefaultRetryDelta = TimeSpan.FromSeconds(2d);
+        private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(3d);
         private readonly IProgressReporter _progressReporter;
         private readonly HttpClient _client;
 
@@ -129,11 +130,6 @@ namespace Microsoft.Fx.Portability
                     return reportingResult.Value;
                 }
 
-                if (!retryDelta.HasValue)
-                {
-                    throw new PortabilityAnalyzerException(LocalizedStrings.HttpExceptionMessage);
-                }
-
                 await Task.Delay(retryDelta.Value);
             }
 
@@ -154,7 +150,8 @@ namespace Microsoft.Fx.Portability
                     switch (response.StatusCode)
                     {
                         case HttpStatusCode.Accepted:
-                            var retryDelta = response.Headers.RetryAfter.Delta;
+                        case HttpStatusCode.NotFound:
+                            var retryDelta = response.Headers.RetryAfter?.Delta ?? DefaultRetryDelta;
                             return (retryDelta, null);
                         case HttpStatusCode.OK:
                             var data = await response.Content.ReadAsByteArrayAsync();
@@ -167,7 +164,7 @@ namespace Microsoft.Fx.Portability
                     }
 
                     await ThrowErrorCodeExceptionAsync(request, response);
-                    
+
                     // the compiler doesn't know ThrowErrorCodeExceptionAsync always throws
                     throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
                 }
