@@ -11,11 +11,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
 {
-    public class ApiPortClient
+    public class ApiPortClient : IDisposable
     {
         /// <summary>
         /// Maximum number of targets that can be submitted to the service at
@@ -34,6 +35,7 @@ namespace Microsoft.Fx.Portability
         private readonly IReportGenerator _reportGenerator;
         private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
         private readonly IFileWriter _writer;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore, IFileWriter writer)
         {
@@ -88,7 +90,7 @@ namespace Microsoft.Fx.Portability
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
         {
-            ValidateOptions(options);
+            await ValidateOptionsAsync(options);
 
             var jsonAdded = includeResponse ? TryAddJsonToOptions(options, out options) : false;
 
@@ -97,7 +99,7 @@ namespace Microsoft.Fx.Portability
                 _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidFileName, errorInput));
             }
 
-            var results = await GetReportsAsync(options);
+            var results = await GetReportsAsync(options).ConfigureAwait(false);
             var outputPaths = new List<string>();
 
             AnalyzeResult result = null;
@@ -114,7 +116,8 @@ namespace Microsoft.Fx.Portability
                     }
                 }
 
-                var outputPath = await CreateReport(reportingResult.Data, options.OutputFileName, reportingResult.Format, options.OverwriteOutputFile);
+                var outputPath = await CreateReport(reportingResult.Data, options.OutputFileName, reportingResult.Format, options.OverwriteOutputFile)
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(outputPath))
                 {
@@ -129,13 +132,15 @@ namespace Microsoft.Fx.Portability
             };
         }
 
-        public Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync()
+        public async Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync()
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingOutputFormats))
             {
                 try
                 {
-                    return Task.FromResult(AvailableReportFormats.Values.AsEnumerable());
+                    var formats = await GetAvailableReportFormatsAsync().ConfigureAwait(false);
+
+                    return formats.Values.AsEnumerable();
                 }
                 catch (Exception)
                 {
@@ -145,19 +150,18 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private Dictionary<string, ResultFormatInformation> AvailableReportFormats
+        private async Task<Dictionary<string, ResultFormatInformation>> GetAvailableReportFormatsAsync()
         {
-            get
+            _semaphore.Wait();
+            if (_availableReportFormats == null)
             {
-                if (_availableReportFormats == null)
-                {
-                    var outputFormats = _apiPortService.GetResultFormatsAsync().GetAwaiter().GetResult();
-                    _availableReportFormats = outputFormats
-                        .ToDictionary(key => key.DisplayName, value => value, StringComparer.OrdinalIgnoreCase);
-                }
-
-                return _availableReportFormats;
+                var outputFormats = await _apiPortService.GetResultFormatsAsync().ConfigureAwait(false);
+                _availableReportFormats = outputFormats
+                    .ToDictionary(key => key.DisplayName, value => value, StringComparer.OrdinalIgnoreCase);
             }
+            _semaphore.Release();
+
+            return _availableReportFormats;
         }
         private Dictionary<string, ResultFormatInformation> _availableReportFormats;
 
@@ -187,9 +191,9 @@ namespace Microsoft.Fx.Portability
                 var outputFileName = Path.GetFileName(filePath);
                 try
                 {
-                    var extension = GetExtensionForFormat(outputFormat);
+                    var extension = await GetExtensionForFormatAsync(outputFormat).ConfigureAwait(false);
 
-                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwriteFile);
+                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwriteFile).ConfigureAwait(false);
 
                     if (string.IsNullOrEmpty(filename))
                     {
@@ -231,16 +235,17 @@ namespace Microsoft.Fx.Portability
             }
 
             var request = GenerateRequest(options, dependencyInfo);
-            var analyzeResponse = await RequestAnalysisAsync(request);
+            var analyzeResponse = await RequestAnalysisAsync(request).ConfigureAwait(false);
 
-            var reportFormats = options.OutputFormats.Select(displayName => AvailableReportFormats[displayName]);
-            if (!reportFormats.Any())
+            var availableFormats = await GetAvailableReportFormatsAsync().ConfigureAwait(false);
+            var selectedFormats = options.OutputFormats.Select(displayName => availableFormats[displayName]);
+            if (!selectedFormats.Any())
             {
-                var defaultFormat = await _apiPortService.GetDefaultResultFormatAsync();
-                reportFormats = new[] { defaultFormat };
+                var defaultFormat = await _apiPortService.GetDefaultResultFormatAsync().ConfigureAwait(false);
+                selectedFormats = new[] { defaultFormat };
             }
 
-            var reports = await GetReportsAsync(analyzeResponse, reportFormats);
+            var reports = await GetReportsAsync(analyzeResponse, selectedFormats).ConfigureAwait(false);
 
             var results = new MultipleFormatAnalysis
             {
@@ -259,7 +264,7 @@ namespace Microsoft.Fx.Portability
             {
                 try
                 {
-                    var response = await _apiPortService.RequestAnalysisAsync(request);
+                    var response = await _apiPortService.RequestAnalysisAsync(request).ConfigureAwait(false);
 
                     return response;
                 }
@@ -276,7 +281,7 @@ namespace Microsoft.Fx.Portability
             using (var progressTask = _progressReport.StartTask("Retrieving report..."))
             {
                 var reportTasks = reportFormats
-                    .Select(async format => await _apiPortService.GetReportingResultAsync(analyzeResponse, format));
+                    .Select(async format => await _apiPortService.GetReportingResultAsync(analyzeResponse, format).ConfigureAwait(false));
                 try
                 {
                     return await Task.WhenAll(reportTasks);
@@ -289,9 +294,10 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        private string GetExtensionForFormat(string format)
+        private async Task<string> GetExtensionForFormatAsync(string format)
         {
-            if (!AvailableReportFormats.TryGetValue(format, out var formatInformation))
+            var formats = await GetAvailableReportFormatsAsync().ConfigureAwait(false);
+            if (!formats.TryGetValue(format, out var formatInformation))
             {
                 throw new UnknownReportFormatException(format);
             }
@@ -405,7 +411,7 @@ namespace Microsoft.Fx.Portability
         /// Ensures that the analysis options are valid.  If they are not,
         /// throws a <see cref="InvalidApiPortOptionsException"/>
         /// </summary>
-        private void ValidateOptions(IApiPortOptions options)
+        private async Task ValidateOptionsAsync(IApiPortOptions options)
         {
             if (options == null)
             {
@@ -417,7 +423,8 @@ namespace Microsoft.Fx.Portability
                 throw new InvalidApiPortOptionsException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
             }
 
-            var unknownFormats = options.OutputFormats.Where(format => !AvailableReportFormats.ContainsKey(format));
+            var formats = await GetAvailableReportFormatsAsync().ConfigureAwait(false);
+            var unknownFormats = options.OutputFormats.Where(format => !formats.ContainsKey(format));
             if (unknownFormats.Any())
             {
                 throw new UnknownReportFormatException(unknownFormats);
@@ -429,6 +436,20 @@ namespace Microsoft.Fx.Portability
             public AnalyzeRequest Request;
             public IDependencyInfo Info;
             public IEnumerable<ReportingResultWithFormat> Results;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _semaphore.Dispose();
+            }
         }
     }
 }
