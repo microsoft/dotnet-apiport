@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Fx.Portability.Azure.Storage;
+using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.WindowsAzure.Storage;
 
 namespace PortabilityService.AnalysisEngine
 {
@@ -21,6 +24,14 @@ namespace PortabilityService.AnalysisEngine
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            //TODO: replace with configuration service
+            var connectionString = Configuration["BlobStorageConnectionString"];
+
+            // Storage
+            services.AddSingleton<IStorage>(new AzureStorage(CloudStorageAccount.Parse(connectionString)));
+
+            //TODO: RequestAnalyzer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

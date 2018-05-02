@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.Azure.Storage;
 using Microsoft.Fx.Portability.ObjectModel;
-using Microsoft.WindowsAzure.Storage;
 
 namespace PortabilityService.AnalysisEngine.Controllers
 {
@@ -23,26 +21,27 @@ namespace PortabilityService.AnalysisEngine.Controllers
 
         public AnalyzeController(
             IConfiguration configuration,
-            IRequestAnalyzer requestAnalyzer,
+            //TODO: inject
+            //IRequestAnalyzer requestAnalyzer,
             IStorage storage,
             ILogger<AnalyzeController> logger)
         {
-            this._configuration = configuration;
-            this._requestAnalyzer = requestAnalyzer;
-            this._storage = storage;
-            this._logger = logger;
+            _configuration = configuration;
+            //TODO: inject
+            //_requestAnalyzer = requestAnalyzer;
+            _storage = storage;
+            _logger = logger;
         }
 
-        [HttpGet("{submissionId}")]
-        public async Task<AnalyzeResponse> Get(string submissionId)
+        [Route("")]
+        [HttpPost]
+        public async Task<IActionResult> Analyze(string submissionId)
         {
             try
             {
-                //TODO: replace with configuration service
-                var connectionString = _configuration["BlobStorageConnectionString"];
-                //TODO: get from DI
-                var storage = new AzureStorage(CloudStorageAccount.Parse(connectionString));
                 var request = await _storage.RetrieveRequestAsync(submissionId);
+
+                var result = await AnalyzeRequestAsync(request, submissionId);
 
                 // if the user opted out of us collecting telemetry
                 if (!request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
@@ -50,16 +49,18 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     //TODO: remove the blob from Azure Blob Storage
                 }
 
-                return AnalyzeRequestAsync(request, submissionId);
+                //TODO: Save analysis result to a storage queue
+
+                return Ok();
             }
             catch (Exception exception)
             {
-                _logger.LogError("Error occurs when analyzing request from {submissionId}: {exception}", submissionId, exception);
-                return null;
+                _logger.LogError("Error occurs when analyzing request from submission '{submissionId}': {exception}", submissionId, exception);
+                throw;
             }
         }
 
-        private AnalyzeResponse AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
+        private async Task<AnalyzeResponse> AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
         {
             using (_logger.BeginScope($"Analyzing request for {submissionId}"))
             {
@@ -73,6 +74,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
 
                 //TODO: invoke the real analysis engine to do the work
                 //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
+                await Task.Yield();
 
                 return new AnalyzeResponse
                 {

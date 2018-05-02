@@ -57,7 +57,8 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         public async Task<AnalyzeRequest> RetrieveFromBlobAsync(string uniqueId)
         {
             var blobs = await GetBlobsAsync();
-            var blob = blobs.SingleOrDefault(b => b.Name == uniqueId);
+            // the CloudBlockBlob name contains folder name too: {day}/{submissionid}
+            var blob = blobs.SingleOrDefault(b => b.Name.EndsWith(uniqueId, StringComparison.OrdinalIgnoreCase));
 
             if (blob == null)
             {
@@ -77,7 +78,13 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             var blobTasks = containers.Select(c => c.ListBlobsAsync());
             var blobs = await Task.WhenAll(blobTasks).ConfigureAwait(false);
 
-            return blobs.SelectMany(b => b)
+            var directories = blobs
+                .SelectMany(b => b)
+                .OfType<CloudBlobDirectory>();
+
+            var blockTasks = directories.Select(d => d.ListBlobsAsync());
+            var blocks = await Task.WhenAll(blockTasks).ConfigureAwait(false);
+            return blocks.SelectMany(b => b)
                 .OfType<CloudBlockBlob>();
         }
 

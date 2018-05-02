@@ -58,6 +58,22 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
             return results;
         }
+
+        public static async Task<IEnumerable<IListBlobItem>> ListBlobsAsync(this CloudBlobDirectory cloudBlobDirectory)
+        {
+            BlobContinuationToken continuationToken = null;
+            var results = new List<IListBlobItem>();
+
+            do
+            {
+                var segment = await cloudBlobDirectory.ListBlobsSegmentedAsync(continuationToken).ConfigureAwait(false);
+
+                continuationToken = segment.ContinuationToken;
+                results.AddRange(segment.Results);
+            } while (continuationToken != null);
+
+            return results;
+        }
     }
 
 }
