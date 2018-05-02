@@ -51,6 +51,7 @@ namespace PortabilityService.Functions
 
             var workflowMgr = WorkflowManager.Initialize();
             var msg = WorkflowManager.GetFirstStage(submissionId);
+
             workflowMessageQueue.Add(msg);
             log.LogInformation("Queuing new message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
 
