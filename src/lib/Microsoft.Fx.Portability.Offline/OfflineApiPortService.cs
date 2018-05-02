@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability
         private readonly ISearcher<string> _searcher;
         private readonly IApiRecommendations _apiRecommendations;
 
-        private AnalyzeRequest AnalyzeRequest { get; set; }
+        private AnalyzeResult AnalyzeResult { get; set; }
 
         public OfflineApiPortService(IApiCatalogLookup lookup, IRequestAnalyzer requestAnalyzer, ITargetMapper mapper, ICollection<IReportWriter> reportWriters, ITargetNameParser targetNameParser, IApiRecommendations apiRecommendations)
         {
@@ -64,25 +64,24 @@ namespace Microsoft.Fx.Portability
 
         public Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest)
         {
-            // IApiPortService separates requesting analysis from retrieving reports, which
-            // is awkward for this offline implementation, so this method stores the request
-            // for use in GetReportingResultAsync, and returns an empty AnalyzeResponse.
-            AnalyzeRequest = analyzeRequest;
+            // IApiPortService separates requesting analysis from retrieving reports so that
+            // each function can be performed by a different backend service. This makes the
+            // offline implementation a little awkward. This method performs the analysis and
+            // stores the result. GetReportingResultAsync uses this stored result to write a report.
+            AnalyzeResult = _requestAnalyzer.AnalyzeRequest(analyzeRequest, Guid.NewGuid().ToString());
 
             return Task.FromResult(new AnalyzeResponse());
         }
 
         public async Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
         {
-            var response = _requestAnalyzer.AnalyzeRequest(AnalyzeRequest, Guid.NewGuid().ToString());
-
             format = format ?? await GetDefaultResultFormatAsync();
 
             var writer = _reportWriters.First(w => w.Format.Equals(format));
 
             using (var ms = new MemoryStream())
             {
-                writer.WriteStream(ms, response);
+                writer.WriteStream(ms, AnalyzeResult);
 
                 return new ReportingResultWithFormat
                 {
