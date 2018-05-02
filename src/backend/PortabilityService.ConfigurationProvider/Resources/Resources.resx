@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EnvironmentNameInvalid" xml:space="preserve">
+  <data name="EnvironmentNameInvalidMessage" xml:space="preserve">
     <value>Url '{0}' from environment setting '{1}' is not a valid Url!</value>
+  </data>
+  <data name="HttpRequestExceptionMessage" xml:space="preserve">
+    <value>Get configuration settings call failed with '{0}'</value>
   </data>
 </root>

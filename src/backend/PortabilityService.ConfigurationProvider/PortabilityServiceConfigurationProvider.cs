@@ -4,6 +4,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,11 +15,13 @@ namespace PortabilityService.ConfigurationProvider
     {
         private readonly HttpClient _httpClient;
         private readonly string _configurationSection;
+        private readonly bool _optional;
 
-        public PortabilityServiceConfigurationProvider(HttpClient httpClient, string configurationSection = Constants.PortabilityServiceConfigurationRoot)
+        public PortabilityServiceConfigurationProvider(HttpClient httpClient, string configurationSection = ConfigurationProviderConstants.PortabilityServiceConfigurationRoot, bool optional = false)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _configurationSection = configurationSection ?? throw new ArgumentNullException(nameof(configurationSection));
+            _optional = optional;
         }
 
         public override void Load() => LoadAsync().GetAwaiter().GetResult();
@@ -62,15 +65,21 @@ namespace PortabilityService.ConfigurationProvider
         /// </summary>
         private async Task<T> GetJsonDataAsync<T>(HttpRequestMessage request)
         {
+            var result = default(T);
             var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
             {
-                return default;
+                if (!_optional)
+                {
+                    throw new HttpRequestException(string.Format(CultureInfo.CurrentCulture, Resources.Resources.HttpRequestExceptionMessage, response.StatusCode.ToString()));
+                }
             }
-
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var result = JsonConvert.DeserializeObject<T>(content);
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                result = JsonConvert.DeserializeObject<T>(content);
+            }
 
             return result;
         }
