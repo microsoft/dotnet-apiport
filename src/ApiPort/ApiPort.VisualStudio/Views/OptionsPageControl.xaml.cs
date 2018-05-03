@@ -1,9 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using Microsoft.Fx.Portability;
+using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -15,14 +18,18 @@ namespace ApiPortVS.Views
     /// </summary>
     public partial class OptionsPageControl : UserControl
     {
+        private readonly IVsStatusbar _statusBar;
+
         private OptionsViewModel ViewModel { get { return DataContext as OptionsViewModel; } }
 
-        public OptionsPageControl(OptionsViewModel viewModel)
+        public OptionsPageControl(OptionsViewModel viewModel, IVsStatusbar statusBar)
         {
             InitializeComponent();
             DataContext = viewModel;
 
-            Loaded += async (s, e) => await viewModel.UpdateAsync().ConfigureAwait(false);
+            _statusBar = statusBar;
+
+            Loaded += async (s, e) => await UpdateModelAsync(false).ConfigureAwait(false);
             Unloaded += (s, e) => viewModel.Save();
         }
 
@@ -30,9 +37,24 @@ namespace ApiPortVS.Views
 
         private void NavigateToMoreInformation(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.About.OriginalString);
 
-        private async void RefreshRequested(object sender, RoutedEventArgs e)
+        private async void RefreshRequested(object sender, RoutedEventArgs e) => await UpdateModelAsync(true).ConfigureAwait(false);
+
+        private async Task UpdateModelAsync(bool force)
         {
-            await ViewModel.UpdateAsync(force: true).ConfigureAwait(false);
+            _statusBar.SetText(LocalizedStrings.RefreshingPlatforms);
+
+            // using a local here to capture ViewModel on the UI thread
+            var viewModel = ViewModel;
+            await viewModel.UpdateAsync(force: force).ConfigureAwait(false);
+
+            if (viewModel.HasError)
+            {
+                _statusBar.SetText(viewModel.ErrorMessage);
+            }
+            else
+            {
+                _statusBar.SetText(LocalizedStrings.RefreshingPlatformsComplete);
+            }
         }
 
         private void UpdateDirectoryClick(object sender, RoutedEventArgs e)

@@ -88,7 +88,7 @@ namespace ApiPortVS
                 .As<IOutputWindowWriter>()
                 .As<TextWriter>()
                 .SingleInstance();
-            builder.RegisterType<TextWriterProgressReporter>()
+            builder.RegisterType<StatusBarProgressReporter>()
                 .As<IProgressReporter>()
                 .SingleInstance();
             builder.RegisterType<ReportFileWriter>()
@@ -163,6 +163,8 @@ namespace ApiPortVS
                 .As<IVsWebBrowsingService>();
             builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
                 .As<IVsSolutionBuildManager2>();
+            builder.Register(_ => Package.GetGlobalService(typeof(SVsStatusbar)))
+                .As<IVsStatusbar>();
             builder.RegisterType<DefaultProjectBuilder>()
                 .As<IProjectBuilder>();
 

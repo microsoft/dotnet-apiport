@@ -440,6 +440,15 @@ namespace ApiPortVS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Platform list refresh complete.
+        /// </summary>
+        public static string RefreshingPlatformsComplete {
+            get {
+                return ResourceManager.GetString("RefreshingPlatformsComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The directory the report was in is not available. It may have been deleted..
         /// </summary>
         public static string ReportDirectoryNotAvailable {
