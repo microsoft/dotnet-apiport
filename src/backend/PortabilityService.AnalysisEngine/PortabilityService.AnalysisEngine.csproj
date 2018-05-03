@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj" />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\PortabilityService.ConfigurationProvider\PortabilityService.ConfigurationProvider.csproj" />
   </ItemGroup>
 
 </Project>

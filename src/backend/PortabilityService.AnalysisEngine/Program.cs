@@ -3,7 +3,9 @@
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PortabilityService.ConfigurationProvider;
 using Serilog;
 
 namespace PortabilityService.AnalysisEngine
@@ -19,9 +21,18 @@ namespace PortabilityService.AnalysisEngine
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(ConfigureAppConfiguration)
                 .ConfigureLogging(ConfigureLogging)
                 .UseStartup<Startup>()
                 .Build();
+
+        /// <summary>
+        /// Configures app configuration
+        /// </summary>
+        private static void ConfigureAppConfiguration(WebHostBuilderContext context, IConfigurationBuilder configBuilder)
+        {
+            configBuilder.AddPortabilityServiceConfiguration();
+        }
 
         /// <summary>
         /// Configure logging providers
