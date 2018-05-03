@@ -45,7 +45,7 @@ namespace PortabilityService.Functions.Tests
 
             var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var storage = Substitute.For<IStorage>();
-            storage.SaveToBlobAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<string>()).Returns(Task.FromResult(true));
+            storage.SaveRequestToBlobAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<string>()).Returns(Task.FromResult(true));
 
             // Act
             var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
@@ -155,6 +155,11 @@ namespace PortabilityService.Functions.Tests
                 throw new NotImplementedException();
             }
 
+            public Task DeleteResultFromBlobAsync(string submissionid)
+            {
+                throw new NotImplementedException();
+            }
+
             public IEnumerable<ProjectSubmission> GetProjectSubmissions()
             {
                 throw new NotImplementedException();
@@ -165,15 +170,25 @@ namespace PortabilityService.Functions.Tests
                 throw new NotImplementedException();
             }
 
+            public Task<AnalyzeResponse> RetrieveResultFromBlobAsync(string submissionId)
+            {
+                throw new NotImplementedException();
+            }
+
             public Task<IEnumerable<string>> RetrieveSubmissionIdsAsync()
             {
                 throw new NotImplementedException();
             }
 
-            public Task<bool> SaveToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
+            public Task SaveRequestToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
             {
                 Stored = analyzeRequest.SerializeAndCompress();
                 return Task.FromResult(true);
+            }
+
+            public Task SaveResultToBlobAsync(string submissionId, AnalyzeResponse result)
+            {
+                throw new NotImplementedException();
             }
         }
     }

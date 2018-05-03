@@ -16,7 +16,8 @@ namespace PortabilityService.AnalysisEngine.Controllers
     {
         private readonly ILogger<AnalyzeController> _logger;
         private readonly IConfiguration _configuration;
-        private readonly IRequestAnalyzer _requestAnalyzer;
+        //TODO: inject
+        //private readonly IRequestAnalyzer _requestAnalyzer;
         private readonly IStorage _storage;
 
         public AnalyzeController(
@@ -49,7 +50,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     //TODO: remove the blob from Azure Blob Storage
                 }
 
-                //TODO: Save analysis result to a storage queue
+                await _storage.SaveResultToBlobAsync(submissionId, result);
 
                 return Ok();
             }
@@ -74,7 +75,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
 
                 //TODO: invoke the real analysis engine to do the work
                 //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
-                await Task.Yield();
+                await Task.Yield(); // to remove the warning about missing await in an async method
 
                 return new AnalyzeResponse
                 {
