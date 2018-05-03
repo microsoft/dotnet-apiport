@@ -38,17 +38,24 @@ namespace PortabilityService.AnalysisEngine.Controllers
         [HttpPost]
         public async Task<IActionResult> Analyze(string submissionId)
         {
+            _logger.LogInformation("{controller}-{action}", nameof(AnalyzeController), nameof(Analyze));
             try
             {
                 var request = await _storage.RetrieveRequestAsync(submissionId);
 
-                var result = await AnalyzeRequestAsync(request, submissionId);
+                if (request == null)
+                {
+                    _logger.LogError("Request for {submissionId} not found", submissionId);
+                    return NotFound();
+                }
 
                 // if the user opted out of us collecting telemetry
                 if (!request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
                 {
                     //TODO: remove the blob from Azure Blob Storage
                 }
+
+                var result = await AnalyzeRequestAsync(request, submissionId);
 
                 await _storage.SaveResultToBlobAsync(submissionId, result);
 

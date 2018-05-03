@@ -100,9 +100,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Workflow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Azure", "src\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj", "{A761180A-067A-4238-AA66-5BB27A59B792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.AnalysisEngine", "src\backend\PortabilityService.AnalysisEngine\PortabilityService.AnalysisEngine.csproj", "{0B1CB15D-ADE9-4D6C-B338-E616AF173212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.AnalysisEngine", "src\backend\PortabilityService.AnalysisEngine\PortabilityService.AnalysisEngine.csproj", "{0B1CB15D-ADE9-4D6C-B338-E616AF173212}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationService", "src\backend\PortabilityService.ConfigurationService\PortabilityService.ConfigurationService.csproj", "{B21C19FC-2BA4-40C9-B4B6-4B92661AB1F6}"
 EndProject
@@ -111,6 +111,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationProvider.Tests", "tests\backend\PortabilityService.ConfigurationProvider.Tests\PortabilityService.ConfigurationProvider.Tests.csproj", "{5115DC25-102E-4E3D-978E-4585B9F70EAA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationProvider", "src\backend\PortabilityService.ConfigurationProvider\PortabilityService.ConfigurationProvider.csproj", "{9111E84B-6644-41A3-B775-35AACDFA0B5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortabilityService.AnalysisEngine.Tests", "tests\backend\PortabilityService.AnalysisEngine.Tests\PortabilityService.AnalysisEngine.Tests.csproj", "{5F0E19AC-8026-47BB-9AD8-F190A03827A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1660,6 +1662,54 @@ Global
 		{9111E84B-6644-41A3-B775-35AACDFA0B5C}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
 		{9111E84B-6644-41A3-B775-35AACDFA0B5C}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
 		{9111E84B-6644-41A3-B775-35AACDFA0B5C}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|x64.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Debug|x86.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|ARM.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|x64.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Debug|x86.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|ARM.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|ARM.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|x64.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|x64.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|x86.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Osx_Release|x86.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|ARM.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|x64.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|x64.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Release|x86.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|ARM.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|x64.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Debug|x86.Build.0 = Debug|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|ARM.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|ARM.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|x64.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|x64.Build.0 = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|x86.ActiveCfg = Release|Any CPU
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7}.Ubuntu_Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1704,6 +1754,7 @@ Global
 		{3F71D970-3C1A-457D-8709-10AFF582360B} = {DE3F5141-1F37-45F6-9A63-697E05E9BF8F}
 		{5115DC25-102E-4E3D-978E-4585B9F70EAA} = {DE3F5141-1F37-45F6-9A63-697E05E9BF8F}
 		{9111E84B-6644-41A3-B775-35AACDFA0B5C} = {018983AE-8D15-4205-9E55-EDC5033146AB}
+		{5F0E19AC-8026-47BB-9AD8-F190A03827A7} = {DE3F5141-1F37-45F6-9A63-697E05E9BF8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E8B2DB2-4847-4909-8631-A995D50F10EF}
