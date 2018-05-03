@@ -41,6 +41,12 @@ namespace PortabilityService.AnalysisEngine.Controllers
             _logger.LogInformation("{controller}-{action}", nameof(AnalyzeController), nameof(Analyze));
             try
             {
+                if (string.IsNullOrEmpty(submissionId))
+                {
+                    _logger.LogError("Submission Id should not be null or empty");
+                    return NotFound();
+                }
+
                 var request = await _storage.RetrieveRequestAsync(submissionId);
 
                 if (request == null)

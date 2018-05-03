@@ -4,6 +4,9 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureWebJobsDashboard": "",
     "WorkflowQueueName": "apiportworkflowqueue",
-    "CloudStorageConnectionString": "UseDevelopmentStorage=true"
+    "CloudStorageConnectionString": "UseDevelopmentStorage=true",
+    "AnalyzeServiceUrl": "http://localhost:13613/api/Analyze",
+    "ReportServiceUrl": "TBD",
+    "TelemetryServiceUrl": "TBD"
   }
 }

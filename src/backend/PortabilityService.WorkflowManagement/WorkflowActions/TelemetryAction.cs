@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace PortabilityService.WorkflowManagement
 {
-    class TelemetryAction : IWorkflowAction
+    class TelemetryAction : BaseAction, IWorkflowAction
     {
+        public TelemetryAction(string serviceUrl) : base(serviceUrl) { }
+
         public async Task<WorkflowStage> ExecuteAsync(string submissionId, CancellationToken cancelToken)
         {
             // TODO: Update to call Telemetry Collection Service
