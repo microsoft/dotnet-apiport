@@ -63,9 +63,18 @@ namespace PortabilityService.ConfigurationProvider.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Url &apos;{0}&apos; from environment setting &apos;{1}&apos; is not a valid Url!.
         /// </summary>
-        internal static string EnvironmentNameInvalid {
+        internal static string EnvironmentNameInvalidMessage {
             get {
-                return ResourceManager.GetString("EnvironmentNameInvalid", resourceCulture);
+                return ResourceManager.GetString("EnvironmentNameInvalidMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get configuration settings call failed with &apos;{0}&apos;.
+        /// </summary>
+        internal static string HttpRequestExceptionMessage {
+            get {
+                return ResourceManager.GetString("HttpRequestExceptionMessage", resourceCulture);
             }
         }
     }

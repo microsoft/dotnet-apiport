@@ -61,18 +61,27 @@ namespace PortabilityService.ConfigurationProvider.Tests
         }
 
         [Fact]
-        public static void LoadWithBadHttpRequestResultLoadsEmptyConfiguration()
+        public static void LoadWithBadHttpRequestResultAndOptionalTrueLoadsEmptyConfiguration()
         {
             using (var httpClient = new HttpClient(new TestHttpMessageHandler(@"[{ ""Key"":""testKey"",""Value"":""testValue"" }]", HttpStatusCode.BadRequest)) { BaseAddress = _testBaseUri })
             {
                 // arrange
-                var configurationProvider = new PortabilityServiceConfigurationProvider(httpClient);
+                var configurationProvider = new PortabilityServiceConfigurationProvider(httpClient, ConfigurationProviderConstants.PortabilityServiceConfigurationRoot, true);
 
                 // act
                 configurationProvider.Load();
 
                 // assert
                 Assert.Equal(Enumerable.Empty<string>(), configurationProvider.GetChildKeys(Enumerable.Empty<string>(), null));
+            }
+        }
+
+        [Fact]
+        public static void LoadWithBadHttpRequestResultAndOptionalFalseThrowsHttpRequestExceptionLoadsEmptyConfiguration()
+        {
+            using (var httpClient = new HttpClient(new TestHttpMessageHandler(@"[{ ""Key"":""testKey"",""Value"":""testValue"" }]", HttpStatusCode.BadRequest)) { BaseAddress = _testBaseUri })
+            {
+                Assert.Throws<HttpRequestException>(() => new PortabilityServiceConfigurationProvider(httpClient, ConfigurationProviderConstants.PortabilityServiceConfigurationRoot, false).Load());
             }
         }
 

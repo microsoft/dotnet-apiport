@@ -10,13 +10,16 @@ namespace PortabilityService.ConfigurationProvider
 {
     public static class PortabilityServiceConfigurationExtensions
     {
-        public static IConfigurationBuilder AddPortabilityServiceConfiguration(this IConfigurationBuilder builder, string urlEnvironmentKeyName = Constants.UrlEnvironmentKeyName, string configurationSection = Constants.PortabilityServiceConfigurationRoot)
-            => AddPortabilityServiceConfiguration(builder, GetConfigurationServiceUrlFromEnvironment(urlEnvironmentKeyName), configurationSection);
+        public static IConfigurationBuilder AddPortabilityServiceConfiguration(this IConfigurationBuilder builder,
+                                                                               string UrlEnvironmentKeyName = ConfigurationProviderConstants.UrlEnvironmentKeyName,
+                                                                               string configurationSection = ConfigurationProviderConstants.PortabilityServiceConfigurationRoot,
+                                                                               bool optional = false)
+            => AddPortabilityServiceConfiguration(builder, GetConfigurationServiceUrlFromEnvironment(UrlEnvironmentKeyName), configurationSection, optional);
 
-        public static IConfigurationBuilder AddPortabilityServiceConfiguration(this IConfigurationBuilder builder, Uri configurationServiceUrl, string configurationSection = Constants.PortabilityServiceConfigurationRoot)
-            => AddPortabilityServiceConfiguration(builder, CreateHttpClient(configurationServiceUrl), configurationSection);
+        public static IConfigurationBuilder AddPortabilityServiceConfiguration(this IConfigurationBuilder builder, Uri configurationServiceUrl, string configurationSection = ConfigurationProviderConstants.PortabilityServiceConfigurationRoot, bool optional = false)
+            => AddPortabilityServiceConfiguration(builder, CreateHttpClient(configurationServiceUrl), configurationSection, optional);
 
-        public static IConfigurationBuilder AddPortabilityServiceConfiguration(this IConfigurationBuilder builder, HttpClient httpClient, string configurationSection = Constants.PortabilityServiceConfigurationRoot)
+        public static IConfigurationBuilder AddPortabilityServiceConfiguration(this IConfigurationBuilder builder, HttpClient httpClient, string configurationSection = ConfigurationProviderConstants.PortabilityServiceConfigurationRoot, bool optional = false)
         {
             if (httpClient == null)
             {
@@ -28,7 +31,7 @@ namespace PortabilityService.ConfigurationProvider
                 throw new ArgumentNullException(nameof(configurationSection));
             }
 
-            return builder.Add(new PortabilityServiceConfigurationSource(httpClient, configurationSection));
+            return builder.Add(new PortabilityServiceConfigurationSource(httpClient, configurationSection, optional));
         }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace PortabilityService.ConfigurationProvider
             }
             catch
             {
-                throw new Exception(string.Format(CultureInfo.CurrentCulture, Resources.Resources.EnvironmentNameInvalid, urlFromEnvironment, urlEnvironmentKeyName));
+                throw new Exception(string.Format(CultureInfo.CurrentCulture, Resources.Resources.EnvironmentNameInvalidMessage, urlFromEnvironment, urlEnvironmentKeyName));
             }
         }
 

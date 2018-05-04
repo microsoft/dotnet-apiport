@@ -3,7 +3,7 @@
 
 namespace PortabilityService.ConfigurationProvider
 {
-    internal static class Constants
+    public static class ConfigurationProviderConstants
     {
         public const string PortabilityServiceConfigurationRoot = "PortabilityServiceSettings";
         public const string UrlEnvironmentKeyName = "PortabilityConfigurationServiceUrl";
