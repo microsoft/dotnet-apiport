@@ -15,6 +15,7 @@ namespace ApiPort
     internal static class CommandLineOptions
     {
         public const string DefaultName = "ApiPortAnalysis";
+        private const string PortabilityServiceEndPoint_EnvVarName = "PortabilityServiceUri";
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
@@ -31,7 +32,10 @@ namespace ApiPort
             IReadOnlyList<string> ignoreAssemblyFile = Array.Empty<string>();
             IReadOnlyList<string> suppressBreakingChange = Array.Empty<string>();
             string targetMap = string.Empty;
-            string endpoint = "https://portability.dot.net";
+
+            // TODO: Once the new portability service is ready for general use,
+            //       use it as the default endpoint.
+            string endpoint = Environment.GetEnvironmentVariable(PortabilityServiceEndPoint_EnvVarName) ?? string.Empty;
             AppCommand command = default;
 
             ArgumentSyntax argSyntax = default;
@@ -86,6 +90,15 @@ namespace ApiPort
                     Console.WriteLine(argSyntax.GetHelpText());
                 }
 
+                return new ConsoleApiPortOptions(AppCommand.Exit);
+            }
+
+            // Since there is currently no default endpoint, verify that a 
+            // valid one has been set (either by an environment variable 
+            // or with a command line parameter)
+            if (!Uri.TryCreate(endpoint, UriKind.Absolute, out _))
+            {
+                Console.WriteLine(LocalizedStrings.CmdNoEndpoint);
                 return new ConsoleApiPortOptions(AppCommand.Exit);
             }
 

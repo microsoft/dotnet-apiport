@@ -10,7 +10,6 @@
 
 namespace ApiPort.Resources {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace ApiPort.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -247,6 +246,15 @@ namespace ApiPort.Resources {
         internal static string CmdEndpoint {
             get {
                 return ResourceManager.GetString("CmdEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify the Portability Service&apos;s endpoint by setting the PortabilityServiceUri environment variable or with a command line argument (-e).
+        /// </summary>
+        internal static string CmdNoEndpoint {
+            get {
+                return ResourceManager.GetString("CmdNoEndpoint", resourceCulture);
             }
         }
         

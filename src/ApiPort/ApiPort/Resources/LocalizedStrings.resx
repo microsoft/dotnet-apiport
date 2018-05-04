@@ -295,4 +295,7 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="CmdDumpAnalysis" xml:space="preserve">
     <value>Write the analysis request to the output file without sending any data to the service</value>
   </data>
+  <data name="CmdNoEndpoint" xml:space="preserve">
+    <value>Please specify the Portability Service's endpoint by setting the PortabilityServiceUri environment variable or with a command line argument (-e)</value>
+  </data>
 </root>
