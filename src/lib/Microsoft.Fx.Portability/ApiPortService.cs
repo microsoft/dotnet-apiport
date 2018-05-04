@@ -22,7 +22,6 @@ namespace Microsoft.Fx.Portability
         {
             internal const string Analyze = "/api/analyze";
             internal const string Targets = "/api/target";
-            internal const string UsedApi = "/api/usage";
             internal const string FxApiSearch = "/api/fxapi/search";
             internal const string ResultFormat = "/api/reportformat";
             internal const string DefaultResultFormat = "/api/reportformat/default";
