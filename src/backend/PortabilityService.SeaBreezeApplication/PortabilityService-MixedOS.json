@@ -1,0 +1,150 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "location": {
+        "type": "string",
+        "defaultValue": "eastus",
+        "metadata": {
+          "description": "Location of the resources."
+        }
+      },
+      "registry-server": {
+        "type": "string",
+        "defaultValue": "portabilityservice.azurecr.io",
+        "metadata": {
+          "description": "Docker container registry with Portability Service images"
+        }
+      },
+      "registry-username": {
+        "type": "string",
+        "defaultValue": "portabilityservice",
+        "metadata": {
+          "description": "User name for private container registry"
+        }
+      },
+      "registry-password": {
+        "type": "string",
+        "metadata": {
+          "description": "Password for the private image registry. Can be provided with --parameters or az sbz deployment create will prompt for it"
+        }
+      }
+    },
+    "resources": [
+      {
+        "apiVersion": "2018-03-01-privatepreview",
+        "name": "PortabilityServiceNetwork",
+        "type": "Microsoft.ServiceFabric/networks",
+        "location": "[parameters('location')]",
+        "dependsOn": [],
+        "properties": {
+          "description": "Private network for application",
+          "addressPrefix": "10.0.0.4/22",
+          "ingressConfig": {
+            "qosLevel": "bronze",
+            "layer4": [
+              {
+                "publicPort": "80",
+                "applicationName": "PortabilityService",
+                "serviceName": "Gateway",
+                "endpointName": "GatewayEndpoint"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "apiVersion": "2018-03-01-privatepreview",
+        "name": "PortabilityService",
+        "type": "Microsoft.ServiceFabric/applications",
+        "location": "[parameters('location')]",
+        "properties": {
+          "description": "Portability Service Backend",
+          "services": [
+            {
+              "name": "Gateway",
+              "properties": {
+                "description": "Portability Service API Gateway",
+                "osType": "linux",
+                "codePackages": [
+                  {
+                    "name": "Gateway.Code",
+                    "image": "portabilityservice-gateway:0.1",
+                    "imageRegistryCredential": {
+                      "server": "[parameters('registry-server')]",
+                      "username": "[parameters('registry-username')]",
+                      "password": "[parameters('registry-password')]"
+                    },
+                    "endpoints": [
+                      {
+                        "name": "GatewayEndpoint",
+                        "port": 80
+                      }
+                    ],
+                    "environmentVariables": [
+                      {
+                        "name": "ConfigurationService_Url",
+                        "value": "http://ConfigurationService"
+                      },
+                      {
+                        "name": "ASPNETCORE_ENVIRONMENT",
+                        "value": "Development"
+                      }
+                    ],
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memoryInGB": 1
+                      }
+                    }
+                  }
+                ],
+                "replicaCount": 1,
+                "networkRefs": [
+                  {
+                    "name": "[resourceId('Microsoft.ServiceFabric/networks', 'PortabilityServiceNetwork')]"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "ConfigurationService",
+              "properties": {
+                "description": "Portability Service Configuration Service.",
+                "osType": "windows",
+                "codePackages": [
+                  {
+                    "name": "ConfigurationService.Code",
+                    "image": "portabilityservice-configurationservice:0.1-windows",
+                    "imageRegistryCredential": {
+                      "server": "[parameters('registry-server')]",
+                      "username": "[parameters('registry-username')]",
+                      "password": "[parameters('registry-password')]"
+                    },
+                    "endpoints": [
+                      {
+                        "name": "ConfigurationServiceEndpoint",
+                        "port": 80
+                      }
+                    ],
+                    "resources": {
+                      "requests": {
+                        "cpu": 0.5,
+                        "memoryInGB": 1
+                      }
+                    }
+                  }
+                ],
+                "replicaCount": 1,
+                "networkRefs": [
+                  {
+                    "name": "[resourceId('Microsoft.ServiceFabric/networks', 'PortabilityServiceNetwork')]"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
