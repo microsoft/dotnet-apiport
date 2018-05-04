@@ -24,7 +24,6 @@ namespace PortabilityService.WorkflowManagement
         readonly IWorkflowAction[] actions;
         static WorkflowManager manager;
 
-        /// <remarks>Unused, should be removed?</remarks>
         public static WorkflowManager Initialize(IWorkflowAction[] workflowActions)
         {
             if (manager == null)
@@ -59,7 +58,6 @@ namespace PortabilityService.WorkflowManagement
             AddAction(new TelemetryAction(telemetryServiceUrl));
         }
 
-        /// <remarks>Unused, should be removed?</remarks>
         private WorkflowManager(IWorkflowAction[] workflowActions)
         {
             actions = workflowActions;
