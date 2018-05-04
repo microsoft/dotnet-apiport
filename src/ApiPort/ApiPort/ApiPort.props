@@ -64,6 +64,10 @@
     <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Third Party Notices.txt" >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- a binary to analyze in demos -->
+    <None Condition=" '$(Configuration)' == 'Debug' " Update="apiport-demo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
