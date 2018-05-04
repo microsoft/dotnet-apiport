@@ -234,9 +234,20 @@ namespace Microsoft.Fx.Portability
             throw new PortabilityAnalyzerException(LocalizedStrings.BadRequestMessage);
         }
 
-        public Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null)
+        public async Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null)
         {
-            throw new NotImplementedException();
+            var url = UrlBuilder
+              .Create(Endpoints.FxApiSearch)
+              .AddQuery("q", query)
+              .AddQuery("top", top);
+
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url.Url))
+            {
+                var bytes = await SendAsync(request);
+                var searchResults = bytes.Deserialize<IReadOnlyCollection<ApiDefinition>>();
+
+                return searchResults;
+            }
         }
 
         private static HttpMessageHandler BuildMessageHandler(string endpoint, IProxyProvider proxyProvider)
