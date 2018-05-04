@@ -24,7 +24,6 @@ namespace PortabilityService.ConfigurationService.Tests
 
         // string constants representing logged messages from the controller method calls
         private const string BaseConfigSectionName = "Root";
-        private const string ReturningAllConfigSettings = "Returning all the configuration settings.";
         private const string SectionNameNullOrEmpty = "Section name cannot be null or empty!";
         private const string SettingNameNullOrEmpty = "Setting name cannot be null or empty!";
         private const string ReturningSectionSettingsMessage = "Returning section settings for section {0}.";
@@ -37,14 +36,12 @@ namespace PortabilityService.ConfigurationService.Tests
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly IStringLocalizer<ConfigurationController> _stringLocalizer;
-        private readonly IEnumerable<KeyValuePair<string, string>> _allConfigSettings;
 
         public ConfigurationControllerTests()
         {
             _configuration = CreateTestIConfiguration();
             _serviceProvider = CreateTestServiceProvider();
             _stringLocalizer = _serviceProvider.GetRequiredService<IStringLocalizer<ConfigurationController>>();
-            _allConfigSettings = CreateAllConfigEnum();
         }
 
         [Fact]
@@ -83,34 +80,10 @@ namespace PortabilityService.ConfigurationService.Tests
 
             // assert
             Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
-            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.Get), ReturningAllConfigSettings) }, testLogger.LoggedMessages);
-            Assert.Equal(_allConfigSettings, result.Value);
+            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSectionSettingsList), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, BaseConfigSectionName)) },
+                         testLogger.LoggedMessages);
+            Assert.Equal(CreateAllConfigEnum(), result.Value);
         }
-
-        /// <summary>
-        /// Creates an enumerable that would be all the settings expected to be returned from a Get call to the ConfigController
-        /// </summary>
-        private static IEnumerable<KeyValuePair<string, string>> CreateAllConfigEnum() => new List<KeyValuePair<string, string>>
-        {
-            { new KeyValuePair<string, string>("Root", null)},
-            { new KeyValuePair<string, string>("Root:SettingString0", "Value for setting string 0")},
-            { new KeyValuePair<string, string>("Root:RootGroup2", null)},
-            { new KeyValuePair<string, string>("Root:RootGroup2:Setting2Url", "http://portabilityService")},
-            { new KeyValuePair<string, string>("Root:RootGroup2:Setting1Url", "http://portabilityconfigservice")},
-            { new KeyValuePair<string, string>("Root:RootGroup1", null)},
-            { new KeyValuePair<string, string>("Root:RootGroup1:SettingBool", "False")},
-            { new KeyValuePair<string, string>("Root:RootGroup1:Group2", null)},
-            { new KeyValuePair<string, string>("Root:RootGroup1:Group2:Group1", null)},
-            { new KeyValuePair<string, string>("Root:RootGroup1:Group2:Group1:SettingString2", "Value for setting string 2")},
-            { new KeyValuePair<string, string>("Root:RootGroup1:Group1", null)},
-            { new KeyValuePair<string, string>("Root:RootGroup1:Group1:Group1", null)},
-            { new KeyValuePair<string, string>("Root:RootGroup1:Group1:Group1:SettingString1", "Value for setting string 1")},
-            { new KeyValuePair<string, string>("Root:ArraySettings", null)},
-            { new KeyValuePair<string, string>("Root:ArraySettings:1", null)},
-            { new KeyValuePair<string, string>("Root:ArraySettings:1:ArraySetting2", "ArraySetting2")},
-            { new KeyValuePair<string, string>("Root:ArraySettings:0", null)},
-            { new KeyValuePair<string, string>("Root:ArraySettings:0:ArraySetting1", "ArraySetting1")},
-        };
 
         [Theory, MemberData(nameof(NullOrEmptyTestData))]
         public void GetSectionWithNullOrEmptySectionNameReturnsBadRequest(string sectionName)
@@ -180,41 +153,31 @@ namespace PortabilityService.ConfigurationService.Tests
                 new object[] { "Root:RootGroup2", new List<string> { "Setting1Url", "Setting2Url" } }
             };
 
-        [Fact]
-        public void GetSectionSettingsListNonExistingSectionReturnsEmptyList()
+        [Theory, MemberData(nameof(GetSectionSettingsListTestData))]
+        public void GetSectionSettingsListReturnsSectionSettings(string sectionName, IEnumerable<KeyValuePair<string, string>> expectedResults)
         {
             // arrange
             var testLogger = CreateTestLogger();
             var controller = CreateTestConfigurationController(_configuration, _stringLocalizer, testLogger);
 
             // act
-            var objectResult = controller.GetSectionSettingsList(NonExisting);
+            var objectResult = controller.GetSectionSettingsList(sectionName);
 
             // assert
-            var keyValueResult = ((IEnumerable<KeyValuePair<string, string>>)objectResult.Value).First();
+            var keyValueResult = ((IEnumerable<KeyValuePair<string, string>>)objectResult.Value);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
-            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSectionSettingsList), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, NonExisting)) }, testLogger.LoggedMessages);
-            Assert.Equal(NonExisting, keyValueResult.Key);
-            Assert.Null(keyValueResult.Value);
+            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSectionSettingsList), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, sectionName)) }, 
+                         testLogger.LoggedMessages);
+            Assert.Equal(expectedResults, keyValueResult);
         }
 
-        [Theory]
-        [InlineData("Root")]
-        [InlineData("Root:RootGroup2")]
-        public void GetSectionSettingsListReturnsSettings(string sectionName)
+        public static IEnumerable<object[]> GetSectionSettingsListTestData() =>
+        new[]
         {
-            // arrange
-            var testLogger = CreateTestLogger();
-            var controller = CreateTestConfigurationController(_configuration, _stringLocalizer, testLogger);
-
-            // act
-            var result = controller.GetSectionSettingsList(sectionName);
-
-            // assert
-            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
-            Assert.Equal(new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetSectionSettingsList), string.Format(CultureInfo.InvariantCulture, ReturningSectionSettingsMessage, sectionName)) }, testLogger.LoggedMessages);
-            Assert.Equal(result.Value, CreateAllConfigEnum().Where(s => s.Key.StartsWith(sectionName, StringComparison.OrdinalIgnoreCase)));
-        }
+            new object[] { NonExisting, new List<KeyValuePair<string, string>>() },
+            new object[] { "Root", CreateAllConfigEnum()},
+            new object[] { "Root:RootGroup2", CreateAllConfigEnum().Where(kvp => kvp.Key.StartsWith("RootGroup2", StringComparison.Ordinal)) }
+        };
 
         [Fact]
         public void GetSectionNotStartingWithBaseSectionNameReturnsBadRequest()
@@ -289,6 +252,21 @@ namespace PortabilityService.ConfigurationService.Tests
             // assert
             VerifyCallResult(testLogger, result, StatusCodes.Status200OK, EnvironmentName, new List<string> { testLogger.GetLogString(LogLevel.Information, nameof(ConfigurationController.GetEnvironment), string.Format(CultureInfo.InvariantCulture, ReturningEnvironmentMessage, EnvironmentName)) });
         }
+
+        /// <summary>
+        /// Creates an enumerable that would be all the settings expected to be returned from a Get call to the ConfigController
+        /// </summary>
+        private static IEnumerable<KeyValuePair<string, string>> CreateAllConfigEnum() => new List<KeyValuePair<string, string>>
+        {
+            { new KeyValuePair<string, string>("SettingString0", "Value for setting string 0")},
+            { new KeyValuePair<string, string>("RootGroup2:Setting2Url", "http://portabilityService")},
+            { new KeyValuePair<string, string>("RootGroup2:Setting1Url", "http://portabilityconfigservice")},
+            { new KeyValuePair<string, string>("RootGroup1:SettingBool", "False")},
+            { new KeyValuePair<string, string>("RootGroup1:Group2:Group1:SettingString2", "Value for setting string 2")},
+            { new KeyValuePair<string, string>("RootGroup1:Group1:Group1:SettingString1", "Value for setting string 1")},
+            { new KeyValuePair<string, string>("ArraySettings:1:ArraySetting2", "ArraySetting2")},
+            { new KeyValuePair<string, string>("ArraySettings:0:ArraySetting1", "ArraySetting1")},
+        };
 
         /// <summary>
         /// Verifies the expected child sections that should be returned for a particular configuration section 
