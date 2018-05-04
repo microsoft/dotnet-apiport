@@ -91,11 +91,6 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        public Task<ApiInformation> GetApiInformationAsync(string docId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null)
         {
             var queryResult = await _searcher.SearchAsync(query, top ?? 10);
@@ -106,24 +101,6 @@ namespace Microsoft.Fx.Portability
                 .AsReadOnly();
 
             return result;
-        }
-
-        public Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds)
-        {
-            if (docIds == null)
-            {
-                throw new ArgumentNullException(nameof(docIds));
-            }
-
-            // return the ApiInformation for all valid Ids
-            var result = docIds
-                        .Distinct(StringComparer.Ordinal)
-                        .Where(_lookup.IsFrameworkMember)
-                        .Select(d => new ApiInformation(d, _lookup, _apiRecommendations))
-                        .ToList()
-                        .AsReadOnly();
-
-            return Task.FromResult((IReadOnlyCollection<ApiInformation>)result);
         }
     }
 }

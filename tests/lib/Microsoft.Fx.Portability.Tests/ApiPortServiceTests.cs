@@ -44,28 +44,6 @@ namespace Microsoft.Fx.Portability.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation(""), null));
         }
 
-        [Fact(Skip = "QueryDocIdsAsync not yet implemented")] // TODO
-        public async Task ApiPortService_GetDocIdsWithValidDocIdAsync()
-        {
-            var docIds = new List<string>
-            {
-                "T:System.Console",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.IO.Stream,System.Object)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.IO.TextWriter,System.Object)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.Object,System.Xml.Serialization.XmlSerializationWriter)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.IO.Stream,System.Object,System.Xml.Serialization.XmlSerializerNamespaces)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.IO.TextWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces)",
-                "M:System.Xml.Serialization.XmlSerializer.Serialize(System.Xml.XmlWriter,System.Object,System.Xml.Serialization.XmlSerializerNamespaces,System.String)"
-            };
-
-            var result = await _apiPortService.QueryDocIdsAsync(docIds);
-
-            Assert.Equal(docIds.Count(), result.Count());
-            Assert.Empty(docIds.Except(Enumerable.Select(result, (r => r.Definition.DocId))));
-        }
-
         [Fact]
         public async Task CompressesAnalyzeRequest()
         {
@@ -108,14 +86,10 @@ namespace Microsoft.Fx.Portability.Tests
                 new AnalyzeResponse { ResultUrl = new Uri("http://localhost") },
                 new ResultFormatInformation { MimeType = "foo/bar" }
             );
-            // TODO GetApiInformationAsync isn't implemented
-            // await service.GetApiInformationAsync("docId");
 
             responseJson = "[{}]"; // these methods expect a json array
             await service.GetResultFormatsAsync();
             await service.GetTargetsAsync();
-            // TODO QueryDocIdsAsync isn't implemented
-            // await service.QueryDocIdsAsync(new[] { "docId" });
         }
 
         [Fact]

@@ -23,7 +23,6 @@ namespace Microsoft.Fx.Portability
             internal const string Analyze = "/api/analyze";
             internal const string Targets = "/api/target";
             internal const string UsedApi = "/api/usage";
-            internal const string FxApi = "/api/fxapi";
             internal const string FxApiSearch = "/api/fxapi/search";
             internal const string ResultFormat = "/api/reportformat";
             internal const string DefaultResultFormat = "/api/reportformat/default";
@@ -62,11 +61,6 @@ namespace Microsoft.Fx.Portability
             _client.DefaultRequestHeaders.Add("Client-Version", info.Version);
         }
 
-        public Task<ApiInformation> GetApiInformationAsync(string docId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ResultFormatInformation> GetDefaultResultFormatAsync()
         {
             using (var request = new HttpRequestMessage(HttpMethod.Get, Endpoints.DefaultResultFormat))
@@ -95,11 +89,6 @@ namespace Microsoft.Fx.Portability
 
                 return bytes.Deserialize<IEnumerable<AvailableTarget>>();
             }
-        }
-
-        public Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest)

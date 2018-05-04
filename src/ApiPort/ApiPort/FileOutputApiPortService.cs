@@ -36,20 +36,6 @@ namespace ApiPort
             _progress = progress;
         }
 
-        public Task<ApiInformation> GetApiInformationAsync(string docId)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-
-            return Task.FromResult(new ApiInformation());
-        }
-
-        public Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds)
-        {
-            _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-
-            return Task.FromResult(s_emptyQueryDocIds);
-        }
-
         public Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = default)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);

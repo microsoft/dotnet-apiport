@@ -9,12 +9,10 @@ namespace Microsoft.Fx.Portability
 {
     public interface IApiPortService
     {
-        Task<ApiInformation> GetApiInformationAsync(string docId);
         Task<ResultFormatInformation> GetDefaultResultFormatAsync();
         Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format);
         Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync();
         Task<IEnumerable<AvailableTarget>> GetTargetsAsync();
-        Task<IReadOnlyCollection<ApiInformation>> QueryDocIdsAsync(IEnumerable<string> docIds);
         Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest);
         Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null);
     }
