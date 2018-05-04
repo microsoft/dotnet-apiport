@@ -29,13 +29,12 @@ namespace PortabilityService.Functions
             //we can treat a function timeout as an ordinary failure which requires that the end-user resubmit their submission for analysis.
             if (!cancelToken.IsCancellationRequested)
             {
-                cancelToken.ThrowIfCancellationRequested()
                 using (CancellationTokenRegistration ctr = cancelToken.Register(() => cancelAsync(workflowMessage)))
                 {
                     log.LogInformation("Processing message {SubmissionId}, stage {Stage}", workflowMessage.SubmissionId, workflowMessage.Stage);
 
                     var workflowMgr = WorkflowManager.Initialize();
-                    var nextMsg = await workflowMgr.ExecuteActionsToNextStage(workflowMessage, cancelToken);
+                    var nextMsg = await workflowMgr.ExecuteActionsToNextStage(workflowMessage, cancelToken).ConfigureAwait(false);
 
                     if (nextMsg.Stage != WorkflowStage.Finished)
                     {
