@@ -40,12 +40,8 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         {
             var currentDate = DateTime.Now;
             var containerName = GetCurrentMonthContainerName(currentDate);
-            var container = await GetBlobContainerAsync(containerName).ConfigureAwait(false);
-
-            if (container == null)
-            {
-                throw new InvalidOperationException("Azure CloubBlobContainer is not expected to be null");
-            }
+            var container = await GetBlobContainerAsync(containerName).ConfigureAwait(false)
+                ?? throw new InvalidOperationException("Azure CloubBlobContainer is not expected to be null");
 
             var containerPath = $"{currentDate.Day.ToString("00", CultureInfo.InvariantCulture)}/{uniqueId}";
             using (var content = new MemoryStream())
@@ -80,12 +76,8 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         public async Task SaveResultToBlobAsync(string uniqueId, AnalyzeResponse result)
         {
-            var container = await GetBlobContainerAsync(ResultContainerNamePrefix).ConfigureAwait(false);
-
-            if (container == null)
-            {
-                throw new InvalidOperationException("Azure CloubBlobContainer is not expected to be null");
-            }
+            var container = await GetBlobContainerAsync(ResultContainerNamePrefix).ConfigureAwait(false)
+                ?? throw new InvalidOperationException("Azure CloubBlobContainer is not expected to be null");
 
             using (var content = new MemoryStream())
             {
