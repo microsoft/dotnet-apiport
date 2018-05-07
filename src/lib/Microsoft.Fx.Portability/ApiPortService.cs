@@ -142,7 +142,7 @@ namespace Microsoft.Fx.Portability
                             var retryDelta = response.Headers.RetryAfter?.Delta ?? DefaultRetryDelta;
                             return (retryDelta, null);
                         case HttpStatusCode.OK:
-                            var data = await response.Content.ReadAsByteArrayAsync();
+                            var data = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                             var result = new ReportingResultWithFormat
                             {
                                 Data = data,
@@ -167,7 +167,7 @@ namespace Microsoft.Fx.Portability
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsByteArrayAsync();
+                    return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                 }
                 else
                 {
@@ -223,7 +223,7 @@ namespace Microsoft.Fx.Portability
 
         private static async Task ProcessBadRequestAsync(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (string.Equals(response.ReasonPhrase, typeof(UnknownTargetException).Name, StringComparison.Ordinal))
             {

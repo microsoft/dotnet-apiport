@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability
             {
                 try
                 {
-                    var targets = await _apiPortService.GetTargetsAsync();
+                    var targets = await _apiPortService.GetTargetsAsync().ConfigureAwait(false);
 
                     return targets;
                 }
@@ -77,7 +77,7 @@ namespace Microsoft.Fx.Portability
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
         {
-            var result = await WriteAnalysisReportsAsync(options, false);
+            var result = await WriteAnalysisReportsAsync(options, false).ConfigureAwait(false);
 
             return result.Paths;
         }

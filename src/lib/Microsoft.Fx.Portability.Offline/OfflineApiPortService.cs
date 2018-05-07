@@ -75,7 +75,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
         {
-            format = format ?? await GetDefaultResultFormatAsync();
+            format = format ?? await GetDefaultResultFormatAsync().ConfigureAwait(false);
 
             var writer = _reportWriters.First(w => w.Format.Equals(format));
 
@@ -93,7 +93,7 @@ namespace Microsoft.Fx.Portability
 
         public async Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null)
         {
-            var queryResult = await _searcher.SearchAsync(query, top ?? 10);
+            var queryResult = await _searcher.SearchAsync(query, top ?? 10).ConfigureAwait(false);
 
             // TODO: This currently only populates the docid, as that is the only thing the offline service currently requires
             var result = queryResult.Select(r => new ApiDefinition { DocId = r })
