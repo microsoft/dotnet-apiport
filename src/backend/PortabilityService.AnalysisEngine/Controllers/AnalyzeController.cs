@@ -55,15 +55,15 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     return NotFound();
                 }
 
-                // if the user opted out of us collecting telemetry
-                if (!request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
-                {
-                    //TODO: remove the blob from Azure Blob Storage
-                }
-
                 var result = await AnalyzeRequestAsync(request, submissionId);
 
                 await _storage.SaveResultToBlobAsync(submissionId, result);
+
+                // if the user opted out of us collecting telemetry
+                if (request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
+                {
+                    //TODO: remove the blob from Azure Blob Storage
+                }
 
                 return Ok();
             }
@@ -74,7 +74,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
             }
         }
 
-        private async Task<AnalyzeResponse> AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
+        private Task<AnalyzeResponse> AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
         {
             using (_logger.BeginScope($"Analyzing request for {submissionId}"))
             {
@@ -88,9 +88,8 @@ namespace PortabilityService.AnalysisEngine.Controllers
 
                 //TODO: invoke the real analysis engine to do the work
                 //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
-                await Task.Yield(); // to remove the warning about missing await in an async method
 
-                return new AnalyzeResponse
+                return Task.FromResult(new AnalyzeResponse
                 {
                     MissingDependencies = new System.Collections.Generic.List<MemberInfo>
                     {
@@ -108,7 +107,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
                         "assembly2",
                         "assembly3"
                     }
-                };
+                });
             }
         }
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PortabilityService.WorkflowManagement
 {
-    abstract class BaseAction
+    internal abstract class BaseAction
     {
         protected static HttpClient httpClient = new HttpClient();
 

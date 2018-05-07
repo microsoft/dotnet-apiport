@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PortabilityService.WorkflowManagement
 {
-    class AnalyzeAction : BaseAction, IWorkflowAction
+    internal class AnalyzeAction : BaseAction, IWorkflowAction
     {
         public AnalyzeAction(string serviceUrl) : base(serviceUrl) { }
 

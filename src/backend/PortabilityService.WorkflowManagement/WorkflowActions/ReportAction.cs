@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PortabilityService.WorkflowManagement
 {
-    class ReportAction : BaseAction, IWorkflowAction
+    internal class ReportAction : BaseAction, IWorkflowAction
     {
         public ReportAction(string serviceUrl) : base(serviceUrl) { }
 
