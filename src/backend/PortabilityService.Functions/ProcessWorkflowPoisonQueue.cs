@@ -3,7 +3,7 @@
 
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using WorkflowManagement;
+using PortabilityService.WorkflowManagement;
 
 namespace Functions
 {

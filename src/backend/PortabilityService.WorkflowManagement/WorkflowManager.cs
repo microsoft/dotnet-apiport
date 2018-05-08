@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -79,8 +80,13 @@ namespace PortabilityService.WorkflowManagement
         /// </summary>
         public async Task<WorkflowQueueMessage> ExecuteActionsToNextStage(WorkflowQueueMessage currentMsg, CancellationToken cancelToken)
         {
+            //Get action corresponding to the current message's workflow stage
+            Debug.Assert(actions.Length - 1 > (int)currentMsg.Stage, "Stage must be within bounds of Actions array.");
+            var action = actions[(int)currentMsg.Stage];
+            Debug.Assert(action.CurrentStage == currentMsg.Stage, "Action's Stage must match current message's Stage.");
+
             //Execute the action
-            WorkflowStage nextStage = await actions[(int)currentMsg.Stage].ExecuteAsync(currentMsg.SubmissionId, cancelToken);
+            WorkflowStage nextStage = await action.ExecuteAsync(currentMsg.SubmissionId, cancelToken).ConfigureAwait(false);
 
             return new WorkflowQueueMessage(currentMsg.SubmissionId, nextStage);
         }
