@@ -10,6 +10,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
     {
         Task SaveRequestToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId);
         Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId);
+        Task DeleteRequestFromBlobAsync(string uniqueId);
 
         Task SaveResultToBlobAsync(string submissionId, AnalyzeResponse result);
         Task<AnalyzeResponse> RetrieveResultFromBlobAsync(string submissionId);

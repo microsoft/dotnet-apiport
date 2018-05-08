@@ -62,7 +62,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
                 // if the user opted out of us collecting telemetry
                 if (request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
                 {
-                    //TODO: remove the blob from Azure Blob Storage
+                    await _storage.DeleteRequestFromBlobAsync(submissionId);
                 }
 
                 return Ok();

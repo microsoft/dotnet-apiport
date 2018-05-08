@@ -25,12 +25,17 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         public Task SaveRequestToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
         {
-            return _blob.SaveToBlobAsync(submissionId, analyzeRequest);
+            return _blob.SaveRequestToBlobAsync(submissionId, analyzeRequest);
         }
 
         public Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId)
         {
             return _blob.RetrieveRequestFromBlobAsync(uniqueId);
+        }
+
+        public Task DeleteRequestFromBlobAsync(string uniqueId)
+        {
+            return _blob.DeleteRequestFromBlobAsync(uniqueId);
         }
 
         public Task AddJobToQueueAsync(string submissionId)

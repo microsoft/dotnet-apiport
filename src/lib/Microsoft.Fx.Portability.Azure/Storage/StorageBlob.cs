@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         /// <param name="uniqueId">Guid for the analysis request</param>
         /// <param name="request">The contents of the request.</param>
         /// <returns></returns>
-        public async Task SaveToBlobAsync(string uniqueId, AnalyzeRequest request)
+        public async Task SaveRequestToBlobAsync(string uniqueId, AnalyzeRequest request)
         {
             var currentDate = DateTime.Now;
             var containerName = GetCurrentMonthContainerName(currentDate);
@@ -59,7 +59,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
         public async Task<AnalyzeRequest> RetrieveRequestFromBlobAsync(string uniqueId)
         {
-            var blobs = await GetBlobsAsync();
+            var blobs = await GetRequestBlobsAsync();
             // the CloudBlockBlob name contains folder name too: {day}/{submissionid}
             var blob = blobs.SingleOrDefault(b => b.Name.EndsWith(uniqueId, StringComparison.OrdinalIgnoreCase));
 
@@ -71,6 +71,24 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             using (var blobStream = await blob.OpenReadAsync())
             {
                 return blobStream.DecompressToObject<AnalyzeRequest>();
+            }
+        }
+
+        /// <summary>
+        /// Deletes an analyze request from the blob storage. Does nothing if the blob
+        /// does not exist.
+        /// </summary>
+        /// <param name="uniqueId">the submission id of the analyze request</param>
+        /// <returns></returns>
+        public async Task DeleteRequestFromBlobAsync(string uniqueId)
+        {
+            var blobs = await GetRequestBlobsAsync();
+            // the CloudBlockBlob name contains folder name too: {day}/{submissionid}
+            var blob = blobs.SingleOrDefault(b => b.Name.EndsWith(uniqueId, StringComparison.OrdinalIgnoreCase));
+
+            if (blob != null)
+            {
+                await blob.DeleteIfExistsAsync();
             }
         }
 
@@ -126,7 +144,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             await blob.DeleteIfExistsAsync();
         }
 
-        private async Task<IEnumerable<CloudBlockBlob>> GetBlobsAsync()
+        private async Task<IEnumerable<CloudBlockBlob>> GetRequestBlobsAsync()
         {
             var blobClient = _storageAccount.CreateCloudBlobClient();
             var containers = await blobClient.ListContainersAsync(prefix: RequestContainerNamePrefix).ConfigureAwait(false);
