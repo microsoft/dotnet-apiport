@@ -26,7 +26,7 @@ namespace ApiPort
         {
             var result = await _service.SearchFxApiAsync(query, numberOfHits);
 
-            return result.Response
+            return result
                 .Select(r => r.DocId)
                 .ToList();
         }

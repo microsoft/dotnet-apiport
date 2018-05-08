@@ -43,24 +43,24 @@ namespace Microsoft.Fx.Portability.Reports
 
         public IEnumerable<NuGetPackageInfo> NuGetPackages { get; private set; }
 
-        public RazorHtmlObject(AnalyzeResponse response, ITargetMapper targetMapper)
+        public RazorHtmlObject(AnalyzeResult result, ITargetMapper targetMapper)
         {
-            CatalogBuiltOn = response.CatalogLastUpdated;
+            CatalogBuiltOn = result.CatalogLastUpdated;
             _targetMapper = targetMapper;
-            RequestFlags = response.ReportingResult.RequestFlags;
-            ReportingResult = response.ReportingResult;
+            RequestFlags = result.ReportingResult.RequestFlags;
+            ReportingResult = result.ReportingResult;
             TargetMapper = _targetMapper;
-            OrderedUnresolvedAssemblies = response.ReportingResult.GetUnresolvedAssemblies().OrderBy(asm => asm.Key);
-            OrderedAssembliesByIdentity = response.ReportingResult.GetAssemblyUsageInfo().OrderBy(a => a.SourceAssembly.AssemblyIdentity);
-            MissingTypes = response.ReportingResult.GetMissingTypes();
-            Targets = response.Targets;
-            TargetHeaders = _targetMapper.GetTargetNames(response.ReportingResult.Targets, true);
-            OrderedBreakingChangesByAssembly = GetGroupedBreakingChanges(response.BreakingChanges, response.ReportingResult.GetAssemblyUsageInfo().Select(a => a.SourceAssembly));
+            OrderedUnresolvedAssemblies = result.ReportingResult.GetUnresolvedAssemblies().OrderBy(asm => asm.Key);
+            OrderedAssembliesByIdentity = result.ReportingResult.GetAssemblyUsageInfo().OrderBy(a => a.SourceAssembly.AssemblyIdentity);
+            MissingTypes = result.ReportingResult.GetMissingTypes();
+            Targets = result.Targets;
+            TargetHeaders = _targetMapper.GetTargetNames(result.ReportingResult.Targets, true);
+            OrderedBreakingChangesByAssembly = GetGroupedBreakingChanges(result.BreakingChanges, result.ReportingResult.GetAssemblyUsageInfo().Select(a => a.SourceAssembly));
             BreakingChangesSummary = GetBreakingChangesSummary(OrderedBreakingChangesByAssembly);
 
-            var skippedAssemblies = response.BreakingChangeSkippedAssemblies ?? Enumerable.Empty<AssemblyInfo>();
+            var skippedAssemblies = result.BreakingChangeSkippedAssemblies ?? Enumerable.Empty<AssemblyInfo>();
             OrderedBreakingChangeSkippedAssemblies = skippedAssemblies.OrderBy(a => a.AssemblyIdentity);
-            NuGetPackages = response.NuGetPackages;
+            NuGetPackages = result.NuGetPackages;
         }
 
         private static IDictionary<BreakingChange, IEnumerable<MemberInfo>> GetBreakingChangesSummary(IEnumerable<KeyValuePair<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>> orderedBreakingChangesByAssembly)

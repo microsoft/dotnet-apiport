@@ -6,9 +6,12 @@ using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
@@ -19,24 +22,23 @@ namespace Microsoft.Fx.Portability
         {
             internal const string Analyze = "/api/analyze";
             internal const string Targets = "/api/target";
-            internal const string UsedApi = "/api/usage";
-            internal const string FxApi = "/api/fxapi";
             internal const string FxApiSearch = "/api/fxapi/search";
-            internal const string ResultFormat = "/api/resultformat";
-            internal const string DefaultResultFormat = "/api/resultformat/default";
+            internal const string ResultFormat = "/api/reportformat";
+            internal const string DefaultResultFormat = "/api/reportformat/default";
         }
 
-        private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan DefaultRetryDelta = TimeSpan.FromSeconds(2d);
+        private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(3d);
+        private readonly IProgressReporter _progressReporter;
+        private readonly HttpClient _client;
 
-        private readonly CompressedHttpClient _client;
+        public ApiPortService(string endpoint, ProductInformation info, IProgressReporter reporter, IProxyProvider proxyProvider = null)
+            : this(endpoint, BuildMessageHandler(endpoint, proxyProvider), info, reporter)
+        { }
 
-        public ApiPortService(string endpoint, ProductInformation info, IProxyProvider proxyProvider = null)
-            : this(endpoint, BuildMessageHandler(endpoint, proxyProvider), info)
+        public ApiPortService(string endpoint, HttpMessageHandler httpMessageHandler, ProductInformation info, IProgressReporter reporter)
         {
-        }
-
-        public ApiPortService(string endpoint, HttpMessageHandler httpMessageHandler, ProductInformation info)
-        {
+            _progressReporter = reporter;
             if (string.IsNullOrWhiteSpace(endpoint))
             {
                 throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, LocalizedStrings.MustBeValidEndpoint);
@@ -47,125 +49,203 @@ namespace Microsoft.Fx.Portability
                 throw new ArgumentNullException(nameof(info));
             }
 
-            _client = new CompressedHttpClient(info, httpMessageHandler)
+            _client = new HttpClient(httpMessageHandler, true)
             {
                 BaseAddress = new Uri(endpoint),
                 Timeout = Timeout
             };
+
+            _client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentCulture.ToString());
+            _client.DefaultRequestHeaders.Add("Client-Type", info.Name);
+            _client.DefaultRequestHeaders.Add("Client-Version", info.Version);
         }
 
-        public async Task<ServiceResponse<AnalyzeResponse>> SendAnalysisAsync(AnalyzeRequest a)
+        public async Task<ResultFormatInformation> GetDefaultResultFormatAsync()
         {
-            return await _client.CallAsync<AnalyzeRequest, AnalyzeResponse>(HttpMethod.Post, Endpoints.Analyze, a);
-        }
-
-        public async Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> format)
-        {
-            var formatInformation = await GetResultFormatsAsync(format);
-
-            return await _client.CallAsync(HttpMethod.Post, Endpoints.Analyze, a, formatInformation);
-        }
-
-        public async Task<ServiceResponse<IEnumerable<AvailableTarget>>> GetTargetsAsync()
-        {
-            return await _client.CallAsync<IEnumerable<AvailableTarget>>(HttpMethod.Get, Endpoints.Targets);
-        }
-
-        public async Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = null, int? top = null, UsageDataFilter? filter = null, IEnumerable<string> targets = null)
-        {
-            var usedApiUrl = UrlBuilder.Create(Endpoints.UsedApi)
-                .AddQuery("skip", skip)
-                .AddQuery("top", top)
-                .AddQuery("filter", filter)
-                .AddQueryList("targets", targets)
-                .Url;
-
-            return await _client.CallAsync<UsageDataCollection>(HttpMethod.Get, usedApiUrl);
-        }
-
-        public async Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
-        {
-            var submissionUrl = UrlBuilder.Create(Endpoints.Analyze).AddPath(submissionId).Url;
-
-            return await _client.CallAsync<AnalyzeResponse>(HttpMethod.Get, submissionUrl);
-        }
-
-        public async Task<ServiceResponse<ReportingResultWithFormat>> GetAnalysisAsync(string submissionId, string format)
-        {
-            var formatInformation = await GetResultFormatsAsync(string.IsNullOrWhiteSpace(format) ? null : new[] { format });
-            var submissionUrl = UrlBuilder.Create(Endpoints.Analyze).AddPath(submissionId).Url;
-
-            return await _client.CallAsync(HttpMethod.Get, submissionUrl, formatInformation);
-        }
-
-        public async Task<ServiceResponse<ApiInformation>> GetApiInformationAsync(string docId)
-        {
-            string sendAnalysis = UrlBuilder
-                .Create(Endpoints.FxApi)
-                .AddQuery("docId", docId)
-                .Url;
-
-            return await _client.CallAsync<ApiInformation>(HttpMethod.Get, sendAnalysis);
-        }
-
-        public async Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = null)
-        {
-            var url = UrlBuilder
-                .Create(Endpoints.FxApiSearch)
-                .AddQuery("q", query)
-                .AddQuery("top", top);
-
-            return await _client.CallAsync<IReadOnlyCollection<ApiDefinition>>(HttpMethod.Get, url.Url);
-        }
-
-        /// <summary>
-        /// Returns a list of valid DocIds from the PortabilityService
-        /// </summary>
-        /// <param name="docIds">Enumerable of DocIds</param>
-        public async Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
-        {
-            return await _client.CallAsync<IEnumerable<string>,
-                IReadOnlyCollection<ApiInformation>>(HttpMethod.Post, Endpoints.FxApi, docIds);
-        }
-
-        public async Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
-        {
-            return await _client.CallAsync<IEnumerable<ResultFormatInformation>>(HttpMethod.Get, Endpoints.ResultFormat);
-        }
-
-        public async Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
-        {
-            return await _client.CallAsync<ResultFormatInformation>(HttpMethod.Get, Endpoints.DefaultResultFormat);
-        }
-
-        public void Dispose()
-        {
-            _client.Dispose();
-        }
-
-        private async Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync(IEnumerable<string> formats)
-        {
-            if (!formats?.Any() ?? true)   //no "resultFormat" string option provider by user
+            using (var request = new HttpRequestMessage(HttpMethod.Get, Endpoints.DefaultResultFormat))
             {
-                var defaultFormat = await GetDefaultResultFormatAsync();
-                return new[] { defaultFormat.Response };
+                var bytes = await SendAsync(request);
+
+                return bytes.Deserialize<ResultFormatInformation>();
             }
-            else
+        }
+
+        public async Task<IEnumerable<ResultFormatInformation>> GetResultFormatsAsync()
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, Endpoints.ResultFormat))
             {
-                var requestedFormats = new HashSet<string>(formats, StringComparer.OrdinalIgnoreCase);
-                var resultFormats = await GetResultFormatsAsync();
-                var formatInformation = resultFormats.Response
-                    .Where(r => requestedFormats.Contains(r.DisplayName));
+                var bytes = await SendAsync(request);
 
-                var unknownFormats = requestedFormats
-                    .Except(formatInformation.Select(f => f.DisplayName), StringComparer.OrdinalIgnoreCase);
+                return bytes.Deserialize<IEnumerable<ResultFormatInformation>>();
+            }
+        }
 
-                if (unknownFormats.Any())
+        public async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, Endpoints.Targets))
+            {
+                var bytes = await SendAsync(request);
+
+                return bytes.Deserialize<IEnumerable<AvailableTarget>>();
+            }
+        }
+
+        public async Task<AnalyzeResponse> RequestAnalysisAsync(AnalyzeRequest analyzeRequest)
+        {
+            var content = analyzeRequest.SerializeAndCompress();
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, Endpoints.Analyze))
+            {
+                request.Content = new ByteArrayContent(content);
+                request.Content.Headers.ContentEncoding.Add("gzip");
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                request.Headers.Add("Accept", "application/json");
+
+                var response = await SendAsync(request);
+
+                return response.Deserialize<AnalyzeResponse>();
+            }
+        }
+
+        public async Task<ReportingResultWithFormat> GetReportingResultAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
+        {
+            var deadline = DateTime.Now + Timeout;
+            while (DateTime.Now < deadline)
+            {
+                var (retryDelta, reportingResult) = await GetReportAsync(analyzeResponse, format);
+                if (reportingResult.HasValue)
                 {
-                    throw new UnknownReportFormatException(unknownFormats);
+                    return reportingResult.Value;
                 }
 
-                return formatInformation;
+                await Task.Delay(retryDelta.Value);
+            }
+
+            throw new TimeoutException(LocalizedStrings.TimedOut);
+        }
+
+        private async Task<(TimeSpan? retryDelta, ReportingResultWithFormat? result)> GetReportAsync(AnalyzeResponse analyzeResponse, ResultFormatInformation format)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, analyzeResponse.ResultUrl.ToString()))
+            {
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(format.MimeType));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", analyzeResponse.ResultAuthToken);
+
+                using (var response = await _client.SendAsync(request))
+                {
+                    ReportEndpointDeprecation(response);
+
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.Accepted:
+                        case HttpStatusCode.NotFound:
+                            var retryDelta = response.Headers.RetryAfter?.Delta ?? DefaultRetryDelta;
+                            return (retryDelta, null);
+                        case HttpStatusCode.OK:
+                            var data = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                            var result = new ReportingResultWithFormat
+                            {
+                                Data = data,
+                                Format = format.DisplayName
+                            };
+                            return (null, result);
+                    }
+
+                    await ThrowErrorCodeExceptionAsync(request, response);
+
+                    // the compiler doesn't know ThrowErrorCodeExceptionAsync always throws
+                    throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
+                }
+            }
+        }
+
+        private async Task<byte[]> SendAsync(HttpRequestMessage request)
+        {
+            using (var response = await _client.SendAsync(request))
+            {
+                ReportEndpointDeprecation(response);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    await ThrowErrorCodeExceptionAsync(request, response);
+
+                    // the compiler doesn't know ThrowErrorCodeExceptionAsync always throws
+                    throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
+                }
+            }
+        }
+
+        private void ReportEndpointDeprecation(HttpResponseMessage response)
+        {
+            if (response.Headers.TryGetValues(typeof(EndpointStatus).Name, out var headers) &&
+                Enum.TryParse(headers.Single(), out EndpointStatus status) &&
+                status == EndpointStatus.Deprecated)
+            {
+                _progressReporter.ReportIssue(LocalizedStrings.ServerEndpointDeprecated);
+            }
+        }
+
+        private static async Task ThrowErrorCodeExceptionAsync(HttpRequestMessage request, HttpResponseMessage response)
+        {
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.BadRequest:
+                    await ProcessBadRequestAsync(response);
+                    break; // ProcessBadRequestAsync always throws but the compiler does not detect it
+                case HttpStatusCode.MovedPermanently:
+                    throw new MovedPermanentlyException();
+                case HttpStatusCode.NotFound:
+                    // Estimated maximum allowed content from the portability service in bytes
+                    const long estimatedMaximumAllowedContentLength = 31457280;
+
+                    var contentLength = request.Content?.Headers?.ContentLength;
+
+                    if (contentLength.HasValue && contentLength.Value >= estimatedMaximumAllowedContentLength)
+                    {
+                        throw new RequestTooLargeException(contentLength.Value);
+                    }
+                    else
+                    {
+                        throw new NotFoundException(request.Method, request.RequestUri);
+                    }
+                case HttpStatusCode.Unauthorized:
+                    throw new UnauthorizedEndpointException();
+                case HttpStatusCode.ProxyAuthenticationRequired:
+                    throw new ProxyAuthenticationRequiredException(request.RequestUri);
+            }
+
+            throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, response.StatusCode));
+        }
+
+        private static async Task ProcessBadRequestAsync(HttpResponseMessage response)
+        {
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (string.Equals(response.ReasonPhrase, typeof(UnknownTargetException).Name, StringComparison.Ordinal))
+            {
+                throw new UnknownTargetException(content);
+            }
+
+            throw new PortabilityAnalyzerException(LocalizedStrings.BadRequestMessage);
+        }
+
+        public async Task<IReadOnlyCollection<ApiDefinition>> SearchFxApiAsync(string query, int? top = null)
+        {
+            var url = UrlBuilder
+              .Create(Endpoints.FxApiSearch)
+              .AddQuery("q", query)
+              .AddQuery("top", top);
+
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url.Url))
+            {
+                var bytes = await SendAsync(request);
+                var searchResults = bytes.Deserialize<IReadOnlyCollection<ApiDefinition>>();
+
+                return searchResults;
             }
         }
 
@@ -184,13 +264,15 @@ namespace Microsoft.Fx.Portability
 
             var clientHandler = new HttpClientHandler
             {
-#if !FEATURE_SERVICE_POINT_MANAGER
-                SslProtocols = CompressedHttpClient.SupportedSSLProtocols,
-#endif
                 Proxy = proxyProvider?.GetProxy(uri),
                 AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
             };
 
+#if FEATURE_SERVICE_POINT_MANAGER
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+#else
+            clientHandler.SslProtocols = SslProtocols.Tls12;
+#endif
             if (clientHandler.Proxy == null)
             {
                 return clientHandler;
@@ -198,5 +280,7 @@ namespace Microsoft.Fx.Portability
 
             return new ProxyAuthenticationHandler(clientHandler, proxyProvider);
         }
+
+        public void Dispose() => _client.Dispose();
     }
 }

@@ -26,29 +26,23 @@ namespace PortabilityService.Functions.Tests
             // Arrange
             var request = PostFromConsoleApiPort;
             request.Content = new StringContent("{ \"json\": \"json\" }");
-            var storage = Substitute.For<IStorage>();
 
+            var storage = Substitute.For<IStorage>();
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
+            
             // Act
-            var response = await Analyze.Run(request, Substitute.For<ICollector<WorkflowQueueMessage>>(), storage, NullLogger.Instance);
+            var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
-        public static async Task ReturnsGuidForCompressedAnalyzeRequest()
+        public static async Task ReturnsAnalyzeResponseForCompressedAnalyzeRequest()
         {
             // Arrange
-            var gzippedAnalyzeRequest = typeof(AnalyzeTests).Assembly
-                .GetManifestResourceStream("PortabilityService.Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
-
             var request = PostFromConsoleApiPort;
-            request.SetConfiguration(new HttpConfiguration());
-            request.Content = new StreamContent(gzippedAnalyzeRequest);
-            request.Content.Headers.Add("Content-Encoding", "gzip");
-            request.Content.Headers.Add("Content-Type", "application/json");
 
-            WorkflowManager.Initialize();
             var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var storage = Substitute.For<IStorage>();
             storage.SaveToBlobAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<string>()).Returns(Task.FromResult(true));
@@ -57,11 +51,25 @@ namespace PortabilityService.Functions.Tests
             var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
 
             // Assert
-            var body = await response.Content.ReadAsStringAsync();
+            var analyzeResponse = await response.Content.ReadAsAsync<AnalyzeResponse>();
+            Assert.IsType<AnalyzeResponse>(analyzeResponse);
+        }
 
-            Assert.True(Guid.TryParse(body, out var submissionId));
+        [Fact]
+        public static async Task EnqueuesWorkflowMessage()
+        {
+            var request = PostFromConsoleApiPort;
 
-            workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId.ToString() && x.Stage == WorkflowStage.Analyze));
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
+            var storage = Substitute.For<IStorage>();
+            storage.SaveToBlobAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<string>()).Returns(Task.FromResult(true));
+
+            var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
+            var analyzeResponse = await response.Content.ReadAsAsync<AnalyzeResponse>();
+
+            workflowQueue.Received()
+                .Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == analyzeResponse.SubmissionId &&
+                                                       x.Stage == WorkflowStage.Analyze));
         }
 
         [Fact]
@@ -69,19 +77,14 @@ namespace PortabilityService.Functions.Tests
         {
             // Arrange
             var gzippedAnalyzeRequestStream = typeof(AnalyzeTests).Assembly
-                .GetManifestResourceStream("PortabilityService.Functions.Tests.Resources.apiport.exe.AnalyzeRequest.json.gz");
+                .GetManifestResourceStream("AnalyzeRequest.json.gz");
 
             var expectedStream = new MemoryStream();
             gzippedAnalyzeRequestStream.CopyTo(expectedStream);
             gzippedAnalyzeRequestStream.Seek(0, SeekOrigin.Begin);
 
             var request = PostFromConsoleApiPort;
-            request.SetConfiguration(new HttpConfiguration());
-            request.Content = new StreamContent(gzippedAnalyzeRequestStream);
-            request.Content.Headers.Add("Content-Encoding", "gzip");
-            request.Content.Headers.Add("Content-Type", "application/json");
 
-            WorkflowManager.Initialize();
             var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var storage = new TestStorage();
 
@@ -92,16 +95,52 @@ namespace PortabilityService.Functions.Tests
             Assert.Equal(expectedStream.ToArray(), storage.Stored);
         }
 
+        [Fact]
+        public static async Task ResponseHasEndpointStatusHeader()
+        {
+            var request = PostFromConsoleApiPort;
+
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
+            var storage = Substitute.For<IStorage>();
+            storage.SaveToBlobAsync(null, null).ReturnsForAnyArgs(true);
+
+            var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
+
+            Assert.True(response.Headers.TryGetValues(nameof(EndpointStatus), out _));
+        }
+
+        [Fact]
+        public static async Task ResponseHasLocationHeader()
+        {
+            var request = PostFromConsoleApiPort;
+
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
+            var storage = Substitute.For<IStorage>();
+            storage.SaveToBlobAsync(null, null).ReturnsForAnyArgs(Task.FromResult(true));
+
+            var response = await Analyze.Run(request, workflowQueue, storage, NullLogger.Instance);
+
+            Assert.NotNull(response.Headers.Location);
+        }
+
         private static HttpRequestMessage PostFromConsoleApiPort
         {
             get
             {
-                var req = new HttpRequestMessage(HttpMethod.Post, "");
+                var req = new HttpRequestMessage(HttpMethod.Post, "http://portability.local/api/analyze");
+                req.SetConfiguration(new HttpConfiguration());
+
                 req.Headers.Add("Accept", "application/json");
                 req.Headers.Add("Accept-Encoding", "gzip, deflate");
                 req.Headers.Add("Client-Type", "ApiPort_Console");
                 req.Headers.Add("Client-Version", "2.4.0.2");
                 req.Headers.Add("Expect", "100-continue");
+
+                var gzippedAnalyzeRequest = typeof(AnalyzeTests).Assembly
+                    .GetManifestResourceStream("AnalyzeRequest.json.gz");
+                req.Content = new StreamContent(gzippedAnalyzeRequest);
+                req.Content.Headers.Add("Content-Encoding", "gzip");
+                req.Content.Headers.Add("Content-Type", "application/json");
 
                 return req;
             }
@@ -117,11 +156,6 @@ namespace PortabilityService.Functions.Tests
             }
 
             public IEnumerable<ProjectSubmission> GetProjectSubmissions()
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<IEnumerable<UsageData>> GetUsageDataAsync()
             {
                 throw new NotImplementedException();
             }

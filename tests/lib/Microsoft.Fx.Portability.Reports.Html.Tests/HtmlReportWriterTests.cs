@@ -41,7 +41,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
             var mapper = Substitute.For<ITargetMapper>();
             var writer = new HtmlReportWriter(mapper);
 
-            var response = GetAnalyzeResponse();
+            var response = GetAnalyzeResult();
 
             // setting all show... flags renders every section of the report
             var flags = AnalyzeRequestFlags.NoTelemetry
@@ -77,8 +77,8 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
             }
         }
 
-        // an AnalyzeResponse with data for every part of the report
-        private static AnalyzeResponse GetAnalyzeResponse() => new AnalyzeResponse
+        // an AnalyzeResult with data for every part of the report
+        private static AnalyzeResult GetAnalyzeResult() => new AnalyzeResult
         {
             SubmissionId = Guid.NewGuid().ToString(),
             CatalogLastUpdated = DateTime.Now,

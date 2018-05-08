@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\backend\PortabilityService.Functions\PortabilityService.Functions.csproj" />
     <ProjectReference Include="..\..\..\src\backend\PortabilityService.WorkflowManagement\PortabilityService.WorkflowManagement.csproj" />
-    <EmbeddedResource Include="Resources\**\*" />
+    <EmbeddedResource Include="Resources\apiport.exe.AnalyzeRequest.json.gz" LogicalName="AnalyzeRequest.json.gz" />
   </ItemGroup>
 
 </Project>
