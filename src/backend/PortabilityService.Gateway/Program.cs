@@ -6,6 +6,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PortabilityService.ConfigurationProvider;
 using Serilog;
 
 namespace PortabilityService.Gateway
@@ -37,6 +38,7 @@ namespace PortabilityService.Gateway
             // (which will override the default) is optional.
             configBuilder.AddJsonFile("reroutes.json");
             configBuilder.AddJsonFile($"reroutes.{context.HostingEnvironment.EnvironmentName}.json", true);
+            configBuilder.AddPortabilityServiceConfiguration();
         }
 
         /// <summary>
