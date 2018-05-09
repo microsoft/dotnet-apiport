@@ -12,8 +12,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId);
         Task DeleteRequestFromBlobAsync(string uniqueId);
 
-        Task SaveResultToBlobAsync(string submissionId, AnalyzeResponse result);
-        Task<AnalyzeResponse> RetrieveResultFromBlobAsync(string submissionId);
+        Task SaveResultToBlobAsync(string submissionId, AnalyzeResult result);
+        Task<AnalyzeResult> RetrieveResultFromBlobAsync(string submissionId);
         Task DeleteResultFromBlobAsync(string submissionid);
 
         Task<IEnumerable<string>> RetrieveSubmissionIdsAsync();

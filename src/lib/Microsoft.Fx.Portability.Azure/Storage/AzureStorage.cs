@@ -53,12 +53,12 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             throw new NotImplementedException();
         }
 
-        public Task SaveResultToBlobAsync(string submissionId, AnalyzeResponse result)
+        public Task SaveResultToBlobAsync(string submissionId, AnalyzeResult result)
         {
             return _blob.SaveResultToBlobAsync(submissionId, result);
         }
 
-        public Task<AnalyzeResponse> RetrieveResultFromBlobAsync(string submissionid)
+        public Task<AnalyzeResult> RetrieveResultFromBlobAsync(string submissionid)
         {
             return _blob.RetrieveResultFromBlobAsync(submissionid);
         }

@@ -21,20 +21,26 @@ namespace PortabilityService.Functions.Tests
         /// </remarks>
         public ProcessWorkflowQueueTests()
         {
-            var workflowActions = new IWorkflowAction[3];
+            var workflowActions = new IWorkflowAction[4];
 
             var analyzeAction = Substitute.For<IWorkflowAction>();
+            analyzeAction.CurrentStage.Returns(WorkflowStage.Analyze);
             analyzeAction.ExecuteAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(Task.FromResult(WorkflowStage.Report));
 
             var reportAction = Substitute.For<IWorkflowAction>();
+            reportAction.CurrentStage.Returns(WorkflowStage.Report);
             reportAction.ExecuteAsync(Arg.Any<string>(), CancellationToken.None).Returns(Task.FromResult(WorkflowStage.Telemetry));
 
             var telemetryAction = Substitute.For<IWorkflowAction>();
+            telemetryAction.CurrentStage.Returns(WorkflowStage.Telemetry);
             telemetryAction.ExecuteAsync(Arg.Any<string>(), CancellationToken.None).Returns(Task.FromResult(WorkflowStage.Finished));
+
+            var finishedAction = Substitute.For<IWorkflowAction>();
 
             workflowActions[(int)WorkflowStage.Analyze] = analyzeAction;
             workflowActions[(int)WorkflowStage.Report] = reportAction;
             workflowActions[(int)WorkflowStage.Telemetry] = telemetryAction;
+            workflowActions[(int)WorkflowStage.Finished] = finishedAction;
 
             WorkflowManager.Initialize(workflowActions);
         }

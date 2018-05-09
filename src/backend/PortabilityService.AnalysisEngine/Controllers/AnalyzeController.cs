@@ -74,7 +74,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
             }
         }
 
-        private Task<AnalyzeResponse> AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
+        private Task<AnalyzeResult> AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
         {
             using (_logger.BeginScope($"Analyzing request for {submissionId}"))
             {
@@ -89,7 +89,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
                 //TODO: invoke the real analysis engine to do the work
                 //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
 
-                return Task.FromResult(new AnalyzeResponse
+                return Task.FromResult(new AnalyzeResult
                 {
                     MissingDependencies = new System.Collections.Generic.List<MemberInfo>
                     {

@@ -25,6 +25,7 @@ namespace PortabilityService.Functions
             ILogger log)
         {
             var analyzeRequest = await DeserializeRequest(req.Content);
+
             if (analyzeRequest == null)
             {
                 log.LogError("invalid request");
@@ -36,8 +37,13 @@ namespace PortabilityService.Functions
 
             try
             {
-
                 await storage.SaveRequestToBlobAsync(analyzeRequest, submissionId);
+            }
+            catch (Exception ex)
+            {
+                log.LogError("Error occurs when saving analyze request to storage for submission {submissionId}: {exception}", submissionId, ex);
+                return req.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurs when saving analyze request to storage for submission");
+            }
 
             var workflowMgr = WorkflowManager.Initialize();
             var msg = WorkflowManager.GetFirstStage(submissionId);

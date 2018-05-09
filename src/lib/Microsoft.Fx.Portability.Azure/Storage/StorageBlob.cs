@@ -92,7 +92,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             }
         }
 
-        public async Task SaveResultToBlobAsync(string uniqueId, AnalyzeResponse result)
+        public async Task SaveResultToBlobAsync(string uniqueId, AnalyzeResult result)
         {
             var container = await GetBlobContainerAsync(ResultContainerNamePrefix).ConfigureAwait(false)
                 ?? throw new InvalidOperationException("Azure CloubBlobContainer is not expected to be null");
@@ -108,7 +108,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             }
         }
 
-        public async Task<AnalyzeResponse> RetrieveResultFromBlobAsync(string uniqueId)
+        public async Task<AnalyzeResult> RetrieveResultFromBlobAsync(string uniqueId)
         {
             var container = await GetBlobContainerAsync(ResultContainerNamePrefix).ConfigureAwait(false);
 
@@ -126,7 +126,7 @@ namespace Microsoft.Fx.Portability.Azure.Storage
 
             using (var blobStream = await blob.OpenReadAsync())
             {
-                return blobStream.DecompressToObject<AnalyzeResponse>();
+                return blobStream.DecompressToObject<AnalyzeResult>();
             }
         }
 

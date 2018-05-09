@@ -37,7 +37,7 @@ namespace PortabilityService.AnalysisEngine.Tests
             var storage = Substitute.For<IStorage>();
             var request = new AnalyzeRequest();
             storage.RetrieveRequestAsync("id").Returns(Task.FromResult(request));
-            var result = new AnalyzeResponse();
+            var result = new AnalyzeResult();
             storage.RetrieveResultFromBlobAsync("id").Returns(Task.FromResult(result));
 
             var configuration = Substitute.For<IConfiguration>();
