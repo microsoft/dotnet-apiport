@@ -46,7 +46,7 @@ namespace PortabilityService.Functions.Tests
         }
 
         [Fact]
-        public async Task ProcessQueueMessageStages()
+        public static async Task ProcessQueueMessageStages()
         {
             var submissionId = new Guid().ToString();
 
@@ -65,7 +65,7 @@ namespace PortabilityService.Functions.Tests
         }
 
         [Fact]
-        public async Task CancellationBeforeActionExecuted()
+        public static async Task CancellationBeforeActionExecuted()
         {
             var submissionId = new Guid().ToString();
 
