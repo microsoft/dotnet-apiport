@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PortabilityService.ConfigurationProvider\PortabilityService.ConfigurationProvider.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.ConfigurationProvider\Microsoft.Fx.Portability.ConfigurationProvider.csproj" />
   </ItemGroup>
 
 </Project>

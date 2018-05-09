@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PortabilityService.ConfigurationProvider.Tests
+namespace Microsoft.Fx.Portability.ConfigurationProvider.Tests
 {
     internal class TestHttpMessageHandler : HttpMessageHandler
     {

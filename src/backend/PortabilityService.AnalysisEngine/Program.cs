@@ -5,7 +5,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PortabilityService.ConfigurationProvider;
+using Microsoft.Fx.Portability.ConfigurationProvider;
 using Serilog;
 
 namespace PortabilityService.AnalysisEngine

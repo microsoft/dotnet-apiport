@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace PortabilityService.ConfigurationProvider
+namespace Microsoft.Fx.Portability.ConfigurationProvider
 {
     public class PortabilityServiceConfigurationProvider : Microsoft.Extensions.Configuration.ConfigurationProvider
     {
