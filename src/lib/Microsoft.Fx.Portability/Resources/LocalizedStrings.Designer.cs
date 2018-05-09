@@ -281,9 +281,9 @@ namespace Microsoft.Fx.Portability.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No files were found to upload..
         /// </summary>
-        public static string NoFilesAvailableToUpload {
+        public static string NoFilesToAnalyze {
             get {
-                return ResourceManager.GetString("NoFilesAvailableToUpload", resourceCulture);
+                return ResourceManager.GetString("NoFilesToAnalyze", resourceCulture);
             }
         }
         

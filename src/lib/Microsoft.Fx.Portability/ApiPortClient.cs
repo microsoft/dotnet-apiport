@@ -68,7 +68,7 @@ namespace Microsoft.Fx.Portability
             }
             else
             {
-                _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
+                _progressReport.ReportIssue(LocalizedStrings.NoFilesToAnalyze);
 
                 return null;
             }
@@ -268,7 +268,7 @@ namespace Microsoft.Fx.Portability
             }
             else
             {
-                _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
+                _progressReport.ReportIssue(LocalizedStrings.NoFilesToAnalyze);
 
                 return new MultipleFormatAnalysis
                 {

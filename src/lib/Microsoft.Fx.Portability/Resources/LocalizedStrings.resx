@@ -201,8 +201,8 @@
   <data name="InvalidFileName" xml:space="preserve">
     <value>Invalid file name: '{0}'</value>
   </data>
-  <data name="NoFilesAvailableToUpload" xml:space="preserve">
-    <value>No files were found to upload.</value>
+  <data name="NoFilesToAnalyze" xml:space="preserve">
+    <value>No files were found to analyze.</value>
   </data>
   <data name="NotFoundException" xml:space="preserve">
     <value>Resource was not found for {0} {1}</value>
