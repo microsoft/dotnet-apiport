@@ -11,7 +11,7 @@ services:
     depends_on:
       - portabilityservice.configurationservice
     environment:
-      - ConfigurationService_Url=http://portabilityservice.configurationservice
+      "ConfigurationService_Url": "http://portabilityservice.configurationservice"
 
   portabilityservice.configurationservice:
     image: ${DOCKER_REGISTRY}portabilityservice-configurationservice:${PORTABILITYSERVICE_VERSION:-latest}
