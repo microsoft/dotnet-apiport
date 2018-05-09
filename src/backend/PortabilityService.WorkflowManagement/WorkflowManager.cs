@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,6 @@ namespace PortabilityService.WorkflowManagement
         readonly IWorkflowAction[] actions;
         static WorkflowManager manager;
 
-        /// <returns></returns>
         public static WorkflowManager Initialize(IWorkflowAction[] workflowActions)
         {
             if (manager == null)
@@ -50,9 +50,13 @@ namespace PortabilityService.WorkflowManagement
             //TODO: When DI is implemented, change this to use that
             actions = new IWorkflowAction[Enum.GetValues(typeof(WorkflowStage)).Length-1];
 
-            AddAction<AnalyzeAction>();
-            AddAction<ReportAction>();
-            AddAction<TelemetryAction>();
+            var analyzeServiceUrl = ConfigurationManager.AppSettings["AnalyzeServiceUrl"];
+            var reportServiceUrl = ConfigurationManager.AppSettings["ReportServiceUrl"];
+            var telemetryServiceUrl = ConfigurationManager.AppSettings["TelemetryServiceUrl"];
+
+            AddAction(new AnalyzeAction(analyzeServiceUrl));
+            AddAction(new ReportAction(reportServiceUrl));
+            AddAction(new TelemetryAction(telemetryServiceUrl));
         }
 
         private WorkflowManager(IWorkflowAction[] workflowActions)
@@ -60,9 +64,8 @@ namespace PortabilityService.WorkflowManagement
             actions = workflowActions;
         }
 
-        private void AddAction<T>() where T : IWorkflowAction, new()
+        private void AddAction(IWorkflowAction action)
         {
-            T action = new T();
             actions[(int)action.CurrentStage] = action;
         }
 

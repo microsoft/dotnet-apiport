@@ -14,17 +14,43 @@ namespace PortabilityService.Functions.Tests
 {
     public class ProcessWorkflowQueueTests
     {
-        [Fact]
-        public static async Task ProcessQueueMessageStages()
+        /// <remarks>Because WorkflowManager only initializes once and returns
+        /// the singleton instance, it won't work to initialize it with
+        /// different set of workflow actiosn in different tests.
+        /// Thus mocking is done before tests are executed.
+        /// </remarks>
+        public ProcessWorkflowQueueTests()
         {
-            IWorkflowAction[] workflowActions = new IWorkflowAction[3];
-            workflowActions[(int)WorkflowStage.Analyze] = Substitute.For<IWorkflowAction>();
-            workflowActions[(int)WorkflowStage.Report] = Substitute.For<IWorkflowAction>();
-            workflowActions[(int)WorkflowStage.Telemetry] = Substitute.For<IWorkflowAction>();
+            var workflowActions = new IWorkflowAction[4];
 
-            WorkflowManager.Initialize();
-            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
+            var analyzeAction = Substitute.For<IWorkflowAction>();
+            analyzeAction.CurrentStage.Returns(WorkflowStage.Analyze);
+            analyzeAction.ExecuteAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(Task.FromResult(WorkflowStage.Report));
+
+            var reportAction = Substitute.For<IWorkflowAction>();
+            reportAction.CurrentStage.Returns(WorkflowStage.Report);
+            reportAction.ExecuteAsync(Arg.Any<string>(), CancellationToken.None).Returns(Task.FromResult(WorkflowStage.Telemetry));
+
+            var telemetryAction = Substitute.For<IWorkflowAction>();
+            telemetryAction.CurrentStage.Returns(WorkflowStage.Telemetry);
+            telemetryAction.ExecuteAsync(Arg.Any<string>(), CancellationToken.None).Returns(Task.FromResult(WorkflowStage.Finished));
+
+            var finishedAction = Substitute.For<IWorkflowAction>();
+
+            workflowActions[(int)WorkflowStage.Analyze] = analyzeAction;
+            workflowActions[(int)WorkflowStage.Report] = reportAction;
+            workflowActions[(int)WorkflowStage.Telemetry] = telemetryAction;
+            workflowActions[(int)WorkflowStage.Finished] = finishedAction;
+
+            WorkflowManager.Initialize(workflowActions);
+        }
+
+        [Fact]
+        public async Task ProcessQueueMessageStages()
+        {
             var submissionId = new Guid().ToString();
+
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
 
             await ProcessWorkflowQueue.Run(new WorkflowQueueMessage(submissionId, WorkflowStage.Analyze), workflowQueue, NullLogger.Instance, CancellationToken.None);
             workflowQueue.Received().Add(Arg.Is<WorkflowQueueMessage>(x => x.SubmissionId == submissionId && x.Stage == WorkflowStage.Report));
@@ -39,21 +65,20 @@ namespace PortabilityService.Functions.Tests
         }
 
         [Fact]
-        public static async Task CancellationBeforeActionExecuted()
+        public async Task CancellationBeforeActionExecuted()
         {
-            IWorkflowAction[] workflowActions = new IWorkflowAction[3];
-            workflowActions[(int)WorkflowStage.Analyze] = Substitute.For<IWorkflowAction>();
-            workflowActions[(int)WorkflowStage.Report] = Substitute.For<IWorkflowAction>();
-            workflowActions[(int)WorkflowStage.Telemetry] = Substitute.For<IWorkflowAction>();
-
-            WorkflowManager.Initialize();
-            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
             var submissionId = new Guid().ToString();
+
+            var workflowQueue = Substitute.For<ICollector<WorkflowQueueMessage>>();
 
             var cancelTokenSrc = new CancellationTokenSource();
             cancelTokenSrc.Cancel();
 
-            var ex = await Assert.ThrowsAsync<TimeoutException>(async () => await ProcessWorkflowQueue.Run(new WorkflowQueueMessage(submissionId, WorkflowStage.Analyze), workflowQueue, NullLogger.Instance, cancelTokenSrc.Token));
+            var ex = await Assert.ThrowsAsync<TimeoutException>(async () =>
+            {
+                await ProcessWorkflowQueue.Run(new WorkflowQueueMessage(submissionId, WorkflowStage.Analyze), workflowQueue, NullLogger.Instance, cancelTokenSrc.Token);
+            });
+
             Assert.Equal($"Timeout before workflow action started. SubmissionId test: {submissionId} Stage: {WorkflowStage.Analyze}.", ex.Message);
         }
     }

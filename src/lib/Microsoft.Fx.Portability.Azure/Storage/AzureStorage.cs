@@ -23,14 +23,19 @@ namespace Microsoft.Fx.Portability.Azure.Storage
             _blob = new StorageBlob(storageAccount);
         }
 
-        public Task<bool> SaveToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
+        public Task SaveRequestToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId)
         {
-            return _blob.SaveToBlobAsync(submissionId, analyzeRequest);
+            return _blob.SaveRequestToBlobAsync(submissionId, analyzeRequest);
         }
 
         public Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId)
         {
-            return _blob.RetrieveFromBlobAsync(uniqueId);
+            return _blob.RetrieveRequestFromBlobAsync(uniqueId);
+        }
+
+        public Task DeleteRequestFromBlobAsync(string uniqueId)
+        {
+            return _blob.DeleteRequestFromBlobAsync(uniqueId);
         }
 
         public Task AddJobToQueueAsync(string submissionId)
@@ -46,6 +51,21 @@ namespace Microsoft.Fx.Portability.Azure.Storage
         public Task<IEnumerable<string>> RetrieveSubmissionIdsAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public Task SaveResultToBlobAsync(string submissionId, AnalyzeResult result)
+        {
+            return _blob.SaveResultToBlobAsync(submissionId, result);
+        }
+
+        public Task<AnalyzeResult> RetrieveResultFromBlobAsync(string submissionid)
+        {
+            return _blob.RetrieveResultFromBlobAsync(submissionid);
+        }
+
+        public Task DeleteResultFromBlobAsync(string submissionid)
+        {
+            return _blob.DeleteResultFromBlobAsync(submissionid);
         }
     }
 }

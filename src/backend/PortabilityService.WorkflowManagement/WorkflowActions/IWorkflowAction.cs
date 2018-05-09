@@ -16,5 +16,10 @@ namespace PortabilityService.WorkflowManagement
         /// Gets the current stage.
         /// </summary>
         WorkflowStage CurrentStage { get; }
+
+        /// <summary>
+        /// Gets the url of service that a workflow action invokes.
+        /// </summary>
+        string ServiceUrl { get; }
     }
 }
