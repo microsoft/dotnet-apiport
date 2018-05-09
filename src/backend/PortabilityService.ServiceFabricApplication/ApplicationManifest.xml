@@ -3,11 +3,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
     xmlns="http://schemas.microsoft.com/2011/01/fabric" ApplicationTypeName="PortabilityServiceType" ApplicationTypeVersion="v1">
+    <Parameters>
+        <Parameter Name="RepositoryUserName" DefaultValue="portabilityservice" />
+        <Parameter Name="RepositoryPassword" DefaultValue="RepositoryPasswordHere" />
+    </Parameters>
     <ServiceManifestImport>
         <ServiceManifestRef ServiceManifestName="portabilityservice.configurationservicePkg" ServiceManifestVersion="v1"/>
         <Policies>
             <ContainerHostPolicies CodePackageRef="portabilityservice.configurationservice.Code">
-                <RepositoryCredentials AccountName="portabilityservice" Password="<RepositoryPassword>"/>
+                <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
+                <ImageOverrides>
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.1" />
+                </ImageOverrides>                
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.configurationserviceEndpoint"/>
             </ContainerHostPolicies>
             <ServicePackageResourceGovernancePolicy/>
@@ -20,7 +27,10 @@
         </EnvironmentOverrides>
         <Policies>
             <ContainerHostPolicies CodePackageRef="portabilityservice.gateway.Code">
-                <RepositoryCredentials AccountName="portabilityservice" Password="<RepositoryPassword>"/>
+                <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
+                <ImageOverrides>
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.1" />
+                </ImageOverrides>
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.gatewayEndpoint"/>
             </ContainerHostPolicies>
             <ServicePackageResourceGovernancePolicy/>
