@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\backend\PortabilityService.ConfigurationProvider\PortabilityService.ConfigurationProvider.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability.ConfigurationProvider\Microsoft.Fx.Portability.ConfigurationProvider.csproj" />
   </ItemGroup>
 
 </Project>

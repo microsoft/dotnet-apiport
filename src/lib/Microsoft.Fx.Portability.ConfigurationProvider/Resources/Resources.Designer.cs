@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PortabilityService.ConfigurationProvider.Resources {
+namespace Microsoft.Fx.Portability.ConfigurationProvider.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PortabilityService.ConfigurationProvider.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PortabilityService.ConfigurationProvider.Resources.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Fx.Portability.ConfigurationProvider.Resources.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
