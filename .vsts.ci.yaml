@@ -82,18 +82,31 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
+- task: VSBuild@1
+  displayName: Package functions
+  inputs:
+    solution: src\backend\PortabilityService.Functions\PortabilityService.Functions.csproj
+    vsVersion: 15.0
+    msbuildArgs: '/bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild-package-functions.binlog /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(BuildConfiguration)"'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
 - task: CopyFiles@2
   inputs:
-    SourceFolder: 'bin\$(BuildConfiguration)'
+    contents: |
+     **\*.zip
+     *.binlog
     TargetFolder: '$(Build.StagingDirectory)\$(Build.BuildNumber)'
-  enabled: false
+  condition: succeededOrFailed()
+  enabled: true
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.StagingDirectory)'
-    ArtifactName: '$(Build.BuildNumber)'
+    PathtoPublish: '$(Build.StagingDirectory)\$(Build.BuildNumber)'
+    ArtifactName: 'drop'
     ArtifactType: Container
-  enabled: false
+  condition: succeededOrFailed()
+  enabled: true
 
 - task: CopyFiles@2
   inputs:
