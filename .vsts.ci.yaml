@@ -95,7 +95,7 @@ steps:
   inputs:
     contents: |
      **\*.zip
-     msbuild.binlog
+     *.binlog
     TargetFolder: '$(Build.StagingDirectory)\$(Build.BuildNumber)'
   condition: succeededOrFailed()
   enabled: true
