@@ -83,11 +83,11 @@ steps:
     configuration: '$(BuildConfiguration)'
 
 - task: VSBuild@1
-  displayName: Build Functions
+  displayName: Package functions
   inputs:
     solution: src\backend\PortabilityService.Functions\PortabilityService.Functions.csproj
     vsVersion: 15.0
-    msbuildArgs: '/bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(BuildConfiguration)"'
+    msbuildArgs: '/bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild-package-functions.binlog /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(BuildConfiguration)"'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
