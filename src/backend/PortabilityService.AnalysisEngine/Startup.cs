@@ -13,6 +13,8 @@ namespace PortabilityService.AnalysisEngine
 {
     public class Startup
     {
+        private const string BlobStorageConnectionStringKeyName = "BlobStorageConnectionString";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,7 +28,7 @@ namespace PortabilityService.AnalysisEngine
             services.AddMvc();
 
             //TODO: replace with configuration service
-            var connectionString = Configuration["BlobStorageConnectionString"];
+            var connectionString = Configuration[BlobStorageConnectionStringKeyName];
 
             // Storage
             services.AddSingleton<IStorage>(new AzureStorage(CloudStorageAccount.Parse(connectionString)));
