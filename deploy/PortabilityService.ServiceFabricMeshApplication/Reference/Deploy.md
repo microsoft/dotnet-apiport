@@ -7,6 +7,8 @@ Based on docs [here](https://github.com/Azure/seabreeze-preview-pr/blob/master/d
 1. `az login`
 1. `az account set --subscription "<subscriptionName>"`
 1. `az mesh deployment create --resource-group <resourceGroupName> --template-file sampleapp.json --verbose`
+    - Or `az mesh deployment create --resource-group portabilityservice-mesh-1709 --template-file PortabilityService-1709.json --verbose`
+    - Or `az mesh deployment create --resource-group portabilityservice-mesh-linux --template-file PortabilityService-Linux.json --verbose`
 1. `az mesh app list -o table`
     1. Confirm the app was created successfully.
 1. `az mesh network list`
