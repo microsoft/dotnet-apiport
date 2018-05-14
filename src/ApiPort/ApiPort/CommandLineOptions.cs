@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.CommandLine;
 using System.IO;
+using System.Linq;
 
 namespace ApiPort
 {
@@ -16,6 +17,16 @@ namespace ApiPort
     {
         public const string DefaultName = "ApiPortAnalysis";
         private const string PortabilityServiceEndPoint_EnvVarName = "PortabilityServiceUri";
+
+        // Commands that require the portability service (in online mode)
+        // Used to fail fast if an endpoint isn't specified.
+        private static AppCommand[] RemoteCommands = new AppCommand[]
+        {
+                    AppCommand.AnalyzeAssemblies,
+                    AppCommand.DocIdSearch,
+                    AppCommand.ListOutputFormats,
+                    AppCommand.ListTargets
+        };
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
@@ -93,14 +104,16 @@ namespace ApiPort
                 return new ConsoleApiPortOptions(AppCommand.Exit);
             }
 
+#if !FEATURE_OFFLINE
             // Since there is currently no default endpoint, verify that a 
             // valid one has been set (either by an environment variable 
             // or with a command line parameter)
-            if (!Uri.TryCreate(endpoint, UriKind.Absolute, out _))
+            if (RemoteCommands.Contains(command) && !Uri.TryCreate(endpoint, UriKind.Absolute, out _))
             {
                 Console.WriteLine(LocalizedStrings.CmdNoEndpoint);
                 return new ConsoleApiPortOptions(AppCommand.Exit);
             }
+#endif
 
             // Set OverwriteOutputFile to true if the output file name is explicitly specified
             if (!string.Equals(DefaultName, outFile, StringComparison.Ordinal))
