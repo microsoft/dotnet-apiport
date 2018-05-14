@@ -18,7 +18,7 @@ namespace ApiPort.Tests
         public static void TestAssemblyFlag_Directory()
         {
             var directoryPath = Directory.GetCurrentDirectory();
-            var options = GetOptions($"analyze -f {directoryPath}");
+            var options = GetOptions($"analyze -f {directoryPath} -e http://portservice");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
@@ -61,9 +61,9 @@ namespace ApiPort.Tests
             Assert.Equal(file, input);
         }
 
-        [InlineData("analyze -f file.dll", CommandLineOptions.DefaultName)]
-        [InlineData("analyze -f file.dll -o other", "other")]
-        [InlineData("analyze -f file.dll --out other", "other")]
+        [InlineData("analyze -f file.dll -e http://portservice", CommandLineOptions.DefaultName)]
+        [InlineData("analyze -f file.dll -o other -e http://portservice", "other")]
+        [InlineData("analyze -f file.dll --out other -e http://portservice", "other")]
         [Theory]
         public static void OutputFile(string args, string name)
         {
@@ -73,10 +73,10 @@ namespace ApiPort.Tests
             Assert.Equal(name, options.OutputFileName);
         }
 
-        [InlineData("analyze -f file.dll", false)]
-        [InlineData("analyze -f file.dll -o other", true)]
-        [InlineData("analyze -f file.dll --force", true)]
-        [InlineData("analyze -f file.dll -o other --force", true)]
+        [InlineData("analyze -f file.dll -e http://portservice", false)]
+        [InlineData("analyze -f file.dll -o other -e http://portservice", true)]
+        [InlineData("analyze -f file.dll --force -e http://portservice", true)]
+        [InlineData("analyze -f file.dll -o other --force -e http://portservice", true)]
         [Theory]
         public static void OverwriteFile(string args, bool overwrite)
         {
@@ -86,9 +86,9 @@ namespace ApiPort.Tests
             Assert.Equal(overwrite, options.OverwriteOutputFile);
         }
 
-        [InlineData("listTargets", AppCommand.ListTargets)]
-        [InlineData("listOutputFormats", AppCommand.ListOutputFormats)]
-        [InlineData("docId", AppCommand.DocIdSearch)]
+        [InlineData("listTargets -e http://portservice", AppCommand.ListTargets)]
+        [InlineData("listOutputFormats -e http://portservice", AppCommand.ListOutputFormats)]
+        [InlineData("docId -e http://portservice", AppCommand.DocIdSearch)]
         [Theory]
         public static void SimpleCommandTests(string args, AppCommand command)
         {
@@ -101,7 +101,7 @@ namespace ApiPort.Tests
         public static void TestAssemblyFlag_FileName()
         {
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
-            var options = GetOptions($"analyze -f {currentAssemblyPath}");
+            var options = GetOptions($"analyze -f {currentAssemblyPath} -e http://portservice");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             var input = Assert.Single(options.InputAssemblies);
@@ -116,7 +116,7 @@ namespace ApiPort.Tests
             var directoryPath = Directory.GetCurrentDirectory();
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
 
-            var options = GetOptions($"analyze -f {directoryPath} -f {currentAssemblyPath}");
+            var options = GetOptions($"analyze -f {directoryPath} -f {currentAssemblyPath} -e http://portservice");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
