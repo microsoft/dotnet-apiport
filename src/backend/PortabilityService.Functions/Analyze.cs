@@ -24,41 +24,34 @@ namespace PortabilityService.Functions
             [Inject]IStorage storage,
             ILogger log)
         {
-            var submissionId = Guid.NewGuid().ToString();
             var analyzeRequest = await DeserializeRequest(req.Content);
 
             if (analyzeRequest == null)
             {
-                log.LogError("Invalid request {SubmissionId}", submissionId);
+                log.LogError("invalid request");
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
+            var submissionId = Guid.NewGuid().ToString();
+            log.LogInformation("Created submission id {SubmissionId}", submissionId);
+
             try
             {
-                log.LogInformation("Created submission id {SubmissionId}", submissionId);
-
-                var saved = await storage.SaveToBlobAsync(analyzeRequest, submissionId);
-                if (!saved)
-                {
-                    log.LogError("Analyze request not saved to storage for submission {submissionId}", submissionId);
-                    return req.CreateResponse(HttpStatusCode.InternalServerError);
-                }
-
-                var workflowMgr = WorkflowManager.Initialize();
-                var msg = WorkflowManager.GetFirstStage(submissionId);
-                workflowMessageQueue.Add(msg);
-                log.LogInformation("Queuing new workflow message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
-
-                var response = req.CreateResponse(HttpStatusCode.OK);
-                response.Content = new StringContent(submissionId);
-
-                return response;
+                await storage.SaveRequestToBlobAsync(analyzeRequest, submissionId);
             }
             catch (Exception ex)
             {
-                log.LogError("Error occurred during analyze request for submission {submissionId}: {exception}", submissionId, ex);
-                return req.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+                log.LogError("Error occurs when saving analyze request to storage for submission {submissionId}: {exception}", submissionId, ex);
+                return req.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurs when saving analyze request to storage for submission");
             }
+
+            var workflowMgr = WorkflowManager.Initialize();
+            var msg = WorkflowManager.GetFirstStage(submissionId);
+
+            workflowMessageQueue.Add(msg);
+            log.LogInformation("Queuing new message {SubmissionId}, stage {Stage}", msg.SubmissionId, msg.Stage);
+
+            return ResponseWithServiceHeaders(req, submissionId);
         }
 
         public static async Task<AnalyzeRequest> DeserializeRequest(HttpContent content)
@@ -72,6 +65,35 @@ namespace PortabilityService.Functions
             {
                 return null;
             }
+        }
+
+        public static HttpResponseMessage ResponseWithServiceHeaders(HttpRequestMessage request, string submissionId)
+        {
+            var accessKey = GetAccessKey(submissionId);
+            var reportUrl = new Uri(request.RequestUri, $"/api/report/{submissionId}");
+            var content = new AnalyzeResponse
+            {
+                ResultAuthToken = accessKey,
+                ResultUrl = reportUrl,
+                SubmissionId = submissionId
+            };
+
+            var response = request.CreateResponse(HttpStatusCode.Created, content);
+            response.Headers.Location = reportUrl;
+            response.Headers.Add(typeof(EndpointStatus).Name, EndpointStatus.Alive.ToString());
+
+            return response;
+        }
+
+        public static string GetAccessKey(string submissionId)
+        {
+            // TODO generate and persist a new unique key
+            // the reversed submissionId is used only so the mock Results
+            // function can validate it without consulting an external source
+            var chars = submissionId.ToCharArray();
+            Array.Reverse(chars);
+
+            return new string(chars);
         }
     }
 }

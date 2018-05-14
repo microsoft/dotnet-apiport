@@ -25,4 +25,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.ConfigurationProvider\Microsoft.Fx.Portability.ConfigurationProvider.csproj" />
+  </ItemGroup>
+
 </Project>

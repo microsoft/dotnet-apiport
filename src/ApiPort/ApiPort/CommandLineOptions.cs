@@ -9,12 +9,24 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.CommandLine;
 using System.IO;
+using System.Linq;
 
 namespace ApiPort
 {
     internal static class CommandLineOptions
     {
         public const string DefaultName = "ApiPortAnalysis";
+        private const string PortabilityServiceEndPoint_EnvVarName = "PortabilityServiceUri";
+
+        // Commands that require the portability service (in online mode)
+        // Used to fail fast if an endpoint isn't specified.
+        private static AppCommand[] RemoteCommands = new AppCommand[]
+        {
+                    AppCommand.AnalyzeAssemblies,
+                    AppCommand.DocIdSearch,
+                    AppCommand.ListOutputFormats,
+                    AppCommand.ListTargets
+        };
 
         public static ICommandLineOptions ParseCommandLineOptions(string[] args)
         {
@@ -31,7 +43,10 @@ namespace ApiPort
             IReadOnlyList<string> ignoreAssemblyFile = Array.Empty<string>();
             IReadOnlyList<string> suppressBreakingChange = Array.Empty<string>();
             string targetMap = string.Empty;
-            string endpoint = "https://portability.dot.net";
+
+            // TODO: Once the new portability service is ready for general use,
+            //       use it as the default endpoint.
+            string endpoint = Environment.GetEnvironmentVariable(PortabilityServiceEndPoint_EnvVarName) ?? string.Empty;
             AppCommand command = default;
 
             ArgumentSyntax argSyntax = default;
@@ -88,6 +103,17 @@ namespace ApiPort
 
                 return new ConsoleApiPortOptions(AppCommand.Exit);
             }
+
+#if !FEATURE_OFFLINE
+            // Since there is currently no default endpoint, verify that a 
+            // valid one has been set (either by an environment variable 
+            // or with a command line parameter)
+            if (RemoteCommands.Contains(command) && !Uri.TryCreate(endpoint, UriKind.Absolute, out _))
+            {
+                Console.WriteLine(LocalizedStrings.CmdNoEndpoint);
+                return new ConsoleApiPortOptions(AppCommand.Exit);
+            }
+#endif
 
             // Set OverwriteOutputFile to true if the output file name is explicitly specified
             if (!string.Equals(DefaultName, outFile, StringComparison.Ordinal))

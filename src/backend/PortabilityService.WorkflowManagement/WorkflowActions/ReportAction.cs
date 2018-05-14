@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace PortabilityService.WorkflowManagement
 {
-    class ReportAction : IWorkflowAction
+    internal class ReportAction : BaseAction, IWorkflowAction
     {
+        public ReportAction(string serviceUrl) : base(serviceUrl) { }
+
         public async Task<WorkflowStage> ExecuteAsync(string submissionId, CancellationToken cancelToken)
         {
             // TODO: Update to call Report Generator Service
