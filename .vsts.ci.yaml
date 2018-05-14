@@ -2,7 +2,6 @@ resources:
 - repo: self
   clean: true
 queue:
-  name: VSEng-MicroBuildVS2017
   demands:
   - DotNetFramework
   - msbuild
