@@ -156,10 +156,10 @@ namespace ApiPortVS.ViewModels
             if (!current.Any())
             {
                 var defaultResultFormat = await _apiPortService.GetDefaultResultFormatAsync().ConfigureAwait(false);
-                current.Add(defaultResultFormat.Response.MimeType);
+                current.Add(defaultResultFormat.MimeType);
             }
 
-            var formats = response.Response.Select(f => new SelectedResultFormat(f, current.Contains(f.MimeType))).ToList();
+            var formats = response.Select(f => new SelectedResultFormat(f, current.Contains(f.MimeType))).ToList();
 
             UpdateResultFormats(formats);
         }
@@ -292,7 +292,7 @@ namespace ApiPortVS.ViewModels
             var allTargetInfos = await _apiPortService.GetTargetsAsync().ConfigureAwait(false);
 
             // We don't want any grouped targets as that option only makes sense for command line
-            var targetInfos = allTargetInfos.Response.Where(t => !t.ExpandedTargets.Any());
+            var targetInfos = allTargetInfos.Where(t => !t.ExpandedTargets.Any());
 
             var platformNames = new HashSet<string>(targetInfos.Select(t => t.Name), StringComparer.OrdinalIgnoreCase);
 

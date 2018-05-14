@@ -61,6 +61,7 @@ namespace ApiPort
                     new ApiPortService(
                             context.Resolve<ICommandLineOptions>().ServiceEndpoint,
                             context.Resolve<ProductInformation>(),
+                            context.Resolve<IProgressReporter>(),
                             context.Resolve<IProxyProvider>()))
                     .As<IApiPortService>()
                     .SingleInstance();

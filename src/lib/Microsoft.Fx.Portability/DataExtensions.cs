@@ -68,6 +68,22 @@ namespace Microsoft.Fx.Portability
             }
         }
 
+        public static void SerializeAndCompressToMemoryStream<T>(this T data, Stream outputStream, bool leaveOpen)
+        {
+            using (var jsonSerializedStream = new MemoryStream())
+            using (var writer = new StreamWriter(jsonSerializedStream, s_defaultEncoding, DefaultBufferSize, leaveOpen: leaveOpen))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                Serializer.Serialize(jsonWriter, data);
+                jsonWriter.Flush();
+
+                using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen: leaveOpen))
+                {
+                    jsonSerializedStream.WriteTo(compressStream);
+                }
+            }
+        }
+
         /// <summary>
         /// Serializes an object to Json and writes the output to the given stream.
         /// </summary>

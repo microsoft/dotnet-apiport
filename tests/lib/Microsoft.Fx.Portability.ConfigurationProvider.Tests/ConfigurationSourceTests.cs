@@ -5,7 +5,7 @@ using System;
 using System.Net.Http;
 using Xunit;
 
-namespace PortabilityService.ConfigurationProvider.Tests
+namespace Microsoft.Fx.Portability.ConfigurationProvider.Tests
 {
     public class ConfigurationSourceTests
     {

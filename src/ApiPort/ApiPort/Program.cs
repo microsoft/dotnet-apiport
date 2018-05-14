@@ -62,11 +62,8 @@ namespace ApiPort
 
                     WriteException(p);
                 }
-                catch (PortabilityAnalyzerException ex)
-                {
-                    WriteException(ex);
-                }
-                catch (ProxyAuthenticationRequiredException ex)
+                catch (Exception ex)
+                    when (ex is PortabilityAnalyzerException || ex is ProxyAuthenticationRequiredException || ex is TimeoutException)
                 {
                     WriteException(ex);
                 }

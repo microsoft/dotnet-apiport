@@ -9,6 +9,6 @@ namespace Microsoft.Fx.Portability.Reporting
     public interface IReportWriter
     {
         ResultFormatInformation Format { get; }
-        void WriteStream(Stream stream, AnalyzeResponse response);
+        void WriteStream(Stream stream, AnalyzeResult response);
     }
 }

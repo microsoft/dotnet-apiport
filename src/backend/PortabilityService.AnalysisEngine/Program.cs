@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability.ConfigurationProvider;
 using Serilog;
 
-namespace PortabilityService.Gateway
+namespace PortabilityService.AnalysisEngine
 {
     public class Program
     {
@@ -17,27 +16,21 @@ namespace PortabilityService.Gateway
 
         public static void Main(string[] args)
         {
-            var webHostBuilder = CreateWebHost(args);
-            webHostBuilder.Build().Run();
+            BuildWebHost(args).Run();
         }
 
-        public static IWebHostBuilder CreateWebHost(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseApplicationInsights()
                 .ConfigureAppConfiguration(ConfigureAppConfiguration)
                 .ConfigureLogging(ConfigureLogging)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .Build();
 
         /// <summary>
-        /// Configures app configuration specific to the API Gateway service
+        /// Configures app configuration
         /// </summary>
         private static void ConfigureAppConfiguration(WebHostBuilderContext context, IConfigurationBuilder configBuilder)
         {
-            // Add configuration from reroute config files.
-            // Reroutes.json is required; environment-specific reroute configuration
-            // (which will override the default) is optional.
-            configBuilder.AddJsonFile("reroutes.json");
-            configBuilder.AddJsonFile($"reroutes.{context.HostingEnvironment.EnvironmentName}.json", true);
             configBuilder.AddPortabilityServiceConfiguration();
         }
 
@@ -55,7 +48,7 @@ namespace PortabilityService.Gateway
             // Create Serilog configuration from app configuration
             var serilogLoggerConfiguration = new LoggerConfiguration()
                 .ReadFrom.Configuration(config);
-            
+
             if (!env.IsDevelopment())
             {
                 // In non-dev environments, add an App Insights sink

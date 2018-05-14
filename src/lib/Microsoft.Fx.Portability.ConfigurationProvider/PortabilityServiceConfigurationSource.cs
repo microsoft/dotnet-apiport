@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Net.Http;
 
-namespace PortabilityService.ConfigurationProvider
+namespace Microsoft.Fx.Portability.ConfigurationProvider
 {
     public class PortabilityServiceConfigurationSource : IConfigurationSource
     {

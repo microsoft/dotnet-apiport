@@ -2,7 +2,6 @@ resources:
 - repo: self
   clean: true
 queue:
-  name: VSEng-MicroBuildVS2017
   demands:
   - DotNetFramework
   - msbuild
@@ -35,6 +34,7 @@ steps:
 - task: MicroBuildSigningPlugin@1
   inputs:
     signType: '$(SigningType)'
+  enabled: false
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
   inputs:
@@ -42,20 +42,22 @@ steps:
     optionsXS: 0
     optionsHMENABLE: 0
   continueOnError: true
+  enabled: false
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
   inputs:
     debugMode: false
   continueOnError: true
+  enabled: false
 
 - task: VSBuild@1
+  displayName: restore
   inputs:
     solution: PortabilityTools.sln
     vsVersion: 15.0
     msbuildArgs: '/t:restore'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    clean: true
 
 - task: VSBuild@1
   inputs:
@@ -79,28 +81,45 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
+- task: VSBuild@1
+  displayName: Package functions
+  inputs:
+    solution: src\backend\PortabilityService.Functions\PortabilityService.Functions.csproj
+    vsVersion: 15.0
+    msbuildArgs: '/bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild-package-functions.binlog /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(BuildConfiguration)"'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
 - task: CopyFiles@2
   inputs:
-    SourceFolder: 'bin\$(BuildConfiguration)'
+    contents: |
+     **\*.zip
+     *.binlog
     TargetFolder: '$(Build.StagingDirectory)\$(Build.BuildNumber)'
+  condition: succeededOrFailed()
+  enabled: true
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.StagingDirectory)'
-    ArtifactName: '$(Build.BuildNumber)'
+    PathtoPublish: '$(Build.StagingDirectory)\$(Build.BuildNumber)'
+    ArtifactName: 'drop'
     ArtifactType: Container
+  condition: succeededOrFailed()
+  enabled: true
 
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'bin\$(BuildConfiguration)'
     Contents: '**\*.pdb'
     TargetFolder: '$(Build.StagingDirectory)\symbols'
+  enabled: false
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.StagingDirectory)\symbols'
     ArtifactName: symbols
     ArtifactType: Container
+  enabled: false
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-fxcop.FxCop@2
   inputs:
@@ -110,6 +129,7 @@ steps:
     verbose: true
     toolVersion: 14.0.23107.0
   continueOnError: true
+  enabled: false
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
   inputs:
@@ -117,6 +137,7 @@ steps:
     AnalyzeTarget: '$(Build.StagingDirectory)\$(Build.BuildNumber)\Microsoft.Fx.*.dll;$(Build.StagingDirectory)\$(Build.BuildNumber)\ApiPor*.dll;$(Build.StagingDirectory)\$(Build.BuildNumber)\ApiPor*.exe'
     AnalyzeSymPath: '$(Build.StagingDirectory)\symbols'
   continueOnError: true
+  enabled: false
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@1
   inputs:
@@ -131,5 +152,7 @@ steps:
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
   condition: succeededOrFailed()
+  enabled: false
 
 - task: MicroBuildCleanup@1
+  enabled: false

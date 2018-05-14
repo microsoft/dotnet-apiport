@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\backend\PortabilityService.Gateway\PortabilityService.Gateway.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability.ConfigurationProvider\Microsoft.Fx.Portability.ConfigurationProvider.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,12 +27,12 @@ namespace Microsoft.Fx.Portability.Reports
             get { return _formatInformation; }
         }
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public void WriteStream(Stream stream, AnalyzeResult result)
         {
             using (var streamWriter = new StreamWriter(stream))
             using (var writer = new JsonTextWriter(streamWriter))
             {
-                DataExtensions.Serializer.Serialize(writer, response);
+                DataExtensions.Serializer.Serialize(writer, result);
             }
         }
     }

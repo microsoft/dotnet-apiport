@@ -6,7 +6,7 @@ using System;
 using System.Globalization;
 using System.Net.Http;
 
-namespace PortabilityService.ConfigurationProvider
+namespace Microsoft.Fx.Portability.ConfigurationProvider
 {
     public static class PortabilityServiceConfigurationExtensions
     {

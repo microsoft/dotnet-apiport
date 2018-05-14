@@ -8,11 +8,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public interface IStorage
     {
-        Task<bool> SaveToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId);
+        Task SaveRequestToBlobAsync(AnalyzeRequest analyzeRequest, string submissionId);
         Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId);
+        Task DeleteRequestFromBlobAsync(string uniqueId);
+
+        Task SaveResultToBlobAsync(string submissionId, AnalyzeResult result);
+        Task<AnalyzeResult> RetrieveResultFromBlobAsync(string submissionId);
+        Task DeleteResultFromBlobAsync(string submissionid);
+
         Task<IEnumerable<string>> RetrieveSubmissionIdsAsync();
         Task AddJobToQueueAsync(string submissionId);
         IEnumerable<ProjectSubmission> GetProjectSubmissions();
-        Task<IEnumerable<UsageData>> GetUsageDataAsync();
     }
 }

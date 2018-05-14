@@ -3,27 +3,27 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:2747",
+      "applicationUrl": "http://localhost:13612/",
       "sslPort": 0
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": false,
+      "launchBrowser": true,
       "environmentVariables": {
         "PortabilityConfigurationServiceUrl": "http://localhost:1443",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PortabilityServiceGateway": {
+    "PortabilityService.AnalysisEngine": {
       "commandName": "Project",
-      "launchBrowser": false,
+      "launchBrowser": true,
       "environmentVariables": {
         "PortabilityConfigurationServiceUrl": "http://localhost:1443",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:2748"
+      "applicationUrl": "http://localhost:13613/"
     }
   }
 }

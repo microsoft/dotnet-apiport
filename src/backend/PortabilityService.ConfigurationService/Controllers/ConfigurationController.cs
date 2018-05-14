@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PortabilityService.ConfigurationService.Controllers
@@ -45,11 +46,7 @@ namespace PortabilityService.ConfigurationService.Controllers
         }
 
         [HttpGet]
-        public ObjectResult Get()
-        {
-            _logger.LogInformation(LogMessageFormat, nameof(Get), _localizer["ReturningAllConfigSettings"].Value);
-            return Ok(_configuration.GetSection(_baseConfigSectionName).AsEnumerable());
-        }
+        public ObjectResult Get() => GetSectionSettingsList(_baseConfigSectionName);
 
         [HttpGet("section/{sectionName}")]
         public ObjectResult GetSection(string sectionName)
@@ -90,7 +87,10 @@ namespace PortabilityService.ConfigurationService.Controllers
             }
 
             _logger.LogInformation(LogMessageFormat, nameof(GetSectionSettingsList), _localizer["ReturningSectionSettings", sectionName].Value);
-            return Ok(_configuration.GetSection(sectionName).AsEnumerable());
+            return Ok(_configuration.GetSection(sectionName)
+                      .AsEnumerable()
+                      .Where(v => v.Value != null)
+                      .Select(k => new KeyValuePair<string, string>(k.Key.Substring(_baseConfigSectionName.Length + 1), k.Value)));
         }
 
         [HttpGet("setting/{settingName}")]
