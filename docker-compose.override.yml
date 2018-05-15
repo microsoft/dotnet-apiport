@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  portabilityservice.gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  portabilityservice.configurationservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

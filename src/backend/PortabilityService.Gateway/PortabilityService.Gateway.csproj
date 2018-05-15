@@ -6,6 +6,7 @@
     <!-- Ocelot is not signed and there's no reason for a service assembly
         (as opposed to a library) to need a strong name signature -->
     <SignAssembly>false</SignAssembly>
+    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
