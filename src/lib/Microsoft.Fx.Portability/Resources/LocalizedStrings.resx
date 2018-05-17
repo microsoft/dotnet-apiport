@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DuplicateAliasError" xml:space="preserve">
-    <value>Duplicate alias: '{0}'</value>
-  </data>
   <data name="AliasCannotBeEqualToTargetNameError" xml:space="preserve">
     <value>Alias cannot be equal to a target name: '{0}'</value>
   </data>
@@ -134,13 +131,6 @@
     <value>Error: The service endpoint has been deprecated. Please update the application to the latest version.</value>
     <comment>Server endpoint is deprecated</comment>
   </data>
-  <data name="InvalidDataMessage" xml:space="preserve">
-    <value>Invalid data</value>
-    <comment>Shown when an exception is thrown</comment>
-  </data>
-  <data name="HttpExceptionMessage" xml:space="preserve">
-    <value>There was an unknown error attempting to reach the service.  Please try again.</value>
-  </data>
   <data name="BadRequestMessage" xml:space="preserve">
     <value>Bad request. Please make sure you have the most up-to-date version of this tool.</value>
     <comment>BadRequest status code is returned for many issues.  If it is unknown, display the returned information.</comment>
@@ -154,15 +144,6 @@
   </data>
   <data name="ComputingReport" xml:space="preserve">
     <value>Computing report.</value>
-  </data>
-  <data name="IdentifyAssembliesToScan" xml:space="preserve">
-    <value>Identifying assemblies to scan.</value>
-  </data>
-  <data name="ProcessedFiles" xml:space="preserve">
-    <value>Processed {0}/{1} files.</value>
-  </data>
-  <data name="ProcessedItems" xml:space="preserve">
-    <value>Processed {0} items.</value>
   </data>
   <data name="RetrievingTargets" xml:space="preserve">
     <value>Retrieving targets</value>
@@ -194,10 +175,6 @@
   <data name="ProductInformationInvalidArgument" xml:space="preserve">
     <value>Must only contain letters or digits</value>
   </data>
-  <data name="HowToSpecifyVersion" xml:space="preserve">
-    <value>In order to specify a version, please use the following format with the '-targets' option:
-	(Target Name), Version=(Version)</value>
-  </data>
   <data name="InvalidFileName" xml:space="preserve">
     <value>Invalid file name: '{0}'</value>
   </data>
@@ -214,10 +191,6 @@
   <data name="OverwriteFile" xml:space="preserve">
     <value>File '{0}' already exists and will be overwritten.</value>
     <comment>Displayed when a file exists and will be overwritten</comment>
-  </data>
-  <data name="InvalidAssembly" xml:space="preserve">
-    <value>{0} is an invalid assembly.</value>
-    <comment>HTML: An assembly used in the portability analysis that cannot be resolved</comment>
   </data>
   <data name="ProgressReportDone" xml:space="preserve">
     <value>[Done]</value>
@@ -252,14 +225,6 @@
   </data>
   <data name="TooManyTargetsMessage" xml:space="preserve">
     <value>Excel output format supports up to {0} targets for analysis at a time.</value>
-  </data>
-  <data name="FrameworkNameHeader" xml:space="preserve">
-    <value>Framework</value>
-    <comment>Framework name header column in Excel</comment>
-  </data>
-  <data name="VersionHeader" xml:space="preserve">
-    <value>Version</value>
-    <comment>Version header column in Excel</comment>
   </data>
   <data name="MustBeValidEndpoint" xml:space="preserve">
     <value>Must be a valid endpoint</value>
