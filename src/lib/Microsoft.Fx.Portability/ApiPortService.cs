@@ -71,18 +71,6 @@ namespace Microsoft.Fx.Portability
             return await _client.CallAsync<IEnumerable<AvailableTarget>>(HttpMethod.Get, Endpoints.Targets);
         }
 
-        public async Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = null, int? top = null, UsageDataFilter? filter = null, IEnumerable<string> targets = null)
-        {
-            var usedApiUrl = UrlBuilder.Create(Endpoints.UsedApi)
-                .AddQuery("skip", skip)
-                .AddQuery("top", top)
-                .AddQuery("filter", filter)
-                .AddQueryList("targets", targets)
-                .Url;
-
-            return await _client.CallAsync<UsageDataCollection>(HttpMethod.Get, usedApiUrl);
-        }
-
         public async Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
         {
             var submissionUrl = UrlBuilder.Create(Endpoints.Analyze).AddPath(submissionId).Url;

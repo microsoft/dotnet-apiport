@@ -106,11 +106,6 @@ namespace Microsoft.Fx.Portability
             return Task.FromResult(response);
         }
 
-        public Task<ServiceResponse<UsageDataCollection>> GetUsageDataAsync(int? skip = null, int? top = null, UsageDataFilter? filter = null, IEnumerable<string> targets = null)
-        {
-            throw new NotImplementedException();
-        }
-
         public static Task<ServiceResponse<AnalyzeResponse>> GetAnalysisAsync(string submissionId)
         {
             throw new NotImplementedException();
