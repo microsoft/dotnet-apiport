@@ -12,31 +12,30 @@
 @using System.Linq
 
 <h4><abbr title="@Model.Description">@Model.Name</abbr> - @Model.Breaks.Count()</h4>
-<div class="BreakDetails">
+<div class="BreakingChangeTable">
     @if (Model.Breaks.Count() > 0)
     {
         <table>
-            <colgroup>
-                <col span="1" class="BreakingChangeID">
-                <col span="1" class="APIColumn">
-                <col span="2" class="LongDescriptionColumn">
-            </colgroup>
-            <tbody>
+            <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>API</th>
-                    <th>Details</th>
-                    <th>Recommendation</th>
-                    <th class="NarrowHeader"><div>Quirked</div></th>
-                    <th class="NarrowHeader"><div>Version Introduced</div></th>
-                    <th class="NarrowHeader"><div>Version Reverted</div></th>
-                    <th class="NarrowHeader"><div>Analyzer Status</div></th>
-                    <th class="NarrowHeader"><div>Link</div></th>
+                    <th colspan="4"></th>
+                    <th colspan="2">@LocalizedStrings.Version</th>
+                    <th colspan="1"></th>
                 </tr>
+                <tr>
+                    <th>@LocalizedStrings.API</th>
+                    <th>@LocalizedStrings.Details</th>
+                    <th>@LocalizedStrings.Recommendation</th>
+                    <th><div>@LocalizedStrings.Quirked</div></th>
+                    <th><div>@LocalizedStrings.Introduced</div></th>
+                    <th><div>@LocalizedStrings.Reverted</div></th>
+                    <th><div>@LocalizedStrings.Link</div></th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (KeyValuePair<BreakingChange, IEnumerable<MemberInfo>> b in Model.Breaks)
                 {
                     <tr>
-                        <td>@b.Key.Id</td>
                         <td class="MemberNames">
                             <ul>
                                 @* .Distinct because the members can appear multiple times if they exist in multiple referenced assemblies *@
@@ -49,16 +48,15 @@
                                 }
                             </ul>
                         </td>
-                        <td>@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Details));}</td>
+                        <td class="breakDetails">@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Details));}</td>
                         <td>@{WriteLiteral(Html.ConvertMarkdownToHtml(b.Key.Suggestion));}</td>
-                        <td>@b.Key.IsQuirked</td>
-                        <td>@b.Key.VersionBroken</td>
-                        <td>@b.Key.VersionFixed</td>
-                        <td>@b.Key.SourceAnalyzerStatus</td>
+                        <td class="textCentered">@b.Key.IsQuirked</td>
+                        <td class="textCentered">@b.Key.VersionBroken</td>
+                        <td class="textCentered">@b.Key.VersionFixed</td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(b.Key.Link))
                             {
-                                <a href="@b.Key.Link">More info</a>
+                                <a href="@b.Key.Link">@LocalizedStrings.MoreInfo</a>
                             }
                         </td>
                     </tr>

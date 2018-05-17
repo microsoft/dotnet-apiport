@@ -15,7 +15,7 @@ For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 ## Using this Repository
 
 ### Windows
-There is a Visual Studio extension available for VS2017 and VS2015: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
+There is a Visual Studio extension available for VS2017: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
 
 Download and build for yourself:
 1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
@@ -27,11 +27,11 @@ Download and build for yourself:
 
 1. Install [.NET Core SDK](https://www.microsoft.com/net/core)
 2. Execute: `build.sh`
-3. Go to: `bin/Debug/ApiPort/netcoreapp1.0`
+3. Go to: `bin/Debug/ApiPort/netcoreapp2.0`
 4. Run ApiPort by executing: `dotnet ApiPort.dll`
   * Example: `dotnet ApiPort.dll listTargets`
   * Example: `dotnet ApiPort.dll analyze -f Foo.dll -r HTML`
-5. For convenience, create an alias command adding the following to your ~/.bash_profile. Replace `{dotnet-apiport-folder}` with the path where you cloned the repo.
+5. For convenience, create an alias command adding the following to your `~/.bash_profile`. Replace `{dotnet-apiport-folder}` with the path where you cloned the repo.
 ```
 alias apiport="dotnet {dotnet-apiport-folder}/bin/Debug/ApiPort/netcoreapp2.0/ApiPort.dll"
 ```

@@ -280,4 +280,28 @@
   <data name="SubmissionOverview" xml:space="preserve">
     <value>Submission Overview:</value>
   </data>
+  <data name="API" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Introduced" xml:space="preserve">
+    <value>Introduced</value>
+  </data>
+  <data name="Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Quirked" xml:space="preserve">
+    <value>Quirked</value>
+  </data>
+  <data name="Recommendation" xml:space="preserve">
+    <value>Recommendation</value>
+  </data>
+  <data name="Reverted" xml:space="preserve">
+    <value>Reverted</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
 </root>
