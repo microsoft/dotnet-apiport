@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <DataPath>$(OutputFullPath)\.data\</DataPath>
+    <DataPath>$(OutputFullPath)\.build\</DataPath>
     <BreakingChangePath>$(OutputFullPath)\docs\BreakingChanges\</BreakingChangePath>
     <CatalogDataFile>$(DataPath)catalog.bin</CatalogDataFile>
   </PropertyGroup>

@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <AssemblyInfoFile>$(MSBuildThisFileDirectory)\.build\GlobalAssemblyInfo.cs</AssemblyInfoFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <LicenseDocumentDirectory>$(MSBuildThisFileDirectory)\docs\LicenseTerms</LicenseDocumentDirectory>
     <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE</FullLicenseFile>
     <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>

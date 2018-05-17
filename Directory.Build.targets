@@ -38,6 +38,10 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
   </ItemGroup>
 
+  <ItemGroup Condition="Exists($(AssemblyInfoFile))">
+    <Compile Include="$(AssemblyInfoFile)" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="$(ShouldSignAssembly)">
       <PrivateAssets>All</PrivateAssets>
@@ -54,12 +58,6 @@
     </PackageReference>
 
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" Condition=" '$(IsPackage)' != 'true' ">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-
-    <!-- GitVersionTask is not compiled against .NET Core, so importing the targets will
-         result in a failure because it will try to resolve Microsoft.Build.Utilities v4.0 -->
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" Condition=" '$(MSBuildRuntimeType)' != 'Core' AND Exists('$(MSBuildThisFileDirectory)\.git') ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
