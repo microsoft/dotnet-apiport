@@ -131,9 +131,8 @@ namespace Microsoft.Fx.Portability.Analysis
             //  -- Find the members that are defined in framework assemblies AND which are framework members.
             //  -- For each member, identity which is the status for that docId for each of the targets.
             //  -- Keep only the members that are not supported on at least one of the targets.
-
             var missingMembers = dependencies.Keys
-                .Where(m => MemberIsInFramework(m, submittedAssemblies))
+                .Where(m => MemberIsInFramework(m, submittedAssemblies) && IsSupportedOnAnyTarget(_catalog, m.MemberDocId))
                 .AsParallel()
                 .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
                 .Where(memberInfo => !memberInfo.IsSupportedAcrossTargets)
@@ -164,9 +163,7 @@ namespace Microsoft.Fx.Portability.Analysis
         /// </summary>
         private MemberInfo ProcessMemberInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
         {
-            List<Version> targetStatus;
-
-            member.IsSupportedAcrossTargets = IsSupportedAcrossTargets(catalog, member.MemberDocId, targets, out targetStatus);
+            member.IsSupportedAcrossTargets = IsSupportedAcrossTargets(catalog, member.MemberDocId, targets, out var targetStatus);
             member.TargetStatus = targetStatus;
             member.RecommendedChanges = _recommendations.GetRecommendedChanges(member.MemberDocId);
             member.SourceCompatibleChange = _recommendations.GetSourceCompatibleChanges(member.MemberDocId);
@@ -198,6 +195,11 @@ namespace Microsoft.Fx.Portability.Analysis
 
             return isSupported;
         }
+
+        /// <summary>
+        /// Finds out if the given <paramref name="docId"/> is supported on any target
+        /// </summary>
+        private static bool IsSupportedOnAnyTarget(IApiCatalogLookup catalog, string docId) => catalog.GetSupportedVersions(docId).Any();
 
         public IEnumerable<string> FindUnreferencedAssemblies(IEnumerable<string> unreferencedAssemblies, IEnumerable<AssemblyInfo> specifiedUserAssemblies)
         {
