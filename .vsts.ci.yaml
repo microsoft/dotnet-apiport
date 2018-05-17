@@ -54,7 +54,7 @@ steps:
   inputs:
     solution: PortabilityTools.sln
     vsVersion: 15.0
-    msbuildArgs: '/t:restore;build /m /p:DeployExtension=false /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog'
+    msbuildArgs: '/t:restore;build /p:DeployExtension=false /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
