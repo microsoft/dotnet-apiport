@@ -278,7 +278,7 @@ namespace Microsoft.Fx.Portability
 
         private async Task<IEnumerable<ReportingResultWithFormat>> GetReportsAsync(AnalyzeResponse analyzeResponse, IEnumerable<ResultFormatInformation> reportFormats)
         {
-            using (var progressTask = _progressReport.StartTask("Retrieving report..."))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingReport))
             {
                 var reportTasks = reportFormats
                     .Select(async format => await _apiPortService.GetReportingResultAsync(analyzeResponse, format).ConfigureAwait(false));
