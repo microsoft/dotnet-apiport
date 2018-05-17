@@ -152,66 +152,11 @@ namespace Microsoft.Fx.Portability.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate alias: &apos;{0}&apos;.
-        /// </summary>
-        public static string DuplicateAliasError {
-            get {
-                return ResourceManager.GetString("DuplicateAliasError", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Framework.
-        /// </summary>
-        public static string FrameworkNameHeader {
-            get {
-                return ResourceManager.GetString("FrameworkNameHeader", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to {0}, FileVersion:{1}.
         /// </summary>
         public static string FullAssemblyIdentity {
             get {
                 return ResourceManager.GetString("FullAssemblyIdentity", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to In order to specify a version, please use the following format with the &apos;-targets&apos; option:
-        ///	(Target Name), Version=(Version).
-        /// </summary>
-        public static string HowToSpecifyVersion {
-            get {
-                return ResourceManager.GetString("HowToSpecifyVersion", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to There was an unknown error attempting to reach the service.  Please try again..
-        /// </summary>
-        public static string HttpExceptionMessage {
-            get {
-                return ResourceManager.GetString("HttpExceptionMessage", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Identifying assemblies to scan..
-        /// </summary>
-        public static string IdentifyAssembliesToScan {
-            get {
-                return ResourceManager.GetString("IdentifyAssembliesToScan", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to {0} is an invalid assembly..
-        /// </summary>
-        public static string InvalidAssembly {
-            get {
-                return ResourceManager.GetString("InvalidAssembly", resourceCulture);
             }
         }
 
@@ -230,15 +175,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string InvalidCategoryDetected {
             get {
                 return ResourceManager.GetString("InvalidCategoryDetected", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid data.
-        /// </summary>
-        public static string InvalidDataMessage {
-            get {
-                return ResourceManager.GetString("InvalidDataMessage", resourceCulture);
             }
         }
 
@@ -315,24 +251,6 @@ namespace Microsoft.Fx.Portability.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Processed {0}/{1} files..
-        /// </summary>
-        public static string ProcessedFiles {
-            get {
-                return ResourceManager.GetString("ProcessedFiles", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Processed {0} items..
-        /// </summary>
-        public static string ProcessedItems {
-            get {
-                return ResourceManager.GetString("ProcessedItems", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Must only contain letters or digits.
         /// </summary>
         public static string ProductInformationInvalidArgument {
@@ -383,6 +301,15 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string RetrievingOutputFormats {
             get {
                 return ResourceManager.GetString("RetrievingOutputFormats", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Retrieving report.
+        /// </summary>
+        public static string RetrievingReport {
+            get {
+                return ResourceManager.GetString("RetrievingReport", resourceCulture);
             }
         }
 
@@ -491,15 +418,6 @@ namespace Microsoft.Fx.Portability.Resources {
         public static string UnknownTarget {
             get {
                 return ResourceManager.GetString("UnknownTarget", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Version.
-        /// </summary>
-        public static string VersionHeader {
-            get {
-                return ResourceManager.GetString("VersionHeader", resourceCulture);
             }
         }
 
