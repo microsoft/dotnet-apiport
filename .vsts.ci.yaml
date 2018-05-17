@@ -51,19 +51,10 @@ steps:
   enabled: false
 
 - task: VSBuild@1
-  displayName: restore
   inputs:
     solution: PortabilityTools.sln
     vsVersion: 15.0
-    msbuildArgs: '/t:restore'
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-
-- task: VSBuild@1
-  inputs:
-    solution: PortabilityTools.sln
-    vsVersion: 15.0
-    msbuildArgs: '/t:build /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog'
+    msbuildArgs: '/t:restore;build /p:DeployExtension=false /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
