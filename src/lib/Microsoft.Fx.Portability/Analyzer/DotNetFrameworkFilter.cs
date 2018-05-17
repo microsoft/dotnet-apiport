@@ -19,20 +19,22 @@ namespace Microsoft.Fx.Portability.Analyzer
             "b77a5c561934e089", // ECMA
             "b03f5f7f11d50a3a", // DEVDIV
             "7cec85d7bea7798e", // SLPLAT
-            "31bf3856ad364e35", // Windows
-            "24eec0d8c86cda1e", // Phone
-            "0738eb9f132ed756", // Mono
-            "ddd0da4d3e678217", // Component model
-            "84e04ff9cfb79065", // Mono Android
-            "842cf8be1de50553", // Xamarin.iOS
+            "31bf3856ad364e35", // SILVERLIGHT
+            "24eec0d8c86cda1e", // PHONE
+            "0738eb9f132ed756", // MONO
             "cc7b13ffcd2ddd51"  // NetStandard
         }, StringComparer.OrdinalIgnoreCase);
 
         private static readonly IEnumerable<string> s_frameworkAssemblyNamePrefixes = new[]
         {
             "System.",
-            "Microsoft.",
-            "Mono."
+            "Microsoft.AspNet.",
+            "Microsoft.AspNetCore.",
+            "Microsoft.CSharp.",
+            "Microsoft.EntityFrameworkCore.",
+            "Microsoft.Win32.",
+            "Microsoft.VisualBasic.",
+            "Windows."
         };
 
         public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)

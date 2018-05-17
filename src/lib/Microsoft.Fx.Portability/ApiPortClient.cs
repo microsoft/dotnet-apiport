@@ -226,7 +226,7 @@ namespace Microsoft.Fx.Portability
             var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
             if (!dependencyInfo.UserAssemblies.Any())
             {
-                _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
+                _progressReport.ReportIssue(LocalizedStrings.NoFilesToAnalyze);
 
                 return new MultipleFormatAnalysis
                 {

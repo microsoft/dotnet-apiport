@@ -61,6 +61,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API.
+        /// </summary>
+        public static string API {
+            get {
+                return ResourceManager.GetString("API", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assembly.
         /// </summary>
         public static string Assembly {
@@ -156,6 +165,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         public static string CouldNotLocate {
             get {
                 return ResourceManager.GetString("CouldNotLocate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
             }
         }
         
@@ -259,6 +277,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Introduced.
+        /// </summary>
+        public static string Introduced {
+            get {
+                return ResourceManager.GetString("Introduced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid content for breaking-change-count tag: {0}.
         /// </summary>
         public static string InvalidBreakingChangeCountTagContent {
@@ -273,6 +300,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         public static string InvalidErrorThresholdAttribute {
             get {
                 return ResourceManager.GetString("InvalidErrorThresholdAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link.
+        /// </summary>
+        public static string Link {
+            get {
+                return ResourceManager.GetString("Link", resourceCulture);
             }
         }
         
@@ -412,6 +448,24 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quirked.
+        /// </summary>
+        public static string Quirked {
+            get {
+                return ResourceManager.GetString("Quirked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommendation.
+        /// </summary>
+        public static string Recommendation {
+            get {
+                return ResourceManager.GetString("Recommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recommended changes.
         /// </summary>
         public static string RecommendedChanges {
@@ -471,6 +525,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         public static string RetargetingIssuesHeader {
             get {
                 return ResourceManager.GetString("RetargetingIssuesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reverted.
+        /// </summary>
+        public static string Reverted {
+            get {
+                return ResourceManager.GetString("Reverted", resourceCulture);
             }
         }
         
@@ -543,6 +606,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         public static string TargetTypeHeader {
             get {
                 return ResourceManager.GetString("TargetTypeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
     }

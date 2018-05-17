@@ -13,7 +13,6 @@
   -->
   <Target Name="AddToVsixSources" AfterTargets="GetVsixSourceItems">
     <ItemGroup>
-      <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.2015.dll" />
       <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.2017.dll" />
       <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.Common.dll" />
       <VSIXSourceItem Include="$(OutputPath)\ApiPort.VisualStudio.dll" />

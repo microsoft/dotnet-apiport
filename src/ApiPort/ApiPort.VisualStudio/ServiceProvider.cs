@@ -21,6 +21,8 @@ using System;
 using System.IO;
 
 using static Microsoft.VisualStudio.VSConstants;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ApiPortVS
 {
@@ -93,7 +95,7 @@ namespace ApiPortVS
                 .As<IFileWriter>()
                 .SingleInstance();
 
-            builder.RegisterInstance(AnalysisOutputToolWindowControl.Model)
+            builder.Register(GetOutputViewModel)
                 .As<OutputViewModel>()
                 .SingleInstance();
 
@@ -130,14 +132,7 @@ namespace ApiPortVS
             var dte = Package.GetGlobalService(typeof(DTE)) as DTE;
             var version = new Version(dte.Version);
 
-            if (version.Major == 14)
-            {
-                builder.RegisterModule(new VS2015.ServiceProvider());
-            }
-            else
-            {
-                builder.RegisterModule(new VS2017.ServiceProvider());
-            }
+            builder.RegisterModule(new VS2017.ServiceProvider());
 
             _container = builder.Build();
         }
@@ -192,6 +187,30 @@ namespace ApiPortVS
                 // If a custom window couldn't be opened, open the general purpose window
                 return provider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
             }).SingleInstance();
+        }
+
+        private static OutputViewModel GetOutputViewModel(IComponentContext context)
+        {
+            var viewModel = context.Resolve<OptionsViewModel>();
+            var directory = new DirectoryInfo(viewModel.OutputDirectory);
+
+            if (!directory.Exists)
+            {
+                return new OutputViewModel();
+            }
+
+            var validExtensions = new HashSet<string>(viewModel.Formats.Select(x => x.FileExtension).Distinct());
+
+            var validReports = directory.EnumerateFiles().Where(x => validExtensions.Contains(x.Extension));
+
+            // If there are no report file extensions we support,
+            // or if there are no matching reports, return a new view model
+            if (!validExtensions.Any() || !validReports.Any())
+            {
+                return new OutputViewModel();
+            }
+
+            return new OutputViewModel(validReports.Select(x => x.FullName));
         }
     }
 }

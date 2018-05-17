@@ -113,6 +113,20 @@ Set-DevEnvironment
 # Show the MSBuild version for failure investigations
 msbuild /version
 
+$msbuild_version = (msbuild /version /nologo | Select-String -pattern '(?<major>[0-9]+)\.(?<minor>[0-9]+)') 
+$binarylog_compat = $false
+
+# check if msbuild_version is not null
+if ($msbuild_version){
+    $msbuild_version = $msbuild_version.Matches[0].Groups
+
+    # check if msbuild_version is greater than or equal to 15.3
+    # binary logging was added in 15.3
+    if([int]$msbuild_version['major'].Value -ge 15 -and [int]$msbuild_version['minor'].Value -ge 3){
+        $binarylog_compat = $true
+    }
+}
+
 $binFolder = [IO.Path]::Combine("bin", $Configuration)
 
 New-Item $binFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
@@ -125,10 +139,14 @@ $PlatformToUse = $Platform
 if ($Platform -eq "AnyCPU") {
     $PlatformToUse = "Any CPU"
 }
+$binarylog_switch = "/bl:$binFolder\msbuild.binlog"
+if (!$binarylog_compat) {
+    $binarylog_switch = ""
+}
 
 Push-Location $root
 
-& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false "/bl:$binFolder\msbuild.binlog"
+& msbuild PortabilityTools.sln "/t:restore;build;pack" /p:Configuration=$Configuration /p:Platform="$PlatformToUse" /nologo /m /v:m /nr:false "$binarylog_switch"
 
 Pop-Location
 
