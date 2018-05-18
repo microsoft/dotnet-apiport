@@ -9,7 +9,7 @@
     <CodePackage Name="portabilityservice.gateway.Code" Version="0.1">
         <EntryPoint>
             <ContainerHost>
-                <ImageName>portabilityservice.azurecr.io/portabilityservice-gateway:0.1</ImageName>
+                <ImageName>portabilityservice.azurecr.io/portabilityservice-gateway:0.2</ImageName>
             </ContainerHost>
         </EntryPoint>
         <EnvironmentVariables>
