@@ -4,6 +4,7 @@
 using ApiPortVS.Resources;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -24,8 +25,12 @@ namespace ApiPortVS.ViewModels
         public ICommand OpenDirectory { get; }
 
         public OutputViewModel()
+            : this(Enumerable.Empty<string>())
+        { }
+
+        public OutputViewModel(IEnumerable<string> existingReports)
         {
-            Paths = new ObservableCollection<string>();
+            Paths = new ObservableCollection<string>(existingReports);
             SaveAs = new DelegateCommand<string>(SaveFileAs);
             OpenFile = new DelegateCommand<string>(path =>
             {

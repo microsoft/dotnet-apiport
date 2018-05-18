@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DuplicateAliasError" xml:space="preserve">
-    <value>Duplicate alias: '{0}'</value>
-  </data>
   <data name="AliasCannotBeEqualToTargetNameError" xml:space="preserve">
     <value>Alias cannot be equal to a target name: '{0}'</value>
   </data>
@@ -134,13 +131,6 @@
     <value>Error: The service endpoint has been deprecated. Please update the application to the latest version.</value>
     <comment>Server endpoint is deprecated</comment>
   </data>
-  <data name="InvalidDataMessage" xml:space="preserve">
-    <value>Invalid data</value>
-    <comment>Shown when an exception is thrown</comment>
-  </data>
-  <data name="HttpExceptionMessage" xml:space="preserve">
-    <value>There was an unknown error attempting to reach the service.  Please try again.</value>
-  </data>
   <data name="BadRequestMessage" xml:space="preserve">
     <value>Bad request. Please make sure you have the most up-to-date version of this tool.</value>
     <comment>BadRequest status code is returned for many issues.  If it is unknown, display the returned information.</comment>
@@ -154,15 +144,6 @@
   </data>
   <data name="ComputingReport" xml:space="preserve">
     <value>Computing report.</value>
-  </data>
-  <data name="IdentifyAssembliesToScan" xml:space="preserve">
-    <value>Identifying assemblies to scan.</value>
-  </data>
-  <data name="ProcessedFiles" xml:space="preserve">
-    <value>Processed {0}/{1} files.</value>
-  </data>
-  <data name="ProcessedItems" xml:space="preserve">
-    <value>Processed {0} items.</value>
   </data>
   <data name="RetrievingTargets" xml:space="preserve">
     <value>Retrieving targets</value>
@@ -194,15 +175,11 @@
   <data name="ProductInformationInvalidArgument" xml:space="preserve">
     <value>Must only contain letters or digits</value>
   </data>
-  <data name="HowToSpecifyVersion" xml:space="preserve">
-    <value>In order to specify a version, please use the following format with the '-targets' option:
-	(Target Name), Version=(Version)</value>
-  </data>
   <data name="InvalidFileName" xml:space="preserve">
     <value>Invalid file name: '{0}'</value>
   </data>
-  <data name="NoFilesAvailableToUpload" xml:space="preserve">
-    <value>No files were found to upload.</value>
+  <data name="NoFilesToAnalyze" xml:space="preserve">
+    <value>No files were found to analyze.</value>
   </data>
   <data name="NotFoundException" xml:space="preserve">
     <value>Resource was not found for {0} {1}</value>
@@ -214,10 +191,6 @@
   <data name="OverwriteFile" xml:space="preserve">
     <value>File '{0}' already exists and will be overwritten.</value>
     <comment>Displayed when a file exists and will be overwritten</comment>
-  </data>
-  <data name="InvalidAssembly" xml:space="preserve">
-    <value>{0} is an invalid assembly.</value>
-    <comment>HTML: An assembly used in the portability analysis that cannot be resolved</comment>
   </data>
   <data name="ProgressReportDone" xml:space="preserve">
     <value>[Done]</value>
@@ -253,14 +226,6 @@
   <data name="TooManyTargetsMessage" xml:space="preserve">
     <value>Excel output format supports up to {0} targets for analysis at a time.</value>
   </data>
-  <data name="FrameworkNameHeader" xml:space="preserve">
-    <value>Framework</value>
-    <comment>Framework name header column in Excel</comment>
-  </data>
-  <data name="VersionHeader" xml:space="preserve">
-    <value>Version</value>
-    <comment>Version header column in Excel</comment>
-  </data>
   <data name="MustBeValidEndpoint" xml:space="preserve">
     <value>Must be a valid endpoint</value>
   </data>
@@ -281,5 +246,8 @@
   </data>
   <data name="TimedOut" xml:space="preserve">
     <value>Timed out, please try again</value>
+  </data>
+  <data name="RetrievingReport" xml:space="preserve">
+    <value>Retrieving report</value>
   </data>
 </root>

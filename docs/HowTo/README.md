@@ -28,4 +28,4 @@ for another. For details, see [Breaking Changes](BreakingChanges.md).
 
 * [Console Application (.NET Framework)](../Console/README.md)
 * [.NET Core Application](../Console/README.md#using-net-core-application)
-* [Visual Studio 2015 Extension](../VSExtension/README.md)
+* [Visual Studio 2017 Extension](../VSExtension/README.md)

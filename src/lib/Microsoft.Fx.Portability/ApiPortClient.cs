@@ -226,7 +226,7 @@ namespace Microsoft.Fx.Portability
             var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
             if (!dependencyInfo.UserAssemblies.Any())
             {
-                _progressReport.ReportIssue(LocalizedStrings.NoFilesAvailableToUpload);
+                _progressReport.ReportIssue(LocalizedStrings.NoFilesToAnalyze);
 
                 return new MultipleFormatAnalysis
                 {
@@ -278,7 +278,7 @@ namespace Microsoft.Fx.Portability
 
         private async Task<IEnumerable<ReportingResultWithFormat>> GetReportsAsync(AnalyzeResponse analyzeResponse, IEnumerable<ResultFormatInformation> reportFormats)
         {
-            using (var progressTask = _progressReport.StartTask("Retrieving report..."))
+            using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingReport))
             {
                 var reportTasks = reportFormats
                     .Select(async format => await _apiPortService.GetReportingResultAsync(analyzeResponse, format).ConfigureAwait(false));
