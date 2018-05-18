@@ -27,7 +27,7 @@ project.lock.json
 src/Microsoft.Fx.Portability.Offline/data/
 /nupkg
 .tools/
-.data
+.build/
 *.nuget.props
 *.nuget.targets
 .vscode

@@ -26,10 +26,12 @@
     <IsTest>false</IsTest>
     <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
   </PropertyGroup>
+
   <PropertyGroup>
     <IsFunctionsProject>false</IsFunctionsProject>
     <IsFunctionsProject Condition="$(MSBuildProjectName.StartsWith('PortabilityService.Functions'))">true</IsFunctionsProject>
   </PropertyGroup>
+
   <PropertyGroup>
     <IsOnWindows>false</IsOnWindows>
     <IsOnWindows Condition="'$(OS)' == 'Windows_NT'">true</IsOnWindows>
@@ -67,6 +69,10 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>.NET portability apiport</PackageTags>
     <Copyright>Copyright 2017</Copyright>
+    <VersionFile>$(MSBuildThisFileDirectory)\.build\version.txt</VersionFile>
+    <InfoVersionFile>$(MSBuildThisFileDirectory)\.build\infoversion.txt</InfoVersionFile>
+    <Version Condition="Exists($(VersionFile))">$([System.IO.File]::ReadAllText($(VersionFile)).Trim())</Version>
+    <InformationalVersion Condition="Exists($(VersionFile))">$([System.IO.File]::ReadAllText($(InfoVersionFile)).Trim())</InformationalVersion>
   </PropertyGroup>
 
   <!-- Some of the project types do not have a pack target. This creates a default empty pack target that will be overridden in supported project types -->

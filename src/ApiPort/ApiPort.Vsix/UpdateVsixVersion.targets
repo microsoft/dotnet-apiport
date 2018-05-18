@@ -2,8 +2,8 @@
 <Project>
 
   <Target Name="UpdateVsixVersion" BeforeTargets="CreateVsixContainer">
-    <UpdateVersion VsixVersion="$(AssemblyVersion)" VsixFile="$(IntermediateVsixManifest)" />
-    <Message Text="Updated $(IntermediateVsixManifest) to $(AssemblyVersion)" />
+    <UpdateVersion VsixVersion="$(Version)" VsixFile="$(IntermediateVsixManifest)" />
+    <Message Text="Updated $(IntermediateVsixManifest) to $(Version)" />
   </Target>
 
   <UsingTask TaskName="UpdateVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
