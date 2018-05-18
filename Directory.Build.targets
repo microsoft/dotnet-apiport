@@ -38,10 +38,6 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
   </ItemGroup>
 
-  <ItemGroup Condition="Exists($(AssemblyInfoFile))">
-    <Compile Include="$(AssemblyInfoFile)" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="$(ShouldSignAssembly)">
       <PrivateAssets>All</PrivateAssets>
