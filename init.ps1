@@ -39,7 +39,12 @@ function GetGitVersion($path) {
 
     $gitversion = "$path\GitVersion.CommandLine\tools\GitVersion.exe"
 
-    & $gitversion /updateAssemblyInfo "$path\GlobalAssemblyInfo.cs" /ensureassemblyinfo /output buildserver
+    & $gitversion /output buildserver
+    
+    $data = & $gitversion | ConvertFrom-Json
+
+    $data.AssemblySemVer > (Join-Path $path "version.txt")
+    $data.InformationalVersion > (Join-Path $path "infoversion.txt")
 }
 
 $root = Join-Path $PSScriptRoot ".build"
