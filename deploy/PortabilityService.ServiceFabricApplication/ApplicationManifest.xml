@@ -13,7 +13,7 @@
             <ContainerHostPolicies CodePackageRef="portabilityservice.configurationservice.Code">
                 <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
                 <ImageOverrides>
-                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.1" />
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.2" />
                 </ImageOverrides>                
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.configurationserviceEndpoint"/>
             </ContainerHostPolicies>
@@ -23,13 +23,13 @@
     <ServiceManifestImport>
         <ServiceManifestRef ServiceManifestName="portabilityservice.gatewayPkg" ServiceManifestVersion="v1"/>
         <EnvironmentOverrides CodePackageRef="portabilityservice.gateway.Code">
-            <EnvironmentVariable Name="ConfigurationService_Url" Value="http://portabilityservice.configurationservice"/>
+            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
         </EnvironmentOverrides>
         <Policies>
             <ContainerHostPolicies CodePackageRef="portabilityservice.gateway.Code">
                 <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
                 <ImageOverrides>
-                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.1" />
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.2" />
                 </ImageOverrides>
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.gatewayEndpoint"/>
             </ContainerHostPolicies>

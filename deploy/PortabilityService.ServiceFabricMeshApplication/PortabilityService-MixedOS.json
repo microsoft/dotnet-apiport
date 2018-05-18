@@ -62,7 +62,7 @@
               "osType": "linux",
               "codePackages": [{
                 "name": "Gateway.Code",
-                "image": "portabilityservice-gateway:0.1",
+                "image": "portabilityservice-gateway:0.2",
                 "imageRegistryCredential": {
                   "server": "[parameters('registry-server')]",
                   "username": "[parameters('registry-username')]",
@@ -73,7 +73,7 @@
                   "port": 80
                 }],
                 "environmentVariables": [{
-                    "name": "ConfigurationService_Url",
+                    "name": "PortabilityConfigurationServiceUrl",
                     "value": "http://ConfigurationService"
                   },
                   {
@@ -101,7 +101,7 @@
               "osType": "windows",
               "codePackages": [{
                 "name": "ConfigurationService.Code",
-                "image": "portabilityservice-configurationservice:0.1-windows",
+                "image": "portabilityservice-configurationservice:0.2-windows",
                 "imageRegistryCredential": {
                   "server": "[parameters('registry-server')]",
                   "username": "[parameters('registry-username')]",

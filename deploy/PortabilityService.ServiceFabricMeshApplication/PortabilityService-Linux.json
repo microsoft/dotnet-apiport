@@ -62,7 +62,7 @@
               "osType": "linux",
               "codePackages": [{
                 "name": "Gateway.Code",
-                "image": "portabilityservice-gateway:0.1",
+                "image": "portabilityservice-gateway:0.2",
                 "imageRegistryCredential": {
                   "server": "[parameters('registry-server')]",
                   "username": "[parameters('registry-username')]",
@@ -73,7 +73,7 @@
                   "port": 80
                 }],
                 "environmentVariables": [{
-                    "name": "ConfigurationService_Url",
+                    "name": "PortabilityConfigurationServiceUrl",
                     "value": "http://ConfigurationService"
                   },
                   {
@@ -101,7 +101,7 @@
               "osType": "linux",
               "codePackages": [{
                 "name": "ConfigurationService.Code",
-                "image": "portabilityservice-configurationservice:0.1",
+                "image": "portabilityservice-configurationservice:0.2",
                 "imageRegistryCredential": {
                   "server": "[parameters('registry-server')]",
                   "username": "[parameters('registry-username')]",
@@ -111,6 +111,11 @@
                   "name": "ConfigurationServiceEndpoint",
                   "port": 80
                 }],
+                "environmentVariables": [{
+                  "name": "ASPNETCORE_ENVIRONMENT",
+                  "value": "Development"
+                }
+              ],                
                 "resources": {
                   "requests": {
                     "cpu": 0.5,
