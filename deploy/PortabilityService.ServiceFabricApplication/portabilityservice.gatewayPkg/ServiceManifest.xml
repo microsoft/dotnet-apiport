@@ -9,11 +9,11 @@
     <CodePackage Name="portabilityservice.gateway.Code" Version="0.1">
         <EntryPoint>
             <ContainerHost>
-                <ImageName>portabilityservice.azurecr.io/portabilityservice-gateway:0.1</ImageName>
+                <ImageName>portabilityservice.azurecr.io/portabilityservice-gateway:0.2</ImageName>
             </ContainerHost>
         </EntryPoint>
         <EnvironmentVariables>
-            <EnvironmentVariable Name="ConfigurationService_Url" Value="http://portabilityservice.configurationservice"/>
+            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
         </EnvironmentVariables>
     </CodePackage>
     <Resources>
