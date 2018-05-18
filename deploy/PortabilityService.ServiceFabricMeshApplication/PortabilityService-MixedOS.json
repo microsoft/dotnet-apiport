@@ -11,14 +11,12 @@
     },
     "registry-server": {
       "type": "string",
-      "defaultValue": "portabilityservice.azurecr.io",
       "metadata": {
         "description": "Docker container registry with Portability Service images"
       }
     },
     "registry-username": {
       "type": "string",
-      "defaultValue": "portabilityservice",
       "metadata": {
         "description": "User name for private container registry"
       }

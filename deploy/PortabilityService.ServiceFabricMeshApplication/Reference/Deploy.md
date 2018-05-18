@@ -1,7 +1,7 @@
-Manual SeaBreeze Deployment Instructions
-========================================
+Manual Service Fabric Mesh Deployment Instructions
+==================================================
 
-Based on docs [here](https://github.com/Azure/seabreeze-preview-pr/blob/master/docs/conceptual-docs/application-deployment-quickstart.md).
+Based on docs [here](https://github.com/Azure/service-fabric-mesh-preview-pr/blob/master/docs/conceptual-docs/application-deployment-quickstart.md).
 
 1. Install [SF Mesh CLI](https://github.com/Azure/service-fabric-mesh-preview-pr/blob/private-preview_3/docs/conceptual-docs/cli-setup.md).
 1. `az login`
