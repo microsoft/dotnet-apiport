@@ -23,7 +23,7 @@
     <ServiceManifestImport>
         <ServiceManifestRef ServiceManifestName="portabilityservice.gatewayPkg" ServiceManifestVersion="v1"/>
         <EnvironmentOverrides CodePackageRef="portabilityservice.gateway.Code">
-            <EnvironmentVariable Name="ConfigurationService_Url" Value="http://portabilityservice.configurationservice"/>
+            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
         </EnvironmentOverrides>
         <Policies>
             <ContainerHostPolicies CodePackageRef="portabilityservice.gateway.Code">
