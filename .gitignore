@@ -31,3 +31,4 @@ src/Microsoft.Fx.Portability.Offline/data/
 *.nuget.props
 *.nuget.targets
 .vscode
+.data/

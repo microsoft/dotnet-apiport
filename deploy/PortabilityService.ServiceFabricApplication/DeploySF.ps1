@@ -23,11 +23,13 @@ Identifier for the Service Fabric application to deploy
 .PARAMETER Upgrade
 Upgrade an existing application to a newer application type. Otherwise, delete and re-create the application.
 
+.PARAMETER EnvironmentName
+Specify the ASP.NET Core environment to run (Development, Staging, Production); defaults to Production
+
 .EXAMPLE
 DeploySF.ps1 -ClusterEndpoint https://portabilityservice.eastus.cloudapp.azure.com:19080 -CertLocation C:\certs\SFCert.pem
 
-DeploySF.ps1 -ClusterEndpoint https://portabilityservice.eastus.cloudapp.azure.com:19080 -CertLocation C:\certs\SFCert.pem -ContainerRegistryUrl portabilityservice.azurecr.io -ContainerRegistryUserName portabilityservice -ImageTag 1.0
-
+DeploySF.ps1 -ClusterEndpoint https://portabilityservice.eastus.cloudapp.azure.com:19080 -CertLocation C:\certs\SFCert.pem -ContainerRegistryUserName portabilityservice -EnvironmentName Development
 #>
 
 # Parameters
@@ -37,7 +39,6 @@ Param
     [string]
     $ClusterEndpoint,
 
-    [Parameter(Mandatory=$true)]
     [String]
     $CertLocation,
 
@@ -52,7 +53,10 @@ Param
     $ApplicationId = 'PortabilityService',
 
     [Switch]
-    $Upgrade
+    $Upgrade,
+
+    [String]
+    $EnvironmentName
 )
 
 function Check-Success
@@ -81,10 +85,19 @@ Write-Host "Deploying $applicationName, $applicationVersion" -ForegroundColor Gr
 
 # Connect to the SF cluster
 Write-Host "Connecting to Service Fabric cluster at $ClusterEndpoint" -ForegroundColor Cyan
-sfctl cluster select --endpoint $ClusterEndpoint --pem $CertLocation --no-verify --verbose
+if ($CertLocation)
+{
+    sfctl cluster select --endpoint $ClusterEndpoint --pem $CertLocation --no-verify --verbose
+}
+else 
+{
+    sfctl cluster select --endpoint $ClusterEndpoint --verbose
+}
 Check-Success "Connect to Service Fabric cluster"
 
 # Upload the application and service manifests
+#   Note that this doesn't work, as written for localhost-hosted clusters
+#   https://github.com/Azure/service-fabric-cli/issues/51
 Write-Host "Uploading app manifests" -ForegroundColor Cyan
 sfctl application upload --path $PSScriptRoot --verbose
 Check-Success "Upload manifests"
@@ -113,6 +126,10 @@ $parameters.RepositoryPassword = [System.Runtime.InteropServices.Marshal]::PtrTo
 if ($ContainerRegistryUserName)
 {
     $parameters.RepositoryUserName = $ContainerRegistryUserName
+}
+if ($EnvironmentName)
+{
+    $parameters.EnvironmentName = $EnvironmentName
 }
 $parametersString = ($parameters | ConvertTo-Json -Compress).replace('"', '\"')
 
