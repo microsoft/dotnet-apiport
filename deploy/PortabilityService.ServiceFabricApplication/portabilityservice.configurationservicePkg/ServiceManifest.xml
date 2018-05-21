@@ -12,11 +12,13 @@
         <ImageName>portabilityservice.azurecr.io/portabilityservice-configurationservice:0.2</ImageName>
       </ContainerHost>
     </EntryPoint>
-    <EnvironmentVariables/>
+    <EnvironmentVariables>
+      <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="Production"/>
+    </EnvironmentVariables>
   </CodePackage>
   <Resources>
     <Endpoints>
-      <Endpoint Name="portabilityservice.configurationserviceEndpoint"/>
+      <Endpoint Name="portabilityservice.configurationserviceEndpoint" Port="8001" />
     </Endpoints>
   </Resources>
 </ServiceManifest>

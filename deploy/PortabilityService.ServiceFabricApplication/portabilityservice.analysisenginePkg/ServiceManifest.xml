@@ -13,12 +13,13 @@
             </ContainerHost>
         </EntryPoint>
         <EnvironmentVariables>
-            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
+            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice:8001"/>
+            <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="Production"/>
         </EnvironmentVariables>
     </CodePackage>
     <Resources>
         <Endpoints>
-            <Endpoint Name="portabilityservice.analysisengineEndpoint" UriScheme="http" Port="80" Protocol="http"/>
+            <Endpoint Name="portabilityservice.analysisengineEndpoint" Port="8002" />
         </Endpoints>
     </Resources>
 </ServiceManifest>
