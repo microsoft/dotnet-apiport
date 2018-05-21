@@ -26,10 +26,13 @@ Upgrade an existing application to a newer application type. Otherwise, delete a
 .PARAMETER EnvironmentName
 Specify the ASP.NET Core environment to run (Development, Staging, Production); defaults to Production
 
+.PARAMETER ImageTag
+Specify Docker image tag to use when pulling containers
+
 .EXAMPLE
 DeploySF.ps1 -ClusterEndpoint https://portabilityservice.eastus.cloudapp.azure.com:19080 -CertLocation C:\certs\SFCert.pem
 
-DeploySF.ps1 -ClusterEndpoint https://portabilityservice.eastus.cloudapp.azure.com:19080 -CertLocation C:\certs\SFCert.pem -ContainerRegistryUserName portabilityservice -EnvironmentName Development
+DeploySF.ps1 -ClusterEndpoint https://portabilityservice.eastus.cloudapp.azure.com:19080 -CertLocation C:\certs\SFCert.pem -ContainerRegistryUserName portabilityservice -EnvironmentName Development -ImageTag 0.3
 #>
 
 # Parameters
@@ -56,7 +59,10 @@ Param
     $Upgrade,
 
     [String]
-    $EnvironmentName
+    $EnvironmentName,
+
+    [String]
+    $ImageTag
 )
 
 function Check-Success
@@ -130,6 +136,10 @@ if ($ContainerRegistryUserName)
 if ($EnvironmentName)
 {
     $parameters.EnvironmentName = $EnvironmentName
+}
+if ($ImageTag)
+{
+    $parameters.ImageTag = $ImageTag
 }
 $parametersString = ($parameters | ConvertTo-Json -Compress).replace('"', '\"')
 
