@@ -15,7 +15,7 @@ namespace PortabilityService.Functions
     {
         [FunctionName("ReportFormat")]
         public static HttpResponseMessage Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "reportformat/{arg:alpha?}")] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "reportformat/{arg:alpha?}")] HttpRequestMessage req,
             string arg,
             TraceWriter log)
         {

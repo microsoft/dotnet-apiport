@@ -17,7 +17,7 @@ namespace PortabilityService.Functions
     {
         [FunctionName("report")]
         public static HttpResponseMessage Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "report/{submissionId}")] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "report/{submissionId}")] HttpRequestMessage req,
             string submissionId,
             TraceWriter log)
         {
