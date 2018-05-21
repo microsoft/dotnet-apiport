@@ -36,6 +36,22 @@
             <ServicePackageResourceGovernancePolicy/>
         </Policies>
     </ServiceManifestImport>
+    <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="portabilityservice.analysisenginePkg" ServiceManifestVersion="v1"/>
+      <EnvironmentOverrides CodePackageRef="portabilityservice.analysisengine.Code">
+        <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
+      </EnvironmentOverrides>
+      <Policies>
+        <ContainerHostPolicies CodePackageRef="portabilityservice.analysisengine.Code">
+          <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
+          <ImageOverrides>
+            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisengine:0.1" />
+          </ImageOverrides>
+          <PortBinding ContainerPort="80" EndpointRef="portabilityservice.analysisengineEndpoint"/>
+        </ContainerHostPolicies>
+        <ServicePackageResourceGovernancePolicy/>
+      </Policies>
+    </ServiceManifestImport>
     <DefaultServices>
         <Service Name="portabilityservice.configurationservice" ServiceDnsName="portabilityservice.configurationservice" ServicePackageActivationMode="ExclusiveProcess">
             <StatelessService ServiceTypeName="portabilityservice.configurationserviceType">
@@ -46,6 +62,11 @@
             <StatelessService ServiceTypeName="portabilityservice.gatewayType">
                 <SingletonPartition/>
             </StatelessService>
+        </Service>
+        <Service Name="portabilityservice.analysisengine" ServiceDnsName="portabilityservice.analysisengine" ServicePackageActivationMode="ExclusiveProcess">
+          <StatelessService ServiceTypeName="portabilityservice.analysisengineType">
+            <SingletonPartition/>
+          </StatelessService>
         </Service>
     </DefaultServices>
 </ApplicationManifest>

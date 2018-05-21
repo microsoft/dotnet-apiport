@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceManifest 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns="http://schemas.microsoft.com/2011/01/fabric" Name="portabilityservice.analysisenginePkg" Version="v1">
+    <ServiceTypes>
+        <StatelessServiceType ServiceTypeName="portabilityservice.analysisengineType" UseImplicitHost="true"/>
+    </ServiceTypes>
+    <CodePackage Name="portabilityservice.analysisengine.Code" Version="0.1">
+        <EntryPoint>
+            <ContainerHost>
+                <ImageName>portabilityservice.azurecr.io/portabilityservice-analysisengine:0.1</ImageName>
+            </ContainerHost>
+        </EntryPoint>
+        <EnvironmentVariables>
+            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
+        </EnvironmentVariables>
+    </CodePackage>
+    <Resources>
+        <Endpoints>
+            <Endpoint Name="portabilityservice.analysisengineEndpoint" UriScheme="http" Port="80" Protocol="http"/>
+        </Endpoints>
+    </Resources>
+</ServiceManifest>
