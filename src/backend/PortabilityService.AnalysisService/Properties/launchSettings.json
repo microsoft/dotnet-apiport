@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PortabilityService.AnalysisEngine": {
+    "PortabilityService.AnalysisService": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

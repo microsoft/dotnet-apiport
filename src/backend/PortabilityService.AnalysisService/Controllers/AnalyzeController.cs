@@ -9,7 +9,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Threading.Tasks;
 
-namespace PortabilityService.AnalysisEngine.Controllers
+namespace PortabilityService.AnalysisService.Controllers
 {
     [Route("api/[controller]")]
     public class AnalyzeController : Controller

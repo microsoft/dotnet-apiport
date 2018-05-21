@@ -9,6 +9,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
-  portabilityservice.analysisengine:
+  portabilityservice.analysisservice:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

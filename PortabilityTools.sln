@@ -97,7 +97,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Workflow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Azure", "src\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj", "{A761180A-067A-4238-AA66-5BB27A59B792}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.AnalysisEngine", "src\backend\PortabilityService.AnalysisEngine\PortabilityService.AnalysisEngine.csproj", "{0B1CB15D-ADE9-4D6C-B338-E616AF173212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.AnalysisService", "src\backend\PortabilityService.AnalysisService\PortabilityService.AnalysisService.csproj", "{0B1CB15D-ADE9-4D6C-B338-E616AF173212}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Functions.DependencyInjection", "src\backend\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj", "{9C5D8008-5A48-4CF6-B3B1-530BDFD07142}"
 EndProject
@@ -105,7 +105,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.Configur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.ConfigurationService.Tests", "tests\backend\PortabilityService.ConfigurationService.Tests\PortabilityService.ConfigurationService.Tests.csproj", "{3F71D970-3C1A-457D-8709-10AFF582360B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.AnalysisEngine.Tests", "tests\backend\PortabilityService.AnalysisEngine.Tests\PortabilityService.AnalysisEngine.Tests.csproj", "{5F0E19AC-8026-47BB-9AD8-F190A03827A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortabilityService.AnalysisService.Tests", "tests\backend\PortabilityService.AnalysisService.Tests\PortabilityService.AnalysisService.Tests.csproj", "{5F0E19AC-8026-47BB-9AD8-F190A03827A7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.ConfigurationProvider", "src\lib\Microsoft.Fx.Portability.ConfigurationProvider\Microsoft.Fx.Portability.ConfigurationProvider.csproj", "{170BB8C9-D838-41F4-9AB4-7271AFB1D277}"
 EndProject
