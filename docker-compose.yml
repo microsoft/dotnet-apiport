@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: src/backend/PortabilityService.AnalysisEngine/Dockerfile
     ports:
-      - "80:80"
+      - "80"
     depends_on:
       - portabilityservice.configurationservice
     environment:
