@@ -7,7 +7,7 @@
         "DownstreamScheme": "https",
         "DownstreamHostAndPorts": [
           {
-            "Host": "portability.dot.net",
+            "Host": "dotnetportability.azurewebsites.net",
             "Port": 443
           }
         ],
@@ -77,7 +77,7 @@
         "QoSOptions": {
           "ExceptionsAllowedBeforeBreaking": 3,
           "DurationOfBreak": 10000,
-          "TimeoutValue": 5000
+          "TimeoutValue": 8000
         }
       },
       {
@@ -96,7 +96,7 @@
         "QoSOptions": {
           "ExceptionsAllowedBeforeBreaking": 3,
           "DurationOfBreak": 10000,
-          "TimeoutValue": 5000
+          "TimeoutValue": 8000
         }
       },
       {
@@ -160,7 +160,7 @@
         "QoSOptions": {
           "ExceptionsAllowedBeforeBreaking": 3,
           "DurationOfBreak": 10000,
-          "TimeoutValue": 5000
+          "TimeoutValue": 8000
         }
       },
       {
@@ -190,41 +190,41 @@
       },
 
       {
-        "RouteDescription": "ResultFormat Service Redirect",
-        "DownstreamPathTemplate": "/api/resultformat",
+        "RouteDescription": "ReportFormat Service Redirect",
+        "DownstreamPathTemplate": "/api/reportformat",
         "DownstreamScheme": "https",
         "DownstreamHostAndPorts": [
           {
-            "Host": "portability.dot.net",
+            "Host": "dotnetportability.azurewebsites.net",
             "Port": 443
           }
         ],
-        "UpstreamPathTemplate": "/api/resultformat",
+        "UpstreamPathTemplate": "/api/reportformat",
         "UpstreamHttpMethod": [ "GET" ],
         "FileCacheOptions": { "TtlSeconds": 5 },
         "QoSOptions": {
           "ExceptionsAllowedBeforeBreaking": 3,
           "DurationOfBreak": 10000,
-          "TimeoutValue": 5000
+          "TimeoutValue": 8000
         }
       },
       {
-        "RouteDescription": "Default ResultFormat Service Redirect",
-        "DownstreamPathTemplate": "/api/resultformat/default",
+        "RouteDescription": "Default ReportFormat Service Redirect",
+        "DownstreamPathTemplate": "/api/reportformat/{path}",
         "DownstreamScheme": "https",
         "DownstreamHostAndPorts": [
           {
-            "Host": "portability.dot.net",
+            "Host": "dotnetportability.azurewebsites.net",
             "Port": 443
           }
         ],
-        "UpstreamPathTemplate": "/api/resultformat/default",
+        "UpstreamPathTemplate": "/api/reportformat/{path}",
         "UpstreamHttpMethod": [ "GET" ],
         "FileCacheOptions": { "TtlSeconds": 5 },
         "QoSOptions": {
           "ExceptionsAllowedBeforeBreaking": 3,
           "DurationOfBreak": 10000,
-          "TimeoutValue": 5000
+          "TimeoutValue": 8000
         }
       },
 
@@ -244,7 +244,7 @@
         "QoSOptions": {
           "ExceptionsAllowedBeforeBreaking": 3,
           "DurationOfBreak": 10000,
-          "TimeoutValue": 5000
+          "TimeoutValue": 8000
         }
       }
     ],
