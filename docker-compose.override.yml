@@ -8,3 +8,7 @@ services:
   portabilityservice.configurationservice:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+
+  portabilityservice.analysisengine:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

@@ -2,14 +2,14 @@
 <ServiceManifest 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns="http://schemas.microsoft.com/2011/01/fabric" Name="portabilityservice.gatewayPkg" Version="v1">
+    xmlns="http://schemas.microsoft.com/2011/01/fabric" Name="portabilityservice.analysisenginePkg" Version="v1">
     <ServiceTypes>
-        <StatelessServiceType ServiceTypeName="portabilityservice.gatewayType" UseImplicitHost="true"/>
+        <StatelessServiceType ServiceTypeName="portabilityservice.analysisengineType" UseImplicitHost="true"/>
     </ServiceTypes>
-    <CodePackage Name="portabilityservice.gateway.Code" Version="0.1">
+    <CodePackage Name="portabilityservice.analysisengine.Code" Version="0.1">
         <EntryPoint>
             <ContainerHost>
-                <ImageName>portabilityservice.azurecr.io/portabilityservice-gateway:0.2</ImageName>
+                <ImageName>portabilityservice.azurecr.io/portabilityservice-analysisengine:0.1</ImageName>
             </ContainerHost>
         </EntryPoint>
         <EnvironmentVariables>
@@ -19,7 +19,7 @@
     </CodePackage>
     <Resources>
         <Endpoints>
-            <Endpoint Name="portabilityservice.gatewayEndpoint" UriScheme="http" Port="80" Protocol="http"/>
+            <Endpoint Name="portabilityservice.analysisengineEndpoint" Port="8002" />
         </Endpoints>
     </Resources>
 </ServiceManifest>

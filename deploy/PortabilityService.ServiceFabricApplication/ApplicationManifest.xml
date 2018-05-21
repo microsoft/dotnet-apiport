@@ -6,9 +6,13 @@
     <Parameters>
         <Parameter Name="RepositoryUserName" DefaultValue="portabilityservice" />
         <Parameter Name="RepositoryPassword" DefaultValue="RepositoryPasswordHere" />
+        <Parameter Name="EnvironmentName" DefaultValue="Production" />
     </Parameters>
     <ServiceManifestImport>
         <ServiceManifestRef ServiceManifestName="portabilityservice.configurationservicePkg" ServiceManifestVersion="v1"/>
+        <EnvironmentOverrides CodePackageRef="portabilityservice.configurationservice.Code">
+            <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="[EnvironmentName]"/>
+        </EnvironmentOverrides>
         <Policies>
             <ContainerHostPolicies CodePackageRef="portabilityservice.configurationservice.Code">
                 <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
@@ -23,7 +27,8 @@
     <ServiceManifestImport>
         <ServiceManifestRef ServiceManifestName="portabilityservice.gatewayPkg" ServiceManifestVersion="v1"/>
         <EnvironmentOverrides CodePackageRef="portabilityservice.gateway.Code">
-            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice"/>
+            <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice:8001"/>
+            <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="[EnvironmentName]"/>
         </EnvironmentOverrides>
         <Policies>
             <ContainerHostPolicies CodePackageRef="portabilityservice.gateway.Code">
@@ -36,6 +41,23 @@
             <ServicePackageResourceGovernancePolicy/>
         </Policies>
     </ServiceManifestImport>
+    <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="portabilityservice.analysisenginePkg" ServiceManifestVersion="v1"/>
+      <EnvironmentOverrides CodePackageRef="portabilityservice.analysisengine.Code">
+        <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice:8001"/>
+        <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="[EnvironmentName]"/>
+      </EnvironmentOverrides>
+      <Policies>
+        <ContainerHostPolicies CodePackageRef="portabilityservice.analysisengine.Code">
+          <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
+          <ImageOverrides>
+            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisengine:0.1" />
+          </ImageOverrides>
+          <PortBinding ContainerPort="80" EndpointRef="portabilityservice.analysisengineEndpoint"/>
+        </ContainerHostPolicies>
+        <ServicePackageResourceGovernancePolicy/>
+      </Policies>
+    </ServiceManifestImport>
     <DefaultServices>
         <Service Name="portabilityservice.configurationservice" ServiceDnsName="portabilityservice.configurationservice" ServicePackageActivationMode="ExclusiveProcess">
             <StatelessService ServiceTypeName="portabilityservice.configurationserviceType">
@@ -43,9 +65,14 @@
             </StatelessService>
         </Service>
         <Service Name="portabilityservice.gateway" ServiceDnsName="portabilityservice.gateway" ServicePackageActivationMode="ExclusiveProcess">
-            <StatelessService ServiceTypeName="portabilityservice.gatewayType">
+            <StatelessService ServiceTypeName="portabilityservice.gatewayType" InstanceCount="-1">
                 <SingletonPartition/>
             </StatelessService>
+        </Service>
+        <Service Name="portabilityservice.analysisengine" ServiceDnsName="portabilityservice.analysisengine" ServicePackageActivationMode="ExclusiveProcess">
+          <StatelessService ServiceTypeName="portabilityservice.analysisengineType">
+            <SingletonPartition/>
+          </StatelessService>
         </Service>
     </DefaultServices>
 </ApplicationManifest>
