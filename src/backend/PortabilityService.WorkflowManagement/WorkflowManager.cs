@@ -84,7 +84,7 @@ namespace PortabilityService.WorkflowManagement
         public async Task<WorkflowQueueMessage> ExecuteActionsToNextStage(WorkflowQueueMessage currentMsg, CancellationToken cancelToken)
         {
             //Get action corresponding to the current message's workflow stage
-            Debug.Assert(actions.Length - 1 > (int)currentMsg.Stage, "Stage must be within bounds of Actions array.");
+            Debug.Assert((int)currentMsg.Stage < actions.Length, "Stage must be within bounds of Actions array.");
             var action = actions[(int)currentMsg.Stage];
             Debug.Assert(action.CurrentStage == currentMsg.Stage, "Action's Stage must match current message's Stage.");
 
