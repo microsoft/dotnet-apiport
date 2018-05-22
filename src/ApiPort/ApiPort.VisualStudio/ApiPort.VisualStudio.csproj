@@ -64,14 +64,16 @@
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.5.100" />
-    <PackageReference Include="VSLangProj140" Version="14.0.25029" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.3.25407" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="15.4.27004" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.6.170" />
+    <PackageReference Include="VSLangProj140" Version="14.0.25030" />
+    <PackageReference Include="VSLangProj150" Version="15.0.26229" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyRedirectResolver.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
+    <Compile Include="StatusBarProgressReporter.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
     <Compile Include="Utils\TargetPlatformDisplayNameConverter.cs" />
     <Compile Include="Utils\TargetInformationStringConverter.cs" />
@@ -120,10 +122,6 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApiPort.VisualStudio.2015\ApiPort.VisualStudio.2015.csproj">
-      <Project>{9def460b-6383-4665-839b-c0b5e6bb6a5f}</Project>
-      <Name>ApiPort.VisualStudio.2015</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ApiPort.VisualStudio.2017\ApiPort.VisualStudio.2017.csproj">
       <Project>{c0629a8d-7107-46cf-83b8-408e1886ab36}</Project>
       <Name>ApiPort.VisualStudio.2017</Name>
@@ -143,11 +141,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\UtilsResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AnalysisOutputToolWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OptionsPageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Resources\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

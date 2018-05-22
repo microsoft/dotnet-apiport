@@ -35,7 +35,7 @@ namespace ApiPortVS
             _productInfo = new ProductInformation("AnalyzeMenu");
         }
 
-        public async void AnalyzeSelectedProjectsAsync(bool includeDependencies)
+        public async Task AnalyzeSelectedProjectsAsync(bool includeDependencies)
         {
             var projects = GetSelectedProjects();
 

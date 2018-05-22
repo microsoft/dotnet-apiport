@@ -152,12 +152,15 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             testData.Add(mi3, usedIn2);
 
             var targets = new List<FrameworkName>() { new FrameworkName("Windows Phone, version=8.1") };
-
+            var dummyFrameworkName = new FrameworkName(".NET Framework, Version=1.1");
             var catalog = Substitute.For<IApiCatalogLookup>();
+
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(mi1.DefinedInAssemblyIdentity)).Returns(true);
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(mi2.DefinedInAssemblyIdentity)).Returns(true);
             catalog.IsFrameworkMember(mi1.MemberDocId).Returns(true);
             catalog.IsFrameworkMember(mi2.MemberDocId).Returns(true);
+            catalog.GetSupportedVersions(mi1.MemberDocId).Returns(new[] { dummyFrameworkName });
+            catalog.GetSupportedVersions(mi2.MemberDocId).Returns(new[] { dummyFrameworkName });
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
@@ -186,12 +189,15 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             testData.Add(mi3, usedIn2);
 
             var targets = new List<FrameworkName>() { new FrameworkName("Windows Phone, version=8.1") };
+            var dummyFrameworkName = new FrameworkName(".NET Framework, Version=1.1");
 
             var catalog = Substitute.For<IApiCatalogLookup>();
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(mi1.DefinedInAssemblyIdentity)).Returns(true);
             catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(mi2.DefinedInAssemblyIdentity)).Returns(true);
             catalog.IsFrameworkMember(mi1.MemberDocId).Returns(true);
             catalog.IsFrameworkMember(mi2.MemberDocId).Returns(true);
+            catalog.GetSupportedVersions(mi1.MemberDocId).Returns(new[] { dummyFrameworkName });
+            catalog.GetSupportedVersions(mi2.MemberDocId).Returns(new[] { dummyFrameworkName });
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ApiPortVS.ViewModels
@@ -193,6 +194,11 @@ namespace ApiPortVS.ViewModels
         private async Task UpdateTargetsAsync()
         {
             var targets = await GetTargetsAsync().ConfigureAwait(false);
+
+            // TODO we do this to ensure the TargetPlatforms below are created on the
+            // UI thread. Probably better to do this with VSThreadingService.SwitchToMainThreadAsync..
+            // but that doesn't just work here.
+            SynchronizationContext.SetSynchronizationContext(Context);
             var canonicalPlatforms = targets.GroupBy(t => t.Name).Select(t =>
             {
                 return new TargetPlatform

@@ -322,4 +322,19 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="SelectDefaultOutputDirectory" xml:space="preserve">
     <value>Select default output directory</value>
   </data>
+  <data name="AvailableReports" xml:space="preserve">
+    <value>Available reports:</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Open Directory</value>
+  </data>
+  <data name="OpenReport" xml:space="preserve">
+    <value>Open Report</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="RefreshingPlatformsComplete" xml:space="preserve">
+    <value>Platform list refresh complete</value>
+  </data>
 </root>
