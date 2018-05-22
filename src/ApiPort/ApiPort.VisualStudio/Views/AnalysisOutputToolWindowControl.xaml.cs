@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using ApiPortVS.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ApiPortVS
@@ -13,7 +13,15 @@ namespace ApiPortVS
         /// </summary>
         public AnalysisOutputToolWindowControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private void ListView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue && sender is ListView listView)
+            {
+                listView.SelectedIndex = 0;
+            }
         }
     }
 }

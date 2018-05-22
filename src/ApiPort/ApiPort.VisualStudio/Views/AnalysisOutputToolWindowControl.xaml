@@ -10,7 +10,8 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
              xmlns:const="clr-namespace:ApiPortVS.Resources;assembly=ApiPort.VisualStudio.Common"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
-             Name="PortabilityResultsToolbar">
+             Name="PortabilityResultsToolbar"
+             Style="{DynamicResource AnalysisOutputToolWindowStyle}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,23 +26,28 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Text="{x:Static const:LocalizedStrings.AvailableReports}"
-                   AutomationProperties.Name="{x:Static const:LocalizedStrings.AvailableReports}"
                    Style="{DynamicResource ToolWindowTextBlockStyle}"
                    Margin="5"
                    FontWeight="Bold"
                    Grid.Row="0"/>
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
+            <ScrollViewer AutomationProperties.Name="{x:Static const:LocalizedStrings.AvailableReports}"
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto"
                           Background="Transparent"
                           IsTabStop="False">
                 <ListView ItemsSource="{Binding Paths}"
-                          ItemContainerStyle="{DynamicResource ToolWindowListBoxItemStyle}"
                           HorizontalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
                           KeyboardNavigation.TabNavigation="Continue"
                           Background="Transparent"
+                          IsVisibleChanged="ListView_IsVisibleChanged"
                           IsTabStop="False">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="AutomationProperties.Name" Value="{Binding Path=., Converter={StaticResource PathToFileNameConverter}}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,5"
@@ -55,41 +61,25 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                                 <TextBlock Text="{Binding Path=., Converter={StaticResource PathToFileNameConverter}}"
                                            AutomationProperties.Name="{Binding Path=., Converter={StaticResource PathToFileNameConverter}}"
                                            Style="{DynamicResource ToolWindowTextBlockStyle}"
-                                           Margin="5,0"
-                                           Grid.Column="0"/>
+                                           Margin="5,3" />
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                                             KeyboardNavigation.TabNavigation="Continue"
                                             Grid.Column="2">
-                                    <TextBlock Margin="5,0">
-                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.OpenFile}"
-                                                   CommandParameter="{Binding}"
-                                                   Style="{DynamicResource ToolWindowHyperlinkStyle}">
-                                            <TextBlock Text="{x:Static const:LocalizedStrings.OpenReport}"
-                                                       AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenReport}"
-                                                       KeyboardNavigation.IsTabStop="true"
-                                                       Style="{DynamicResource ToolWindowTextBlockStyle}" />
-                                        </Hyperlink>
-                                    </TextBlock>
-                                    <TextBlock Margin="5,0">
-                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenDirectory}"
-                                                   CommandParameter="{Binding}"
-                                                   Style="{DynamicResource ToolWindowHyperlinkStyle}">
-                                            <TextBlock Text="{x:Static const:LocalizedStrings.OpenDirectory}"
-                                                       AutomationProperties.Name="{x:Static const:LocalizedStrings.OpenDirectory}"
-                                                       KeyboardNavigation.IsTabStop="true"
-                                                       Style="{DynamicResource ToolWindowTextBlockStyle}" />
-                                        </Hyperlink>
-                                    </TextBlock>
-                                    <TextBlock Margin="5,0">
-                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SaveAs}"
-                                                   CommandParameter="{Binding}"
-                                                   Style="{DynamicResource ToolWindowHyperlinkStyle}">
-                                            <TextBlock Text="{x:Static const:LocalizedStrings.SaveAs}"
-                                                       AutomationProperties.Name="{x:Static const:LocalizedStrings.SaveAs}"
-                                                       KeyboardNavigation.IsTabStop="true"
-                                                       Style="{DynamicResource ToolWindowTextBlockStyle}" />
-                                        </Hyperlink>
-                                    </TextBlock>
+                                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.OpenFile}"
+                                            CommandParameter="{Binding}"
+                                            Content="{x:Static const:LocalizedStrings.OpenReport}"
+                                            Margin="5,0"
+                                            Padding="5,2" />
+                                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.OpenDirectory}"
+                                            CommandParameter="{Binding}"
+                                            Content="{x:Static const:LocalizedStrings.OpenDirectory}"
+                                            Margin="5,0"
+                                            Padding="5,2" />
+                                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.SaveAs}"
+                                            CommandParameter="{Binding}"
+                                            Content="{x:Static const:LocalizedStrings.SaveAs}"
+                                            Margin="5,0"
+                                            Padding="5,2" />
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>

@@ -334,4 +334,7 @@ There is no public build for https://github.com/Microsoft/cci yet, which support
   <data name="SaveAs" xml:space="preserve">
     <value>Save As</value>
   </data>
+  <data name="RefreshingPlatformsComplete" xml:space="preserve">
+    <value>Platform list refresh complete</value>
+  </data>
 </root>

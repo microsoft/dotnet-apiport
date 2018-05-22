@@ -2,32 +2,34 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Resources;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Microsoft.Fx.Portability
 {
-    public sealed class TextWriterProgressReporter : IProgressReporter
+    public class TextWriterProgressReporter : IProgressReporter
     {
         private readonly List<string> _issuesReported = new List<string>();
-        private readonly TextWriter _textWriter;
 
         public TextWriterProgressReporter(TextWriter textWriter)
         {
-            _textWriter = textWriter;
+            Writer = textWriter;
         }
 
-        public IProgressTask StartTask(string taskName)
+        protected TextWriter Writer { get; }
+
+        public virtual IProgressTask StartTask(string taskName)
         {
-            return new TextWriterProgressTask(_textWriter, taskName);
+            return new TextWriterProgressTask(Writer, taskName);
         }
 
-        public IProgressTask StartTask(string taskName, int total)
+        public virtual IProgressTask StartTask(string taskName, int total)
         {
             return StartTask(taskName);
         }
 
-        public IReadOnlyCollection<string> Issues { get { return _issuesReported.AsReadOnly(); } }
+        public IReadOnlyCollection<string> Issues => _issuesReported.AsReadOnly();
 
         public void ReportIssue(string issue)
         {
@@ -40,10 +42,17 @@ namespace Microsoft.Fx.Portability
         public void Resume()
         { }
 
-        public void Dispose()
-        { }
+        protected virtual void Dispose(bool disposing)
+        {
+        }
 
-        private sealed class TextWriterProgressTask : IProgressTask
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected class TextWriterProgressTask : IProgressTask
         {
             private readonly TextWriter _textWriter;
             private readonly string _task;
@@ -57,18 +66,24 @@ namespace Microsoft.Fx.Portability
                 _textWriter.Write(_task + " ");
             }
 
-            public void ReportUnitComplete()
+            public virtual void ReportUnitComplete()
             {
             }
 
-            public void Abort()
+            public virtual void Abort()
             {
                 EndTask(LocalizedStrings.ProgressReportFailed);
             }
 
-            public void Dispose()
+            protected virtual void Dispose(bool disposing)
             {
                 EndTask(LocalizedStrings.ProgressReportDone);
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
             }
 
             private void EndTask(string message)
