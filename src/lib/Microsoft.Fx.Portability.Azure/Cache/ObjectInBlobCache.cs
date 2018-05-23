@@ -22,7 +22,7 @@ namespace Microsoft.Fx.Portability.Cache
         private readonly CloudBlobContainer _blobContainer;
 
         public ObjectInBlobCache(CloudStorageAccount storageAccount, string containerName, string blobName, TimeSpan updateFrequency, CancellationToken cancellationToken)
-            : base(cancellationToken, updateFrequency, String.Format("{0}/{1}", containerName, blobName))
+            : base(updateFrequency, $"{containerName}/{blobName}", cancellationToken)
         {
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Cache
 
             if (_blobContainer == null)
             {
-                throw new InvalidOperationException(string.Format("Could not find container '{0}'", containerName));
+                throw new InvalidOperationException($"Could not find container '{containerName}'");
             }
         }
 
@@ -52,7 +52,7 @@ namespace Microsoft.Fx.Portability.Cache
                 Trace.WriteLine("ERROR: Could not connect to storage account");
             }
 
-            Trace.WriteLine(String.Format("Could not find blob: {0}/{1}", _blobContainer.Name, _blobName));
+            Trace.WriteLine($"Could not find blob: {_blobContainer.Name}/{_blobName}");
 
             return DateTimeOffset.MinValue;
         }
