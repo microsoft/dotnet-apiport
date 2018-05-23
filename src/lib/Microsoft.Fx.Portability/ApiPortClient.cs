@@ -128,7 +128,7 @@ namespace Microsoft.Fx.Portability
             return new ReportingResultPaths
             {
                 Paths = outputPaths,
-                Result = GetReportingResult(results.Request, result, results.Info)
+                Result = GetReportingResult(results.Request, result)
             };
         }
 
@@ -347,7 +347,7 @@ namespace Microsoft.Fx.Portability
             };
         }
 
-        private ReportingResult GetReportingResult(AnalyzeRequest request, AnalyzeResult result, IDependencyInfo dependencyInfo)
+        private ReportingResult GetReportingResult(AnalyzeRequest request, AnalyzeResult result)
         {
             if (result == null)
             {
@@ -358,17 +358,7 @@ namespace Microsoft.Fx.Portability
             {
                 try
                 {
-                    return _reportGenerator.ComputeReport(
-                        result.Targets,
-                        result.SubmissionId,
-                        request.RequestFlags,
-                        dependencyInfo?.Dependencies,
-                        result.MissingDependencies,
-                        dependencyInfo?.UnresolvedAssemblies,
-                        result.UnresolvedUserAssemblies,
-                        dependencyInfo?.AssembliesWithErrors,
-                        result.NuGetPackages
-                    );
+                    return _reportGenerator.ComputeReport(request, result);
                 }
                 catch (Exception)
                 {
