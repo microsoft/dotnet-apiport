@@ -112,6 +112,14 @@ steps:
     ArtifactType: Container
   enabled: false
 
+- task: DockerCompose
+  inputs:
+    ContainerRegistryType: "Azure Container Registry"
+    DockerRegistryEndpoint: "PortabilityService-Development"
+    AzureContainerRegistry: "portabilityservice"
+    DockerComposeFile: "docker-compose.yml"
+
+
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-fxcop.FxCop@2
   inputs:
     inputType: Basic
