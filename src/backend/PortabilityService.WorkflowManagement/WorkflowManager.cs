@@ -12,7 +12,6 @@ namespace PortabilityService.WorkflowManagement
     public enum WorkflowStage
     {
         Analyze,
-        Report,
         Telemetry,
         Finished
     }
@@ -51,11 +50,9 @@ namespace PortabilityService.WorkflowManagement
             actions = new IWorkflowAction[Enum.GetValues(typeof(WorkflowStage)).Length-1];
 
             var analyzeServiceUrl = ConfigurationManager.AppSettings["AnalyzeServiceUrl"];
-            var reportServiceUrl = ConfigurationManager.AppSettings["ReportServiceUrl"];
             var telemetryServiceUrl = ConfigurationManager.AppSettings["TelemetryServiceUrl"];
 
             AddAction(new AnalyzeAction(analyzeServiceUrl));
-            AddAction(new ReportAction(reportServiceUrl));
             AddAction(new TelemetryAction(telemetryServiceUrl));
         }
 
