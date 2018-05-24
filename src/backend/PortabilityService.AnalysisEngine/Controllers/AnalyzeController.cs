@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.ObjectModel;
+using System;
+using System.Threading.Tasks;
 
 namespace PortabilityService.AnalysisEngine.Controllers
 {
@@ -89,25 +89,11 @@ namespace PortabilityService.AnalysisEngine.Controllers
                 //TODO: invoke the real analysis engine to do the work
                 //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
 
-                return Task.FromResult(new AnalyzeResult
+                using (var stream = typeof(AnalyzeController).Assembly.GetManifestResourceStream("apiport-demo.dll.json"))
                 {
-                    MissingDependencies = new System.Collections.Generic.List<MemberInfo>
-                    {
-                        new MemberInfo { MemberDocId = "doc1" },
-                        new MemberInfo { MemberDocId = "doc2" }
-                    },
-                    SubmissionId = Guid.NewGuid().ToString(),
-                    Targets = new System.Collections.Generic.List<System.Runtime.Versioning.FrameworkName>
-                    {
-                        new System.Runtime.Versioning.FrameworkName("target1", Version.Parse("1.0.0.0"))
-                    },
-                    UnresolvedUserAssemblies = new System.Collections.Generic.List<string>
-                    {
-                        "assembly1",
-                        "assembly2",
-                        "assembly3"
-                    }
-                });
+                    var analyzeResult = DataExtensions.Deserialize<AnalyzeResult>(stream);
+                    return Task.FromResult(analyzeResult);
+                }
             }
         }
     }
