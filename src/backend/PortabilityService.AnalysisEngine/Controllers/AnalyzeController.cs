@@ -59,12 +59,6 @@ namespace PortabilityService.AnalysisEngine.Controllers
 
                 await _storage.SaveResultToBlobAsync(submissionId, result);
 
-                // if the user opted out of us collecting telemetry
-                if (request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
-                {
-                    await _storage.DeleteRequestFromBlobAsync(submissionId);
-                }
-
                 return Ok();
             }
             catch (Exception exception)
