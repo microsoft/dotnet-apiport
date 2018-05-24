@@ -23,6 +23,7 @@
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Fx.Portability.Azure;
 using Microsoft.Fx.Portability.Azure.Storage;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.WindowsAzure.Storage;
@@ -64,6 +65,7 @@ namespace PortabilityService.Functions.DependencyInjection
 
             services.AddSingleton(CloudStorageAccount.Parse(connection));
             services.AddScoped<IStorage, AzureStorage>(CreateStorage);
+            services.AddSingleton<IReportTokenValidator, ReversedIdTokenValidator>();
         }
 
         private static AzureStorage CreateStorage(IServiceProvider arg)

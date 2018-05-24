@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.Azure;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reports;
@@ -28,9 +29,10 @@ namespace PortabilityService.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "report/{submissionId}")] HttpRequestMessage req,
             string submissionId,
             [Inject] IStorage storage,
+            [Inject] IReportTokenValidator validator,
             ILogger log)
         {
-            if (!ValidAccessKey(req))
+            if (!validator.RequestHasValidToken(req))
             {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
             }
@@ -110,24 +112,6 @@ namespace PortabilityService.Functions
 
                 return new ByteArrayContent(stream.ToArray());
             }
-        }
-
-        public static bool ValidAccessKey(HttpRequestMessage request)
-        {
-            // TODO generate and persist a new unique key in Analyze, validate it here
-            var authHeader = request.Headers.Authorization;
-            if (authHeader == null || !authHeader.Scheme.Equals("Bearer", StringComparison.Ordinal))
-            {
-                return false;
-            }
-
-            var token = authHeader.Parameter;
-            var submissionId = request.RequestUri.Segments.Last();
-            var chars = submissionId.ToCharArray();
-            Array.Reverse(chars);
-            var expectedToken = new string(chars);
-
-            return token.Equals(expectedToken, StringComparison.Ordinal);
         }
     }
 }
