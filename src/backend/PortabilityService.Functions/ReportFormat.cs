@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Fx.Portability;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 
@@ -29,20 +30,8 @@ namespace PortabilityService.Functions
                 : req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        private static readonly ResultFormatInformation[] Formats = new[]
-        {
-            new ResultFormatInformation
-            {
-                DisplayName = "Excel",
-                MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                FileExtension = ".xlsx"
-            },
-            new ResultFormatInformation
-            {
-                DisplayName = "Json",
-                FileExtension = ".json",
-                MimeType = "application/json"
-            }
-        };
+        private static ResultFormatInformation[] Formats { get; } = Report.ReportWriters
+            .Select(writer => writer.Format)
+            .ToArray();
     }
 }
