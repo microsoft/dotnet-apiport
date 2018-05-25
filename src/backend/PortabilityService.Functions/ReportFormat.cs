@@ -3,7 +3,6 @@
 
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Fx.Portability;
 using System;
 using System.Linq;
@@ -17,8 +16,7 @@ namespace PortabilityService.Functions
         [FunctionName("ReportFormat")]
         public static HttpResponseMessage Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "reportformat/{arg:alpha?}")] HttpRequestMessage req,
-            string arg,
-            TraceWriter log)
+            string arg)
         {
             if (arg == null)
             {
