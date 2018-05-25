@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.Azure.ObjectModel;
 using Microsoft.Fx.Portability.Azure.Storage;
 using Microsoft.Fx.Portability.Cache;
 using Microsoft.Fx.Portability.ObjectModel;
@@ -35,18 +34,6 @@ namespace PortabilityService.AnalysisService
             {
                 var settings = arg.Resolve<IServiceSettings>();
 
-                return new ObjectInBlobCache<FxApiUsageData>(settings.StorageAccount, "data", "fxmember.json.gz", settings.UpdateFrequency, CancellationToken.None);
-            })
-                .As<IObjectCache<FxApiUsageData>>()
-                .As<IObjectCache>()
-                .SingleInstance()
-                .OnActivated(o => o.Instance.Start())
-                .AutoActivate();
-
-            builder.Register(arg =>
-            {
-                var settings = arg.Resolve<IServiceSettings>();
-
                 return new CatalogInBlobIndexCache(settings, CancellationToken.None);
             })
                 .As<IObjectCache<CatalogIndex>>()
@@ -55,17 +42,14 @@ namespace PortabilityService.AnalysisService
                 .OnActivated(o => o.Instance.Start())
                 .AutoActivate();
 
-            // TODO (yumeng): replace with a concrete type implementing IApiCatalogLookup and interacts with 
-            // the catelog service.
+            // TODO (yumeng): replace UnioningApiCatalogLookup with a concrete type implementing IApiCatalogLookup
+            // and interacting with the planned catelog service.
             builder.RegisterAdapter<IObjectCache<CatalogIndex>, IApiCatalogLookup>(cache => cache.Value.Catalog)
                 .InstancePerLifetimeScope();
 
             builder.RegisterAdapter<IObjectCache<CatalogIndex>, ISearcher<string>>(cache => cache.Value.Index)
                 .InstancePerLifetimeScope()
                 .ExternallyOwned();
-
-            builder.RegisterAdapter<IObjectCache<FxApiUsageData>, FxApiUsageData>(cache => cache.Value)
-                .InstancePerLifetimeScope();
 
             builder.Register(CreateTargetNameParser).As<ITargetNameParser>().InstancePerLifetimeScope();
             builder.Register(CreateTargetMapper).As<ITargetMapper>().InstancePerLifetimeScope();
@@ -75,6 +59,7 @@ namespace PortabilityService.AnalysisService
             builder.RegisterType<ReportGenerator>().As<IReportGenerator>().SingleInstance();
             builder.RegisterType<CloudPackageFinder>().As<IPackageFinder>().SingleInstance();
 
+            //TODO (yumeng): replace DummyRecommendations with a real implementation
             builder.RegisterType<DummyRecommendations>().As<IApiRecommendations>().InstancePerLifetimeScope();
 
             builder.Register(CreateStorage).As<IStorage>().SingleInstance();

@@ -86,7 +86,7 @@ namespace PortabilityService.AnalysisService
 
         /// <summary>
         /// Parse a string containing target names into FrameworkNames.
-        /// 
+        ///
         /// Try the following in order:
         ///   1. Check if the target specified uses the 'simple' name (i.e. Windows, .NET Framework) then get the default or latest version of it
         ///   2. Try to parse it as a target name. If the target was not a valid FrameworkName, an exception will be thrown

@@ -71,7 +71,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// <summary>
         /// Gets the ApiDefinition for a docId.
         /// </summary>
-        /// <returns>The corresponding ApiDefinition if it exists.  
+        /// <returns>The corresponding ApiDefinition if it exists.
         /// If docId is null/empty or does not exist, returns null.</returns>
         public ApiDefinition GetApiDefinition(string docId)
         {
