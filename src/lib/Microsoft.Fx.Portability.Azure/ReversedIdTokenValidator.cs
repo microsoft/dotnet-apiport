@@ -9,6 +9,7 @@ namespace Microsoft.Fx.Portability.Azure
 {
     public class ReversedIdTokenValidator : IReportTokenValidator
     {
+        // TODO this for development use, don't use in production
         public bool RequestHasValidToken(HttpRequestMessage request)
         {
             var authHeader = request.Headers.Authorization;

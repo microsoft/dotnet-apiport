@@ -65,6 +65,8 @@ namespace PortabilityService.Functions.DependencyInjection
 
             services.AddSingleton(CloudStorageAccount.Parse(connection));
             services.AddScoped<IStorage, AzureStorage>(CreateStorage);
+
+            // TODO this for development use, don't use in production
             services.AddSingleton<IReportTokenValidator, ReversedIdTokenValidator>();
         }
 
