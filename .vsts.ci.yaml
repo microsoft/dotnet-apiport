@@ -115,7 +115,7 @@ steps:
 - task: DockerCompose@0
   inputs:
     ContainerRegistryType: "Azure Container Registry"
-    DockerRegistryEndpoint: "PortabilityService-Development"
+    AzureSubscriptionEndpoint: "PortabilityService-Development"
     AzureContainerRegistry: "portabilityservice"
     DockerComposeFile: "docker-compose.yml"
 
