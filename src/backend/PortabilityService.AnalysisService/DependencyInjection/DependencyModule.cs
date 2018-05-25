@@ -7,19 +7,19 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analysis;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Azure.ObjectModel;
+using Microsoft.Fx.Portability.Azure.Storage;
 using Microsoft.Fx.Portability.Cache;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.WindowsAzure.Storage;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PortabilityService.AnalysisService
 {
     public class DependencyModule : Module
     {
+        private const string BlobStorageConnectionStringKeyName = "BlobStorageConnectionString";
+
         public DependencyModule(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -55,30 +55,43 @@ namespace PortabilityService.AnalysisService
                 .OnActivated(o => o.Instance.Start())
                 .AutoActivate();
 
+            // TODO (yumeng): replace with a concrete type implementing IApiCatalogLookup and interacts with 
+            // the catelog service.
             builder.RegisterAdapter<IObjectCache<CatalogIndex>, IApiCatalogLookup>(cache => cache.Value.Catalog)
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             builder.RegisterAdapter<IObjectCache<CatalogIndex>, ISearcher<string>>(cache => cache.Value.Index)
-                .InstancePerRequest()
+                .InstancePerLifetimeScope()
                 .ExternallyOwned();
 
             builder.RegisterAdapter<IObjectCache<FxApiUsageData>, FxApiUsageData>(cache => cache.Value)
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
-            builder.Register(CreateTargetNameParser).As<ITargetNameParser>().InstancePerRequest();
-            builder.Register(CreateTargetMapper).As<ITargetMapper>().InstancePerRequest();
-            builder.RegisterType<RequestAnalyzer>().As<IRequestAnalyzer>().InstancePerRequest();
+            builder.Register(CreateTargetNameParser).As<ITargetNameParser>().InstancePerLifetimeScope();
+            builder.Register(CreateTargetMapper).As<ITargetMapper>().InstancePerLifetimeScope();
+            builder.RegisterType<RequestAnalyzer>().As<IRequestAnalyzer>().InstancePerLifetimeScope();
 
-            builder.RegisterType<AnalysisEngine>().As<IAnalysisEngine>();
+            builder.RegisterType<AnalysisEngine>().As<IAnalysisEngine>().InstancePerLifetimeScope();
             builder.RegisterType<ReportGenerator>().As<IReportGenerator>().SingleInstance();
+            builder.RegisterType<CloudPackageFinder>().As<IPackageFinder>().SingleInstance();
+
+            builder.RegisterType<DummyRecommendations>().As<IApiRecommendations>().InstancePerLifetimeScope();
+
+            builder.Register(CreateStorage).As<IStorage>().SingleInstance();
         }
 
-        private object CreateSettings(IComponentContext arg)
+        private AzureStorage CreateStorage(IComponentContext arg)
+        {
+            var connectionString = Configuration[BlobStorageConnectionStringKeyName];
+            return new AzureStorage(CloudStorageAccount.Parse(connectionString));
+        }
+
+        private AnalysisServiceSettings CreateSettings(IComponentContext arg)
         {
             return new AnalysisServiceSettings(Configuration);
         }
 
-        private ITargetMapper CreateTargetMapper(IComponentContext arg)
+        private TargetMapper CreateTargetMapper(IComponentContext arg)
         {
             var mapper = new TargetMapper();
             var settings = arg.Resolve<IServiceSettings>();
@@ -88,7 +101,7 @@ namespace PortabilityService.AnalysisService
             return mapper;
         }
 
-        private ITargetNameParser CreateTargetNameParser(IComponentContext arg)
+        private CloudTargetNameParser CreateTargetNameParser(IComponentContext arg)
         {
             var catalog = arg.Resolve<IApiCatalogLookup>();
             var settings = arg.Resolve<IServiceSettings>();

@@ -44,7 +44,7 @@ namespace PortabilityService.AnalysisService
         {
             get
             {
-                var storageConnectionString = _configuration["StorageConnectionString"];
+                var storageConnectionString = _configuration["CatalogStorageConnectionString"];
 
                 return CloudStorageAccount.Parse(storageConnectionString);
             }
