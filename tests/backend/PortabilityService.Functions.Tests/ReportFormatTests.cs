@@ -42,16 +42,15 @@ namespace PortabilityService.Functions.Tests
         }
 
         [Fact]
-        public async Task RespondsWithOneFormatForDefaultArg()
+        public void RespondsWithOneFormatForDefaultArg()
         {
             var request = new HttpRequestMessage { Method = HttpMethod.Get };
             request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
             var response = ReportFormat.Run(request, "default");
 
-            var contentStream = await response.Content.ReadAsStreamAsync();
-            Assert.True(response.TryGetContentValue(out ResultFormatInformation defaultFormat));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(response.TryGetContentValue(out ResultFormatInformation defaultFormat));
         }
     }
 }
