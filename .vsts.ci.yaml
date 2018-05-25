@@ -112,7 +112,7 @@ steps:
     ArtifactType: Container
   enabled: false
 
-- task: DockerCompose
+- task: DockerCompose@0
   inputs:
     ContainerRegistryType: "Azure Container Registry"
     DockerRegistryEndpoint: "PortabilityService-Development"
