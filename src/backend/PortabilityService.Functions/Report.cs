@@ -4,11 +4,9 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Azure;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
-using Microsoft.Fx.Portability.Reports;
 using Microsoft.WindowsAzure.Storage;
 using PortabilityService.Functions.DependencyInjection;
 using System;
@@ -24,12 +22,15 @@ namespace PortabilityService.Functions
 {
     public static class Report
     {
+        private static readonly TimeSpan s_retryDelay = TimeSpan.FromSeconds(2);
+
         [FunctionName("report")]
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "report/{submissionId}")] HttpRequestMessage req,
             string submissionId,
             [Inject] IStorage storage,
             [Inject] IReportTokenValidator validator,
+            [Inject] IEnumerable<IReportWriter> reportWriters,
             ILogger log)
         {
             if (!validator.RequestHasValidToken(req))
@@ -42,33 +43,47 @@ namespace PortabilityService.Functions
             {
                 // the request may have been received but not yet stored => the client should poll again
                 var res = req.CreateResponse(HttpStatusCode.NotFound);
-                res.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(4d));
+                res.Headers.RetryAfter = new RetryConditionHeaderValue(s_retryDelay);
+
+                return res;
             }
             if (analyzeResult == null)
             {
-                // AnalyzeRequest received but AnalyzeResult not available => client should continue polling
+                // AnalyzeRequest received but AnalyzeResult unavailable => client should continue polling
                 var res = req.CreateResponse(HttpStatusCode.Accepted);
-                res.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(2d));
+                res.Headers.RetryAfter = new RetryConditionHeaderValue(s_retryDelay);
 
                 return res;
             }
 
-            var response = req.CreateResponse();
-            try
+            var mediaType = req.Headers.Accept.SingleOrDefault();
+            if (mediaType == null)
             {
-                response.Content = GetReportContent(req.Headers.Accept.SingleOrDefault(), analyzeRequest, analyzeResult);
-                response.StatusCode = HttpStatusCode.OK;
-            }
-            catch (UnsupportedMediaTypeException ex)
-            {
-                log.LogError("unknown format {MediaType} requested", ex.MediaType);
-                response.StatusCode = HttpStatusCode.UnsupportedMediaType;
+                return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            return response;
+            var reportWriter = reportWriters
+                .SingleOrDefault(writer => writer.Format.MimeType.Equals(mediaType.MediaType, StringComparison.OrdinalIgnoreCase));
+            if (reportWriter == null)
+            {
+                return req.CreateResponse(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var generator = new ReportGenerator();
+            analyzeResult.ReportingResult = generator.ComputeReport(analyzeRequest, analyzeResult);
+
+            using (var stream = new MemoryStream())
+            {
+                reportWriter.WriteStream(stream, analyzeResult);
+
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Content = new ByteArrayContent(stream.ToArray());
+
+                return response;
+            }
         }
 
-        public static async Task<(AnalyzeRequest, AnalyzeResult)> GetSubmissionDataAsync(string submissionId, IStorage storage, ILogger log)
+        private static async Task<(AnalyzeRequest, AnalyzeResult)> GetSubmissionDataAsync(string submissionId, IStorage storage, ILogger log)
         {
             AnalyzeRequest analyzeRequest = null;
             AnalyzeResult analyzeResult = null;
@@ -83,35 +98,6 @@ namespace PortabilityService.Functions
             }
 
             return (analyzeRequest, analyzeResult);
-        }
-
-        private static readonly ITargetMapper s_targetMapper = new TargetMapper();
-        public static IReadOnlyCollection<IReportWriter> ReportWriters { get; } = new IReportWriter[]
-        {
-            new ExcelReportWriter(s_targetMapper),
-            // TODO HtmlReportWriter fails, possibly because RazorEngine can't write temp files to disk
-            //new HtmlReportWriter(s_targetMapper),
-            new JsonReportWriter()
-        };
-
-        public static ByteArrayContent GetReportContent(MediaTypeWithQualityHeaderValue mediaType, AnalyzeRequest analyzeRequest, AnalyzeResult analyzeResult)
-        {
-            var reportWriter = ReportWriters
-                .SingleOrDefault(writer => writer.Format.MimeType.Equals(mediaType.MediaType, StringComparison.OrdinalIgnoreCase));
-            if (mediaType == null || reportWriter == null)
-            {
-                throw new UnsupportedMediaTypeException("no appropriate report writer found", mediaType);
-            }
-
-            var generator = new ReportGenerator();
-            analyzeResult.ReportingResult = generator.ComputeReport(analyzeRequest, analyzeResult);
-
-            using (var stream = new MemoryStream())
-            {
-                reportWriter.WriteStream(stream, analyzeResult);
-
-                return new ByteArrayContent(stream.ToArray());
-            }
         }
     }
 }

@@ -18,9 +18,10 @@
     <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.0" />  </ItemGroup>
 
   <ItemGroup>
+    <!-- TODO this is only for use by DemoRequestAnalyzer, remove upon adding a real RequestAnalyzer -->
     <EmbeddedResource Include="apiport-demo.dll.json" LogicalName="apiport-demo.dll.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
   </ItemGroup>

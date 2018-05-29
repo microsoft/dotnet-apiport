@@ -4,7 +4,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Threading.Tasks;
@@ -16,20 +16,17 @@ namespace PortabilityService.AnalysisEngine.Controllers
     {
         private readonly ILogger<AnalyzeController> _logger;
         private readonly IConfiguration _configuration;
-        //TODO: inject
-        //private readonly IRequestAnalyzer _requestAnalyzer;
+        private readonly IRequestAnalyzer _requestAnalyzer;
         private readonly IStorage _storage;
 
         public AnalyzeController(
             IConfiguration configuration,
-            //TODO: inject
-            //IRequestAnalyzer requestAnalyzer,
+            IRequestAnalyzer requestAnalyzer,
             IStorage storage,
             ILogger<AnalyzeController> logger)
         {
             _configuration = configuration;
-            //TODO: inject
-            //_requestAnalyzer = requestAnalyzer;
+            _requestAnalyzer = requestAnalyzer;
             _storage = storage;
             _logger = logger;
         }
@@ -80,14 +77,9 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     analyzeRequest.RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
                 }
 
-                //TODO: invoke the real analysis engine to do the work
-                //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
+                var analyzeResult = _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
 
-                using (var stream = typeof(AnalyzeController).Assembly.GetManifestResourceStream("apiport-demo.dll.json"))
-                {
-                    var analyzeResult = DataExtensions.Deserialize<AnalyzeResult>(stream);
-                    return Task.FromResult(analyzeResult);
-                }
+                return Task.FromResult(analyzeResult);
             }
         }
     }

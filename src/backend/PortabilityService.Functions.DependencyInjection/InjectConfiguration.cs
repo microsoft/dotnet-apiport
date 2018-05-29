@@ -23,11 +23,15 @@
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Azure;
 using Microsoft.Fx.Portability.Azure.Storage;
 using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Reporting;
+using Microsoft.Fx.Portability.Reports;
 using Microsoft.WindowsAzure.Storage;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace PortabilityService.Functions.DependencyInjection
@@ -65,16 +69,35 @@ namespace PortabilityService.Functions.DependencyInjection
 
             services.AddSingleton(CloudStorageAccount.Parse(connection));
             services.AddScoped<IStorage, AzureStorage>(CreateStorage);
+            services.AddSingleton<ITargetMapper>(new TargetMapper());
+            services.AddSingleton<IEnumerable<IReportWriter>>(CreateReportWriters);
+            services.AddSingleton<ResultFormatInformation>(GetDefaultResultFormat);
 
-            // TODO this for development use, don't use in production
+            // TODO this for development only, don't use in production
             services.AddSingleton<IReportTokenValidator, ReversedIdTokenValidator>();
         }
+
+        private static ResultFormatInformation GetDefaultResultFormat(IServiceProvider arg)
+            => new ExcelReportWriter(null).Format;
 
         private static AzureStorage CreateStorage(IServiceProvider arg)
         {
             var account = arg.GetService<CloudStorageAccount>();
 
             return new AzureStorage(account);
+        }
+
+        private static IEnumerable<IReportWriter> CreateReportWriters(IServiceProvider arg)
+        {
+            var targetMapper = arg.GetService<ITargetMapper>();
+
+            return new IReportWriter[]
+            {
+                new ExcelReportWriter(targetMapper),
+                // TODO HtmlReportWriter fails, possibly because RazorEngine can't write temp files to disk
+                //new HtmlReportWriter(s_targetMapper),
+                new JsonReportWriter()
+            };
         }
     }
 }

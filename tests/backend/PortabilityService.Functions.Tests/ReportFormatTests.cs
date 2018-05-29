@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.Reporting;
+using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,37 +22,57 @@ namespace PortabilityService.Functions.Tests
         [InlineData(" ")]
         public void RespondsBadRequestForInvalidRouteArg(string arg)
         {
-            var request = new HttpRequestMessage { Method = HttpMethod.Get };
+            var reportWriters = Substitute.For<IEnumerable<IReportWriter>>();
+            var defaultFormat = Substitute.For<ResultFormatInformation>();
 
-            var response = ReportFormat.Run(request, arg);
+            using (var request = new HttpRequestMessage { Method = HttpMethod.Get })
+            {
+                var response = ReportFormat.Run(request, reportWriters, defaultFormat, arg);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            }
         }
 
         [Fact]
         public async Task RespondsWithFormatsFromReportFunction()
         {
-            var request = new HttpRequestMessage { Method = HttpMethod.Get };
-            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+            var reportWriters = Substitute.For<IEnumerable<IReportWriter>>();
+            var defaultFormat = Substitute.For<ResultFormatInformation>();
 
-            var response = ReportFormat.Run(request, null);
+            using (var request = new HttpRequestMessage { Method = HttpMethod.Get })
+            {
+                request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
-            var contentStream = await response.Content.ReadAsStreamAsync();
-            var formats = DataExtensions.Deserialize<IEnumerable<ResultFormatInformation>>(contentStream);
-            Assert.All(formats, format => Report.ReportWriters.Single(writer => writer.Format.Equals(format)));
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var response = ReportFormat.Run(request, reportWriters, defaultFormat, null);
+
+                var contentStream = await response.Content.ReadAsStreamAsync();
+                var formats = DataExtensions.Deserialize<IEnumerable<ResultFormatInformation>>(contentStream);
+                Assert.All(formats, format => reportWriters.Single(writer => writer.Format.Equals(format)));
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            }
         }
 
         [Fact]
-        public void RespondsWithOneFormatForDefaultArg()
+        public void RespondsWithDefaultFormatForDefaultArg()
         {
-            var request = new HttpRequestMessage { Method = HttpMethod.Get };
-            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+            var defaultFormat = new ResultFormatInformation
+            {
+                DisplayName = "foo",
+                FileExtension = "bar",
+                MimeType = "baz/quux"
+            };
+            var reportWriters = Substitute.For<IEnumerable<IReportWriter>>();
 
-            var response = ReportFormat.Run(request, "default");
+            using (var request = new HttpRequestMessage { Method = HttpMethod.Get })
+            {
+                request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.True(response.TryGetContentValue(out ResultFormatInformation defaultFormat));
+                var response = ReportFormat.Run(request, reportWriters, defaultFormat, "default");
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                Assert.True(response.TryGetContentValue(out ResultFormatInformation actual));
+                Assert.Equal(defaultFormat, actual);
+            }
         }
     }
 }
