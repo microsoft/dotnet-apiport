@@ -12,7 +12,6 @@ namespace PortabilityService.WorkflowManagement
     public enum WorkflowStage
     {
         Analyze,
-        Report,
         Telemetry,
         Finished
     }
@@ -51,11 +50,9 @@ namespace PortabilityService.WorkflowManagement
             actions = new IWorkflowAction[Enum.GetValues(typeof(WorkflowStage)).Length-1];
 
             var analyzeServiceUrl = ConfigurationManager.AppSettings["AnalyzeServiceUrl"];
-            var reportServiceUrl = ConfigurationManager.AppSettings["ReportServiceUrl"];
             var telemetryServiceUrl = ConfigurationManager.AppSettings["TelemetryServiceUrl"];
 
             AddAction(new AnalyzeAction(analyzeServiceUrl));
-            AddAction(new ReportAction(reportServiceUrl));
             AddAction(new TelemetryAction(telemetryServiceUrl));
         }
 
@@ -84,7 +81,7 @@ namespace PortabilityService.WorkflowManagement
         public async Task<WorkflowQueueMessage> ExecuteActionsToNextStage(WorkflowQueueMessage currentMsg, CancellationToken cancelToken)
         {
             //Get action corresponding to the current message's workflow stage
-            Debug.Assert(actions.Length - 1 > (int)currentMsg.Stage, "Stage must be within bounds of Actions array.");
+            Debug.Assert((int)currentMsg.Stage < actions.Length, "Stage must be within bounds of Actions array.");
             var action = actions[(int)currentMsg.Stage];
             Debug.Assert(action.CurrentStage == currentMsg.Stage, "Action's Stage must match current message's Stage.");
 

@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
+using System;
+using System.Threading.Tasks;
 
 namespace PortabilityService.AnalysisEngine.Controllers
 {
@@ -16,20 +16,17 @@ namespace PortabilityService.AnalysisEngine.Controllers
     {
         private readonly ILogger<AnalyzeController> _logger;
         private readonly IConfiguration _configuration;
-        //TODO: inject
-        //private readonly IRequestAnalyzer _requestAnalyzer;
+        private readonly IRequestAnalyzer _requestAnalyzer;
         private readonly IStorage _storage;
 
         public AnalyzeController(
             IConfiguration configuration,
-            //TODO: inject
-            //IRequestAnalyzer requestAnalyzer,
+            IRequestAnalyzer requestAnalyzer,
             IStorage storage,
             ILogger<AnalyzeController> logger)
         {
             _configuration = configuration;
-            //TODO: inject
-            //_requestAnalyzer = requestAnalyzer;
+            _requestAnalyzer = requestAnalyzer;
             _storage = storage;
             _logger = logger;
         }
@@ -59,12 +56,6 @@ namespace PortabilityService.AnalysisEngine.Controllers
 
                 await _storage.SaveResultToBlobAsync(submissionId, result);
 
-                // if the user opted out of us collecting telemetry
-                if (request.RequestFlags.HasFlag(AnalyzeRequestFlags.NoTelemetry))
-                {
-                    await _storage.DeleteRequestFromBlobAsync(submissionId);
-                }
-
                 return Ok();
             }
             catch (Exception exception)
@@ -86,28 +77,9 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     analyzeRequest.RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
                 }
 
-                //TODO: invoke the real analysis engine to do the work
-                //return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
+                var analyzeResult = _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
 
-                return Task.FromResult(new AnalyzeResult
-                {
-                    MissingDependencies = new System.Collections.Generic.List<MemberInfo>
-                    {
-                        new MemberInfo { MemberDocId = "doc1" },
-                        new MemberInfo { MemberDocId = "doc2" }
-                    },
-                    SubmissionId = Guid.NewGuid().ToString(),
-                    Targets = new System.Collections.Generic.List<System.Runtime.Versioning.FrameworkName>
-                    {
-                        new System.Runtime.Versioning.FrameworkName("target1", Version.Parse("1.0.0.0"))
-                    },
-                    UnresolvedUserAssemblies = new System.Collections.Generic.List<string>
-                    {
-                        "assembly1",
-                        "assembly2",
-                        "assembly3"
-                    }
-                });
+                return Task.FromResult(analyzeResult);
             }
         }
     }
