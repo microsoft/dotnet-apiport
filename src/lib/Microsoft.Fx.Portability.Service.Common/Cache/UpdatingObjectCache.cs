@@ -18,7 +18,7 @@ namespace Microsoft.Fx.Portability.Cache
         private readonly CancellationToken _cancellationToken;
         private readonly TimeSpan _cachePollInterval;
 
-        public UpdatingObjectCache(TimeSpan cachePollInterval, string identifier = null, CancellationToken cancellationToken = default)
+        public UpdatingObjectCache(TimeSpan cachePollInterval, string identifier, CancellationToken cancellationToken)
             : base(identifier)
         {
             _cancellationToken = cancellationToken;

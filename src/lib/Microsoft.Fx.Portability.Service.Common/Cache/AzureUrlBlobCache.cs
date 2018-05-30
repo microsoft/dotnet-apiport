@@ -20,7 +20,7 @@ namespace Microsoft.Fx.Portability.Cache
         private readonly string _url;
         private readonly bool _compressed;
 
-        public AzureUrlBlobCache(string url, bool compressed, TimeSpan cachePollInterval, CancellationToken token = default)
+        public AzureUrlBlobCache(string url, bool compressed, TimeSpan cachePollInterval, CancellationToken token)
             : base(cachePollInterval, url, token)
         {
             _url = url;
