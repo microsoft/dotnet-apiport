@@ -19,7 +19,7 @@ namespace PortabilityService.Functions.Tests
         /// different set of workflow actiosn in different tests.
         /// Thus mocking is done before tests are executed.
         /// </remarks>
-        public ProcessWorkflowQueueTests()
+        static ProcessWorkflowQueueTests()
         {
             var workflowActions = new IWorkflowAction[4];
 
