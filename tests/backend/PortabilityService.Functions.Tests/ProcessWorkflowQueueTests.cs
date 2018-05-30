@@ -40,7 +40,7 @@ namespace PortabilityService.Functions.Tests
             WorkflowManager.Initialize(workflowActions);
         }
 
-        [Fact]
+        [Fact(Skip = "WorkflowManager initialization has race conditions")]
         public async Task ProcessQueueMessageStages()
         {
             var submissionId = new Guid().ToString();
@@ -55,7 +55,7 @@ namespace PortabilityService.Functions.Tests
             workflowQueue.DidNotReceive().Add(Arg.Any<WorkflowQueueMessage>());
         }
 
-        [Fact]
+        [Fact(Skip = "WorkflowManager initialization has race conditions")]
         public async Task CancellationBeforeActionExecuted()
         {
             var submissionId = new Guid().ToString();
