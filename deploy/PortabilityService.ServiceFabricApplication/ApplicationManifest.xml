@@ -17,7 +17,9 @@
             <ContainerHostPolicies CodePackageRef="portabilityservice.configurationservice.Code">
                 <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
                 <ImageOverrides>
-                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.2" />
+                    <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
+                    image name. -->
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.3" />
                 </ImageOverrides>                
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.configurationserviceEndpoint"/>
             </ContainerHostPolicies>
@@ -34,7 +36,9 @@
             <ContainerHostPolicies CodePackageRef="portabilityservice.gateway.Code">
                 <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
                 <ImageOverrides>
-                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.2" />
+                    <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
+                    image name. -->                
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.3" />
                 </ImageOverrides>
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.gatewayEndpoint"/>
             </ContainerHostPolicies>
@@ -51,7 +55,9 @@
         <ContainerHostPolicies CodePackageRef="portabilityservice.analysisengine.Code">
           <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
           <ImageOverrides>
-            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisengine:0.1" />
+            <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
+            image name. -->          
+            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisengine:0.3" />
           </ImageOverrides>
           <PortBinding ContainerPort="80" EndpointRef="portabilityservice.analysisengineEndpoint"/>
         </ContainerHostPolicies>
