@@ -17,7 +17,7 @@ namespace PortabilityService.AnalysisService
 {
     public class DependencyModule : Module
     {
-        private const string BlobStorageConnectionStringKeyName = "BlobStorageConnectionString";
+        private const string BlobStorageConnectionStringKeyName = "BlobStorageConnection";
 
         public DependencyModule(IConfiguration configuration)
         {
@@ -67,7 +67,7 @@ namespace PortabilityService.AnalysisService
 
         private AzureStorage CreateStorage(IComponentContext arg)
         {
-            var connectionString = Configuration[BlobStorageConnectionStringKeyName];
+            var connectionString = Configuration.GetConnectionString(BlobStorageConnectionStringKeyName);
             return new AzureStorage(CloudStorageAccount.Parse(connectionString));
         }
 

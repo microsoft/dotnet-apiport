@@ -9,6 +9,7 @@ namespace PortabilityService.AnalysisService
 {
     internal class AnalysisServiceSettings : IServiceSettings
     {
+        private const string CatalogStorageConnectionKeyName = "CatalogStorageConnectionString";
         private readonly IConfiguration _configuration;
 
         public AnalysisServiceSettings(IConfiguration configuration)
@@ -44,7 +45,7 @@ namespace PortabilityService.AnalysisService
         {
             get
             {
-                var storageConnectionString = _configuration["CatalogStorageConnectionString"];
+                var storageConnectionString = _configuration.GetConnectionString(CatalogStorageConnectionKeyName);
 
                 return CloudStorageAccount.Parse(storageConnectionString);
             }
