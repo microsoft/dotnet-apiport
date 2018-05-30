@@ -23,7 +23,7 @@ namespace PortabilityService.WorkflowManagement
 
             response.EnsureSuccessStatusCode();
 
-            return WorkflowStage.Report;
+            return WorkflowStage.Telemetry;
         }
 
         public WorkflowStage CurrentStage

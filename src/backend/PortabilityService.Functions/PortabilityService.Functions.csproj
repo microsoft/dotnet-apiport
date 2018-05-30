@@ -8,6 +8,10 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.10" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
     <ProjectReference Include="..\PortabilityService.Functions.DependencyInjection\PortabilityService.Functions.DependencyInjection.csproj" />
     <ProjectReference Include="..\PortabilityService.WorkflowManagement\PortabilityService.WorkflowManagement.csproj" />
   </ItemGroup>
@@ -15,8 +19,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="apiport-demo.dll.json" DependentUpon="Report.cs" LogicalName="apiport-demo.dll.json" />
-    <EmbeddedResource Include="apiport-demo.dll.xlsx" DependentUpon="Report.cs" LogicalName="apiport-demo.dll.xlsx" />
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

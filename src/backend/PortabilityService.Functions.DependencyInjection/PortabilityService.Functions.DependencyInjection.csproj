@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Azure\Microsoft.Fx.Portability.Azure.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj" />
   </ItemGroup>
 
 </Project>

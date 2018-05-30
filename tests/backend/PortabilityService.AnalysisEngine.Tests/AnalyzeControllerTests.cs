@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using PortabilityService.AnalysisEngine.Controllers;
@@ -18,10 +19,11 @@ namespace PortabilityService.AnalysisEngine.Tests
         public static async Task ShouldReturnNotFoundForInvalidRequest()
         {
             // Arrange
+            var analyzer = Substitute.For<IRequestAnalyzer>();
             var storage = Substitute.For<IStorage>();
             var configuration = Substitute.For<IConfiguration>();
             var logger = Substitute.For<ILogger<AnalyzeController>>();
-            var controller = new AnalyzeController(configuration, storage, logger);
+            var controller = new AnalyzeController(configuration, analyzer, storage, logger);
 
             // Act
             var result = await controller.Analyze("any-id");
@@ -34,6 +36,7 @@ namespace PortabilityService.AnalysisEngine.Tests
         public static async Task ShouldReturnOkForValidSubmission()
         {
             // Arrange
+            var analyzer = Substitute.For<IRequestAnalyzer>();
             var storage = Substitute.For<IStorage>();
             var request = new AnalyzeRequest();
             storage.RetrieveRequestAsync("id").Returns(Task.FromResult(request));
@@ -42,7 +45,7 @@ namespace PortabilityService.AnalysisEngine.Tests
 
             var configuration = Substitute.For<IConfiguration>();
             var logger = Substitute.For<ILogger<AnalyzeController>>();
-            var controller = new AnalyzeController(configuration, storage, logger);
+            var controller = new AnalyzeController(configuration, analyzer, storage, logger);
 
             // Act
             var actionResult = await controller.Analyze("id");

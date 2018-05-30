@@ -10,6 +10,7 @@ namespace Microsoft.Fx.Portability.Reporting
 {
     public interface IReportGenerator
     {
+        ReportingResult ComputeReport(AnalyzeRequest request, AnalyzeResult result);
         ReportingResult ComputeReport(IList<FrameworkName> targets, string submissionId, AnalyzeRequestFlags requestFlags, IDictionary<MemberInfo, ICollection<AssemblyInfo>> allDependencies, IList<MemberInfo> missingDependencies, IDictionary<string, ICollection<string>> unresolvedAssemblies, IList<string> unresolvedUserAssemblies, IEnumerable<string> assembliesWithErrors, IList<NuGetPackageInfo> nugetPackages);
     }
 }

@@ -3,100 +3,101 @@
 
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
+using Microsoft.Fx.Portability.Azure;
+using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Reporting;
+using Microsoft.WindowsAzure.Storage;
+using PortabilityService.Functions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace PortabilityService.Functions
 {
     public static class Report
     {
+        private static readonly TimeSpan s_retryDelay = TimeSpan.FromSeconds(2);
+
         [FunctionName("report")]
-        public static HttpResponseMessage Run(
+        public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "report/{submissionId}")] HttpRequestMessage req,
             string submissionId,
-            TraceWriter log)
+            [Inject] IStorage storage,
+            [Inject] IReportTokenValidator validator,
+            [Inject] IEnumerable<IReportWriter> reportWriters,
+            ILogger log)
         {
-            if (!ValidAccessKey(req))
+            if (!validator.RequestHasValidToken(req))
             {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
             }
 
-            // simulate report generation taking some time
-            if (new Random().Next(10) < 4)
+            var (analyzeRequest, analyzeResult) = await GetSubmissionDataAsync(submissionId, storage, log);
+            if (analyzeRequest == null)
             {
-                // TODO this should return 202 only when the analyze request is known to have been received,
-                // 404 otherwise (e.g. when the client tries to get the report before its analyze request
-                // has propagated)
-                var response = req.CreateResponse(HttpStatusCode.Accepted);
-                response.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(2d));
+                // the request may have been received but not yet stored => the client should poll again
+                var res = req.CreateResponse(HttpStatusCode.NotFound);
+                res.Headers.RetryAfter = new RetryConditionHeaderValue(s_retryDelay);
+
+                return res;
+            }
+            if (analyzeResult == null)
+            {
+                // AnalyzeRequest received but AnalyzeResult unavailable => client should continue polling
+                var res = req.CreateResponse(HttpStatusCode.Accepted);
+                res.Headers.RetryAfter = new RetryConditionHeaderValue(s_retryDelay);
+
+                return res;
+            }
+
+            var mediaType = req.Headers.Accept.SingleOrDefault();
+            if (mediaType == null)
+            {
+                return req.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            var reportWriter = reportWriters
+                .SingleOrDefault(writer => writer.Format.MimeType.Equals(mediaType.MediaType, StringComparison.OrdinalIgnoreCase));
+            if (reportWriter == null)
+            {
+                return req.CreateResponse(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var generator = new ReportGenerator();
+            analyzeResult.ReportingResult = generator.ComputeReport(analyzeRequest, analyzeResult);
+
+            using (var stream = new MemoryStream())
+            {
+                reportWriter.WriteStream(stream, analyzeResult);
+
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Content = new ByteArrayContent(stream.ToArray());
 
                 return response;
             }
-
-            switch (req.Headers.Accept.ToString())
-            {
-                case MediaType.Json:
-                    return JsonReport(req);
-                case MediaType.Excel:
-                    return ExcelReport(req);
-                default:
-                    return req.CreateResponse(HttpStatusCode.UnsupportedMediaType);
-            }
         }
 
-        public static bool ValidAccessKey(HttpRequestMessage request)
+        private static async Task<(AnalyzeRequest, AnalyzeResult)> GetSubmissionDataAsync(string submissionId, IStorage storage, ILogger log)
         {
-            // TODO generate and persist a new unique key in Analyze, validate it here
-            var authHeader = request.Headers.Authorization;
-            if (authHeader == null || !authHeader.Scheme.Equals("Bearer", StringComparison.Ordinal))
+            AnalyzeRequest analyzeRequest = null;
+            AnalyzeResult analyzeResult = null;
+            try
             {
-                return false;
+                analyzeRequest = await storage.RetrieveRequestAsync(submissionId);
+                analyzeResult = await storage.RetrieveResultFromBlobAsync(submissionId);
+            }
+            catch (StorageException ex)
+            {
+                log.LogError("exception getting submission data {ex}", ex);
             }
 
-            var token = authHeader.Parameter;
-            var submissionId = request.RequestUri.Segments.Last();
-            var chars = submissionId.ToCharArray();
-            Array.Reverse(chars);
-            var expectedToken = new string(chars);
-
-            return token.Equals(expectedToken, StringComparison.Ordinal);
-        }
-
-        public static HttpResponseMessage JsonReport(HttpRequestMessage request)
-        {
-            // TODO retrieve a real report generated somewhere else
-            var response = request.CreateResponse(HttpStatusCode.OK);
-            using (var stream = typeof(Report).Assembly.GetManifestResourceStream("apiport-demo.dll.json"))
-            using (var sr = new StreamReader(stream))
-            {
-                var json = sr.ReadToEnd();
-                var content = new StringContent(json, System.Text.Encoding.UTF8, MediaType.Json);
-                response.Content = content;
-            }
-
-            return response;
-        }
-
-        private static HttpResponseMessage ExcelReport(HttpRequestMessage request)
-        {
-            // TODO retrieve a real report generated somewhere else
-            var response = request.CreateResponse(HttpStatusCode.OK);
-            using (var stream = typeof(Report).Assembly.GetManifestResourceStream("apiport-demo.dll.xlsx"))
-            {
-                var bytes = new byte[stream.Length];
-                stream.Read(bytes, 0, (int)stream.Length);
-
-                var content = new ByteArrayContent(bytes);
-                response.Content = content;
-                response.Content.Headers.Add("Content-Type", MediaType.Excel);
-            }
-
-            return response;
+            return (analyzeRequest, analyzeResult);
         }
     }
 }
