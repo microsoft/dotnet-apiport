@@ -2,14 +2,14 @@
 <ServiceManifest 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns="http://schemas.microsoft.com/2011/01/fabric" Name="portabilityservice.analysisenginePkg" Version="v1">
+    xmlns="http://schemas.microsoft.com/2011/01/fabric" Name="portabilityservice.analysisservicePkg" Version="v1">
     <ServiceTypes>
-        <StatelessServiceType ServiceTypeName="portabilityservice.analysisengineType" UseImplicitHost="true"/>
+        <StatelessServiceType ServiceTypeName="portabilityservice.analysisserviceType" UseImplicitHost="true"/>
     </ServiceTypes>
-    <CodePackage Name="portabilityservice.analysisengine.Code" Version="0.1">
+    <CodePackage Name="portabilityservice.analysisservice.Code" Version="0.1">
         <EntryPoint>
             <ContainerHost>
-                <ImageName>portabilityservice.azurecr.io/portabilityservice-analysisengine:0.1</ImageName>
+                <ImageName>portabilityservice.azurecr.io/portabilityservice-analysisservice:0.4</ImageName>
             </ContainerHost>
         </EntryPoint>
         <EnvironmentVariables>
@@ -19,7 +19,7 @@
     </CodePackage>
     <Resources>
         <Endpoints>
-            <Endpoint Name="portabilityservice.analysisengineEndpoint" Port="8002" />
+            <Endpoint Name="portabilityservice.analysisserviceEndpoint" Port="8002" />
         </Endpoints>
     </Resources>
 </ServiceManifest>

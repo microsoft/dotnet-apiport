@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
-using PortabilityService.AnalysisEngine.Controllers;
+using PortabilityService.AnalysisService.Controllers;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PortabilityService.AnalysisEngine.Tests
+namespace PortabilityService.AnalysisService.Tests
 {
     public class AnalyzeControllerTests
     {

@@ -45,7 +45,6 @@ namespace PortabilityService.Functions
                 return req.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurs when saving analyze request to storage for submission");
             }
 
-            var workflowMgr = WorkflowManager.Initialize();
             var msg = WorkflowManager.GetFirstStage(submissionId);
 
             workflowMessageQueue.Add(msg);

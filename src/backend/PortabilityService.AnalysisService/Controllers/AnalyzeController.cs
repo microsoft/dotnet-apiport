@@ -9,7 +9,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Threading.Tasks;
 
-namespace PortabilityService.AnalysisEngine.Controllers
+namespace PortabilityService.AnalysisService.Controllers
 {
     [Route("api/[controller]")]
     public class AnalyzeController : Controller
@@ -52,7 +52,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     return NotFound();
                 }
 
-                var result = await AnalyzeRequestAsync(request, submissionId);
+                var result = AnalyzeRequest(request, submissionId);
 
                 await _storage.SaveResultToBlobAsync(submissionId, result);
 
@@ -65,7 +65,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
             }
         }
 
-        private Task<AnalyzeResult> AnalyzeRequestAsync(AnalyzeRequest analyzeRequest, string submissionId)
+        private AnalyzeResult AnalyzeRequest(AnalyzeRequest analyzeRequest, string submissionId)
         {
             using (_logger.BeginScope($"Analyzing request for {submissionId}"))
             {
@@ -77,9 +77,7 @@ namespace PortabilityService.AnalysisEngine.Controllers
                     analyzeRequest.RequestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
                 }
 
-                var analyzeResult = _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
-
-                return Task.FromResult(analyzeResult);
+                return _requestAnalyzer.AnalyzeRequest(analyzeRequest, submissionId);
             }
         }
     }

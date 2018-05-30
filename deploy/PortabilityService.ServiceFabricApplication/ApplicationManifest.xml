@@ -46,20 +46,20 @@
         </Policies>
     </ServiceManifestImport>
     <ServiceManifestImport>
-      <ServiceManifestRef ServiceManifestName="portabilityservice.analysisenginePkg" ServiceManifestVersion="v1"/>
-      <EnvironmentOverrides CodePackageRef="portabilityservice.analysisengine.Code">
+      <ServiceManifestRef ServiceManifestName="portabilityservice.analysisservicePkg" ServiceManifestVersion="v1"/>
+      <EnvironmentOverrides CodePackageRef="portabilityservice.analysisservice.Code">
         <EnvironmentVariable Name="PortabilityConfigurationServiceUrl" Value="http://portabilityservice.configurationservice:8001"/>
         <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="[EnvironmentName]"/>
       </EnvironmentOverrides>
       <Policies>
-        <ContainerHostPolicies CodePackageRef="portabilityservice.analysisengine.Code">
+        <ContainerHostPolicies CodePackageRef="portabilityservice.analysisservice.Code">
           <RepositoryCredentials AccountName="[RepositoryUserName]" Password="[RepositoryPassword]"/>
           <ImageOverrides>
             <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
-            image name. -->          
-            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisengine:0.3" />
+            image name. -->
+            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisservice:0.4" />
           </ImageOverrides>
-          <PortBinding ContainerPort="80" EndpointRef="portabilityservice.analysisengineEndpoint"/>
+          <PortBinding ContainerPort="80" EndpointRef="portabilityservice.analysisserviceEndpoint"/>
         </ContainerHostPolicies>
         <ServicePackageResourceGovernancePolicy/>
       </Policies>
@@ -75,8 +75,8 @@
                 <SingletonPartition/>
             </StatelessService>
         </Service>
-        <Service Name="portabilityservice.analysisengine" ServiceDnsName="portabilityservice.analysisengine" ServicePackageActivationMode="ExclusiveProcess">
-          <StatelessService ServiceTypeName="portabilityservice.analysisengineType">
+        <Service Name="portabilityservice.analysisservice" ServiceDnsName="portabilityservice.analysisservice" ServicePackageActivationMode="ExclusiveProcess">
+          <StatelessService ServiceTypeName="portabilityservice.analysisserviceType">
             <SingletonPartition/>
           </StatelessService>
         </Service>

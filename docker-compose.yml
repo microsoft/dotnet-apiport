@@ -13,11 +13,11 @@ services:
     environment:
       "PortabilityConfigurationServiceUrl": "http://portabilityservice.configurationservice"
 
-  portabilityservice.analysisengine:
-    image: ${DOCKER_REGISTRY}portabilityservice-analysisengine:${PORTABILITYSERVICE_VERSION:-latest}
+  portabilityservice.analysisservice:
+    image: ${DOCKER_REGISTRY}portabilityservice-analysisservice:${PORTABILITYSERVICE_VERSION:-latest}
     build:
       context: .
-      dockerfile: src/backend/PortabilityService.AnalysisEngine/Dockerfile
+      dockerfile: src/backend/PortabilityService.AnalysisService/Dockerfile
     ports:
       - "80"
     depends_on:
