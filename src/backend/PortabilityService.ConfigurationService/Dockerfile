@@ -1,5 +1,5 @@
 ### Build Stage
-FROM microsoft/aspnetcore-build:2.0.7-2.1.105 AS build
+FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
 
 # Restore packages in one build layer
@@ -19,7 +19,7 @@ RUN dotnet publish PortabilityService.ConfigurationService.csproj -c Release -o 
 
 
 ### Run Stage
-FROM microsoft/aspnetcore:2.0.7 AS final
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS final
 WORKDIR /app
 COPY --from=publish /app .
 EXPOSE 80
