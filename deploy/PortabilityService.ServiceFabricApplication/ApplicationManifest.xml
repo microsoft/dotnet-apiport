@@ -19,7 +19,7 @@
                 <ImageOverrides>
                     <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
                     image name. -->
-                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.3" />
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-configurationservice:0.5" />
                 </ImageOverrides>                
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.configurationserviceEndpoint"/>
             </ContainerHostPolicies>
@@ -38,7 +38,7 @@
                 <ImageOverrides>
                     <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
                     image name. -->                
-                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.3" />
+                    <Image Name="portabilityservice.azurecr.io/portabilityservice-gateway:0.5" />
                 </ImageOverrides>
                 <PortBinding ContainerPort="80" EndpointRef="portabilityservice.gatewayEndpoint"/>
             </ContainerHostPolicies>
@@ -57,7 +57,7 @@
           <ImageOverrides>
             <!-- The image tag isn't parameterized because Service Fabric currently doesn't support parameters in the
             image name. -->
-            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisservice:0.4" />
+            <Image Name="portabilityservice.azurecr.io/portabilityservice-analysisservice:0.5" />
           </ImageOverrides>
           <PortBinding ContainerPort="80" EndpointRef="portabilityservice.analysisserviceEndpoint"/>
         </ContainerHostPolicies>
