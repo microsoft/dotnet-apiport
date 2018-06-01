@@ -6,6 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputDrop>$(TF_BUILD_BINARIESDIRECTORY)</OutputDrop>
     <NoWarn>$(NoWarn),1570,1572,1573,1574,1591,1701</NoWarn>
+    <!-- This is due to aspnet/Mvc #7852 -->
+    <NoWarn>$(NoWarn),8032</NoWarn>
     <Features>IOperation;$(Features)</Features>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\rules.ruleset</CodeAnalysisRuleSet>
     <WriteVersionInfoToBuildLog>True</WriteVersionInfoToBuildLog>
