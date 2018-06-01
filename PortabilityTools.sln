@@ -111,7 +111,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.ConfigurationProvider.Tests", "tests\lib\Microsoft.Fx.Portability.ConfigurationProvider.Tests\Microsoft.Fx.Portability.ConfigurationProvider.Tests.csproj", "{ED161822-6C49-4ECC-92C1-6C9918ACE617}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Fx.Portability.Service.Common", "src\lib\Microsoft.Fx.Portability.Service.Common\Microsoft.Fx.Portability.Service.Common.csproj", "{1FC98979-DBD5-453D-AF9A-827E3AFBCED4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Service.Common", "src\lib\Microsoft.Fx.Portability.Service.Common\Microsoft.Fx.Portability.Service.Common.csproj", "{1FC98979-DBD5-453D-AF9A-827E3AFBCED4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
