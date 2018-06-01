@@ -1,6 +1,18 @@
 # Changelog
 
-There are changes to each version of the .NET Portability Analyzer that has been released on [Visual Studio extension gallery](https://visualstudiogallery.msdn.microsoft.com/1177943e-cfb7-4822-a8a6-e56c7905292b)
+There are changes to each version of the .NET Portability Analyzer that has been released on [Visual Studio extension gallery](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
+
+## 2.5.0
+
+__May 30, 2018__
+
+* Accessibility improvements
+    * Improve screen narrator support
+    * Improve experience when in high contrast mode
+    * Fix tab ordering
+    * Fix accessibility of HTML reports
+* Add support for proxies when contacting service
+* Remove support for Visual Studio 2015
 
 ## 1.4.0
 
