@@ -82,7 +82,7 @@ for using the .NET Core application include:
 **From Commandline**
 
 1. Execute `build.cmd`
-2. Execute `dotnet.exe .\bin\Release\ApiPort\netcoreapp1.0\ApiPort.dll [Any other arguments to ApiPort]`
+2. Execute `dotnet.exe .\bin\Release\ApiPort\netcoreapp2.1\ApiPort.dll [Any other arguments to ApiPort]`
 
 **In Visual Studio 2017**
 
