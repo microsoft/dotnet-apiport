@@ -9,7 +9,7 @@ namespace PortabilityService.AnalysisService
 {
     internal class AnalysisServiceSettings : IServiceSettings
     {
-        private const string CatalogStorageConnectionKeyName = "CatalogStorageConnectionString";
+        private const string CatalogStorageConnectionKeyName = "CatalogStorageConnection";
         private readonly IConfiguration _configuration;
 
         public AnalysisServiceSettings(IConfiguration configuration)
