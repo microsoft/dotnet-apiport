@@ -1,5 +1,5 @@
 ### Build Stage
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM microsoft/dotnet:2.1-sdk-alpine AS build
 WORKDIR /src
 
 # Restore packages in one build layer
@@ -17,7 +17,7 @@ FROM build AS publish
 RUN dotnet publish PortabilityService.AnalysisService.csproj -c Release -o /app
 
 ### Run Stage
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS final
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine AS final
 WORKDIR /app
 COPY --from=publish /app .
 EXPOSE 80
