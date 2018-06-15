@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
+    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />

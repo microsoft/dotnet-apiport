@@ -59,8 +59,7 @@ namespace PortabilityService.AnalysisService
             builder.RegisterType<ReportGenerator>().As<IReportGenerator>().SingleInstance();
             builder.RegisterType<CloudPackageFinder>().As<IPackageFinder>().SingleInstance();
 
-            //TODO (yumeng): replace DummyRecommendations with a real implementation
-            builder.RegisterType<DummyRecommendations>().As<IApiRecommendations>().InstancePerLifetimeScope();
+            builder.RegisterModule<ApiPortDataModule>();
 
             builder.Register(CreateStorage).As<IStorage>().SingleInstance();
         }
