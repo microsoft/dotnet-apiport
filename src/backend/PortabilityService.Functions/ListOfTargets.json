@@ -1,0 +1,366 @@
+[
+  {
+    "Name": ".NET Core",
+    "Description": null,
+    "Version": "1.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Core",
+    "Description": null,
+    "Version": "1.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Core",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Core",
+    "Description": null,
+    "Version": "2.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Core + Platform Extensions",
+    "Description": null,
+    "Version": "1.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Core + Platform Extensions",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Core + Platform Extensions",
+    "Description": null,
+    "Version": "2.1",
+    "ExpandedTargets": [],
+    "IsSet": true
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "1.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "3.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "3.5",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.5",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.5.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.5.2",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.6",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.6.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.6.2",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.7",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Framework",
+    "Description": null,
+    "Version": "4.7.1",
+    "ExpandedTargets": [],
+    "IsSet": true
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.2",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.3",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.4",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.5",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "1.6",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard + Platform Extensions",
+    "Description": null,
+    "Version": "1.6",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": ".NET Standard + Platform Extensions",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": true
+  },
+  {
+    "Name": "ASP.NET Core",
+    "Description": null,
+    "Version": "1.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "ASP.NET Core",
+    "Description": null,
+    "Version": "1.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "ASP.NET Core",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Mono",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Mono",
+    "Description": null,
+    "Version": "3.5",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Mono",
+    "Description": null,
+    "Version": "4.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Mono",
+    "Description": null,
+    "Version": "4.5",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Silverlight",
+    "Description": null,
+    "Version": "2.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Silverlight",
+    "Description": null,
+    "Version": "3.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Silverlight",
+    "Description": null,
+    "Version": "4.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Silverlight",
+    "Description": null,
+    "Version": "5.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "UWP",
+    "Description": null,
+    "Version": "8.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "UWP",
+    "Description": null,
+    "Version": "8.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "UWP",
+    "Description": null,
+    "Version": "10.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "UWP",
+    "Description": null,
+    "Version": "10.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Windows Phone",
+    "Description": null,
+    "Version": "8.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Windows Phone Silverlight",
+    "Description": null,
+    "Version": "7.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Windows Phone Silverlight",
+    "Description": null,
+    "Version": "7.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Windows Phone Silverlight",
+    "Description": null,
+    "Version": "8.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Windows Phone Silverlight",
+    "Description": null,
+    "Version": "8.1",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Xamarin Android",
+    "Description": null,
+    "Version": "1.0.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  },
+  {
+    "Name": "Xamarin iOS",
+    "Description": null,
+    "Version": "1.0.0.0",
+    "ExpandedTargets": [],
+    "IsSet": false
+  }
+]
