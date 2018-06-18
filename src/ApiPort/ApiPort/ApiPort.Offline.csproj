@@ -3,6 +3,7 @@
   <Import Project="ApiPort.props" />
 
   <PropertyGroup>
+    <AssemblyName>ApiPort-Offline</AssemblyName>
     <DefineConstants>$(DefineConstants);FEATURE_OFFLINE</DefineConstants>
   </PropertyGroup>
 

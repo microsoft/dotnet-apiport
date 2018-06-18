@@ -1,20 +1,15 @@
 <Project>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <AssemblyName>ApiPort</AssemblyName>
     <RootNamespace>ApiPort</RootNamespace>
-    <!--
-      netcoreapp target must be first to avoid a ResXFileCodeGenerator issue
-      (tracked at https://github.com/dotnet/project-system/issues/1519)
-    -->
-    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
-    <RuntimeIdentifiers>win7-x64;win7-x86;osx.10.10-x64;ubuntu.14.04-x64;ubuntu.17.04-x64</RuntimeIdentifiers>
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <IsPackable>false</IsPackable>
+    <PackAsTool>true</PackAsTool>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackAsTool>false</PackAsTool>
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
   </PropertyGroup>
@@ -22,14 +17,6 @@
   <PropertyGroup>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
     <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-
-  <!-- FxCop does not understand this target platform and will output an error similar to the following:
-    MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp1.0\ApiPort.dll'
-    MSBUILD : error : CA0052 : No targets were selected.
-    -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,10 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="System.CommandLine" Version="0.1.0-e171125-2" />
-    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
-    <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

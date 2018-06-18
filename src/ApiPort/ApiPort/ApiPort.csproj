@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ApiPort</AssemblyName>
+  </PropertyGroup>
 
   <Import Project="ApiPort.props" />
 
