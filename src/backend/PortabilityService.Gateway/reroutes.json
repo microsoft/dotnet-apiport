@@ -3,12 +3,12 @@
     "ReRoutes": [
       {
         "RouteDescription": "Analyze Service Redirect",
-        "DownstreamPathTemplate": "/api/analyze",
-        "DownstreamScheme": "https",
+        "DownstreamPathTemplate": "/api/Analyze",
+        "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "dotnetportability.azurewebsites.net",
-            "Port": 443
+            "Host": "portabilityservice.analysisservice",
+            "Port": 8002
           }
         ],
         "UpstreamPathTemplate": "/api/analyze",
