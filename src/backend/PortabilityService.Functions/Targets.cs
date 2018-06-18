@@ -1,4 +1,7 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,7 +26,7 @@ namespace PortabilityService.Functions
         {
             var targets = await GetStaticListOfTargets(log);
             var content = new StringContent(targets, Encoding.UTF8, "application/json");
-            return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = content};
+            return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = content };
         }
 
         /// <summary>
@@ -31,16 +34,16 @@ namespace PortabilityService.Functions
         /// </summary>
         /// <returns>A Task<string> representing the async task that fetches the catalog of supported targets</string></returns>
         /// <param name="log">logging provider instance</param>
-        private static async Task<string> GetStaticListOfTargets(ILogger log)
+        private static Task<string> GetStaticListOfTargets(ILogger log)
         {
-            return await Task.Run(() => 
+            return Task.Run(() =>
             {
                 var targets = string.Empty;
                 try
                 {
                     targets = Encoding.UTF8.GetString(Properties.Resources.ListOfTargets);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     log.LogError(ex.Message, ex.StackTrace);
                 }
