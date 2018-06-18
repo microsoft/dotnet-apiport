@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\ApiPort\ApiPort\ApiPort.csproj" />
+    <ProjectReference Include="..\..\..\src\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
 </Project>
