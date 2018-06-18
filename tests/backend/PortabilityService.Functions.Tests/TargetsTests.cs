@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability.Azure;
 using NSubstitute;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,9 +25,8 @@ namespace PortabilityService.Functions.Tests
                 var response = await Targets.Run(request, Substitute.For<ILogger>());
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 var contents = await response.Content.ReadAsStringAsync();
-#pragma warning disable CA1307 // Specify StringComparison (this string is static at this time)
-                Assert.Contains(".NET Core + Platform Extensions", contents);
-#pragma warning restore CA1307 // Specify StringComparison
+
+                Assert.Contains(".NET Core + Platform Extensions", contents, StringComparison.Ordinal);
             }
         }
     }
