@@ -7,10 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.Azure.Storage;
-using Microsoft.Fx.Portability.ObjectModel;
-using Microsoft.WindowsAzure.Storage;
 using System;
 
 namespace PortabilityService.AnalysisService
@@ -46,6 +42,7 @@ namespace PortabilityService.AnalysisService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.EnsureCatalogIsAvailable();
             app.UseMvc();
         }
     }

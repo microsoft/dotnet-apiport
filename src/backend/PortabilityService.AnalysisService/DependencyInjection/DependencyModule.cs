@@ -36,11 +36,11 @@ namespace PortabilityService.AnalysisService
 
                 return new CatalogInBlobIndexCache(settings, CancellationToken.None);
             })
-                .As<IObjectCache<CatalogIndex>>()
-                .As<IObjectCache>()
-                .SingleInstance()
-                .OnActivated(o => o.Instance.Start())
-                .AutoActivate();
+            .As<IObjectCache<CatalogIndex>>()
+            .As<IObjectCache>()
+            .SingleInstance()
+            .OnActivated(o => o.Instance.Start())
+            .AutoActivate();
 
             // TODO (yumeng): replace UnioningApiCatalogLookup with a concrete type implementing IApiCatalogLookup
             // and interacting with the planned catelog service.
