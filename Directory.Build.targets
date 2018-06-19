@@ -49,7 +49,7 @@
 
     <!-- Enforcing the same compiler toolset to be used on desktop builds.
       https://github.com/dotnet/roslyn-analyzers/issues/1533#issuecomment-358733030 -->
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" Condition="'$(OS)' == 'Windows_NT'">
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.2" Condition="'$(OS)' == 'Windows_NT'">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
