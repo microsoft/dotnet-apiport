@@ -5,14 +5,17 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.ConfigurationProvider
 {
-    public class PortabilityServiceConfigurationProvider : Microsoft.Extensions.Configuration.ConfigurationProvider
+    public class PortabilityServiceConfigurationProvider : Extensions.Configuration.ConfigurationProvider
     {
+        private static JsonSerializer s_serializer = JsonSerializer.CreateDefault();
+
         private readonly HttpClient _httpClient;
         private readonly string _configurationSection;
         private readonly bool _optional;
@@ -65,23 +68,30 @@ namespace Microsoft.Fx.Portability.ConfigurationProvider
         /// </summary>
         private async Task<T> GetJsonDataAsync<T>(HttpRequestMessage request)
         {
-            var result = default(T);
-            var response = await _httpClient.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                if (!_optional)
+                using (var response = await _httpClient.SendAsync(request))
                 {
-                    throw new HttpRequestException(string.Format(CultureInfo.CurrentCulture, Resources.Resources.HttpRequestExceptionMessage, response.StatusCode.ToString()));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using (var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        using (var streamReader = new StreamReader(stream))
+                        using (var jsonReader = new JsonTextReader(streamReader))
+                        {
+                            return s_serializer.Deserialize<T>(jsonReader);
+                        }
+                    }
+                    else if (!_optional)
+                    {
+                        throw new HttpRequestException(string.Format(CultureInfo.CurrentCulture, Resources.Resources.HttpRequestExceptionMessage, response.StatusCode.ToString()));
+                    }
                 }
             }
-            else
+            catch (HttpRequestException) when (_optional)
             {
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                result = JsonConvert.DeserializeObject<T>(content);
             }
 
-            return result;
+            return default;
         }
     }
 }
