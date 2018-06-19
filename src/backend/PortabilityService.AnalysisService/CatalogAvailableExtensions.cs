@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Fx.Portability.Cache;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PortabilityService.AnalysisService
 {
@@ -13,22 +15,41 @@ namespace PortabilityService.AnalysisService
     {
         public static IApplicationBuilder EnsureCatalogIsAvailable(this IApplicationBuilder app)
         {
-            return app.Use((context, next) =>
-            {
-                var index = context.RequestServices.GetService<IObjectCache<CatalogIndex>>();
+            return app.UseMiddleware<EnsureCatalogAvailableMiddleware>();
+        }
 
-                if (index.Value.Catalog is null)
+        private class EnsureCatalogAvailableMiddleware
+        {
+            private readonly RequestDelegate _next;
+            private readonly ILogger<EnsureCatalogAvailableMiddleware> _log;
+            private readonly IObjectCache<CatalogIndex> _cache;
+
+            public EnsureCatalogAvailableMiddleware(RequestDelegate next, ILogger<EnsureCatalogAvailableMiddleware> log, IObjectCache<CatalogIndex> cache)
+            {
+                _next = next;
+                _log = log;
+                _cache = cache;
+            }
+
+            public Task InvokeAsync(HttpContext context)
+            {
+                if (_cache.Value.Catalog is null)
                 {
-                    var text = "Catalog not available";
-                    var bytes = Encoding.UTF8.GetBytes(text);
-                    context.Response.StatusCode = (int)HttpStatusCode.FailedDependency;
-                    return context.Response.Body.WriteAsync(bytes).AsTask();
+                    return WriteOutput(context.Response, "Catalog is not available");
                 }
                 else
                 {
-                    return next();
+                    return _next(context);
                 }
-            });
+            }
+
+            private Task WriteOutput(HttpResponse response, string message)
+            {
+                _log.LogWarning(message);
+                var bytes = Encoding.UTF8.GetBytes(message);
+                response.StatusCode = (int)HttpStatusCode.FailedDependency;
+                return response.Body.WriteAsync(bytes).AsTask();
+            }
         }
     }
 }
