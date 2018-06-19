@@ -9,24 +9,19 @@ namespace PortabilityService.AnalysisService
 {
     public sealed class CatalogIndex : IDisposable
     {
-        private IApiCatalogLookup _catalog;
-        private ISearcher<string> _index;
-
         public CatalogIndex(IApiCatalogLookup catalog, ISearcher<string> index)
         {
-            _catalog = catalog;
-            _index = index;
+            Catalog = catalog;
+            Index = index;
         }
 
-        public IApiCatalogLookup Catalog { get { return _catalog; } }
+        public IApiCatalogLookup Catalog { get; }
 
-        public ISearcher<string> Index { get { return _index; } }
+        public ISearcher<string> Index { get; }
 
         public void Dispose()
         {
-            var searcher = _index as IDisposable;
-
-            if (searcher != null)
+            if (Index is IDisposable searcher)
             {
                 searcher.Dispose();
             }
