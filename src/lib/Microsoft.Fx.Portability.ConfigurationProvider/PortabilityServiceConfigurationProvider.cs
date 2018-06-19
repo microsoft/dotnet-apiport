@@ -70,7 +70,7 @@ namespace Microsoft.Fx.Portability.ConfigurationProvider
         {
             try
             {
-                using (var response = await _httpClient.SendAsync(request))
+                using (var response = await _httpClient.SendAsync(request).ConfigureAwait(false))
                 {
                     if (response.IsSuccessStatusCode)
                     {
