@@ -69,15 +69,14 @@ namespace ApiPort
                 if (query.StartsWith(LocalizedStrings.ReplOptionCount, StringComparison.OrdinalIgnoreCase))
                 {
                     var trimmed = query
-#if NETCOREAPP2_0
+#if NETCOREAPP2_1
                         .Replace(LocalizedStrings.ReplOptionCount, string.Empty, StringComparison.OrdinalIgnoreCase)
 #else
                         .Replace(LocalizedStrings.ReplOptionCount, string.Empty)
 #endif
                         .Trim();
-                    int updatedCount;
 
-                    if (Int32.TryParse(trimmed, out updatedCount))
+                    if (Int32.TryParse(trimmed, out int updatedCount))
                     {
                         count = updatedCount;
                         WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ReplUpdatedCount, count), ConsoleColor.Yellow);
