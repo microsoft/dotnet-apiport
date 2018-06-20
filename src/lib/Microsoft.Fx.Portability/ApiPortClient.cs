@@ -270,7 +270,7 @@ namespace Microsoft.Fx.Portability
             foreach (var assembly in dependencyInfo.UserAssemblies)
             {
                 // Windows's file paths are case-insensitive
-                var matchingAssembly = options.InputAssemblies.SingleOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
+                var matchingAssembly = options.InputAssemblies.FirstOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
 
                 // AssemblyInfo is explicitly specified if we found a matching
                 // assembly location in the input dictionary AND the value is
