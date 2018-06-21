@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public class UnioningApiCatalogLookup : CloudApiCatalogLookup2
+    public class UnioningApiCatalogLookup : CloudApiCatalogLookup
     {
         private static readonly FrameworkName AspNetCore1_0 = new FrameworkName("ASP.NET Core", Version.Parse("1.0"));
         private static readonly FrameworkName NetCore1_0 = new FrameworkName(".NET Core", Version.Parse("1.0"));
