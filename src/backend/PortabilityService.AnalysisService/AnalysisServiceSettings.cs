@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
+using System;
 
 namespace PortabilityService.AnalysisService
 {
@@ -39,8 +39,6 @@ namespace PortabilityService.AnalysisService
 
         public string DefaultVersions => _configuration[nameof(DefaultVersions)];
 
-        public string DotNetStatusEndpoint => _configuration[nameof(DotNetStatusEndpoint)];
-
         public CloudStorageAccount StorageAccount
         {
             get
@@ -53,16 +51,11 @@ namespace PortabilityService.AnalysisService
 
         public string TargetGroups => _configuration[nameof(TargetGroups)];
 
-        public bool UnionAspNetWithNetCore
-        {
-            get
-            {
-                bool settingValue;
-                if (bool.TryParse(_configuration[nameof(UnionAspNetWithNetCore)], out settingValue))
-                    return settingValue;
-                else
-                    return false;
-            }
-        }
+        public bool UnionAspNetWithNetCore =>
+            bool.TryParse(_configuration[nameof(UnionAspNetWithNetCore)], out var settingValue) ? settingValue : false;
+
+        public string BreakingChangesPath => _configuration[nameof(BreakingChangesPath)];
+
+        public string RecommendedChangesPath => _configuration[nameof(RecommendedChangesPath)];
     }
 }

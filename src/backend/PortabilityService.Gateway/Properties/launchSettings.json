@@ -1,21 +1,5 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:2747",
-      "sslPort": 0
-    }
-  },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": false,
-      "environmentVariables": {
-        "PortabilityConfigurationServiceUrl": "http://localhost:1443",
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "PortabilityServiceGateway": {
       "commandName": "Project",
       "launchBrowser": false,

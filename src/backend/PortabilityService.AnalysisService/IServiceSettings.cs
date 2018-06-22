@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-//TODO (yumeng): uncommend next line
-//using Microsoft.Fx.Portability.Github;
 using Microsoft.WindowsAzure.Storage;
 using System;
 
@@ -38,13 +36,6 @@ namespace PortabilityService.AnalysisService
         string DefaultVersions { get; }
 
         /// <summary>
-        /// URL to http://dotnetstatus.azurewebsites.net site
-        /// 
-        /// TODO: Remove this because site is replaced with apisof.net
-        /// </summary>
-        string DotNetStatusEndpoint { get; }
-
-        /// <summary>
         /// Storage account for catalog.bin
         /// </summary>
         CloudStorageAccount StorageAccount { get; }
@@ -54,28 +45,17 @@ namespace PortabilityService.AnalysisService
         /// </summary>
         string TargetGroups { get; }
 
-        /* TODO (yumeng): add back the following after portability is done
         /// <summary>
-        /// Git repository used to fetch <see cref="Microsoft.Fx.Portability.ObjectModel.ApiPortData"/>
+        /// Absolute path to a directory containing breaking change docs as .md files
+        /// (i.e. the contents of https://github.com/Microsoft/dotnet/tree/master/Documentation/compatibility)
         /// </summary>
-        IGitSettings ApiPortGitData { get; }
+        string BreakingChangesPath { get; }
 
         /// <summary>
-        /// Git repository to fetch <see cref="BreakingChange"/>
+        /// Absolute path to a directory tree containing recommended changes as .md files
+        /// (i.e. the contents of https://github.com/Microsoft/dotnet-apiport/tree/master/docs/RecommendedChanges)
         /// </summary>
-        IGitSettings BreakingChangeData { get; }
-
-        /// <summary>
-        /// Settings used to download Compatibility Diagnostic information
-        /// </summary>
-        IDiagnosticDownloaderSettings DiagnosticDownloader { get; }
-
-        /// <summary>
-        /// OAuth information used to communicate with GitHub.
-        /// </summary>
-        /// <remarks>Used for the WebHooks for dotnet-apiport PR validation</remarks>
-        IGitHubSettings GitHub { get; }
-        end TODO */
+        string RecommendedChangesPath { get; }
 
         /// <summary>
         /// True to unify APIs from ASP.NET Core and .NET Core into the same
