@@ -10,6 +10,6 @@ namespace Microsoft.Fx.Portability.Reporting
     {
         ResultFormatInformation Format { get; }
 
-        void WriteStream(Stream stream, AnalyzeResponse response);
+        void WriteStream(Stream stream, AnalyzeResponse response, AnalyzeRequest request);
     }
 }

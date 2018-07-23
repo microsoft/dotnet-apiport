@@ -26,7 +26,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         public ResultFormatInformation Format { get { return _formatInformation; } }
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public void WriteStream(Stream stream, AnalyzeResponse response, AnalyzeRequest request)
         {
             var excelWriter = new ExcelOpenXmlOutputWriter(_targetMapper, response.ReportingResult, response.BreakingChanges, response.CatalogLastUpdated, description: null);
 
