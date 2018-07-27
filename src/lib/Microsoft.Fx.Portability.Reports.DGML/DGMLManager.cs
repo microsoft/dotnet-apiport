@@ -1,7 +1,9 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Linq;
 
 namespace Microsoft.Fx.Portability.Reports.DGML
@@ -9,13 +11,13 @@ namespace Microsoft.Fx.Portability.Reports.DGML
     /// <summary>
     /// This class will manage the IDs that we generate for the DGML graph
     /// </summary>
-    class DGMLManager
+    internal class DGMLManager
     {
         private readonly Dictionary<string, Guid> _nodesDictionary = new Dictionary<string, Guid>();
 
-        private XElement nodes;
+        private readonly XElement nodes;
 
-        private XElement links;
+        private readonly XElement links;
 
         private readonly XNamespace _nameSpace = "http://schemas.microsoft.com/vs/2009/dgml";
         #region DGML template
@@ -52,8 +54,8 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             </DirectedGraph>";
         #endregion
 
+        private XDocument file;
 
-        XDocument file;
         public DGMLManager()
         {
             file = XDocument.Parse(_template);
@@ -73,11 +75,6 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             return _nodesDictionary.TryGetValue(value, out frameworkGuid);
         }
 
-        internal void AddId(string value, Guid nodeGuid)
-        {
-            _nodesDictionary.Add(value, nodeGuid);
-        }
-
         internal void AddLink(Guid source, Guid target, string category = null)
         {
             var element = new XElement(_nameSpace + "Link",
@@ -85,7 +82,9 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                 new XAttribute("Target", target));
 
             if (category != null)
+            {
                 element.SetAttributeValue("Category", category);
+            }
 
             links.Add(element);
         }
@@ -103,9 +102,14 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                 new XAttribute("Category", category));
 
             if (portabilityIndex != null)
+            {
                 element.SetAttributeValue("PortabilityIndex", portabilityIndex);
+            }
+
             if (group != null)
+            {
                 element.SetAttributeValue("Group", group);
+            }
 
             nodes.Add(element);
         }
@@ -117,19 +121,18 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                 file.Save(ms);
                 ms.Position = 0;
                 ms.CopyTo(stream);
-            };
+            }
         }
 
-        internal bool GetOrCreateGuid(string nodeLabel, out Guid guid)
+        internal Guid GetOrCreateGuid(string nodeLabel)
         {
-            if (!_nodesDictionary.TryGetValue(nodeLabel, out guid))
+            if (!_nodesDictionary.TryGetValue(nodeLabel, out Guid guid))
             {
                 guid = Guid.NewGuid();
                 _nodesDictionary.Add(nodeLabel, guid);
-                return false;
             }
 
-            return true;
+            return guid;
         }
     }
 }

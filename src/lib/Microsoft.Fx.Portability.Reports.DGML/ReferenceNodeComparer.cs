@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability.Reports.DGML
 {
-    class ReferenceNodeComparer : IEqualityComparer<ReferenceNode>
+    internal class ReferenceNodeComparer : IEqualityComparer<ReferenceNode>
     {
+        public static ReferenceNodeComparer Instance { get; } = new ReferenceNodeComparer();
+
         public bool Equals(ReferenceNode x, ReferenceNode y)
         {
             return x.Assembly == y.Assembly;

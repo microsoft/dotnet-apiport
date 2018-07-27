@@ -24,7 +24,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             FileExtension = ".dgml"
         };
 
-        private DGMLManager dgml = new DGMLManager();
+        private readonly DGMLManager dgml = new DGMLManager();
 
         public void WriteStream(Stream stream, AnalyzeResponse response, AnalyzeRequest request)
         {
@@ -35,27 +35,30 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             GenerateTargetContainers(targets);
             dgml.SetTitle(response.ApplicationName);
 
-            //for each target, let's generate the assemblies
+            // For each target, let's generate the assemblies
             foreach (var node in rg.Nodes.Keys)
             {
                 for (int i = 0; i < targets.Count; i++)
                 {
-                    double portabilityIndex = 0;
+                    double portabilityIndex = 0, portabilityIndexRefs = 0;
                     string missingTypes = null;
                     if (node.UsageData != null)
                     {
                         TargetUsageInfo usageInfo = node.UsageData[i];
-                        portabilityIndex = Math.Round(usageInfo.PortabilityIndex * 100.0, 2);
+                        portabilityIndex = node.GetPortabilityIndex(i);
+                        portabilityIndexRefs = node.GetPortabilityIndexForReferences(i);
 
                         missingTypes = GenerateMissingTypes(node.Assembly, analysisResult, i);
                     }
 
                     // generate the node
                     string tfm = targets[i].FullName;
-                    dgml.GetOrCreateGuid($"{node.Assembly},TFM:{tfm}", out Guid nodeGuid);
+                    Guid nodeGuid = dgml.GetOrCreateGuid($"{node.Assembly},TFM:{tfm}");
+                    string nodeTitle = $"{node.SimpleName}: {Math.Round(portabilityIndex * 100, 2)}%, References: {Math.Round(portabilityIndexRefs * 100, 2)}%";
+                    string nodeCategory = node.IsMissing ? "Unresolved" : GetCategory(Math.Round(portabilityIndex * portabilityIndexRefs * 100, 2));
 
-                    dgml.AddNode(nodeGuid, $"{node.SimpleName}, {portabilityIndex}%",
-                        node.IsMissing ? "Unresolved" : GetCategory(portabilityIndex),
+                    dgml.AddNode(nodeGuid, nodeTitle,
+                        nodeCategory,
                         portabilityIndex,
                         group: missingTypes.Length == 0 ? null : "Collapsed");
 
@@ -80,12 +83,11 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                 {
                     // generate the node
                     string tfm = targets[i].FullName;
-                    dgml.GetOrCreateGuid($"{node.Assembly},TFM:{tfm}", out Guid nodeGuid);
+                    Guid nodeGuid = dgml.GetOrCreateGuid($"{node.Assembly},TFM:{tfm}");
 
                     foreach (var refNode in node.Nodes)
                     {
-                        dgml.GetOrCreateGuid($"{refNode.Assembly},TFM:{tfm}", out Guid refNodeGuid);
-
+                        Guid refNodeGuid = dgml.GetOrCreateGuid($"{refNode.Assembly},TFM:{tfm}");
                         dgml.AddLink(nodeGuid, refNodeGuid);
                     }
                 }
@@ -99,9 +101,12 @@ namespace Microsoft.Fx.Portability.Reports.DGML
         private static string GenerateMissingTypes(string assembly, ReportingResult response, int i)
         {
             // for a given assembly identity and a given target usage, display the missing types
-            //TODO: this is very allocation heavy.
-            IEnumerable<MissingTypeInfo> missingTypesForAssembly = response.GetMissingTypes().Where(mt => mt.UsedIn.Any(x => x.AssemblyIdentity == assembly) && mt.IsMissing);
-            var missingTypesForFramework = missingTypesForAssembly.Where(mt => mt.TargetStatus.ToList()[i] == "Not supported" || (mt.TargetVersionStatus.ToList()[i] > response.Targets[i].Version)).Select(x => x.DocId).OrderBy(x => x);
+            IEnumerable<MissingTypeInfo> missingTypesForAssembly = response.GetMissingTypes()
+                                                                    .Where(mt => mt.UsedIn.Any(x => x.AssemblyIdentity == assembly) && mt.IsMissing);
+
+            var missingTypesForFramework = missingTypesForAssembly
+                                            .Where(mt => mt.TargetStatus.ToList()[i] == "Not supported" || (mt.TargetVersionStatus.ToList()[i] > response.Targets[i].Version))
+                                            .Select(x => x.DocId).OrderBy(x => x);
 
             return string.Join("\n", missingTypesForFramework);
         }
@@ -111,8 +116,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             for (int i = 0; i < targets.Count; i++)
             {
                 string targetFramework = targets[i].FullName;
-                Guid nodeGuid = Guid.NewGuid();
-                dgml.AddId(targetFramework, nodeGuid);
+                Guid nodeGuid = dgml.GetOrCreateGuid(targetFramework);
                 dgml.AddNode(nodeGuid, targetFramework, "Target", null, group: "Expanded");
             }
         }

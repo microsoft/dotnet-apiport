@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
-using System.Security.Cryptography;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -43,57 +42,20 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private IList<AssemblyReferenceInformation> ComputeAssemblyReferences(MetadataReader metadataReader)
         {
-            List<AssemblyReferenceInformation> refs = new List<AssemblyReferenceInformation>();
+            var refs = new List<AssemblyReferenceInformation>();
             foreach (var handle in _reader.AssemblyReferences)
             {
                 try
                 {
                     var entry = _reader.GetAssemblyReference(handle);
 
-                    string name = metadataReader.GetString(entry.Name);
-                    string culture = entry.Culture.IsNil ? "neutral" : metadataReader.GetString(entry.Culture);
-                    Version version = entry.Version;
-                    string pkt = FormatPublicKeyToken(metadataReader, entry.PublicKeyOrToken);
-
-                    refs.Add(new AssemblyReferenceInformation(name, version, culture, pkt));
+                    refs.Add(metadataReader.FormatAssemblyInfo(entry));
                 }
                 catch (BadImageFormatException)
                 {
                 }
             }
             return refs;
-        }
-
-        private static string FormatPublicKeyToken(MetadataReader metadataReader, BlobHandle handle)
-        {
-            byte[] bytes = metadataReader.GetBlobBytes(handle);
-
-            if (bytes == null || bytes.Length <= 0)
-            {
-                return "null";
-            }
-
-            if (bytes.Length > 8)  // Strong named assembly
-            {
-                // Get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key 
-                using (var sha1 = SHA1.Create())
-                {
-                    var token = sha1.ComputeHash(bytes);
-
-                    bytes = new byte[8];
-                    int count = 0;
-                    for (int i = token.Length - 1; i >= token.Length - 8; i--)
-                    {
-                        bytes[count] = token[i];
-                        count++;
-                    }
-                }
-            }
-
-            // Convert bytes to string, but we don't want the '-' characters and need it to be lower case
-            return BitConverter.ToString(bytes)
-                .Replace("-", "")
-                .ToLowerInvariant();
         }
 
         public AssemblyInfo CallingAssembly { get; }

@@ -21,6 +21,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         }
 
         public int GetAvailableAPICalls() => _callsToAvailableAPIs;
+
         public int GetUnavailableAPICalls() => _callsToUnavailableAPIs;
 
         public double PortabilityIndex
