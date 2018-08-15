@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Tests\ResourceAssembliesGetSkipped_NoReferences.il" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
