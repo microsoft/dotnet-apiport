@@ -49,17 +49,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             // reference to System.Object that is considered a possible
             // framework assembly and use that for any primitives that don't
             // have an assembly
-            AssemblyReferenceInformation systemObjectAssembly;
-
-            if (!_reader.AssemblyReferences.Any() && !_reader.MemberReferences.Any())
-            {
-                // this is probably a resources DLL and doesn't need inspection
-                systemObjectAssembly = null;
-            }
-            else
-            {
-                systemObjectAssembly = _objectFinder.GetSystemRuntimeAssemblyInformation(_reader);
-            }
+            var systemObjectAssembly = _objectFinder.GetSystemRuntimeAssemblyInformation(_reader);
 
             var provider = new MemberMetadataInfoTypeProvider(_reader);
 

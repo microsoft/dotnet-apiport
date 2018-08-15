@@ -32,6 +32,10 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// </summary>
         public AssemblyReferenceInformation GetSystemRuntimeAssemblyInformation(MetadataReader reader)
         {
+            // this is probably a resources DLL and doesn't need inspection
+            if (!reader.AssemblyReferences.Any() && !reader.MemberReferences.Any())
+                return null;
+
             var microsoftAssemblies = reader.AssemblyReferences
                 .Select(handle =>
                 {
