@@ -3,18 +3,18 @@
 
 using ApiPortVS.Contracts;
 using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
-using static Microsoft.VisualStudio.VSConstants;
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
-using System;
-using System.Threading;
-using Microsoft.VisualStudio;
-using System.Diagnostics;
+using static Microsoft.VisualStudio.VSConstants;
 
 namespace ApiPortVS
 {

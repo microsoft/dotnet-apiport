@@ -16,15 +16,25 @@ namespace Microsoft.Fx.Portability
         /// Value: true if the file was explicitly specified and false otherwise.
         /// </summary>
         ImmutableDictionary<IAssemblyFile, bool> InputAssemblies { get; }
+
         IEnumerable<string> IgnoredAssemblyFiles { get; }
+
         AnalyzeRequestFlags RequestFlags { get; }
+
         IEnumerable<string> Targets { get; }
+
         IEnumerable<string> OutputFormats { get; }
+
         IEnumerable<string> BreakingChangeSuppressions { get; }
+
         string ServiceEndpoint { get; }
+
         string OutputFileName { get; }
+
         IEnumerable<string> InvalidInputFiles { get; }
+
         bool OverwriteOutputFile { get; }
+
         IEnumerable<string> ReferencedNuGetPackages { get; }
     }
 }

@@ -18,11 +18,13 @@ namespace Microsoft.Fx.Portability
             get { return _docId ?? string.Empty; }
             set { _docId = value; }
         }
+
         public string ReturnType
         {
             get { return _returnType ?? string.Empty; }
             set { _returnType = value; }
         }
+
         public string Name
         {
             get { return _name ?? string.Empty; }

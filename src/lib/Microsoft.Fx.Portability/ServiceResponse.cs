@@ -8,6 +8,7 @@ namespace Microsoft.Fx.Portability
     public class ServiceResponse<T>
     {
         public T Response { get; private set; }
+
         public ServiceHeaders Headers { get; private set; }
 
         public ServiceResponse(T response)

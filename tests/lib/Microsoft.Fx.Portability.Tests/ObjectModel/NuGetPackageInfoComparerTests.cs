@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
 using Xunit;
+
 using static Microsoft.Fx.Portability.Tests.TestData.TestFrameworks;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel

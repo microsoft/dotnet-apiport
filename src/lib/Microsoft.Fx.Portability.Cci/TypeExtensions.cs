@@ -41,12 +41,16 @@ namespace Microsoft.Cci.Extensions
         public static ITypeDefinition GetDefinitionOrNull(this ITypeReference type)
         {
             if (type == null)
+            {
                 return null;
+            }
 
             ITypeDefinition typeDef = type.ResolvedType;
 
             if (typeDef.IsDummy())
+            {
                 return null;
+            }
 
             return typeDef;
         }
@@ -58,7 +62,9 @@ namespace Microsoft.Cci.Extensions
                 ITypeDefinition baseType = bc.GetDefinitionOrNull();
 
                 if (baseType != null)
+                {
                     yield return baseType;
+                }
             }
 
             foreach (var iface in type.Interfaces)
@@ -66,7 +72,9 @@ namespace Microsoft.Cci.Extensions
                 ITypeDefinition baseType = iface.GetDefinitionOrNull();
 
                 if (baseType != null)
+                {
                     yield return baseType;
+                }
             }
         }
 
@@ -82,8 +90,10 @@ namespace Microsoft.Cci.Extensions
                 {
                     yield return baseType;
 
-                    foreach (ITypeDefinition nextBaseType in GetAllBaseTypes(baseType))
+                    foreach (var nextBaseType in GetAllBaseTypes(baseType))
+                    {
                         yield return nextBaseType;
+                    }
                 }
             }
         }
@@ -100,13 +110,19 @@ namespace Microsoft.Cci.Extensions
 
                     // Get all the base types of the interface.
                     foreach (ITypeDefinition nextIfaceRef in GetAllBaseTypes(iface))
+                    {
                         yield return nextIfaceRef;
+                    }
                 }
             }
 
             foreach (var baseType in GetAllBaseTypes(type))
+            {
                 foreach (var iface in GetAllInterfaces(baseType))
+                {
                     yield return iface;
+                }
+            }
         }
 
         public static IAssembly GetAssembly(this ITypeDefinition type)
@@ -115,11 +131,15 @@ namespace Microsoft.Cci.Extensions
 
             IAssembly assembly = unit as IAssembly;
             if (assembly != null)
+            {
                 return assembly;
+            }
 
             IModule module = unit as IModule;
             if (module != null)
+            {
                 return module.ContainingAssembly;
+            }
 
             return null;
         }
@@ -130,11 +150,15 @@ namespace Microsoft.Cci.Extensions
 
             IAssemblyReference assembly = unit as IAssemblyReference;
             if (assembly != null)
+            {
                 return assembly;
+            }
 
             IModuleReference module = unit as IModuleReference;
             if (module != null)
+            {
                 return module.ContainingAssembly;
+            }
 
             return null;
         }
@@ -144,17 +168,20 @@ namespace Microsoft.Cci.Extensions
             Contract.Requires(reference != null);
             Contract.Requires(!(reference is Dummy));
 
-            IAssemblyReference assembly = reference as IAssemblyReference;
-            if (assembly != null)
+            if (reference is IAssemblyReference assembly)
+            {
                 return assembly;
+            }
 
-            ITypeReference type = reference as ITypeReference;
-            if (type != null)
+            if (reference is ITypeReference type)
+            {
                 return type.GetAssemblyReference();
+            }
 
-            ITypeMemberReference member = reference as ITypeMemberReference;
-            if (member != null)
+            if (reference is ITypeMemberReference member)
+            {
                 return member.ContainingType.GetAssemblyReference();
+            }
 
             throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownIReference, reference.GetType().FullName));
         }
@@ -177,24 +204,23 @@ namespace Microsoft.Cci.Extensions
         public static bool IsWindowsRuntimeAssembly(this IAssemblyReference assembly)
         {
             if (assembly == null)
+            {
                 return false;
+            }
 
             // ContainsForeignTypes == AssemblyFlag 0x200 == windowsruntime bit
-            if (assembly.ContainsForeignTypes)
-                return true;
-
-            return false;
+            return assembly.ContainsForeignTypes;
         }
 
         public static bool IsWindowsRuntimeType(this ITypeReference type)
         {
-            IAssemblyReference assemblyRef = type.GetAssemblyReference();
+            var assemblyRef = type.GetAssemblyReference();
             return assemblyRef.IsWindowsRuntimeAssembly();
         }
 
         public static bool IsWindowsRuntimeMember(this ITypeMemberReference member)
         {
-            IAssemblyReference assemblyRef = member.GetAssemblyReference();
+            var assemblyRef = member.GetAssemblyReference();
             return assemblyRef.IsWindowsRuntimeAssembly();
         }
 
@@ -205,56 +231,65 @@ namespace Microsoft.Cci.Extensions
 
         public static string GetTypeName(this ITypeReference type, bool includeNamespace = true)
         {
-            TypeNameFormatter formatter = new TypeNameFormatter();
-            NameFormattingOptions options = NameFormattingOptions.OmitTypeArguments | NameFormattingOptions.UseReflectionStyleForNestedTypeNames;
+            var formatter = new TypeNameFormatter();
+            var options = NameFormattingOptions.OmitTypeArguments | NameFormattingOptions.UseReflectionStyleForNestedTypeNames;
             if (!includeNamespace)
+            {
                 options |= NameFormattingOptions.OmitContainingNamespace;
+            }
 
             string name = formatter.GetTypeName(type, options);
             return name;
         }
+
         public static string GetTypeName(this ITypeReference type, NameFormattingOptions options)
         {
-            TypeNameFormatter formatter = new TypeNameFormatter();
+            var formatter = new TypeNameFormatter();
             string name = formatter.GetTypeName(type, options);
             return name;
         }
 
         public static INamespaceDefinition GetNamespace(this ITypeDefinition type)
         {
-            INamespaceTypeDefinition nsType = type as INamespaceTypeDefinition;
-            if (nsType != null)
+            if (type is INamespaceTypeDefinition nsType)
+            {
                 return nsType.ContainingNamespace;
+            }
 
-            INestedTypeDefinition ntType = type as INestedTypeDefinition;
-            if (ntType != null)
+            if (type is INestedTypeDefinition ntType)
+            {
                 return GetNamespace(ntType.ContainingTypeDefinition);
+            }
 
             return null;
         }
 
         public static string GetNamespaceName(this ITypeReference type)
         {
-            INamespaceTypeReference nsType = type as INamespaceTypeReference;
-            if (nsType != null)
+            if (type is INamespaceTypeReference nsType)
+            {
                 return TypeHelper.GetNamespaceName(nsType.ContainingUnitNamespace, NameFormattingOptions.None);
+            }
 
-            INestedTypeReference ntType = type as INestedTypeReference;
-            if (ntType != null)
+            if (type is INestedTypeReference ntType)
+            {
                 return GetNamespaceName(ntType.ContainingType);
+            }
 
-            return "";
+            return string.Empty;
         }
 
         public static string Name(this ITypeDefinition type)
         {
-            INamespaceTypeDefinition nsType = type as INamespaceTypeDefinition;
-            if (nsType != null)
+            if (type is INamespaceTypeDefinition nsType)
+            {
                 return nsType.Name.Value;
+            }
 
-            INestedTypeDefinition nType = type as INestedTypeDefinition;
-            if (nType != null)
+            if (type is INestedTypeDefinition nType)
+            {
                 return nType.Name.Value;
+            }
 
             throw new NotImplementedException(LocalizedStrings.CalledNameOnUnsupportedDefinition);
         }
@@ -263,23 +298,27 @@ namespace Microsoft.Cci.Extensions
         {
             Contract.Requires(reference != null);
 
-            ITypeReference type = reference as ITypeReference;
-            if (type != null)
+            if (reference is ITypeReference type)
+            {
                 return TypeHelper.GetTypeName(type, NameFormattingOptions.TypeParameters);
+            }
 
-            ITypeMemberReference member = reference as ITypeMemberReference;
-            if (member != null)
+            if (reference is ITypeMemberReference member)
+            {
                 return MemberHelper.GetMemberSignature(member, NameFormattingOptions.TypeParameters | NameFormattingOptions.Signature);
+            }
 
-            IUnitNamespaceReference ns = reference as IUnitNamespaceReference;
-            if (ns != null)
+            if (reference is IUnitNamespaceReference ns)
+            {
                 return TypeHelper.GetNamespaceName(ns, NameFormattingOptions.None);
+            }
 
-            INamedEntity named = reference as INamedEntity;
-            if (named != null)
+            if (reference is INamedEntity named)
+            {
                 return named.Name.Value;
+            }
 
-            Contract.Assert(false, String.Format(CultureInfo.CurrentCulture, LocalizedStrings.FellThroughCasesIn, "TypeExtensions.FullName()", reference.GetType()));
+            Contract.Assert(false, string.Format(CultureInfo.CurrentCulture, LocalizedStrings.FellThroughCasesIn, "TypeExtensions.FullName()", reference.GetType()));
             return LocalizedStrings.UnknownReferenceType;
         }
 
@@ -292,21 +331,25 @@ namespace Microsoft.Cci.Extensions
         {
             Contract.Requires(reference != null);
 
-            ITypeReference type = reference as ITypeReference;
-            if (type != null)
+            if (reference is ITypeReference type)
+            {
                 return type.DocId();
+            }
 
-            ITypeMemberReference member = reference as ITypeMemberReference;
-            if (member != null)
+            if (reference is ITypeMemberReference member)
+            {
                 return member.DocId();
+            }
 
-            IUnitNamespaceReference ns = reference as IUnitNamespaceReference;
-            if (ns != null)
+            if (reference is IUnitNamespaceReference ns)
+            {
                 return ns.DocId();
+            }
 
-            IAssemblyReference assembly = reference as IAssemblyReference;
-            if (assembly != null)
+            if (reference is IAssemblyReference assembly)
+            {
                 return assembly.DocId();
+            }
 
             // Include the hash code as well to make it unique so we can use this for a key
             return LocalizedStrings.UnknownReferenceType + reference.GetHashCode().ToString(CultureInfo.InvariantCulture);
@@ -317,7 +360,9 @@ namespace Microsoft.Cci.Extensions
             yield return assembly.NamespaceRoot;
 
             foreach (var ns in assembly.NamespaceRoot.GetNamespaces(true))
+            {
                 yield return ns;
+            }
         }
 
         public static IEnumerable<INamespaceDefinition> GetNamespaces(this INamespaceDefinition ns, bool recursive = true)
@@ -329,7 +374,9 @@ namespace Microsoft.Cci.Extensions
                 if (recursive)
                 {
                     foreach (var nn in nestedNs.GetNamespaces(recursive))
+                    {
                         yield return nn;
+                    }
                 }
             }
         }
@@ -342,9 +389,10 @@ namespace Microsoft.Cci.Extensions
             {
                 types = ns.Members.Select<INamespaceMember, INamespaceTypeDefinition>(nsMember =>
                 {
-                    INamespaceAliasForType nsAlias = nsMember as INamespaceAliasForType;
-                    if (nsAlias != null)
+                    if (nsMember is INamespaceAliasForType nsAlias)
+                    {
                         nsMember = nsAlias.AliasedType.ResolvedType as INamespaceTypeDefinition;
+                    }
 
                     return nsMember as INamespaceTypeDefinition;
                 }).Where(t => t != null);
@@ -353,23 +401,30 @@ namespace Microsoft.Cci.Extensions
             {
                 types = ns.Members.OfType<INamespaceTypeDefinition>();
             }
+
             return types;
         }
 
         public static IEnumerable<ITypeDefinitionMember> GetAllMembers(this ITypeDefinition type)
         {
             foreach (var m in type.Members)
+            {
                 yield return m;
+            }
 
             if (type.IsInterface)
             {
                 foreach (var m in GetAllMembersFromInterfaces(type))
+                {
                     yield return m;
+                }
             }
             else
             {
                 foreach (var m in GetAllMembersBaseType(type))
+                {
                     yield return m;
+                }
             }
         }
 
@@ -378,14 +433,16 @@ namespace Microsoft.Cci.Extensions
             ITypeReference baseTypeRef = type.BaseClasses.FirstOrDefault();
 
             if (baseTypeRef == null || TypeHelper.TypesAreEquivalent(baseTypeRef, type.PlatformType.SystemObject))
+            {
                 yield break;
+            }
 
             ITypeDefinition baseType = baseTypeRef.ResolvedType;
 
-            //Contract.Assert(baseType != Dummy.Type);
-
             foreach (var m in GetAllMembers(baseType))
+            {
                 yield return m;
+            }
         }
 
         public static IEnumerable<ITypeDefinitionMember> GetAllMembersFromInterfaces(this ITypeDefinition type)
@@ -393,10 +450,11 @@ namespace Microsoft.Cci.Extensions
             foreach (ITypeReference iface in type.Interfaces)
             {
                 ITypeDefinition ifaceType = iface.ResolvedType;
-                //Contract.Assert(ifaceType != Dummy.Type);
 
                 foreach (var m in ifaceType.Members)
+                {
                     yield return m;
+                }
             }
         }
 
@@ -407,25 +465,30 @@ namespace Microsoft.Cci.Extensions
 
         public static ITypeReference UnWrap(this ITypeReference reference)
         {
-            IPointerTypeReference pointer = reference as IPointerTypeReference;
-            if (pointer != null)
+            if (reference is IPointerTypeReference pointer)
+            {
                 return pointer.TargetType.UnWrap();
+            }
 
-            IArrayTypeReference array = reference as IArrayTypeReference;
-            if (array != null)
+            if (reference is IArrayTypeReference array)
+            {
                 return array.ElementType.UnWrap();
+            }
 
-            IModifiedTypeReference modified = reference as IModifiedTypeReference;
-            if (modified != null)
+            if (reference is IModifiedTypeReference modified)
+            {
                 return modified.UnmodifiedType.UnWrap();
+            }
 
-            ISpecializedNestedTypeReference specialized = reference as ISpecializedNestedTypeReference;
-            if (specialized != null)
+            if (reference is ISpecializedNestedTypeReference specialized)
+            {
                 return specialized.UnspecializedVersion.UnWrap();
+            }
 
-            IGenericTypeInstanceReference instantiation = reference as IGenericTypeInstanceReference;
-            if (instantiation != null)
+            if (reference is IGenericTypeInstanceReference instantiation)
+            {
                 return instantiation.GenericType.UnWrap();
+            }
 
             Contract.Assert(reference is INamedTypeReference
                 || reference is INestedTypeReference
@@ -433,7 +496,7 @@ namespace Microsoft.Cci.Extensions
                 || reference is IGenericTypeParameterReference
                 || reference is IGenericMethodParameterReference
                 || reference is IFunctionPointerTypeReference,
-                string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnexpectedTypeReference, (reference?.GetType()?.FullName ?? "null")));
+                string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnexpectedTypeReference, reference?.GetType()?.FullName ?? "null"));
 
             return reference;
         }
@@ -441,29 +504,35 @@ namespace Microsoft.Cci.Extensions
         public static T UnWrapMember<T>(this T member)
            where T : ITypeMemberReference
         {
-            IGenericMethodInstanceReference genericMethod = member as IGenericMethodInstanceReference;
-            if (genericMethod != null)
+            if (member is IGenericMethodInstanceReference genericMethod)
+            {
                 return (T)genericMethod.GenericMethod.UnWrapMember();
+            }
 
-            ISpecializedNestedTypeReference type = member as ISpecializedNestedTypeReference;
-            if (type != null)
+            if (member is ISpecializedNestedTypeReference type)
+            {
                 return (T)type.UnspecializedVersion.UnWrapMember();
+            }
 
-            ISpecializedMethodReference method = member as ISpecializedMethodReference;
-            if (method != null)
+            if (member is ISpecializedMethodReference method)
+            {
                 return (T)method.UnspecializedVersion.UnWrapMember();
+            }
 
-            ISpecializedFieldReference field = member as ISpecializedFieldReference;
-            if (field != null)
+            if (member is ISpecializedFieldReference field)
+            {
                 return (T)field.UnspecializedVersion.UnWrapMember();
+            }
 
-            ISpecializedPropertyDefinition property = member as ISpecializedPropertyDefinition;
-            if (property != null)
+            if (member is ISpecializedPropertyDefinition property)
+            {
                 return (T)property.UnspecializedVersion.UnWrapMember();
+            }
 
-            ISpecializedEventDefinition evnt = member as ISpecializedEventDefinition;
-            if (evnt != null)
+            if (member is ISpecializedEventDefinition evnt)
+            {
                 return (T)evnt.UnspecializedVersion.UnWrapMember();
+            }
 
             return member;
         }
@@ -476,24 +545,34 @@ namespace Microsoft.Cci.Extensions
         public static AccessorType GetAccessorType(this IMethodDefinition methodDefinition)
         {
             if (!methodDefinition.IsSpecialName)
+            {
                 return AccessorType.None;
+            }
 
             foreach (var p in methodDefinition.ContainingTypeDefinition.Properties)
             {
                 if (p.Getter != null && p.Getter.ResolvedMethod.InternedKey == methodDefinition.InternedKey)
+                {
                     return AccessorType.PropertyGetter;
+                }
 
                 if (p.Setter != null && p.Setter.ResolvedMethod.InternedKey == methodDefinition.InternedKey)
+                {
                     return AccessorType.PropertySetter;
+                }
             }
 
             foreach (var e in methodDefinition.ContainingTypeDefinition.Events)
             {
                 if (e.Adder != null && e.Adder.ResolvedMethod.InternedKey == methodDefinition.InternedKey)
+                {
                     return AccessorType.EventAdder;
+                }
 
                 if (e.Remover != null && e.Remover.ResolvedMethod.InternedKey == methodDefinition.InternedKey)
+                {
                     return AccessorType.EventRemover;
+                }
             }
 
             return AccessorType.None;
@@ -506,17 +585,16 @@ namespace Microsoft.Cci.Extensions
                                 select a).FirstOrDefault();
 
             if (tfmAttribute == null)
+            {
                 return string.Empty;
+            }
 
-            var nameArgument = tfmAttribute.Arguments.FirstOrDefault() as IMetadataConstant;
-            if (nameArgument == null)
+            if (!(tfmAttribute.Arguments.FirstOrDefault() is IMetadataConstant nameArgument))
+            {
                 return string.Empty;
+            }
 
-            var name = nameArgument.Value as string;
-            if (name == null)
-                return string.Empty;
-
-            return name;
+            return !(nameArgument.Value is string name) ? string.Empty : name;
         }
 
         public static bool IsReferenceAssembly(this IAssembly assembly)
@@ -524,20 +602,21 @@ namespace Microsoft.Cci.Extensions
             return assembly.AssemblyAttributes.Any(a => a.Type.FullName() == "System.Runtime.CompilerServices.ReferenceAssemblyAttribute");
         }
 
-        private static Dictionary<string, string> s_tokenNames = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> TokenNames = new Dictionary<string, string>()
         {
-            {"b77a5c561934e089", "ECMA"},
-            {"b03f5f7f11d50a3a", "DEVDIV"},
-            {"7cec85d7bea7798e", "SLPLAT"},
-            {"31bf3856ad364e35", "SILVERLIGHT"},
-            {"24eec0d8c86cda1e", "PHONE"},
+            { "b77a5c561934e089", "ECMA" },
+            { "b03f5f7f11d50a3a", "DEVDIV" },
+            { "7cec85d7bea7798e", "SLPLAT" },
+            { "31bf3856ad364e35", "SILVERLIGHT" },
+            { "24eec0d8c86cda1e", "PHONE" },
         };
 
         public static string MapPublicKeyTokenToName(string publicKeyToken)
         {
-            string name;
-            if (!s_tokenNames.TryGetValue(publicKeyToken.ToLower(), out name))
+            if (!TokenNames.TryGetValue(publicKeyToken.ToLower(), out var name))
+            {
                 name = publicKeyToken;
+            }
 
             return name;
         }
@@ -559,7 +638,7 @@ namespace Microsoft.Cci.Extensions
 
         public static string GetPublicKeyToken(this AssemblyIdentity identity)
         {
-            return identity.PublicKeyToken.Aggregate("", (s, b) => s += b.ToString("x2", CultureInfo.InvariantCulture));
+            return identity.PublicKeyToken.Aggregate(string.Empty, (s, b) => s += b.ToString("x2", CultureInfo.InvariantCulture));
         }
 
         public static bool IsFrameworkAssembly(this AssemblyIdentity identity)
@@ -575,7 +654,9 @@ namespace Microsoft.Cci.Extensions
         public static bool IsFacade(this IAssembly assembly)
         {
             if (assembly.GetAllTypes().Any(t => t.Name.Value != "<Module>"))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -607,14 +688,14 @@ namespace Microsoft.Cci.Extensions
                 return false;
             }
 
-            IMetadataConstant singleArgument = attribute.Arguments.Single() as IMetadataConstant;
+            var singleArgument = attribute.Arguments.Single() as IMetadataConstant;
 
             if (singleArgument == null || !(singleArgument.Value is int))
             {
                 return false;
             }
 
-            if (EditorBrowsableState.Never != (EditorBrowsableState)singleArgument.Value)
+            if ((EditorBrowsableState)singleArgument.Value != EditorBrowsableState.Never)
             {
                 return false;
             }

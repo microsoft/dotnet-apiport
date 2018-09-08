@@ -12,22 +12,29 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
     {
         private readonly HashSet<AssemblyInfo> _usedInAssemblies;
 
-        public IEnumerable<AssemblyInfo> UsedIn { get { return _usedInAssemblies; } }
+        public IEnumerable<AssemblyInfo> UsedIn { get; }
 
-        public int Uses { get { return _usedInAssemblies.Count; } }
+        public int Uses
+        {
+            get { return _usedInAssemblies.Count; }
+        }
+
         public string MemberName { get; set; }
-        public IEnumerable<String> TargetStatus { get; set; }
+
+        public IEnumerable<string> TargetStatus { get; set; }
+
         public IEnumerable<Version> TargetVersionStatus { get; set; }
+
         public void IncrementUsage(AssemblyInfo sourceAssembly)
         {
             _usedInAssemblies.Add(sourceAssembly);
         }
 
-        public MissingMemberInfo(AssemblyInfo sourceAssembly, string DocId, List<Version> targetStatus, string recommendedChanges)
-            : base(DocId)
+        public MissingMemberInfo(AssemblyInfo sourceAssembly, string docId, List<Version> targetStatus, string recommendedChanges)
+            : base(docId)
         {
             RecommendedChanges = recommendedChanges;
-            MemberName = DocId;
+            MemberName = docId;
             TargetStatus = targetStatus?.Select(GenerateTargetStatusMessage).ToList() ?? Enumerable.Empty<string>();
             TargetVersionStatus = new List<Version>(targetStatus ?? Enumerable.Empty<Version>());
 

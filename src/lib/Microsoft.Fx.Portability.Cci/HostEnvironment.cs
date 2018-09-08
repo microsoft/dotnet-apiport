@@ -20,13 +20,12 @@ namespace Microsoft.Cci.Extensions
     {
         Default,
         TreatAsWarning,
-        Ignore
+        Ignore,
     }
 
     public class HostEnvironment : MetadataReaderHost
     {
         private PeReader _reader;
-        private HashSet<UnresolvedReference<IUnit, AssemblyIdentity>> _unresolvedIdentities;
         private AssemblyIdentity _coreAssemblyIdentity;
 
         public HostEnvironment()
@@ -48,12 +47,12 @@ namespace Microsoft.Cci.Extensions
             : base(nameTable, internFactory, 0, null, false)
         {
             _reader = new PeReader(this);
-            _unresolvedIdentities = new HashSet<UnresolvedReference<IUnit, AssemblyIdentity>>();
+            UnresolvedIdentities = new HashSet<UnresolvedReference<IUnit, AssemblyIdentity>>();
         }
 
         public bool UnifyToLibPath { get; set; }
 
-        public ICollection<UnresolvedReference<IUnit, AssemblyIdentity>> UnresolvedIdentities { get { return _unresolvedIdentities; } }
+        public ICollection<UnresolvedReference<IUnit, AssemblyIdentity>> UnresolvedIdentities { get; }
 
         public bool ResolveInReferringUnitLocation { get; set; }
 
@@ -64,10 +63,14 @@ namespace Microsoft.Cci.Extensions
         public void AddLibPaths(IEnumerable<string> paths)
         {
             if (paths == null)
+            {
                 return;
+            }
 
             foreach (var path in paths)
+            {
                 AddLibPath(path);
+            }
         }
 
         public void Cleanup()
@@ -80,7 +83,7 @@ namespace Microsoft.Cci.Extensions
             IUnit unit = _reader.OpenModule(
                 BinaryDocument.GetBinaryDocumentForFile(location, this));
 
-            this.RegisterAsLatest(unit);
+            RegisterAsLatest(unit);
             return unit;
         }
 
@@ -98,10 +101,10 @@ namespace Microsoft.Cci.Extensions
         /// <param name="stream">The data to be used as the unit</param>
         public IUnit LoadUnitFrom(string location, Stream stream)
         {
-            string fileName = Path.GetFileName(location);
-            IName name = this.NameTable.GetNameFor(fileName);
-            StreamDocument document = new StreamDocument(location, name, stream);
-            IModule unit = _reader.OpenModule(document);
+            var fileName = Path.GetFileName(location);
+            var name = NameTable.GetNameFor(fileName);
+            var document = new StreamDocument(location, name, stream);
+            var unit = _reader.OpenModule(document);
 
             this.RegisterAsLatest(unit);
             return unit;
@@ -117,15 +120,21 @@ namespace Microsoft.Cci.Extensions
             string path = assemblyNameOrPath;
 
             if (File.Exists(path))
-                return this.LoadAssemblyFrom(path);
+            {
+                return LoadAssemblyFrom(path);
+            }
 
-            foreach (var extension in s_probingExtensions)
+            foreach (var extension in ProbingExtensions)
             {
                 path = ProbeLibPaths(assemblyNameOrPath + extension);
                 if (path != null)
                 {
                     var assembly = this.LoadAssembly(path);
-                    if (assembly == null) continue;
+                    if (assembly == null)
+                    {
+                        continue;
+                    }
+
                     return assembly;
                 }
             }
@@ -139,31 +148,39 @@ namespace Microsoft.Cci.Extensions
             {
                 AssemblyIdentity probedIdentity = this.Probe(libPath, identity);
                 if (probedIdentity != null)
+                {
                     return probedIdentity;
+                }
             }
-            return new AssemblyIdentity(identity, "");
+
+            return new AssemblyIdentity(identity, string.Empty);
         }
 
         private string ProbeLibPaths(string assemblyPath)
         {
             if (File.Exists(assemblyPath))
+            {
                 return assemblyPath;
+            }
 
             foreach (var libPath in LibPaths)
             {
                 string combinedPath = Path.Combine(libPath, assemblyPath);
                 if (File.Exists(combinedPath))
+                {
                     return combinedPath;
+                }
             }
+
             return null;
         }
 
         // Potential way to unify assemblies based on the current runtime
-        //public override void ResolvingAssemblyReference(IUnit referringUnit, AssemblyIdentity referencedAssembly)
-        //{
+        // public override void ResolvingAssemblyReference(IUnit referringUnit, AssemblyIdentity referencedAssembly)
+        // {
         //    IAssemblyReference asmRef = referringUnit.UnitReferences.OfType<IAssemblyReference>()
         //        .FirstOrDefault(a => referencedAssembly.Equals(a.UnifiedAssemblyIdentity));
-
+        //
         //    if (asmRef != null && asmRef.IsRetargetable)
         //    {
         //        string strongName = UnitHelper.StrongName(asmRef);
@@ -171,15 +188,14 @@ namespace Microsoft.Cci.Extensions
         //        if (strongName != retargetedName)
         //        {
         //            System.Reflection.AssemblyName name = new System.Reflection.AssemblyName(retargetedName);
-
+        //
         //            referencedAssembly = new AssemblyIdentity(this.NameTable.GetNameFor(name.Name),
         //                name.CultureInfo != null ? name.CultureInfo.Name : "", name.Version, name.GetPublicKeyToken(), "");
         //        }
         //    }
         //    base.ResolvingAssemblyReference(referringUnit, referencedAssembly);
-        //}
-
-        private static string[] s_probingExtensions = new string[]
+        // }
+        private static readonly string[] ProbingExtensions = new string[]
         {
             ".dll",
             ".ildll",
@@ -187,7 +203,8 @@ namespace Microsoft.Cci.Extensions
             ".winmd",
             ".exe",
             ".ilexe",
-            //".ni.exe" Do these actually exist?
+
+            // ".ni.exe" Do these actually exist?
         };
 
         protected override AssemblyIdentity Probe(string probeDir, AssemblyIdentity referencedAssembly)
@@ -197,28 +214,38 @@ namespace Microsoft.Cci.Extensions
             Contract.Requires(referencedAssembly != null);
 #endif
             string path = null;
-            foreach (var extension in s_probingExtensions)
+            foreach (var extension in ProbingExtensions)
             {
                 path = Path.Combine(probeDir, referencedAssembly.Name.Value + extension);
                 if (File.Exists(path))
                 {
                     // Possible that we might find an assembly with a matching extension but without a match identity
                     // or possibly be a native version of the assembly so if that fails we should try other extensions.
-                    var assembly = this.LoadUnitFrom(path) as IAssembly;
-                    if (assembly == null) continue;
+                    if (!(LoadUnitFrom(path) is IAssembly assembly))
+                    {
+                        continue;
+                    }
 
-                    if (this.UnifyToLibPath)
+                    if (UnifyToLibPath)
                     {
                         // If Unifying to LibPath then we only verify the assembly name matches.
-                        if (assembly.AssemblyIdentity.Name.UniqueKeyIgnoringCase != referencedAssembly.Name.UniqueKeyIgnoringCase) continue;
+                        if (assembly.AssemblyIdentity.Name.UniqueKeyIgnoringCase != referencedAssembly.Name.UniqueKeyIgnoringCase)
+                        {
+                            continue;
+                        }
                     }
                     else
                     {
-                        if (!assembly.AssemblyIdentity.Equals(referencedAssembly)) continue;
+                        if (!assembly.AssemblyIdentity.Equals(referencedAssembly))
+                        {
+                            continue;
+                        }
                     }
+
                     return assembly.AssemblyIdentity;
                 }
             }
+
             return null;
         }
 
@@ -226,7 +253,9 @@ namespace Microsoft.Cci.Extensions
         {
             // If explicitly set return that identity
             if (_coreAssemblyIdentity != null)
+            {
                 return _coreAssemblyIdentity;
+            }
 
             AssemblyIdentity baseCoreAssemblyIdentity = base.GetCoreAssemblySymbolicIdentity();
 
@@ -234,11 +263,15 @@ namespace Microsoft.Cci.Extensions
             foreach (var assembly in this.LoadedUnits.OfType<IAssembly>())
             {
                 if (assembly.AssemblyIdentity.Equals(assembly.CoreAssemblySymbolicIdentity))
+                {
                     return assembly.AssemblyIdentity;
+                }
 
                 // Adjust the base core assembly identity based on what this assembly believes should be
                 if (assembly.AssemblyIdentity.Equals(baseCoreAssemblyIdentity))
+                {
                     baseCoreAssemblyIdentity = assembly.CoreAssemblySymbolicIdentity;
+                }
             }
 
             // Otherwise fallback to CCI's default core assembly loading logic.
@@ -251,11 +284,14 @@ namespace Microsoft.Cci.Extensions
             {
                 throw new InvalidOperationException(LocalizedStrings.CoreAssemblyAlreadySet);
             }
+
             // Lets ignore this if someone passes dummy as nothing good can come from it. We considered making it an error
             // but in some logical cases (i.e. facades) the CoreAssembly might be dummy and we don't want to start throwing
             // in a bunch of cases where if we let it go the right thing will happen.
             if (coreAssembly == Dummy.AssemblyIdentity)
+            {
                 return;
+            }
 
             _coreAssemblyIdentity = coreAssembly;
         }
@@ -269,20 +305,26 @@ namespace Microsoft.Cci.Extensions
             IAssembly asm = this.FindAssembly(identity);
 
             if (asm != null && !(asm is Dummy))
+            {
                 return asm.AssemblyIdentity;
+            }
 
             // Find assembly match based on simple name only. (It might be worth caching these results if we find them to be too expensive)
             foreach (var loadedAssembly in this.LoadedUnits.OfType<IAssembly>())
             {
                 if (loadedAssembly.AssemblyIdentity.Name.UniqueKeyIgnoringCase == identity.Name.UniqueKeyIgnoringCase)
+                {
                     return loadedAssembly.AssemblyIdentity;
+                }
             }
 
-            AssemblyIdentity probedIdentity = this.ProbeLibPaths(identity);
+            var probedIdentity = ProbeLibPaths(identity);
             if (probedIdentity != null)
+            {
                 return probedIdentity;
+            }
 
-            return new AssemblyIdentity(identity, "");
+            return new AssemblyIdentity(identity, string.Empty);
         }
 
         /// <summary>
@@ -291,10 +333,14 @@ namespace Microsoft.Cci.Extensions
         public override AssemblyIdentity UnifyAssembly(AssemblyIdentity assemblyIdentity)
         {
             if (ShouldUnifyToCoreAssembly(assemblyIdentity))
+            {
                 return this.CoreAssemblySymbolicIdentity;
+            }
 
             if (this.UnifyToLibPath)
-                assemblyIdentity = this.FindUnifiedAssemblyIdentity(assemblyIdentity);
+            {
+                assemblyIdentity = FindUnifiedAssemblyIdentity(assemblyIdentity);
+            }
 
             return assemblyIdentity;
         }
@@ -305,8 +351,10 @@ namespace Microsoft.Cci.Extensions
         //   .publickeytoken = (B7 7A 5C 56 19 34 E0 89 )
         //   .ver 255:255:255:255
         // }
-        private static readonly byte[] s_ecmaKey = { 0xb7, 0x7a, 0x5c, 0x56, 0x19, 0x34, 0xe0, 0x89 };
-        private static readonly Version s_winmdBclVersion = new Version(255, 255, 255, 255);
+        private static readonly byte[] EcmaKey = { 0xb7, 0x7a, 0x5c, 0x56, 0x19, 0x34, 0xe0, 0x89 };
+
+        private static readonly Version WinmdBclVersion = new Version(255, 255, 255, 255);
+
         public bool ShouldUnifyToCoreAssembly(AssemblyIdentity assemblyIdentity)
         {
             // Unify any other potential versions of this core assembly to itself.
@@ -314,7 +362,9 @@ namespace Microsoft.Cci.Extensions
             {
                 if (assemblyIdentity.PublicKeyToken == null ||
                    !assemblyIdentity.PublicKeyToken.SequenceEqual(this.CoreAssemblySymbolicIdentity.PublicKeyToken))
+                {
                     return false;
+                }
 
                 return true;
             }
@@ -323,10 +373,15 @@ namespace Microsoft.Cci.Extensions
             // another facade.
             if (assemblyIdentity.Name.Value == "mscorlib")
             {
-                if (assemblyIdentity.PublicKeyToken == null || !assemblyIdentity.PublicKeyToken.SequenceEqual(s_ecmaKey))
+                if (assemblyIdentity.PublicKeyToken == null || !assemblyIdentity.PublicKeyToken.SequenceEqual(EcmaKey))
+                {
                     return false;
-                if (!(assemblyIdentity.Version.Equals(s_winmdBclVersion)))
+                }
+
+                if (!assemblyIdentity.Version.Equals(WinmdBclVersion))
+                {
                     return false;
+                }
 
                 return true;
             }
@@ -342,8 +397,10 @@ namespace Microsoft.Cci.Extensions
         {
             // We need to ensure the core assembly is being unified and in some code paths, such as from GetCoreAssemblySymbolicIdentity
             // it doesn't get properly unified before calling ProbeAssemblyReference
-            if (this.CoreAssemblySymbolicIdentity.Equals(referencedAssembly))
+            if (CoreAssemblySymbolicIdentity.Equals(referencedAssembly))
+            {
                 referencedAssembly = UnifyAssembly(referencedAssembly);
+            }
 
             AssemblyIdentity result = null;
 
@@ -351,21 +408,26 @@ namespace Microsoft.Cci.Extensions
             {
                 // NOTE: When probing for the core assembly, the referring unit is a dummy unit and thus does not have
                 //       a location.
-
-                string referringDir = string.IsNullOrEmpty(referringUnit.Location) ? null
+                var referringDir = string.IsNullOrEmpty(referringUnit.Location) ? null
                                      : Path.GetDirectoryName(Path.GetFullPath(referringUnit.Location));
 
                 result = string.IsNullOrEmpty(referringDir) ? null
-                       : this.Probe(referringDir, referencedAssembly);
+                       : Probe(referringDir, referencedAssembly);
 
-                if (result != null) return result;
+                if (result != null)
+                {
+                    return result;
+                }
             }
 
             // Probe in the libPaths directories
             foreach (string libPath in this.LibPaths)
             {
                 result = this.Probe(libPath, referencedAssembly);
-                if (result != null) return result;
+                if (result != null)
+                {
+                    return result;
+                }
             }
 
             if (this.ResolveAgainstRunningFramework)
@@ -374,7 +436,9 @@ namespace Microsoft.Cci.Extensions
                 result = base.ProbeAssemblyReference(referringUnit, referencedAssembly);
 
                 if (result != null && result.Location != null && !result.Location.StartsWith("unknown", StringComparison.Ordinal))
+                {
                     return result;
+                }
             }
 
             var unresolved = new UnresolvedReference<IUnit, AssemblyIdentity>(referringUnit, referencedAssembly);
@@ -387,11 +451,9 @@ namespace Microsoft.Cci.Extensions
 
         protected virtual void OnUnableToResolve(UnresolvedReference<IUnit, AssemblyIdentity> unresolved)
         {
-            var unableToResolve = this.UnableToResolve;
-            if (unableToResolve != null)
-                unableToResolve(this, unresolved);
+            UnableToResolve?.Invoke(this, unresolved);
 
-            this.UnresolvedIdentities.Add(unresolved);
+            UnresolvedIdentities.Add(unresolved);
         }
 
         // Overriding this method allows us to read the binaries without blocking the files. The default
@@ -407,7 +469,9 @@ namespace Microsoft.Cci.Extensions
             // call the overload that processes the stream.
             var streamDocument = sourceDocument as StreamDocument;
             if (streamDocument != null)
+            {
                 return UnmanagedBinaryMemoryBlock.CreateUnmanagedBinaryMemoryBlock(streamDocument.Stream, sourceDocument);
+            }
 
             // Otherwise we assume that we can load the data from the location of sourceDocument.
             try
@@ -427,7 +491,9 @@ namespace Microsoft.Cci.Extensions
         public static string[] SplitPaths(string pathSet)
         {
             if (pathSet == null)
+            {
                 return new string[0];
+            }
 
             return pathSet.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
         }
@@ -472,7 +538,9 @@ namespace Microsoft.Cci.Extensions
 
             // Explicitly set the core assembly
             if (coreAssemblyFile != null && assemblies.Count > 0)
+            {
                 SetCoreAssembly(assemblies[0].AssemblyIdentity);
+            }
 
             return assemblies;
         }
@@ -485,12 +553,14 @@ namespace Microsoft.Cci.Extensions
 
         // False by deafult for backwards compatibility with tools that wire in their own custom handlers.
         private bool _traceResolutionErrorsAsLoadErrors;
+
         public bool TraceResolutionErrorsAsLoadErrors
         {
             get
             {
                 return _traceResolutionErrorsAsLoadErrors;
             }
+
             set
             {
                 if (value != _traceResolutionErrorsAsLoadErrors)
@@ -555,16 +625,14 @@ namespace Microsoft.Cci.Extensions
                 string filePath = ProbeLibPaths(file);
                 if (filePath == null)
                 {
-                    if (logErrorCallback != null)
-                        logErrorCallback(string.Format(CultureInfo.CurrentCulture, "File does not exist {0}", file), LoadErrorTreatment);
+                    logErrorCallback?.Invoke(string.Format(CultureInfo.CurrentCulture, "File does not exist {0}", file), LoadErrorTreatment);
                     continue;
                 }
 
-                assembly = this.LoadAssembly(filePath);
+                assembly = LoadAssembly(filePath);
                 if (assembly == null)
                 {
-                    if (logErrorCallback != null)
-                        logErrorCallback(string.Format(CultureInfo.CurrentCulture, "Failed to load assembly {0}", filePath), LoadErrorTreatment);
+                    logErrorCallback?.Invoke(string.Format(CultureInfo.CurrentCulture, "Failed to load assembly {0}", filePath), LoadErrorTreatment);
                     continue;
                 }
 
@@ -573,8 +641,7 @@ namespace Microsoft.Cci.Extensions
 
             if (assemblySet.Count == 0)
             {
-                if (logErrorCallback != null)
-                    logErrorCallback(string.Format(CultureInfo.CurrentCulture, "No assemblies loaded for {0}", string.Join(", ", paths)), LoadErrorTreatment);
+                logErrorCallback?.Invoke(string.Format(CultureInfo.CurrentCulture, "No assemblies loaded for {0}", string.Join(", ", paths)), LoadErrorTreatment);
             }
 
             return new ReadOnlyCollection<IAssembly>(assemblySet);
@@ -618,22 +685,22 @@ namespace Microsoft.Cci.Extensions
             foreach (var unmappedIdentity in identities)
             {
                 // Remap the name and clear the location.
-                AssemblyIdentity identity = new AssemblyIdentity(this.NameTable.GetNameFor(unmappedIdentity.Name.Value),
-                    unmappedIdentity.Culture, unmappedIdentity.Version, unmappedIdentity.PublicKeyToken, "");
+                var identity = new AssemblyIdentity(this.NameTable.GetNameFor(unmappedIdentity.Name.Value),
+                    unmappedIdentity.Culture, unmappedIdentity.Version, unmappedIdentity.PublicKeyToken, string.Empty);
 
-                AssemblyIdentity matchingIdentity = this.ProbeLibPaths(identity);
+                var matchingIdentity = this.ProbeLibPaths(identity);
 
                 var matchingAssembly = this.LoadAssembly(matchingIdentity);
                 if ((matchingAssembly == null || matchingAssembly == Dummy.Assembly) && logErrorOrWarningCallback != null)
                 {
-                    string message = string.Format(CultureInfo.CurrentCulture, "Failed to find or load matching assembly '{0}'.", identity.Name.Value);
+                    var message = string.Format(CultureInfo.CurrentCulture, "Failed to find or load matching assembly '{0}'.", identity.Name.Value);
                     logErrorOrWarningCallback(message, LoadErrorTreatment);
                     continue;
                 }
 
                 if (!identity.Version.Equals(matchingAssembly.Version) && logErrorOrWarningCallback != null && warnOnVersionMismatch)
                 {
-                    string message = string.Format(CultureInfo.CurrentCulture, "Found '{0}' with version '{1}' instead of '{2}'.", identity.Name.Value, matchingAssembly.Version, identity.Version);
+                    var message = string.Format(CultureInfo.CurrentCulture, "Found '{0}' with version '{1}' instead of '{2}'.", identity.Name.Value, matchingAssembly.Version, identity.Version);
                     logErrorOrWarningCallback(message, ErrorTreatment.TreatAsWarning);
                 }
 
@@ -661,7 +728,7 @@ namespace Microsoft.Cci.Extensions
 
                 if (coreIdentity == null)
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.CoreAssemblyNotFoundInIdentities, coreAssemblySimpleName));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CoreAssemblyNotFoundInIdentities, coreAssemblySimpleName));
                 }
 
                 identities = Enumerable.Concat(new List<AssemblyIdentity>() { coreIdentity }, identities.Where(ai => ai != coreIdentity));
@@ -673,12 +740,13 @@ namespace Microsoft.Cci.Extensions
         public static IEnumerable<string> GetFilePaths(IEnumerable<string> paths, SearchOption searchOption)
         {
             if (searchOption == SearchOption.TopDirectoryOnly)
+            {
                 return GetFilePaths(paths);
+            }
 
             // expand the path into a list of paths that contains all the subdirectories
-            Stack<string> unexpandedPaths = new Stack<string>(paths);
-
-            HashSet<string> allPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var unexpandedPaths = new Stack<string>(paths);
+            var allPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var path in paths)
             {
@@ -686,7 +754,9 @@ namespace Microsoft.Cci.Extensions
 
                 // if the path did not point to a directory, continue
                 if (!Directory.Exists(path))
+                {
                     continue;
+                }
 
                 foreach (var dir in Directory.EnumerateDirectories(path, "*.*", SearchOption.AllDirectories))
                 {
@@ -713,7 +783,9 @@ namespace Microsoft.Cci.Extensions
             foreach (var path in paths)
             {
                 if (path == null)
+                {
                     continue;
+                }
 
                 string resolvedPath = Environment.ExpandEnvironmentVariables(path);
 
@@ -721,17 +793,18 @@ namespace Microsoft.Cci.Extensions
                 {
                     perResolvedPathAction(resolvedPath);
 
-                    for (int extIndex = 0; extIndex < s_probingExtensions.Length; extIndex++)
+                    for (int extIndex = 0; extIndex < ProbingExtensions.Length; extIndex++)
                     {
-                        var searchPattern = "*" + s_probingExtensions[extIndex];
+                        var searchPattern = "*" + ProbingExtensions[extIndex];
                         foreach (var file in Directory.EnumerateFiles(resolvedPath, searchPattern))
                         {
                             yield return file;
                         }
                     }
+
                     if (recursive)
                     {
-                        //recursively do the same for sub-folders
+                        // Recursively do the same for sub-folders
                         foreach (var file in GetFilePaths(Directory.EnumerateDirectories(resolvedPath), perResolvedPathAction, recursive))
                         {
                             yield return file;
@@ -753,7 +826,9 @@ namespace Microsoft.Cci.Extensions
                     }
 
                     foreach (var file in files)
+                    {
                         yield return file;
+                    }
                 }
                 else
                 {
@@ -808,6 +883,7 @@ namespace Microsoft.Cci.Extensions
         }
 
         public TReferrer Referrer { get; private set; }
+
         public TUnresolved Unresolved { get; private set; }
     }
 }

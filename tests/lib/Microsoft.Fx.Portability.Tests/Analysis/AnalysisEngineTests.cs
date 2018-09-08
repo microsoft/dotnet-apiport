@@ -432,6 +432,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var mi2_usedIn = result[mi2];
             Assert.True(mi2_usedIn.Contains(userAsm3) && !mi2_usedIn.Contains(userAsm2));
         }
+
         private static void TestBreakingChangeWithoutFixedEntry(Version version, bool noBreakingChangesExpected)
         {
             TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null, Enumerable.Empty<string>());

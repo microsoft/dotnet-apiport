@@ -20,6 +20,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public string AssemblyIdentity
         {
             get { return _assemblyIdentity; }
+
             set
             {
                 _assemblyIdentity = value;
@@ -28,7 +29,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         }
 
         /// <summary>
-        /// Assembly location
+        /// Gets or sets the assembly location
         /// </summary>
         /// <remarks>Do not serialize location and send it to service.</remarks>
         [JsonIgnore]
@@ -36,7 +37,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string FileVersion
         {
-            get { return _fileVersion; }
+            get
+            {
+                return _fileVersion;
+            }
+
             set
             {
                 _fileVersion = value;
@@ -47,6 +52,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public string TargetFrameworkMoniker
         {
             get { return _targetFrameworkVersion; }
+
             set
             {
                 _targetFrameworkVersion = value;

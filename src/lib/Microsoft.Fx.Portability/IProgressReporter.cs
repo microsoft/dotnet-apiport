@@ -9,11 +9,15 @@ namespace Microsoft.Fx.Portability
     public interface IProgressReporter : IDisposable
     {
         void ReportIssue(string issue);
+
         IProgressTask StartTask(string taskName, int totalUnits);
+
         IProgressTask StartTask(string taskName);
+
         IReadOnlyCollection<string> Issues { get; }
 
         void Suspend();
+
         void Resume();
     }
 }

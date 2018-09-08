@@ -8,8 +8,10 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using VisualStudio = Microsoft.VisualStudio.Shell;
+
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
+
+using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS
 {

@@ -17,6 +17,7 @@ namespace Microsoft.Fx.Portability.Utils.JsonConverters
         private class KeyValueHelper
         {
             public TKey Key { get; set; }
+
             public ICollection<TValue> Value { get; set; }
         }
 

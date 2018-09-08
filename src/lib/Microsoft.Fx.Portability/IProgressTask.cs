@@ -8,6 +8,7 @@ namespace Microsoft.Fx.Portability
     public interface IProgressTask : IDisposable
     {
         void ReportUnitComplete();
+
         void Abort();
     }
 }

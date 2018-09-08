@@ -11,17 +11,17 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public class TargetInformation
     {
-        private static readonly ISet<string> s_EmptyTargets = new HashSet<string>();
-        private static readonly ICollection<TargetVersion> s_EmptyVersions = new List<TargetVersion>();
-        private static readonly string s_ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
+        private static readonly ISet<string> EmptyTargets = new HashSet<string>();
+        private static readonly ICollection<TargetVersion> EmptyVersions = new List<TargetVersion>();
+        private static readonly string ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
 
         private ISet<string> _expandedTargets;
         private ICollection<TargetVersion> _versions;
 
         public TargetInformation()
         {
-            _expandedTargets = s_EmptyTargets;
-            _versions = s_EmptyVersions;
+            _expandedTargets = EmptyTargets;
+            _versions = EmptyVersions;
         }
 
         public string Name { get; set; }
@@ -29,20 +29,21 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public IEnumerable<string> ExpandedTargets
         {
             get { return _expandedTargets; }
-            set
-            {
-                _expandedTargets = new HashSet<string>(value, StringComparer.OrdinalIgnoreCase);
-            }
+            set { _expandedTargets = new HashSet<string>(value, StringComparer.OrdinalIgnoreCase); }
         }
 
         public IEnumerable<TargetVersion> AvailableVersions
         {
-            get { return _versions; }
+            get
+            {
+                return _versions;
+            }
+
             set
             {
                 if (value == null)
                 {
-                    _versions = s_EmptyVersions;
+                    _versions = EmptyVersions;
                 }
                 else
                 {
@@ -55,7 +56,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             if (ExpandedTargets.Any())
             {
-                return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TargetInformationGroups, Name, string.Join(s_ListSeparator, ExpandedTargets));
+                return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TargetInformationGroups, Name, string.Join(ListSeparator, ExpandedTargets));
             }
             else
             {
@@ -65,9 +66,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override bool Equals(object obj)
         {
-            var other = obj as TargetInformation;
-
-            if (other == null) return false;
+            if (!(obj is TargetInformation other))
+            {
+                return false;
+            }
 
             return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
                 && _expandedTargets.SetEquals(other._expandedTargets);
@@ -79,11 +81,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
             const int HashMultiplier = 23;
 
             int hash = HashSeed;
-            hash = hash * HashMultiplier + (Name ?? string.Empty).GetHashCode();
+            hash = (hash * HashMultiplier) + (Name ?? string.Empty).GetHashCode();
 
             foreach (var target in ExpandedTargets)
             {
-                hash = hash * HashMultiplier + target.GetHashCode();
+                hash = (hash * HashMultiplier) + target.GetHashCode();
             }
 
             return hash;

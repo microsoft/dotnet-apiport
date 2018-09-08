@@ -4,8 +4,8 @@
 using ApiPortVS.Analyze;
 using ApiPortVS.Contracts;
 using ApiPortVS.Models;
-using ApiPortVS.Resources;
 using ApiPortVS.Reporting;
+using ApiPortVS.Resources;
 using ApiPortVS.SourceMapping;
 using ApiPortVS.ViewModels;
 using ApiPortVS.Views;
@@ -18,11 +18,11 @@ using Microsoft.Fx.Portability.Reporting;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using static Microsoft.VisualStudio.VSConstants;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace ApiPortVS
 {
