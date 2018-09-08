@@ -116,6 +116,7 @@ namespace ApiPort
                     Console.Write('*');
                 }
             }
+
             Console.WriteLine();
         }
 

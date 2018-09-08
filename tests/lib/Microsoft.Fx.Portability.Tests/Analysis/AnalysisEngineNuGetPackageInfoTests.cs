@@ -17,7 +17,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
     /// <summary>
     /// Tests GetNuGetPackageInfo for AnalysisEngine
     /// </summary>
-    public class AnalysisEngineTestsNuGetPackageInfo
+    public class AnalysisEngineNuGetPackageInfoTests
     {
         /// <summary>
         /// Tests that given a set of assemblies, the correct nuget package is returned.

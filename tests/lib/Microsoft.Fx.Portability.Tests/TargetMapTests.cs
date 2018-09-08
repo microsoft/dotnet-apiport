@@ -12,7 +12,7 @@ using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    public class TargetMapTest
+    public class TargetMapTests
     {
         [Fact]
         public static void UnknownTarget()
