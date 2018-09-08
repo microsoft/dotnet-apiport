@@ -73,13 +73,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// <summary>
         /// Gets the ApiDefinition for a docId.
         /// </summary>
-        /// <returns>The corresponding ApiDefinition if it exists.  
+        /// <returns>The corresponding ApiDefinition if it exists.
         /// If docId is null/empty or does not exist, returns null.</returns>
         public virtual ApiDefinition GetApiDefinition(string docId)
         {
-            ApiDefinition apiDefinition;
-
-            if (string.IsNullOrEmpty(docId) || !_docIdToApi.TryGetValue(docId, out apiDefinition))
+            if (string.IsNullOrEmpty(docId) || !_docIdToApi.TryGetValue(docId, out var apiDefinition))
             {
                 return null;
             }
@@ -96,14 +94,13 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public virtual bool IsMemberInTarget(string docId, FrameworkName targetName, out Version introducedVersion)
         {
-            Dictionary<string, Version> targets;
             introducedVersion = null;
 
             // The docId is a member in the target if:
             //  - There is an entry for the API.
             //  - The entry for the API contains the target.
             //  - The version for when the API was introduced is before (or equal) to the target version.
-            if (!_apiMapping.TryGetValue(docId, out targets))
+            if (!_apiMapping.TryGetValue(docId, out var targets))
                 return false;
 
             if (!targets.TryGetValue(targetName.Identifier, out introducedVersion))
@@ -114,16 +111,14 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public virtual bool IsMemberInTarget(string docId, FrameworkName targetName)
         {
-            Version version;
-            return IsMemberInTarget(docId, targetName, out version);
+            return IsMemberInTarget(docId, targetName, out var version);
         }
 
         public virtual string GetApiMetadata(string docId, string metadataKey)
         {
-            Dictionary<string, string> metadata;
             string metadataValue = null;
 
-            if (_apiMetadata.TryGetValue(docId, out metadata))
+            if (_apiMetadata.TryGetValue(docId, out var metadata))
             {
                 metadata.TryGetValue(metadataKey, out metadataValue);
             }
@@ -147,12 +142,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public virtual Version GetVersionIntroducedIn(string docId, FrameworkName target)
         {
-            Dictionary<string, Version> targets;
-            Version versionIntroducedIn;
-
-            if (_apiMapping.TryGetValue(docId, out targets))
+            if (_apiMapping.TryGetValue(docId, out var targets))
             {
-                if (targets.TryGetValue(target.Identifier, out versionIntroducedIn))
+                if (targets.TryGetValue(target.Identifier, out var versionIntroducedIn))
                 {
                     return versionIntroducedIn;
                 }
@@ -163,8 +155,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public virtual FrameworkName GetLatestVersion(string targetIdentifier)
         {
-            FrameworkName name;
-            if (_latestTargetVersion.TryGetValue(targetIdentifier, out name))
+            if (_latestTargetVersion.TryGetValue(targetIdentifier, out var name))
             {
                 return name;
             }
@@ -182,7 +173,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         }
 
         /// <summary>
-        /// Retrieves the ancestors for a given docId. 
+        /// Retrieves the ancestors for a given docId.
         /// This retrieves the Api's parent first and then the parent's ancestor
         /// until it reaches the root.
         /// If the docId does not exist or is null, it will return an empty

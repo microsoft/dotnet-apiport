@@ -128,13 +128,12 @@ namespace Microsoft.Fx.Portability.Reporting
 
         /// <summary>
         /// Give a list of assemblies it will compute which name an assembly must have.
-        /// For instance, if we have a single assembly, we will use the assembly simple name. 
+        /// For instance, if we have a single assembly, we will use the assembly simple name.
         /// If we have more than one then we should use the full assembly name in order to distinguish betweeen them
         /// </summary>
         private static Dictionary<AssemblyInfo, string> ComputeAssemblyNames(IEnumerable<AssemblyUsageInfo> assemblyUsage)
         {
             // Group the assemblies by the simple name. In order to do that we need to parse the assembly identity and use the Name property.
-            // 
             var mapAssemblyNameOccurences = assemblyUsage.GroupBy(asui => new System.Reflection.AssemblyName(asui.SourceAssembly.AssemblyIdentity).Name)
                                                 .SelectMany(assemblyNameGroup => assemblyNameGroup.Select(assemblyInfo => new
                                                 {

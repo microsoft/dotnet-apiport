@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability
 {
     public class ServiceHeaders
     {
-        // Do not change these 
+        // Do not change these
         public const string EndpointHeader = "WebsiteUrl";
         public const string ApiInfoHeader = "DotNetApiInfoUrl";
         public const string SubmissionUrlHeader = "SubmissionUrl";

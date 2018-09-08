@@ -22,7 +22,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             "31bf3856ad364e35", // SILVERLIGHT
             "24eec0d8c86cda1e", // PHONE
             "0738eb9f132ed756", // MONO
-            "cc7b13ffcd2ddd51"  // NetStandard
+            "cc7b13ffcd2ddd51" // NetStandard
         }, StringComparer.OrdinalIgnoreCase);
 
         private static readonly IEnumerable<string> s_frameworkAssemblyNamePrefixes = new[]

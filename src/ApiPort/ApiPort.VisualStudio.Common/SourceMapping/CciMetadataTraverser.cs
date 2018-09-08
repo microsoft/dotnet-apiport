@@ -46,7 +46,7 @@ namespace ApiPortVS.SourceMapping
         }
 
         // TODO: Add support for fields, properties, type definitions and attributes as well
-        // 
+        //
         // Example:
         //  [Serializable]
         //  public class Foo {}

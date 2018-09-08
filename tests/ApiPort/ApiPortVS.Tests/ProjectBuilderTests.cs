@@ -29,7 +29,7 @@ namespace ApiPortVS.Tests
 
             Assert.False(result);
 
-            // Checking that we are not listening to build events 
+            // Checking that we are not listening to build events
             // if starting a build was not successful
             buildManager.DidNotReceiveWithAnyArgs()
                 .AdviseUpdateSolutionEvents(null, out pdwCookie);

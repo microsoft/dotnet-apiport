@@ -32,7 +32,7 @@ namespace Microsoft.Fx.Portability
         public CompressedHttpClient(ProductInformation info)
             : this(info, new HttpClientHandler {
 #if !FEATURE_SERVICE_POINT_MANAGER
-                SslProtocols = SupportedSSLProtocols, 
+                SslProtocols = SupportedSSLProtocols,
 #endif
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             })

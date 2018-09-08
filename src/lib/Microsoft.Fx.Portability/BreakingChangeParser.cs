@@ -184,8 +184,8 @@ namespace Microsoft.Fx.Portability
                         else if (currentLine.StartsWith("[More information]", StringComparison.OrdinalIgnoreCase))
                         {
                             currentBreak.Link = currentLine.Substring("[More information]".Length)
-                                .Trim(' ', '(', ')', '[', ']', '\t', '\n', '\r')      // Remove markdown link enclosures
-                                .Replace("\\(", "(").Replace("\\)", ")");             // Unescape parens in link
+                                .Trim(' ', '(', ')', '[', ']', '\t', '\n', '\r') // Remove markdown link enclosures
+                                .Replace("\\(", "(").Replace("\\)", ")"); // Unescape parens in link
                             state = ParseState.None;
                         }
 
@@ -325,8 +325,7 @@ namespace Microsoft.Fx.Portability
                     if (!allowedCategories?.Contains(currentLine, StringComparer.OrdinalIgnoreCase) ?? false)
                     {
                         throw new InvalidOperationException(
-                            string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, currentLine)
-                        );
+                            string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, currentLine));
                     }
 
                     if (currentBreak.Categories == null)

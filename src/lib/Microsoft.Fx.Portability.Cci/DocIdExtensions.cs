@@ -25,8 +25,8 @@ namespace Microsoft.Cci.Extensions
 
         public static string DocId(this ITypeMemberReference member)
         {
-            //Do we need to unwrap members?
-            //member = member.UnWrapMember();
+            // Do we need to unwrap members?
+            // member = member.UnWrapMember();
             return MemberHelper.GetMemberSignature(member, NameFormattingOptions.DocumentationId);
         }
 
@@ -52,7 +52,7 @@ namespace Microsoft.Cci.Extensions
 
         public static string DocId(this IPlatformInvokeInformation platformInvoke)
         {
-            //return string.Format("I:{0}.{1}", platformInvoke.ImportModule.Name.Value, platformInvoke.ImportName.Value);
+            // return string.Format("I:{0}.{1}", platformInvoke.ImportModule.Name.Value, platformInvoke.ImportName.Value);
 
             // For now so we can use this to match up with the modern sdk names only include the pinvoke name in the identifier.
             return string.Format(CultureInfo.InvariantCulture, "{0}", platformInvoke.ImportName.Value);
@@ -62,20 +62,16 @@ namespace Microsoft.Cci.Extensions
         {
             Contract.Requires(reference != null);
 
-            ITypeReference type = reference as ITypeReference;
-            if (type != null)
+            if (reference is ITypeReference type)
                 return type.DocId();
 
-            ITypeMemberReference member = reference as ITypeMemberReference;
-            if (member != null)
+            if (reference is ITypeMemberReference member)
                 return member.DocId();
 
-            IUnitNamespaceReference ns = reference as IUnitNamespaceReference;
-            if (ns != null)
+            if (reference is IUnitNamespaceReference ns)
                 return ns.DocId();
 
-            IAssemblyReference assembly = reference as IAssemblyReference;
-            if (assembly != null)
+            if (reference is IAssemblyReference assembly)
                 return assembly.DocId();
 
             Contract.Assert(false, string.Format(CultureInfo.CurrentUICulture, LocalizedStrings.FellThroughCasesIn, "DocIdExtensions.RefDocId()", reference.GetType()));

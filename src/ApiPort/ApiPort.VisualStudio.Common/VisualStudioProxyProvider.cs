@@ -26,8 +26,8 @@ namespace ApiPortVS
 
         public async Task<bool> TryUpdateCredentialsAsync(Uri uri, IWebProxy proxy, CredentialRequestType type, CancellationToken cancellationToken)
         {
-            // This value will cause the web proxy service to first attempt to retrieve 
-            // credentials from its cache and fall back to prompting if necessary. 
+            // This value will cause the web proxy service to first attempt to retrieve
+            // credentials from its cache and fall back to prompting if necessary.
             const __VsWebProxyState oldState = __VsWebProxyState.VsWebProxyState_DefaultCredentials;
 
             // This must be run on the UI thread in case a prompt has to be shown to retrieve the credentials

@@ -45,8 +45,8 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
                     {
                         new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>()
                         {
-                            {Windows80, nugetPackageWin80Version },
-                            { NetStandard16, nugetPackageNetStandardVersion},
+                            { Windows80, nugetPackageWin80Version },
+                            { NetStandard16, nugetPackageNetStandardVersion },
                         })
                     };
 
@@ -96,7 +96,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>() { { Windows81, packageVersion }, { NetStandard16, packageVersion } },userNuGetPackage.AssemblyIdentity)
+                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>() { { Windows81, packageVersion }, { NetStandard16, packageVersion } }, userNuGetPackage.AssemblyIdentity)
             };
 
             // Act
@@ -130,7 +130,13 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }, { NetStandard16, null } }, userNuGetPackage.AssemblyIdentity)
+                new NuGetPackageInfo(packageId,
+                new Dictionary<FrameworkName, string>()
+                {
+                    { Windows81, packageVersion },
+                    { NetStandard16, null },
+                },
+                userNuGetPackage.AssemblyIdentity)
             };
 
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
@@ -139,7 +145,12 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             var nugetPackageResult2 = new[]
             {
-                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }}, userNuGetPackage.AssemblyIdentity)
+                new NuGetPackageInfo(packageId,
+                new Dictionary<FrameworkName, string>()
+                {
+                    { Windows81, packageVersion }
+                },
+                userNuGetPackage.AssemblyIdentity)
             };
 
             assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
@@ -171,7 +182,13 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }, { NetStandard16, packageVersion } }, userNuGetPackage.AssemblyIdentity)
+                new NuGetPackageInfo(packageId,
+                new Dictionary<FrameworkName, string>()
+                {
+                    { Windows81, packageVersion },
+                    { NetStandard16, packageVersion }
+                },
+                userNuGetPackage.AssemblyIdentity)
             };
 
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);
@@ -199,7 +216,13 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             var nugetPackageResult = new[]
             {
-                new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>(){{Windows81, packageVersion }, { NetStandard16, packageVersion } }, userNuGetPackage.AssemblyIdentity)
+                new NuGetPackageInfo(packageId,
+                new Dictionary<FrameworkName, string>()
+                {
+                    { Windows81, packageVersion },
+                    { NetStandard16, packageVersion }
+                },
+                userNuGetPackage.AssemblyIdentity)
             };
 
             var assemblies = engine.ComputeAssembliesToRemove(inputAssemblies, targets, nugetPackageResult);

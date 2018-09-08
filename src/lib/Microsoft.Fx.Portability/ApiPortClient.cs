@@ -324,8 +324,7 @@ namespace Microsoft.Fx.Portability
                         dependencyInfo?.UnresolvedAssemblies,
                         response.UnresolvedUserAssemblies,
                         dependencyInfo?.AssembliesWithErrors,
-                        response.NuGetPackages
-                    );
+                        response.NuGetPackages);
                 }
                 catch (Exception)
                 {

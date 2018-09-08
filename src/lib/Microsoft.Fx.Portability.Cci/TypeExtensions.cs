@@ -129,14 +129,12 @@ namespace Microsoft.Cci.Extensions
         {
             IUnit unit = TypeHelper.GetDefiningUnit(type);
 
-            IAssembly assembly = unit as IAssembly;
-            if (assembly != null)
+            if (unit is IAssembly assembly)
             {
                 return assembly;
             }
 
-            IModule module = unit as IModule;
-            if (module != null)
+            if (unit is IModule module)
             {
                 return module.ContainingAssembly;
             }
@@ -148,14 +146,12 @@ namespace Microsoft.Cci.Extensions
         {
             IUnitReference unit = TypeHelper.GetDefiningUnitReference(type);
 
-            IAssemblyReference assembly = unit as IAssemblyReference;
-            if (assembly != null)
+            if (unit is IAssemblyReference assembly)
             {
                 return assembly;
             }
 
-            IModuleReference module = unit as IModuleReference;
-            if (module != null)
+            if (unit is IModuleReference module)
             {
                 return module.ContainingAssembly;
             }

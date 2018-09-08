@@ -27,8 +27,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
             CreateTargetMapper(),
             CreateCollectionOfReportWriters(),
             CreateTargetNameParser(),
-            CreateApiRecommendations()
-        );
+            CreateApiRecommendations());
 
         [Fact]
         public async Task QueryDocIdsWithNullThrowsArgumentNullException()
@@ -120,7 +119,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         {
             var docIdsToPass = new List<string>
             {
-                $"T:{ValidDocId}0" ,
+                $"T:{ValidDocId}0",
                 $"T:{ValidDocId}1",
                 $"P:{ValidDocId}1",
                 "",
@@ -131,7 +130,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
 
             var expectedDocIds = new List<string>
             {
-                $"T:{ValidDocId}0" ,
+                $"T:{ValidDocId}0",
                 $"T:{ValidDocId}1",
                 $"P:{ValidDocId}1"
             };
@@ -146,7 +145,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         {
             var expectedDocIds = new List<string>
             {
-                $"T:{ValidDocId.ToUpper(CultureInfo.InvariantCulture)}0" ,
+                $"T:{ValidDocId.ToUpper(CultureInfo.InvariantCulture)}0",
                 $"M:{ValidDocId.ToUpper(CultureInfo.InvariantCulture)}1",
                 $"P:{ValidDocId}0"
             };
@@ -216,13 +215,13 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
 
-            //Add some different types of DocIds
+            // Add some different types of DocIds
             AddDocIdsForType("T", catalog);
             AddDocIdsForType("P", catalog);
             AddDocIdsForType("M", catalog);
             AddDocIdsForType("E", catalog);
 
-            //Add some different type of DocIds with Parameters
+            // Add some different type of DocIds with Parameters
             AddDocIdWithParameter("M", catalog);
             AddDocIdWithParameter("T", catalog);
 

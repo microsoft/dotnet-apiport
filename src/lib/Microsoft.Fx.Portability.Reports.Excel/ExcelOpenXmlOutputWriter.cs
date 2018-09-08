@@ -347,7 +347,7 @@ namespace Microsoft.Fx.Portability.Reports
                     breakingChange.Break.Details,
                     breakingChange.Break.Suggestion,
                     breakingChange.Break.SourceAnalyzerStatus.ToString(),
-                    string.IsNullOrWhiteSpace(breakingChange.Break.Link) ? "No link" : CreateHyperlink("Link",breakingChange.Break.Link),
+                    string.IsNullOrWhiteSpace(breakingChange.Break.Link) ? "No link" : CreateHyperlink("Link", breakingChange.Break.Link),
                     string.Empty
                 };
 
@@ -413,7 +413,7 @@ namespace Microsoft.Fx.Portability.Reports
         {
             return submissionId;
 
-            //TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
+            // TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
 #if FALSE
             var headers = _analysisReport.Headers;
             // If no website is provided, do not create hyperlink
@@ -435,7 +435,7 @@ namespace Microsoft.Fx.Portability.Reports
         {
             return docId;
 
-            //TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
+            // TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
 #if FALSE
             var headers = _analysisReport.Headers;
             // If no website is provided, do not create hyperlink

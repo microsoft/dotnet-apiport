@@ -215,7 +215,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var systemObject = dependencies.Dependencies.FirstOrDefault(o => string.Equals(o.Key.MemberDocId, objectDocId, StringComparison.Ordinal)).Key;
             Assert.NotNull(systemObject);
 
-            //Test that the DefinedInAssemblyIdentity of the primitive array is not null/empty and it is the same as the one of System.Object
+            // Test that the DefinedInAssemblyIdentity of the primitive array is not null/empty and it is the same as the one of System.Object
             var definedInAssemblyIdentity = primitiveArray.DefinedInAssemblyIdentity;
 
             var isNullOrWhiteSpace = string.IsNullOrWhiteSpace(definedInAssemblyIdentity);
