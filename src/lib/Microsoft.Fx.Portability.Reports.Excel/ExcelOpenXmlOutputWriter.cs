@@ -307,7 +307,7 @@ namespace Microsoft.Fx.Portability.Reports
             detailsPage.AddColumnWidth(columnWidths);
         }
 
-        private void GenerateBreakingChangesPage(Worksheet worksheet, IEnumerable<BreakingChangeDependency> _breakingChanges)
+        private void GenerateBreakingChangesPage(Worksheet worksheet, IEnumerable<BreakingChangeDependency> breakingChanges)
         {
             var row = 1;
 
@@ -332,7 +332,7 @@ namespace Microsoft.Fx.Portability.Reports
 
             worksheet.AddRow(header);
 
-            foreach (var breakingChange in _breakingChanges)
+            foreach (var breakingChange in breakingChanges)
             {
                 var rowContent = new object[]
                 {

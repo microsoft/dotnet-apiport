@@ -11,11 +11,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     public class CciDependencyFinder : IDependencyFinder
     {
-        public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IProgressReporter _progressReport)
+        public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> inputAssemblies, IProgressReporter progressReport)
         {
-            var inputAssemblyPaths = inputAssemblies.Where(f => FilterValidFiles(f, _progressReport)).Select(i => i.Name).ToList();
+            var inputAssemblyPaths = inputAssemblies.Where(f => FilterValidFiles(f, progressReport)).Select(i => i.Name).ToList();
 
-            using (var task = _progressReport.StartTask(LocalizedStrings.DetectingAssemblyReferences, inputAssemblyPaths.Count))
+            using (var task = progressReport.StartTask(LocalizedStrings.DetectingAssemblyReferences, inputAssemblyPaths.Count))
             {
                 try
                 {
@@ -29,14 +29,14 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
         }
 
-        private static bool FilterValidFiles(IAssemblyFile file, IProgressReporter _progressReport)
+        private static bool FilterValidFiles(IAssemblyFile file, IProgressReporter progressReport)
         {
             if (file.Exists)
             {
                 return true;
             }
 
-            _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownFile, file.Name));
+            progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownFile, file.Name));
 
             return false;
         }

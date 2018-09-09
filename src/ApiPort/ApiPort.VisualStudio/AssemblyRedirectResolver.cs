@@ -83,13 +83,13 @@ namespace ApiPortVS
         }
     }
 
-    internal class AssemblyRedirect
+    internal readonly struct AssemblyRedirect
     {
-        public readonly string Name;
+        public string Name { get; }
 
-        public readonly string PublicKeyToken;
+        public string PublicKeyToken { get; }
 
-        public readonly Version TargetVersion;
+        public Version TargetVersion { get; }
 
         public AssemblyRedirect(string name, string version, string publicKeyToken)
         {

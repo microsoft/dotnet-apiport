@@ -350,7 +350,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private class MemberInfoBreakingChangeComparer : IEqualityComparer<Tuple<MemberInfo, BreakingChange>>
         {
-            public static IEqualityComparer<Tuple<MemberInfo, BreakingChange>> Instance = new MemberInfoBreakingChangeComparer();
+            public static readonly IEqualityComparer<Tuple<MemberInfo, BreakingChange>> Instance = new MemberInfoBreakingChangeComparer();
 
             public bool Equals(Tuple<MemberInfo, BreakingChange> x, Tuple<MemberInfo, BreakingChange> y)
             {

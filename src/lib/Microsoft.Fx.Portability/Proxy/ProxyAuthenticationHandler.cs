@@ -35,9 +35,9 @@ namespace Microsoft.Fx.Portability.Proxy
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            int _attempts = 0;
+            int attempts = 0;
 
-            while (_attempts < MaxAttempts)
+            while (attempts < MaxAttempts)
             {
                 try
                 {
@@ -55,7 +55,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     }
                 }
 
-                _attempts++;
+                attempts++;
             }
 
             throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnknownErrorCodeMessage, HttpStatusCode.BadRequest));

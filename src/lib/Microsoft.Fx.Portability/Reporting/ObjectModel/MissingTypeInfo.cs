@@ -12,7 +12,6 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
     public class MissingTypeInfo : MissingInfo
     {
         private readonly HashSet<AssemblyInfo> _usedInAssemblies;
-        private bool _isMissing;
 
         public int UsageCount { get { return _usedInAssemblies.Count; } }
 
@@ -22,9 +21,9 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public IEnumerable<Version> TargetVersionStatus { get; set; }
 
-        public bool IsMissing { get { return _isMissing; } }
+        public bool IsMissing { get; private set; }
 
-        public HashSet<MissingMemberInfo> MissingMembers;
+        public HashSet<MissingMemberInfo> MissingMembers { get; }
 
         public string TypeName { get; set; }
 
@@ -43,7 +42,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public void MarkAsMissing()
         {
-            _isMissing = true;
+            IsMissing = true;
         }
 
         public void IncrementUsage(AssemblyInfo sourceAssembly)

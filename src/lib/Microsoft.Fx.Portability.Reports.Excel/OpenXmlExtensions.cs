@@ -21,11 +21,11 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         public static Worksheet AddWorksheet(this SpreadsheetDocument spreadsheet, string name)
         {
-            var _sheets = spreadsheet.WorkbookPart.Workbook.GetFirstChild<Sheets>();
-            if (_sheets == null)
+            var sheets = spreadsheet.WorkbookPart.Workbook.GetFirstChild<Sheets>();
+            if (sheets == null)
             {
-                _sheets = new Sheets();
-                spreadsheet.WorkbookPart.Workbook.AppendChild(_sheets);
+                sheets = new Sheets();
+                spreadsheet.WorkbookPart.Workbook.AppendChild(sheets);
             }
 
             var worksheetPart = spreadsheet.WorkbookPart.AddNewPart<WorksheetPart>();
@@ -34,10 +34,10 @@ namespace Microsoft.Fx.OpenXmlExtensions
             worksheetPart.Worksheet.Save();
 
             // create the worksheet to workbook relation
-            _sheets.AppendChild(new Sheet()
+            sheets.AppendChild(new Sheet()
             {
                 Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart),
-                SheetId = new DocumentFormat.OpenXml.UInt32Value((uint)_sheets.Count() + 1),
+                SheetId = new DocumentFormat.OpenXml.UInt32Value((uint)sheets.Count() + 1),
                 Name = name
             });
 
@@ -263,7 +263,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             }
         }
 
-        static Cell CreateTextCell(string text)
+        public static Cell CreateTextCell(string text)
         {
             var cell = new Cell
             {
@@ -280,7 +280,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             return cell;
         }
 
-        static Cell CreateNumberCell(string value)
+        public static Cell CreateNumberCell(string value)
         {
             return new Cell
             {
