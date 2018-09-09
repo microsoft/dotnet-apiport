@@ -30,7 +30,7 @@ namespace ApiPortVS
     {
         private const string DefaultEndpoint = @"https://portability.dot.net/";
         private static readonly DirectoryInfo AssemblyDirectory = new FileInfo(typeof(ServiceProvider).Assembly.Location).Directory;
-        private static Guid outputWindowGuid = new Guid(0xe2fc797f, 0x1dd3, 0x476c, 0x89, 0x17, 0x86, 0xcd, 0x31, 0x33, 0xc4, 0x69);
+        private static Guid _outputWindowGuid = new Guid(0xe2fc797f, 0x1dd3, 0x476c, 0x89, 0x17, 0x86, 0xcd, 0x31, 0x33, 0xc4, 0x69);
 
         private readonly IContainer _container;
 
@@ -173,14 +173,14 @@ namespace ApiPortVS
             {
                 var outputWindow = provider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
 
-                if (outputWindow.GetPane(ref outputWindowGuid, out IVsOutputWindowPane windowPane) == S_OK)
+                if (outputWindow.GetPane(ref _outputWindowGuid, out IVsOutputWindowPane windowPane) == S_OK)
                 {
                     return windowPane;
                 }
 
-                if (outputWindow.CreatePane(ref outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
+                if (outputWindow.CreatePane(ref _outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
                 {
-                    if (outputWindow.GetPane(ref outputWindowGuid, out windowPane) == S_OK)
+                    if (outputWindow.GetPane(ref _outputWindowGuid, out windowPane) == S_OK)
                     {
                         return windowPane;
                     }

@@ -11,7 +11,7 @@ namespace ApiPortVS.SourceMapping
 {
     internal static class CodeDocumentNavigator
     {
-        private static Guid logicalViewGuid = VSConstants.LOGVIEWID.Code_guid;
+        private static Guid _logicalViewGuid = VSConstants.LOGVIEWID.Code_guid;
 
         public static void Navigate(object sender, EventArgs e)
         {
@@ -44,7 +44,7 @@ namespace ApiPortVS.SourceMapping
             if (Package.GetGlobalService(typeof(VsTextManagerClass)) is IVsTextManager textManager
                 && buffer != null)
             {
-                textManager.NavigateToLineAndColumn(buffer, ref logicalViewGuid, line, column, line, column);
+                textManager.NavigateToLineAndColumn(buffer, ref _logicalViewGuid, line, column, line, column);
             }
         }
 
@@ -57,7 +57,7 @@ namespace ApiPortVS.SourceMapping
             {
                 ErrorHandler.ThrowOnFailure(openDocument.OpenDocumentViaProject(
                     documentPath,
-                    ref logicalViewGuid,
+                    ref _logicalViewGuid,
                     out var serviceProvider,
                     out var hierarchy,
                     out var itemId,

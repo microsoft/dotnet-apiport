@@ -259,7 +259,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     break;
 
                 default:
-                    Debug.Assert(false, "Encountered a type MemberMetadataInfoTypeProvider is not supported for.");
+                    Debug.Assert(false, $"Not supported typecode [{typeCode}].");
                     throw new ArgumentOutOfRangeException(nameof(typeCode));
             }
 
