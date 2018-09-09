@@ -50,9 +50,11 @@ namespace Microsoft.Fx.Portability.Reporting
             try
             {
                 using (var destinationStream = _fileSystem.CreateFile(filePath))
-                using (var memoryStream = new MemoryStream(report))
                 {
-                    await memoryStream.CopyToAsync(destinationStream);
+                    using (var memoryStream = new MemoryStream(report))
+                    {
+                        await memoryStream.CopyToAsync(destinationStream);
+                    }
                 }
             }
             catch (IOException ex)

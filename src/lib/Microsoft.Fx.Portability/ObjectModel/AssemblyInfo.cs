@@ -66,7 +66,9 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             AssemblyInfo other = obj as AssemblyInfo;
             if (other == null)
+            {
                 return false;
+            }
 
             return StringComparer.Ordinal.Equals(other.AssemblyIdentity, AssemblyIdentity)
                 && StringComparer.Ordinal.Equals(other.TargetFrameworkMoniker, TargetFrameworkMoniker);

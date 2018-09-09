@@ -101,10 +101,14 @@ namespace Microsoft.Fx.Portability.ObjectModel
             //  - The entry for the API contains the target.
             //  - The version for when the API was introduced is before (or equal) to the target version.
             if (!_apiMapping.TryGetValue(docId, out var targets))
+            {
                 return false;
+            }
 
             if (!targets.TryGetValue(targetName.Identifier, out introducedVersion))
+            {
                 return false;
+            }
 
             return targetName.Version >= introducedVersion;
         }

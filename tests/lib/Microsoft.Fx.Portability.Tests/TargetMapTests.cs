@@ -458,14 +458,16 @@ namespace Microsoft.Fx.Portability.Tests
         private static TargetMapper LoadXml(string config)
         {
             using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms) { AutoFlush = true })
             {
-                writer.Write(config);
-                ms.Seek(0, SeekOrigin.Begin);
+                using (var writer = new StreamWriter(ms) { AutoFlush = true })
+                {
+                    writer.Write(config);
+                    ms.Seek(0, SeekOrigin.Begin);
 
-                var targetMapper = new TargetMapper();
-                targetMapper.Load(ms);
-                return targetMapper;
+                    var targetMapper = new TargetMapper();
+                    targetMapper.Load(ms);
+                    return targetMapper;
+                }
             }
         }
     }

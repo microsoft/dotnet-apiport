@@ -141,7 +141,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var reference in cciAssembly.GetTypeMemberReferences())
                 {
                     if (reference.ContainingType.GetAssemblyReference() == null)
+                    {
                         continue;
+                    }
 
                     string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
                     // return the type

@@ -43,7 +43,9 @@ namespace Microsoft.Fx.Portability.Reporting
                     {
                         ICollection<AssemblyInfo> calledIn;
                         if (!allDependencies.TryGetValue(item, out calledIn))
+                        {
                             return;
+                        }
 
                         foreach (var callingAsm in calledIn)
                         {
@@ -99,9 +101,10 @@ namespace Microsoft.Fx.Portability.Reporting
                     // This is declared here to minimize allocations
                     AssemblyUsageInfo currentAssembly;
 
-                    ICollection<AssemblyInfo> usedIn;
-                    if (!allDependencies.TryGetValue(memberInfo, out usedIn))
+                    if (!allDependencies.TryGetValue(memberInfo, out var usedIn))
+                    {
                         return;
+                    }
 
                     foreach (var file in usedIn)
                     {

@@ -196,10 +196,9 @@ namespace Microsoft.Fx.Portability
                  */
                 if (group.Count() == 1)
                 {
-                    if (includeVersion)
-                        yield return group.Single().FullName;
-                    else
-                        yield return group.Key;
+                    yield return includeVersion
+                        ? group.Single().FullName
+                        : group.Key;
                 }
                 else
                 {

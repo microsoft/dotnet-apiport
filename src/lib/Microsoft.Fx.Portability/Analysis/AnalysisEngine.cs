@@ -205,7 +205,9 @@ namespace Microsoft.Fx.Portability.Analysis
         public IEnumerable<string> FindUnreferencedAssemblies(IEnumerable<string> unreferencedAssemblies, IEnumerable<AssemblyInfo> specifiedUserAssemblies)
         {
             if (unreferencedAssemblies == null)
+            {
                 yield break;
+            }
 
             // Find the unreferenced assemblies that are not framework assemblies.
             var userUnreferencedAssemblies = unreferencedAssemblies.AsParallel().
@@ -217,11 +219,15 @@ namespace Microsoft.Fx.Portability.Analysis
             {
                 // if somehow a null made it through...
                 if (userAsm == null)
+                {
                     continue;
+                }
 
                 // If the unresolved assembly was not actually specified, we need to tell the user that.
                 if (specifiedUserAssemblies != null && specifiedUserAssemblies.Any(ua => ua != null && StringComparer.OrdinalIgnoreCase.Equals(ua.AssemblyIdentity, userAsm)))
+                {
                     continue;
+                }
 
                 yield return userAsm;
             }

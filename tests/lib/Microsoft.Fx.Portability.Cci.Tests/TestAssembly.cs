@@ -74,9 +74,11 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             var name = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceNames().Single(n => n.EndsWith(fileName, StringComparison.Ordinal));
 
             using (var stream = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceStream(name))
-            using (var reader = new StreamReader(stream))
+            {
+                using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
+            }
             }
         }
     }

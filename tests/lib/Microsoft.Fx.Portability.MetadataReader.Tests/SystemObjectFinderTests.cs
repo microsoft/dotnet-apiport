@@ -25,7 +25,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var file = TestAssembly.Create("multiple-mscorlib.il", _output);
 
             using (var stream = file.OpenRead())
-            using (var peFile = new PEReader(stream))
+            {
+                using (var peFile = new PEReader(stream))
             {
                 var metadataReader = peFile.GetMetadataReader();
 
@@ -34,6 +35,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
                 Assert.Equal("neutral", assemblyInfo.Culture);
                 Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
+            }
             }
         }
 
@@ -48,15 +50,17 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var file = TestAssembly.Create("OnlyNetStandardReference.il", _output);
 
             using (var stream = file.OpenRead())
-            using (var peFile = new PEReader(stream))
             {
-                var metadataReader = peFile.GetMetadataReader();
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
 
-                Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
-                Assert.Equal("netstandard", assemblyInfo.Name);
-                Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
-                Assert.Equal("neutral", assemblyInfo.Culture);
-                Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+                    Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Equal("netstandard", assemblyInfo.Name);
+                    Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
+                    Assert.Equal("neutral", assemblyInfo.Culture);
+                    Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+                }
             }
         }
 
