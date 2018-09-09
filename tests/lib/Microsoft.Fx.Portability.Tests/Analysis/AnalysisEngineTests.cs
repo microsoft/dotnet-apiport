@@ -67,7 +67,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = new[] { new AssemblyInfo { FileVersion = "", AssemblyIdentity = "MyAssembly" } };
+            var specifiedUserAssemblies = new[] { new AssemblyInfo { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" } };
             var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // 0 missing assembly since Microsoft.CSharp is a FX assembly and we specified MyAssembly
@@ -98,7 +98,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = "", AssemblyIdentity = "MyAssembly" }, null };
+            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" }, null };
             var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // 0 missing assembly since Microsoft.CSharp is a fx assembly and we specified MyAssembly
@@ -114,7 +114,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = "", AssemblyIdentity = "MyAssembly" } };
+            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" } };
             var listWithNulls = s_unreferencedAssemblies.Concat(new List<string>() { null }).ToList();
 
             var unreferencedAssms = engine.FindUnreferencedAssemblies(listWithNulls, specifiedUserAssemblies).ToList();

@@ -93,11 +93,12 @@ namespace Microsoft.Fx.Portability.Tests
 
         private static IDictionary<MemberInfo, ICollection<AssemblyInfo>> GetDependencies()
         {
-            var dict = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>();
-
-            dict.Add(new MemberInfo { MemberDocId = "item1" }, new HashSet<AssemblyInfo> { new AssemblyInfo { AssemblyIdentity = "string1" }, new AssemblyInfo { AssemblyIdentity = "string2" } });
-            dict.Add(new MemberInfo { MemberDocId = "item2" }, new HashSet<AssemblyInfo> { new AssemblyInfo { AssemblyIdentity = "string3" }, new AssemblyInfo { AssemblyIdentity = "string4" } });
-            dict.Add(new MemberInfo { MemberDocId = "item3" }, new HashSet<AssemblyInfo> { new AssemblyInfo { AssemblyIdentity = "string5" }, new AssemblyInfo { AssemblyIdentity = "string6" } });
+            var dict = new Dictionary<MemberInfo, ICollection<AssemblyInfo>>
+            {
+                { new MemberInfo { MemberDocId = "item1" }, new HashSet<AssemblyInfo> { new AssemblyInfo { AssemblyIdentity = "string1" }, new AssemblyInfo { AssemblyIdentity = "string2" } } },
+                { new MemberInfo { MemberDocId = "item2" }, new HashSet<AssemblyInfo> { new AssemblyInfo { AssemblyIdentity = "string3" }, new AssemblyInfo { AssemblyIdentity = "string4" } } },
+                { new MemberInfo { MemberDocId = "item3" }, new HashSet<AssemblyInfo> { new AssemblyInfo { AssemblyIdentity = "string5" }, new AssemblyInfo { AssemblyIdentity = "string6" } } }
+            };
 
             return dict;
         }
@@ -110,7 +111,7 @@ namespace Microsoft.Fx.Portability.Tests
         private static void VerifyEmptySerialized<T>()
             where T : class
         {
-            var deserialized = "".Serialize().Deserialize<T>();
+            var deserialized = string.Empty.Serialize().Deserialize<T>();
 
             Assert.Null(deserialized);
         }

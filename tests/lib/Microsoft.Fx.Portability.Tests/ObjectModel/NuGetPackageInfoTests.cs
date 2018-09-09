@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
             var packageInfo = new NuGetPackageInfo(package1, new Dictionary<FrameworkName, string> { { frameworkName, package1Version } }, assemblyInfo);
 
             Assert.Throws<ArgumentNullException>(() => new NuGetPackageInfo(null, new Dictionary<FrameworkName, string> { { frameworkName, package1Version } }, assemblyInfo));
-            Assert.Throws<ArgumentException>(() => new NuGetPackageInfo("", new Dictionary<FrameworkName, string> { { frameworkName, package1Version } }, assemblyInfo));
+            Assert.Throws<ArgumentException>(() => new NuGetPackageInfo(string.Empty, new Dictionary<FrameworkName, string> { { frameworkName, package1Version } }, assemblyInfo));
             Assert.Throws<ArgumentNullException>(() => new NuGetPackageInfo(package1, new Dictionary<FrameworkName, string> { { null, package1Version } }, assemblyInfo));
         }
     }

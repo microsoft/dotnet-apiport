@@ -140,7 +140,7 @@ namespace Microsoft.Fx.Portability
 
             // Convert bytes to string, but we don't want the '-' characters and need it to be lower case
             return BitConverter.ToString(bytes)
-                .Replace("-", "")
+                .Replace("-", string.Empty)
                 .ToLowerInvariant();
         }
 

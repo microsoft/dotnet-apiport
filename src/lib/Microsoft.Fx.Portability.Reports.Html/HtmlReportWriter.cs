@@ -123,7 +123,7 @@ namespace Microsoft.Fx.Portability.Reports
 
             public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
             {
-                var className = "";
+                var className = string.Empty;
                 if (breaks <= warningThreshold)
                 {
                     className = "NoBreakingChanges";

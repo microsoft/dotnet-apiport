@@ -38,8 +38,8 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public static void CaseInsensitive()
         {
-            var parser = new TargetNameParser(new TestCatalog(), String.Empty);
-            var targets = parser.MapTargetsToExplicitVersions(new String[] { "target 1, version=1.0" });
+            var parser = new TargetNameParser(new TestCatalog(), string.Empty);
+            var targets = parser.MapTargetsToExplicitVersions(new[] { "target 1, version=1.0" });
 
             // We should only have 1 target!
             Assert.Single(targets);
@@ -49,7 +49,7 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public static void NoSpecifiedDefaultTargets()
         {
-            var parser = new TargetNameParser(new TestCatalog(), String.Empty);
+            var parser = new TargetNameParser(new TestCatalog(), string.Empty);
             var targets = parser.MapTargetsToExplicitVersions(Enumerable.Empty<string>());
 
             // We should only have 0 target!

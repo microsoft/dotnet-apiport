@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
             var expandedTargets = new[] { expanded1, expanded2 };
             var info = new TargetInformation { Name = group, ExpandedTargets = expandedTargets };
 
-            var groupedToString = String.Format(CultureInfo.CurrentCulture, LocalizedStrings.TargetInformationGroups, group, String.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ", expandedTargets));
+            var groupedToString = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TargetInformationGroups, group, string.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ", expandedTargets));
             Assert.Equal(groupedToString, info.ToString());
         }
     }

@@ -122,7 +122,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
                 $"T:{ValidDocId}0",
                 $"T:{ValidDocId}1",
                 $"P:{ValidDocId}1",
-                "",
+                string.Empty,
                 $"{InvalidDocId}{MaxDocIdSetCount + 1}",
                 $"{InvalidDocId}{MaxDocIdSetCount + 2}",
                 $"{InvalidDocId}{MaxDocIdSetCount + 3}",

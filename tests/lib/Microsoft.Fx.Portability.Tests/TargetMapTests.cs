@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
@@ -267,7 +267,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
@@ -306,7 +306,7 @@ namespace Microsoft.Fx.Portability.Tests
             catch (TargetMapperException e)
             {
                 Assert.NotNull(e.InnerException);
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.InnerException.Message), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.InnerException.Message), e.Message);
                 return;
             }
 
@@ -330,7 +330,7 @@ namespace Microsoft.Fx.Portability.Tests
             {
 #if FEATURE_XML_SCHEMA
                 Assert.NotNull(e.InnerException);
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
 #else
                 Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, string.Empty), e.Message);
 #endif

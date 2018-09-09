@@ -212,7 +212,7 @@ namespace ApiPort
             {
                 var errorType = ex.InnerException.InnerException.InnerException.GetType();
 
-                if (String.Equals(errorType.FullName, "Mono.Security.Protocol.Tls.TlsException", StringComparison.Ordinal))
+                if (string.Equals(errorType.FullName, "Mono.Security.Protocol.Tls.TlsException", StringComparison.Ordinal))
                 {
                     Console.WriteLine(LocalizedStrings.MonoWebRequestsFailure);
 
