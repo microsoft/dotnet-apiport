@@ -15,9 +15,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
 {
     internal static class OpenXmlExtensions
     {
-        private static uint _GlobalId = 1;
+        private static uint _globalId = 1;
 
-        private static uint IncrementalUniqueId { get { return _GlobalId++; } }
+        private static uint IncrementalUniqueId { get { return _globalId++; } }
 
         public static Worksheet AddWorksheet(this SpreadsheetDocument spreadsheet, string name)
         {

@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// These keys are a collection of public key tokens derived from all the reference assemblies in
         /// "%ProgramFiles%\Reference Assemblies\Microsoft" on a Windows 10 machine with VS 2015 installed
         /// </summary>
-        private static readonly ICollection<string> s_microsoftKeys = new HashSet<string>(new[]
+        private static readonly ICollection<string> MicrosoftKeys = new HashSet<string>(new[]
         {
             "b77a5c561934e089", // ECMA
             "b03f5f7f11d50a3a", // DEVDIV
@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             "cc7b13ffcd2ddd51" // NetStandard
         }, StringComparer.OrdinalIgnoreCase);
 
-        private static readonly IEnumerable<string> s_frameworkAssemblyNamePrefixes = new[]
+        private static readonly IEnumerable<string> FrameworkAssemblyNamePrefixes = new[]
         {
             "System.",
             "Microsoft.AspNet.",
@@ -45,12 +45,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 return true;
             }
 
-            if (s_microsoftKeys.Contains(assembly.PublicKeyToken))
+            if (MicrosoftKeys.Contains(assembly.PublicKeyToken))
             {
                 return true;
             }
 
-            if (s_frameworkAssemblyNamePrefixes.Any(p => assembly.Name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            if (FrameworkAssemblyNamePrefixes.Any(p => assembly.Name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
                 return true;
             }

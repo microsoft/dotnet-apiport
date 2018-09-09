@@ -15,7 +15,7 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Items that can show up in the breaking change 'Affected APIs' section that should be ignored
         /// </summary>
-        private static readonly ICollection<string> s_ignoredApis = new HashSet<string>(new[]
+        private static readonly ICollection<string> IgnoredApis = new HashSet<string>(new[]
         {
             "Not detectable via API analysis",
             "Investigate applicable APIs"
@@ -271,7 +271,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.ApplicableApis = new List<string>();
                     }
-                    if (!s_ignoredApis.Contains(api))
+                    if (!IgnoredApis.Contains(api))
                     {
                         currentBreak.ApplicableApis.Add(api);
                     }

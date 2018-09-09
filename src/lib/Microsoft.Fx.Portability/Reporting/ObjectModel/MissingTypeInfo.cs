@@ -79,9 +79,8 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public override bool Equals(object obj)
         {
-            MissingTypeInfo other = obj as MissingTypeInfo;
-
-            return other != null && StringComparer.Ordinal.Equals(other.TypeName, TypeName);
+            return obj is MissingTypeInfo other
+                && StringComparer.Ordinal.Equals(other.TypeName, TypeName);
         }
     }
 }

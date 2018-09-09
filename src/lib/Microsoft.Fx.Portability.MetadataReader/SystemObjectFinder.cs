@@ -11,7 +11,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     public class SystemObjectFinder
     {
-        private static readonly HashSet<string> s_systemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
+        private static readonly HashSet<string> SystemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
         {
             "mscorlib",
             "netstandard",
@@ -44,7 +44,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     return reader.FormatAssemblyInfo(assembly);
                 })
                 .Where(_assemblyFilter.IsFrameworkAssembly)
-                .Where(assembly => s_systemObjectAssemblies.Contains(assembly.Name))
+                .Where(assembly => SystemObjectAssemblies.Contains(assembly.Name))
                 .OrderByDescending(assembly => assembly.Version);
 
             var matchingAssembly = microsoftAssemblies.FirstOrDefault();

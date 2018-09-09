@@ -21,7 +21,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
         #region FindUnreferencedAssemblies
 
-        private static List<string> s_unreferencedAssemblies = new List<string>()
+        private static readonly List<string> UnreferencedAssemblies = new List<string>()
             {
                 "Microsoft.CSharp, Version=4.0.0.0, PublicKeyToken=b03f5f7f11d50a3a",
                 "MyAssembly"
@@ -42,7 +42,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var result = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, null).ToList();
+            var result = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, null).ToList();
 
             Assert.NotNull(result);
         }
@@ -54,8 +54,8 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = s_unreferencedAssemblies.Select(ua => new AssemblyInfo() { AssemblyIdentity = ua, FileVersion = "0.0.0.0" }).ToList();
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
+            var specifiedUserAssemblies = UnreferencedAssemblies.Select(ua => new AssemblyInfo() { AssemblyIdentity = ua, FileVersion = "0.0.0.0" }).ToList();
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // We don't expect to have any unreferenced assemblies.
             Assert.Empty(unreferencedAssms);
@@ -65,13 +65,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_1()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
             var specifiedUserAssemblies = new[] { new AssemblyInfo { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" } };
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // 0 missing assembly since Microsoft.CSharp is a FX assembly and we specified MyAssembly
             Assert.Empty(unreferencedAssms);
@@ -81,12 +81,12 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_2()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, Enumerable.Empty<AssemblyInfo>()).ToList();
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, Enumerable.Empty<AssemblyInfo>()).ToList();
 
             // 1 missing assembly since Microsoft.CSharp is a FX assembly
             Assert.Single(unreferencedAssms);
@@ -96,13 +96,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInSpecifiedList()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
             var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" }, null };
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // 0 missing assembly since Microsoft.CSharp is a fx assembly and we specified MyAssembly
             Assert.Empty(unreferencedAssms);
@@ -112,13 +112,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInUnrefList()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
             var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" } };
-            var listWithNulls = s_unreferencedAssemblies.Concat(new List<string>() { null }).ToList();
+            var listWithNulls = UnreferencedAssemblies.Concat(new List<string>() { null }).ToList();
 
             var unreferencedAssms = engine.FindUnreferencedAssemblies(listWithNulls, specifiedUserAssemblies).ToList();
 
