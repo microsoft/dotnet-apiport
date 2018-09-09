@@ -88,7 +88,9 @@ namespace ApiPortVS.ViewModels
                     File.Copy(path, fileSaveDialog.FileName);
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         private class DelegateCommand<T> : ICommand

@@ -89,7 +89,8 @@ namespace Microsoft.Fx.Portability.Tests
                 fileSystem.FileExists(path).Returns(true);
                 var nextFileName = string.Format(CultureInfo.CurrentCulture, fileNameFormat, fileNumber);
                 path = Path.Combine(dir, Path.ChangeExtension(nextFileName, extension));
-            } while (fileNumber++ < FileExistsCount);
+            }
+            while (fileNumber++ < FileExistsCount);
 
             var writer = new ReportFileWriter(fileSystem, progressReporter);
             var report = Encoding.UTF8.GetBytes("This is a test report.");
