@@ -91,8 +91,7 @@ namespace Microsoft.Fx.Portability
                         }
                         else if (splitTitle.Length == 2)
                         {
-                            int id;
-                            if (int.TryParse(splitTitle[0], out id))
+                            if (int.TryParse(splitTitle[0], out var id))
                             {
                                 currentBreak.Id = id.ToString(CultureInfo.InvariantCulture);
                                 currentBreak.Title = splitTitle[1].Trim();
@@ -106,7 +105,8 @@ namespace Microsoft.Fx.Portability
                         // Clear state
                         state = ParseState.None;
                     }
-                    else if (currentBreak != null) // Only parse breaking change if we've seen a breaking change header ("## ...")
+                    // Only parse breaking change if we've seen a breaking change header ("## ...")
+                    else if (currentBreak != null)
                     {
                         // State changes
                         if (currentLine.StartsWith("###", StringComparison.Ordinal))

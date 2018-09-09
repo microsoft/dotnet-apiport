@@ -365,7 +365,7 @@ namespace Microsoft.Fx.Portability.Tests
        </Targets>
      </ApiTool> ";
 
-            var map = LoadXml(xml); ;
+            var map = LoadXml(xml);
 
             Assert.Equal("Alias1", map.GetAlias("TestTarget1"));
         }
