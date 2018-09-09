@@ -218,7 +218,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             var sb = new StringBuilder();
 
             if (index >= Alphabet.Length)
-                sb.Append(Alphabet[index / Alphabet.Length - 1]);
+                sb.Append(Alphabet[(index / Alphabet.Length) - 1]);
 
             sb.Append(Alphabet[index % Alphabet.Length]);
 

@@ -56,8 +56,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
             if (!_hashComputed)
             {
                 var hash = 17;
-                hash = hash * 23 + (AssemblyInfo ?? string.Empty).GetHashCode();
-                hash = hash * 23 + (PackageId ?? string.Empty).GetHashCode();
+                hash = (hash * 23) + (AssemblyInfo ?? string.Empty).GetHashCode();
+                hash = (hash * 23) + (PackageId ?? string.Empty).GetHashCode();
                 _hashCode = hash;
                 _hashComputed = true;
             }
@@ -79,8 +79,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
             public int GetHashCode(KeyValuePair<FrameworkName, string> kvp)
             {
                 var hash = 17;
-                hash = hash * 23 + kvp.Key.GetHashCode();
-                hash = hash * 23 + (kvp.Value ?? string.Empty).GetHashCode();
+                hash = (hash * 23) + kvp.Key.GetHashCode();
+                hash = (hash * 23) + (kvp.Value ?? string.Empty).GetHashCode();
                 return hash;
             }
         }

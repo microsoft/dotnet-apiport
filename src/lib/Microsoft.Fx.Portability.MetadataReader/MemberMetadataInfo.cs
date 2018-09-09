@@ -320,7 +320,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private static bool CalculateGenericArgsOffset(string displayName, int pos, out int numGenericArgs, out int offsetStringAfterGenericMarker)
         {
-            Debug.Assert(displayName[pos] == '`');
+            Debug.Assert(displayName[pos] == '`', $"Name should contain ` but contains {displayName[pos]}");
 
             offsetStringAfterGenericMarker = ++pos;
 

@@ -167,7 +167,8 @@ namespace Microsoft.Fx.Portability
                             var boundary = contentType.Parameters.FirstOrDefault(p => string.Equals("boundary", p.Name, StringComparison.OrdinalIgnoreCase))?.Value
                                 .Trim('\"');
 
-                            Debug.Assert(boundary != null);
+                            Debug.Assert(boundary != null,
+                                $"boundary not parsed from parameters: {string.Join(",", contentType.Parameters.Select(x => x.Name))}");
 
                             using (var stream = await response.Content.ReadAsStreamAsync())
                             {

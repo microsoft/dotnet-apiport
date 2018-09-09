@@ -175,7 +175,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                     // equivalent if my understanding is correct. I don't know
                     // if it will resolve ExportedTypes from the same syntax
                     // however.
-                    Debug.Assert(scope.IsNil || scope == Handle.ModuleDefinition);
+                    Debug.Assert(scope.IsNil || scope == Handle.ModuleDefinition,
+                        "This is a rare case. Add this to verify an unusual situation.");
                     return name;
             }
         }
@@ -258,7 +259,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     break;
 
                 default:
-                    Debug.Assert(false);
+                    Debug.Assert(false, "Encountered a type MemberMetadataInfoTypeProvider is not supported for.");
                     throw new ArgumentOutOfRangeException(nameof(typeCode));
             }
 
