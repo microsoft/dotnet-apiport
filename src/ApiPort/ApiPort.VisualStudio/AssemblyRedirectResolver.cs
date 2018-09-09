@@ -24,7 +24,10 @@ namespace ApiPortVS
 
         public AssemblyRedirectResolver(string configFile)
         {
-            XName GetFullName(string name) { return XName.Get(name, "urn:schemas-microsoft-com:asm.v1"); }
+            XName GetFullName(string name)
+            {
+                return XName.Get(name, "urn:schemas-microsoft-com:asm.v1");
+            }
 
             var xml = XDocument.Load(configFile);
             var redirects = from element in xml.Descendants(GetFullName("dependentAssembly"))

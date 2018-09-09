@@ -95,7 +95,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         callingAssembly = e.Referrer.GetAssemblyReference().AssemblyIdentity.Format();
                     }
-                    catch { }
+                    catch
+                    {
+                    }
 
                     HashSet<string> newValue = new HashSet<string>
                     {
