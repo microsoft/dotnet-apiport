@@ -28,7 +28,8 @@ namespace ApiPortVS
 
         internal static IServiceProvider LocalServiceProvider { get { return s_serviceProvider; } }
 
-        public ApiPortVSPackage() : base()
+        public ApiPortVSPackage()
+            : base()
         {
             s_serviceProvider = new ServiceProvider(this);
             _assemblyResolver = s_serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
@@ -107,7 +108,7 @@ namespace ApiPortVS
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
-            if ((null == window) || (null == window.Frame))
+            if ((window == null) || (window.Frame == null))
             {
                 throw new NotSupportedException(LocalizedStrings.CannotCreateToolWindow);
             }

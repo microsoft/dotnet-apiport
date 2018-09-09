@@ -7,6 +7,9 @@ namespace Microsoft.Fx.Portability
 {
     public class MovedPermanentlyException : PortabilityAnalyzerException
     {
-        public MovedPermanentlyException() : base(LocalizedStrings.ServerEndpointMovedPermanently) { }
+        public MovedPermanentlyException()
+            : base(LocalizedStrings.ServerEndpointMovedPermanently)
+        {
+        }
     }
 }

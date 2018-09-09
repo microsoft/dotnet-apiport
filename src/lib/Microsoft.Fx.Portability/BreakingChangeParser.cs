@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability
                 BreakingChange currentBreak = null;
                 string currentLine;
 
-                while (null != (currentLine = sr.ReadLine()))
+                while ((currentLine = sr.ReadLine()) != null)
                 {
                     currentLine = currentLine.Trim();
 
