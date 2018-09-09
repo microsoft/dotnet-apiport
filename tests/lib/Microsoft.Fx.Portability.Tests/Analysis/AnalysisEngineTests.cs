@@ -16,6 +16,9 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 {
     public class AnalysisEngineTests
     {
+        private const string TestDocId1 = "T:System.Drawing.Color";
+        private const string TestDocId2 = "T:System.Data.SqlTypes.SqlBoolean";
+
         #region FindUnreferencedAssemblies
 
         private static List<string> s_unreferencedAssemblies = new List<string>()
@@ -582,9 +585,6 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             return recommendations;
         }
-
-        private const string TestDocId1 = "T:System.Drawing.Color";
-        private const string TestDocId2 = "T:System.Data.SqlTypes.SqlBoolean";
 
         private static ICollection<IgnoreAssemblyInfo> GenerateIgnoreAssemblies(bool otherAssm, string[] targetFrameworks)
         {

@@ -3,15 +3,15 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.Fx.Portability.Reports.Html;
+using Microsoft.Fx.Portability.Reports.Html.Resources;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using RazorEngine.Text;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System;
-using Microsoft.Fx.Portability.Reports.Html;
-using Microsoft.Fx.Portability.Reports.Html.Resources;
 
 using static System.FormattableString;
 

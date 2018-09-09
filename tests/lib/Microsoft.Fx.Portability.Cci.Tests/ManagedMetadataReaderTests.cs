@@ -1,18 +1,18 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Fx.Portability.Analyzer;
 using NSubstitute;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
     public class ManagedMetadataReaderTests
     {
-        private readonly static string s_emptyProjectPath = TestAssembly.EmptyProject;
-        private readonly static string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
+        private static readonly string s_emptyProjectPath = TestAssembly.EmptyProject;
+        private static readonly string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
 
         [Fact]
         public static void EmptyProject()

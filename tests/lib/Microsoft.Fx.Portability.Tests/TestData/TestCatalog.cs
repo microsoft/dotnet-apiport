@@ -4,8 +4,8 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Versioning;
 using System.Linq;
+using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.TestData
 {
@@ -97,8 +97,7 @@ namespace Microsoft.Fx.Portability.TestData
 
         public bool IsMemberInTarget(string docId, FrameworkName targetName)
         {
-            Version v;
-            return IsMemberInTarget(docId, targetName, out v);
+            return IsMemberInTarget(docId, targetName, out var v);
         }
 
         public string GetRecommendedChange(string docId)

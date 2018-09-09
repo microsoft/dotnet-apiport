@@ -1,18 +1,18 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Fx.Portability.Resources;
-using Microsoft.Fx.Portability.ObjectModel;
 
 namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
     public class MissingTypeInfo : MissingInfo
     {
-        private bool _isMissing;
         private readonly HashSet<AssemblyInfo> _usedInAssemblies;
+        private bool _isMissing;
 
         public int UsageCount { get { return _usedInAssemblies.Count; } }
 

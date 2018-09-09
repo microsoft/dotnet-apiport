@@ -1,16 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
+using Microsoft.Fx.Portability.Resources;
 using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.Fx.Portability.Resources;
 
 namespace Microsoft.Fx.Portability
 {
     public class AliasMappedToMultipleNamesException : PortabilityAnalyzerException
     {
-        private static string s_listSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
+        private static readonly string s_listSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
 
         private static string GenerateMessage(IEnumerable<string> invalidNames)
         {
