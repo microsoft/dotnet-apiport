@@ -9,6 +9,6 @@ namespace Microsoft.Fx.Portability
     {
         public static readonly Uri PrivacyPolicy = new Uri("https://privacy.microsoft.com/en-us/privacystatement");
 
-        public static readonly Uri About = new Uri("http://go.microsoft.com/fwlink/?LinkId=506955");
+        public static readonly Uri About = new Uri("https://go.microsoft.com/fwlink/?LinkId=506955");
     }
 }
