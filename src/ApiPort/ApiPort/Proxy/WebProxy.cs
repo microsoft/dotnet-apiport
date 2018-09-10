@@ -43,6 +43,7 @@ namespace ApiPort.Proxy
             {
                 return _bypassList;
             }
+
             set
             {
                 _bypassList = value ?? new string[] { };

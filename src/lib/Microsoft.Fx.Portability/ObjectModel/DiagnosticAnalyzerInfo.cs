@@ -13,16 +13,21 @@ namespace Microsoft.Fx.Portability.ObjectModel
 #endif
     public class DiagnosticAnalyzerInfo
     {
-        private static readonly Regex s_regEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+        private static readonly Regex DiagnosticIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
 
         public string AnalyzerName { get; set; }
+
         public string Id { get; set; }
+
         public ICollection<CompatibilityRange> CompatibilityRanges { get; set; }
+
         public bool IsCompatibilityDiagnostic { get; set; }
+
         public ICollection<string> SupportedLanguages { get; set; }
 
         /// <summary>
-        /// Returns the integer number value from the Id string property or a -1 if an integer value cannot be returned. 
+        /// Returns the integer number value from the Id string property or a
+        /// -1 if an integer value cannot be returned.
         /// </summary>
         public int GetIdNumber()
         {
@@ -31,7 +36,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 return -1;
             }
 
-            var regExMatches = s_regEx.Match(Id);
+            var regExMatches = DiagnosticIdRegex.Match(Id);
             return regExMatches.Success ? int.Parse(regExMatches.Captures[0].Value, CultureInfo.InvariantCulture) : -1;
         }
     }

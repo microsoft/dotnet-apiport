@@ -12,6 +12,7 @@ namespace ApiPortVS
     public class NotifyPropertyBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected SynchronizationContext Context { get; }
 
         public NotifyPropertyBase()

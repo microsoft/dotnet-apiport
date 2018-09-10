@@ -10,6 +10,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.Versioning;
 using Xunit;
+
 using static Microsoft.Fx.Portability.Tests.TestData.TestFrameworks;
 
 namespace Microsoft.Fx.Portability.Tests.Analysis
@@ -17,7 +18,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
     /// <summary>
     /// Tests GetNuGetPackageInfo for AnalysisEngine
     /// </summary>
-    public class AnalysisEngineTestsNuGetPackageInfo
+    public class AnalysisEngineNuGetPackageInfoTests
     {
         /// <summary>
         /// Tests that given a set of assemblies, the correct nuget package is returned.
@@ -42,9 +43,11 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             var packagesList = new[]
                     {
-                        new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>() {
+                        new NuGetPackageInfo(packageId, new Dictionary<FrameworkName, string>()
+                        {
                             {Windows80, nugetPackageWin80Version },
-                            { NetStandard16, nugetPackageNetStandardVersion} })
+                            { NetStandard16, nugetPackageNetStandardVersion},
+                        })
                     };
 
             packageFinder.TryFindPackages(nugetPackageAssembly.AssemblyIdentity, targets, out var packages)

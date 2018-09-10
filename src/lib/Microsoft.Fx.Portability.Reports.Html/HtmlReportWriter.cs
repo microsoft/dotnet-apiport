@@ -12,6 +12,7 @@ using System.Text;
 using System;
 using Microsoft.Fx.Portability.Reports.Html;
 using Microsoft.Fx.Portability.Reports.Html.Resources;
+
 using static System.FormattableString;
 
 namespace Microsoft.Fx.Portability.Reports

@@ -20,6 +20,7 @@ namespace Microsoft.Fx.Portability.Reports
         internal static class ColumnWidths
         {
             internal const double Targets = 15;
+
             internal static class SummaryPage
             {
                 internal const double AssemblyName = 40;
@@ -126,7 +127,7 @@ namespace Microsoft.Fx.Portability.Reports
                 CellFormats = new CellFormats(format1, format2),
                 Fills = new Fills(fill1, fill2),
                 CellStyles = new CellStyles(cellstyle),
-                Borders = new Borders(border)
+                Borders = new Borders(border),
             };
 
             wb.AddNewPart<WorkbookStylesPart>();

@@ -7,6 +7,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 
 namespace ApiPort
@@ -14,6 +15,7 @@ namespace ApiPort
     public class DocIdSearchRepl
     {
         private readonly ISearcher<string> _searcher;
+
         public DocIdSearchRepl(ISearcher<string> searcher)
         {
             _searcher = searcher;
@@ -75,9 +77,8 @@ namespace ApiPort
                         .Replace(LocalizedStrings.ReplOptionCount, string.Empty)
 #endif
                         .Trim();
-                    int updatedCount;
 
-                    if (Int32.TryParse(trimmed, out updatedCount))
+                    if (int.TryParse(trimmed, out var updatedCount))
                     {
                         count = updatedCount;
                         WriteColorLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.ReplUpdatedCount, count), ConsoleColor.Yellow);

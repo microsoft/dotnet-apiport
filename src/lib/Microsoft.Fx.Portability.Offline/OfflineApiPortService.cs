@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability
             _mapper = mapper;
             _reportWriters = reportWriters;
             _defaultTargets = new HashSet<FrameworkName>(targetNameParser.DefaultTargets);
-            _searcher = new StringContainsSearch(lookup);
+            _searcher = new StringContainsSearcher(lookup);
             _apiRecommendations = apiRecommendations;
         }
 

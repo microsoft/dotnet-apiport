@@ -177,7 +177,6 @@
     <Rule Id="SA1513" Action="None" />
     <Rule Id="SA1514" Action="None" />
     <Rule Id="SA1515" Action="None" />
-    <Rule Id="SA1516" Action="None" />
     <Rule Id="SA1517" Action="None" />
     <Rule Id="SA1519" Action="None" />
     <Rule Id="SA1520" Action="None" />
@@ -224,7 +223,6 @@
     <Rule Id="SA1646" Action="None" />
     <Rule Id="SA1647" Action="None" />
     <Rule Id="SA1648" Action="None" />
-    <Rule Id="SA1649" Action="None" />
     <Rule Id="SA1650" Action="None" />
     <Rule Id="SA1651" Action="None" />
     <Rule Id="SA1652" Action="None" />

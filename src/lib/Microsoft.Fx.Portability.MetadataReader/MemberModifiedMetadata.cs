@@ -6,6 +6,7 @@ namespace Microsoft.Fx.Portability.Analyzer
     internal class MemberModifiedMetadata
     {
         public bool IsRequired { get; }
+
         public MemberMetadataInfo Metadata { get; }
 
         public MemberModifiedMetadata(bool isRequired, MemberMetadataInfo metadata)

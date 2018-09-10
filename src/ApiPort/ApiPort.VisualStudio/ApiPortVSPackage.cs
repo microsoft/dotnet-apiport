@@ -59,41 +59,41 @@ namespace ApiPortVS
                 var menuInitializer = LocalServiceProvider.GetService(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
                 // Add menu items for Analyze toolbar menu
-                CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeMenuItem);
+                CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeMenuItem);
                 MenuCommand menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, anazlyMenuCommandID);
                 mcs.AddCommand(menuItem);
 
-                CommandID analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeOptionsMenuItem);
+                CommandID analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeOptionsMenuItem);
                 MenuCommand analyzeMenuOptionsItem = new MenuCommand(ShowOptionsPage, analyzeMenuOptionsCommandID);
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
-                CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeToolbarMenuItem);
+                CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeToolbarMenuItem);
                 MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, __) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 // Add menu items for Project context menus
-                CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
+                CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextMenuItem);
                 OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
 
-                CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextDependentsMenuItem);
+                CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextDependentsMenuItem);
                 OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
                 contextMenuDependentsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuDependenciesItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuDependentsItem);
 
-                CommandID projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextOptionsMenuItem);
+                CommandID projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextOptionsMenuItem);
                 OleMenuCommand contextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, projectContextMenuOptionsCmdId);
                 contextMenuOptionsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuOptionsItem);
 
                 // Add menu items for Solution context menus
-                CommandID solutionContextMenuCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdSolutionContextMenuItem);
+                CommandID solutionContextMenuCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextMenuItem);
                 OleMenuCommand solutionContextMenuItem = new OleMenuCommand(menuInitializer.SolutionContextMenuItemCallback, solutionContextMenuCmdId);
                 solutionContextMenuItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuItem);
 
-                CommandID solutionContextMenuOptionsCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdSolutionContextOptionsMenuItem);
+                CommandID solutionContextMenuOptionsCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextOptionsMenuItem);
                 OleMenuCommand solutionContextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, solutionContextMenuOptionsCmdId);
                 solutionContextMenuOptionsItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuOptionsItem);
