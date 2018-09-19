@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 
 namespace Microsoft.Fx.Portability.Analyzer

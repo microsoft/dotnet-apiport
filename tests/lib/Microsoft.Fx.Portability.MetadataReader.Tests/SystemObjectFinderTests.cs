@@ -61,5 +61,35 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
             }
         }
+
+        /// <summary>
+        /// Test that <see cref="SystemObjectFinder"/> doesn't throw on
+        /// assemblies that don't reference System.Object, but also don't
+        /// reference anything else. This is typically the case for resource
+        /// assemblies (e.g., for localization).
+        /// </summary>
+        [Fact]
+        public void ResourceAssembliesGetSkipped()
+        {
+            var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
+            var file = TestAssembly.Create("ResourceAssembliesGetSkipped_NoReferences.il", _output);
+
+            using (var stream = file.OpenRead())
+            using (var peFile = new PEReader(stream))
+            {
+                var metadataReader = peFile.GetMetadataReader();
+
+                var ex = Record.Exception(() =>
+                {
+                    var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
+
+                    // we shouldn't receive anything back
+                    Assert.Null(assemblyInfo);
+                });
+
+                // this should not throw
+                Assert.Null(ex);
+            }
+        }
     }
 }
