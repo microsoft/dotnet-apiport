@@ -133,8 +133,7 @@
     <value>An unexpected error was encountered while parsing the metadata for the PE file located at {0}.</value>
   </data>
   <data name="MissingSystemObjectAssembly" xml:space="preserve">
-    <value>Cannot locate assembly information for System.Object. Microsoft assemblies found are:
-{0}</value>
+    <value>Cannot locate assembly information for System.Object.</value>
   </data>
   <data name="MoreParametersWereRequired" xml:space="preserve">
     <value>More parameters were required than are available</value>

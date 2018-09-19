@@ -29,8 +29,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             {
                 var metadataReader = peFile.GetMetadataReader();
 
-                var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
-
+                Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
                 Assert.Equal("mscorlib", assemblyInfo.Name);
                 Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
                 Assert.Equal("neutral", assemblyInfo.Culture);
@@ -53,8 +52,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             {
                 var metadataReader = peFile.GetMetadataReader();
 
-                var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
-
+                Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
                 Assert.Equal("netstandard", assemblyInfo.Name);
                 Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
                 Assert.Equal("neutral", assemblyInfo.Culture);
@@ -79,16 +77,33 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             {
                 var metadataReader = peFile.GetMetadataReader();
 
-                var ex = Record.Exception(() =>
-                {
-                    var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
+                Assert.False(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                Assert.Null(assemblyInfo);
+            }
+        }
 
-                    // we shouldn't receive anything back
-                    Assert.Null(assemblyInfo);
-                });
+        [InlineData("mscorlib")]
+        [InlineData("netstandard")]
+        [InlineData("System.Private.CoreLib")]
+        [InlineData("System.Runtime")]
+        [Theory]
+        public void LookInFilePassedInAssembly(string name)
+        {
+            var Source = @"
+.assembly " + name + @"
+{
+  .ver 1:0:0:0
+} ";
+            var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
+            var file = TestAssembly.CreateFromIL(Source, name, _output);
 
-                // this should not throw
-                Assert.Null(ex);
+            using (var stream = file.OpenRead())
+            using (var peFile = new PEReader(stream))
+            {
+                var metadataReader = peFile.GetMetadataReader();
+
+                Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                Assert.Equal(name, assemblyInfo.Name);
             }
         }
     }

@@ -107,8 +107,7 @@ namespace Microsoft.Fx.Portability.Analyzer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot locate assembly information for System.Object. Microsoft assemblies found are:
-        ///{0}.
+        ///   Looks up a localized string similar to Cannot locate assembly information for System.Object..
         /// </summary>
         internal static string MissingSystemObjectAssembly {
             get {

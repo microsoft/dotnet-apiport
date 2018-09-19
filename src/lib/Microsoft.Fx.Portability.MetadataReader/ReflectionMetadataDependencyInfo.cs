@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.Analyzer.Resources;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
@@ -107,10 +106,9 @@ namespace Microsoft.Fx.Portability.Analyzer
             });
 
             // Clear out unresolved dependencies that were resolved during processing
-            ICollection<string> collection;
             foreach (var assembly in _userAssemblies)
             {
-                _unresolvedAssemblies.TryRemove(assembly.AssemblyIdentity, out collection);
+                _unresolvedAssemblies.TryRemove(assembly.AssemblyIdentity, out _);
             }
         }
 
@@ -220,11 +218,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             public void CopyTo(T[] array, int arrayIndex) => Keys.CopyTo(array, arrayIndex);
 
-            public bool Remove(T item)
-            {
-                byte b;
-                return TryRemove(item, out b);
-            }
+            public bool Remove(T item) => TryRemove(item, out _);
 
             IEnumerator IEnumerable.GetEnumerator() => Keys.GetEnumerator();
 

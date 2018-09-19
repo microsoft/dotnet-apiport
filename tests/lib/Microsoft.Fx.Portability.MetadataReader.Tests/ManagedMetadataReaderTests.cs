@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
@@ -238,6 +237,24 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             });
 
             Assert.IsType<SystemObjectNotFoundException>(exception.InnerException);
+        }
+
+        [Fact]
+        public void AssemblyWithNoReferencesIsSkipped()
+        {
+            var dependencyFilter = Substitute.For<IDependencyFilter>();
+            dependencyFilter.IsFrameworkAssembly(Arg.Any<AssemblyReferenceInformation>()).Returns(false);
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter, new SystemObjectFinder(dependencyFilter));
+            var file = TestAssembly.Create("ResourceAssembliesGetSkipped_NoReferences.il", _output);
+            var progressReporter = Substitute.For<IProgressReporter>();
+
+            var dependencies = dependencyFinder.FindDependencies(new[] { file }, progressReporter);
+
+            Assert.Empty(dependencies.AssembliesWithErrors);
+            Assert.Empty(dependencies.UnresolvedAssemblies);
+            var assembly = Assert.Single(dependencies.UserAssemblies);
+
+            Assert.Equal("NoReferences, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", assembly.AssemblyIdentity);
         }
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
