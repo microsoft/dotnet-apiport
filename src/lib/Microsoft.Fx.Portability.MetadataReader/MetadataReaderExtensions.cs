@@ -18,9 +18,28 @@ namespace Microsoft.Fx.Portability
             return metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition());
         }
 
+        public static bool TryGetCurrentAssemblyName(this MetadataReader metadataReader, out string name)
+        {
+            if (metadataReader.IsAssembly)
+            {
+                name = metadataReader.GetString(metadataReader.GetAssemblyDefinition().Name);
+                return true;
+            }
+            else
+            {
+                name = null;
+                return false;
+            }
+        }
+
+        public static string GetAssemblyName(this MetadataReader metadataReader, AssemblyReference assemblyReference)
+        {
+            return metadataReader.GetString(assemblyReference.Name);
+        }
+
         public static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyReference assemblyReference)
         {
-            var name = metadataReader.GetString(assemblyReference.Name);
+            var name = metadataReader.GetAssemblyName(assemblyReference);
 
             return metadataReader.FormatAssemblyInfo(name, assemblyReference.Culture, assemblyReference.PublicKeyOrToken, assemblyReference.Version);
         }

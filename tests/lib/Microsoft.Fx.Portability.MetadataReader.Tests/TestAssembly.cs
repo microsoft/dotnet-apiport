@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,6 +19,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
     internal static class TestAssembly
     {
         private static readonly Assembly s_assembly = typeof(TestAssembly).GetTypeInfo().Assembly;
+
+        public static IAssemblyFile CreateFromIL(string il, string name, ITestOutputHelper output)
+        {
+            return new ILStreamAssemblyFile(new StringAssemblyFile(name, il), output);
+        }
 
         public static IAssemblyFile Create(string source, ITestOutputHelper output, bool allowUnsafe = false, IEnumerable<string> additionalReferences = null)
         {
@@ -29,10 +35,29 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 case ".cs":
                     return new CSharpCompileAssemblyFile(source, allowUnsafe, additionalReferences, output);
                 case ".il":
-                    return new ILStreamAssemblyFile(source, output);
+                    return new ILStreamAssemblyFile(new ResourceStreamAssemblyFile(source, output), output);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(source), source, "Unknown extension");
             }
+        }
+
+        private class StringAssemblyFile : IAssemblyFile
+        {
+            private readonly byte[] _contents;
+
+            public StringAssemblyFile(string name, string contents)
+            {
+                Name = name;
+                _contents = Encoding.UTF8.GetBytes(contents);
+            }
+
+            public string Name { get; }
+
+            public string Version => string.Empty;
+
+            public bool Exists => true;
+
+            public Stream OpenRead() => new MemoryStream(_contents);
         }
 
         private class CSharpCompileAssemblyFile : ResourceStreamAssemblyFile
@@ -129,16 +154,26 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             }
         }
 
-        private class ILStreamAssemblyFile : ResourceStreamAssemblyFile
+        private class ILStreamAssemblyFile : IAssemblyFile
         {
             private static readonly string s_ilAsmPath = Path.Combine(Path.GetDirectoryName(s_assembly.Location), "ilasm.exe");
 
-            public ILStreamAssemblyFile(string fileName, ITestOutputHelper output)
-                : base(fileName, output)
+            private readonly IAssemblyFile _other;
+            private readonly ITestOutputHelper _output;
+
+            public ILStreamAssemblyFile(IAssemblyFile other, ITestOutputHelper output)
             {
+                _other = other;
+                _output = output;
             }
 
-            public override Stream OpenRead()
+            public string Name => _other.Name;
+
+            public string Version => _other.Version;
+
+            public bool Exists => _other.Exists;
+
+            public Stream OpenRead()
             {
                 if (!File.Exists(s_ilAsmPath))
                 {
@@ -148,7 +183,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var ilPath = Path.GetTempFileName();
 
                 using (var fs = File.OpenWrite(ilPath))
-                using (var stream = base.OpenRead())
+                using (var stream = _other.OpenRead())
                 {
                     stream.CopyTo(fs);
                 }
@@ -169,11 +204,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     var stdout = process.StandardOutput.ReadToEnd();
                     var stderr = process.StandardError.ReadToEnd();
 
-                    Output.WriteLine("ilasm stdout:");
-                    Output.WriteLine(stdout);
+                    _output.WriteLine("ilasm stdout:");
+                    _output.WriteLine(stdout);
 
-                    Output.WriteLine("ilasm stderr:");
-                    Output.WriteLine(stderr);
+                    _output.WriteLine("ilasm stderr:");
+                    _output.WriteLine(stderr);
 
                     Assert.Equal(0, process.ExitCode);
                 }

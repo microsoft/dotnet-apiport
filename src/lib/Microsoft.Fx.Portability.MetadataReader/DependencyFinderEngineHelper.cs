@@ -45,12 +45,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public void ComputeData()
         {
-            // Primitives need to have their assembly set, so we search for a
-            // reference to System.Object that is considered a possible
-            // framework assembly and use that for any primitives that don't
-            // have an assembly
-            var systemObjectAssembly = _objectFinder.GetSystemRuntimeAssemblyInformation(_reader);
-
             var provider = new MemberMetadataInfoTypeProvider(_reader);
 
             // Get type references
@@ -79,27 +73,41 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
             }
 
-            // Get member references
-            foreach (var handle in _reader.MemberReferences)
+            if (_reader.MemberReferences.Any())
             {
-                try
+                // Primitives need to have their assembly set, so we search for a
+                // reference to System.Object that is considered a possible
+                // framework assembly and use that for any primitives that don't
+                // have an assembly
+                if (_objectFinder.TryGetSystemRuntimeAssemblyInformation(_reader, out var systemObjectAssembly))
                 {
-                    var entry = _reader.GetMemberReference(handle);
-
-                    var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry, systemObjectAssembly);
-                    if (memberReferenceMemberDependency != null)
+                    // Get member references
+                    foreach (var handle in _reader.MemberReferences)
                     {
-                        MemberDependency.Add(memberReferenceMemberDependency);
+                        try
+                        {
+                            var entry = _reader.GetMemberReference(handle);
+
+                            var memberReferenceMemberDependency = GetMemberReferenceMemberDependency(entry, systemObjectAssembly);
+                            if (memberReferenceMemberDependency != null)
+                            {
+                                MemberDependency.Add(memberReferenceMemberDependency);
+                            }
+                        }
+                        catch (BadImageFormatException)
+                        {
+                            // Some obfuscators will inject dead types that break decompilers
+                            // (for example, types that serve as each others' scopes).
+                            //
+                            // For portability/compatibility analysis purposes, though,
+                            // we can skip such malformed references and just analyze those
+                            // that we can successfully decode.
+                        }
                     }
                 }
-                catch (BadImageFormatException)
+                else
                 {
-                    // Some obfuscators will inject dead types that break decompilers
-                    // (for example, types that serve as each others' scopes).
-                    //
-                    // For portability/compatibility analysis purposes, though,
-                    // we can skip such malformed references and just analyze those
-                    // that we can successfully decode.
+                    throw new SystemObjectNotFoundException();
                 }
             }
         }

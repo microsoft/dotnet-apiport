@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
@@ -30,11 +29,13 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// <summary>
         /// Tries to locate the assembly containing <see cref="object"/>.
         /// </summary>
-        public AssemblyReferenceInformation GetSystemRuntimeAssemblyInformation(MetadataReader reader)
+        public bool TryGetSystemRuntimeAssemblyInformation(MetadataReader reader, out AssemblyReferenceInformation assemblyReference)
         {
-            // this is probably a resources DLL and doesn't need inspection
-            if (!reader.AssemblyReferences.Any() && !reader.MemberReferences.Any())
-                return null;
+            if (reader.TryGetCurrentAssemblyName(out var name) && s_systemObjectAssemblies.Contains(name))
+            {
+                assemblyReference = reader.FormatAssemblyInfo();
+                return true;
+            }
 
             var microsoftAssemblies = reader.AssemblyReferences
                 .Select(handle =>
@@ -50,12 +51,12 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             if (matchingAssembly != default(AssemblyReferenceInformation))
             {
-                return matchingAssembly;
+                assemblyReference = matchingAssembly;
+                return true;
             }
-            else
-            {
-                throw new SystemObjectNotFoundException(microsoftAssemblies);
-            }
+
+            assemblyReference = null;
+            return false;
         }
     }
 }

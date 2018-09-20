@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability
             try
             {
                 // This will throw if a path is invalid
-                return path != null && Path.GetFullPath(path) != null;
+                return !string.IsNullOrWhiteSpace(path) && Path.GetFullPath(path) != null;
             }
             catch (ArgumentException)
             {
