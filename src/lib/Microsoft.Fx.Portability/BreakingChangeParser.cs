@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability
                 BreakingChange currentBreak = null;
                 string currentLine;
 
-                while (null != (currentLine = sr.ReadLine()))
+                while ((currentLine = sr.ReadLine()) != null)
                 {
                     currentLine = currentLine.Trim();
 
@@ -283,7 +283,7 @@ namespace Microsoft.Fx.Portability
                     }
                     else
                     {
-                        currentBreak.Details += ("\n" + currentLine);
+                        currentBreak.Details += "\n" + currentLine;
                     }
                     break;
                 case ParseState.Suggestion:
@@ -293,24 +293,27 @@ namespace Microsoft.Fx.Portability
                     }
                     else
                     {
-                        currentBreak.Suggestion += ("\n" + currentLine);
+                        currentBreak.Suggestion += "\n" + currentLine;
                     }
                     break;
                 case ParseState.Notes:
                     // Special-case the fact that 'notes' will often come at the end of a comment section and we don't need the closing --> in the note.
-                    if (string.Equals("-->", currentLine.Trim(), StringComparison.Ordinal)) return;
+                    if (string.Equals("-->", currentLine.Trim(), StringComparison.Ordinal))
+                    {
+                        return;
+                    }
+
                     if (currentBreak.Notes == null)
                     {
                         currentBreak.Notes = currentLine;
                     }
                     else
                     {
-                        currentBreak.Notes += ("\n" + currentLine);
+                        currentBreak.Notes += "\n" + currentLine;
                     }
                     break;
                 case ParseState.SourceAnalyzerStatus:
-                    BreakingChangeAnalyzerStatus status;
-                    if (Enum.TryParse<BreakingChangeAnalyzerStatus>(currentLine.Trim().Replace(" ", ""), true, out status))
+                    if (Enum.TryParse<BreakingChangeAnalyzerStatus>(currentLine.Trim().Replace(" ", string.Empty), true, out var status))
                     {
                         currentBreak.SourceAnalyzerStatus = status;
                     }

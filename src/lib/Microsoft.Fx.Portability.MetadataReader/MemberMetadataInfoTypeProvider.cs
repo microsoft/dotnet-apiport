@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Analyzer.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -8,7 +9,6 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using Microsoft.Fx.Portability.Analyzer.Resources;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
@@ -144,7 +144,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         return new MemberMetadataInfo(name)
                         {
-                            DefinedInAssembly = Reader.GetAssemblyReference((AssemblyReferenceHandle)(scope))
+                            DefinedInAssembly = Reader.GetAssemblyReference((AssemblyReferenceHandle)scope)
                         };
                     }
                     else
@@ -158,12 +158,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                         // Some obfuscators will inject impossible types that are each others' scopes
                         // in order to foil decompilers. Check for that case so that we can fail reasonably
                         // instead of stack overflowing.
-                        if (Reader.GetTypeReference((TypeReferenceHandle)(scope)).Equals(child.Value))
+                        if (Reader.GetTypeReference((TypeReferenceHandle)scope).Equals(child.Value))
                         {
                             throw new BadImageFormatException(LocalizedStrings.InfiniteTypeParentingRecursion);
                         }
                     }
-                    MemberMetadataInfo info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)(scope)), reference);
+                    MemberMetadataInfo info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)scope), reference);
                     return new MemberMetadataInfo(name, info2);
 
                 default:

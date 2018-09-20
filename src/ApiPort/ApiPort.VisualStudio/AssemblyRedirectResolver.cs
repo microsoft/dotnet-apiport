@@ -24,12 +24,12 @@ namespace ApiPortVS
 
         public AssemblyRedirectResolver(string configFile)
         {
-            var xml = XDocument.Load(configFile);
-            Func<string, XName> getFullName = (name) => { return XName.Get(name, "urn:schemas-microsoft-com:asm.v1"); };
+            XName GetFullName(string name) { return XName.Get(name, "urn:schemas-microsoft-com:asm.v1"); }
 
-            var redirects = from element in xml.Descendants(getFullName("dependentAssembly"))
-                            let identity = element.Element(getFullName("assemblyIdentity"))
-                            let redirect = element.Element(getFullName("bindingRedirect"))
+            var xml = XDocument.Load(configFile);
+            var redirects = from element in xml.Descendants(GetFullName("dependentAssembly"))
+                            let identity = element.Element(GetFullName("assemblyIdentity"))
+                            let redirect = element.Element(GetFullName("bindingRedirect"))
                             let name = identity.Attribute("name").Value
                             let publicKey = identity.Attribute("publicKeyToken").Value
                             let newVersion = redirect.Attribute("newVersion").Value
@@ -43,7 +43,7 @@ namespace ApiPortVS
             var redirects = assemblyFolder.GetFiles("*.dll")
                 .Select(dll => {
                     var name = AssemblyName.GetAssemblyName(dll.FullName);
-                    var publicKeyToken = name.GetPublicKeyToken().Aggregate("", (s, b) => s += b.ToString("x2", CultureInfo.InvariantCulture));
+                    var publicKeyToken = name.GetPublicKeyToken().Aggregate(string.Empty, (s, b) => s += b.ToString("x2", CultureInfo.InvariantCulture));
                     return new AssemblyRedirect(name.Name, name.Version.ToString(), publicKeyToken);
                 });
 
@@ -55,9 +55,7 @@ namespace ApiPortVS
             // Use latest strong name & version when trying to load SDK assemblies
             var requestedAssembly = new AssemblyName(assemblyName);
 
-            AssemblyRedirect redirectInformation;
-
-            if (!_redirectsDictionary.TryGetValue(requestedAssembly.Name, out redirectInformation))
+            if (!_redirectsDictionary.TryGetValue(requestedAssembly.Name, out var redirectInformation))
             {
                 return null;
             }
@@ -72,7 +70,7 @@ namespace ApiPortVS
                     && redirectInformation.TargetVersion.Equals(assm.Version);
             });
 
-            if (alreadyLoadedAssembly != default(Assembly))
+            if (alreadyLoadedAssembly != default)
             {
                 return alreadyLoadedAssembly;
             }

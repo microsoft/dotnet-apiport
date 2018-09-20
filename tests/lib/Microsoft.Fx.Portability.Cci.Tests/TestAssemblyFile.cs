@@ -3,7 +3,6 @@
 
 using System;
 using System.IO;
-using Microsoft.Fx.Portability;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {

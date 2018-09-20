@@ -62,7 +62,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         protected virtual string GetComponent(string docId)
         {
-            return String.Empty;
+            return string.Empty;
         }
 
         IEnumerable<BreakingChange> IApiRecommendations.GetBreakingChanges(string docId)

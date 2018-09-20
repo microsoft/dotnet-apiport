@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Reflection;
-using Newtonsoft.Json;
+using System.Linq;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -59,12 +58,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IEnumerator<IgnoreAssemblyInfo> GetEnumerator()
         {
-            return _innerList == null ? null : _innerList.GetEnumerator();
+            return _innerList?.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)_innerList) == null ? null : ((IEnumerable)_innerList).GetEnumerator();
+            return ((IEnumerable)_innerList)?.GetEnumerator();
         }
     }
 }

@@ -20,8 +20,8 @@ namespace Microsoft.Fx.Portability.Proxy
     /// </remarks>
     public class ProxyAuthenticationHandler : DelegatingHandler
     {
-        public static readonly int MaxAttempts = 3;
         private const string BasicAuthenticationType = "Basic";
+        public static readonly int MaxAttempts = 3;
 
         private readonly HttpClientHandler _clientHandler;
         private readonly IProxyProvider _proxyProvider;

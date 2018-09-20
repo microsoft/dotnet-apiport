@@ -161,7 +161,7 @@ namespace Microsoft.Fx.Portability.Reports
                     var summaryData = new List<object>() { analysisResult.GetNameForAssemblyInfo(item.SourceAssembly), item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
 
                     // TODO: figure out how to add formatting to cells to show percentages.
-                    summaryData.AddRange(item.UsageData.Select(pui => (object)(Math.Round(pui.PortabilityIndex * 100.0, 2))));
+                    summaryData.AddRange(item.UsageData.Select(pui => (object)Math.Round(pui.PortabilityIndex * 100.0, 2)));
                     summaryPage.AddRow(summaryData.ToArray());
                     tableRowCount++;
                 }
@@ -206,7 +206,7 @@ namespace Microsoft.Fx.Portability.Reports
                 }
                 else
                 {
-                    missingAssembliesPage.AddRow(unresolvedAssemblyPair.Key, String.Empty, LocalizedStrings.UnresolvedUsedAssembly);
+                    missingAssembliesPage.AddRow(unresolvedAssemblyPair.Key, string.Empty, LocalizedStrings.UnresolvedUsedAssembly);
                 }
             }
 
@@ -295,10 +295,12 @@ namespace Microsoft.Fx.Portability.Reports
             detailsPage.AddTable(1, detailsRows, 1, detailsPageHeader.ToArray());
 
             // Generate the columns
-            List<double> columnWidths = new List<double>();
-            columnWidths.Add(ColumnWidths.DetailsPage.TargetType); // Target type
-            columnWidths.Add(ColumnWidths.DetailsPage.TargetMember); // Target member
-            columnWidths.Add(ColumnWidths.DetailsPage.AssemblyName); // Assembly name
+            var columnWidths = new List<double>
+            {
+                ColumnWidths.DetailsPage.TargetType, // Target type
+                ColumnWidths.DetailsPage.TargetMember, // Target member
+                ColumnWidths.DetailsPage.AssemblyName // Assembly name
+            };
             columnWidths.AddRange(Enumerable.Repeat(ColumnWidths.Targets, analysisResult.Targets.Count)); // Targets
             columnWidths.Add(ColumnWidths.DetailsPage.RecommendedChanges); // Recommended changes
 

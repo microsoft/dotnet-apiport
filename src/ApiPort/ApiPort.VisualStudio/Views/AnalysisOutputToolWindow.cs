@@ -26,7 +26,8 @@ namespace ApiPortVS
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalysisOutputToolWindow"/> class.
         /// </summary>
-        public AnalysisOutputToolWindow() : base(null)
+        public AnalysisOutputToolWindow()
+            : base(null)
         {
             var viewModel = ApiPortVSPackage.LocalServiceProvider.GetService(typeof(OutputViewModel)) as OutputViewModel;
             this.Caption = LocalizedStrings.PortabilityAnalysisResults;

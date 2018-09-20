@@ -177,7 +177,7 @@ namespace Microsoft.Fx.Portability
                 SslProtocols = CompressedHttpClient.SupportedSSLProtocols,
 #endif
                 Proxy = proxyProvider?.GetProxy(uri),
-                AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate)
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
             if (clientHandler.Proxy == null)

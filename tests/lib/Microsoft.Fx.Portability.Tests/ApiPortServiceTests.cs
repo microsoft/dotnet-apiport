@@ -33,9 +33,9 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public static void VerifyParameterChecks()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation("")));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation("")));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation("")));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation(string.Empty)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation(string.Empty)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation(string.Empty)));
         }
 
         [Fact]
@@ -97,8 +97,10 @@ namespace Microsoft.Fx.Portability.Tests
             var streamContent = new StreamContent(resourceStream);
             streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-            response.Content = streamContent;
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = streamContent
+            };
             return response;
         }
     }

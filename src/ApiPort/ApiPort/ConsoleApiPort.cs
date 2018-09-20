@@ -84,7 +84,7 @@ namespace ApiPort
 
                     foreach (var item in expandableTargets)
                     {
-                        Console.WriteLine(LocalizedStrings.TargetsListGrouped, item.Name, String.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ", item.ExpandedTargets));
+                        Console.WriteLine(LocalizedStrings.TargetsListGrouped, item.Name, string.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ", item.ExpandedTargets));
                     }
                 }
             }

@@ -68,8 +68,10 @@ namespace Microsoft.Fx.OpenXmlExtensions
             // use unique ids for tables.
             uint tableID = IncrementalUniqueId;
 
-            var tp = new TablePart();
-            tp.Id = worksheet.WorksheetPart.GetIdOfPart(tableDefPart);
+            var tp = new TablePart
+            {
+                Id = worksheet.WorksheetPart.GetIdOfPart(tableDefPart)
+            };
             var tableParts = worksheet.GetFirstChild<TableParts>();
             if (tableParts == null)
                 tableParts = worksheet.AppendChild(new TableParts());
@@ -91,8 +93,10 @@ namespace Microsoft.Fx.OpenXmlExtensions
                 tc.AppendChild(new TableColumn() { Id = i + 1, Name = headers[i] });
             }
 
-            tableDefPart.Table.AutoFilter = new AutoFilter();
-            tableDefPart.Table.AutoFilter.Reference = range;
+            tableDefPart.Table.AutoFilter = new AutoFilter
+            {
+                Reference = range
+            };
 
             var styleInfo = tableDefPart.Table.AppendChild(new TableStyleInfo());
             styleInfo.Name = "TableStyleMedium2";
@@ -200,7 +204,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             // Column needs to be 0-based for the GetColumnName method
             var columnCount = row.Descendants<Cell>().Count() - 1;
 
-            return String.Format(CultureInfo.CurrentCulture, "{0}{1}", GetColumnName(columnCount), rowCount);
+            return string.Format(CultureInfo.CurrentCulture, "{0}{1}", GetColumnName(columnCount), rowCount);
         }
 
         /// <summary>

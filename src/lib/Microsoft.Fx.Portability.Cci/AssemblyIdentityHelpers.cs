@@ -42,7 +42,7 @@ namespace Microsoft.Cci.Extensions
 #if FEATURE_ASSEMBLYNAME_CODEBASE
                                         name.CodeBase);
 #else
-                                        "");
+                                        string.Empty);
 #endif
         }
     }
