@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// </summary>
         public bool TryGetSystemRuntimeAssemblyInformation(MetadataReader reader, out AssemblyReferenceInformation assemblyReference)
         {
-            if (reader.TryGetCurrentAssemblyName(out var name) && s_systemObjectAssemblies.Contains(name))
+            if (reader.TryGetCurrentAssemblyName(out var name) && SystemObjectAssemblies.Contains(name))
             {
                 assemblyReference = reader.FormatAssemblyInfo();
                 return true;
