@@ -89,13 +89,13 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void LookInFilePassedInAssembly(string name)
         {
-            var Source = @"
+            var source = @"
 .assembly " + name + @"
 {
   .ver 1:0:0:0
 } ";
             var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
-            var file = TestAssembly.CreateFromIL(Source, name, _output);
+            var file = TestAssembly.CreateFromIL(source, name, _output);
 
             using (var stream = file.OpenRead())
             using (var peFile = new PEReader(stream))
