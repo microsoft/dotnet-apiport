@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
             {
                 using (var file = File.OpenWrite(tempFile))
                 {
-                    writer.WriteStream(file, response, request: null);
+                    writer.WriteStream(file, response);
                 }
 
                 Assert.True(File.Exists(tempFile));

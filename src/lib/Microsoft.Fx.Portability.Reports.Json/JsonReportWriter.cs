@@ -27,7 +27,7 @@ namespace Microsoft.Fx.Portability.Reports
             get { return _formatInformation; }
         }
 
-        public void WriteStream(Stream stream, AnalyzeResponse response, AnalyzeRequest request)
+        public void WriteStream(Stream stream, AnalyzeResponse response)
         {
             using (var streamWriter = new StreamWriter(stream))
             using (var writer = new JsonTextWriter(streamWriter))

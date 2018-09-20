@@ -26,9 +26,9 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 
         private readonly DGMLManager dgml = new DGMLManager();
 
-        public void WriteStream(Stream stream, AnalyzeResponse response, AnalyzeRequest request)
+        public void WriteStream(Stream stream, AnalyzeResponse response)
         {
-            ReferenceGraph rg = ReferenceGraph.CreateGraph(response, request);
+            ReferenceGraph rg = ReferenceGraph.CreateGraph(response);
 
             ReportingResult analysisResult = response.ReportingResult;
             var targets = analysisResult.Targets;

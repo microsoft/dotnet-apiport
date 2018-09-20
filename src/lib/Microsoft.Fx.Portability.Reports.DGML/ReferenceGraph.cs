@@ -11,9 +11,10 @@ namespace Microsoft.Fx.Portability.Reports.DGML
     {
         public Dictionary<ReferenceNode, ReferenceNode> Nodes { get; }
 
-        public static ReferenceGraph CreateGraph(AnalyzeResponse response, AnalyzeRequest request)
+        public static ReferenceGraph CreateGraph(AnalyzeResponse response)
         {
-           ReferenceGraph rg = new ReferenceGraph();
+            ReferenceGraph rg = new ReferenceGraph();
+            AnalyzeRequest request = response.Request;
 
             // get the list of assemblies that have some data reported for them.
             var assembliesWithData = response.ReportingResult.GetAssemblyUsageInfo().ToDictionary(x => x.SourceAssembly.AssemblyIdentity, x => x.UsageData);

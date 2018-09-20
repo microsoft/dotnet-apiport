@@ -36,7 +36,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         public ResultFormatInformation Format => _formatInformation;
 
-        public void WriteStream(Stream stream, AnalyzeResponse response, AnalyzeRequest request)
+        public void WriteStream(Stream stream, AnalyzeResponse response)
         {
             const string ReportTemplateName = "ReportTemplate";
 
