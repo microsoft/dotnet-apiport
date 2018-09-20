@@ -18,9 +18,9 @@ namespace ApiPortVS.Models
     /// </summary>
     public class OptionsModel : NotifyPropertyBase
     {
-        private static readonly string s_optionsFilePath;
-        private static readonly string s_defaultOutputDirectory;
-        private static readonly string s_defaultOutputName;
+        private static readonly string OptionsFilePath;
+        private static readonly string DefaultOutputDirectory;
+        private static readonly string DefaultOutputFileName;
 
         private IList<SelectedResultFormat> _formats;
         private IList<TargetPlatform> _platforms;
@@ -32,17 +32,17 @@ namespace ApiPortVS.Models
             var assembly = Assembly.GetExecutingAssembly();
             var directory = Path.GetDirectoryName(assembly.Location);
 
-            s_defaultOutputName = "ApiPortAnalysis";
-            s_defaultOutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
-            s_optionsFilePath = Path.Combine(directory, "options.dat");
+            DefaultOutputFileName = "ApiPortAnalysis";
+            DefaultOutputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Portability Analysis");
+            OptionsFilePath = Path.Combine(directory, "options.dat");
         }
 
         public OptionsModel()
         {
             _platforms = Array.Empty<TargetPlatform>();
             _formats = Array.Empty<SelectedResultFormat>();
-            _outputName = s_defaultOutputName;
-            _outputDirectory = s_defaultOutputDirectory;
+            _outputName = DefaultOutputFileName;
+            _outputDirectory = DefaultOutputDirectory;
 
             LastUpdate = DateTimeOffset.MinValue;
         }
@@ -70,16 +70,16 @@ namespace ApiPortVS.Models
         public string DefaultOutputName
         {
             get { return _outputName; }
-            set { UpdateProperty(ref _outputName, string.IsNullOrWhiteSpace(value) ? s_defaultOutputName : value); }
+            set { UpdateProperty(ref _outputName, string.IsNullOrWhiteSpace(value) ? DefaultOutputFileName : value); }
         }
 
         public static OptionsModel Load()
         {
             try
             {
-                if (File.Exists(s_optionsFilePath))
+                if (File.Exists(OptionsFilePath))
                 {
-                    var bytes = File.ReadAllBytes(s_optionsFilePath);
+                    var bytes = File.ReadAllBytes(OptionsFilePath);
 
                     return bytes.Deserialize<OptionsModel>();
                 }
@@ -96,13 +96,13 @@ namespace ApiPortVS.Models
         {
             try
             {
-                File.WriteAllBytes(s_optionsFilePath, this.Serialize());
+                File.WriteAllBytes(OptionsFilePath, this.Serialize());
 
                 return true;
             }
             catch (IOException)
             {
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnableToSaveFileFormat, s_optionsFilePath));
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.UnableToSaveFileFormat, OptionsFilePath));
 
                 return false;
             }

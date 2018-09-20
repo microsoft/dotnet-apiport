@@ -55,32 +55,9 @@
     <Rule Id="SA1201" Action="None" />
     <Rule Id="SA1202" Action="None" />
     <Rule Id="SA1204" Action="None" />
-    <Rule Id="SA1300" Action="None" />
-    <Rule Id="SA1301" Action="None" />
-    <Rule Id="SA1302" Action="None" />
-    <Rule Id="SA1303" Action="None" />
-    <Rule Id="SA1304" Action="None" />
-    <Rule Id="SA1306" Action="None" />
-    <Rule Id="SA1307" Action="None" />
-    <Rule Id="SA1308" Action="None" />
     <Rule Id="SA1309" Action="None" />
     <Rule Id="SA1310" Action="None" />
-    <Rule Id="SA1311" Action="None" />
-    <Rule Id="SA1312" Action="None" />
-    <Rule Id="SA1313" Action="None" />
-    <Rule Id="SA1314" Action="None" />
-    <Rule Id="SA1400" Action="None" />
-    <Rule Id="SA1401" Action="None" />
     <Rule Id="SA1402" Action="None" />
-    <Rule Id="SA1403" Action="None" />
-    <Rule Id="SA1404" Action="None" />
-    <Rule Id="SA1405" Action="None" />
-    <Rule Id="SA1406" Action="None" />
-    <Rule Id="SA1407" Action="None" />
-    <Rule Id="SA1408" Action="None" />
-    <Rule Id="SA1409" Action="None" />
-    <Rule Id="SA1410" Action="None" />
-    <Rule Id="SA1411" Action="None" />
     <Rule Id="SA1412" Action="Warning" />
     <Rule Id="SA1413" Action="None" />
     <Rule Id="SA1500" Action="None" />

@@ -9,7 +9,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public class AssemblyReferenceInformation
     {
-        private static readonly StringComparer s_comparer = StringComparer.OrdinalIgnoreCase;
+        private static readonly StringComparer DefaultComparer = StringComparer.OrdinalIgnoreCase;
 
         private readonly string _string;
 
@@ -33,8 +33,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override string ToString() => _string;
 
-        public override bool Equals(object obj) => s_comparer.Equals(_string, (obj as AssemblyReferenceInformation)?._string);
+        public override bool Equals(object obj) => DefaultComparer.Equals(_string, (obj as AssemblyReferenceInformation)?._string);
 
-        public override int GetHashCode() => s_comparer.GetHashCode(_string);
+        public override int GetHashCode() => DefaultComparer.GetHashCode(_string);
     }
 }

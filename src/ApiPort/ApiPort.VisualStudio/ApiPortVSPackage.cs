@@ -23,16 +23,16 @@ namespace ApiPortVS
     [ProvideToolWindow(typeof(AnalysisOutputToolWindow))]
     public class ApiPortVSPackage : Package, IResultToolbar
     {
-        private static ServiceProvider s_serviceProvider;
+        private static ServiceProvider _serviceProvider;
         private readonly AssemblyRedirectResolver _assemblyResolver;
 
-        internal static IServiceProvider LocalServiceProvider { get { return s_serviceProvider; } }
+        internal static IServiceProvider LocalServiceProvider { get { return _serviceProvider; } }
 
         public ApiPortVSPackage()
             : base()
         {
-            s_serviceProvider = new ServiceProvider(this);
-            _assemblyResolver = s_serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
+            _serviceProvider = new ServiceProvider(this);
+            _assemblyResolver = _serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
 
             if (_assemblyResolver == default(AssemblyRedirectResolver))
             {
@@ -44,7 +44,7 @@ namespace ApiPortVS
 
         protected override void Dispose(bool disposing)
         {
-            s_serviceProvider.Dispose();
+            _serviceProvider.Dispose();
             AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
 
             base.Dispose(disposing);
@@ -69,17 +69,17 @@ namespace ApiPortVS
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
                 CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeToolbarMenuItem);
-                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, __) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
+                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, e) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 // Add menu items for Project context menus
                 CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextMenuItem);
-                OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
+                OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
 
                 CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextDependentsMenuItem);
-                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
+                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
                 contextMenuDependentsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuDependenciesItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuDependentsItem);
 

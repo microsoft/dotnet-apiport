@@ -89,7 +89,7 @@ namespace ApiPortVS
             return await tcs.Task;
         }
 
-        public virtual async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default)
         {
             var configuration = await ProjectMapper.GetVsProjectConfigurationAsync(project).ConfigureAwait(false);
 
@@ -142,10 +142,12 @@ namespace ApiPortVS
             private readonly TaskCompletionSource<bool> _completionSource;
             private readonly IVsSolutionBuildManager _buildManager;
 
+#pragma warning disable SA1401 // Cookie is required by the DefaultProjectBuilder
             /// <summary>
             /// A cookie used to track this instance in IVsSolutionBuildManager solution events.
             /// </summary>
             internal uint UpdateSolutionEventsCookie;
+#pragma warning restore SA1401
 
             public ProjectAsyncBuilder(IVsSolutionBuildManager manager, TaskCompletionSource<bool> completionSource)
             {

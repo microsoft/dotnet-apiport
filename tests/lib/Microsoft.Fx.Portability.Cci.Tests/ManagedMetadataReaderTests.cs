@@ -11,25 +11,25 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 {
     public class ManagedMetadataReaderTests
     {
-        private static readonly string s_emptyProjectPath = TestAssembly.EmptyProject;
-        private static readonly string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
+        private static readonly string EmptyProjectPath = TestAssembly.EmptyProject;
+        private static readonly string WithGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
 
         [Fact]
         public static void EmptyProject()
         {
-            CompareFinders(s_emptyProjectPath);
+            CompareFinders(EmptyProjectPath);
         }
 
         [Fact]
         public static void WithGenericsAndReference()
         {
-            CompareFinders(s_withGenericsAndReferencePath);
+            CompareFinders(WithGenericsAndReferencePath);
         }
 
         [Fact]
         public static void WithGenericsAndReferenceAndEmptyProject()
         {
-            CompareFinders(s_withGenericsAndReferencePath, s_emptyProjectPath);
+            CompareFinders(WithGenericsAndReferencePath, EmptyProjectPath);
         }
 
         private static void CompareFinders(params string[] paths)

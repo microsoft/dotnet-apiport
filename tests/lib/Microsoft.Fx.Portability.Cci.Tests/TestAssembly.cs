@@ -17,7 +17,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
     internal class TestAssembly
     {
         private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
-        private static readonly string s_mscorlib = typeof(object).GetTypeInfo().Assembly.Location;
+        private static readonly string Mscorlib = typeof(object).GetTypeInfo().Assembly.Location;
         private readonly string _path;
 
         private TestAssembly(string assemblyName, string text, IEnumerable<string> referencePaths)
@@ -56,7 +56,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             get
             {
                 var text = GetText("EmptyProject.cs");
-                return new TestAssembly("EmptyProject", text, new[] { s_mscorlib }).Path;
+                return new TestAssembly("EmptyProject", text, new[] { Mscorlib }).Path;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             get
             {
                 var text = GetText("WithGenericsAndReference.cs");
-                return new TestAssembly("WithGenericsAndReference", text, new[] { s_mscorlib, EmptyProject }).Path;
+                return new TestAssembly("WithGenericsAndReference", text, new[] { Mscorlib, EmptyProject }).Path;
             }
         }
 

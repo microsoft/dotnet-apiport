@@ -25,9 +25,7 @@ namespace ApiPortVS
 
         public override bool Equals(object obj)
         {
-            var compared = obj as TargetPlatform;
-
-            if (compared == null)
+            if (!(obj is TargetPlatform compared))
                 return false;
 
             return string.Equals(Name, compared.Name, StringComparison.Ordinal)
@@ -44,14 +42,14 @@ namespace ApiPortVS
 
                 if (Name != null)
                 {
-                    hash = hash * HashMultipler + Name.GetHashCode();
+                    hash = (hash * HashMultipler) + Name.GetHashCode();
                 }
 
                 if (Versions != null)
                 {
                     foreach (var version in Versions)
                     {
-                        hash = hash * HashMultipler + version.GetHashCode();
+                        hash = (hash * HashMultipler) + version.GetHashCode();
                     }
                 }
 

@@ -16,9 +16,9 @@ namespace ApiPort
     /// </summary>
     internal class FileOutputApiPortService : IApiPortService
     {
-        private static readonly IReadOnlyCollection<ApiDefinition> s_emptySearchResults = new ApiDefinition[] { };
-        private static readonly IReadOnlyCollection<ApiInformation> s_emptyQueryDocIds = new ApiInformation[] { };
-        private static readonly IEnumerable<ResultFormatInformation> s_formats = new[]
+        private static readonly IReadOnlyCollection<ApiDefinition> EmptySearchResults = new ApiDefinition[] { };
+        private static readonly IReadOnlyCollection<ApiInformation> EmptyQueryDocIds = new ApiInformation[] { };
+        private static readonly IEnumerable<ResultFormatInformation> Formats = new[]
         {
             new ResultFormatInformation
             {
@@ -60,7 +60,7 @@ namespace ApiPort
 
         public Task<ServiceResponse<IEnumerable<ResultFormatInformation>>> GetResultFormatsAsync()
         {
-            var response = ServiceResponse.Create(s_formats);
+            var response = ServiceResponse.Create(Formats);
 
             return Task.FromResult(response);
         }
@@ -68,7 +68,7 @@ namespace ApiPort
         public Task<ServiceResponse<ResultFormatInformation>> GetDefaultResultFormatAsync()
         {
             // s_formats contains one element
-            var response = ServiceResponse.Create(s_formats.First());
+            var response = ServiceResponse.Create(Formats.First());
 
             return Task.FromResult(response);
         }
@@ -84,15 +84,15 @@ namespace ApiPort
         public Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(s_emptyQueryDocIds);
+            var response = ServiceResponse.Create(EmptyQueryDocIds);
 
             return Task.FromResult(response);
         }
 
-        public Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = default(int?))
+        public Task<ServiceResponse<IReadOnlyCollection<ApiDefinition>>> SearchFxApiAsync(string query, int? top = default)
         {
             _progress.ReportIssue(LocalizedStrings.FileOutputServiceNotSupported);
-            var response = ServiceResponse.Create(s_emptySearchResults);
+            var response = ServiceResponse.Create(EmptySearchResults);
 
             return Task.FromResult(response);
         }
@@ -105,11 +105,11 @@ namespace ApiPort
         }
 
         /// <summary>
-        /// Returns the analysis as <see cref="s_formats"/>. Input <paramref name="formats"/> is ignored.
+        /// Returns the analysis as <see cref="Formats"/>. Input <paramref name="formats"/> is ignored.
         /// </summary>
         public Task<ServiceResponse<IEnumerable<ReportingResultWithFormat>>> SendAnalysisAsync(AnalyzeRequest a, IEnumerable<string> formats)
         {
-            var result = s_formats.Select(f => new ReportingResultWithFormat
+            var result = Formats.Select(f => new ReportingResultWithFormat
             {
                 Data = SendAnalysisAsync(a, f.DisplayName),
                 Format = f.DisplayName

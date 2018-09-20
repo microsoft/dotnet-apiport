@@ -110,7 +110,7 @@ namespace Microsoft.Fx.Portability.TestData
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FrameworkName> GetSupportedVersions(string DocId)
+        public IEnumerable<FrameworkName> GetSupportedVersions(string docId)
         {
             throw new NotImplementedException();
         }

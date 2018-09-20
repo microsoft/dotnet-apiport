@@ -9,11 +9,11 @@ namespace Microsoft.Fx.Portability
 {
     public class AliasMappedToMultipleNamesException : PortabilityAnalyzerException
     {
-        private static readonly string s_listSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
+        private static readonly string ListSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator + " ";
 
         private static string GenerateMessage(IEnumerable<string> invalidNames)
         {
-            return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasMappedToMultipleNamesInvalidAliases, string.Join(s_listSeparator, invalidNames));
+            return string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasMappedToMultipleNamesInvalidAliases, string.Join(ListSeparator, invalidNames));
         }
 
         public AliasMappedToMultipleNamesException(IEnumerable<string> invalidNames)
