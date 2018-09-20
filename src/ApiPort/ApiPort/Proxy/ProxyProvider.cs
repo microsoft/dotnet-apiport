@@ -149,8 +149,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     {
                         webProxy.Credentials = new NetworkCredential(
                             userName: credentials[0],
-                            password: credentials[1]
-                        );
+                            password: credentials[1]);
                     }
                 }
 

@@ -16,7 +16,7 @@ namespace Microsoft.Fx.Portability
 
         public bool Equals(BreakingChangeDependency other)
         {
-            return Member.Equals(other.Member) 
+            return Member.Equals(other.Member)
                 && (Break.CompareTo(other.Break) == 0)
                 && DependantAssembly.Equals(other.DependantAssembly);
         }

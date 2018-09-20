@@ -8,7 +8,7 @@ namespace Microsoft.Fx.Portability
     /// </summary>
     public class InvalidApiPortOptionsException : PortabilityAnalyzerException
     {
-        public InvalidApiPortOptionsException(string message) 
+        public InvalidApiPortOptionsException(string message)
             : base(message)
         { }
     }

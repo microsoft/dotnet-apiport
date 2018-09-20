@@ -167,7 +167,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     return new MemberMetadataInfo(name, info2);
 
                 default:
-                    // These cases are rare. According to spec, nil means look 
+                    // These cases are rare. According to spec, nil means look
                     // in ExportedTypes, and Handle.ModuleDefinition means
                     // "reference" to type defined in the current module. The
                     // syntax generated here may be wrong. In the module definition

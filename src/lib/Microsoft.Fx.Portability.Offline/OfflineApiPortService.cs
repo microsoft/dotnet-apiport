@@ -59,7 +59,7 @@ namespace Microsoft.Fx.Portability
         {
             var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
 
-            if(!formats?.Any() ?? true)
+            if (!formats?.Any() ?? true)
             {
                 var defaultFormat = await GetDefaultResultFormatAsync();
                 formats = new[] { defaultFormat.Response.DisplayName };

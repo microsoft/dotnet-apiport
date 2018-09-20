@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability
 
                         if (fileBreakingChanges == null)
                         {
-                            //Trace.WriteLine("No data was found in '" + file + "'");
+                            // Trace.WriteLine("No data was found in '" + file + "'");
                         }
                         else
                         {

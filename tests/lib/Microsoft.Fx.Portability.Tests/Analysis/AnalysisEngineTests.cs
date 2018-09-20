@@ -361,7 +361,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             Assert.Equal(3, result.Count());
 
-            //verify only 3, 4 and 5 are in the list
+            // verify only 3, 4 and 5 are in the list
             int expectedID = 3;
             foreach (BreakingChangeDependency bcd in result)
             {
@@ -390,7 +390,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             Assert.Equal(5, result.Count());
 
-            //verify 1, 2, 3, 4 and 5 are in the list
+            // verify 1, 2, 3, 4 and 5 are in the list
             int expectedID = 1;
             foreach (BreakingChangeDependency bcd in result)
             {
@@ -542,12 +542,12 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         {
             int lastIDUsed = 1;
             var recommendations = Substitute.For<IApiRecommendations>();
-            List<BreakingChange> breakingChanges = new List<BreakingChange>();
+            var breakingChanges = new List<BreakingChange>();
 
-            //add requested number of retargetting issues
+            // add requested number of retargetting issues
             for (int i = 0; i < numOfRetargettingIssues; i++)
             {
-                //add a new breaking change
+                // add a new breaking change
                 BreakingChange bc = new BreakingChange
                 {
                     ApplicableApis = new[] { TestDocId1 },
@@ -561,11 +561,11 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
                 lastIDUsed++;
             }
 
-            //add requested number of runtime issues
+            // add requested number of runtime issues
             for (int i = 0; i < numOfRuntimeIssues; i++)
             {
-                //add a new breaking change
-                BreakingChange bc = new BreakingChange
+                // add a new breaking change
+                var bc = new BreakingChange
                 {
                     ApplicableApis = new[] { TestDocId1 },
                     Id = lastIDUsed.ToString(CultureInfo.CurrentCulture),
@@ -588,8 +588,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
         private static ICollection<IgnoreAssemblyInfo> GenerateIgnoreAssemblies(bool otherAssm, string[] targetFrameworks)
         {
-            return new[] {
-                new IgnoreAssemblyInfo() { AssemblyIdentity = otherAssm? "userAsm2, Version=2.0.0.0" : "userAsm1, Version=1.0.0.0", TargetsIgnored = targetFrameworks }
+            return new[]
+            {
+                new IgnoreAssemblyInfo
+                {
+                    AssemblyIdentity = otherAssm ? "userAsm2, Version=2.0.0.0" : "userAsm1, Version=1.0.0.0",
+                    TargetsIgnored = targetFrameworks
+                }
             };
         }
 
@@ -609,9 +614,9 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             return new Dictionary<MemberInfo, ICollection<AssemblyInfo>>
             {
-                {mi1, new[] { userAsm1 } },
-                {mi2, new[] { userAsm2 } },
-                {mi3, new[] { userAsm3 } },
+                { mi1, new[] { userAsm1 } },
+                { mi2, new[] { userAsm2 } },
+                { mi3, new[] { userAsm3 } },
             };
         }
 

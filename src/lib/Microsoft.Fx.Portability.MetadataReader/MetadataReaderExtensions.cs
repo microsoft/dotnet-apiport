@@ -102,7 +102,7 @@ namespace Microsoft.Fx.Portability
 
         /// <summary>
         /// Convert a blob referencing a public key token from a PE file into a human-readable string.
-        /// 
+        ///
         /// If there are no bytes, the return will be 'null'
         /// If the length is greater than 8, it is a strong name signed assembly
         /// Otherwise, the key is the byte sequence
@@ -120,9 +120,10 @@ namespace Microsoft.Fx.Portability
                 return "null";
             }
 
-            if (bytes.Length > 8)  // Strong named assembly
+            // Strong named assembly
+            if (bytes.Length > 8)
             {
-                // Get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key 
+                // Get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key
                 using (var sha1 = SHA1.Create())
                 {
                     var token = sha1.ComputeHash(bytes);

@@ -32,7 +32,7 @@ namespace Microsoft.Fx.Portability
         public CompressedHttpClient(ProductInformation info)
             : this(info, new HttpClientHandler {
 #if !FEATURE_SERVICE_POINT_MANAGER
-                SslProtocols = SupportedSSLProtocols, 
+                SslProtocols = SupportedSSLProtocols,
 #endif
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             })
@@ -123,7 +123,7 @@ namespace Microsoft.Fx.Portability
                 DisplayName = "Json",
                 MimeType = "application/json",
                 FileExtension = ".json"
-            }; ;
+            };
 
             var response = await CallInternalAsync(request, new[] { json });
             var result = response.Response.Single().Data.Deserialize<TResponse>();
@@ -183,8 +183,7 @@ namespace Microsoft.Fx.Portability
                                         break;
                                     }
 
-                                    StringValues contentTypes;
-                                    section.Headers.TryGetValue("Content-Type", out contentTypes);
+                                    section.Headers.TryGetValue("Content-Type", out var contentTypes);
 
                                     if (contentTypes.Count == 0)
                                     {

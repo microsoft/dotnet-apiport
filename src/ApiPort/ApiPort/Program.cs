@@ -142,7 +142,8 @@ namespace ApiPort
 
         private static IEnumerable<Exception> GetRecursiveInnerExceptions(Exception ex)
         {
-            if (ex is AggregateException) // AggregateExceptions can have multiple inner exceptions
+            // AggregateExceptions can have multiple inner exceptions
+            if (ex is AggregateException)
             {
                 foreach (var innerEx in (ex as AggregateException).InnerExceptions)
                 {
@@ -153,7 +154,8 @@ namespace ApiPort
                     }
                 }
             }
-            else // Other exceptions can have only one inner exception
+            // Other exceptions can have only one inner exception
+            else
             {
                 if (ex.InnerException != null)
                 {

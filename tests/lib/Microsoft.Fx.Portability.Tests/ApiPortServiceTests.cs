@@ -21,7 +21,7 @@ namespace Microsoft.Fx.Portability.Tests
             var httpMessageHandler = new TestHandler(HttpRequestConverter);
             var productInformation = new ProductInformation("ApiPort_Tests");
 
-            //Create a fake ApiPortService which uses the TestHandler to send back the response message
+            // Create a fake ApiPortService which uses the TestHandler to send back the response message
             _apiPortService = new ApiPortService("http://localhost", httpMessageHandler, productInformation);
         }
 

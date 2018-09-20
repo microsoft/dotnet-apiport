@@ -12,7 +12,8 @@ namespace ApiPortVS.Common
     {
         public static bool IsDotNetProject(this Project project)
         {
-            if (project.CodeModel == null) // e.g. F# projects
+            // e.g. F# projects
+            if (project.CodeModel == null)
             {
                 return IsFSharpProject(project);
             }

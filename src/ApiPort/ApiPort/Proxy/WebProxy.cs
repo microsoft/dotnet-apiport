@@ -86,7 +86,7 @@ namespace ApiPort.Proxy
 #else
                 return content.Replace(oldValue, newValue);
 #endif
-            };
+            }
 
             return Replace(
                     Replace(Regex.Escape(pattern), @"\*", ".*?"),

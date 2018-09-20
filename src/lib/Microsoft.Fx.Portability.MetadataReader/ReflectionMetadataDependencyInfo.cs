@@ -146,8 +146,8 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// Add all assemblies that were referenced to the referenced assembly dictionary.  By default, 
-        /// we add every referenced assembly and will remove the ones that are actually referenced when 
+        /// Add all assemblies that were referenced to the referenced assembly dictionary.  By default,
+        /// we add every referenced assembly and will remove the ones that are actually referenced when
         /// all submitted assemblies are processed.
         /// </summary>
         /// <param name="metadataReader"></param>

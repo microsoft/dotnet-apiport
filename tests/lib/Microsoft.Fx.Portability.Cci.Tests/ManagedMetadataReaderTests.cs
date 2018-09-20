@@ -39,7 +39,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private static void CompareFinders(IEnumerable<string> paths)
         {
-            //CompareFinders(new ManagedMetadataReaderDependencyFinder(), new CciDependencyFinder(), paths);
+            // CompareFinders(new ManagedMetadataReaderDependencyFinder(), new CciDependencyFinder(), paths);
         }
 
         private static void CompareFinders(IDependencyFinder finder1, IDependencyFinder finder2, IEnumerable<string> paths)

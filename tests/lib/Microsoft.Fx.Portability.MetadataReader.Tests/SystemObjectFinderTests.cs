@@ -38,7 +38,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         /// <summary>
-        /// Test that SystemObjectFinder works even for netstandard facade 
+        /// Test that SystemObjectFinder works even for netstandard facade
         /// assemblies that may not have references to mscorlib or system.runtime
         /// </summary>
         [Fact]
