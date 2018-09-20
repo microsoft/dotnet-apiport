@@ -27,15 +27,15 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             using (var stream = file.OpenRead())
             {
                 using (var peFile = new PEReader(stream))
-            {
-                var metadataReader = peFile.GetMetadataReader();
+                {
+                    var metadataReader = peFile.GetMetadataReader();
 
-                Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
-                Assert.Equal("mscorlib", assemblyInfo.Name);
-                Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
-                Assert.Equal("neutral", assemblyInfo.Culture);
-                Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
-            }
+                    Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Equal("mscorlib", assemblyInfo.Name);
+                    Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
+                    Assert.Equal("neutral", assemblyInfo.Culture);
+                    Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
+                }
             }
         }
 
@@ -77,12 +77,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var file = TestAssembly.Create("ResourceAssembliesGetSkipped_NoReferences.il", _output);
 
             using (var stream = file.OpenRead())
-            using (var peFile = new PEReader(stream))
             {
-                var metadataReader = peFile.GetMetadataReader();
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
 
-                Assert.False(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
-                Assert.Null(assemblyInfo);
+                    Assert.False(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Null(assemblyInfo);
+                }
             }
         }
 
@@ -102,12 +104,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var file = TestAssembly.CreateFromIL(source, name, _output);
 
             using (var stream = file.OpenRead())
-            using (var peFile = new PEReader(stream))
             {
-                var metadataReader = peFile.GetMetadataReader();
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
 
-                Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
-                Assert.Equal(name, assemblyInfo.Name);
+                    Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Equal(name, assemblyInfo.Name);
+                }
             }
         }
     }

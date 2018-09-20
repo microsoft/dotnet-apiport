@@ -41,8 +41,7 @@ namespace Microsoft.Fx.Portability.Reporting
                     }
                     else
                     {
-                        ICollection<AssemblyInfo> calledIn;
-                        if (!allDependencies.TryGetValue(item, out calledIn))
+                        if (!allDependencies.TryGetValue(item, out var calledIn))
                         {
                             return;
                         }
