@@ -48,9 +48,7 @@ namespace Microsoft.Fx.Portability
 
         public override bool Equals(object obj)
         {
-            var other = obj as ApiDefinition;
-
-            if (other == null)
+            if (!(obj is ApiDefinition other))
             {
                 return false;
             }
