@@ -107,9 +107,6 @@ namespace Microsoft.Fx.Portability
         /// If the length is greater than 8, it is a strong name signed assembly
         /// Otherwise, the key is the byte sequence
         /// </summary>
-        /// <param name="metadataReader"></param>
-        /// <param name="handle"></param>
-        /// <returns></returns>
         [SuppressMessage("Microsoft.Security.Cryptography", "CA5354:SHA1CannotBeUsed", Justification = "Public key tokens are calculated using a SHA-1 hash.")]
         private static string FormatPublicKeyToken(this MetadataReader metadataReader, BlobHandle handle)
         {

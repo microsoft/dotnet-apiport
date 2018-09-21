@@ -150,7 +150,6 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// we add every referenced assembly and will remove the ones that are actually referenced when
         /// all submitted assemblies are processed.
         /// </summary>
-        /// <param name="metadataReader"></param>
         private void AddReferencedAssemblies(MetadataReader metadataReader)
         {
             var assemblyReferences = metadataReader.AssemblyReferences
@@ -180,8 +179,6 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// Attempt to get a MetadataReader.  Call this method instead of directly on PEReader so that
         /// exceptions thrown by it are caught and propagated as a known InvalidPEAssemblyException
         /// </summary>
-        /// <param name="peReader"></param>
-        /// <returns></returns>
         private static MetadataReader GetMetadataReader(PEReader peReader)
         {
             try

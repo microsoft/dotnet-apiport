@@ -17,7 +17,6 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
         /// <summary>
         /// Tests that the templates are embedded into the assembly.
         /// </summary>
-        /// <param name="templateName"></param>
         [InlineData("_PortabilityReport.cshtml")]
         [InlineData("ReportTemplate.cshtml")]
         [InlineData("_Scripts.cshtml")]

@@ -226,8 +226,6 @@ namespace Microsoft.Fx.Portability.Proxy
         /// <summary>
         /// Return true or false if connecting through a proxy server
         /// </summary>
-        /// <param name="uri"></param>
-        /// <returns></returns>
         private static bool IsSystemProxySet(Uri uri)
         {
             // The reason for not calling the GetSystemProxy is because the object

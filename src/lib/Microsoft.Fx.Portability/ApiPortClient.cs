@@ -49,7 +49,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Retrieve a list of targets available from the service
         /// </summary>
-        /// <returns></returns>
         public async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingTargets))
@@ -73,7 +72,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Writes analysis reports to path supplied by options
         /// </summary>
-        /// <param name="options"></param>
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
         {
@@ -85,8 +83,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Writes analysis reports to path supplied by options
         /// </summary>
-        /// <param name="options"></param>
-        /// <param name="includeResponse"></param>
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
         {
@@ -350,9 +346,6 @@ namespace Microsoft.Fx.Portability
         /// Add JSON to the options object if it is not there. This is used in cases where an analysis
         /// doesn't request the JSON result, but the result is needed for analysis (ie source line mapping)
         /// </summary>
-        /// <param name="options"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
         private bool TryAddJsonToOptions(IApiPortOptions options, out IApiPortOptions other)
         {
             var outputs = new HashSet<string>(options.OutputFormats, StringComparer.OrdinalIgnoreCase);
