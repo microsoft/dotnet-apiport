@@ -65,7 +65,6 @@ namespace ApiPortVS.Tests
 
             Assert.Equal(string.CompareOrdinal(name1, name2), platform.CompareTo(compared));
             Assert.Equal(string.CompareOrdinal(name2, name1), compared.CompareTo(platform));
-
         }
 
         [Fact]

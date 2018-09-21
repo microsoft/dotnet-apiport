@@ -19,7 +19,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string AssemblyIdentity
         {
-            get { return _assemblyIdentity; }
+            get
+            {
+                return _assemblyIdentity;
+            }
 
             set
             {
@@ -51,7 +54,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string TargetFrameworkMoniker
         {
-            get { return _targetFrameworkVersion; }
+            get
+            {
+                return _targetFrameworkVersion;
+            }
 
             set
             {
@@ -64,8 +70,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public override bool Equals(object obj)
         {
-            AssemblyInfo other = obj as AssemblyInfo;
-            if (other == null)
+            if (!(obj is AssemblyInfo other))
                 return false;
 
             return StringComparer.Ordinal.Equals(other.AssemblyIdentity, AssemblyIdentity)

@@ -454,6 +454,5 @@ namespace Microsoft.Fx.Portability.Reports
             };
 #endif
         }
-
     }
 }
