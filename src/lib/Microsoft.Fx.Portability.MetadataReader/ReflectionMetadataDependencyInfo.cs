@@ -136,6 +136,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
                 if (exc is InvalidPEAssemblyException) throw;
+
                 // Occurs when we cannot find the System.Object assembly.
                 if (exc is SystemObjectNotFoundException) throw;
 

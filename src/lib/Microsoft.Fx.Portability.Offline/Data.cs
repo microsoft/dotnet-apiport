@@ -5,7 +5,6 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Offline.Resources;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -45,6 +44,7 @@ namespace Microsoft.Fx.Portability
             else
             {
                 var breakingChanges = new List<BreakingChange>();
+
                 // Breaking changes will be serialized as either md or (less commonly now) json files
                 foreach (var file in typeof(Data).GetTypeInfo().Assembly.GetManifestResourceNames().Where(s => s.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || s.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
                 {
