@@ -98,9 +98,9 @@ namespace Microsoft.Fx.Portability.Analysis
                 {
                     list.Add(_catalog.GetLatestVersion(target) ?? new FrameworkName(target));
                 }
-                // Catch ArgumentException because FrameworkName does not have a TryParse method
                 catch (ArgumentException)
                 {
+                    // Catch ArgumentException because FrameworkName does not have a TryParse method
                     if (!skipNonExistent)
                     {
                         throw new UnknownTargetException(target);

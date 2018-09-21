@@ -243,6 +243,7 @@ namespace Microsoft.Fx.Portability
                                 {
                                     throw new NotFoundException(request.Method, request.RequestUri);
                                 }
+
                             case HttpStatusCode.Unauthorized:
                                 throw new UnauthorizedEndpointException();
                             case HttpStatusCode.ProxyAuthenticationRequired:

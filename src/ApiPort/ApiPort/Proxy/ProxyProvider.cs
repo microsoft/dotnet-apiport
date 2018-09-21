@@ -249,6 +249,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     {
                         return false;
                     }
+
                     return !proxy.IsBypassed(uri);
                 }
             }

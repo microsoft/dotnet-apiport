@@ -254,6 +254,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 else if (name[i] == ',') newName[i] = '@';
                 else newName[i] = name[i];
             }
+
             return new string(newName);
         }
 

@@ -163,7 +163,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                             throw new BadImageFormatException(LocalizedStrings.InfiniteTypeParentingRecursion);
                         }
                     }
-                    MemberMetadataInfo info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)scope), reference);
+
+                    var info2 = GetFullName(Reader.GetTypeReference((TypeReferenceHandle)scope), reference);
                     return new MemberMetadataInfo(name, info2);
 
                 default:
@@ -329,10 +330,11 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             genericType.IsGenericInstance = true;
             genericType.GenericTypeArgs = new List<MemberMetadataInfo>(typeArguments);
-            foreach (MemberMetadataInfo mInfo in genericType.GenericTypeArgs)
+            foreach (var mInfo in genericType.GenericTypeArgs)
             {
                 mInfo.IsEnclosedType = true;
             }
+
             return genericType;
         }
 

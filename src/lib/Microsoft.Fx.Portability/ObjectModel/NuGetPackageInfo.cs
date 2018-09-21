@@ -31,6 +31,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 throw new ArgumentException(nameof(packageId));
             }
+
             SupportedVersions = supportedVersions?.OrderBy(x => x.Key.FullName).ToImmutableDictionary() ?? ImmutableDictionary.Create<FrameworkName, string>();
             AssemblyInfo = assemblyInfo;
         }
@@ -48,6 +49,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                     && string.Equals(other.PackageId, PackageId, StringComparison.Ordinal)
                     && SupportedVersions.SequenceEqual(other.SupportedVersions, new SupportedVersionsComparer());
             }
+
             return false;
         }
 
@@ -61,6 +63,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashCode = hash;
                 _hashComputed = true;
             }
+
             return _hashCode;
         }
 

@@ -40,6 +40,7 @@ namespace Microsoft.Fx.Portability
 
                 return breakingChanges;
             }
+
             // If no BreakingChanges folder exists, then we'll fall back to loading embedded breaking changes
             else
             {
@@ -77,6 +78,7 @@ namespace Microsoft.Fx.Portability
                     return categoriesFile.Deserialize<string[]>();
                 }
             }
+
             return null;
         }
 
@@ -116,6 +118,7 @@ namespace Microsoft.Fx.Portability
             {
                 return BreakingChangeParser.FromMarkdown(stream, allowedCategories);
             }
+
             if (string.Equals(".json", extension, StringComparison.OrdinalIgnoreCase))
             {
                 try
@@ -127,6 +130,7 @@ namespace Microsoft.Fx.Portability
                     // An invalid json file will throw an exception when deserialized. Simply ignore such files.
                 }
             }
+
             return Enumerable.Empty<BreakingChange>();
         }
     }

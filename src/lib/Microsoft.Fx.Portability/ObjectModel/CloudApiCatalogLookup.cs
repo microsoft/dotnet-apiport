@@ -122,6 +122,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 metadata.TryGetValue(metadataKey, out metadataValue);
             }
+
             return metadataValue;
         }
 
@@ -159,6 +160,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 return name;
             }
+
             return null;
         }
 

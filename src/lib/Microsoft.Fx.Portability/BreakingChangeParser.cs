@@ -77,6 +77,7 @@ namespace Microsoft.Fx.Portability
                         {
                             CleanAndAddBreak(breakingChanges, currentBreak);
                         }
+
                         currentBreak = new BreakingChange();
 
                         // Separate ID and title
@@ -105,6 +106,7 @@ namespace Microsoft.Fx.Portability
                         // Clear state
                         state = ParseState.None;
                     }
+
                     // Only parse breaking change if we've seen a breaking change header ("## ...")
                     else if (currentBreak != null)
                     {
@@ -241,6 +243,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.BugLink = currentLine.Trim();
                     }
+
                     break;
                 case ParseState.Scope:
                     BreakingChangeImpact scope;
@@ -248,6 +251,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.ImpactScope = scope;
                     }
+
                     break;
                 case ParseState.VersionBroken:
                     Version verBroken;
@@ -255,6 +259,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.VersionBroken = verBroken;
                     }
+
                     break;
                 case ParseState.VersionFixed:
                     Version verFixed;
@@ -262,6 +267,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.VersionFixed = verFixed;
                     }
+
                     break;
                 case ParseState.AffectedAPIs:
                     // Trim md list and code markers, as well as comment tags (in case the affected APIs section is followed by a comment)
@@ -271,10 +277,12 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.ApplicableApis = new List<string>();
                     }
+
                     if (!IgnoredApis.Contains(api))
                     {
                         currentBreak.ApplicableApis.Add(api);
                     }
+
                     break;
                 case ParseState.Details:
                     if (currentBreak.Details == null)
@@ -285,6 +293,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.Details += "\n" + currentLine;
                     }
+
                     break;
                 case ParseState.Suggestion:
                     if (currentBreak.Suggestion == null)
@@ -295,6 +304,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.Suggestion += "\n" + currentLine;
                     }
+
                     break;
                 case ParseState.Notes:
                     // Special-case the fact that 'notes' will often come at the end of a comment section and we don't need the closing --> in the note.
@@ -311,12 +321,14 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.Notes += "\n" + currentLine;
                     }
+
                     break;
                 case ParseState.SourceAnalyzerStatus:
                     if (Enum.TryParse<BreakingChangeAnalyzerStatus>(currentLine.Trim().Replace(" ", string.Empty), true, out var status))
                     {
                         currentBreak.SourceAnalyzerStatus = status;
                     }
+
                     break;
                 case ParseState.Categories:
                     if (string.IsNullOrWhiteSpace(currentLine) || currentLine.StartsWith("<!--", StringComparison.Ordinal))
@@ -335,6 +347,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.Categories = new List<string>();
                     }
+
                     currentBreak.Categories.Add(currentLine);
                     break;
                 case ParseState.Comment:
@@ -343,6 +356,7 @@ namespace Microsoft.Fx.Portability
                     {
                         state = ParseState.None;
                     }
+
                     break;
                 default:
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidBreakingChangeParserState, state.ToString()));
