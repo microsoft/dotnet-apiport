@@ -90,14 +90,6 @@
     <Rule Id="SA1610" Action="None" />
     <Rule Id="SA1611" Action="None" />
     <Rule Id="SA1615" Action="None" />
-    <Rule Id="SA1621" Action="None" />
-    <Rule Id="SA1622" Action="None" />
-    <Rule Id="SA1623" Action="None" />
-    <Rule Id="SA1624" Action="None" />
-    <Rule Id="SA1625" Action="None" />
-    <Rule Id="SA1626" Action="None" />
-    <Rule Id="SA1627" Action="None" />
-    <Rule Id="SA1628" Action="None" />
     <Rule Id="SA1629" Action="None" />
     <Rule Id="SA1630" Action="None" />
     <Rule Id="SA1631" Action="None" />
