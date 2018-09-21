@@ -179,7 +179,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Returns the identifies for the target names. If multiple targets have the same name, keep the version as well
         /// </summary>
-        /// <returns></returns>
         public IEnumerable<string> GetTargetNames(IEnumerable<FrameworkName> targets, bool includeVersion)
         {
             foreach (var group in targets.GroupBy(target => target.Identifier))
