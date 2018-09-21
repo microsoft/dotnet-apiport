@@ -143,7 +143,6 @@ namespace Microsoft.Fx.Portability.Analysis
             sw.Stop();
 
             // Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
-
             return missingMembers;
         }
 

@@ -84,6 +84,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashCode = (AssemblyIdentity ?? string.Empty + (TargetFrameworkMoniker ?? string.Empty)).GetHashCode();
                 _hashComputed = true;
             }
+
             return _hashCode;
         }
 

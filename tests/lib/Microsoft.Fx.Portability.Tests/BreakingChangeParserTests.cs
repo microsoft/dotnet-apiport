@@ -168,10 +168,10 @@ namespace Microsoft.Fx.Portability.Tests
         #endregion
 
         #region Negative Test Cases
+
         // This is intentionally empty as the breaking change parser is never expected
         // to throw. In the case of invalid/corrupt inputs, it will do its best to return
         // partially correct breaking changes or, in the worst case, an empty set of breaks.
-
         #endregion
 
         #region Helper Methods
