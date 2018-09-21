@@ -18,7 +18,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public string FullName { get; set; }
 
         /// <summary>
-        /// DocId of the parent. Null if the Api does not have a parent.
+        /// Gets or sets docId of the parent. Null if the Api does not have a parent.
         /// </summary>
         public string Parent { get; set; }
 
