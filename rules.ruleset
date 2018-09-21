@@ -90,23 +90,11 @@
     <Rule Id="SA1610" Action="None" />
     <Rule Id="SA1611" Action="None" />
     <Rule Id="SA1615" Action="None" />
-    <Rule Id="SA1629" Action="None" />
-    <Rule Id="SA1630" Action="None" />
-    <Rule Id="SA1631" Action="None" />
-    <Rule Id="SA1632" Action="None" />
     <Rule Id="SA1637" Action="None" />
     <Rule Id="SA1638" Action="None" />
     <Rule Id="SA1640" Action="None" />
     <Rule Id="SA1641" Action="None" />
     <Rule Id="SA1642" Action="None" />
     <Rule Id="SA1643" Action="None" />
-    <Rule Id="SA1644" Action="None" />
-    <Rule Id="SA1645" Action="None" />
-    <Rule Id="SA1646" Action="None" />
-    <Rule Id="SA1647" Action="None" />
-    <Rule Id="SA1648" Action="None" />
-    <Rule Id="SA1650" Action="None" />
-    <Rule Id="SA1651" Action="None" />
-    <Rule Id="SA1652" Action="None" />
   </Rules>
 </RuleSet>
