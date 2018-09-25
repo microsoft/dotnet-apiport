@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Resources;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -59,6 +60,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashComputed = false;
             }
         }
+
+        public IList<AssemblyReferenceInformation> AssemblyReferences { get; set; }
 
         public bool IsExplicitlySpecified { get; set; } = true;
 

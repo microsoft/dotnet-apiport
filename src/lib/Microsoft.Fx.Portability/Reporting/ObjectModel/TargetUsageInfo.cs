@@ -20,6 +20,10 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
             Interlocked.Increment(ref _callsToUnavailableAPIs);
         }
 
+        public int GetAvailableAPICalls() => _callsToAvailableAPIs;
+
+        public int GetUnavailableAPICalls() => _callsToUnavailableAPIs;
+
         public double PortabilityIndex
         {
             get
