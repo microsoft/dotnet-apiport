@@ -21,20 +21,24 @@ namespace ApiPortVS.SourceMapping
         public override IEnumerable<ISourceMappedItem> GetSourceInfo(string assemblyPath, string pdbPath, ReportingResult report)
         {
             using (var host = new HostEnvironment())
-            using (var pdbFs = File.OpenRead(pdbPath))
-            using (var pdbReader = new PdbReader(pdbFs, host))
             {
-                var metadataVisitor = new CciMetadataTraverser(assemblyPath, report, pdbReader);
-                var traverser = new MetadataTraverser
+                using (var pdbFs = File.OpenRead(pdbPath))
                 {
-                    PreorderVisitor = metadataVisitor,
-                    TraverseIntoMethodBodies = true
-                };
+                    using (var pdbReader = new PdbReader(pdbFs, host))
+                    {
+                        var metadataVisitor = new CciMetadataTraverser(assemblyPath, report, pdbReader);
+                        var traverser = new MetadataTraverser
+                        {
+                            PreorderVisitor = metadataVisitor,
+                            TraverseIntoMethodBodies = true
+                        };
 
-                var cciAssembly = host.LoadAssembly(assemblyPath);
-                traverser.Traverse(cciAssembly);
+                        var cciAssembly = host.LoadAssembly(assemblyPath);
+                        traverser.Traverse(cciAssembly);
 
-                return metadataVisitor.FoundItems;
+                        return metadataVisitor.FoundItems;
+                    }
+                }
             }
         }
     }

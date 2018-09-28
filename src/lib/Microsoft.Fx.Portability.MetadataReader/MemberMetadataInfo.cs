@@ -248,12 +248,26 @@ namespace Microsoft.Fx.Portability.Analyzer
             char[] newName = new char[name.Length];
             for (int i = 0; i < name.Length; i++)
             {
-                if (name[i] == '<') newName[i] = '{';
-                else if (name[i] == '>') newName[i] = '}';
-                else if (name[i] == '.') newName[i] = '#';
-                else if (name[i] == ',') newName[i] = '@';
-                else newName[i] = name[i];
+                switch (name[i])
+                {
+                    case '<':
+                        newName[i] = '{';
+                        break;
+                    case '>':
+                        newName[i] = '}';
+                        break;
+                    case '.':
+                        newName[i] = '#';
+                        break;
+                    case ',':
+                        newName[i] = '@';
+                        break;
+                    default:
+                        newName[i] = name[i];
+                        break;
+                }
             }
+
             return new string(newName);
         }
 

@@ -182,9 +182,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var ilPath = Path.GetTempFileName();
 
                 using (var fs = File.OpenWrite(ilPath))
-                using (var stream = _other.OpenRead())
                 {
-                    stream.CopyTo(fs);
+                    using (var stream = _other.OpenRead())
+                    {
+                        stream.CopyTo(fs);
+                    }
                 }
 
                 var psi = new ProcessStartInfo

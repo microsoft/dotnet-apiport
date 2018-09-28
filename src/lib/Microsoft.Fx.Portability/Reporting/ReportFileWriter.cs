@@ -23,12 +23,16 @@ namespace Microsoft.Fx.Portability.Reporting
         public async Task<string> WriteReportAsync(byte[] report, string extension, string outputDirectory, string reportFileName, bool overwrite)
         {
             if (report == null || report.Length == 0)
+            {
                 return null;
+            }
 
             var filename = GetFileName(outputDirectory, reportFileName, extension, isUnique: !overwrite);
 
             if (string.IsNullOrEmpty(filename))
+            {
                 return null;
+            }
 
             var filePath = _fileSystem.CombinePaths(outputDirectory, filename);
             var isWritten = await TryWriteReportAsync(report, filePath);
@@ -46,9 +50,11 @@ namespace Microsoft.Fx.Portability.Reporting
             try
             {
                 using (var destinationStream = _fileSystem.CreateFile(filePath))
-                using (var memoryStream = new MemoryStream(report))
                 {
-                    await memoryStream.CopyToAsync(destinationStream);
+                    using (var memoryStream = new MemoryStream(report))
+                    {
+                        await memoryStream.CopyToAsync(destinationStream);
+                    }
                 }
             }
             catch (IOException ex)

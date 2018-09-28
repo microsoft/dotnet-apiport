@@ -30,7 +30,9 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
             {
                 // prevent Div/0
                 if (_callsToAvailableAPIs == 0 && _callsToUnavailableAPIs == 0)
+                {
                     return 0;
+                }
 
                 return (double)_callsToAvailableAPIs / ((double)_callsToAvailableAPIs + _callsToUnavailableAPIs);
             }

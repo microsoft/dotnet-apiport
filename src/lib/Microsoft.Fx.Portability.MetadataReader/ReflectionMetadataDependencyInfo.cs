@@ -117,27 +117,35 @@ namespace Microsoft.Fx.Portability.Analyzer
             try
             {
                 using (var stream = file.OpenRead())
-                using (var peFile = new PEReader(stream))
                 {
-                    var metadataReader = GetMetadataReader(peFile);
+                    using (var peFile = new PEReader(stream))
+                    {
+                        var metadataReader = GetMetadataReader(peFile);
 
-                    AddReferencedAssemblies(metadataReader);
+                        AddReferencedAssemblies(metadataReader);
 
-                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
-                    helper.ComputeData();
+                        var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
+                        helper.ComputeData();
 
-                    // Remember this assembly as a user assembly.
-                    _userAssemblies.Add(helper.CallingAssembly);
+                        // Remember this assembly as a user assembly.
+                        _userAssemblies.Add(helper.CallingAssembly);
 
-                    return helper.MemberDependency;
+                        return helper.MemberDependency;
+                    }
                 }
             }
             catch (Exception exc)
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
-                if (exc is InvalidPEAssemblyException) throw;
+                if (exc is InvalidPEAssemblyException)
+                {
+                    throw;
+                }
                 // Occurs when we cannot find the System.Object assembly.
-                if (exc is SystemObjectNotFoundException) throw;
+                if (exc is SystemObjectNotFoundException)
+                {
+                    throw;
+                }
 
                 // Other exceptions are unexpected, though, and will benefit from
                 // more details on the scenario that hit them

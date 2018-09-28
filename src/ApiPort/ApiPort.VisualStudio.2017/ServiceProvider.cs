@@ -13,7 +13,8 @@ namespace ApiPortVS.VS2017
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAdapter<IServiceProvider, IProjectService>(serviceProvider => {
+            builder.RegisterAdapter<IServiceProvider, IProjectService>(serviceProvider =>
+            {
                 var componentModel = serviceProvider.GetService(typeof(SComponentModel)) as IComponentModel;
                 var projectServiceAccessor = componentModel.GetService<IProjectServiceAccessor>();
                 return projectServiceAccessor.GetProjectService();
