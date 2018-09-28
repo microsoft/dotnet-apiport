@@ -141,6 +141,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 {
                     throw;
                 }
+
                 // Occurs when we cannot find the System.Object assembly.
                 if (exc is SystemObjectNotFoundException)
                 {
