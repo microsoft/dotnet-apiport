@@ -143,7 +143,6 @@ namespace Microsoft.Fx.Portability.Analysis
             sw.Stop();
 
             // Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
-
             return missingMembers;
         }
 
@@ -298,6 +297,7 @@ namespace Microsoft.Fx.Portability.Analysis
                         break;
                     }
                 }
+
                 if (supportedOnAllTargets)
                 {
                     yield return assembly.AssemblyIdentity;
@@ -318,6 +318,7 @@ namespace Microsoft.Fx.Portability.Analysis
                     filteredDependencies.Add(dependency.Key, newList.ToList());
                 }
             }
+
             return filteredDependencies;
         }
 

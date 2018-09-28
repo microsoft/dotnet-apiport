@@ -79,6 +79,7 @@ namespace ApiPortVS
                 Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsCfgProvider)} from project: {project.Name}"));
                 return null;
             }
+
             if (!(provider is IVsCfgProvider2))
             {
                 Trace.TraceError(ToCurrentCulture($"IVsCfgProvider returned {provider.GetType()} is not of the right type. Expected: {nameof(IVsCfgProvider2)}"));

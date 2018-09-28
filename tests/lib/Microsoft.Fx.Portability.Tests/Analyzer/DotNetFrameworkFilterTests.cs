@@ -25,8 +25,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("31bf3856ad364e35", true)]
         [InlineData("24eec0d8c86cda1e", true)]
         [InlineData("0738eb9f132ed756", true)]
+
         // Microsoft public key token (different case)
         [InlineData("0738eb9F132ed756", true)]
+
         // Non-Microsoft public key token
         [InlineData("something", false)]
         [Theory]

@@ -300,8 +300,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         private static string ComputeRange(int rowStart, int rowCount, int columnStart, int columnCount)
         {
-            // only support up to 26 columns for now..
-
+            // Only support up to 26 columns for now..
             if (columnStart + columnCount > 26)
             {
                 throw new NotSupportedException(LocalizedStrings.TooManyColumns);

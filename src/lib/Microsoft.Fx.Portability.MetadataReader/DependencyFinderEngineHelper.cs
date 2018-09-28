@@ -55,6 +55,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 {
                 }
             }
+
             return refs;
         }
 

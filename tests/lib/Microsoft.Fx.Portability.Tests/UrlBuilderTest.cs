@@ -5,7 +5,6 @@ using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-
 #if FEATURE_STRONGNAMESIGNING
     public class UrlBuilderTest
     {

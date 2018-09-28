@@ -119,7 +119,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                 if (cciAssembly == null)
                 {
                     _assembliesWithError.Add(assemblyLocation);
-                    // error.
                     yield break;
                 }
 
@@ -146,6 +145,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                     }
 
                     string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
+
                     // return the type
                     yield return new MemberDependency()
                     {
@@ -168,6 +168,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var refence in cciAssembly.GetTypeReferences())
                 {
                     string definedIn = refence.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
+
                     // return the type
                     yield return new MemberDependency()
                     {

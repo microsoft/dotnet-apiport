@@ -67,6 +67,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 var nugetPackagesForMissingAssemblies = _analysisEngine.GetNuGetPackagesInfoFromAssembly(missingUserAssemblies, targets);
                 nugetPackages = nugetPackagesForMissingAssemblies.Union(nugetPackagesForUserAssemblies).ToList();
             }
+
             nugetPackages.Sort(new NuGetPackageInfoComparer());
 
             userAssemblies.RemoveWhere(assembliesToRemove.Contains);

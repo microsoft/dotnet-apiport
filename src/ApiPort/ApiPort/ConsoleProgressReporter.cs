@@ -161,6 +161,7 @@ namespace ApiPort
                 {
                     return;
                 }
+
                 _animationResetEvent.Reset();
             }
 

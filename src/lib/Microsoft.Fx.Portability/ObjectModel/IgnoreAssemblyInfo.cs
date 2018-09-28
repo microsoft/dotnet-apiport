@@ -73,6 +73,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 ret ^= ver.GetHashCode();
             }
+
             return ret;
         }
     }
