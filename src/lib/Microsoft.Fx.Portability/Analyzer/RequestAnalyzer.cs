@@ -103,7 +103,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 SubmissionId = submissionId,
                 BreakingChanges = breakingChanges,
                 BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies,
-                NuGetPackages = nugetPackages
+                NuGetPackages = nugetPackages,
+                Request = request
             };
         }
     }

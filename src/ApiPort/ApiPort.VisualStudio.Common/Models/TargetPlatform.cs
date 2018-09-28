@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,9 @@ namespace ApiPortVS
         public override bool Equals(object obj)
         {
             if (!(obj is TargetPlatform compared))
+            {
                 return false;
+            }
 
             return string.Equals(Name, compared.Name, StringComparison.Ordinal)
                 && Versions.SequenceEqual(compared.Versions);
@@ -104,34 +105,36 @@ namespace ApiPortVS
             // information, like whether e1 comes before e2 (returning -1) or e1
             // comes after e2 (returning +1).
             using (var e1 = Versions.GetEnumerator())
-            using (var e2 = other.Versions.GetEnumerator())
             {
-                while (e1.MoveNext())
+                using (var e2 = other.Versions.GetEnumerator())
                 {
-                    // `this` has more Versions than the compared object, so
-                    // `this` should come after the compared object since all
-                    // other elements up until this point were equal.
-                    if (!e2.MoveNext())
+                    while (e1.MoveNext())
                     {
-                        return 1;
+                        // `this` has more Versions than the compared object, so
+                        // `this` should come after the compared object since all
+                        // other elements up until this point were equal.
+                        if (!e2.MoveNext())
+                        {
+                            return 1;
+                        }
+                        else if (Equals(e1.Current, e2.Current))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return e1.Current.Version.CompareTo(e2.Current.Version);
+                        }
                     }
-                    else if (Equals(e1.Current, e2.Current))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        return e1.Current.Version.CompareTo(e2.Current.Version);
-                    }
-                }
 
-                // Compared has more Versions than `this`.  `this` comes first
-                if (e2.MoveNext())
-                {
-                    return -1;
-                }
+                    // Compared has more Versions than `this`.  `this` comes first
+                    if (e2.MoveNext())
+                    {
+                        return -1;
+                    }
 
-                return 0;
+                    return 0;
+                }
             }
         }
     }

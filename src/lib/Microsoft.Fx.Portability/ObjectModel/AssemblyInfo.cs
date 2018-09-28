@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Resources;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -66,12 +67,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
         }
 
+        public IList<AssemblyReferenceInformation> AssemblyReferences { get; set; }
+
         public bool IsExplicitlySpecified { get; set; } = true;
 
         public override bool Equals(object obj)
         {
             if (!(obj is AssemblyInfo other))
+            {
                 return false;
+            }
 
             return StringComparer.Ordinal.Equals(other.AssemblyIdentity, AssemblyIdentity)
                 && StringComparer.Ordinal.Equals(other.TargetFrameworkMoniker, TargetFrameworkMoniker);

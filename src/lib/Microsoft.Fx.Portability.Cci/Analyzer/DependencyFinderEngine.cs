@@ -95,7 +95,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         callingAssembly = e.Referrer.GetAssemblyReference().AssemblyIdentity.Format();
                     }
-                    catch { }
+                    catch
+                    {
+                    }
 
                     HashSet<string> newValue = new HashSet<string>
                     {
@@ -138,7 +140,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var reference in cciAssembly.GetTypeMemberReferences())
                 {
                     if (reference.ContainingType.GetAssemblyReference() == null)
+                    {
                         continue;
+                    }
 
                     string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
 

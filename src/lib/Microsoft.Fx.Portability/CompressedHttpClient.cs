@@ -30,7 +30,8 @@ namespace Microsoft.Fx.Portability
         /// <param name="productName">Product name that will be displayed in the User Agent string of requests</param>
         /// <param name="productVersion">Product version that will be displayed in the User Agent string of requests</param>
         public CompressedHttpClient(ProductInformation info)
-            : this(info, new HttpClientHandler {
+            : this(info, new HttpClientHandler
+            {
 #if !FEATURE_SERVICE_POINT_MANAGER
                 SslProtocols = SupportedSSLProtocols,
 #endif

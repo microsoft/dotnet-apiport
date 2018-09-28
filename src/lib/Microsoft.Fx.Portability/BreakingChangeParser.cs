@@ -53,7 +53,9 @@ namespace Microsoft.Fx.Portability
         /// Parses markdown files into BrekaingChange objects
         /// </summary>
         /// <param name="stream">The markdown to parse</param>
-        /// <param name="allowedCategories">Valid category strings. Pass null to allow any category. A breaking change using an invalid category will throw an exception while parsing the breaking change.</param>
+        /// <param name="allowedCategories">Valid category strings. Pass null
+        /// to allow any category. A breaking change using an invalid category
+        /// will throw an exception while parsing the breaking change.</param>
         /// <returns>BreakingChanges parsed from the markdown</returns>
         public static IEnumerable<BreakingChange> FromMarkdown(Stream stream, IEnumerable<string> allowedCategories)
         {
@@ -272,7 +274,11 @@ namespace Microsoft.Fx.Portability
                 case ParseState.AffectedAPIs:
                     // Trim md list and code markers, as well as comment tags (in case the affected APIs section is followed by a comment)
                     string api = currentLine.Trim().TrimStart('*', '-', '`', ' ', '\t', '<', '!', '-').TrimEnd('`');
-                    if (string.IsNullOrWhiteSpace(api)) return;
+                    if (string.IsNullOrWhiteSpace(api))
+                    {
+                        return;
+                    }
+
                     if (currentBreak.ApplicableApis == null)
                     {
                         currentBreak.ApplicableApis = new List<string>();
@@ -366,9 +372,20 @@ namespace Microsoft.Fx.Portability
         private static void CleanAndAddBreak(List<BreakingChange> breakingChanges, BreakingChange currentBreak)
         {
             // Clean up trailing white-space, etc. from long-form text entries
-            if (currentBreak.Details != null) currentBreak.Details = currentBreak.Details.Trim();
-            if (currentBreak.Suggestion != null) currentBreak.Suggestion = currentBreak.Suggestion.Trim();
-            if (currentBreak.Notes != null) currentBreak.Notes = currentBreak.Notes.Trim();
+            if (currentBreak.Details != null)
+            {
+                currentBreak.Details = currentBreak.Details.Trim();
+            }
+
+            if (currentBreak.Suggestion != null)
+            {
+                currentBreak.Suggestion = currentBreak.Suggestion.Trim();
+            }
+
+            if (currentBreak.Notes != null)
+            {
+                currentBreak.Notes = currentBreak.Notes.Trim();
+            }
 
             breakingChanges.Add(currentBreak);
         }

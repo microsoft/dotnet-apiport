@@ -48,7 +48,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 var sortedOtherTargetsEnum = other.TargetsIgnored.OrderBy(s => s).GetEnumerator();
                 while (sortedTargetsEnum.MoveNext() && sortedOtherTargetsEnum.MoveNext())
                 {
-                    if (!sortedTargetsEnum.Current.Equals(sortedOtherTargetsEnum.Current, StringComparison.OrdinalIgnoreCase)) return false;
+                    if (!sortedTargetsEnum.Current.Equals(sortedOtherTargetsEnum.Current, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return false;
+                    }
                 }
             }
 

@@ -10,13 +10,15 @@ namespace Microsoft.Fx.Portability.Tests.TestData
 {
     public class TestDotNetCatalog : DotNetCatalog
     {
-        private static readonly string[] FrameworkIdentities = new[] {
+        private static readonly string[] FrameworkIdentities = new[]
+        {
             "System.Collections, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Collections.Concurrent, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Collections.NonGeneric, PublicKeyToken=b03f5f7f11d50a3a"
         };
 
-        private static readonly TargetInfo[] TestSupportedTargets = new[] {
+        private static readonly TargetInfo[] TestSupportedTargets = new[]
+        {
             new TargetInfo { DisplayName = Windows80, IsReleased = true },
             new TargetInfo { DisplayName = Windows81, IsReleased = true },
             new TargetInfo { DisplayName = NetCore50, IsReleased = true },
@@ -40,8 +42,10 @@ namespace Microsoft.Fx.Portability.Tests.TestData
             var targets11 = new[] { Windows80, NetCore50, Net11 };
             var targets40 = new[] { Windows80, NetCore50, Net40, NetStandard16 };
 
-            var apis = new[] {
-                new ApiInfoStorage {
+            var apis = new[]
+            {
+                new ApiInfoStorage
+                {
                     DocId = "N:System.Collections",
                     FullName = "System.Collections",
                     Name = "System.Collections",
@@ -49,7 +53,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = null,
                     Targets = targets11
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "N:System.Collections.Concurrent",
                     FullName = "System.Collections.Concurrent",
                     Name = "System.Collections.Concurrent",
@@ -57,7 +62,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = null,
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "T:System.Collections.Concurrent.ConcurrentBag`1",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>",
                     Name = "ConcurrentBag<T>",
@@ -65,7 +71,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = "N:System.Collections.Concurrent",
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "P:System.Collections.Concurrent.ConcurrentBag`1.Count",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>.Count",
                     Name = "Count",
@@ -73,7 +80,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = "T:System.Collections.Concurrent.ConcurrentBag`1",
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "M:System.Collections.Concurrent.ConcurrentBag`1.CopyTo(`0[],System.Int32)",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>.CopyTo(T[], Int32)",
                     Name = "CopyTo(T[], Int32)",
@@ -81,7 +89,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = "T:System.Collections.Concurrent.ConcurrentBag`1",
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "M:System.Collections.Concurrent.ConcurrentBag`1.get_Count",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>.Count.get_Count()",
                     Name = "get_Count()",

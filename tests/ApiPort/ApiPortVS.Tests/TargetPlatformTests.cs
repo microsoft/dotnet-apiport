@@ -17,7 +17,8 @@ namespace ApiPortVS.Tests
             var platform = new TargetPlatform
             {
                 Name = frameworkName,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = frameworkName },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = frameworkName },
                 }.OrderBy(x => x.Version).ToList()
@@ -26,7 +27,8 @@ namespace ApiPortVS.Tests
             var compared = new TargetPlatform
             {
                 Name = frameworkName,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = frameworkName },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = frameworkName },
                 }.OrderBy(x => x.Version).ToList()
@@ -45,7 +47,8 @@ namespace ApiPortVS.Tests
             var platform = new TargetPlatform
             {
                 Name = name1,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = name1 },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = name1 },
                 }.OrderBy(x => x.Version).ToList()
@@ -55,7 +58,8 @@ namespace ApiPortVS.Tests
             var compared = new TargetPlatform
             {
                 Name = name2,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = name2 },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = name2 },
                 }.OrderBy(x => x.Version).ToList()
@@ -74,7 +78,8 @@ namespace ApiPortVS.Tests
             var platform = new TargetPlatform
             {
                 Name = name1,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = name1 },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = name1 },
                 }.OrderBy(x => x.Version).ToList()
@@ -83,7 +88,8 @@ namespace ApiPortVS.Tests
             var compared = new TargetPlatform
             {
                 Name = name1,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("2.8"), PlatformName = name1 },
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = name1 },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = name1 },
@@ -105,7 +111,8 @@ namespace ApiPortVS.Tests
             var platform = new TargetPlatform
             {
                 Name = name1,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = name1 },
                     new TargetPlatformVersion { Version = new Version("5.8.3"), PlatformName = name1 },
                 }.OrderBy(x => x.Version).ToList()
@@ -114,7 +121,8 @@ namespace ApiPortVS.Tests
             var compared = new TargetPlatform
             {
                 Name = name1,
-                Versions = new[] {
+                Versions = new[]
+                {
                     new TargetPlatformVersion { Version = new Version("1.0"), PlatformName = name1 },
                     new TargetPlatformVersion { Version = new Version("5.7.3"), PlatformName = name1 },
                 }.OrderBy(x => x.Version).ToList()

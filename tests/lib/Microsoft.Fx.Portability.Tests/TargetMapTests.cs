@@ -209,9 +209,11 @@ namespace Microsoft.Fx.Portability.Tests
             try
             {
                 using (var fs = file.OpenWrite())
-                using (var writer = new StreamWriter(fs))
                 {
-                    writer.Write(xml);
+                    using (var writer = new StreamWriter(fs))
+                    {
+                        writer.Write(xml);
+                    }
                 }
 
                 var map = new TargetMapper();
@@ -427,17 +429,21 @@ namespace Microsoft.Fx.Portability.Tests
             var targetNamesWithVersions = mapper.GetTargetNames(targets, includeVersion: true).ToArray();
 
             AreCollectionsEqual(
-                new string[] {
+                new string[]
+                {
                     netFramework4.FullName, windows81.FullName,
                     netFramework451.FullName, "Windows Phone",
-                    windows8.FullName },
+                    windows8.FullName
+                },
                 targetNames);
 
             AreCollectionsEqual(
-                new string[] {
+                new string[]
+                {
                     netFramework4.FullName, windows81.FullName,
                     netFramework451.FullName, windowsPhone.FullName,
-                    windows8.FullName },
+                    windows8.FullName
+                },
                 targetNamesWithVersions);
         }
 
@@ -452,14 +458,16 @@ namespace Microsoft.Fx.Portability.Tests
         private static TargetMapper LoadXml(string config)
         {
             using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms) { AutoFlush = true })
             {
-                writer.Write(config);
-                ms.Seek(0, SeekOrigin.Begin);
+                using (var writer = new StreamWriter(ms) { AutoFlush = true })
+                {
+                    writer.Write(config);
+                    ms.Seek(0, SeekOrigin.Begin);
 
-                var targetMapper = new TargetMapper();
-                targetMapper.Load(ms);
-                return targetMapper;
+                    var targetMapper = new TargetMapper();
+                    targetMapper.Load(ms);
+                    return targetMapper;
+                }
             }
         }
     }

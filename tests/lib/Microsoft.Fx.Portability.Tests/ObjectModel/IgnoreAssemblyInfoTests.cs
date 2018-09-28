@@ -8,24 +8,28 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
 {
     public class IgnoreAssemblyInfoTests
     {
-        private readonly IgnoreAssemblyInfo[] _set1 = new[] {
+        private readonly IgnoreAssemblyInfo[] _set1 = new[]
+        {
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Foo", TargetsIgnored = new[] { "v1", "v2" } },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Bar", TargetsIgnored = new[] { "v2" } }
         };
 
-        private readonly IgnoreAssemblyInfo[] _set2 = new[] {
+        private readonly IgnoreAssemblyInfo[] _set2 = new[]
+        {
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Foo", TargetsIgnored = new[] { "v1", "v3" } },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Bar", TargetsIgnored = new[] { "v1" } },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Baz", TargetsIgnored = new string[0] }
         };
 
-        private readonly IgnoreAssemblyInfo[] _set3 = new[] {
+        private readonly IgnoreAssemblyInfo[] _set3 = new[]
+        {
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Foo", TargetsIgnored = new[] { "V1" } },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Bar" },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Baz", TargetsIgnored = new[] { "v1" } }
         };
 
-        private readonly IgnoreAssemblyInfo[] _combined = new[] {
+        private readonly IgnoreAssemblyInfo[] _combined = new[]
+        {
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Foo", TargetsIgnored = new[] { "v1", "v2", "v3" } },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Bar" },
             new IgnoreAssemblyInfo() { AssemblyIdentity = "Baz" }
