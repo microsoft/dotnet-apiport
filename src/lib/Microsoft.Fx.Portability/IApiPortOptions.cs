@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability
 
         /// <summary>
         /// Gets a dictionary of input assembly files and whether or not they
-        /// were specified or not.
+        /// were specified.
         /// Key: IAssemblyFile
         /// Value: true if the file was explicitly specified and false otherwise.
         /// </summary>
