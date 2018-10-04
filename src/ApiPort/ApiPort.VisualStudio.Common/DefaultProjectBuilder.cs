@@ -166,7 +166,6 @@ namespace ApiPortVS
             /// Called before any build actions have begun. This is the last chance to cancel the build before any building begins.
             /// </summary>
             /// <param name="pfCancelUpdate">Pointer to a flag indicating cancel update.</param>
-            /// <returns></returns>
             public int UpdateSolution_Begin(ref int pfCancelUpdate) => S_OK;
 
             /// <summary>

@@ -38,7 +38,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// DocId of Api's parent
+        /// Gets or sets the docId of Api's parent
         /// </summary>
         public string Parent
         {
@@ -48,9 +48,7 @@ namespace Microsoft.Fx.Portability
 
         public override bool Equals(object obj)
         {
-            var other = obj as ApiDefinition;
-
-            if (other == null)
+            if (!(obj is ApiDefinition other))
             {
                 return false;
             }

@@ -19,7 +19,6 @@ namespace ApiPortVS.Contracts
         /// <summary>
         /// Ensures that the caller is on the UI thread.
         /// </summary>
-        /// <returns></returns>
-        Task SwitchToMainThreadAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task SwitchToMainThreadAsync(CancellationToken cancellationToken = default);
     }
 }

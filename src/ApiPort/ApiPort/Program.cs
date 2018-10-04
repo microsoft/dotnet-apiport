@@ -205,8 +205,6 @@ namespace ApiPort
         /// Mono does not come installed with root certificates.  If a user runs this without configuring them,
         /// they will receive a Mono.Security.Protocol.Tls.TlsException.
         /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
         private static bool IsWebSecurityFailureOnMono(Exception ex)
         {
             if (ex.InnerException is System.Net.WebException && ex.InnerException.InnerException is System.IO.IOException && ex.InnerException.InnerException.InnerException != null)

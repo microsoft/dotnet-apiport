@@ -122,7 +122,6 @@ namespace Microsoft.Fx.Portability
         /// <param name="inputStream">Input stream to read contents from</param>
         /// <param name="outputStream">Stream to write contents to</param>
         /// <param name="leaveOpen">Whether to leave the input and output streams open after reading/writing to/from them.</param>
-        /// <returns></returns>
         public static async Task CompressAsync(this Stream inputStream, Stream outputStream, bool leaveOpen)
         {
             using (var reader = new BinaryReader(inputStream, DefaultEncoding, leaveOpen))
