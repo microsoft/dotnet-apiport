@@ -43,7 +43,9 @@ namespace ApiPortVS
                 Window window = _dte.Windows.Item(Constants.VsWindowKindOutput);
                 window.Activate();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         public async Task ClearWindowAsync()

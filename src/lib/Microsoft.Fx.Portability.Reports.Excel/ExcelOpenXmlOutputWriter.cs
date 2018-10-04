@@ -140,10 +140,13 @@ namespace Microsoft.Fx.Portability.Reports
 
             // This is the submission id
             summaryPage.AddRow(LocalizedStrings.SubmissionId, AddSubmissionLink(analysisResult.SubmissionId));
+
             // This is the description of the app
             summaryPage.AddRow(LocalizedStrings.Description, _description);
+
             // This is the target list that was submitted to the service.
             summaryPage.AddRow(LocalizedStrings.Targets, string.Join(",", targetNames));
+
             // Add an empty row.
             summaryPage.AddRow();
 
@@ -393,6 +396,7 @@ namespace Microsoft.Fx.Portability.Reports
                 {
                     rowContent.Add(nugetInfo.AssemblyInfo);
                 }
+
                 page.AddRow(rowContent.ToArray());
                 rowCount++;
             }
@@ -454,6 +458,5 @@ namespace Microsoft.Fx.Portability.Reports
             };
 #endif
         }
-
     }
 }

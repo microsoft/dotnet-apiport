@@ -36,11 +36,13 @@ namespace Microsoft.Fx.Portability
             using (var outputStream = new MemoryStream())
             {
                 using (var writer = new StreamWriter(outputStream))
-                using (var jsonWriter = new JsonTextWriter(writer))
                 {
-                    var serializer = JsonSerializer.Create(JsonSettings);
-                    serializer.Formatting = Formatting.None;
-                    serializer.Serialize(jsonWriter, data);
+                    using (var jsonWriter = new JsonTextWriter(writer))
+                    {
+                        var serializer = JsonSerializer.Create(JsonSettings);
+                        serializer.Formatting = Formatting.None;
+                        serializer.Serialize(jsonWriter, data);
+                    }
                 }
 
                 return outputStream.ToArray();
@@ -50,20 +52,24 @@ namespace Microsoft.Fx.Portability
         public static byte[] SerializeAndCompress<T>(this T data)
         {
             using (var jsonSerializedStream = new MemoryStream())
-            using (var writer = new StreamWriter(jsonSerializedStream))
-            using (var jsonWriter = new JsonTextWriter(writer))
             {
-                Serializer.Serialize(jsonWriter, data);
-                jsonWriter.Flush();
-
-                using (var outputStream = new MemoryStream())
+                using (var writer = new StreamWriter(jsonSerializedStream))
                 {
-                    using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress))
+                    using (var jsonWriter = new JsonTextWriter(writer))
                     {
-                        jsonSerializedStream.WriteTo(compressStream);
-                    }
+                        Serializer.Serialize(jsonWriter, data);
+                        jsonWriter.Flush();
 
-                    return outputStream.ToArray();
+                        using (var outputStream = new MemoryStream())
+                        {
+                            using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress))
+                            {
+                                jsonSerializedStream.WriteTo(compressStream);
+                            }
+
+                            return outputStream.ToArray();
+                        }
+                    }
                 }
             }
         }
@@ -119,15 +125,17 @@ namespace Microsoft.Fx.Portability
         public static async Task CompressAsync(this Stream inputStream, Stream outputStream, bool leaveOpen)
         {
             using (var reader = new BinaryReader(inputStream, DefaultEncoding, leaveOpen))
-            using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen))
             {
-                reader.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen))
                 {
-                    var buffer = reader.ReadBytes(DefaultBufferSize);
+                    reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                    await compressionStream.WriteAsync(buffer, 0, buffer.Length);
+                    while (reader.BaseStream.Position < reader.BaseStream.Length)
+                    {
+                        var buffer = reader.ReadBytes(DefaultBufferSize);
+
+                        await compressionStream.WriteAsync(buffer, 0, buffer.Length);
+                    }
                 }
             }
         }

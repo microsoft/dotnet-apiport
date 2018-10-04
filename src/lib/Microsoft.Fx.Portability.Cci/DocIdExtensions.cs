@@ -63,16 +63,21 @@ namespace Microsoft.Cci.Extensions
             Contract.Requires(reference != null);
 
             if (reference is ITypeReference type)
+            {
                 return type.DocId();
-
-            if (reference is ITypeMemberReference member)
+            }
+            else if (reference is ITypeMemberReference member)
+            {
                 return member.DocId();
-
-            if (reference is IUnitNamespaceReference ns)
+            }
+            else if (reference is IUnitNamespaceReference ns)
+            {
                 return ns.DocId();
-
-            if (reference is IAssemblyReference assembly)
+            }
+            else if (reference is IAssemblyReference assembly)
+            {
                 return assembly.DocId();
+            }
 
             Contract.Assert(false, string.Format(CultureInfo.CurrentUICulture, LocalizedStrings.FellThroughCasesIn, "DocIdExtensions.RefDocId()", reference.GetType()));
             return LocalizedStrings.UnknownReferenceType;
@@ -83,12 +88,18 @@ namespace Microsoft.Cci.Extensions
             HashSet<string> ids = new HashSet<string>();
 
             if (!File.Exists(docIdsFile))
+            {
                 return ids;
+            }
 
             foreach (string id in File.ReadAllLines(docIdsFile))
             {
-                if (string.IsNullOrWhiteSpace(id) || id.StartsWith("#", StringComparison.Ordinal) || id.StartsWith("//", StringComparison.Ordinal))
+                if (string.IsNullOrWhiteSpace(id)
+                    || id.StartsWith("#", StringComparison.Ordinal)
+                    || id.StartsWith("//", StringComparison.Ordinal))
+                {
                     continue;
+                }
 
                 ids.Add(id.Trim());
             }

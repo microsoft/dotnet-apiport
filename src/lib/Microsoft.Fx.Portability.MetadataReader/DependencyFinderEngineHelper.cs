@@ -29,7 +29,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 Location = file.Name,
                 AssemblyIdentity = metadataReader.FormatAssemblyInfo().ToString(),
                 FileVersion = file.Version ?? string.Empty,
-                TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty
+                TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty,
+                AssemblyReferences = ComputeAssemblyReferences(metadataReader)
             };
 
             // Get assembly info
@@ -37,6 +38,25 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             _currentAssemblyInfo = _reader.FormatAssemblyInfo(assemblyDefinition);
             _currentAssemblyName = _reader.GetString(assemblyDefinition.Name);
+        }
+
+        private IList<AssemblyReferenceInformation> ComputeAssemblyReferences(MetadataReader metadataReader)
+        {
+            var refs = new List<AssemblyReferenceInformation>();
+            foreach (var handle in _reader.AssemblyReferences)
+            {
+                try
+                {
+                    var entry = _reader.GetAssemblyReference(handle);
+
+                    refs.Add(metadataReader.FormatAssemblyInfo(entry));
+                }
+                catch (BadImageFormatException)
+                {
+                }
+            }
+
+            return refs;
         }
 
         public AssemblyInfo CallingAssembly { get; }

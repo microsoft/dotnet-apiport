@@ -48,13 +48,17 @@ namespace Microsoft.Fx.OpenXmlExtensions
         public static Table AddTable(this Worksheet worksheet, int rowStart, int rowCount, int columnStart, params string[] headers)
         {
             if (rowCount == 1)
+            {
                 rowCount++;
+            }
 
             string range = ComputeRange(rowStart, rowCount, columnStart, headers.Length);
 
             var sheetViews = worksheet.GetFirstChild<SheetViews>();
             if (sheetViews == null)
+            {
                 sheetViews = worksheet.InsertAt(new SheetViews(), 0);
+            }
 
             var sheetView = sheetViews.AppendChild(new SheetView());
             sheetView.WorkbookViewId = 0;
@@ -74,7 +78,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
             };
             var tableParts = worksheet.GetFirstChild<TableParts>();
             if (tableParts == null)
+            {
                 tableParts = worksheet.AppendChild(new TableParts());
+            }
 
             tableParts.AppendChild(tp);
 
@@ -147,7 +153,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
         {
             var sd = ws.GetFirstChild<SheetData>();
             if (sd == null)
+            {
                 sd = ws.AppendChild(new SheetData());
+            }
 
             var row = sd.AppendChild(new Row());
 
@@ -218,7 +226,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
             var sb = new StringBuilder();
 
             if (index >= Alphabet.Length)
+            {
                 sb.Append(Alphabet[(index / Alphabet.Length) - 1]);
+            }
 
             sb.Append(Alphabet[index % Alphabet.Length]);
 
@@ -290,8 +300,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         private static string ComputeRange(int rowStart, int rowCount, int columnStart, int columnCount)
         {
-            // only support up to 26 columns for now..
-
+            // Only support up to 26 columns for now..
             if (columnStart + columnCount > 26)
             {
                 throw new NotSupportedException(LocalizedStrings.TooManyColumns);

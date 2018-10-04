@@ -68,6 +68,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
 
             Assert.Equal(nugetPackageResult[0].SupportedVersions[Windows80], nugetPackageWin80Version);
             Assert.Equal(nugetPackageResult[0].SupportedVersions[NetStandard16], nugetPackageNetStandardVersion);
+
             // We did not have any packages that supported .NET Standard 2.0
             Assert.True(!nugetPackageResult[0].SupportedVersions.TryGetValue(Net11, out var value) || string.IsNullOrEmpty(value));
 

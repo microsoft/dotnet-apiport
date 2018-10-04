@@ -17,7 +17,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             var other = obj as ProjectSubmission;
 
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
 
             return string.Equals(Name, other.Name, StringComparison.Ordinal)
                 && SubmittedDate == other.SubmittedDate

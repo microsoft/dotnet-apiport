@@ -143,7 +143,6 @@ namespace Microsoft.Fx.Portability.Analysis
             sw.Stop();
 
             // Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
-
             return missingMembers;
         }
 
@@ -205,7 +204,9 @@ namespace Microsoft.Fx.Portability.Analysis
         public IEnumerable<string> FindUnreferencedAssemblies(IEnumerable<string> unreferencedAssemblies, IEnumerable<AssemblyInfo> specifiedUserAssemblies)
         {
             if (unreferencedAssemblies == null)
+            {
                 yield break;
+            }
 
             // Find the unreferenced assemblies that are not framework assemblies.
             var userUnreferencedAssemblies = unreferencedAssemblies.AsParallel().
@@ -217,11 +218,15 @@ namespace Microsoft.Fx.Portability.Analysis
             {
                 // if somehow a null made it through...
                 if (userAsm == null)
+                {
                     continue;
+                }
 
                 // If the unresolved assembly was not actually specified, we need to tell the user that.
                 if (specifiedUserAssemblies != null && specifiedUserAssemblies.Any(ua => ua != null && StringComparer.OrdinalIgnoreCase.Equals(ua.AssemblyIdentity, userAsm)))
+                {
                     continue;
+                }
 
                 yield return userAsm;
             }
@@ -292,6 +297,7 @@ namespace Microsoft.Fx.Portability.Analysis
                         break;
                     }
                 }
+
                 if (supportedOnAllTargets)
                 {
                     yield return assembly.AssemblyIdentity;
@@ -312,6 +318,7 @@ namespace Microsoft.Fx.Portability.Analysis
                     filteredDependencies.Add(dependency.Key, newList.ToList());
                 }
             }
+
             return filteredDependencies;
         }
 

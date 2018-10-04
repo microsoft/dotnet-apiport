@@ -101,7 +101,8 @@ namespace Microsoft.Fx.Portability.Tests
                 Suggestion = "Be aware that Application.FilterMessage will no longer throw for the re-entrant IMessageFilter.PreFilterMessage behavior described above. This only affects applications targeting the .NET Framework 4.6.1.",
                 Categories = new List<string> { "Windows Forms" },
                 Link = "https://msdn.microsoft.com/en-us/library/mt620031%28v=vs.110%29.aspx#WinForms",
-                ApplicableApis = new List<string> {
+                ApplicableApis = new List<string>
+                {
                     "M:System.Windows.Forms.Application.FilterMessage(System.Windows.Forms.Message@)"
                 },
                 Notes = "It's unclear if this one will be better analyzed by Application.FilterMessage callers (who would have seen the exception previously)"
@@ -168,10 +169,10 @@ namespace Microsoft.Fx.Portability.Tests
         #endregion
 
         #region Negative Test Cases
+
         // This is intentionally empty as the breaking change parser is never expected
         // to throw. In the case of invalid/corrupt inputs, it will do its best to return
         // partially correct breaking changes or, in the worst case, an empty set of breaks.
-
         #endregion
 
         #region Helper Methods
@@ -290,7 +291,8 @@ namespace Microsoft.Fx.Portability.Tests
             IsBuildTime = false,
             SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Available,
             Suggestion = "If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.",
-            ApplicableApis = new[] {
+            ApplicableApis = new[]
+            {
                 "M:System.Uri.#ctor(System.String)",
                 "M:System.Uri.#ctor(System.String,System.Boolean)",
                 "M:System.Uri.#ctor(System.String,System.UriKind)",

@@ -16,6 +16,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 {
                     return 0;
                 }
+
                 return -1;
             }
             else
@@ -24,6 +25,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 {
                     return 1;
                 }
+
                 if (string.Equals(x.PackageId, y.PackageId, StringComparison.Ordinal))
                 {
                     return string.Compare(x.AssemblyInfo, y.AssemblyInfo, StringComparison.Ordinal);

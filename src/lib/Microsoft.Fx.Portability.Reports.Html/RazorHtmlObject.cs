@@ -76,17 +76,19 @@ namespace Microsoft.Fx.Portability.Reports
         {
             Dictionary<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>> ret = new Dictionary<AssemblyInfo, IDictionary<BreakingChange, IEnumerable<MemberInfo>>>();
 
-            foreach (BreakingChangeDependency b in breakingChanges ?? Enumerable.Empty<BreakingChangeDependency>())
+            foreach (var b in breakingChanges ?? Enumerable.Empty<BreakingChangeDependency>())
             {
                 // Add breaking changes, grouped by assembly, each with a collection of MemberInfos that trigger the break
                 if (!ret.ContainsKey(b.DependantAssembly))
                 {
                     ret.Add(b.DependantAssembly, new Dictionary<BreakingChange, IEnumerable<MemberInfo>>());
                 }
+
                 if (!ret[b.DependantAssembly].ContainsKey(b.Break))
                 {
                     ret[b.DependantAssembly].Add(b.Break, new List<MemberInfo>());
                 }
+
                 if (!ret[b.DependantAssembly][b.Break].Contains(b.Member))
                 {
                     (ret[b.DependantAssembly][b.Break] as IList<MemberInfo>).Add(b.Member);

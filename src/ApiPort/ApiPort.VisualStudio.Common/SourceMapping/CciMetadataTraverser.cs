@@ -52,7 +52,6 @@ namespace ApiPortVS.SourceMapping
         //  public class Foo {}
         //
         // The 'Serializable' (Which is not supported on most platforms) is not found
-
         public override void Visit(IMethodBody method)
         {
             var calls = method.Operations

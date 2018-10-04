@@ -104,7 +104,8 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var assemblyToTest = TestAssembly.Create("FilterApis.cs", _output);
 
             var expected = FilterApisDocIds
-                .Concat(new[] {
+                .Concat(new[]
+                {
                     "M:System.Uri.TryCreate(System.String,System.UriKind,System.Uri@)",
                     "T:System.Uri",
                     "T:System.UriKind"

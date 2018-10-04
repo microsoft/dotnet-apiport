@@ -53,6 +53,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                     });
                 }
             }
+
             _innerList = merged;
         }
 

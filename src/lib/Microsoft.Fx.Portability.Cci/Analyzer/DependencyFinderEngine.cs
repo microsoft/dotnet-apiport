@@ -95,7 +95,9 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         callingAssembly = e.Referrer.GetAssemblyReference().AssemblyIdentity.Format();
                     }
-                    catch { }
+                    catch
+                    {
+                    }
 
                     HashSet<string> newValue = new HashSet<string>
                     {
@@ -117,7 +119,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                 if (cciAssembly == null)
                 {
                     _assembliesWithError.Add(assemblyLocation);
-                    // error.
                     yield break;
                 }
 
@@ -139,9 +140,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var reference in cciAssembly.GetTypeMemberReferences())
                 {
                     if (reference.ContainingType.GetAssemblyReference() == null)
+                    {
                         continue;
+                    }
 
                     string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
+
                     // return the type
                     yield return new MemberDependency()
                     {
@@ -164,6 +168,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var refence in cciAssembly.GetTypeReferences())
                 {
                     string definedIn = refence.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
+
                     // return the type
                     yield return new MemberDependency()
                     {
