@@ -103,8 +103,6 @@ namespace ApiPortVS
                 OleMenuCommand solutionContextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, solutionContextMenuOptionsCmdId);
                 solutionContextMenuOptionsItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuOptionsItem);
-
-                return;
             }
         }
 

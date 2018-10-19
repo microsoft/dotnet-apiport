@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using static Microsoft.VisualStudio.VSConstants;
 
 namespace ApiPortVS
@@ -136,7 +137,7 @@ namespace ApiPortVS
 
             _container = builder.Build();
         }
-        
+
         public void Dispose()
         {
             _container.Dispose();
