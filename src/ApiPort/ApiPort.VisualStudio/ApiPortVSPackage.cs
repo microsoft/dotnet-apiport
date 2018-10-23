@@ -11,22 +11,27 @@ using System;
 using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ApiPortVS
 {
     [Guid(Guids.ApiPortVSPkgString)]
     [InstalledProductRegistration("#110", "#112", "1.1.10808.0", IconResourceID = 400)] // Help->About info
-    [PackageRegistration(UseManagedResourcesOnly = true)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)] // load when a solution is opened
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)] // load when a solution is opened
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "General", 110, 113, true)]
     [ProvideToolWindow(typeof(AnalysisOutputToolWindow))]
-    public class ApiPortVSPackage : Package, IResultToolbar
+    [ProvideService(typeof(ApiPortVSPackage), IsAsyncQueryable = true)]
+    public class ApiPortVSPackage : AsyncPackage, IResultToolbar
     {
         private static ServiceProvider _serviceProvider;
         private readonly AssemblyRedirectResolver _assemblyResolver;
 
         internal static IServiceProvider LocalServiceProvider { get { return _serviceProvider; } }
+
+        internal static IAsyncServiceProvider LocalServiceProviderAsync { get { return _serviceProvider; } }
 
         public ApiPortVSPackage()
             : base()
@@ -51,13 +56,13 @@ namespace ApiPortVS
         }
 
         // Called after constructor when package is sited
-        protected override void Initialize()
+        protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await base.InitializeAsync(cancellationToken, progress);
 
-            if (GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
+            if (await GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
             {
-                var menuInitializer = LocalServiceProvider.GetService(typeof(AnalyzeMenu)) as AnalyzeMenu;
+                var menuInitializer = await LocalServiceProviderAsync.GetServiceAsync(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
                 // Add menu items for Analyze toolbar menu
                 CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeMenuItem);

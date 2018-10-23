@@ -21,12 +21,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 using static Microsoft.VisualStudio.VSConstants;
 
 namespace ApiPortVS
 {
-    internal sealed class ServiceProvider : IDisposable, IServiceProvider
+    internal sealed class ServiceProvider : IDisposable, IAsyncServiceProvider, IServiceProvider
     {
         private const string DefaultEndpoint = @"https://portability.dot.net/";
         private static readonly DirectoryInfo AssemblyDirectory = new FileInfo(typeof(ServiceProvider).Assembly.Location).Directory;
@@ -137,11 +138,6 @@ namespace ApiPortVS
             _container = builder.Build();
         }
 
-        public object GetService(Type serviceType)
-        {
-            return _container.Resolve(serviceType);
-        }
-
         public void Dispose()
         {
             _container.Dispose();
@@ -213,6 +209,16 @@ namespace ApiPortVS
             }
 
             return new OutputViewModel(validReports.Select(x => x.FullName));
+        }
+
+        Task<object> IAsyncServiceProvider.GetServiceAsync(Type serviceType)
+        {
+            return System.Threading.Tasks.Task.FromResult<object>(_container.Resolve(serviceType));
+        }
+
+        public object GetService(Type serviceType)
+        {
+            return _container.Resolve(serviceType);
         }
     }
 }
