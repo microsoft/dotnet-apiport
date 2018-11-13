@@ -3,7 +3,6 @@ Remove usage.
 
 ### Affected APIs
 * `T:System.AccessViolationException`
-* `T:System.AppDomain`
 * `T:System.AppDomainManager`
 * `T:System.AppDomainManagerInitializationOptions`
 * `T:System.AppDomainSetup`
