@@ -9,9 +9,13 @@ namespace Microsoft.Fx.Portability.Reports.Html
     public class CompatibilityResultsModel
     {
         public string Name { get; }
+
         public string Description { get; }
+
         public IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> Breaks { get; }
+
         public int WarningThreshold { get; }
+
         public int ErrorThreshold { get; }
 
         public CompatibilityResultsModel(string name, string description, IEnumerable<KeyValuePair<BreakingChange, IEnumerable<MemberInfo>>> breaks, int warningThreshold, int errorThreshold)

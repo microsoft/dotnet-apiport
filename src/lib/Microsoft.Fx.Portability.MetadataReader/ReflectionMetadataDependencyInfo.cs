@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Analyzer.Exceptions;
 using Microsoft.Fx.Portability.Analyzer.Resources;
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
@@ -107,10 +106,9 @@ namespace Microsoft.Fx.Portability.Analyzer
             });
 
             // Clear out unresolved dependencies that were resolved during processing
-            ICollection<string> collection;
             foreach (var assembly in _userAssemblies)
             {
-                _unresolvedAssemblies.TryRemove(assembly.AssemblyIdentity, out collection);
+                _unresolvedAssemblies.TryRemove(assembly.AssemblyIdentity, out _);
             }
         }
 
@@ -119,27 +117,36 @@ namespace Microsoft.Fx.Portability.Analyzer
             try
             {
                 using (var stream = file.OpenRead())
-                using (var peFile = new PEReader(stream))
                 {
-                    var metadataReader = GetMetadataReader(peFile);
+                    using (var peFile = new PEReader(stream))
+                    {
+                        var metadataReader = GetMetadataReader(peFile);
 
-                    AddReferencedAssemblies(metadataReader);
+                        AddReferencedAssemblies(metadataReader);
 
-                    var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
-                    helper.ComputeData();
+                        var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
+                        helper.ComputeData();
 
-                    // Remember this assembly as a user assembly.
-                    _userAssemblies.Add(helper.CallingAssembly);
+                        // Remember this assembly as a user assembly.
+                        _userAssemblies.Add(helper.CallingAssembly);
 
-                    return helper.MemberDependency;
+                        return helper.MemberDependency;
+                    }
                 }
             }
             catch (Exception exc)
             {
                 // InvalidPEAssemblyExceptions may be expected and indicative of a non-PE file
-                if (exc is InvalidPEAssemblyException) throw;
+                if (exc is InvalidPEAssemblyException)
+                {
+                    throw;
+                }
+
                 // Occurs when we cannot find the System.Object assembly.
-                if (exc is SystemObjectNotFoundException) throw;
+                if (exc is SystemObjectNotFoundException)
+                {
+                    throw;
+                }
 
                 // Other exceptions are unexpected, though, and will benefit from
                 // more details on the scenario that hit them
@@ -148,11 +155,10 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// Add all assemblies that were referenced to the referenced assembly dictionary.  By default, 
-        /// we add every referenced assembly and will remove the ones that are actually referenced when 
+        /// Add all assemblies that were referenced to the referenced assembly dictionary.  By default,
+        /// we add every referenced assembly and will remove the ones that are actually referenced when
         /// all submitted assemblies are processed.
         /// </summary>
-        /// <param name="metadataReader"></param>
         private void AddReferencedAssemblies(MetadataReader metadataReader)
         {
             var assemblyReferences = metadataReader.AssemblyReferences
@@ -182,8 +188,6 @@ namespace Microsoft.Fx.Portability.Analyzer
         /// Attempt to get a MetadataReader.  Call this method instead of directly on PEReader so that
         /// exceptions thrown by it are caught and propagated as a known InvalidPEAssemblyException
         /// </summary>
-        /// <param name="peReader"></param>
-        /// <returns></returns>
         private static MetadataReader GetMetadataReader(PEReader peReader)
         {
             try
@@ -220,11 +224,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             public void CopyTo(T[] array, int arrayIndex) => Keys.CopyTo(array, arrayIndex);
 
-            public bool Remove(T item)
-            {
-                byte b;
-                return TryRemove(item, out b);
-            }
+            public bool Remove(T item) => TryRemove(item, out _);
 
             IEnumerator IEnumerable.GetEnumerator() => Keys.GetEnumerator();
 

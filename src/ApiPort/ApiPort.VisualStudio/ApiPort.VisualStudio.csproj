@@ -21,6 +21,11 @@
     <DeployExtension>false</DeployExtension>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseCodebase>true</UseCodebase>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>15.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Most projects will just inherit this from Directory.Build.props, but since this contains WPF, a temp project is created which causes issues with MSBuildProjectName -->
@@ -94,7 +99,6 @@
     </Compile>
     <Compile Include="Guids.cs" />
     <Compile Include="OutputWindowWriter.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ApiPortVSPackage.cs" />
     <Compile Include="PkgCmdID.cs" />
   </ItemGroup>

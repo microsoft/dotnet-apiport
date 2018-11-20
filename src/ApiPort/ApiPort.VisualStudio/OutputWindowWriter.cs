@@ -40,10 +40,12 @@ namespace ApiPortVS
 
             try
             {
-                Window window = _dte.Windows.Item(Constants.vsWindowKindOutput);
+                Window window = _dte.Windows.Item(Constants.VsWindowKindOutput);
                 window.Activate();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         public async Task ClearWindowAsync()
@@ -76,7 +78,7 @@ namespace ApiPortVS
             /// <see cref="EnvDTE.Constants.vsWindowKindOutput"/>
             /// https://msdn.microsoft.com/en-us/library/envdte.constants.vswindowkindoutput.aspx?f=255&MSPPError=-2147217396
             /// </summary>
-            public const string vsWindowKindOutput = "{34E76E81-EE4A-11D0-AE2E-00A0C90FFFC3}";
+            public const string VsWindowKindOutput = "{34E76E81-EE4A-11D0-AE2E-00A0C90FFFC3}";
         }
     }
 }

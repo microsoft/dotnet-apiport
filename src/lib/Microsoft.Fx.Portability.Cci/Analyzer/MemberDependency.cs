@@ -17,16 +17,20 @@ namespace Microsoft.Fx.Portability.Analyzer
         private string _typeDocId;
 
         /// <summary>
-        /// This represents the assembly that is calling the member
+        /// Gets or sets the assembly that is calling the member
         /// </summary>
         public AssemblyInfo CallingAssembly { get; set; }
 
         /// <summary>
-        /// This represents the assembly in which the member is defined
+        /// Gets or sets the assembly in which the member is defined
         /// </summary>
         public string DefinedInAssemblyIdentity
         {
-            get { return _definedInAssemblyIdentity; }
+            get
+            {
+                return _definedInAssemblyIdentity;
+            }
+
             set
             {
                 _definedInAssemblyIdentity = value;
@@ -36,7 +40,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public string MemberDocId
         {
-            get { return _memberDocId; }
+            get
+            {
+                return _memberDocId;
+            }
+
             set
             {
                 _memberDocId = value;
@@ -46,7 +54,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public string TypeDocId
         {
-            get { return _typeDocId; }
+            get
+            {
+                return _typeDocId;
+            }
+
             set
             {
                 _typeDocId = value;
@@ -61,9 +73,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override bool Equals(object obj)
         {
-            MemberDependency other = obj as MemberDependency;
+            var other = obj as MemberDependency;
             if (other == null)
+            {
                 return false;
+            }
 
             return StringComparer.Ordinal.Equals(MemberDocId, other.MemberDocId) &&
                     StringComparer.Ordinal.Equals(DefinedInAssemblyIdentity, other.DefinedInAssemblyIdentity) &&
@@ -77,6 +91,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 _hashCode = ((DefinedInAssemblyIdentity ?? string.Empty) + (MemberDocId ?? string.Empty)).GetHashCode() ^ CallingAssembly.GetHashCode();
                 _hashComputed = true;
             }
+
             return _hashCode;
         }
     }

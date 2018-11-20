@@ -43,6 +43,7 @@ namespace ApiPort.Proxy
             {
                 return _bypassList;
             }
+
             set
             {
                 _bypassList = value ?? new string[] { };
@@ -61,7 +62,7 @@ namespace ApiPort.Proxy
 
             if (_regExBypassList != null && _regExBypassList.Length > 0)
             {
-                var normalizedUri = uri.Scheme + "://" + uri.Host + ((!uri.IsDefaultPort) ? (":" + uri.Port) : "");
+                var normalizedUri = uri.Scheme + "://" + uri.Host + ((!uri.IsDefaultPort) ? (":" + uri.Port) : string.Empty);
                 return _regExBypassList.Any(r => r.IsMatch(normalizedUri));
             }
 
@@ -85,7 +86,7 @@ namespace ApiPort.Proxy
 #else
                 return content.Replace(oldValue, newValue);
 #endif
-            };
+            }
 
             return Replace(
                     Replace(Regex.Escape(pattern), @"\*", ".*?"),

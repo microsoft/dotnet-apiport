@@ -16,7 +16,7 @@ namespace Microsoft.Fx.Portability
     public static class DataExtensions
     {
         private const int DefaultBufferSize = 1024;
-        private static readonly Encoding s_defaultEncoding = Encoding.UTF8;
+        private static readonly Encoding DefaultEncoding = Encoding.UTF8;
 
         public static JsonSerializerSettings JsonSettings { get; } = new JsonSerializerSettings
         {
@@ -36,11 +36,13 @@ namespace Microsoft.Fx.Portability
             using (var outputStream = new MemoryStream())
             {
                 using (var writer = new StreamWriter(outputStream))
-                using (var jsonWriter = new JsonTextWriter(writer))
                 {
-                    var serializer = JsonSerializer.Create(JsonSettings);
-                    serializer.Formatting = Formatting.None;
-                    serializer.Serialize(jsonWriter, data);
+                    using (var jsonWriter = new JsonTextWriter(writer))
+                    {
+                        var serializer = JsonSerializer.Create(JsonSettings);
+                        serializer.Formatting = Formatting.None;
+                        serializer.Serialize(jsonWriter, data);
+                    }
                 }
 
                 return outputStream.ToArray();
@@ -50,20 +52,24 @@ namespace Microsoft.Fx.Portability
         public static byte[] SerializeAndCompress<T>(this T data)
         {
             using (var jsonSerializedStream = new MemoryStream())
-            using (var writer = new StreamWriter(jsonSerializedStream))
-            using (var jsonWriter = new JsonTextWriter(writer))
             {
-                Serializer.Serialize(jsonWriter, data);
-                jsonWriter.Flush();
-
-                using (var outputStream = new MemoryStream())
+                using (var writer = new StreamWriter(jsonSerializedStream))
                 {
-                    using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress))
+                    using (var jsonWriter = new JsonTextWriter(writer))
                     {
-                        jsonSerializedStream.WriteTo(compressStream);
-                    }
+                        Serializer.Serialize(jsonWriter, data);
+                        jsonWriter.Flush();
 
-                    return outputStream.ToArray();
+                        using (var outputStream = new MemoryStream())
+                        {
+                            using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress))
+                            {
+                                jsonSerializedStream.WriteTo(compressStream);
+                            }
+
+                            return outputStream.ToArray();
+                        }
+                    }
                 }
             }
         }
@@ -76,7 +82,7 @@ namespace Microsoft.Fx.Portability
         /// <param name="leaveOpen">true to leave the stream open; false otherwise</param>
         public static void Serialize<T>(this T data, Stream outputStream, bool leaveOpen)
         {
-            using (var writer = new StreamWriter(outputStream, s_defaultEncoding, DefaultBufferSize, leaveOpen))
+            using (var writer = new StreamWriter(outputStream, DefaultEncoding, DefaultBufferSize, leaveOpen))
             {
                 Serializer.Serialize(writer, data);
             }
@@ -116,19 +122,20 @@ namespace Microsoft.Fx.Portability
         /// <param name="inputStream">Input stream to read contents from</param>
         /// <param name="outputStream">Stream to write contents to</param>
         /// <param name="leaveOpen">Whether to leave the input and output streams open after reading/writing to/from them.</param>
-        /// <returns></returns>
         public static async Task CompressAsync(this Stream inputStream, Stream outputStream, bool leaveOpen)
         {
-            using (var reader = new BinaryReader(inputStream, s_defaultEncoding, leaveOpen))
-            using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen))
+            using (var reader = new BinaryReader(inputStream, DefaultEncoding, leaveOpen))
             {
-                reader.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                using (var compressionStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen))
                 {
-                    var buffer = reader.ReadBytes(DefaultBufferSize);
+                    reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                    await compressionStream.WriteAsync(buffer, 0, buffer.Length);
+                    while (reader.BaseStream.Position < reader.BaseStream.Length)
+                    {
+                        var buffer = reader.ReadBytes(DefaultBufferSize);
+
+                        await compressionStream.WriteAsync(buffer, 0, buffer.Length);
+                    }
                 }
             }
         }

@@ -11,27 +11,33 @@ using System;
 using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ApiPortVS
 {
     [Guid(Guids.ApiPortVSPkgString)]
     [InstalledProductRegistration("#110", "#112", "1.1.10808.0", IconResourceID = 400)] // Help->About info
-    [PackageRegistration(UseManagedResourcesOnly = true)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)] // load when a solution is opened
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)] // load when a solution is opened
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionsPage), ".NET Portability Analyzer", "General", 110, 113, true)]
     [ProvideToolWindow(typeof(AnalysisOutputToolWindow))]
-    public class ApiPortVSPackage : Package, IResultToolbar
+    [ProvideService(typeof(ApiPortVSPackage), IsAsyncQueryable = true)]
+    public class ApiPortVSPackage : AsyncPackage, IResultToolbar
     {
-        private static ServiceProvider s_serviceProvider;
+        private static ServiceProvider _serviceProvider;
         private readonly AssemblyRedirectResolver _assemblyResolver;
 
-        internal static IServiceProvider LocalServiceProvider { get { return s_serviceProvider; } }
+        internal static IServiceProvider LocalServiceProvider { get { return _serviceProvider; } }
 
-        public ApiPortVSPackage() : base()
+        internal static IAsyncServiceProvider LocalServiceProviderAsync { get { return _serviceProvider; } }
+
+        public ApiPortVSPackage()
+            : base()
         {
-            s_serviceProvider = new ServiceProvider(this);
-            _assemblyResolver = s_serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
+            _serviceProvider = new ServiceProvider(this);
+            _assemblyResolver = _serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
 
             if (_assemblyResolver == default(AssemblyRedirectResolver))
             {
@@ -43,57 +49,57 @@ namespace ApiPortVS
 
         protected override void Dispose(bool disposing)
         {
-            s_serviceProvider.Dispose();
+            _serviceProvider.Dispose();
             AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
 
             base.Dispose(disposing);
         }
 
         // Called after constructor when package is sited
-        protected override void Initialize()
+        protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await base.InitializeAsync(cancellationToken, progress);
 
-            if (GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
+            if (await GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
             {
-                var menuInitializer = LocalServiceProvider.GetService(typeof(AnalyzeMenu)) as AnalyzeMenu;
+                var menuInitializer = await LocalServiceProviderAsync.GetServiceAsync(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
                 // Add menu items for Analyze toolbar menu
-                CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeMenuItem);
+                CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeMenuItem);
                 MenuCommand menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, anazlyMenuCommandID);
                 mcs.AddCommand(menuItem);
 
-                CommandID analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeOptionsMenuItem);
+                CommandID analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeOptionsMenuItem);
                 MenuCommand analyzeMenuOptionsItem = new MenuCommand(ShowOptionsPage, analyzeMenuOptionsCommandID);
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
-                CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdIDList.CmdIdAnalyzeToolbarMenuItem);
-                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, __) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
+                CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeToolbarMenuItem);
+                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, e) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 // Add menu items for Project context menus
-                CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextMenuItem);
-                OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
+                CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextMenuItem);
+                OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
 
-                CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextDependentsMenuItem);
-                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, __) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
+                CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextDependentsMenuItem);
+                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
                 contextMenuDependentsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuDependenciesItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuDependentsItem);
 
-                CommandID projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdProjectContextOptionsMenuItem);
+                CommandID projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextOptionsMenuItem);
                 OleMenuCommand contextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, projectContextMenuOptionsCmdId);
                 contextMenuOptionsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuOptionsItem);
 
                 // Add menu items for Solution context menus
-                CommandID solutionContextMenuCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdSolutionContextMenuItem);
+                CommandID solutionContextMenuCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextMenuItem);
                 OleMenuCommand solutionContextMenuItem = new OleMenuCommand(menuInitializer.SolutionContextMenuItemCallback, solutionContextMenuCmdId);
                 solutionContextMenuItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuItem);
 
-                CommandID solutionContextMenuOptionsCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdIDList.CmdIdSolutionContextOptionsMenuItem);
+                CommandID solutionContextMenuOptionsCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextOptionsMenuItem);
                 OleMenuCommand solutionContextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, solutionContextMenuOptionsCmdId);
                 solutionContextMenuOptionsItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuOptionsItem);
@@ -107,7 +113,7 @@ namespace ApiPortVS
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
-            if ((null == window) || (null == window.Frame))
+            if ((window == null) || (window.Frame == null))
             {
                 throw new NotSupportedException(LocalizedStrings.CannotCreateToolWindow);
             }

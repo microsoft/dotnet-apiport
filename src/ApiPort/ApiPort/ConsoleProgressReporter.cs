@@ -105,8 +105,7 @@ namespace ApiPort
         private sealed class ConsoleProgressTask : IProgressTask
         {
             private static readonly TimeSpan MaxWaitTime = TimeSpan.FromMinutes(10);
-
-            private readonly static char[] s_chars = new char[] { '-', '\\', '|', '/' };
+            private static readonly char[] InProgressCharacters = new char[] { '-', '\\', '|', '/' };
 
             private readonly Task _animationTask;
 
@@ -162,6 +161,7 @@ namespace ApiPort
                 {
                     return;
                 }
+
                 _animationResetEvent.Reset();
             }
 

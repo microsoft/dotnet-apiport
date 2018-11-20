@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability.Proxy
         Proxy,
 
         /// <summary>
-        /// Indicates that the remote server rejected the previous request as unauthorized. This 
+        /// Indicates that the remote server rejected the previous request as unauthorized. This
         /// suggests that the server does not know who the caller is (i.e. the caller is not
         /// authenticated).
         /// </summary>

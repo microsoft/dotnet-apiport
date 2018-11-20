@@ -14,8 +14,8 @@ namespace Microsoft.Fx.Portability.Proxy
     public interface IProxyProvider
     {
         /// <summary>
-        /// True if it can get updated credentials (if the existing ones for
-        /// the proxy are not sufficient).
+        /// Gets a value indicating whether it can get updated credentials (if
+        /// the existing ones for the proxy are not sufficient).
         /// </summary>
         bool CanUpdateCredentials { get; }
 

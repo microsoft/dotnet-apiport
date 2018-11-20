@@ -3,22 +3,23 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.Fx.Portability.Reports.Html;
+using Microsoft.Fx.Portability.Reports.Html.Resources;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using RazorEngine.Text;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System;
-using Microsoft.Fx.Portability.Reports.Html;
-using Microsoft.Fx.Portability.Reports.Html.Resources;
+
 using static System.FormattableString;
 
 namespace Microsoft.Fx.Portability.Reports
 {
     public class HtmlReportWriter : IReportWriter
     {
-        private static readonly IRazorEngineService s_razorService = CreateService();
+        private static readonly IRazorEngineService RazorService = CreateService();
 
         private readonly ITargetMapper _targetMapper;
         private static readonly ResultFormatInformation _formatInformation = new ResultFormatInformation
@@ -43,7 +44,7 @@ namespace Microsoft.Fx.Portability.Reports
             {
                 var reportObject = new RazorHtmlObject(response, _targetMapper);
                 var mainTemplate = Resolve(ReportTemplateName);
-                var razor = s_razorService.RunCompile(mainTemplate, ReportTemplateName, typeof(RazorHtmlObject), reportObject);
+                var razor = RazorService.RunCompile(mainTemplate, ReportTemplateName, typeof(RazorHtmlObject), reportObject);
 
                 writer.Write(razor);
             }
@@ -95,7 +96,7 @@ namespace Microsoft.Fx.Portability.Reports
             public IEncodedString Partial(string name)
             {
                 var template = Resolve(name);
-                var razor = s_razorService.RunCompile(template, name);
+                var razor = RazorService.RunCompile(template, name);
 
                 return Raw(razor);
             }
@@ -103,7 +104,7 @@ namespace Microsoft.Fx.Portability.Reports
             public IEncodedString Partial<T>(string name, T model)
             {
                 var template = Resolve(name);
-                var razor = s_razorService.RunCompile(template, name, typeof(T), model);
+                var razor = RazorService.RunCompile(template, name, typeof(T), model);
 
                 return Raw(razor);
             }
@@ -122,7 +123,7 @@ namespace Microsoft.Fx.Portability.Reports
 
             public IEncodedString BreakingChangeCountCell(int breaks, int warningThreshold, int errorThreshold)
             {
-                var className = "";
+                var className = string.Empty;
                 if (breaks <= warningThreshold)
                 {
                     className = "NoBreakingChanges";

@@ -46,13 +46,12 @@ namespace ApiPortVS.SourceMapping
         }
 
         // TODO: Add support for fields, properties, type definitions and attributes as well
-        // 
+        //
         // Example:
         //  [Serializable]
         //  public class Foo {}
         //
         // The 'Serializable' (Which is not supported on most platforms) is not found
-
         public override void Visit(IMethodBody method)
         {
             var calls = method.Operations

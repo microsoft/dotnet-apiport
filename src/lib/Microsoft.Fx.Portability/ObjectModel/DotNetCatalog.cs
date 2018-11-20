@@ -9,9 +9,13 @@ namespace Microsoft.Fx.Portability.ObjectModel
     public class DotNetCatalog
     {
         public DateTimeOffset LastModified { get; set; }
+
         public string BuiltBy { get; set; }
+
         public IReadOnlyCollection<ApiInfoStorage> Apis { get; set; }
+
         public IReadOnlyCollection<string> FrameworkAssemblyIdenties { get; set; }
+
         public IReadOnlyCollection<TargetInfo> SupportedTargets { get; set; }
     }
 }

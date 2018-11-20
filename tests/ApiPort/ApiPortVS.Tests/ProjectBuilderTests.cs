@@ -1,15 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Threading.Tasks;
+using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
-using Xunit;
 using System.Collections.Generic;
-using ApiPortVS.Contracts;
+using Xunit;
 
 namespace ApiPortVS.Tests
 {
@@ -23,16 +21,15 @@ namespace ApiPortVS.Tests
             var mapper = Substitute.For<IProjectMapper>();
             var threading = Substitute.For<IVSThreadingService>();
             var projectBuilder = new DefaultProjectBuilder(buildManager, threading, mapper);
-            uint pdwCookie;
 
             var result = projectBuilder.BuildAsync(new List<Project> { project }).Result;
 
             Assert.False(result);
 
-            // Checking that we are not listening to build events 
+            // Checking that we are not listening to build events
             // if starting a build was not successful
             buildManager.DidNotReceiveWithAnyArgs()
-                .AdviseUpdateSolutionEvents(null, out pdwCookie);
+                .AdviseUpdateSolutionEvents(null, out var pdwCookie);
         }
 
         [Fact]
@@ -44,13 +41,11 @@ namespace ApiPortVS.Tests
             var threading = Substitute.For<IVSThreadingService>();
 
             var projectBuilder = new DefaultProjectBuilder(buildManager, threading, mapper);
-            uint pdwCookie;
-
             var buildTask = projectBuilder.BuildAsync(new List<Project> { project });
 
             // Checking that we are subscribed to build events
             buildManager.ReceivedWithAnyArgs(1)
-                .AdviseUpdateSolutionEvents(Arg.Any<IVsUpdateSolutionEvents>(), out pdwCookie);
+                .AdviseUpdateSolutionEvents(Arg.Any<IVsUpdateSolutionEvents>(), out var pdwCookie);
         }
 
         private static IVsSolutionBuildManager2 BuildManagerWhichReturns(int returnForUpdate)
@@ -59,9 +54,7 @@ namespace ApiPortVS.Tests
             buildManager.StartUpdateSpecificProjectConfigurations(default, null, null, null, null, null, default, default)
                         .ReturnsForAnyArgs(returnForUpdate);
 
-            uint cookie;
-
-            buildManager.AdviseUpdateSolutionEvents(null, out cookie)
+            buildManager.AdviseUpdateSolutionEvents(null, out var cookie)
                 .ReturnsForAnyArgs(4);
 
             return buildManager;

@@ -20,6 +20,7 @@ namespace Microsoft.Fx.Portability.Reports
         internal static class ColumnWidths
         {
             internal const double Targets = 15;
+
             internal static class SummaryPage
             {
                 internal const double AssemblyName = 40;
@@ -126,7 +127,7 @@ namespace Microsoft.Fx.Portability.Reports
                 CellFormats = new CellFormats(format1, format2),
                 Fills = new Fills(fill1, fill2),
                 CellStyles = new CellStyles(cellstyle),
-                Borders = new Borders(border)
+                Borders = new Borders(border),
             };
 
             wb.AddNewPart<WorkbookStylesPart>();
@@ -139,10 +140,13 @@ namespace Microsoft.Fx.Portability.Reports
 
             // This is the submission id
             summaryPage.AddRow(LocalizedStrings.SubmissionId, AddSubmissionLink(analysisResult.SubmissionId));
+
             // This is the description of the app
             summaryPage.AddRow(LocalizedStrings.Description, _description);
+
             // This is the target list that was submitted to the service.
             summaryPage.AddRow(LocalizedStrings.Targets, string.Join(",", targetNames));
+
             // Add an empty row.
             summaryPage.AddRow();
 
@@ -160,7 +164,7 @@ namespace Microsoft.Fx.Portability.Reports
                     var summaryData = new List<object>() { analysisResult.GetNameForAssemblyInfo(item.SourceAssembly), item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
 
                     // TODO: figure out how to add formatting to cells to show percentages.
-                    summaryData.AddRange(item.UsageData.Select(pui => (object)(Math.Round(pui.PortabilityIndex * 100.0, 2))));
+                    summaryData.AddRange(item.UsageData.Select(pui => (object)Math.Round(pui.PortabilityIndex * 100.0, 2)));
                     summaryPage.AddRow(summaryData.ToArray());
                     tableRowCount++;
                 }
@@ -205,7 +209,7 @@ namespace Microsoft.Fx.Portability.Reports
                 }
                 else
                 {
-                    missingAssembliesPage.AddRow(unresolvedAssemblyPair.Key, String.Empty, LocalizedStrings.UnresolvedUsedAssembly);
+                    missingAssembliesPage.AddRow(unresolvedAssemblyPair.Key, string.Empty, LocalizedStrings.UnresolvedUsedAssembly);
                 }
             }
 
@@ -294,17 +298,19 @@ namespace Microsoft.Fx.Portability.Reports
             detailsPage.AddTable(1, detailsRows, 1, detailsPageHeader.ToArray());
 
             // Generate the columns
-            List<double> columnWidths = new List<double>();
-            columnWidths.Add(ColumnWidths.DetailsPage.TargetType); // Target type
-            columnWidths.Add(ColumnWidths.DetailsPage.TargetMember); // Target member
-            columnWidths.Add(ColumnWidths.DetailsPage.AssemblyName); // Assembly name
+            var columnWidths = new List<double>
+            {
+                ColumnWidths.DetailsPage.TargetType, // Target type
+                ColumnWidths.DetailsPage.TargetMember, // Target member
+                ColumnWidths.DetailsPage.AssemblyName // Assembly name
+            };
             columnWidths.AddRange(Enumerable.Repeat(ColumnWidths.Targets, analysisResult.Targets.Count)); // Targets
             columnWidths.Add(ColumnWidths.DetailsPage.RecommendedChanges); // Recommended changes
 
             detailsPage.AddColumnWidth(columnWidths);
         }
 
-        private void GenerateBreakingChangesPage(Worksheet worksheet, IEnumerable<BreakingChangeDependency> _breakingChanges)
+        private void GenerateBreakingChangesPage(Worksheet worksheet, IEnumerable<BreakingChangeDependency> breakingChanges)
         {
             var row = 1;
 
@@ -329,7 +335,7 @@ namespace Microsoft.Fx.Portability.Reports
 
             worksheet.AddRow(header);
 
-            foreach (var breakingChange in _breakingChanges)
+            foreach (var breakingChange in breakingChanges)
             {
                 var rowContent = new object[]
                 {
@@ -346,7 +352,7 @@ namespace Microsoft.Fx.Portability.Reports
                     breakingChange.Break.Details,
                     breakingChange.Break.Suggestion,
                     breakingChange.Break.SourceAnalyzerStatus.ToString(),
-                    string.IsNullOrWhiteSpace(breakingChange.Break.Link) ? "No link" : CreateHyperlink("Link",breakingChange.Break.Link),
+                    string.IsNullOrWhiteSpace(breakingChange.Break.Link) ? "No link" : CreateHyperlink("Link", breakingChange.Break.Link),
                     string.Empty
                 };
 
@@ -390,6 +396,7 @@ namespace Microsoft.Fx.Portability.Reports
                 {
                     rowContent.Add(nugetInfo.AssemblyInfo);
                 }
+
                 page.AddRow(rowContent.ToArray());
                 rowCount++;
             }
@@ -412,7 +419,7 @@ namespace Microsoft.Fx.Portability.Reports
         {
             return submissionId;
 
-            //TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
+            // TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
 #if FALSE
             var headers = _analysisReport.Headers;
             // If no website is provided, do not create hyperlink
@@ -434,7 +441,7 @@ namespace Microsoft.Fx.Portability.Reports
         {
             return docId;
 
-            //TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
+            // TODO: Add back in logic to create URIs when finished abstracting IReportWriter.
 #if FALSE
             var headers = _analysisReport.Headers;
             // If no website is provided, do not create hyperlink
@@ -451,6 +458,5 @@ namespace Microsoft.Fx.Portability.Reports
             };
 #endif
         }
-
     }
 }

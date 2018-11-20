@@ -49,7 +49,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Retrieve a list of targets available from the service
         /// </summary>
-        /// <returns></returns>
         public async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
         {
             using (var progressTask = _progressReport.StartTask(LocalizedStrings.RetrievingTargets))
@@ -73,7 +72,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Writes analysis reports to path supplied by options
         /// </summary>
-        /// <param name="options"></param>
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
         {
@@ -85,8 +83,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Writes analysis reports to path supplied by options
         /// </summary>
-        /// <param name="options"></param>
-        /// <param name="includeResponse"></param>
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
         {
@@ -270,7 +266,7 @@ namespace Microsoft.Fx.Portability
             foreach (var assembly in dependencyInfo.UserAssemblies)
             {
                 // Windows's file paths are case-insensitive
-                var matchingAssembly = options.InputAssemblies.SingleOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
+                var matchingAssembly = options.InputAssemblies.FirstOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
 
                 // AssemblyInfo is explicitly specified if we found a matching
                 // assembly location in the input dictionary AND the value is
@@ -283,15 +279,17 @@ namespace Microsoft.Fx.Portability
             {
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
                 Dependencies = dependencyInfo.Dependencies,
-                AssembliesToIgnore = _assembliesToIgnore,                 // We pass along assemblies to ignore instead of filtering them from Dependencies at this point
-                                                                          // because breaking change analysis and portability analysis will likely want to filter dependencies
-                                                                          // in different ways for ignored assemblies.
-                                                                          // For breaking changes, we should show breaking changes for
-                                                                          // an assembly if it is un-ignored on any of the user-specified targets and we should hide breaking changes
-                                                                          // for an assembly if it ignored on all user-specified targets.
-                                                                          // For portability analysis, on the other hand, we will want to show portability for precisely those targets
-                                                                          // that a user specifies that are not on the ignore list. In this case, some of the assembly's dependency
-                                                                          // information will be needed.
+
+                // We pass along assemblies to ignore instead of filtering them from Dependencies at this point
+                // because breaking change analysis and portability analysis will likely want to filter dependencies
+                // in different ways for ignored assemblies.
+                // For breaking changes, we should show breaking changes for
+                // an assembly if it is un-ignored on any of the user-specified targets and we should hide breaking changes
+                // for an assembly if it ignored on all user-specified targets.
+                // For portability analysis, on the other hand, we will want to show portability for precisely those targets
+                // that a user specifies that are not on the ignore list. In this case, some of the assembly's dependency
+                // information will be needed.
+                AssembliesToIgnore = _assembliesToIgnore,
                 UnresolvedAssemblies = dependencyInfo.UnresolvedAssemblies.Keys.ToList(),
                 UnresolvedAssembliesDictionary = dependencyInfo.UnresolvedAssemblies,
                 UserAssemblies = dependencyInfo.UserAssemblies.ToList(),
@@ -324,8 +322,7 @@ namespace Microsoft.Fx.Portability
                         dependencyInfo?.UnresolvedAssemblies,
                         response.UnresolvedUserAssemblies,
                         dependencyInfo?.AssembliesWithErrors,
-                        response.NuGetPackages
-                    );
+                        response.NuGetPackages);
                 }
                 catch (Exception)
                 {
@@ -351,9 +348,6 @@ namespace Microsoft.Fx.Portability
         /// Add JSON to the options object if it is not there. This is used in cases where an analysis
         /// doesn't request the JSON result, but the result is needed for analysis (ie source line mapping)
         /// </summary>
-        /// <param name="options"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
         private bool TryAddJsonToOptions(IApiPortOptions options, out IApiPortOptions other)
         {
             var outputs = new HashSet<string>(options.OutputFormats, StringComparer.OrdinalIgnoreCase);

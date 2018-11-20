@@ -25,7 +25,7 @@ namespace Microsoft.Fx.Portability.Analysis
         /// Maps the list of targets specified as strings to a list of supported target names.
         /// </summary>
         /// <remarks>
-        /// If no targets are specified, return the list of all public targets with their latest version. 
+        /// If no targets are specified, return the list of all public targets with their latest version.
         ///  - From the list of public targets, filter out the ones that are NOT in the configuration setting described by 'DefaultTargets'
         ///    Note: This allows us to support Mono targets without having them automatically show up in the default target list.
         /// If targets are specified, parse them like this:
@@ -70,7 +70,7 @@ namespace Microsoft.Fx.Portability.Analysis
             // Create a hashset of all the targets specified in the configuration setting.
             HashSet<FrameworkName> parsedDefaultTargets = new HashSet<FrameworkName>(ParseTargets(defaultTargetsSplit, skipNonExistent: true));
 
-            //return all the public targets (their latest versions) as long as they also show up the default targets set.
+            // return all the public targets (their latest versions) as long as they also show up the default targets set.
             return _catalog.GetPublicTargets()
                 .Select(plat => plat.Identifier)
                 .Distinct()
@@ -79,8 +79,8 @@ namespace Microsoft.Fx.Portability.Analysis
         }
 
         /// <summary>
-        /// Parse a string containing target names into FrameworkNames. 
-        /// 
+        /// Parse a string containing target names into FrameworkNames.
+        ///
         /// Try the following in order:
         ///   1. Check if the target specified uses the 'simple' name (i.e. Windows, .NET Framework) then get the latest version for it
         ///   2. Try to parse it as a target name. If the target was not a valid FrameworkName, an ArgumentException will be thrown and passed down to user
@@ -98,9 +98,9 @@ namespace Microsoft.Fx.Portability.Analysis
                 {
                     list.Add(_catalog.GetLatestVersion(target) ?? new FrameworkName(target));
                 }
-                // Catch ArgumentException because FrameworkName does not have a TryParse method
                 catch (ArgumentException)
                 {
+                    // Catch ArgumentException because FrameworkName does not have a TryParse method
                     if (!skipNonExistent)
                     {
                         throw new UnknownTargetException(target);

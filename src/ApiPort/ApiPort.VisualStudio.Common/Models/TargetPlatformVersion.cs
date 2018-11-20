@@ -9,6 +9,7 @@ namespace ApiPortVS
     public class TargetPlatformVersion : NotifyPropertyBase
     {
         private string _platformName;
+
         public string PlatformName
         {
             get { return _platformName; }
@@ -16,6 +17,7 @@ namespace ApiPortVS
         }
 
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -23,6 +25,7 @@ namespace ApiPortVS
         }
 
         private Version _version;
+
         public Version Version
         {
             get { return _version; }
@@ -43,14 +46,12 @@ namespace ApiPortVS
 
         public override bool Equals(object obj)
         {
-            var other = obj as TargetPlatformVersion;
-
-            if (other == null)
+            if (!(obj is TargetPlatformVersion other))
             {
                 return false;
             }
 
-            return String.Equals(PlatformName, other.PlatformName, StringComparison.OrdinalIgnoreCase)
+            return string.Equals(PlatformName, other.PlatformName, StringComparison.OrdinalIgnoreCase)
                 && Version == other.Version;
         }
 
@@ -62,8 +63,8 @@ namespace ApiPortVS
             {
                 int hash = 17;
 
-                hash = hash * HashMultipler + PlatformName.GetHashCode();
-                hash = hash * HashMultipler + Version.GetHashCode();
+                hash = (hash * HashMultipler) + PlatformName.GetHashCode();
+                hash = (hash * HashMultipler) + Version.GetHashCode();
 
                 return hash;
             }

@@ -18,9 +18,28 @@ namespace Microsoft.Fx.Portability
             return metadataReader.FormatAssemblyInfo(metadataReader.GetAssemblyDefinition());
         }
 
+        public static bool TryGetCurrentAssemblyName(this MetadataReader metadataReader, out string name)
+        {
+            if (metadataReader.IsAssembly)
+            {
+                name = metadataReader.GetString(metadataReader.GetAssemblyDefinition().Name);
+                return true;
+            }
+            else
+            {
+                name = null;
+                return false;
+            }
+        }
+
+        public static string GetAssemblyName(this MetadataReader metadataReader, AssemblyReference assemblyReference)
+        {
+            return metadataReader.GetString(assemblyReference.Name);
+        }
+
         public static AssemblyReferenceInformation FormatAssemblyInfo(this MetadataReader metadataReader, AssemblyReference assemblyReference)
         {
-            var name = metadataReader.GetString(assemblyReference.Name);
+            var name = metadataReader.GetAssemblyName(assemblyReference);
 
             return metadataReader.FormatAssemblyInfo(name, assemblyReference.Culture, assemblyReference.PublicKeyOrToken, assemblyReference.Version);
         }
@@ -83,14 +102,11 @@ namespace Microsoft.Fx.Portability
 
         /// <summary>
         /// Convert a blob referencing a public key token from a PE file into a human-readable string.
-        /// 
+        ///
         /// If there are no bytes, the return will be 'null'
         /// If the length is greater than 8, it is a strong name signed assembly
         /// Otherwise, the key is the byte sequence
         /// </summary>
-        /// <param name="metadataReader"></param>
-        /// <param name="handle"></param>
-        /// <returns></returns>
         [SuppressMessage("Microsoft.Security.Cryptography", "CA5354:SHA1CannotBeUsed", Justification = "Public key tokens are calculated using a SHA-1 hash.")]
         private static string FormatPublicKeyToken(this MetadataReader metadataReader, BlobHandle handle)
         {
@@ -101,9 +117,10 @@ namespace Microsoft.Fx.Portability
                 return "null";
             }
 
-            if (bytes.Length > 8)  // Strong named assembly
+            // Strong named assembly
+            if (bytes.Length > 8)
             {
-                // Get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key 
+                // Get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key
                 using (var sha1 = SHA1.Create())
                 {
                     var token = sha1.ComputeHash(bytes);
@@ -120,7 +137,7 @@ namespace Microsoft.Fx.Portability
 
             // Convert bytes to string, but we don't want the '-' characters and need it to be lower case
             return BitConverter.ToString(bytes)
-                .Replace("-", "")
+                .Replace("-", string.Empty)
                 .ToLowerInvariant();
         }
 

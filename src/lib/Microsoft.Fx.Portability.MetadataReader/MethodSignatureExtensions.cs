@@ -11,10 +11,9 @@ namespace Microsoft.Fx.Portability
     internal static class MethodSignatureExtensions
     {
         /// <summary>
-        /// Marks all types in a method signature as enclosed.  This does not change any of the inputs; instead it will create a new 
+        /// Marks all types in a method signature as enclosed.  This does not change any of the inputs; instead it will create a new
         /// method signature from new parameters and return type
         /// </summary>
-        /// <param name="methodSignature"></param>
         /// <returns>MethodSignature with types marked as enclosed</returns>
         public static MethodSignature<MemberMetadataInfo> MakeEnclosedType(this MethodSignature<MemberMetadataInfo> methodSignature)
         {

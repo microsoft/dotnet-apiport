@@ -1,17 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Fx.Portability.Resources;
-using Microsoft.Fx.Portability.ObjectModel;
 
 namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 {
     public class MissingTypeInfo : MissingInfo
     {
-        private bool _isMissing;
         private readonly HashSet<AssemblyInfo> _usedInAssemblies;
 
         public int UsageCount { get { return _usedInAssemblies.Count; } }
@@ -22,9 +21,9 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public IEnumerable<Version> TargetVersionStatus { get; set; }
 
-        public bool IsMissing { get { return _isMissing; } }
+        public bool IsMissing { get; private set; }
 
-        public HashSet<MissingMemberInfo> MissingMembers;
+        public HashSet<MissingMemberInfo> MissingMembers { get; }
 
         public string TypeName { get; set; }
 
@@ -43,7 +42,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public void MarkAsMissing()
         {
-            _isMissing = true;
+            IsMissing = true;
         }
 
         public void IncrementUsage(AssemblyInfo sourceAssembly)
@@ -56,7 +55,9 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
         {
             int pos = DocId.IndexOf("T:", StringComparison.Ordinal);
             if (pos == -1)
+            {
                 throw new ArgumentException(LocalizedStrings.MemberShouldBeDefinedOnTypeException, nameof(docId));
+            }
 
             TypeName = DocId.Substring(pos);
             MissingMembers = new HashSet<MissingMemberInfo>();
@@ -79,9 +80,8 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public override bool Equals(object obj)
         {
-            MissingTypeInfo other = obj as MissingTypeInfo;
-
-            return other != null && StringComparer.Ordinal.Equals(other.TypeName, TypeName);
+            return obj is MissingTypeInfo other
+                && StringComparer.Ordinal.Equals(other.TypeName, TypeName);
         }
     }
 }

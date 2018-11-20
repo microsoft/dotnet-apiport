@@ -9,12 +9,16 @@ namespace Microsoft.Fx.Portability
     public class BreakingChangeDependency : IEquatable<BreakingChangeDependency>
     {
         public MemberInfo Member { get; set; }
+
         public BreakingChange Break { get; set; }
+
         public AssemblyInfo DependantAssembly { get; set; }
 
         public bool Equals(BreakingChangeDependency other)
         {
-            return (Member.Equals(other.Member) && (Break.CompareTo(other.Break) == 0) && DependantAssembly.Equals(other.DependantAssembly));
+            return Member.Equals(other.Member)
+                && (Break.CompareTo(other.Break) == 0)
+                && DependantAssembly.Equals(other.DependantAssembly);
         }
     }
 }

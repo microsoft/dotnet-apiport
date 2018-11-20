@@ -15,17 +15,17 @@ namespace Microsoft.Fx.OpenXmlExtensions
 {
     internal static class OpenXmlExtensions
     {
-        private static uint _GlobalId = 1;
+        private static uint _globalId = 1;
 
-        private static uint IncrementalUniqueId { get { return _GlobalId++; } }
+        private static uint IncrementalUniqueId { get { return _globalId++; } }
 
         public static Worksheet AddWorksheet(this SpreadsheetDocument spreadsheet, string name)
         {
-            var _sheets = spreadsheet.WorkbookPart.Workbook.GetFirstChild<Sheets>();
-            if (_sheets == null)
+            var sheets = spreadsheet.WorkbookPart.Workbook.GetFirstChild<Sheets>();
+            if (sheets == null)
             {
-                _sheets = new Sheets();
-                spreadsheet.WorkbookPart.Workbook.AppendChild(_sheets);
+                sheets = new Sheets();
+                spreadsheet.WorkbookPart.Workbook.AppendChild(sheets);
             }
 
             var worksheetPart = spreadsheet.WorkbookPart.AddNewPart<WorksheetPart>();
@@ -34,10 +34,10 @@ namespace Microsoft.Fx.OpenXmlExtensions
             worksheetPart.Worksheet.Save();
 
             // create the worksheet to workbook relation
-            _sheets.AppendChild(new Sheet()
+            sheets.AppendChild(new Sheet()
             {
                 Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart),
-                SheetId = new DocumentFormat.OpenXml.UInt32Value((uint)_sheets.Count() + 1),
+                SheetId = new DocumentFormat.OpenXml.UInt32Value((uint)sheets.Count() + 1),
                 Name = name
             });
 
@@ -48,13 +48,17 @@ namespace Microsoft.Fx.OpenXmlExtensions
         public static Table AddTable(this Worksheet worksheet, int rowStart, int rowCount, int columnStart, params string[] headers)
         {
             if (rowCount == 1)
+            {
                 rowCount++;
+            }
 
             string range = ComputeRange(rowStart, rowCount, columnStart, headers.Length);
 
             var sheetViews = worksheet.GetFirstChild<SheetViews>();
             if (sheetViews == null)
+            {
                 sheetViews = worksheet.InsertAt(new SheetViews(), 0);
+            }
 
             var sheetView = sheetViews.AppendChild(new SheetView());
             sheetView.WorkbookViewId = 0;
@@ -68,11 +72,15 @@ namespace Microsoft.Fx.OpenXmlExtensions
             // use unique ids for tables.
             uint tableID = IncrementalUniqueId;
 
-            var tp = new TablePart();
-            tp.Id = worksheet.WorksheetPart.GetIdOfPart(tableDefPart);
+            var tp = new TablePart
+            {
+                Id = worksheet.WorksheetPart.GetIdOfPart(tableDefPart)
+            };
             var tableParts = worksheet.GetFirstChild<TableParts>();
             if (tableParts == null)
+            {
                 tableParts = worksheet.AppendChild(new TableParts());
+            }
 
             tableParts.AppendChild(tp);
 
@@ -91,8 +99,10 @@ namespace Microsoft.Fx.OpenXmlExtensions
                 tc.AppendChild(new TableColumn() { Id = i + 1, Name = headers[i] });
             }
 
-            tableDefPart.Table.AutoFilter = new AutoFilter();
-            tableDefPart.Table.AutoFilter.Reference = range;
+            tableDefPart.Table.AutoFilter = new AutoFilter
+            {
+                Reference = range
+            };
 
             var styleInfo = tableDefPart.Table.AppendChild(new TableStyleInfo());
             styleInfo.Name = "TableStyleMedium2";
@@ -143,7 +153,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
         {
             var sd = ws.GetFirstChild<SheetData>();
             if (sd == null)
+            {
                 sd = ws.AppendChild(new SheetData());
+            }
 
             var row = sd.AppendChild(new Row());
 
@@ -200,7 +212,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             // Column needs to be 0-based for the GetColumnName method
             var columnCount = row.Descendants<Cell>().Count() - 1;
 
-            return String.Format(CultureInfo.CurrentCulture, "{0}{1}", GetColumnName(columnCount), rowCount);
+            return string.Format(CultureInfo.CurrentCulture, "{0}{1}", GetColumnName(columnCount), rowCount);
         }
 
         /// <summary>
@@ -214,7 +226,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
             var sb = new StringBuilder();
 
             if (index >= Alphabet.Length)
-                sb.Append(Alphabet[index / Alphabet.Length - 1]);
+            {
+                sb.Append(Alphabet[(index / Alphabet.Length) - 1]);
+            }
 
             sb.Append(Alphabet[index % Alphabet.Length]);
 
@@ -259,7 +273,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             }
         }
 
-        static Cell CreateTextCell(string text)
+        public static Cell CreateTextCell(string text)
         {
             var cell = new Cell
             {
@@ -276,7 +290,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             return cell;
         }
 
-        static Cell CreateNumberCell(string value)
+        public static Cell CreateNumberCell(string value)
         {
             return new Cell
             {
@@ -286,8 +300,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         private static string ComputeRange(int rowStart, int rowCount, int columnStart, int columnCount)
         {
-            // only support up to 26 columns for now..
-
+            // Only support up to 26 columns for now..
             if (columnStart + columnCount > 26)
             {
                 throw new NotSupportedException(LocalizedStrings.TooManyColumns);

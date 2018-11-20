@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability
     public class ProxyAuthenticationRequiredException : Exception
     {
         /// <summary>
-        /// Endpoint that was accessed when thrown.
+        /// Gets the endpoint that was accessed when thrown.
         /// </summary>
         public Uri Endpoint { get; }
 

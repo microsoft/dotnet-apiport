@@ -18,11 +18,13 @@ namespace Microsoft.Fx.Portability
             get { return _docId ?? string.Empty; }
             set { _docId = value; }
         }
+
         public string ReturnType
         {
             get { return _returnType ?? string.Empty; }
             set { _returnType = value; }
         }
+
         public string Name
         {
             get { return _name ?? string.Empty; }
@@ -36,7 +38,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// DocId of Api's parent
+        /// Gets or sets the docId of Api's parent
         /// </summary>
         public string Parent
         {
@@ -46,9 +48,7 @@ namespace Microsoft.Fx.Portability
 
         public override bool Equals(object obj)
         {
-            var other = obj as ApiDefinition;
-
-            if (other == null)
+            if (!(obj is ApiDefinition other))
             {
                 return false;
             }

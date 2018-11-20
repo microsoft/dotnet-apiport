@@ -12,17 +12,18 @@ namespace ApiPortVS.Common
     {
         public static bool IsDotNetProject(this Project project)
         {
-            if (project.CodeModel == null) // e.g. F# projects
+            // e.g. F# projects
+            if (project.CodeModel == null)
             {
                 return IsFSharpProject(project);
             }
 
             switch (project.CodeModel.Language)
             {
-                case CodeModelLanguageConstants.vsCMLanguageCSharp:
-                case CodeModelLanguageConstants.vsCMLanguageVB:
+                case CodeModelLanguageConstants.VsCMLanguageCSharp:
+                case CodeModelLanguageConstants.VsCMLanguageVB:
                     return true;
-                case CodeModelLanguageConstants.vsCMLanguageVC:
+                case CodeModelLanguageConstants.VsCMLanguageVC:
                     return project.IsManagedCppProject();
             }
 
@@ -84,9 +85,9 @@ namespace ApiPortVS.Common
         /// </summary>
         private static class CodeModelLanguageConstants
         {
-            internal const string vsCMLanguageVC = "{B5E9BD32-6D3E-4B5D-925E-8A43B79820B4}";
-            internal const string vsCMLanguageVB = "{B5E9BD33-6D3E-4B5D-925E-8A43B79820B4}";
-            internal const string vsCMLanguageCSharp = "{B5E9BD34-6D3E-4B5D-925E-8A43B79820B4}";
+            internal const string VsCMLanguageVC = "{B5E9BD32-6D3E-4B5D-925E-8A43B79820B4}";
+            internal const string VsCMLanguageVB = "{B5E9BD33-6D3E-4B5D-925E-8A43B79820B4}";
+            internal const string VsCMLanguageCSharp = "{B5E9BD34-6D3E-4B5D-925E-8A43B79820B4}";
         }
 
         /// <summary>

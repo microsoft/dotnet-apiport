@@ -31,6 +31,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 throw new ArgumentException(nameof(packageId));
             }
+
             SupportedVersions = supportedVersions?.OrderBy(x => x.Key.FullName).ToImmutableDictionary() ?? ImmutableDictionary.Create<FrameworkName, string>();
             AssemblyInfo = assemblyInfo;
         }
@@ -48,6 +49,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                     && string.Equals(other.PackageId, PackageId, StringComparison.Ordinal)
                     && SupportedVersions.SequenceEqual(other.SupportedVersions, new SupportedVersionsComparer());
             }
+
             return false;
         }
 
@@ -56,11 +58,12 @@ namespace Microsoft.Fx.Portability.ObjectModel
             if (!_hashComputed)
             {
                 var hash = 17;
-                hash = hash * 23 + (AssemblyInfo ?? string.Empty).GetHashCode();
-                hash = hash * 23 + (PackageId ?? string.Empty).GetHashCode();
+                hash = (hash * 23) + (AssemblyInfo ?? string.Empty).GetHashCode();
+                hash = (hash * 23) + (PackageId ?? string.Empty).GetHashCode();
                 _hashCode = hash;
                 _hashComputed = true;
             }
+
             return _hashCode;
         }
 
@@ -79,8 +82,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
             public int GetHashCode(KeyValuePair<FrameworkName, string> kvp)
             {
                 var hash = 17;
-                hash = hash * 23 + kvp.Key.GetHashCode();
-                hash = hash * 23 + (kvp.Value ?? string.Empty).GetHashCode();
+                hash = (hash * 23) + kvp.Key.GetHashCode();
+                hash = (hash * 23) + (kvp.Value ?? string.Empty).GetHashCode();
                 return hash;
             }
         }

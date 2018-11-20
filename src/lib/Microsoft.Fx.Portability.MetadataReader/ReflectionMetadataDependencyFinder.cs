@@ -18,13 +18,13 @@ namespace Microsoft.Fx.Portability.Analyzer
             _objectFinder = objectFinder;
         }
 
-        public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> files, IProgressReporter _progressReporter)
+        public IDependencyInfo FindDependencies(IEnumerable<IAssemblyFile> files, IProgressReporter progressReporter)
         {
-            using (var task = _progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences))
+            using (var task = progressReporter.StartTask(LocalizedStrings.DetectingAssemblyReferences))
             {
                 try
                 {
-                    return ReflectionMetadataDependencyInfo.ComputeDependencies(files, _assemblyFilter, _progressReporter, _objectFinder);
+                    return ReflectionMetadataDependencyInfo.ComputeDependencies(files, _assemblyFilter, progressReporter, _objectFinder);
                 }
                 catch (Exception)
                 {

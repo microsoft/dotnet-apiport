@@ -1,22 +1,21 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
+using System;
 
 namespace ApiPortVS.SourceMapping
 {
     internal static class CodeDocumentNavigator
     {
-        private static Guid s_logicalViewGuid = VSConstants.LOGVIEWID.Code_guid;
+        private static Guid _logicalViewGuid = VSConstants.LOGVIEWID.Code_guid;
 
         public static void Navigate(object sender, EventArgs e)
         {
-            var task = sender as Task;
-            if (task != null)
+            if (sender is Task task)
             {
                 OpenDocumentTo(task.Document, task.Line, task.Column);
             }
@@ -24,8 +23,7 @@ namespace ApiPortVS.SourceMapping
 
         public static void OpenDocumentTo(string documentPath, int line, int column)
         {
-            var openDocument = Package.GetGlobalService(typeof(IVsUIShellOpenDocument)) as IVsUIShellOpenDocument;
-            if (openDocument == null)
+            if (!(Package.GetGlobalService(typeof(IVsUIShellOpenDocument)) is IVsUIShellOpenDocument openDocument))
             {
                 return;
             }
@@ -36,19 +34,17 @@ namespace ApiPortVS.SourceMapping
                 return;
             }
 
-            object pvar;
-            window.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out pvar);
+            window.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out var pvar);
 
-            var buffer = pvar as VsTextBuffer;
-            if (buffer == null)
+            if (!(pvar is VsTextBuffer buffer))
             {
                 buffer = GetBufferFromProvider(pvar);
             }
 
-            var textManager = Package.GetGlobalService(typeof(VsTextManagerClass)) as IVsTextManager;
-            if (textManager != null && buffer != null)
+            if (Package.GetGlobalService(typeof(VsTextManagerClass)) is IVsTextManager textManager
+                && buffer != null)
             {
-                textManager.NavigateToLineAndColumn(buffer, ref s_logicalViewGuid, line, column, line, column);
+                textManager.NavigateToLineAndColumn(buffer, ref _logicalViewGuid, line, column, line, column);
             }
         }
 
@@ -57,13 +53,15 @@ namespace ApiPortVS.SourceMapping
             var openDocument = Package.GetGlobalService(typeof(IVsUIShellOpenDocument)) as IVsUIShellOpenDocument;
 
             IVsWindowFrame window = null;
-            Microsoft.VisualStudio.OLE.Interop.IServiceProvider serviceProvider;
-            IVsUIHierarchy hierarchy;
-            uint itemId;
             try
             {
-                ErrorHandler.ThrowOnFailure(openDocument.OpenDocumentViaProject
-                    (documentPath, ref s_logicalViewGuid, out serviceProvider, out hierarchy, out itemId, out window));
+                ErrorHandler.ThrowOnFailure(openDocument.OpenDocumentViaProject(
+                    documentPath,
+                    ref _logicalViewGuid,
+                    out var serviceProvider,
+                    out var hierarchy,
+                    out var itemId,
+                    out window));
             }
             catch
             {
@@ -75,14 +73,12 @@ namespace ApiPortVS.SourceMapping
 
         private static VsTextBuffer GetBufferFromProvider(object pvar)
         {
-            var bufferProvider = pvar as IVsTextBufferProvider;
-            if (bufferProvider == null)
+            if (!(pvar is IVsTextBufferProvider bufferProvider))
             {
                 return null;
             }
 
-            IVsTextLines lines;
-            bufferProvider.GetTextBuffer(out lines);
+            bufferProvider.GetTextBuffer(out var lines);
             return lines as VsTextBuffer;
         }
     }

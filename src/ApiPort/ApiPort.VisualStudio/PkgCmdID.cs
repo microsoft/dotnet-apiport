@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// MUST match PkgCmdID.h
-
 namespace ApiPortVS
 {
-    internal static class PkgCmdIDList
+    /// <summary>
+    /// Command ids for Visual Studio menu items
+    /// MUST match PkgCmdID.h
+    /// </summary>
+    internal static class PkgCmdID
     {
         public const uint CmdIdAnalyzeMenuItem = 0x0100;
         public const uint CmdIdAnalyzeOptionsMenuItem = 0x0101;
@@ -15,5 +17,5 @@ namespace ApiPortVS
         public const uint CmdIdProjectContextOptionsMenuItem = 0x0202;
         public const uint CmdIdSolutionContextMenuItem = 0x0300;
         public const uint CmdIdSolutionContextOptionsMenuItem = 0x0301;
-    };
+    }
 }

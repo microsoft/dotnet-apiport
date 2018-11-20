@@ -142,7 +142,8 @@ namespace ApiPort
 
         private static IEnumerable<Exception> GetRecursiveInnerExceptions(Exception ex)
         {
-            if (ex is AggregateException) // AggregateExceptions can have multiple inner exceptions
+            // AggregateExceptions can have multiple inner exceptions
+            if (ex is AggregateException)
             {
                 foreach (var innerEx in (ex as AggregateException).InnerExceptions)
                 {
@@ -153,7 +154,9 @@ namespace ApiPort
                     }
                 }
             }
-            else // Other exceptions can have only one inner exception
+
+            // Other exceptions can have only one inner exception
+            else
             {
                 if (ex.InnerException != null)
                 {
@@ -202,15 +205,13 @@ namespace ApiPort
         /// Mono does not come installed with root certificates.  If a user runs this without configuring them,
         /// they will receive a Mono.Security.Protocol.Tls.TlsException.
         /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
         private static bool IsWebSecurityFailureOnMono(Exception ex)
         {
             if (ex.InnerException is System.Net.WebException && ex.InnerException.InnerException is System.IO.IOException && ex.InnerException.InnerException.InnerException != null)
             {
                 var errorType = ex.InnerException.InnerException.InnerException.GetType();
 
-                if (String.Equals(errorType.FullName, "Mono.Security.Protocol.Tls.TlsException", StringComparison.Ordinal))
+                if (string.Equals(errorType.FullName, "Mono.Security.Protocol.Tls.TlsException", StringComparison.Ordinal))
                 {
                     Console.WriteLine(LocalizedStrings.MonoWebRequestsFailure);
 

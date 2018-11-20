@@ -3,19 +3,22 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
+
 using static Microsoft.Fx.Portability.Tests.TestData.TestFrameworks;
 
 namespace Microsoft.Fx.Portability.Tests.TestData
 {
     public class TestDotNetCatalog : DotNetCatalog
     {
-        private static readonly string[] s_frameworkIdentities = new[] {
+        private static readonly string[] FrameworkIdentities = new[]
+        {
             "System.Collections, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Collections.Concurrent, PublicKeyToken=b03f5f7f11d50a3a",
             "System.Collections.NonGeneric, PublicKeyToken=b03f5f7f11d50a3a"
         };
 
-        private static readonly TargetInfo[] s_testSupportedTargets = new[] {
+        private static readonly TargetInfo[] TestSupportedTargets = new[]
+        {
             new TargetInfo { DisplayName = Windows80, IsReleased = true },
             new TargetInfo { DisplayName = Windows81, IsReleased = true },
             new TargetInfo { DisplayName = NetCore50, IsReleased = true },
@@ -30,8 +33,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
             LastModified = new DateTimeOffset(2015, 12, 2, 11, 23, 01, TimeSpan.FromHours(7));
             BuiltBy = "Test Machine";
             Apis = GetApis();
-            FrameworkAssemblyIdenties = s_frameworkIdentities;
-            SupportedTargets = s_testSupportedTargets;
+            FrameworkAssemblyIdenties = FrameworkIdentities;
+            SupportedTargets = TestSupportedTargets;
         }
 
         private ApiInfoStorage[] GetApis()
@@ -39,32 +42,37 @@ namespace Microsoft.Fx.Portability.Tests.TestData
             var targets11 = new[] { Windows80, NetCore50, Net11 };
             var targets40 = new[] { Windows80, NetCore50, Net40, NetStandard16 };
 
-            var apis = new[] {
-                new ApiInfoStorage {
+            var apis = new[]
+            {
+                new ApiInfoStorage
+                {
                     DocId = "N:System.Collections",
                     FullName = "System.Collections",
                     Name = "System.Collections",
-                    Type = "",
+                    Type = string.Empty,
                     Parent = null,
                     Targets = targets11
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "N:System.Collections.Concurrent",
                     FullName = "System.Collections.Concurrent",
                     Name = "System.Collections.Concurrent",
-                    Type = "",
+                    Type = string.Empty,
                     Parent = null,
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "T:System.Collections.Concurrent.ConcurrentBag`1",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>",
                     Name = "ConcurrentBag<T>",
-                    Type = "",
+                    Type = string.Empty,
                     Parent = "N:System.Collections.Concurrent",
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "P:System.Collections.Concurrent.ConcurrentBag`1.Count",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>.Count",
                     Name = "Count",
@@ -72,7 +80,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = "T:System.Collections.Concurrent.ConcurrentBag`1",
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "M:System.Collections.Concurrent.ConcurrentBag`1.CopyTo(`0[],System.Int32)",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>.CopyTo(T[], Int32)",
                     Name = "CopyTo(T[], Int32)",
@@ -80,7 +89,8 @@ namespace Microsoft.Fx.Portability.Tests.TestData
                     Parent = "T:System.Collections.Concurrent.ConcurrentBag`1",
                     Targets = targets40
                 },
-                new ApiInfoStorage {
+                new ApiInfoStorage
+                {
                     DocId = "M:System.Collections.Concurrent.ConcurrentBag`1.get_Count",
                     FullName = "System.Collections.Concurrent.ConcurrentBag<T>.Count.get_Count()",
                     Name = "get_Count()",

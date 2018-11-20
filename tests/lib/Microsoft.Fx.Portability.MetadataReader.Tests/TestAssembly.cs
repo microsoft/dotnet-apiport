@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,7 +18,12 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 {
     internal static class TestAssembly
     {
-        private static readonly Assembly s_assembly = typeof(TestAssembly).GetTypeInfo().Assembly;
+        private static readonly Assembly Assembly = typeof(TestAssembly).GetTypeInfo().Assembly;
+
+        public static IAssemblyFile CreateFromIL(string il, string name, ITestOutputHelper output)
+        {
+            return new ILStreamAssemblyFile(new StringAssemblyFile(name, il), output);
+        }
 
         public static IAssemblyFile Create(string source, ITestOutputHelper output, bool allowUnsafe = false, IEnumerable<string> additionalReferences = null)
         {
@@ -29,20 +35,38 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 case ".cs":
                     return new CSharpCompileAssemblyFile(source, allowUnsafe, additionalReferences, output);
                 case ".il":
-                    return new ILStreamAssemblyFile(source, output);
+                    return new ILStreamAssemblyFile(new ResourceStreamAssemblyFile(source, output), output);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(source), source, "Unknown extension");
             }
         }
 
+        private class StringAssemblyFile : IAssemblyFile
+        {
+            private readonly byte[] _contents;
+
+            public StringAssemblyFile(string name, string contents)
+            {
+                Name = name;
+                _contents = Encoding.UTF8.GetBytes(contents);
+            }
+
+            public string Name { get; }
+
+            public string Version => string.Empty;
+
+            public bool Exists => true;
+
+            public Stream OpenRead() => new MemoryStream(_contents);
+        }
+
         private class CSharpCompileAssemblyFile : ResourceStreamAssemblyFile
         {
-            private static readonly IEnumerable<MetadataReference> s_references = new[] { typeof(object).GetTypeInfo().Assembly.Location, typeof(Uri).GetTypeInfo().Assembly.Location, typeof(Console).GetTypeInfo().Assembly.Location }
+            private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
+            private static readonly IEnumerable<MetadataReference> References = new[] { typeof(object).GetTypeInfo().Assembly.Location, typeof(Uri).GetTypeInfo().Assembly.Location, typeof(Console).GetTypeInfo().Assembly.Location }
                                                                      .Distinct()
                                                                      .Select(r => MetadataReference.CreateFromFile(r))
                                                                      .ToList();
-
-            private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
 
             private readonly bool _allowUnsafe;
             private readonly IEnumerable<string> _additionalReferences;
@@ -64,7 +88,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: _allowUnsafe);
                 var references = _additionalReferences
                     .Select(x => MetadataReference.CreateFromFile(x))
-                    .Concat(s_references);
+                    .Concat(References);
 
                 var compilation = CSharpCompilation.Create(assemblyName, new[] { tree, tfm }, references, options);
 
@@ -110,7 +134,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             public virtual Stream OpenRead()
             {
-                var names = s_assembly.GetManifestResourceNames();
+                var names = Assembly.GetManifestResourceNames();
                 var name = names.Single(n => n.EndsWith(Name, StringComparison.Ordinal));
 
                 if (name == null)
@@ -125,22 +149,32 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
                 Assert.NotNull(name);
 
-                return s_assembly.GetManifestResourceStream(name);
+                return Assembly.GetManifestResourceStream(name);
             }
         }
 
-        private class ILStreamAssemblyFile : ResourceStreamAssemblyFile
+        private class ILStreamAssemblyFile : IAssemblyFile
         {
-            private static readonly string s_ilAsmPath = Path.Combine(Path.GetDirectoryName(s_assembly.Location), "ilasm.exe");
+            private static readonly string ILAssemblyPath = Path.Combine(Path.GetDirectoryName(Assembly.Location), "ilasm.exe");
 
-            public ILStreamAssemblyFile(string fileName, ITestOutputHelper output)
-                : base(fileName, output)
+            private readonly IAssemblyFile _other;
+            private readonly ITestOutputHelper _output;
+
+            public ILStreamAssemblyFile(IAssemblyFile other, ITestOutputHelper output)
             {
+                _other = other;
+                _output = output;
             }
 
-            public override Stream OpenRead()
+            public string Name => _other.Name;
+
+            public string Version => _other.Version;
+
+            public bool Exists => _other.Exists;
+
+            public Stream OpenRead()
             {
-                if (!File.Exists(s_ilAsmPath))
+                if (!File.Exists(ILAssemblyPath))
                 {
                     throw new FileNotFoundException("Could not find ilasm");
                 }
@@ -148,15 +182,17 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 var ilPath = Path.GetTempFileName();
 
                 using (var fs = File.OpenWrite(ilPath))
-                using (var stream = base.OpenRead())
                 {
-                    stream.CopyTo(fs);
+                    using (var stream = _other.OpenRead())
+                    {
+                        stream.CopyTo(fs);
+                    }
                 }
 
                 var psi = new ProcessStartInfo
                 {
                     Arguments = $"{ilPath} /dll",
-                    FileName = s_ilAsmPath,
+                    FileName = ILAssemblyPath,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false
@@ -169,11 +205,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     var stdout = process.StandardOutput.ReadToEnd();
                     var stderr = process.StandardError.ReadToEnd();
 
-                    Output.WriteLine("ilasm stdout:");
-                    Output.WriteLine(stdout);
+                    _output.WriteLine("ilasm stdout:");
+                    _output.WriteLine(stdout);
 
-                    Output.WriteLine("ilasm stderr:");
-                    Output.WriteLine(stderr);
+                    _output.WriteLine("ilasm stderr:");
+                    _output.WriteLine(stderr);
 
                     Assert.Equal(0, process.ExitCode);
                 }

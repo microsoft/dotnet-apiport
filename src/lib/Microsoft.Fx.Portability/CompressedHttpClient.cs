@@ -30,9 +30,10 @@ namespace Microsoft.Fx.Portability
         /// <param name="productName">Product name that will be displayed in the User Agent string of requests</param>
         /// <param name="productVersion">Product version that will be displayed in the User Agent string of requests</param>
         public CompressedHttpClient(ProductInformation info)
-            : this(info, new HttpClientHandler {
+            : this(info, new HttpClientHandler
+            {
 #if !FEATURE_SERVICE_POINT_MANAGER
-                SslProtocols = SupportedSSLProtocols, 
+                SslProtocols = SupportedSSLProtocols,
 #endif
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             })
@@ -123,7 +124,7 @@ namespace Microsoft.Fx.Portability
                 DisplayName = "Json",
                 MimeType = "application/json",
                 FileExtension = ".json"
-            }; ;
+            };
 
             var response = await CallInternalAsync(request, new[] { json });
             var result = response.Response.Single().Data.Deserialize<TResponse>();
@@ -167,7 +168,8 @@ namespace Microsoft.Fx.Portability
                             var boundary = contentType.Parameters.FirstOrDefault(p => string.Equals("boundary", p.Name, StringComparison.OrdinalIgnoreCase))?.Value
                                 .Trim('\"');
 
-                            Debug.Assert(boundary != null);
+                            Debug.Assert(boundary != null,
+                                $"boundary not parsed from parameters: {string.Join(",", contentType.Parameters.Select(x => x.Name))}");
 
                             using (var stream = await response.Content.ReadAsStreamAsync())
                             {
@@ -183,8 +185,7 @@ namespace Microsoft.Fx.Portability
                                         break;
                                     }
 
-                                    StringValues contentTypes;
-                                    section.Headers.TryGetValue("Content-Type", out contentTypes);
+                                    section.Headers.TryGetValue("Content-Type", out var contentTypes);
 
                                     if (contentTypes.Count == 0)
                                     {
@@ -243,6 +244,7 @@ namespace Microsoft.Fx.Portability
                                 {
                                     throw new NotFoundException(request.Method, request.RequestUri);
                                 }
+
                             case HttpStatusCode.Unauthorized:
                                 throw new UnauthorizedEndpointException();
                             case HttpStatusCode.ProxyAuthenticationRequired:

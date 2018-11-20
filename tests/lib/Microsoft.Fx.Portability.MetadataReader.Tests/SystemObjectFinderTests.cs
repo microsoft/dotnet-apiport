@@ -25,21 +25,22 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var file = TestAssembly.Create("multiple-mscorlib.il", _output);
 
             using (var stream = file.OpenRead())
-            using (var peFile = new PEReader(stream))
             {
-                var metadataReader = peFile.GetMetadataReader();
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
 
-                var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
-
-                Assert.Equal("mscorlib", assemblyInfo.Name);
-                Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
-                Assert.Equal("neutral", assemblyInfo.Culture);
-                Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
+                    Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Equal("mscorlib", assemblyInfo.Name);
+                    Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
+                    Assert.Equal("neutral", assemblyInfo.Culture);
+                    Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
+                }
             }
         }
 
         /// <summary>
-        /// Test that SystemObjectFinder works even for netstandard facade 
+        /// Test that SystemObjectFinder works even for netstandard facade
         /// assemblies that may not have references to mscorlib or system.runtime
         /// </summary>
         [Fact]
@@ -49,16 +50,68 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var file = TestAssembly.Create("OnlyNetStandardReference.il", _output);
 
             using (var stream = file.OpenRead())
-            using (var peFile = new PEReader(stream))
             {
-                var metadataReader = peFile.GetMetadataReader();
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
 
-                var assemblyInfo = objectFinder.GetSystemRuntimeAssemblyInformation(metadataReader);
+                    Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Equal("netstandard", assemblyInfo.Name);
+                    Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
+                    Assert.Equal("neutral", assemblyInfo.Culture);
+                    Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+                }
+            }
+        }
 
-                Assert.Equal("netstandard", assemblyInfo.Name);
-                Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
-                Assert.Equal("neutral", assemblyInfo.Culture);
-                Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+        /// <summary>
+        /// Test that <see cref="SystemObjectFinder"/> doesn't throw on
+        /// assemblies that don't reference System.Object, but also don't
+        /// reference anything else. This is typically the case for resource
+        /// assemblies (e.g., for localization).
+        /// </summary>
+        [Fact]
+        public void ResourceAssembliesGetSkipped()
+        {
+            var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
+            var file = TestAssembly.Create("ResourceAssembliesGetSkipped_NoReferences.il", _output);
+
+            using (var stream = file.OpenRead())
+            {
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
+
+                    Assert.False(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Null(assemblyInfo);
+                }
+            }
+        }
+
+        [InlineData("mscorlib")]
+        [InlineData("netstandard")]
+        [InlineData("System.Private.CoreLib")]
+        [InlineData("System.Runtime")]
+        [Theory]
+        public void LookInFilePassedInAssembly(string name)
+        {
+            var source = @"
+.assembly " + name + @"
+{
+  .ver 1:0:0:0
+} ";
+            var objectFinder = new SystemObjectFinder(new DotNetFrameworkFilter());
+            var file = TestAssembly.CreateFromIL(source, name, _output);
+
+            using (var stream = file.OpenRead())
+            {
+                using (var peFile = new PEReader(stream))
+                {
+                    var metadataReader = peFile.GetMetadataReader();
+
+                    Assert.True(objectFinder.TryGetSystemRuntimeAssemblyInformation(metadataReader, out var assemblyInfo));
+                    Assert.Equal(name, assemblyInfo.Name);
+                }
             }
         }
     }

@@ -4,6 +4,7 @@
 using Microsoft.Fx.Portability.Resources;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -19,7 +20,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string AssemblyIdentity
         {
-            get { return _assemblyIdentity; }
+            get
+            {
+                return _assemblyIdentity;
+            }
+
             set
             {
                 _assemblyIdentity = value;
@@ -28,7 +33,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         }
 
         /// <summary>
-        /// Assembly location
+        /// Gets or sets the assembly location
         /// </summary>
         /// <remarks>Do not serialize location and send it to service.</remarks>
         [JsonIgnore]
@@ -36,7 +41,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string FileVersion
         {
-            get { return _fileVersion; }
+            get
+            {
+                return _fileVersion;
+            }
+
             set
             {
                 _fileVersion = value;
@@ -46,7 +55,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public string TargetFrameworkMoniker
         {
-            get { return _targetFrameworkVersion; }
+            get
+            {
+                return _targetFrameworkVersion;
+            }
+
             set
             {
                 _targetFrameworkVersion = value;
@@ -54,13 +67,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
         }
 
+        public IList<AssemblyReferenceInformation> AssemblyReferences { get; set; }
+
         public bool IsExplicitlySpecified { get; set; } = true;
 
         public override bool Equals(object obj)
         {
-            AssemblyInfo other = obj as AssemblyInfo;
-            if (other == null)
+            if (!(obj is AssemblyInfo other))
+            {
                 return false;
+            }
 
             return StringComparer.Ordinal.Equals(other.AssemblyIdentity, AssemblyIdentity)
                 && StringComparer.Ordinal.Equals(other.TargetFrameworkMoniker, TargetFrameworkMoniker);
@@ -73,6 +89,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashCode = (AssemblyIdentity ?? string.Empty + (TargetFrameworkMoniker ?? string.Empty)).GetHashCode();
                 _hashComputed = true;
             }
+
             return _hashCode;
         }
 

@@ -18,16 +18,20 @@ namespace Microsoft.Fx.Portability.Analyzer
         private bool _isPrimitive;
 
         /// <summary>
-        /// This represents the assembly that is calling the member
+        /// Gets or sets the assembly that is calling the member
         /// </summary>
         public AssemblyInfo CallingAssembly { get; set; }
 
         /// <summary>
-        /// This represents the assembly in which the member is defined
+        /// Gets or sets the assembly in which the member is defined
         /// </summary>
         public AssemblyReferenceInformation DefinedInAssemblyIdentity
         {
-            get { return _definedInAssemblyIdentity; }
+            get
+            {
+                return _definedInAssemblyIdentity;
+            }
+
             set
             {
                 _definedInAssemblyIdentity = value;
@@ -36,11 +40,15 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// This indicates whether or not the dependency is a primitive type
+        /// Gets or sets a value indicating whether or not the dependency is a primitive type
         /// </summary>
         public bool IsPrimitive
         {
-            get { return _isPrimitive; }
+            get
+            {
+                return _isPrimitive;
+            }
+
             set
             {
                 _isPrimitive = value;
@@ -50,7 +58,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public string MemberDocId
         {
-            get { return _memberDocId; }
+            get
+            {
+                return _memberDocId;
+            }
+
             set
             {
                 _memberDocId = value;
@@ -60,7 +72,11 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public string TypeDocId
         {
-            get { return _typeDocId; }
+            get
+            {
+                return _typeDocId;
+            }
+
             set
             {
                 _typeDocId = value;
@@ -75,9 +91,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override bool Equals(object obj)
         {
-            var other = obj as MemberDependency;
-
-            if (other == null)
+            if (!(obj is MemberDependency other))
             {
                 return false;
             }
@@ -95,6 +109,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString()).GetHashCode() ^ CallingAssembly.GetHashCode();
                 _hashComputed = true;
             }
+
             return _hashCode;
         }
     }

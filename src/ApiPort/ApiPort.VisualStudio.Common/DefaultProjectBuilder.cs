@@ -3,18 +3,18 @@
 
 using ApiPortVS.Contracts;
 using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
-using static Microsoft.VisualStudio.VSConstants;
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
-using System;
-using System.Threading;
-using Microsoft.VisualStudio;
-using System.Diagnostics;
+using static Microsoft.VisualStudio.VSConstants;
 
 namespace ApiPortVS
 {
@@ -89,7 +89,7 @@ namespace ApiPortVS
             return await tcs.Task;
         }
 
-        public virtual async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default)
         {
             var configuration = await ProjectMapper.GetVsProjectConfigurationAsync(project).ConfigureAwait(false);
 
@@ -142,10 +142,12 @@ namespace ApiPortVS
             private readonly TaskCompletionSource<bool> _completionSource;
             private readonly IVsSolutionBuildManager _buildManager;
 
+#pragma warning disable SA1401 // Cookie is required by the DefaultProjectBuilder
             /// <summary>
             /// A cookie used to track this instance in IVsSolutionBuildManager solution events.
             /// </summary>
             internal uint UpdateSolutionEventsCookie;
+#pragma warning restore SA1401
 
             public ProjectAsyncBuilder(IVsSolutionBuildManager manager, TaskCompletionSource<bool> completionSource)
             {
@@ -164,7 +166,6 @@ namespace ApiPortVS
             /// Called before any build actions have begun. This is the last chance to cancel the build before any building begins.
             /// </summary>
             /// <param name="pfCancelUpdate">Pointer to a flag indicating cancel update.</param>
-            /// <returns></returns>
             public int UpdateSolution_Begin(ref int pfCancelUpdate) => S_OK;
 
             /// <summary>

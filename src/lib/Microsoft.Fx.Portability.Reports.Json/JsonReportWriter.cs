@@ -30,9 +30,11 @@ namespace Microsoft.Fx.Portability.Reports
         public void WriteStream(Stream stream, AnalyzeResponse response)
         {
             using (var streamWriter = new StreamWriter(stream))
-            using (var writer = new JsonTextWriter(streamWriter))
             {
-                DataExtensions.Serializer.Serialize(writer, response);
+                using (var writer = new JsonTextWriter(streamWriter))
+                {
+                    DataExtensions.Serializer.Serialize(writer, response);
+                }
             }
         }
     }

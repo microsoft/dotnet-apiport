@@ -2,17 +2,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Resources;
-using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
+using Xunit;
 
 namespace Microsoft.Fx.Portability.Tests
 {
-    public class TargetMapTest
+    public class TargetMapTests
     {
         [Fact]
         public static void UnknownTarget()
@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
@@ -209,9 +209,11 @@ namespace Microsoft.Fx.Portability.Tests
             try
             {
                 using (var fs = file.OpenWrite())
-                using (var writer = new StreamWriter(fs))
                 {
-                    writer.Write(xml);
+                    using (var writer = new StreamWriter(fs))
+                    {
+                        writer.Write(xml);
+                    }
                 }
 
                 var map = new TargetMapper();
@@ -267,7 +269,7 @@ namespace Microsoft.Fx.Portability.Tests
             }
             catch (TargetMapperException e)
             {
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AliasCannotBeEqualToTargetNameError, "TestTarget2"), e.Message);
                 return;
             }
 
@@ -306,7 +308,7 @@ namespace Microsoft.Fx.Portability.Tests
             catch (TargetMapperException e)
             {
                 Assert.NotNull(e.InnerException);
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.InnerException.Message), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, e.InnerException.Message), e.Message);
                 return;
             }
 
@@ -330,7 +332,7 @@ namespace Microsoft.Fx.Portability.Tests
             {
 #if FEATURE_XML_SCHEMA
                 Assert.NotNull(e.InnerException);
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
 #else
                 Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, string.Empty), e.Message);
 #endif
@@ -365,7 +367,7 @@ namespace Microsoft.Fx.Portability.Tests
        </Targets>
      </ApiTool> ";
 
-            var map = LoadXml(xml); ;
+            var map = LoadXml(xml);
 
             Assert.Equal("Alias1", map.GetAlias("TestTarget1"));
         }
@@ -427,17 +429,21 @@ namespace Microsoft.Fx.Portability.Tests
             var targetNamesWithVersions = mapper.GetTargetNames(targets, includeVersion: true).ToArray();
 
             AreCollectionsEqual(
-                new string[] {
+                new string[]
+                {
                     netFramework4.FullName, windows81.FullName,
                     netFramework451.FullName, "Windows Phone",
-                    windows8.FullName },
+                    windows8.FullName
+                },
                 targetNames);
 
             AreCollectionsEqual(
-                new string[] {
+                new string[]
+                {
                     netFramework4.FullName, windows81.FullName,
                     netFramework451.FullName, windowsPhone.FullName,
-                    windows8.FullName },
+                    windows8.FullName
+                },
                 targetNamesWithVersions);
         }
 
@@ -452,14 +458,16 @@ namespace Microsoft.Fx.Portability.Tests
         private static TargetMapper LoadXml(string config)
         {
             using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms) { AutoFlush = true })
             {
-                writer.Write(config);
-                ms.Seek(0, SeekOrigin.Begin);
+                using (var writer = new StreamWriter(ms) { AutoFlush = true })
+                {
+                    writer.Write(config);
+                    ms.Seek(0, SeekOrigin.Begin);
 
-                var targetMapper = new TargetMapper();
-                targetMapper.Load(ms);
-                return targetMapper;
+                    var targetMapper = new TargetMapper();
+                    targetMapper.Load(ms);
+                    return targetMapper;
+                }
             }
         }
     }

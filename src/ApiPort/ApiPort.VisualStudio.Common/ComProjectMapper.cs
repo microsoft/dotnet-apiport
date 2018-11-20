@@ -8,8 +8,10 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using VisualStudio = Microsoft.VisualStudio.Shell;
+
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
+
+using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS
 {
@@ -77,6 +79,7 @@ namespace ApiPortVS
                 Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsCfgProvider)} from project: {project.Name}"));
                 return null;
             }
+
             if (!(provider is IVsCfgProvider2))
             {
                 Trace.TraceError(ToCurrentCulture($"IVsCfgProvider returned {provider.GetType()} is not of the right type. Expected: {nameof(IVsCfgProvider2)}"));

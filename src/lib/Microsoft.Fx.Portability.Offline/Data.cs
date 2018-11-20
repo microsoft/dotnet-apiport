@@ -5,7 +5,6 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Offline.Resources;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -40,10 +39,12 @@ namespace Microsoft.Fx.Portability
 
                 return breakingChanges;
             }
+
             // If no BreakingChanges folder exists, then we'll fall back to loading embedded breaking changes
             else
             {
                 var breakingChanges = new List<BreakingChange>();
+
                 // Breaking changes will be serialized as either md or (less commonly now) json files
                 foreach (var file in typeof(Data).GetTypeInfo().Assembly.GetManifestResourceNames().Where(s => s.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || s.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -53,7 +54,7 @@ namespace Microsoft.Fx.Portability
 
                         if (fileBreakingChanges == null)
                         {
-                            //Trace.WriteLine("No data was found in '" + file + "'");
+                            // Trace.WriteLine("No data was found in '" + file + "'");
                         }
                         else
                         {
@@ -77,6 +78,7 @@ namespace Microsoft.Fx.Portability
                     return categoriesFile.Deserialize<string[]>();
                 }
             }
+
             return null;
         }
 
@@ -116,6 +118,7 @@ namespace Microsoft.Fx.Portability
             {
                 return BreakingChangeParser.FromMarkdown(stream, allowedCategories);
             }
+
             if (string.Equals(".json", extension, StringComparison.OrdinalIgnoreCase))
             {
                 try
@@ -127,6 +130,7 @@ namespace Microsoft.Fx.Portability
                     // An invalid json file will throw an exception when deserialized. Simply ignore such files.
                 }
             }
+
             return Enumerable.Empty<BreakingChange>();
         }
     }

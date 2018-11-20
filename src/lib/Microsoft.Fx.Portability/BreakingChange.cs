@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability
 
         public BreakingChangeImpact ImpactScope { get; set; }
 
-        public IList<string> Categories;
+        public IList<string> Categories { get; set; }
 
         public int CompareTo(BreakingChange other)
         {

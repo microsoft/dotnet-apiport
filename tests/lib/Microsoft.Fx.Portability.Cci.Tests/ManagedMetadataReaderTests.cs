@@ -1,35 +1,35 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Fx.Portability.Analyzer;
 using NSubstitute;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Cci.Tests
 {
     public class ManagedMetadataReaderTests
     {
-        private readonly static string s_emptyProjectPath = TestAssembly.EmptyProject;
-        private readonly static string s_withGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
+        private static readonly string EmptyProjectPath = TestAssembly.EmptyProject;
+        private static readonly string WithGenericsAndReferencePath = TestAssembly.WithGenericsAndReference;
 
         [Fact]
         public static void EmptyProject()
         {
-            CompareFinders(s_emptyProjectPath);
+            CompareFinders(EmptyProjectPath);
         }
 
         [Fact]
         public static void WithGenericsAndReference()
         {
-            CompareFinders(s_withGenericsAndReferencePath);
+            CompareFinders(WithGenericsAndReferencePath);
         }
 
         [Fact]
         public static void WithGenericsAndReferenceAndEmptyProject()
         {
-            CompareFinders(s_withGenericsAndReferencePath, s_emptyProjectPath);
+            CompareFinders(WithGenericsAndReferencePath, EmptyProjectPath);
         }
 
         private static void CompareFinders(params string[] paths)
@@ -39,7 +39,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
 
         private static void CompareFinders(IEnumerable<string> paths)
         {
-            //CompareFinders(new ManagedMetadataReaderDependencyFinder(), new CciDependencyFinder(), paths);
+            // CompareFinders(new ManagedMetadataReaderDependencyFinder(), new CciDependencyFinder(), paths);
         }
 
         private static void CompareFinders(IDependencyFinder finder1, IDependencyFinder finder2, IEnumerable<string> paths)

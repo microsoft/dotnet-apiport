@@ -15,9 +15,6 @@ namespace ApiPortVS.Contracts
         /// <summary>
         /// Displays given source mapped items in the error window.
         /// </summary>
-        /// <param name="items"></param>
-        /// <param name="projects"></param>
-        /// <returns></returns>
         Task DisplaySourceItemsAsync(IEnumerable<ISourceMappedItem> items, ICollection<CalculatedProject> projects);
     }
 }

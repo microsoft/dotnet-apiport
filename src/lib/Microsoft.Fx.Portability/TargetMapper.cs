@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Fx.Portability.Resources;
 
 #if FEATURE_XML_SCHEMA
 using System.Xml.Schema;
@@ -53,7 +53,7 @@ namespace Microsoft.Fx.Portability
             try
             {
                 // This will throw if a path is invalid
-                return path != null && Path.GetFullPath(path) != null;
+                return !string.IsNullOrWhiteSpace(path) && Path.GetFullPath(path) != null;
             }
             catch (ArgumentException)
             {
@@ -179,7 +179,6 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Returns the identifies for the target names. If multiple targets have the same name, keep the version as well
         /// </summary>
-        /// <returns></returns>
         public IEnumerable<string> GetTargetNames(IEnumerable<FrameworkName> targets, bool includeVersion)
         {
             foreach (var group in targets.GroupBy(target => target.Identifier))
@@ -196,10 +195,9 @@ namespace Microsoft.Fx.Portability
                  */
                 if (group.Count() == 1)
                 {
-                    if (includeVersion)
-                        yield return group.Single().FullName;
-                    else
-                        yield return group.Key;
+                    yield return includeVersion
+                        ? group.Single().FullName
+                        : group.Key;
                 }
                 else
                 {

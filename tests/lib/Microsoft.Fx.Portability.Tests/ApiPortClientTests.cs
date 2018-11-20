@@ -5,7 +5,9 @@ using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,6 +63,138 @@ namespace Microsoft.Fx.Portability.Tests
 
             await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options));
             await Assert.ThrowsAsync<InvalidApiPortOptionsException>(() => client.WriteAnalysisReportsAsync(options, true));
+        }
+
+        [Fact]
+        public static async Task SingleAssemblyFile()
+        {
+            var files = new[]
+            {
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file1",
+                    FileVersion = "1.0.0",
+                    Location = "file1",
+                    IsExplicitlySpecified = false
+                }
+            };
+
+            await UserAssemblyTestsAsync(files);
+        }
+
+        [Fact]
+        public static async Task TwoAssemblyFiles()
+        {
+            var files = new[]
+            {
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file1",
+                    FileVersion = "1.0.0",
+                    Location = "file1",
+                    IsExplicitlySpecified = false
+                },
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file2",
+                    FileVersion = "1.0.0",
+                    Location = "file2",
+                    IsExplicitlySpecified = true
+                }
+            };
+
+            await UserAssemblyTestsAsync(files);
+        }
+
+        [Fact]
+        public static async Task DuplicateAssemblyFile()
+        {
+            var files = new[]
+            {
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file1",
+                    FileVersion = "1.0.0",
+                    Location = "file1",
+                    IsExplicitlySpecified = false
+                },
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file1",
+                    FileVersion = "1.0.0",
+                    Location = "file1",
+                    IsExplicitlySpecified = true
+                }
+            };
+
+            await UserAssemblyTestsAsync(files);
+        }
+
+        [Fact]
+        public static async Task DuplicateNameDifferentVersion()
+        {
+            var files = new[]
+            {
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file1",
+                    FileVersion = "1.0.0",
+                    Location = "file1",
+                    IsExplicitlySpecified = true
+                },
+                new AssemblyInfo
+                {
+                    AssemblyIdentity = "file3",
+                    FileVersion = "1.0.1",
+                    Location = "file3",
+                    IsExplicitlySpecified = false
+                }
+            };
+
+            await UserAssemblyTestsAsync(files);
+        }
+
+        private static async Task UserAssemblyTestsAsync(IEnumerable<AssemblyInfo> assemblies)
+        {
+            var service = Substitute.For<IApiPortService>();
+            var progressReporter = Substitute.For<IProgressReporter>();
+            var targetMapper = Substitute.For<ITargetMapper>();
+            var dependencyFinder = Substitute.For<IDependencyFinder>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+            var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var writer = Substitute.For<IFileWriter>();
+
+            service.SendAnalysisAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<IEnumerable<string>>()).Returns(
+                ServiceResponse.Create(Enumerable.Empty<ReportingResultWithFormat>()));
+
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var options = Substitute.For<IApiPortOptions>();
+
+            IAssemblyFile CreateAssemblyFile(AssemblyInfo assemblyInfo)
+            {
+                var file = Substitute.For<IAssemblyFile>();
+                file.Name.Returns(assemblyInfo.AssemblyIdentity);
+                file.Version.Returns(assemblyInfo.FileVersion);
+                file.Exists.Returns(true);
+                return file;
+            }
+
+            var assemblyFiles = assemblies.Where(a => a.IsExplicitlySpecified).ToImmutableDictionary(CreateAssemblyFile, _ => false);
+            options.InputAssemblies.Returns(assemblyFiles);
+
+            var info = Substitute.For<IDependencyInfo>();
+            info.UserAssemblies.Returns(assemblies);
+
+            dependencyFinder.FindDependencies(Arg.Any<IEnumerable<IAssemblyFile>>(), progressReporter)
+                .Returns(info);
+
+            await client.WriteAnalysisReportsAsync(options);
+
+            Assert.All(assemblies, a =>
+            {
+                var expected = assemblies.First(t => string.Equals(t.Location, a.Location, StringComparison.OrdinalIgnoreCase)).IsExplicitlySpecified;
+                Assert.Equal(expected, a.IsExplicitlySpecified);
+            });
         }
     }
 }

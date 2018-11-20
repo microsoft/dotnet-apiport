@@ -78,7 +78,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         /// <summary>
-        /// Verify that the first recommended change (closest to the docId is 
+        /// Verify that the first recommended change (closest to the docId is
         /// returned if we have multiple matching ones).
         /// </summary>
         [Fact]
@@ -176,7 +176,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         /// <summary>
-        /// Verify that the first Breaking change (closest to the docId is 
+        /// Verify that the first Breaking change (closest to the docId is
         /// returned if we have multiple matching ones).
         /// </summary>
         [Fact]

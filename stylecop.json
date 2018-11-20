@@ -2,6 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
   "settings": {
     "documentationRules": {
+      "fileNamingConvention": "stylecop",
       "documentExposedElements": false,
       "documentInternalElements": false,
       "companyName": "Microsoft",
@@ -22,6 +23,7 @@
     "namingRules": {},
     "orderingRules": {
       "systemUsingDirectivesFirst": false,
+      "blankLinesBetweenUsingGroups": "require",
       "usingDirectivesPlacement": "outsideNamespace",
       "elementOrder": [
         "kind",

@@ -15,7 +15,7 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Items that can show up in the breaking change 'Affected APIs' section that should be ignored
         /// </summary>
-        private static readonly ICollection<string> s_ignoredApis = new HashSet<string>(new[]
+        private static readonly ICollection<string> IgnoredApis = new HashSet<string>(new[]
         {
             "Not detectable via API analysis",
             "Investigate applicable APIs"
@@ -53,7 +53,9 @@ namespace Microsoft.Fx.Portability
         /// Parses markdown files into BrekaingChange objects
         /// </summary>
         /// <param name="stream">The markdown to parse</param>
-        /// <param name="allowedCategories">Valid category strings. Pass null to allow any category. A breaking change using an invalid category will throw an exception while parsing the breaking change.</param>
+        /// <param name="allowedCategories">Valid category strings. Pass null
+        /// to allow any category. A breaking change using an invalid category
+        /// will throw an exception while parsing the breaking change.</param>
         /// <returns>BreakingChanges parsed from the markdown</returns>
         public static IEnumerable<BreakingChange> FromMarkdown(Stream stream, IEnumerable<string> allowedCategories)
         {
@@ -65,7 +67,7 @@ namespace Microsoft.Fx.Portability
                 BreakingChange currentBreak = null;
                 string currentLine;
 
-                while (null != (currentLine = sr.ReadLine()))
+                while ((currentLine = sr.ReadLine()) != null)
                 {
                     currentLine = currentLine.Trim();
 
@@ -77,6 +79,7 @@ namespace Microsoft.Fx.Portability
                         {
                             CleanAndAddBreak(breakingChanges, currentBreak);
                         }
+
                         currentBreak = new BreakingChange();
 
                         // Separate ID and title
@@ -91,8 +94,7 @@ namespace Microsoft.Fx.Portability
                         }
                         else if (splitTitle.Length == 2)
                         {
-                            int id;
-                            if (int.TryParse(splitTitle[0], out id))
+                            if (int.TryParse(splitTitle[0], out var id))
                             {
                                 currentBreak.Id = id.ToString(CultureInfo.InvariantCulture);
                                 currentBreak.Title = splitTitle[1].Trim();
@@ -106,7 +108,9 @@ namespace Microsoft.Fx.Portability
                         // Clear state
                         state = ParseState.None;
                     }
-                    else if (currentBreak != null) // Only parse breaking change if we've seen a breaking change header ("## ...")
+
+                    // Only parse breaking change if we've seen a breaking change header ("## ...")
+                    else if (currentBreak != null)
                     {
                         // State changes
                         if (currentLine.StartsWith("###", StringComparison.Ordinal))
@@ -184,8 +188,8 @@ namespace Microsoft.Fx.Portability
                         else if (currentLine.StartsWith("[More information]", StringComparison.OrdinalIgnoreCase))
                         {
                             currentBreak.Link = currentLine.Substring("[More information]".Length)
-                                .Trim(' ', '(', ')', '[', ']', '\t', '\n', '\r')      // Remove markdown link enclosures
-                                .Replace("\\(", "(").Replace("\\)", ")");             // Unescape parens in link
+                                .Trim(' ', '(', ')', '[', ']', '\t', '\n', '\r') // Remove markdown link enclosures
+                                .Replace("\\(", "(").Replace("\\)", ")"); // Unescape parens in link
                             state = ParseState.None;
                         }
 
@@ -241,6 +245,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.BugLink = currentLine.Trim();
                     }
+
                     break;
                 case ParseState.Scope:
                     BreakingChangeImpact scope;
@@ -248,6 +253,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.ImpactScope = scope;
                     }
+
                     break;
                 case ParseState.VersionBroken:
                     Version verBroken;
@@ -255,6 +261,7 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.VersionBroken = verBroken;
                     }
+
                     break;
                 case ParseState.VersionFixed:
                     Version verFixed;
@@ -262,19 +269,26 @@ namespace Microsoft.Fx.Portability
                     {
                         currentBreak.VersionFixed = verFixed;
                     }
+
                     break;
                 case ParseState.AffectedAPIs:
                     // Trim md list and code markers, as well as comment tags (in case the affected APIs section is followed by a comment)
                     string api = currentLine.Trim().TrimStart('*', '-', '`', ' ', '\t', '<', '!', '-').TrimEnd('`');
-                    if (string.IsNullOrWhiteSpace(api)) return;
+                    if (string.IsNullOrWhiteSpace(api))
+                    {
+                        return;
+                    }
+
                     if (currentBreak.ApplicableApis == null)
                     {
                         currentBreak.ApplicableApis = new List<string>();
                     }
-                    if (!s_ignoredApis.Contains(api))
+
+                    if (!IgnoredApis.Contains(api))
                     {
                         currentBreak.ApplicableApis.Add(api);
                     }
+
                     break;
                 case ParseState.Details:
                     if (currentBreak.Details == null)
@@ -283,8 +297,9 @@ namespace Microsoft.Fx.Portability
                     }
                     else
                     {
-                        currentBreak.Details += ("\n" + currentLine);
+                        currentBreak.Details += "\n" + currentLine;
                     }
+
                     break;
                 case ParseState.Suggestion:
                     if (currentBreak.Suggestion == null)
@@ -293,27 +308,33 @@ namespace Microsoft.Fx.Portability
                     }
                     else
                     {
-                        currentBreak.Suggestion += ("\n" + currentLine);
+                        currentBreak.Suggestion += "\n" + currentLine;
                     }
+
                     break;
                 case ParseState.Notes:
                     // Special-case the fact that 'notes' will often come at the end of a comment section and we don't need the closing --> in the note.
-                    if (string.Equals("-->", currentLine.Trim(), StringComparison.Ordinal)) return;
+                    if (string.Equals("-->", currentLine.Trim(), StringComparison.Ordinal))
+                    {
+                        return;
+                    }
+
                     if (currentBreak.Notes == null)
                     {
                         currentBreak.Notes = currentLine;
                     }
                     else
                     {
-                        currentBreak.Notes += ("\n" + currentLine);
+                        currentBreak.Notes += "\n" + currentLine;
                     }
+
                     break;
                 case ParseState.SourceAnalyzerStatus:
-                    BreakingChangeAnalyzerStatus status;
-                    if (Enum.TryParse<BreakingChangeAnalyzerStatus>(currentLine.Trim().Replace(" ", ""), true, out status))
+                    if (Enum.TryParse<BreakingChangeAnalyzerStatus>(currentLine.Trim().Replace(" ", string.Empty), true, out var status))
                     {
                         currentBreak.SourceAnalyzerStatus = status;
                     }
+
                     break;
                 case ParseState.Categories:
                     if (string.IsNullOrWhiteSpace(currentLine) || currentLine.StartsWith("<!--", StringComparison.Ordinal))
@@ -325,14 +346,14 @@ namespace Microsoft.Fx.Portability
                     if (!allowedCategories?.Contains(currentLine, StringComparer.OrdinalIgnoreCase) ?? false)
                     {
                         throw new InvalidOperationException(
-                            string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, currentLine)
-                        );
+                            string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidCategoryDetected, currentLine));
                     }
 
                     if (currentBreak.Categories == null)
                     {
                         currentBreak.Categories = new List<string>();
                     }
+
                     currentBreak.Categories.Add(currentLine);
                     break;
                 case ParseState.Comment:
@@ -341,6 +362,7 @@ namespace Microsoft.Fx.Portability
                     {
                         state = ParseState.None;
                     }
+
                     break;
                 default:
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidBreakingChangeParserState, state.ToString()));
@@ -350,9 +372,20 @@ namespace Microsoft.Fx.Portability
         private static void CleanAndAddBreak(List<BreakingChange> breakingChanges, BreakingChange currentBreak)
         {
             // Clean up trailing white-space, etc. from long-form text entries
-            if (currentBreak.Details != null) currentBreak.Details = currentBreak.Details.Trim();
-            if (currentBreak.Suggestion != null) currentBreak.Suggestion = currentBreak.Suggestion.Trim();
-            if (currentBreak.Notes != null) currentBreak.Notes = currentBreak.Notes.Trim();
+            if (currentBreak.Details != null)
+            {
+                currentBreak.Details = currentBreak.Details.Trim();
+            }
+
+            if (currentBreak.Suggestion != null)
+            {
+                currentBreak.Suggestion = currentBreak.Suggestion.Trim();
+            }
+
+            if (currentBreak.Notes != null)
+            {
+                currentBreak.Notes = currentBreak.Notes.Trim();
+            }
 
             breakingChanges.Add(currentBreak);
         }

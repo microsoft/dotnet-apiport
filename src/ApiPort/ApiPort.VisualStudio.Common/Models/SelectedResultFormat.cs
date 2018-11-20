@@ -12,9 +12,14 @@ namespace ApiPortVS
     public class SelectedResultFormat : ResultFormatInformation, INotifyPropertyChanged
     {
         private bool _isSelected;
+
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get
+            {
+                return _isSelected;
+            }
+
             set
             {
                 if (_isSelected == value)
@@ -34,7 +39,10 @@ namespace ApiPortVS
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
-        public SelectedResultFormat() { }
+        public SelectedResultFormat()
+        {
+        }
+
         public SelectedResultFormat(ResultFormatInformation format, bool isSelected)
         {
             DisplayName = format.DisplayName;

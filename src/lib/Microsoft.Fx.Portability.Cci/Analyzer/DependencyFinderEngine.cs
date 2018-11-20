@@ -63,8 +63,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                         MemberInfo m = new MemberInfo() { MemberDocId = dep.MemberDocId, TypeDocId = dep.TypeDocId, DefinedInAssemblyIdentity = dep.DefinedInAssemblyIdentity };
 
                         // Add this memberinfo
-                        HashSet<AssemblyInfo> newassembly = new HashSet<AssemblyInfo>();
-                        newassembly.Add(dep.CallingAssembly);
+                        var newassembly = new HashSet<AssemblyInfo>
+                        {
+                            dep.CallingAssembly
+                        };
                         ICollection<AssemblyInfo> assemblies = dependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
                                                                                                         {
                                                                                                             lock (existingSet)
@@ -93,10 +95,14 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         callingAssembly = e.Referrer.GetAssemblyReference().AssemblyIdentity.Format();
                     }
-                    catch { }
+                    catch
+                    {
+                    }
 
-                    HashSet<string> newValue = new HashSet<string>();
-                    newValue.Add(callingAssembly);
+                    HashSet<string> newValue = new HashSet<string>
+                    {
+                        callingAssembly
+                    };
                     _unresolvedAssemblies.AddOrUpdate(e.Unresolved.Format(), newValue, (key, existingHashSet) =>
                     {
                         lock (existingHashSet)
@@ -113,7 +119,6 @@ namespace Microsoft.Fx.Portability.Analyzer
                 if (cciAssembly == null)
                 {
                     _assembliesWithError.Add(assemblyLocation);
-                    // error.
                     yield break;
                 }
 
@@ -135,9 +140,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var reference in cciAssembly.GetTypeMemberReferences())
                 {
                     if (reference.ContainingType.GetAssemblyReference() == null)
+                    {
                         continue;
+                    }
 
                     string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
+
                     // return the type
                     yield return new MemberDependency()
                     {
@@ -146,7 +154,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                         DefinedInAssemblyIdentity = definedIn
                     };
 
-                    //return the member
+                    // return the member
                     yield return new MemberDependency()
                     {
                         CallingAssembly = assemblyInfo,
@@ -160,7 +168,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 foreach (var refence in cciAssembly.GetTypeReferences())
                 {
                     string definedIn = refence.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
-                    //return the type
+
+                    // return the type
                     yield return new MemberDependency()
                     {
                         CallingAssembly = assemblyInfo,

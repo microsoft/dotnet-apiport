@@ -10,6 +10,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
     public class MissingInfo
     {
         public string DocId { get; set; }
+
         public string RecommendedChanges { get; protected set; }
 
         public MissingInfo(string docId)
@@ -24,8 +25,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public override bool Equals(object obj)
         {
-            MissingInfo other = obj as MissingInfo;
-            return other != null && StringComparer.Ordinal.Equals(other.DocId, DocId);
+            return obj is MissingInfo other && StringComparer.Ordinal.Equals(other.DocId, DocId);
         }
 
         protected static string GenerateTargetStatusMessage(Version version)

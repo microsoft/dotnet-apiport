@@ -16,9 +16,12 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 {
     public class AnalysisEngineTests
     {
+        private const string TestDocId1 = "T:System.Drawing.Color";
+        private const string TestDocId2 = "T:System.Data.SqlTypes.SqlBoolean";
+
         #region FindUnreferencedAssemblies
 
-        private static List<string> s_unreferencedAssemblies = new List<string>()
+        private static readonly List<string> UnreferencedAssemblies = new List<string>()
             {
                 "Microsoft.CSharp, Version=4.0.0.0, PublicKeyToken=b03f5f7f11d50a3a",
                 "MyAssembly"
@@ -39,7 +42,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var result = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, null).ToList();
+            var result = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, null).ToList();
 
             Assert.NotNull(result);
         }
@@ -51,8 +54,8 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = s_unreferencedAssemblies.Select(ua => new AssemblyInfo() { AssemblyIdentity = ua, FileVersion = "0.0.0.0" }).ToList();
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
+            var specifiedUserAssemblies = UnreferencedAssemblies.Select(ua => new AssemblyInfo() { AssemblyIdentity = ua, FileVersion = "0.0.0.0" }).ToList();
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // We don't expect to have any unreferenced assemblies.
             Assert.Empty(unreferencedAssms);
@@ -62,13 +65,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_1()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = new[] { new AssemblyInfo { FileVersion = "", AssemblyIdentity = "MyAssembly" } };
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
+            var specifiedUserAssemblies = new[] { new AssemblyInfo { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" } };
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // 0 missing assembly since Microsoft.CSharp is a FX assembly and we specified MyAssembly
             Assert.Empty(unreferencedAssms);
@@ -78,12 +81,12 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_2()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, Enumerable.Empty<AssemblyInfo>()).ToList();
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, Enumerable.Empty<AssemblyInfo>()).ToList();
 
             // 1 missing assembly since Microsoft.CSharp is a FX assembly
             Assert.Single(unreferencedAssms);
@@ -93,13 +96,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInSpecifiedList()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = "", AssemblyIdentity = "MyAssembly" }, null };
-            var unreferencedAssms = engine.FindUnreferencedAssemblies(s_unreferencedAssemblies, specifiedUserAssemblies).ToList();
+            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" }, null };
+            var unreferencedAssms = engine.FindUnreferencedAssemblies(UnreferencedAssemblies, specifiedUserAssemblies).ToList();
 
             // 0 missing assembly since Microsoft.CSharp is a fx assembly and we specified MyAssembly
             Assert.Empty(unreferencedAssms);
@@ -109,13 +112,13 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         public static void FindUnreferencedAssemblies_UnreferencedAssemblies_WithNullInUnrefList()
         {
             var catalog = Substitute.For<IApiCatalogLookup>();
-            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(s_unreferencedAssemblies[0])).Returns(true);
+            catalog.IsFrameworkAssembly(GetAssemblyIdentityWithoutCultureAndVersion(UnreferencedAssemblies[0])).Returns(true);
 
             var recommendations = Substitute.For<IApiRecommendations>();
             var engine = new AnalysisEngine(catalog, recommendations, null);
 
-            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = "", AssemblyIdentity = "MyAssembly" } };
-            var listWithNulls = s_unreferencedAssemblies.Concat(new List<string>() { null }).ToList();
+            var specifiedUserAssemblies = new List<AssemblyInfo>() { new AssemblyInfo() { FileVersion = string.Empty, AssemblyIdentity = "MyAssembly" } };
+            var listWithNulls = UnreferencedAssemblies.Concat(new List<string>() { null }).ToList();
 
             var unreferencedAssms = engine.FindUnreferencedAssemblies(listWithNulls, specifiedUserAssemblies).ToList();
 
@@ -361,7 +364,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             Assert.Equal(3, result.Count());
 
-            //verify only 3, 4 and 5 are in the list
+            // verify only 3, 4 and 5 are in the list
             int expectedID = 3;
             foreach (BreakingChangeDependency bcd in result)
             {
@@ -390,7 +393,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             Assert.Equal(5, result.Count());
 
-            //verify 1, 2, 3, 4 and 5 are in the list
+            // verify 1, 2, 3, 4 and 5 are in the list
             int expectedID = 1;
             foreach (BreakingChangeDependency bcd in result)
             {
@@ -432,6 +435,7 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             var mi2_usedIn = result[mi2];
             Assert.True(mi2_usedIn.Contains(userAsm3) && !mi2_usedIn.Contains(userAsm2));
         }
+
         private static void TestBreakingChangeWithoutFixedEntry(Version version, bool noBreakingChangesExpected)
         {
             TestBreakingChange(version, GenerateTestRecommendationsWithoutFixedEntry(), noBreakingChangesExpected, null, Enumerable.Empty<string>());
@@ -541,12 +545,12 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         {
             int lastIDUsed = 1;
             var recommendations = Substitute.For<IApiRecommendations>();
-            List<BreakingChange> breakingChanges = new List<BreakingChange>();
+            var breakingChanges = new List<BreakingChange>();
 
-            //add requested number of retargetting issues
+            // add requested number of retargetting issues
             for (int i = 0; i < numOfRetargettingIssues; i++)
             {
-                //add a new breaking change
+                // add a new breaking change
                 BreakingChange bc = new BreakingChange
                 {
                     ApplicableApis = new[] { TestDocId1 },
@@ -560,11 +564,11 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
                 lastIDUsed++;
             }
 
-            //add requested number of runtime issues
+            // add requested number of runtime issues
             for (int i = 0; i < numOfRuntimeIssues; i++)
             {
-                //add a new breaking change
-                BreakingChange bc = new BreakingChange
+                // add a new breaking change
+                var bc = new BreakingChange
                 {
                     ApplicableApis = new[] { TestDocId1 },
                     Id = lastIDUsed.ToString(CultureInfo.CurrentCulture),
@@ -582,13 +586,15 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
             return recommendations;
         }
 
-        private const string TestDocId1 = "T:System.Drawing.Color";
-        private const string TestDocId2 = "T:System.Data.SqlTypes.SqlBoolean";
-
         private static ICollection<IgnoreAssemblyInfo> GenerateIgnoreAssemblies(bool otherAssm, string[] targetFrameworks)
         {
-            return new[] {
-                new IgnoreAssemblyInfo() { AssemblyIdentity = otherAssm? "userAsm2, Version=2.0.0.0" : "userAsm1, Version=1.0.0.0", TargetsIgnored = targetFrameworks }
+            return new[]
+            {
+                new IgnoreAssemblyInfo
+                {
+                    AssemblyIdentity = otherAssm ? "userAsm2, Version=2.0.0.0" : "userAsm1, Version=1.0.0.0",
+                    TargetsIgnored = targetFrameworks
+                }
             };
         }
 
@@ -608,9 +614,9 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
 
             return new Dictionary<MemberInfo, ICollection<AssemblyInfo>>
             {
-                {mi1, new[] { userAsm1 } },
-                {mi2, new[] { userAsm2 } },
-                {mi3, new[] { userAsm3 } },
+                { mi1, new[] { userAsm1 } },
+                { mi2, new[] { userAsm2 } },
+                { mi3, new[] { userAsm3 } },
             };
         }
 

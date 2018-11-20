@@ -21,7 +21,7 @@ namespace Microsoft.Fx.Portability.Tests
             var httpMessageHandler = new TestHandler(HttpRequestConverter);
             var productInformation = new ProductInformation("ApiPort_Tests");
 
-            //Create a fake ApiPortService which uses the TestHandler to send back the response message
+            // Create a fake ApiPortService which uses the TestHandler to send back the response message
             _apiPortService = new ApiPortService("http://localhost", httpMessageHandler, productInformation);
         }
 
@@ -33,9 +33,9 @@ namespace Microsoft.Fx.Portability.Tests
         [Fact]
         public static void VerifyParameterChecks()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation("")));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation("")));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation("")));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(null, new ProductInformation(string.Empty)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(string.Empty, new ProductInformation(string.Empty)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ApiPortService(" \t", new ProductInformation(string.Empty)));
         }
 
         [Fact]
@@ -97,8 +97,10 @@ namespace Microsoft.Fx.Portability.Tests
             var streamContent = new StreamContent(resourceStream);
             streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-            response.Content = streamContent;
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = streamContent
+            };
             return response;
         }
     }
@@ -111,6 +113,7 @@ namespace Microsoft.Fx.Portability.Tests
         {
             _converter = converter;
         }
+
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             return Task.FromResult(_converter(request));

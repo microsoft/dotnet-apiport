@@ -16,9 +16,13 @@ namespace Microsoft.Fx.Portability.ObjectModel
         }
 
         public string Name { get; set; }
+
         public string Description { get; set; }
+
         public Version Version { get; set; }
+
         public IEnumerable<string> ExpandedTargets { get; set; }
+
         public bool IsSet { get; set; }
 
         public override string ToString()

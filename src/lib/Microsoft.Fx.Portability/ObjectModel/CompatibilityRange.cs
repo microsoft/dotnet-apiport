@@ -11,10 +11,15 @@ namespace Microsoft.Fx.Portability.ObjectModel
     public class CompatibilityRange
     {
         public string FrameworkName { get; set; }
+
         public Version StartVersion { get; set; }
+
         public Version EndVersion { get; set; }
+
         public Version LatestVersion { get; set; }
+
         public Version DefaultVersion { get; set; }
+
         public bool IsRetargeting { get; set; }
     }
 }

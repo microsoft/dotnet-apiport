@@ -4,8 +4,8 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Versioning;
 using System.Linq;
+using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.TestData
 {
@@ -62,25 +62,21 @@ namespace Microsoft.Fx.Portability.TestData
         public Version GetVersionIntroducedIn(string docId, FrameworkName target)
         {
             if (docId == DocId1)
+            {
                 return Target1.Version;
+            }
 
             return null;
         }
 
         public bool IsFrameworkAssembly(string assemblyIdentity)
         {
-            if (assemblyIdentity == "mscorlib")
-                return true;
-
-            return false;
+            return assemblyIdentity == "mscorlib";
         }
 
         public bool IsFrameworkMember(string docId)
         {
-            if (docId == DocId1)
-                return true;
-
-            return false;
+            return docId == DocId1;
         }
 
         public bool IsMemberInTarget(string docId, FrameworkName targetName, out Version introducedVersion)
@@ -97,8 +93,7 @@ namespace Microsoft.Fx.Portability.TestData
 
         public bool IsMemberInTarget(string docId, FrameworkName targetName)
         {
-            Version v;
-            return IsMemberInTarget(docId, targetName, out v);
+            return IsMemberInTarget(docId, targetName, out var v);
         }
 
         public string GetRecommendedChange(string docId)
@@ -111,7 +106,7 @@ namespace Microsoft.Fx.Portability.TestData
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FrameworkName> GetSupportedVersions(string DocId)
+        public IEnumerable<FrameworkName> GetSupportedVersions(string docId)
         {
             throw new NotImplementedException();
         }

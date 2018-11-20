@@ -32,11 +32,13 @@ namespace Microsoft.Fx.Portability.Analysis
         {
             foreach (AssemblyInfo a in userAssemblies)
             {
+                // The assembly must be in assembliesToIgnore and
+                // either be 'IgnoreForAllTargets' or
+                // all targeted Frameworks are in the ignore list for the assembly
                 if (assembliesToIgnore.Any(i =>
-                    i.AssemblyIdentity.Equals(a.AssemblyIdentity, StringComparison.OrdinalIgnoreCase) &&        // The assembly must be in assembliesToIgnore and 
-                    (i.IgnoreForAllTargets ||                                                                   // either be 'IgnoreForAllTargets' or
-                    targets.All(f => i.TargetsIgnored.Contains(f.FullName, StringComparer.OrdinalIgnoreCase)))  // all targeted Frameworks are in the ignore list for the assembly
-                ))
+                    i.AssemblyIdentity.Equals(a.AssemblyIdentity, StringComparison.OrdinalIgnoreCase) &&
+                    (i.IgnoreForAllTargets ||
+                    targets.All(f => i.TargetsIgnored.Contains(f.FullName, StringComparer.OrdinalIgnoreCase)))))
                 {
                     yield return a;
                 }
@@ -118,8 +120,8 @@ namespace Microsoft.Fx.Portability.Analysis
 
         public IList<MemberInfo> FindMembersNotInTargets(IEnumerable<FrameworkName> targets, ICollection<string> submittedAssemblies, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
-            //Trace.TraceInformation("Computing members not in target");
-            Stopwatch sw = new Stopwatch();
+            // Trace.TraceInformation("Computing members not in target");
+            var sw = new Stopwatch();
             sw.Start();
 
             if (dependencies == null || dependencies.Keys == null || targets == null)
@@ -139,8 +141,8 @@ namespace Microsoft.Fx.Portability.Analysis
                 .ToList();
 
             sw.Stop();
-            //Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
 
+            // Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
             return missingMembers;
         }
 
@@ -183,9 +185,7 @@ namespace Microsoft.Fx.Portability.Analysis
                 // For each target we should get the status of the api:
                 //   - 'null' if not supported
                 //   - Version introduced in
-                Version status;
-
-                if (!IsSupportedOnTarget(catalog, memberDocId, target, out status))
+                if (!IsSupportedOnTarget(catalog, memberDocId, target, out var status))
                 {
                     isSupported = false;
                 }
@@ -204,7 +204,9 @@ namespace Microsoft.Fx.Portability.Analysis
         public IEnumerable<string> FindUnreferencedAssemblies(IEnumerable<string> unreferencedAssemblies, IEnumerable<AssemblyInfo> specifiedUserAssemblies)
         {
             if (unreferencedAssemblies == null)
+            {
                 yield break;
+            }
 
             // Find the unreferenced assemblies that are not framework assemblies.
             var userUnreferencedAssemblies = unreferencedAssemblies.AsParallel().
@@ -216,11 +218,15 @@ namespace Microsoft.Fx.Portability.Analysis
             {
                 // if somehow a null made it through...
                 if (userAsm == null)
+                {
                     continue;
+                }
 
                 // If the unresolved assembly was not actually specified, we need to tell the user that.
                 if (specifiedUserAssemblies != null && specifiedUserAssemblies.Any(ua => ua != null && StringComparer.OrdinalIgnoreCase.Equals(ua.AssemblyIdentity, userAsm)))
+                {
                     continue;
+                }
 
                 yield return userAsm;
             }
@@ -234,7 +240,7 @@ namespace Microsoft.Fx.Portability.Analysis
                 {
                     foreach (var nuGetPackageInfo in packages)
                     {
-                        //check if the assembly is set
+                        // Check if the assembly is set
                         if (nuGetPackageInfo.AssemblyInfo == null)
                         {
                             yield return new NuGetPackageInfo(nuGetPackageInfo.PackageId, nuGetPackageInfo.SupportedVersions, assembly);
@@ -291,6 +297,7 @@ namespace Microsoft.Fx.Portability.Analysis
                         break;
                     }
                 }
+
                 if (supportedOnAllTargets)
                 {
                     yield return assembly.AssemblyIdentity;
@@ -311,6 +318,7 @@ namespace Microsoft.Fx.Portability.Analysis
                     filteredDependencies.Add(dependency.Key, newList.ToList());
                 }
             }
+
             return filteredDependencies;
         }
 
@@ -349,7 +357,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
         private class MemberInfoBreakingChangeComparer : IEqualityComparer<Tuple<MemberInfo, BreakingChange>>
         {
-            public static IEqualityComparer<Tuple<MemberInfo, BreakingChange>> Instance = new MemberInfoBreakingChangeComparer();
+            public static readonly IEqualityComparer<Tuple<MemberInfo, BreakingChange>> Instance = new MemberInfoBreakingChangeComparer();
 
             public bool Equals(Tuple<MemberInfo, BreakingChange> x, Tuple<MemberInfo, BreakingChange> y)
             {

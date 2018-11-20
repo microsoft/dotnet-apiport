@@ -148,15 +148,15 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// Add the type arguments for generic instances. Go through all type names, and if it is generic, such 
+        /// Add the type arguments for generic instances. Go through all type names, and if it is generic, such
         /// as Hashtable`1, remove the `1. Look in the arguments list and put the list of arguments in between {}
         ///
-        /// Example: Hashtable{`0}.KeyValuePair 
-        /// 
+        /// Example: Hashtable{`0}.KeyValuePair
+        ///
         /// There are some interesting corner cases involving nested types -
         /// First, generic argument indexes are counted over all types in the nested type hierarchy.
         /// Therefore, OuterClass`2.InnerClass`2 should resolve as OuterClass{`0,`1}.InnerClass{`2,`3}.
-        /// 
+        ///
         /// Secondly, it is not required that all generic arguments be made concrete.
         /// For example, it's possible in IL to define nested generic types OuterClass`2.InnerClass`2 and
         /// then pass only two generic types in GenericTypeArgs. In such cases, the type should resolve
@@ -223,7 +223,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append(string.Join(",", GenericTypeArgs.GetRange(index, numGenericArgs)));
                 sb.Append("}");
 
-                // Add any part that was after the generic entry 
+                // Add any part that was after the generic entry
                 if (displayName.Length > offsetStringAfterGenericMarker)
                 {
                     var length = displayName.Length - offsetStringAfterGenericMarker;
@@ -248,12 +248,26 @@ namespace Microsoft.Fx.Portability.Analyzer
             char[] newName = new char[name.Length];
             for (int i = 0; i < name.Length; i++)
             {
-                if (name[i] == '<') newName[i] = '{';
-                else if (name[i] == '>') newName[i] = '}';
-                else if (name[i] == '.') newName[i] = '#';
-                else if (name[i] == ',') newName[i] = '@';
-                else newName[i] = name[i];
+                switch (name[i])
+                {
+                    case '<':
+                        newName[i] = '{';
+                        break;
+                    case '>':
+                        newName[i] = '}';
+                        break;
+                    case '.':
+                        newName[i] = '#';
+                        break;
+                    case ',':
+                        newName[i] = '@';
+                        break;
+                    default:
+                        newName[i] = name[i];
+                        break;
+                }
             }
+
             return new string(newName);
         }
 
@@ -282,7 +296,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
             }
 
-            // Add the method signature 
+            // Add the method signature
             if (Kind == MemberKind.Method && MethodSignature.ParameterTypes.Count() > 0)
             {
                 sb.Append("(");
@@ -305,8 +319,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 sb.Append("(__arglist)");
             }
 
-            // Technically, we want to verify that these are marked as a special name along with the names op_Implicit or op_Explicit.  However, 
-            // since we are just using member references, we don't have enought information to know if it is.  For now, we will assume that it is 
+            // Technically, we want to verify that these are marked as a special name along with the names op_Implicit or op_Explicit.  However,
+            // since we are just using member references, we don't have enought information to know if it is.  For now, we will assume that it is
             // a special name if it only has one input parameter
             if (Kind == MemberKind.Method && MethodSignature.ParameterTypes.Length == 1 &&
                 (string.Equals(Name, "op_Implicit", StringComparison.Ordinal) || string.Equals(Name, "op_Explicit", StringComparison.Ordinal)))
@@ -320,7 +334,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private static bool CalculateGenericArgsOffset(string displayName, int pos, out int numGenericArgs, out int offsetStringAfterGenericMarker)
         {
-            Debug.Assert(displayName[pos] == '`');
+            Debug.Assert(displayName[pos] == '`', $"Name should contain ` but contains {displayName[pos]}");
 
             offsetStringAfterGenericMarker = ++pos;
 

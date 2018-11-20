@@ -32,7 +32,7 @@ namespace Microsoft.Fx.Portability
             IEnumerable<AssemblyInfo> assembliesToIgnore,
             IEnumerable<string> breakingChangesToSuppress,
             ICollection<string> userAssemblies,
-            bool ShowRetargettingIssues = false);
+            bool showRetargettingIssues = false);
 
         IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfoFromAssembly(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets);
 

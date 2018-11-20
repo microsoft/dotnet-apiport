@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
 using Xunit;
+
 using static Microsoft.Fx.Portability.Tests.TestData.TestFrameworks;
 
 namespace Microsoft.Fx.Portability.Tests.ObjectModel
@@ -20,9 +21,9 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
             var packageId1 = "Remotion.Linq";
             var packageId2 = "Antlr3.Runtime";
             var packageId3 = "NHibernate";
-            var nuget1 = new NuGetPackageInfo(packageId1, new Dictionary<FrameworkName, string>(), "");
-            var nuget2 = new NuGetPackageInfo(packageId2, new Dictionary<FrameworkName, string>(), "");
-            var nuget3 = new NuGetPackageInfo(packageId3, new Dictionary<FrameworkName, string>(), "");
+            var nuget1 = new NuGetPackageInfo(packageId1, new Dictionary<FrameworkName, string>(), string.Empty);
+            var nuget2 = new NuGetPackageInfo(packageId2, new Dictionary<FrameworkName, string>(), string.Empty);
+            var nuget3 = new NuGetPackageInfo(packageId3, new Dictionary<FrameworkName, string>(), string.Empty);
 
             var nugetList = new List<NuGetPackageInfo>() { nuget1, nuget2, nuget3 };
             nugetList.Sort(new NuGetPackageInfoComparer());

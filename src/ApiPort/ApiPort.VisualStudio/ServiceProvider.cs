@@ -4,8 +4,8 @@
 using ApiPortVS.Analyze;
 using ApiPortVS.Contracts;
 using ApiPortVS.Models;
-using ApiPortVS.Resources;
 using ApiPortVS.Reporting;
+using ApiPortVS.Resources;
 using ApiPortVS.SourceMapping;
 using ApiPortVS.ViewModels;
 using ApiPortVS.Views;
@@ -18,19 +18,20 @@ using Microsoft.Fx.Portability.Reporting;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 using static Microsoft.VisualStudio.VSConstants;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace ApiPortVS
 {
-    internal sealed class ServiceProvider : IDisposable, IServiceProvider
+    internal sealed class ServiceProvider : IDisposable, IAsyncServiceProvider, IServiceProvider
     {
-        private static Guid OutputWindowGuid = new Guid(0xe2fc797f, 0x1dd3, 0x476c, 0x89, 0x17, 0x86, 0xcd, 0x31, 0x33, 0xc4, 0x69);
-        private static readonly DirectoryInfo AssemblyDirectory = new FileInfo(typeof(ServiceProvider).Assembly.Location).Directory;
         private const string DefaultEndpoint = @"https://portability.dot.net/";
+        private static readonly DirectoryInfo AssemblyDirectory = new FileInfo(typeof(ServiceProvider).Assembly.Location).Directory;
+        private static Guid _outputWindowGuid = new Guid(0xe2fc797f, 0x1dd3, 0x476c, 0x89, 0x17, 0x86, 0xcd, 0x31, 0x33, 0xc4, 0x69);
 
         private readonly IContainer _container;
 
@@ -137,11 +138,6 @@ namespace ApiPortVS
             _container = builder.Build();
         }
 
-        public object GetService(Type serviceType)
-        {
-            return _container.Resolve(serviceType);
-        }
-
         public void Dispose()
         {
             _container.Dispose();
@@ -173,14 +169,14 @@ namespace ApiPortVS
             {
                 var outputWindow = provider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
 
-                if (outputWindow.GetPane(ref OutputWindowGuid, out IVsOutputWindowPane windowPane) == S_OK)
+                if (outputWindow.GetPane(ref _outputWindowGuid, out IVsOutputWindowPane windowPane) == S_OK)
                 {
                     return windowPane;
                 }
 
-                if (outputWindow.CreatePane(ref OutputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
+                if (outputWindow.CreatePane(ref _outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
                 {
-                    if (outputWindow.GetPane(ref OutputWindowGuid, out windowPane) == S_OK)
+                    if (outputWindow.GetPane(ref _outputWindowGuid, out windowPane) == S_OK)
                     {
                         return windowPane;
                     }
@@ -213,6 +209,16 @@ namespace ApiPortVS
             }
 
             return new OutputViewModel(validReports.Select(x => x.FullName));
+        }
+
+        Task<object> IAsyncServiceProvider.GetServiceAsync(Type serviceType)
+        {
+            return System.Threading.Tasks.Task.FromResult<object>(_container.Resolve(serviceType));
+        }
+
+        public object GetService(Type serviceType)
+        {
+            return _container.Resolve(serviceType);
         }
     }
 }

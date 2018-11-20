@@ -31,7 +31,7 @@ namespace Microsoft.Fx.Portability
             _mapper = mapper;
             _reportWriters = reportWriters;
             _defaultTargets = new HashSet<FrameworkName>(targetNameParser.DefaultTargets);
-            _searcher = new StringContainsSearch(lookup);
+            _searcher = new StringContainsSearcher(lookup);
             _apiRecommendations = apiRecommendations;
         }
 
@@ -59,7 +59,7 @@ namespace Microsoft.Fx.Portability
         {
             var response = _requestAnalyzer.AnalyzeRequest(a, Guid.NewGuid().ToString());
 
-            if(!formats?.Any() ?? true)
+            if (!formats?.Any() ?? true)
             {
                 var defaultFormat = await GetDefaultResultFormatAsync();
                 formats = new[] { defaultFormat.Response.DisplayName };

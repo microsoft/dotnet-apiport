@@ -8,7 +8,7 @@ namespace Microsoft.Fx.Portability.Proxy
     /// </summary>
     internal class ProxyConstants
     {
-        /// Configuration keys for config.json
+        // Configuration keys for config.json
         public const string ProxySection = "proxy";
         public const string Username = nameof(Username);
         public const string Address = nameof(Address);

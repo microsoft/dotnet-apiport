@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability
 {
-    public class StringContainsSearch : ISearcher<string>
+    public class StringContainsSearcher : ISearcher<string>
     {
         private readonly IApiCatalogLookup _lookup;
 
-        public StringContainsSearch(IApiCatalogLookup lookup)
+        public StringContainsSearcher(IApiCatalogLookup lookup)
         {
             _lookup = lookup;
         }

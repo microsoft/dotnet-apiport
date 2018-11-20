@@ -29,6 +29,7 @@ namespace ApiPortVS.ViewModels
         private bool _hasError;
         private bool _updating;
         private bool _saveMetadata;
+        private string _errorMessage;
 
         public OptionsViewModel(IApiPortService apiPort, ITargetMapper targetMapper, OptionsModel optionsModel)
         {
@@ -51,7 +52,11 @@ namespace ApiPortVS.ViewModels
 
         public IList<SelectedResultFormat> Formats
         {
-            get { return _optionsModel.Formats; }
+            get
+            {
+                return _optionsModel.Formats;
+            }
+
             set
             {
                 _optionsModel.Formats = value;
@@ -61,7 +66,11 @@ namespace ApiPortVS.ViewModels
 
         public IList<TargetPlatform> Targets
         {
-            get { return _optionsModel.Platforms; }
+            get
+            {
+                return _optionsModel.Platforms;
+            }
+
             set
             {
                 _optionsModel.Platforms = value;
@@ -84,7 +93,11 @@ namespace ApiPortVS.ViewModels
 
         public string OutputDirectory
         {
-            get { return _optionsModel.OutputDirectory; }
+            get
+            {
+                return _optionsModel.OutputDirectory;
+            }
+
             set
             {
                 _optionsModel.OutputDirectory = value;
@@ -94,7 +107,11 @@ namespace ApiPortVS.ViewModels
 
         public string DefaultOutputName
         {
-            get { return _optionsModel.DefaultOutputName; }
+            get
+            {
+                return _optionsModel.DefaultOutputName;
+            }
+
             set
             {
                 _optionsModel.DefaultOutputName = value;
@@ -108,7 +125,6 @@ namespace ApiPortVS.ViewModels
             set { UpdateProperty(ref _hasError, value); }
         }
 
-        private string _errorMessage;
         public string ErrorMessage
         {
             get { return _errorMessage; }
@@ -204,15 +220,14 @@ namespace ApiPortVS.ViewModels
                 return new TargetPlatform
                 {
                     Name = t.Key,
-
                     Versions = t.Select(v => new TargetPlatformVersion
                     {
                         PlatformName = t.Key,
                         Version = v.Version,
-                        IsSelected = v.IsSet
+                        IsSelected = v.IsSet,
                     })
                     .OrderBy(v => v.Version)
-                    .ToList()
+                    .ToList(),
                 };
             });
 
@@ -244,7 +259,7 @@ namespace ApiPortVS.ViewModels
                     {
                         foreach (var name in _targetMapper.GetNames(alias))
                         {
-                            if (String.Equals(platform.Name, name, StringComparison.Ordinal))
+                            if (string.Equals(platform.Name, name, StringComparison.Ordinal))
                             {
                                 platform.AlternativeNames.Add(alias);
                             }
@@ -289,6 +304,7 @@ namespace ApiPortVS.ViewModels
                         HasError = false;
                         ErrorMessage = string.Empty;
                     }
+
                     break;
             }
         }

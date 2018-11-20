@@ -135,9 +135,8 @@ namespace Microsoft.Fx.Portability.Proxy
         {
             // Try reading from the environment variable http_proxy. This would be specified as http://<username>:<password>@proxy.com
             var host = Environment.GetEnvironmentVariable(ProxyConstants.HttpProxy);
-            Uri uri;
             if (!string.IsNullOrEmpty(host)
-                && Uri.TryCreate(host, UriKind.Absolute, out uri))
+                && Uri.TryCreate(host, UriKind.Absolute, out var uri))
             {
                 var webProxy = new ApiPort.Proxy.WebProxy(uri.GetComponents(UriComponents.HttpRequestUrl, UriFormat.SafeUnescaped));
 
@@ -149,8 +148,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     {
                         webProxy.Credentials = new NetworkCredential(
                             userName: credentials[0],
-                            password: credentials[1]
-                        );
+                            password: credentials[1]);
                     }
                 }
 
@@ -175,11 +173,9 @@ namespace Microsoft.Fx.Portability.Proxy
         private IWebProxy GetWebProxyFromConfiguration()
         {
             string host;
-            bool isEnabled;
-
             string isEnabledString = GetValueFromProxyConfiguration<string>(_configuration, ProxyConstants.IsEnabled);
 
-            if (!bool.TryParse(isEnabledString, out isEnabled) || !isEnabled)
+            if (!bool.TryParse(isEnabledString, out var isEnabled) || !isEnabled)
             {
                 return null;
             }
@@ -227,8 +223,6 @@ namespace Microsoft.Fx.Portability.Proxy
         /// <summary>
         /// Return true or false if connecting through a proxy server
         /// </summary>
-        /// <param name="uri"></param>
-        /// <returns></returns>
         private static bool IsSystemProxySet(Uri uri)
         {
             // The reason for not calling the GetSystemProxy is because the object
@@ -250,6 +244,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     {
                         return false;
                     }
+
                     return !proxy.IsBypassed(uri);
                 }
             }

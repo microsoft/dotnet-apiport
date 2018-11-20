@@ -101,7 +101,8 @@ namespace Microsoft.Fx.Portability.Tests
                 Suggestion = "Be aware that Application.FilterMessage will no longer throw for the re-entrant IMessageFilter.PreFilterMessage behavior described above. This only affects applications targeting the .NET Framework 4.6.1.",
                 Categories = new List<string> { "Windows Forms" },
                 Link = "https://msdn.microsoft.com/en-us/library/mt620031%28v=vs.110%29.aspx#WinForms",
-                ApplicableApis = new List<string> {
+                ApplicableApis = new List<string>
+                {
                     "M:System.Windows.Forms.Application.FilterMessage(System.Windows.Forms.Message@)"
                 },
                 Notes = "It's unclear if this one will be better analyzed by Application.FilterMessage callers (who would have seen the exception previously)"
@@ -168,10 +169,10 @@ namespace Microsoft.Fx.Portability.Tests
         #endregion
 
         #region Negative Test Cases
+
         // This is intentionally empty as the breaking change parser is never expected
         // to throw. In the case of invalid/corrupt inputs, it will do its best to return
         // partially correct breaking changes or, in the worst case, an empty set of breaks.
-
         #endregion
 
         #region Helper Methods
@@ -245,7 +246,7 @@ namespace Microsoft.Fx.Portability.Tests
         #endregion
 
         #region Expected Breaking Changes
-        public static BreakingChange TemplateBC = new BreakingChange
+        private static readonly BreakingChange TemplateBC = new BreakingChange
         {
             Id = "100",
             Title = "Breaking Change Title",
@@ -263,7 +264,7 @@ namespace Microsoft.Fx.Portability.Tests
             Notes = "Source analyzer status: Not usefully detectable with an analyzer"
         };
 
-        public static BreakingChange ListTBC = new BreakingChange
+        private static readonly BreakingChange ListTBC = new BreakingChange
         {
             Id = "5",
             Title = "List<T>.ForEach",
@@ -279,7 +280,7 @@ namespace Microsoft.Fx.Portability.Tests
             Notes = "This introduces an exception, but requires retargeting\nSource analyzer status: Pri 1, source and binary done (MikeRou)"
         };
 
-        public static BreakingChange UriBC = new BreakingChange
+        private static readonly BreakingChange UriBC = new BreakingChange
         {
             Id = "6",
             Title = "System.Uri",
@@ -290,7 +291,8 @@ namespace Microsoft.Fx.Portability.Tests
             IsBuildTime = false,
             SourceAnalyzerStatus = BreakingChangeAnalyzerStatus.Available,
             Suggestion = "If the old .NET 4.0 URI parsing semantics are necessary (they often aren't), they can be used by targeting .NET 4.0. This can be accomplished by using a TargetFrameworkAttribute on the assembly, or through Visual Studio's project system UI in the 'project properties' page.",
-            ApplicableApis = new[] {
+            ApplicableApis = new[]
+            {
                 "M:System.Uri.#ctor(System.String)",
                 "M:System.Uri.#ctor(System.String,System.Boolean)",
                 "M:System.Uri.#ctor(System.String,System.UriKind)",
@@ -303,7 +305,7 @@ namespace Microsoft.Fx.Portability.Tests
             Notes = "Changes IRI parsing, requires access to parameters to detect\nSource analyzer status: Pri 1, source done (AlPopa)"
         };
 
-        public static BreakingChange LongPathSupportBC = new BreakingChange
+        private static readonly BreakingChange LongPathSupportBC = new BreakingChange
         {
             Id = "162",
             Title = "Long path support",
@@ -319,7 +321,7 @@ namespace Microsoft.Fx.Portability.Tests
             Categories = new[] { "Core" }
         };
 
-        public static BreakingChange OptionalBC = new BreakingChange
+        private static readonly BreakingChange OptionalBC = new BreakingChange
         {
             Id = "50",
             Title = "Opt-in break to revert from different 4.5 SQL generation to simpler 4.0 SQL generation",
@@ -334,7 +336,7 @@ namespace Microsoft.Fx.Portability.Tests
             Categories = new[] { "Entity Framework" }
         };
 
-        public static BreakingChange PointerStackBC = new BreakingChange
+        private static readonly BreakingChange PointerStackBC = new BreakingChange
         {
             Id = "172",
             Title = "WPF Pointer-Based Touch Stack",
@@ -349,7 +351,7 @@ namespace Microsoft.Fx.Portability.Tests
             Categories = new[] { "Windows Presentation Foundation (WPF)" }
         };
 
-        public static BreakingChange AccessibilityBC = new BreakingChange
+        private static readonly BreakingChange AccessibilityBC = new BreakingChange
         {
             Title = "ASP.NET Accessibility Improvements in .NET 4.7.1",
             ImpactScope = BreakingChangeImpact.Minor,
