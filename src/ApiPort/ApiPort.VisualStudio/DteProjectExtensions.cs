@@ -3,36 +3,17 @@
 
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace ApiPortVS
 {
     internal static class DteProjectExtensions
     {
-        public static string GetProjectFileDirectory(this Project project)
-        {
-            return Path.GetDirectoryName(project.FullName); // FullName is the project file path
-        }
-
-        public static IVsHierarchy GetHierarchy(this Project project)
-        {
-            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
-            if (solution == null)
-            {
-                return null;
-            }
-
-            IVsHierarchy hierarchy;
-            solution.GetProjectOfUniqueName(project.FullName, out hierarchy);
-
-            return hierarchy;
-        }
-
         public static IEnumerable<Project> GetProjects(this Solution sln)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             foreach (Project project in sln.Projects)
             {
                 if (IsSolutionFolder(project))
@@ -51,9 +32,9 @@ namespace ApiPortVS
 
         public static IEnumerable<Project> GetReferences(this Project project)
         {
-            var vsproj = project.Object as VSLangProj.VSProject;
+            ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (vsproj == null)
+            if (!(project.Object is VSLangProj.VSProject vsproj))
             {
                 yield break;
             }
@@ -69,6 +50,8 @@ namespace ApiPortVS
 
         private static IEnumerable<Project> GetSolutionFolderProjects(Project solutionFolder)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             foreach (ProjectItem project in solutionFolder.ProjectItems)
             {
                 var subProject = project.SubProject;
@@ -96,6 +79,7 @@ namespace ApiPortVS
         {
             const string vsProjectKindSolutionFolder = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
 
+            ThreadHelper.ThrowIfNotOnUIThread();
             return string.Equals(project.Kind, vsProjectKindSolutionFolder, StringComparison.OrdinalIgnoreCase);
         }
     }

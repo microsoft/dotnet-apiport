@@ -2,24 +2,24 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Contracts;
+using ApiPortVS.VS2017;
 using Autofac;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.ProjectSystem;
+using Microsoft.VisualStudio.Shell;
 using System;
 
-namespace ApiPortVS.VS2017
+namespace ApiPortVS
 {
-    public class ServiceProvider : Module
+    public static class ServiceProvider2017
     {
-        protected override void Load(ContainerBuilder builder)
+        public static void AddVS2017(this ContainerBuilder builder, IComponentModel componentModel)
         {
-            builder.RegisterAdapter<IServiceProvider, IProjectService>(serviceProvider =>
-            {
-                var componentModel = serviceProvider.GetService(typeof(SComponentModel)) as IComponentModel;
-                var projectServiceAccessor = componentModel.GetService<IProjectServiceAccessor>();
-                return projectServiceAccessor.GetProjectService();
-            })
-            .SingleInstance();
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var projectServiceAccessor = componentModel.GetService<IProjectServiceAccessor>();
+
+            builder.RegisterInstance(projectServiceAccessor.GetProjectService());
 
             builder.RegisterAdapter<IProjectService, IProjectThreadingService>(service => service.Services.ThreadingPolicy);
             builder.RegisterType<VSThreadingService>()

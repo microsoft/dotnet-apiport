@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -57,16 +58,15 @@ namespace ApiPortVS.Reporting
 
             if (!_fileSystem.FileExists(url))
             {
-                _output.WriteLine(LocalizedStrings.CannotSaveReport, url);
+                await _output.WriteLineAsync(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CannotSaveReport, url)).ConfigureAwait(false);
             }
             else if (_browserService == null)
             {
-                _output.WriteLine(LocalizedStrings.CannotViewReport);
+                await _output.WriteLineAsync(LocalizedStrings.CannotViewReport).ConfigureAwait(false);
             }
             else
             {
-                IVsWindowFrame browserFrame;
-                var errCode = _browserService.Navigate(url, REUSE_EXISTING_BROWSER_IF_AVAILABLE, out browserFrame);
+                var errCode = _browserService.Navigate(url, REUSE_EXISTING_BROWSER_IF_AVAILABLE, out _);
             }
         }
     }

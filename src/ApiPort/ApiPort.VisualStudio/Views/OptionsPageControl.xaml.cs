@@ -20,7 +20,7 @@ namespace ApiPortVS.Views
     {
         private readonly IVsStatusbar _statusBar;
 
-        private OptionsViewModel ViewModel { get { return DataContext as OptionsViewModel; } }
+        private OptionsViewModel ViewModel => DataContext as OptionsViewModel;
 
         public OptionsPageControl(OptionsViewModel viewModel, IVsStatusbar statusBar)
         {
@@ -41,11 +41,13 @@ namespace ApiPortVS.Views
 
         private async Task UpdateModelAsync(bool force)
         {
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             _statusBar.SetText(LocalizedStrings.RefreshingPlatforms);
 
             // using a local here to capture ViewModel on the UI thread
             var viewModel = ViewModel;
-            await viewModel.UpdateAsync(force: force).ConfigureAwait(false);
+            await viewModel.UpdateAsync(force: force);
 
             if (viewModel.HasError)
             {
