@@ -12,7 +12,6 @@ using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ApiPortVS
 {
@@ -27,16 +26,27 @@ namespace ApiPortVS
     public class ApiPortVSPackage : AsyncPackage, IResultToolbar
     {
         private static ServiceProvider _serviceProvider;
-        private readonly AssemblyRedirectResolver _assemblyResolver;
+        private AssemblyRedirectResolver _assemblyResolver;
 
-        internal static IServiceProvider LocalServiceProvider { get { return _serviceProvider; } }
+        internal static IServiceProvider LocalServiceProvider => _serviceProvider;
 
-        internal static IAsyncServiceProvider LocalServiceProviderAsync { get { return _serviceProvider; } }
+        internal static IAsyncServiceProvider LocalServiceProviderAsync => _serviceProvider;
 
-        public ApiPortVSPackage()
-            : base()
+        protected override void Dispose(bool disposing)
         {
-            _serviceProvider = new ServiceProvider(this);
+            _serviceProvider?.Dispose();
+
+            AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+
+            base.Dispose(disposing);
+        }
+
+        // Called after constructor when package is sited
+        protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        {
+            await base.InitializeAsync(cancellationToken, progress);
+
+            _serviceProvider = await ServiceProvider.CreateAsync(this);
             _assemblyResolver = _serviceProvider.GetService(typeof(AssemblyRedirectResolver)) as AssemblyRedirectResolver;
 
             if (_assemblyResolver == default(AssemblyRedirectResolver))
@@ -45,62 +55,48 @@ namespace ApiPortVS
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _serviceProvider.Dispose();
-            AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
-
-            base.Dispose(disposing);
-        }
-
-        // Called after constructor when package is sited
-        protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
-        {
-            await base.InitializeAsync(cancellationToken, progress);
 
             if (await GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
             {
                 var menuInitializer = await LocalServiceProviderAsync.GetServiceAsync(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
                 // Add menu items for Analyze toolbar menu
-                CommandID anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeMenuItem);
-                MenuCommand menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, anazlyMenuCommandID);
+                var anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeMenuItem);
+                var menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, anazlyMenuCommandID);
                 mcs.AddCommand(menuItem);
 
-                CommandID analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeOptionsMenuItem);
-                MenuCommand analyzeMenuOptionsItem = new MenuCommand(ShowOptionsPage, analyzeMenuOptionsCommandID);
+                var analyzeMenuOptionsCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeOptionsMenuItem);
+                var analyzeMenuOptionsItem = new MenuCommand(ShowOptionsPage, analyzeMenuOptionsCommandID);
                 mcs.AddCommand(analyzeMenuOptionsItem);
 
-                CommandID analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeToolbarMenuItem);
-                MenuCommand analyzeMenuToolbarItem = new MenuCommand(async (_, e) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
+                var analyzeMenuToolbarCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeToolbarMenuItem);
+                var analyzeMenuToolbarItem = new MenuCommand(async (_, e) => await ShowToolbarAsync().ConfigureAwait(false), analyzeMenuToolbarCommandID);
                 mcs.AddCommand(analyzeMenuToolbarItem);
 
                 // Add menu items for Project context menus
-                CommandID projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextMenuItem);
-                OleMenuCommand contextMenuItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
+                var projectContextMenuCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextMenuItem);
+                var contextMenuItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(false), projectContextMenuCmdId);
                 contextMenuItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuItem);
 
-                CommandID projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextDependentsMenuItem);
-                OleMenuCommand contextMenuDependentsItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
+                var projectContextMenuDependentsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextDependentsMenuItem);
+                var contextMenuDependentsItem = new OleMenuCommand(async (_, e) => await menuInitializer.AnalyzeSelectedProjectsAsync(true), projectContextMenuDependentsCmdId);
                 contextMenuDependentsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuDependenciesItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuDependentsItem);
 
-                CommandID projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextOptionsMenuItem);
-                OleMenuCommand contextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, projectContextMenuOptionsCmdId);
+                var projectContextMenuOptionsCmdId = new CommandID(Guids.ProjectContextMenuItemCmdSet, (int)PkgCmdID.CmdIdProjectContextOptionsMenuItem);
+                var contextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, projectContextMenuOptionsCmdId);
                 contextMenuOptionsItem.BeforeQueryStatus += menuInitializer.ProjectContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(contextMenuOptionsItem);
 
                 // Add menu items for Solution context menus
-                CommandID solutionContextMenuCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextMenuItem);
-                OleMenuCommand solutionContextMenuItem = new OleMenuCommand(menuInitializer.SolutionContextMenuItemCallback, solutionContextMenuCmdId);
+                var solutionContextMenuCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextMenuItem);
+                var solutionContextMenuItem = new OleMenuCommand(menuInitializer.SolutionContextMenuItemCallback, solutionContextMenuCmdId);
                 solutionContextMenuItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuItem);
 
-                CommandID solutionContextMenuOptionsCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextOptionsMenuItem);
-                OleMenuCommand solutionContextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, solutionContextMenuOptionsCmdId);
+                var solutionContextMenuOptionsCmdId = new CommandID(Guids.SolutionContextMenuItemCmdSet, (int)PkgCmdID.CmdIdSolutionContextOptionsMenuItem);
+                var solutionContextMenuOptionsItem = new OleMenuCommand(ShowOptionsPage, solutionContextMenuOptionsCmdId);
                 solutionContextMenuOptionsItem.BeforeQueryStatus += menuInitializer.SolutionContextMenuItemBeforeQueryStatus;
                 mcs.AddCommand(solutionContextMenuOptionsItem);
             }
@@ -112,21 +108,18 @@ namespace ApiPortVS
             // https://blogs.msdn.microsoft.com/andrewarnottms/2014/05/07/asynchronous-and-multithreaded-programming-within-vs-using-the-joinabletaskfactory/
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            ToolWindowPane window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
+            var window = FindToolWindow(typeof(AnalysisOutputToolWindow), 0, true);
             if ((window == null) || (window.Frame == null))
             {
                 throw new NotSupportedException(LocalizedStrings.CannotCreateToolWindow);
             }
 
-            IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
+            var windowFrame = (IVsWindowFrame)window.Frame;
             ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) => _assemblyResolver.ResolveAssembly(args.Name, args.RequestingAssembly);
 
-        private void ShowOptionsPage(object sender, EventArgs e)
-        {
-            ShowOptionPage(typeof(OptionsPage));
-        }
+        private void ShowOptionsPage(object sender, EventArgs e) => ShowOptionPage(typeof(OptionsPage));
     }
 }
