@@ -15,6 +15,7 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
@@ -24,6 +25,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using static Microsoft.VisualStudio.VSConstants;
+
+using Tasks = System.Threading.Tasks;
 
 namespace ApiPortVS
 {
@@ -35,13 +38,14 @@ namespace ApiPortVS
 
         private readonly IContainer _container;
 
-        public ServiceProvider(ApiPortVSPackage serviceProvider)
+        private ServiceProvider(IContainer container)
+        {
+            _container = container;
+        }
+
+        public static async Task<ServiceProvider> CreateAsync(ApiPortVSPackage serviceProvider)
         {
             var builder = new ContainerBuilder();
-
-            // VS type registration
-            // Registers all of the Visual Studio Package components.
-            RegisterVisualStudioComponents(builder, serviceProvider);
 
             builder.RegisterType<VsBrowserReportViewer>()
                 .As<IReportViewer>()
@@ -130,21 +134,19 @@ namespace ApiPortVS
                 .As<ISourceLineMapper>()
                 .InstancePerLifetimeScope();
 
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE;
-            var version = new Version(dte.Version);
+            // VS type registration
+            // Registers all of the Visual Studio Package components.
+            await RegisterVisualStudioComponentsAsync(builder, serviceProvider);
 
-            builder.RegisterModule(new VS2017.ServiceProvider());
-
-            _container = builder.Build();
+            return new ServiceProvider(builder.Build());
         }
 
-        public void Dispose()
-        {
-            _container.Dispose();
-        }
+        public void Dispose() => _container.Dispose();
 
-        private static void RegisterVisualStudioComponents(ContainerBuilder builder, ApiPortVSPackage serviceProvider)
+        private static async Tasks.Task RegisterVisualStudioComponentsAsync(ContainerBuilder builder, ApiPortVSPackage serviceProvider)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             builder.RegisterInstance(serviceProvider)
                 .As<IResultToolbar>()
                 .As<IServiceProvider>();
@@ -153,38 +155,42 @@ namespace ApiPortVS
             builder.RegisterType<ErrorListProvider>()
                 .As<IErrorListProvider>()
                 .SingleInstance();
-            builder.Register(_ => Package.GetGlobalService(typeof(SVsWebProxy)))
-                .As<IVsWebProxy>();
-            builder.Register(_ => Package.GetGlobalService(typeof(SVsWebBrowsingService)))
-                .As<IVsWebBrowsingService>();
-            builder.Register(_ => Package.GetGlobalService(typeof(SVsSolutionBuildManager)))
-                .As<IVsSolutionBuildManager2>();
-            builder.Register(_ => Package.GetGlobalService(typeof(SVsStatusbar)))
-                .As<IVsStatusbar>();
+
+            builder.RegisterComInstance<SVsWebProxy, IVsWebProxy>();
+            builder.RegisterComInstance<SVsWebBrowsingService, IVsWebBrowsingService>();
+            builder.RegisterComInstance<SVsSolutionBuildManager, IVsSolutionBuildManager2>();
+            builder.RegisterComInstance<SVsStatusbar, IVsStatusbar>();
+
+            builder.RegisterCom<DTE>(await serviceProvider.GetServiceAsync(typeof(DTE)));
+
             builder.RegisterType<DefaultProjectBuilder>()
                 .As<IProjectBuilder>();
 
-            builder.RegisterAdapter<IServiceProvider, DTE>(provider => (DTE)provider.GetService(typeof(DTE)));
-            builder.RegisterAdapter<IServiceProvider, IVsOutputWindowPane>(provider =>
-            {
-                var outputWindow = provider.GetService(typeof(SVsOutputWindow)) as IVsOutputWindow;
+            var outputWindow = await serviceProvider.GetServiceAsync(typeof(SVsOutputWindow));
+            builder.RegisterCom<IVsOutputWindowPane>(BuildPane((IVsOutputWindow)outputWindow));
 
-                if (outputWindow.GetPane(ref _outputWindowGuid, out IVsOutputWindowPane windowPane) == S_OK)
+            var componentModel = await serviceProvider.GetServiceAsync(typeof(SComponentModel));
+            builder.AddVS2017((IComponentModel)componentModel);
+        }
+
+        public static IVsOutputWindowPane BuildPane(IVsOutputWindow outputWindow)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (outputWindow.GetPane(ref _outputWindowGuid, out var windowPane) == S_OK)
+            {
+                return windowPane;
+            }
+
+            if (outputWindow.CreatePane(ref _outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
+            {
+                if (outputWindow.GetPane(ref _outputWindowGuid, out windowPane) == S_OK)
                 {
                     return windowPane;
                 }
+            }
 
-                if (outputWindow.CreatePane(ref _outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
-                {
-                    if (outputWindow.GetPane(ref _outputWindowGuid, out windowPane) == S_OK)
-                    {
-                        return windowPane;
-                    }
-                }
-
-                // If a custom window couldn't be opened, open the general purpose window
-                return provider.GetService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
-            }).SingleInstance();
+            throw new InvalidOperationException("Could not create pane");
         }
 
         private static OutputViewModel GetOutputViewModel(IComponentContext context)
@@ -211,14 +217,8 @@ namespace ApiPortVS
             return new OutputViewModel(validReports.Select(x => x.FullName));
         }
 
-        Task<object> IAsyncServiceProvider.GetServiceAsync(Type serviceType)
-        {
-            return System.Threading.Tasks.Task.FromResult<object>(_container.Resolve(serviceType));
-        }
+        Task<object> IAsyncServiceProvider.GetServiceAsync(Type serviceType) => System.Threading.Tasks.Task.FromResult<object>(_container.Resolve(serviceType));
 
-        public object GetService(Type serviceType)
-        {
-            return _container.Resolve(serviceType);
-        }
+        public object GetService(Type serviceType) => _container.Resolve(serviceType);
     }
 }

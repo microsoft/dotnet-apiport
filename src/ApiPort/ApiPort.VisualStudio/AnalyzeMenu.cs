@@ -44,6 +44,7 @@ namespace ApiPortVS
 
         public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList()).ConfigureAwait(false);
         }
 
@@ -94,6 +95,7 @@ namespace ApiPortVS
 
         public void SolutionContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             ContextMenuItemBeforeQueryStatus(sender, _dte.Solution.GetProjects(), false);
         }
 
@@ -180,6 +182,8 @@ namespace ApiPortVS
 
         private ICollection<Project> GetSelectedProjects()
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
             return _dte.SelectedItems
                 .OfType<SelectedItem>()
                 .Select(i => i.Project)

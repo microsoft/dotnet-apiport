@@ -4,14 +4,13 @@
 using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
-
-using VisualStudio = Microsoft.VisualStudio.Shell;
 
 namespace ApiPortVS
 {
@@ -20,13 +19,6 @@ namespace ApiPortVS
     /// </summary>
     public class COMProjectMapper : IProjectMapper
     {
-        private readonly IVSThreadingService _threadingService;
-
-        public COMProjectMapper(IVSThreadingService threadingService)
-        {
-            _threadingService = threadingService;
-        }
-
         /// <summary>
         /// Gets the VSHierarchy using COM calls to the package service.
         /// </summary>
@@ -37,23 +29,21 @@ namespace ApiPortVS
                 throw new ArgumentNullException(nameof(project));
             }
 
-            await _threadingService.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var solution = VisualStudio.Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
-            if (solution == null)
+            if (Package.GetGlobalService(typeof(SVsSolution)) is IVsSolution solution)
             {
-                return null;
+                solution.GetProjectOfUniqueName(project.FullName, out var hierarchy);
+
+                return hierarchy;
             }
 
-            IVsHierarchy hierarchy;
-            solution.GetProjectOfUniqueName(project.FullName, out hierarchy);
-
-            return hierarchy;
+            return null;
         }
 
         public async Task<IVsCfg> GetVsProjectConfigurationAsync(Project project)
         {
-            object browseObject = null;
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var hierarchy = await GetVsHierarchyAsync(project).ConfigureAwait(false);
 
@@ -62,9 +52,7 @@ namespace ApiPortVS
                 return null;
             }
 
-            await _threadingService.SwitchToMainThreadAsync();
-
-            hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_BrowseObject, out browseObject);
+            hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_BrowseObject, out var browseObject);
 
             var getConfigurationProvider = browseObject as IVsGetCfgProvider;
 
@@ -74,7 +62,7 @@ namespace ApiPortVS
                 return null;
             }
 
-            if (ErrorHandler.Failed(getConfigurationProvider.GetCfgProvider(out IVsCfgProvider provider)))
+            if (ErrorHandler.Failed(getConfigurationProvider.GetCfgProvider(out var provider)))
             {
                 Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsCfgProvider)} from project: {project.Name}"));
                 return null;
@@ -89,7 +77,7 @@ namespace ApiPortVS
             var provider2 = (IVsCfgProvider2)provider;
             var activeConfiguration = project.ConfigurationManager.ActiveConfiguration;
 
-            if (ErrorHandler.Failed(provider2.GetCfgOfName(activeConfiguration.ConfigurationName, activeConfiguration.PlatformName, out IVsCfg configuration)))
+            if (ErrorHandler.Failed(provider2.GetCfgOfName(activeConfiguration.ConfigurationName, activeConfiguration.PlatformName, out var configuration)))
             {
                 Trace.TraceError(ToCurrentCulture($"Could not retrieve {nameof(IVsCfg)} from project: {project.Name}"));
                 return null;

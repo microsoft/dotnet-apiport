@@ -27,7 +27,6 @@ namespace ApiPortVS.Analyze
         private readonly IErrorListProvider _errorList;
         private readonly IVsApiPortAnalyzer _analyzer;
         private readonly IProjectBuilder _builder;
-        private readonly IVSThreadingService _threadingService;
         private readonly IProjectMapper _projectMapper;
         private readonly IOutputWindowWriter _outputWindowWriter;
 
@@ -39,8 +38,7 @@ namespace ApiPortVS.Analyze
             IOutputWindowWriter outputWindowWriter,
             IFileSystem fileSystem,
             IProjectBuilder builder,
-            IProjectMapper projectMapper,
-            IVSThreadingService threadingService)
+            IProjectMapper projectMapper)
         {
             _analyzer = analyzer;
             _sourceLineMapper = sourceLineMapper;
@@ -49,7 +47,6 @@ namespace ApiPortVS.Analyze
             _builder = builder;
             _errorList = errorList;
             _projectMapper = projectMapper;
-            _threadingService = threadingService;
             _outputWindowWriter = outputWindowWriter;
         }
 
