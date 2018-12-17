@@ -4,11 +4,13 @@
 using ApiPortVS.Contracts;
 using ApiPortVS.Models;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
+using Tasks = System.Threading.Tasks;
 
 namespace ApiPortVS
 {
@@ -16,21 +18,18 @@ namespace ApiPortVS
     {
         private readonly Microsoft.VisualStudio.Shell.ErrorListProvider _errorList;
         private readonly IFileSystem _fileSystem;
-        private readonly IVSThreadingService _threadingService;
 
         public ErrorListProvider(
             Microsoft.VisualStudio.Shell.ErrorListProvider errorList,
-            IFileSystem fileSystem,
-            IVSThreadingService threadingService)
+            IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
             _errorList = errorList;
-            _threadingService = threadingService;
         }
 
-        public async Task DisplaySourceItemsAsync(IEnumerable<ISourceMappedItem> items, ICollection<CalculatedProject> projects)
+        public async Tasks.Task DisplaySourceItemsAsync(IEnumerable<ISourceMappedItem> items, ICollection<CalculatedProject> projects)
         {
-            await _threadingService.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _errorList.Tasks.Clear();
             _errorList.Refresh();
@@ -56,8 +55,6 @@ namespace ApiPortVS
                 }
             }
 
-            await _threadingService.SwitchToMainThreadAsync();
-
             try
             {
                 var defaultHierarchy = projects.First().VsHierarchy;
@@ -69,7 +66,7 @@ namespace ApiPortVS
                         continue;
                     }
 
-                    if (!projectWithOutputMappings.TryGetValue(item.Assembly, out IVsHierarchy hierarchy))
+                    if (!projectWithOutputMappings.TryGetValue(item.Assembly, out var hierarchy))
                     {
                         hierarchy = defaultHierarchy;
                     }

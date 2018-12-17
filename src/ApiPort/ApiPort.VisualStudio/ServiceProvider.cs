@@ -138,9 +138,6 @@ namespace ApiPortVS
             // Registers all of the Visual Studio Package components.
             await RegisterVisualStudioComponentsAsync(builder, serviceProvider);
 
-            var componentModel = await serviceProvider.GetServiceAsync(typeof(SComponentModel));
-            builder.AddVS2017((IComponentModel)componentModel);
-
             return new ServiceProvider(builder.Build());
         }
 
@@ -171,6 +168,9 @@ namespace ApiPortVS
 
             var outputWindow = await serviceProvider.GetServiceAsync(typeof(SVsOutputWindow));
             builder.RegisterCom<IVsOutputWindowPane>(BuildPane((IVsOutputWindow)outputWindow));
+
+            var componentModel = await serviceProvider.GetServiceAsync(typeof(SComponentModel));
+            builder.AddVS2017((IComponentModel)componentModel);
         }
 
         public static IVsOutputWindowPane BuildPane(IVsOutputWindow outputWindow)

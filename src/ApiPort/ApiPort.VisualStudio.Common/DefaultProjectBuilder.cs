@@ -4,6 +4,7 @@
 using ApiPortVS.Contracts;
 using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Concurrent;
@@ -24,15 +25,12 @@ namespace ApiPortVS
     public class DefaultProjectBuilder : IProjectBuilder
     {
         private readonly IVsSolutionBuildManager2 _buildManager;
-        private readonly IVSThreadingService _threadingService;
 
         public DefaultProjectBuilder(
             IVsSolutionBuildManager2 buildManager,
-            IVSThreadingService threadingService,
             IProjectMapper projectMapper)
         {
             ProjectMapper = projectMapper;
-            _threadingService = threadingService;
             _buildManager = buildManager;
         }
 
@@ -104,7 +102,7 @@ namespace ApiPortVS
                 return null;
             }
 
-            await _threadingService.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             if (ErrorHandler.Failed(configuration2.OpenOutputGroup(Common.Constants.OutputGroups.BuiltProject, out IVsOutputGroup outputGroup)))
             {
