@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyRedirectResolver.cs" />
+    <Compile Include="AutofacComRegisterExtensions.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="StatusBarProgressReporter.cs" />
