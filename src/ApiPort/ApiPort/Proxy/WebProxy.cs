@@ -81,7 +81,7 @@ namespace ApiPort.Proxy
         {
             string Replace(string content, string oldValue, string newValue)
             {
-#if NETCOREAPP2_0
+#if NETCOREAPP2_1
                 return content.Replace(oldValue, newValue, StringComparison.Ordinal);
 #else
                 return content.Replace(oldValue, newValue);
