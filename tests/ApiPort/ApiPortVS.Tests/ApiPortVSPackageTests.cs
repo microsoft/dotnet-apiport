@@ -2,59 +2,21 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using ApiPortVS.Analyze;
-using ApiPortVS.Contracts;
 using Microsoft.Fx.Portability.Reporting;
 using NSubstitute;
 using System.IO;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiPortVS.Tests
 {
     public class ApiPortVSPackageTests
     {
-        [Fact]
-        public static void FileHasAnalyzableExtension_FileIsExe_ReturnsTrue()
+        [InlineData("analyzable.exe", true)]
+        [InlineData("analyzable.dll", true)]
+        [InlineData("analyzable.vshost.exe", false)]
+        [Theory]
+        public static void FileHasAnalyzableExtensionTest(string filename, bool expected)
         {
-            var filename = "analyzable.exe";
-
-            var package = GetProjectAnalyzer();
-
-            var result = package.FileHasAnalyzableExtension(filename);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public static void FileHasAnalyzableExtension_FileIsDll_ReturnsTrue()
-        {
-            var filename = "analyzable.dll";
-
-            var package = GetProjectAnalyzer();
-
-            var result = package.FileHasAnalyzableExtension(filename);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public static void FileHasAnalyzableExtension_FilenameContainsVshost_ReturnsFalse()
-        {
-            var filename = "analyzable.vshost.exe";
-
-            var package = GetProjectAnalyzer();
-
-            var result = package.FileHasAnalyzableExtension(filename);
-
-            Assert.False(result);
-        }
-
-        private static ProjectAnalyzer GetProjectAnalyzer()
-        {
-            var threadingService = Substitute.For<IVSThreadingService>();
-
-            threadingService.SwitchToMainThreadAsync().Returns(Task.CompletedTask);
-
             var fileSystem = Substitute.For<IFileSystem>();
 
             fileSystem.GetFileExtension(Arg.Any<string>()).Returns(arg =>
@@ -64,7 +26,7 @@ namespace ApiPortVS.Tests
                 return Path.GetExtension(path);
             });
 
-            return new ProjectAnalyzer(
+            var package = new ProjectAnalyzer(
                 null,
                 null,
                 null,
@@ -72,8 +34,9 @@ namespace ApiPortVS.Tests
                 null,
                 fileSystem,
                 null,
-                null,
-                threadingService);
+                null);
+
+            Assert.Equal(expected, package.FileHasAnalyzableExtension(filename));
         }
     }
 }
