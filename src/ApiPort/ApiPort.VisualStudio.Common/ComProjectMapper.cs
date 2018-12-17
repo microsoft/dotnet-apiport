@@ -7,6 +7,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace ApiPortVS
     /// <summary>
     /// You need to switch to the UI thread before calling any COM interfaces (e.g. IVsHierarchy) using
     /// </summary>
+    [Export(typeof(IProjectMapper))]
     public class COMProjectMapper : IProjectMapper
     {
         /// <summary>

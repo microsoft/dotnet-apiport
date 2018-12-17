@@ -114,9 +114,6 @@ namespace ApiPortVS
             builder.RegisterType<ProjectAnalyzer>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
-            builder.RegisterType<COMProjectMapper>()
-                .As<IProjectMapper>()
-                .SingleInstance();
 
             // Register option pane services
             builder.RegisterType<OptionsPageControl>()
@@ -158,19 +155,17 @@ namespace ApiPortVS
 
             builder.RegisterComInstance<SVsWebProxy, IVsWebProxy>();
             builder.RegisterComInstance<SVsWebBrowsingService, IVsWebBrowsingService>();
-            builder.RegisterComInstance<SVsSolutionBuildManager, IVsSolutionBuildManager2>();
             builder.RegisterComInstance<SVsStatusbar, IVsStatusbar>();
 
             builder.RegisterCom<DTE>(await serviceProvider.GetServiceAsync(typeof(DTE)));
 
-            builder.RegisterType<DefaultProjectBuilder>()
-                .As<IProjectBuilder>();
+            var componentModel = await serviceProvider.GetServiceAsync(typeof(SComponentModel)) as IComponentModel;
+
+            builder.RegisterInstance(componentModel.GetService<IProjectBuilder>());
+            builder.RegisterInstance(componentModel.GetService<IProjectMapper>());
 
             var outputWindow = await serviceProvider.GetServiceAsync(typeof(SVsOutputWindow));
             builder.RegisterCom<IVsOutputWindowPane>(BuildPane((IVsOutputWindow)outputWindow));
-
-            var componentModel = await serviceProvider.GetServiceAsync(typeof(SComponentModel));
-            builder.AddVS2017((IComponentModel)componentModel);
         }
 
         public static IVsOutputWindowPane BuildPane(IVsOutputWindow outputWindow)
