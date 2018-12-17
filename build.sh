@@ -14,11 +14,11 @@ DotNetExe=$DotNetSDKPath"/dotnet"
 
 TestResults=$RootDir"/TestResults"
 
-usage() { echo "Usage: build.sh [-c|--configuration <Debug|Release>]"; }
+usage() { 
+    echo "Usage: build.sh [-c|--configuration <Debug|Release>] [--downloadCatalog]"
+}
 
-prebuild() {
-    $DotNetExe restore
-
+downloadCatalog() {
     local catalog=$RootDir"/.data/catalog.bin"
     local data=$(dirname $catalog)
 
@@ -87,9 +87,14 @@ do
         usage
         exit 1
         ;;
-        "-c" | "--configuration")
+        "-c" | "--configuration" )
         Configuration="$2"
         shift 2
+        ;;
+        "--downloadcatalog" )
+        echo "Only downloading catalog"
+        downloadCatalog
+        exit 0
         ;;
         *)
         echo "Unknown option: "$option
@@ -117,7 +122,7 @@ if [[ ! -e $DotNetExe ]]; then
     exit 2
 fi
 
-prebuild
+downloadCatalog
 
 build
 
