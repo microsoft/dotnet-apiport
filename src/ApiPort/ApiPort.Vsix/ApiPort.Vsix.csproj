@@ -74,6 +74,12 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+    <ProjectReference Include="..\ApiPort.VisualStudio.2019\ApiPort.VisualStudio.2019.csproj">
+      <Project>{0A48BC2C-3421-4E8F-B7BC-4E584D821AA3}</Project>
+      <Name>ApiPort.VisualStudio.2019</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
       <Project>{60798B82-B273-4D39-AA52-021C7228A0AD}</Project>
       <Name>ApiPort.VisualStudio.Common</Name>

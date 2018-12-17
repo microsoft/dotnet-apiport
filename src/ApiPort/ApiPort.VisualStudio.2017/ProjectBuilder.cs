@@ -22,10 +22,10 @@ using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 namespace ApiPortVS
 {
     [Export(typeof(IProjectBuilder))]
-    public class ProjectBuilder2017 : DefaultProjectBuilder
+    public class ProjectBuilder : DefaultProjectBuilder
     {
         [ImportingConstructor]
-        public ProjectBuilder2017(IBuildServices buildServices, IProjectMapper projectMapper)
+        public ProjectBuilder(IBuildServices buildServices, IProjectMapper projectMapper)
             : base(buildServices.BuildManager, projectMapper)
         {
         }

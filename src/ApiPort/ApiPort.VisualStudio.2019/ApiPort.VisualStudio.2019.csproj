@@ -3,14 +3,18 @@
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <RootNamespace>ApiPortVS</RootNamespace>
-    <DefineConstants>$(DefineConstants);VS2017</DefineConstants>
+    <DefineConstants>$(DefineConstants);VS2019</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="15.4.27004">
+    <Compile Include="..\ApiPort.VisualStudio.2017\ProjectBuilder.cs" Link="ProjectBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="16.0.189-g83e7c53a57">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="15.3.224">
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="16.0.374-pre">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
