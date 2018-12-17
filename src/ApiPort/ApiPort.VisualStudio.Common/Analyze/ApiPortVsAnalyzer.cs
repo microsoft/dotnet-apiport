@@ -22,22 +22,19 @@ namespace ApiPortVS.Analyze
         private readonly IOutputWindowWriter _outputWindow;
         private readonly IProgressReporter _reporter;
         private readonly IReportViewer _viewer;
-        private readonly IVSThreadingService _threadingService;
 
         public ApiPortVsAnalyzer(
             ApiPortClient client,
             OptionsViewModel optionsViewModel,
             IOutputWindowWriter outputWindow,
             IReportViewer viewer,
-            IProgressReporter reporter,
-            IVSThreadingService threadingService)
+            IProgressReporter reporter)
         {
             _client = client;
             _optionsViewModel = optionsViewModel;
             _outputWindow = outputWindow;
             _viewer = viewer;
             _reporter = reporter;
-            _threadingService = threadingService;
         }
 
         public async Task<ReportingResult> WriteAnalysisReportsAsync(
@@ -46,46 +43,45 @@ namespace ApiPortVS.Analyze
             IFileWriter reportWriter,
             bool includeJson)
         {
-            await _outputWindow.ShowWindowAsync().ConfigureAwait(false);
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            await _optionsViewModel.UpdateAsync().ConfigureAwait(false);
+            await _outputWindow.ShowWindowAsync();
+
+            await _optionsViewModel.UpdateAsync();
 
             var reportDirectory = _optionsViewModel.OutputDirectory;
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
             var reportFileName = _optionsViewModel.DefaultOutputName;
 
-            var analysisOptions = await GetApiPortOptions(assemblyPaths, outputFormats, installedPackages, Path.Combine(reportDirectory, reportFileName)).ConfigureAwait(false);
+            var analysisOptions = await GetOptionsAsync(assemblyPaths, outputFormats, installedPackages, Path.Combine(reportDirectory, reportFileName));
             var issuesBefore = _reporter.Issues.Count;
 
-            var result = await _client.WriteAnalysisReportsAsync(analysisOptions, includeJson).ConfigureAwait(false);
+            var result = await _client.WriteAnalysisReportsAsync(analysisOptions, includeJson);
 
             if (!result.Paths.Any())
             {
                 var issues = _reporter.Issues.ToArray();
 
-                await _threadingService.SwitchToMainThreadAsync();
-
-                for (int i = issuesBefore; i < issues.Length; i++)
+                for (var i = issuesBefore; i < issues.Length; i++)
                 {
                     _outputWindow.WriteLine(LocalizedStrings.ListItem, issues[i]);
                 }
             }
 
-            await _viewer.ViewAsync(result.Paths).ConfigureAwait(false);
+            await _viewer.ViewAsync(result.Paths);
 
             return result.Result;
         }
 
-        private async Task<IApiPortOptions> GetApiPortOptions(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, IEnumerable<string> referencedNugetPackages, string reportFileName)
+        private async Task<IApiPortOptions> GetOptionsAsync(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, IEnumerable<string> referencedNugetPackages, string reportFileName)
         {
             await _optionsViewModel.UpdateAsync().ConfigureAwait(false);
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             foreach (var invalidPlatform in _optionsViewModel.InvalidTargets)
             {
                 if (invalidPlatform.Versions.Any(v => v.IsSelected))
                 {
-                    await _threadingService.SwitchToMainThreadAsync();
-
                     var message = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidPlatformSelectedFormat, invalidPlatform.Name);
                     _outputWindow.WriteLine(message);
                 }
@@ -98,8 +94,6 @@ namespace ApiPortVS.Analyze
 
             if (!targets.Any())
             {
-                await _threadingService.SwitchToMainThreadAsync();
-
                 _outputWindow.WriteLine(LocalizedStrings.UsingDefaultTargets);
                 _outputWindow.WriteLine(LocalizedStrings.TargetSelectionGuidance);
             }

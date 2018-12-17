@@ -60,6 +60,8 @@ namespace ApiPortVS
             {
                 var menuInitializer = await LocalServiceProviderAsync.GetServiceAsync(typeof(AnalyzeMenu)) as AnalyzeMenu;
 
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                 // Add menu items for Analyze toolbar menu
                 var anazlyMenuCommandID = new CommandID(Guids.AnalyzeMenuItemCmdSet, (int)PkgCmdID.CmdIdAnalyzeMenuItem);
                 var menuItem = new MenuCommand(menuInitializer.AnalyzeMenuItemCallback, anazlyMenuCommandID);

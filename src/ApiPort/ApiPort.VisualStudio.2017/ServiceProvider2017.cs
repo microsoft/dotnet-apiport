@@ -22,9 +22,6 @@ namespace ApiPortVS
             builder.RegisterInstance(projectServiceAccessor.GetProjectService());
 
             builder.RegisterAdapter<IProjectService, IProjectThreadingService>(service => service.Services.ThreadingPolicy);
-            builder.RegisterType<VSThreadingService>()
-                .As<IVSThreadingService>()
-                .SingleInstance();
             builder.RegisterType<ProjectBuilder2017>()
                 .As<IProjectBuilder>()
                 .SingleInstance();

@@ -20,8 +20,7 @@ namespace ApiPortVS.Tests
             var buildManager = BuildManagerWhichReturns(VSConstants.S_FALSE);
             var project = Substitute.For<Project>();
             var mapper = Substitute.For<IProjectMapper>();
-            var threading = Substitute.For<IVSThreadingService>();
-            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, mapper);
+            var projectBuilder = new DefaultProjectBuilder(buildManager, mapper);
 
             var result = await projectBuilder.BuildAsync(new List<Project> { project });
 
@@ -39,9 +38,8 @@ namespace ApiPortVS.Tests
             var buildManager = BuildManagerWhichReturns(VSConstants.S_OK);
             var project = Substitute.For<Project>();
             var mapper = Substitute.For<IProjectMapper>();
-            var threading = Substitute.For<IVSThreadingService>();
 
-            var projectBuilder = new DefaultProjectBuilder(buildManager, threading, mapper);
+            var projectBuilder = new DefaultProjectBuilder(buildManager, mapper);
             var buildTask = projectBuilder.BuildAsync(new List<Project> { project });
 
             // Checking that we are subscribed to build events

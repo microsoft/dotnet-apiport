@@ -24,9 +24,8 @@ namespace ApiPortVS.VS2017
     {
         public ProjectBuilder2017(
             IVsSolutionBuildManager2 buildManager,
-            IVSThreadingService threadingService,
             IProjectMapper projectMapper)
-            : base(buildManager, threadingService, projectMapper)
+            : base(buildManager, projectMapper)
         { }
 
         /// <summary>
@@ -134,9 +133,6 @@ namespace ApiPortVS.VS2017
             return outputs.Any() ? outputs : null;
         }
 
-        private static UnconfiguredProject GetUnconfiguredProject(Project project)
-        {
-            return (project as IVsBrowseObjectContext)?.UnconfiguredProject;
-        }
+        private static UnconfiguredProject GetUnconfiguredProject(Project project) => (project as IVsBrowseObjectContext)?.UnconfiguredProject;
     }
 }
