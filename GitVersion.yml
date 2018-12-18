@@ -5,9 +5,10 @@ branches:
     regex: master
     tag: alpha
     prevent-increment-of-merged-branch-version: true
-  dev:
+  develop:
     regex: dev(elop)?(ment)?$
     tag: unstable
+    source-branches: ['master']
   pull-request:
     regex: (pull|pull\-requests|pr)[/-]
     mode: ContinuousDelivery
