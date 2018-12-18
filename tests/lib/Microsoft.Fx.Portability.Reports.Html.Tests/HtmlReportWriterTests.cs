@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Reports.Html.Tests
@@ -35,7 +36,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
         }
 
         [Fact]
-        public static void CreatesHtmlReport()
+        public static async Task CreatesHtmlReport()
         {
             var mapper = Substitute.For<ITargetMapper>();
             var writer = new HtmlReportWriter(mapper);
@@ -57,7 +58,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
             {
                 using (var file = File.OpenWrite(tempFile))
                 {
-                    writer.WriteStream(file, response);
+                    await writer.WriteStreamAsync(file, response);
                 }
 
                 Assert.True(File.Exists(tempFile));

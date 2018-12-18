@@ -3,6 +3,7 @@
 
 using Microsoft.Fx.Portability.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reporting
 {
@@ -10,6 +11,6 @@ namespace Microsoft.Fx.Portability.Reporting
     {
         ResultFormatInformation Format { get; }
 
-        void WriteStream(Stream stream, AnalyzeResponse response);
+        Task WriteStreamAsync(Stream stream, AnalyzeResponse response);
     }
 }

@@ -12,6 +12,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 using static System.FormattableString;
 
@@ -36,7 +37,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         public ResultFormatInformation Format => _formatInformation;
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
             const string ReportTemplateName = "ReportTemplate";
 
@@ -48,6 +49,8 @@ namespace Microsoft.Fx.Portability.Reports
 
                 writer.Write(razor);
             }
+
+            return Task.CompletedTask;
         }
 
         private static IRazorEngineService CreateService()
