@@ -67,9 +67,7 @@ namespace Microsoft.Fx.Portability.Reports
             });
 
             services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-            services.AddSingleton<DiagnosticSource>(new DiagnosticListener("Microsoft.AspNetCore"));
             services.AddLogging();
-            services.AddMvc();
             services.AddMvc();
             services.AddTransient<RazorViewToStringRenderer>();
 
