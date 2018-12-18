@@ -1,14 +1,14 @@
 ﻿@*
-   Copyright (c) Microsoft. All rights reserved.
-   Licensed under the MIT license. See LICENSE file in the project root for full license information.
+    Copyright (c) Microsoft. All rights reserved.
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 *@
 
 @model Microsoft.Fx.Portability.Reports.RazorHtmlObject
 
+@using Microsoft.Fx.Portability.Reports
 @using Microsoft.Fx.Portability.Reports.Html.Resources
 @using System.Collections.Generic
 @using System.Globalization
-@using System.IO
 @using System.Linq
 
 @{
@@ -36,13 +36,17 @@
         @foreach (var assembly in Model.OrderedAssembliesByIdentity)
         {
             <tr>
-                <td><strong><a href="#@assembly.SourceAssembly">
-                    <span class="assembly-name">@assembly.SourceAssembly</span>
-                    @if (!string.IsNullOrEmpty(assembly.SourceAssembly.TargetFrameworkMoniker))
-                    {
-                        <span class="assembly-tfm">(@assembly.SourceAssembly.TargetFrameworkMoniker)</span>
-                    }
-                </a></strong></td>
+                <td>
+                    <strong>
+                        <a href="#@assembly.SourceAssembly">
+                            <span class="assembly-name">@assembly.SourceAssembly</span>
+                            @if (!string.IsNullOrEmpty(assembly.SourceAssembly.TargetFrameworkMoniker))
+                            {
+                                <span class="assembly-tfm">(@assembly.SourceAssembly.TargetFrameworkMoniker)</span>
+                            }
+                        </a>
+                    </strong>
+                </td>
                 @foreach (var usageData in @assembly.UsageData)
                 {
                     <td class="text-center">@usageData.PortabilityIndex.ToString("P2")</td>
@@ -51,7 +55,7 @@
         }
         @foreach (var invalidAssembly in reportingResult.GetAssembliesWithError())
         {
-            var fileName = Path.GetFileName(invalidAssembly);
+            var fileName = System.IO.Path.GetFileName(invalidAssembly);
             var message = string.Format(CultureInfo.CurrentCulture, LocalizedStrings.AssemblyIsInvalid, fileName);
             <tr>
                 <td>@message</td>
@@ -69,17 +73,17 @@
         detailColumnHeaders.AddRange(Model.TargetHeaders);
         detailColumnHeaders.Add(LocalizedStrings.RecommendedChanges);
 
-    <h3>@LocalizedStrings.HideColumns</h3>
-    <form>
-        @* It doesn't make sense to hide the first column (Target type), which lists
-            names of the types and members that have possible problems in porting. *@
-        @for (int i = 1; i < detailColumnHeaders.Count; i++)
-        {
-            var id = "checkbox" + i.ToString();
-            <input type="checkbox" id="@id" onchange='onToggleColumnVisibility(this)'>
-            <label for="@id">@detailColumnHeaders[i]</label>
-        }
-    </form>
+        <h3>@LocalizedStrings.HideColumns</h3>
+        <form>
+            @* It doesn't make sense to hide the first column (Target type), which lists
+                names of the types and members that have possible problems in porting. *@
+            @for (int i = 1; i < detailColumnHeaders.Count; i++)
+            {
+                var id = "checkbox" + i.ToString();
+                <input type="checkbox" id="@id" onchange='onToggleColumnVisibility(this)'>
+                <label for="@id">@detailColumnHeaders[i]</label>
+            }
+        </form>
     }
 
     @foreach (var assembly in Model.OrderedAssembliesByIdentity)

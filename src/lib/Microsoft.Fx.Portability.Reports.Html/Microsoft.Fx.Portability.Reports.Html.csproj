@@ -1,13 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>An HTML formatter for ApiPort reports</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-    <PackageReference Include="RazorEngine" Version="4.5.1-alpha002" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,11 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\*.cshtml" />
+    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <Content Update="Views\*.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
