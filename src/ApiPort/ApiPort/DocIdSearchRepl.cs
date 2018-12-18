@@ -71,7 +71,7 @@ namespace ApiPort
                 if (query.StartsWith(LocalizedStrings.ReplOptionCount, StringComparison.OrdinalIgnoreCase))
                 {
                     var trimmed = query
-#if NETCOREAPP2_0
+#if NETCOREAPP2_1
                         .Replace(LocalizedStrings.ReplOptionCount, string.Empty, StringComparison.OrdinalIgnoreCase)
 #else
                         .Replace(LocalizedStrings.ReplOptionCount, string.Empty)
