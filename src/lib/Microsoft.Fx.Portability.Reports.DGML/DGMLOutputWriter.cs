@@ -8,10 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reports.DGML
 {
@@ -26,7 +24,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 
         private readonly DGMLManager dgml = new DGMLManager();
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
             ReferenceGraph rg = ReferenceGraph.CreateGraph(response);
 
@@ -95,7 +93,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 
             dgml.Save(stream);
 
-            return;
+            return Task.CompletedTask;
         }
 
         private static string GenerateMissingTypes(string assembly, ReportingResult response, int i)

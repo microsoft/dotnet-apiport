@@ -5,16 +5,15 @@ using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Newtonsoft.Json;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reports
 {
     public class JsonReportWriter : IReportWriter
     {
-        private readonly ResultFormatInformation _formatInformation;
-
         public JsonReportWriter()
         {
-            _formatInformation = new ResultFormatInformation
+            Format = new ResultFormatInformation
             {
                 DisplayName = "Json",
                 MimeType = "application/json",
@@ -22,12 +21,9 @@ namespace Microsoft.Fx.Portability.Reports
             };
         }
 
-        public ResultFormatInformation Format
-        {
-            get { return _formatInformation; }
-        }
+        public ResultFormatInformation Format { get; }
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
             using (var streamWriter = new StreamWriter(stream))
             {
@@ -36,6 +32,8 @@ namespace Microsoft.Fx.Portability.Reports
                     DataExtensions.Serializer.Serialize(writer, response);
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }
