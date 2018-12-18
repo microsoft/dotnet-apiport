@@ -10,7 +10,7 @@
     MSBUILD : error : CA0055 : Could not identify platform for 'bin\Debug\ApiPort\netcoreapp2.0\ApiPort.dll'
     MSBUILD : error : CA0052 : No targets were selected.
     -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <DefineConstants>$(DefineConstants);FEATURE_XML_SCHEMA</DefineConstants>
   </PropertyGroup>
