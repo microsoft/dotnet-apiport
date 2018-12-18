@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -18,15 +19,16 @@ using System.Threading.Tasks;
 
 using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 
-namespace ApiPortVS.VS2017
+namespace ApiPortVS
 {
-    public class ProjectBuilder2017 : DefaultProjectBuilder
+    [Export(typeof(IProjectBuilder))]
+    public class ProjectBuilder : DefaultProjectBuilder
     {
-        public ProjectBuilder2017(
-            IVsSolutionBuildManager2 buildManager,
-            IProjectMapper projectMapper)
-            : base(buildManager, projectMapper)
-        { }
+        [ImportingConstructor]
+        public ProjectBuilder(IBuildServices buildServices, IProjectMapper projectMapper)
+            : base(buildServices.BuildManager, projectMapper)
+        {
+        }
 
         /// <summary>
         /// Tries to fetch output items if it uses Common Project System then

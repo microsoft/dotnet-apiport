@@ -334,7 +334,7 @@ namespace Microsoft.Fx.Portability.Tests
                 Assert.NotNull(e.InnerException);
                 Assert.Equal(string.Format(CultureInfo.CurrentCulture, e.InnerException.Message), e.Message);
 #else
-                Assert.Equal(String.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, string.Empty), e.Message);
+                Assert.Equal(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.MalformedMap, string.Empty), e.Message);
 #endif
                 return;
             }

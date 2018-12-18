@@ -132,6 +132,12 @@ namespace ApiPortVS
                 return new[] { finalOutputPath as string };
             }
 
+            // This is used for some projects, such as C++/CLI
+            if (ErrorHandler.Succeeded(keyGroup.get_DeploySourceURL(out var url)))
+            {
+                return new[] { new Uri(url).LocalPath };
+            }
+
             return null;
         }
 
