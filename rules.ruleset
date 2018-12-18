@@ -24,6 +24,7 @@
     <Rule Id="CA2007" Action="None" />
     <Rule Id="CA2211" Action="None" />
     <Rule Id="CA2227" Action="None" />
+    <Rule Id="CA2237" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeQuality.CSharp.Analyzers" RuleNamespace="Microsoft.CodeQuality.CSharp.Analyzers">
     <Rule Id="CA1032" Action="None" />
