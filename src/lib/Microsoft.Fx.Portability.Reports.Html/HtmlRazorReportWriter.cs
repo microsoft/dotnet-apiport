@@ -10,9 +10,9 @@ using Microsoft.Extensions.ObjectPool;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -38,14 +38,14 @@ namespace Microsoft.Fx.Portability.Reports
 
         public ResultFormatInformation Format => _formatInformation;
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public async Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
             using (var scope = _factory.CreateScope())
             {
                 var model = new RazorHtmlObject(response, _targetMapper);
                 var helper = scope.ServiceProvider.GetRequiredService<RazorViewToStringRenderer>();
 
-                helper.RenderViewAsync("Views/ReportTemplate.cshtml", model, stream).GetAwaiter().GetResult();
+                await helper.RenderViewAsync("Views/ReportTemplate.cshtml", model, stream);
             }
         }
 
