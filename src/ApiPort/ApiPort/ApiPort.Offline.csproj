@@ -10,7 +10,7 @@
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.csproj" />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.DGML\Microsoft.Fx.Portability.Reports.DGML.csproj" />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj" />
-    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj" Condition=" '$(TargetFramework)' == 'net461' " />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Html\Microsoft.Fx.Portability.Reports.Html.csproj" Condition=" '$(TargetFramework)' != 'net461' " />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj" />
   </ItemGroup>
 
