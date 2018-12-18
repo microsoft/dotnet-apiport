@@ -10,6 +10,7 @@ using Microsoft.Extensions.ObjectPool;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -65,6 +66,9 @@ namespace Microsoft.Fx.Portability.Reports
                 options.FileProviders.Clear();
                 options.FileProviders.Add(fileProvider);
             });
+
+            var diagnosticSource = new DiagnosticListener("Microsoft.AspNetCore.Mvc.Razor");
+            services.AddSingleton<DiagnosticSource>(diagnosticSource);
 
             services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
             services.AddLogging();
