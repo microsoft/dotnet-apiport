@@ -31,12 +31,17 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("OpImplicitMethod2Parameter.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method_2Parameter`1.op_Implicit(`0,`0)")]
         [InlineData("OpExplicit.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit`1.op_Explicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpExplicit{`0}")]
         [InlineData("NestedGenericTypesWithInvalidNames.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator")]
-        [InlineData("modopt.il", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
-        [InlineData("modopt.il", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
 
+        [Theory]
+        public void TestForDocId(string source, string docid)
+        {
+            TestForDocIdHelper(source, docid, false);
+        }
+
+#if FEATURE_ILDASM
         // IL can, bizarrely, define non-generic types that take generic paratmers
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})")]
@@ -45,12 +50,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         // This is not possible to construct in C#, but was being encoded incorrectly by the metadata reader parser.
         [InlineData("NestedGenericTypes.il", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)")]
         [InlineData("NestedGenericTypes.il", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
-
+        [InlineData("modopt.il", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
+        [InlineData("modopt.il", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
         [Theory]
-        public void TestForDocId(string source, string docid)
+        public void TestForDocIdIL(string source, string docid)
         {
             TestForDocIdHelper(source, docid, false);
         }
+#endif
 
         [InlineData("Spec.cs", "T:N.X`1")]
         [InlineData("Spec.cs", "M:N.X`1.#ctor")]
@@ -242,6 +249,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.IsType<SystemObjectNotFoundException>(exception.InnerException);
         }
 
+#if FEATURE_ILDASM
         [Fact]
         public void AssemblyWithNoReferencesIsSkipped()
         {
@@ -259,6 +267,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             Assert.Equal("NoReferences, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", assembly.AssemblyIdentity);
         }
+#endif
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
         {

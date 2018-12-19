@@ -18,6 +18,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             _output = output;
         }
 
+#if FEATURE_ILDASM
         [Fact]
         public void MultipleMscorlibReferencesFound()
         {
@@ -114,5 +115,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 }
             }
         }
+#endif
     }
 }
