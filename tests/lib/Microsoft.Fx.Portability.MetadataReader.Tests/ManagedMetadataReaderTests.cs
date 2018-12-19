@@ -140,7 +140,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             .OrderBy(x => x, StringComparer.Ordinal);
 
             var assemblyName = "FilterApis";
-            var filter = new AssemblyNameFilter(assemblyName);
+
+            // We want to recognize System.Console but not System.Uri.
+            var filter = new AssemblyNameFilter(assemblyName, new[] { "System.Console" });
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
@@ -296,21 +298,37 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private class AssemblyNameFilter : IDependencyFilter
         {
-            private readonly string _assemblyName;
-
-            public AssemblyNameFilter(string assemblyName)
+            private static readonly HashSet<string> SystemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
             {
-                _assemblyName = assemblyName;
+                "mscorlib",
+                "netstandard",
+                "System.Private.CoreLib",
+                "System.Runtime"
+            };
+
+            private readonly string _assemblyName;
+            private readonly HashSet<string> _frameworkAssemblies;
+
+            public AssemblyNameFilter(string assemblyName, IEnumerable<string> frameworkAssemblies)
+            {
+                _assemblyName = assemblyName ?? throw new ArgumentNullException(nameof(assemblyName));
+                _frameworkAssemblies = new HashSet<string>(
+                    frameworkAssemblies ?? Enumerable.Empty<string>(),
+                    StringComparer.Ordinal);
             }
 
             public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)
             {
-                var comparison = StringComparison.Ordinal;
                 var name = assembly?.Name;
 
-                var result = string.Equals(_assemblyName, name, comparison)
-                    || string.Equals("mscorlib", name, comparison)
-                    || string.Equals("System.Runtime", name, comparison);
+                if (string.IsNullOrEmpty(name))
+                {
+                    return false;
+                }
+
+                var result = string.Equals(_assemblyName, name, StringComparison.Ordinal)
+                    || SystemObjectAssemblies.Contains(name)
+                    || _frameworkAssemblies.Contains(name);
 
                 return result;
             }
