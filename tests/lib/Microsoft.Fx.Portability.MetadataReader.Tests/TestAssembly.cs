@@ -63,10 +63,18 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         private class CSharpCompileAssemblyFile : ResourceStreamAssemblyFile
         {
             private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
-            private static readonly IEnumerable<MetadataReference> References = new[] { typeof(object).GetTypeInfo().Assembly.Location, typeof(Uri).GetTypeInfo().Assembly.Location, typeof(Console).GetTypeInfo().Assembly.Location }
-                                                                     .Distinct()
-                                                                     .Select(r => MetadataReference.CreateFromFile(r))
-                                                                     .ToList();
+            private static readonly IEnumerable<MetadataReference> References = new[]
+            {
+                typeof(object).GetTypeInfo().Assembly.Location,
+                typeof(Uri).GetTypeInfo().Assembly.Location,
+                typeof(Console).GetTypeInfo().Assembly.Location,
+
+                // Reference to System.Runtime.dll rather than System.Private.CoreLib on .NET Core
+                typeof(RuntimeReflectionExtensions).Assembly.Location
+            }
+            .Distinct()
+            .Select(r => MetadataReference.CreateFromFile(r))
+            .ToList();
 
             private readonly bool _allowUnsafe;
             private readonly IEnumerable<string> _additionalReferences;
