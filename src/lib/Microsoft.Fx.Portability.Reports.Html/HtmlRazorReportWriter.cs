@@ -67,8 +67,7 @@ namespace Microsoft.Fx.Portability.Reports
                 options.FileProviders.Add(fileProvider);
             });
 
-            var diagnosticSource = new DiagnosticListener("Microsoft.AspNetCore.Mvc.Razor");
-            services.AddSingleton<DiagnosticSource>(diagnosticSource);
+            services.AddSingleton<DiagnosticSource>(new DiagnosticListener("Microsoft.AspNetCore.Mvc.Razor"));
 
             services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
             services.AddLogging();
