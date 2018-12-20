@@ -12,10 +12,11 @@ RootDir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DotNetSDKPath=$RootDir"/.tools/dotnet/"$DotNetSDKVersion
 DotNetExe=$DotNetSDKPath"/dotnet"
 
-TestResults=$RootDir"/TestResults"
+BuildApps=true
+RunTests=false
 
 usage() {
-	echo "Usage: build.sh [-c|--configuration <Debug|Release>] [--downloadCatalog]"
+	echo "Usage: build.sh [-c|--configuration <Debug|Release>] [--downloadCatalog] [--runTests] [--no-build]"
 }
 
 downloadCatalog() {
@@ -39,6 +40,14 @@ downloadCatalog() {
 }
 
 installSDK() {
+	local dotnetPath=$(command -v dotnet)
+
+	if [[ $dotnetPath != "" ]]; then
+		echo "dotnet is found on PATH. using that."
+		DotNetExe=$dotnetPath
+		return 0
+	fi
+
 	if [[ -e $DotNetExe ]]; then
 		echo $DotNetExe" exists.  Skipping install..."
 		return 0
@@ -53,18 +62,28 @@ installSDK() {
 	curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current --install-dir $DotNetSDKPath
 }
 
+tryGetTargetFramework() {
+	local file=$1
+	local targetFramework=$(awk -F: '/<TargetFramework(s)?>.*netcoreapp[1-9]\.[0-9].*<\/TargetFramework(s)?>/ { print $0 }' $file | sed 's/.*\(netcoreapp[1-9]\.[0-9]\).*/\1/')
+	echo $targetFramework
+}
+
 build() {
 	echo "Building ApiPort... Configuration: ["$Configuration"]"
 
 	pushd src/ApiPort/ApiPort >/dev/null
-	$DotNetExe build ApiPort.csproj -f netcoreapp2.1 -c $Configuration
-	$DotNetExe build ApiPort.Offline.csproj -f netcoreapp2.1 -c $Configuration
+
+	local targetFramework=$(tryGetTargetFramework ApiPort.props)
+	echo "Building for: $targetFramework"
+
+	$DotNetExe build ApiPort.csproj -f $targetFramework -c $Configuration
+	$DotNetExe build ApiPort.Offline.csproj -f $targetFramework -c $Configuration
 	popd >/dev/null
 }
 
 runTest() {
 	ls $1/*.csproj | while read file; do
-		local targetFramework=$(awk -F: '/<TargetFramework(s)?>.*netcoreapp[1-9]\.[0-9].*<\/TargetFramework(s)?>/ { print $0 }' $file | sed 's/.*\(netcoreapp[1-9]\.[0-9]\).*/\1/')
+		local targetFramework=$(tryGetTargetFramework $file)
 
 		if [[ $targetFramework == "" ]]; then
 			echo "Skipping "$file
@@ -73,14 +92,6 @@ runTest() {
 			echo "Testing "$file
 			$DotNetExe test $file -c $Configuration --logger trx --framework $targetFramework --results-directory $2
 		fi
-	done
-
-	if [ ! -d $TestResults ]; then
-		mkdir $TestResults
-	fi
-
-	find $RootDir/tests/ -type f -name "*.trx" | while read line; do
-		mv $line $TestResults/
 	done
 }
 
@@ -109,6 +120,14 @@ while [[ $# -gt 0 ]]; do
 	"-c" | "--configuration")
 		Configuration="$2"
 		shift 2
+		;;
+	"--runtests")
+		RunTests=true
+		shift
+		;;
+	"--no-build")
+		BuildApps=false
+		shift
 		;;
 	"--downloadcatalog")
 		downloadCatalog "true"
@@ -140,10 +159,17 @@ if [[ ! -e $DotNetExe ]]; then
 	exit 2
 fi
 
-downloadCatalog
+if [[ $BuildApps == "true" ]]; then
+	downloadCatalog
+	build
+fi
 
-#build
+if [[ $RunTests == "true" ]]; then
+	if [[$BuildApps != "true" ]]; then
+		echo "WARNING: Not building applications because --no-build is set."
+	fi
 
-findAndRunTests
+	findAndRunTests
+fi
 
 echo "Finished!"
