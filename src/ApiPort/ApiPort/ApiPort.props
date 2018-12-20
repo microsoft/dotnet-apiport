@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
-    <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
   </PropertyGroup>
 
