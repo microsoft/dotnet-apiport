@@ -2,13 +2,19 @@
 
   <PropertyGroup>
     <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
-    <RuntimeIdentifiers>win;linux-x64;osx-x64</RuntimeIdentifiers>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <NonShipping>true</NonShipping>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework) == 'net461'">
+    <!-- Need to specify RuntimeIdentifier in here because using
+    RuntimeIdentifiers will not copy native assets (ildasm) to the output.
+    folder.
+    TODO: ilasm exists on Linux but for some reason the assets are not copied
+    during dotnet test even when using RuntimeIdentifier. See:
+    https://github.com/dotnet/sdk/issues/2765 -->
+    <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
     <DefineConstants>$(DefineConstants);FEATURE_ILDASM</DefineConstants>
   </PropertyGroup>
 
