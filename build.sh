@@ -71,7 +71,7 @@ runTest() {
 			echo "--- Desktop .NET Framework testing is not currently supported on Unix."
 		else
 			echo "Testing "$file
-			$DotNetExe test $file -c $Configuration --logger trx --framework $targetFramework
+			$DotNetExe test $file -c $Configuration --logger trx --framework $targetFramework --results-directory $2
 		fi
 	done
 
@@ -85,8 +85,17 @@ runTest() {
 }
 
 findAndRunTests() {
+	local testResultsDirectory=$COMMON_TESTRESULTSDIRECTORY
+
+	if [[ $testResultsDirectory == "" ]]; then
+		testResultsDirectory=$RootDir/TestResults
+		echo "Results directory not specified, using $testResultsDirectory."
+	else
+		echo "Using common one set by build agent."
+	fi
+
 	find tests/ -type d -name "*\.Tests" | while read file; do
-		runTest $file
+		runTest $file $testResultsDirectory
 	done
 }
 
@@ -133,7 +142,7 @@ fi
 
 downloadCatalog
 
-build
+#build
 
 findAndRunTests
 
