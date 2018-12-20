@@ -64,13 +64,14 @@ build() {
 
 runTest() {
 	ls $1/*.csproj | while read file; do
-		if awk -F: '/<TargetFramework>netcoreapp[1-9]\.[0-9]<\/TargetFramework>/ { found = 1 } END { if (found == 1) { exit 0 } else { exit 1 } }' $file; then
-			echo "Testing "$file
-			$DotNetExe test $file -c $Configuration --logger trx
-		else
-			# Can remove this when: https://github.com/dotnet/sdk/issues/335 is resolved
+		local targetFramework=$(awk -F: '/<TargetFramework(s)?>.*netcoreapp[1-9]\.[0-9].*<\/TargetFramework(s)?>/ { print $0 }' $file | sed 's/.*\(netcoreapp[1-9]\.[0-9]\).*/\1/')
+
+		if [[ $targetFramework == "" ]]; then
 			echo "Skipping "$file
 			echo "--- Desktop .NET Framework testing is not currently supported on Unix."
+		else
+			echo "Testing "$file
+			$DotNetExe test $file -c $Configuration --logger trx --framework $targetFramework
 		fi
 	done
 
@@ -80,6 +81,12 @@ runTest() {
 
 	find $RootDir/tests/ -type f -name "*.trx" | while read line; do
 		mv $line $TestResults/
+	done
+}
+
+findAndRunTests() {
+	find tests/ -type d -name "*\.Tests" | while read file; do
+		runTest $file
 	done
 }
 
@@ -128,8 +135,6 @@ downloadCatalog
 
 build
 
-find tests/ -type d -name "*\.Tests" | while read file; do
-	runTest $file
-done
+findAndRunTests
 
 echo "Finished!"
