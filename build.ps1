@@ -39,12 +39,9 @@ function Invoke-Tests() {
     foreach ($test in $(Get-ChildItem $testFolder | ? { $_.PsIsContainer })) {
         $csprojs = Get-ChildItem $test.FullName -Recurse | ? { $_.Extension -eq ".csproj" }
         foreach ($proj in $csprojs) {
-            $trx = "$($proj.BaseName).$(Get-Date -Format "yyyy-MM-dd.hh_mm_ss").trx"
-            $fullpath = Join-Path $testResults $trx
-
             Write-Host "Testing $($proj.Name). Output: $trx"
 
-            dotnet test "$($proj.FullName)" --configuration $Configuration --logger "trx;LogFileName=$fullpath" --no-build
+            dotnet test "$($proj.FullName)" --configuration $Configuration --logger "trx" --no-build
         }
     }
 }
