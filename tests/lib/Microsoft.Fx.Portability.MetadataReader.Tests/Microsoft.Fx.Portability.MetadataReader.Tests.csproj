@@ -15,7 +15,7 @@
     during dotnet test even when using RuntimeIdentifier. See:
     https://github.com/dotnet/sdk/issues/2765 -->
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
-    <DefineConstants>$(DefineConstants);FEATURE_ILDASM</DefineConstants>
+    <DefineConstants>$(DefineConstants);FEATURE_ILASM</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

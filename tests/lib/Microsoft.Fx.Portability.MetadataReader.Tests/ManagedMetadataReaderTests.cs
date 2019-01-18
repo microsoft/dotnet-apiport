@@ -41,7 +41,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             TestForDocIdHelper(source, docid, false);
         }
 
-#if FEATURE_ILDASM
+#if FEATURE_ILASM
         // IL can, bizarrely, define non-generic types that take generic paratmers
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})")]
@@ -249,7 +249,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.IsType<SystemObjectNotFoundException>(exception.InnerException);
         }
 
-#if FEATURE_ILDASM
+#if FEATURE_ILASM
         [Fact]
         public void AssemblyWithNoReferencesIsSkipped()
         {
