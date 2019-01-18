@@ -34,13 +34,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
-
-        [Theory]
-        public void TestForDocId(string source, string docid)
-        {
-            TestForDocIdHelper(source, docid, false);
-        }
-
 #if FEATURE_ILASM
         // IL can, bizarrely, define non-generic types that take generic paratmers
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
@@ -52,12 +45,12 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("NestedGenericTypes.il", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
         [InlineData("modopt.il", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
         [InlineData("modopt.il", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
+#endif
         [Theory]
-        public void TestForDocIdIL(string source, string docid)
+        public void TestForDocId(string source, string docid)
         {
             TestForDocIdHelper(source, docid, false);
         }
-#endif
 
         [InlineData("Spec.cs", "T:N.X`1")]
         [InlineData("Spec.cs", "M:N.X`1.#ctor")]
