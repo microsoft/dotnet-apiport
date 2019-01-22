@@ -34,9 +34,9 @@ namespace ApiPortVS
         /// Tries to fetch output items if it uses Common Project System then
         /// tries to fetch output items by retrieving FinalBuildOutput
         /// location using code snippet from:
-        /// https://github.com/Microsoft/visualfsharp/blob/master/vsintegration/tests/unittests/Tests.ProjectSystem.Miscellaneous.fs#L168-L182
+        /// https://github.com/Microsoft/visualfsharp/blob/master/vsintegration/tests/unittests/Tests.ProjectSystem.Miscellaneous.fs#L168-L182.
         /// </summary>
-        /// <returns>null if it is unable to retrieve VS configuration objects</returns>
+        /// <returns>null if it is unable to retrieve VS configuration objects.</returns>
         public override async Task<IEnumerable<string>> GetBuildOutputFilesAsync(Project project, CancellationToken cancellationToken = default)
         {
             if (project == null)

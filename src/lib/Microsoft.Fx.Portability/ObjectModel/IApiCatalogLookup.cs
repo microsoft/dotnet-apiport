@@ -40,7 +40,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         IEnumerable<FrameworkName> GetSupportedVersions(string docId);
 
         /// <summary>
-        /// Retrieves the ancestors for a given docId
+        /// Retrieves the ancestors for a given docId.
         /// </summary>
         IEnumerable<string> GetAncestors(string docId);
     }

@@ -16,7 +16,7 @@ namespace Microsoft.Fx.Portability.Proxy
     /// new credentials from user when authorization is required.
     /// </summary>
     /// <remarks>
-    /// Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Protocol.Core.v3/HttpSource/ProxyAuthenticationHandler.cs
+    /// Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Protocol.Core.v3/HttpSource/ProxyAuthenticationHandler.cs.
     /// </remarks>
     public class ProxyAuthenticationHandler : DelegatingHandler
     {

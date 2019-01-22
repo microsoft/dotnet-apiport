@@ -203,7 +203,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         /// <summary>
         /// Determines the cell reference for a row.  This assumes that the cell of interest
-        /// is the next cell to be added to the row
+        /// is the next cell to be added to the row.
         /// </summary>
         private static string GetCellRefence(SheetData sd, Row row)
         {
@@ -217,7 +217,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         /// <summary>
         /// Excel column names are base-26 using letters A-Z.  This converts a base-10
-        /// index into the corresponding Excel column name
+        /// index into the corresponding Excel column name.
         /// </summary>
         private static string GetColumnName(int index)
         {

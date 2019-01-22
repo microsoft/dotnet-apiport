@@ -9,7 +9,7 @@ using System.Xml.Linq;
 namespace Microsoft.Fx.Portability.Reports.DGML
 {
     /// <summary>
-    /// This class will manage the IDs that we generate for the DGML graph
+    /// This class will manage the IDs that we generate for the DGML graph.
     /// </summary>
     internal class DGMLManager
     {

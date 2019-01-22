@@ -14,7 +14,7 @@ namespace ApiPort
 {
     /// <summary>
     /// Credential provider for console input.
-    /// Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Clients/NuGet.CommandLine/Common/ConsoleCredentialProvider.cs
+    /// Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Clients/NuGet.CommandLine/Common/ConsoleCredentialProvider.cs.
     /// </summary>
     public class ConsoleCredentialProvider : ICredentialProvider
     {
@@ -92,7 +92,7 @@ namespace ApiPort
         }
 
         /// <summary>
-        /// Using Console input, retrieves a SecureString
+        /// Using Console input, retrieves a SecureString.
         /// </summary>
         private static void ReadSecureStringFromConsole(SecureString secureString)
         {

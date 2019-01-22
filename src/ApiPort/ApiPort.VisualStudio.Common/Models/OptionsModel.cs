@@ -14,7 +14,7 @@ using System.Reflection;
 namespace ApiPortVS.Models
 {
     /// <summary>
-    /// The options for ApiPort VS that are persisted
+    /// The options for ApiPort VS that are persisted.
     /// </summary>
     public class OptionsModel : NotifyPropertyBase
     {

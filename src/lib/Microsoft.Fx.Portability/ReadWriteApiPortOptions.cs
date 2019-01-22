@@ -8,7 +8,7 @@ using System.Collections.Immutable;
 namespace Microsoft.Fx.Portability
 {
     /// <summary>
-    /// Provides an implementation of IApiPortOptions that allows for reading and writing properties
+    /// Provides an implementation of IApiPortOptions that allows for reading and writing properties.
     /// </summary>
     public class ReadWriteApiPortOptions : IApiPortOptions
     {

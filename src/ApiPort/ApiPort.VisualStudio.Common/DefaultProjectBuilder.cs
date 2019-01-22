@@ -179,11 +179,11 @@ namespace ApiPortVS
             public int UpdateSolution_Cancel() => S_OK;
 
             /// <summary>
-            /// Called when entire solution is done building
+            /// Called when entire solution is done building.
             /// </summary>
-            /// <param name="fSucceeded">true if no update actions failed</param>
-            /// <param name="fModified">true if any update actions succeeded</param>
-            /// <param name="fCancelCommand">true if update actions were canceled</param>
+            /// <param name="fSucceeded">true if no update actions failed.</param>
+            /// <param name="fModified">true if any update actions succeeded.</param>
+            /// <param name="fCancelCommand">true if update actions were canceled.</param>
             /// <returns>If the method succeeds, it returns S_OK. If it fails, it returns an error code.</returns>
             public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
             {

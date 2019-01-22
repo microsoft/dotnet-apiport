@@ -71,7 +71,7 @@ namespace Microsoft.Fx.Portability
         /// This method will return a list of parameter values for the custom attribute.
         /// </summary>
         /// <remarks>
-        /// Currently, this only works for string values
+        /// Currently, this only works for string values.
         /// </remarks>
         public static ImmutableArray<string> GetParameterValues(this MetadataReader metadataReader, CustomAttribute customAttribute)
         {
@@ -105,7 +105,7 @@ namespace Microsoft.Fx.Portability
         ///
         /// If there are no bytes, the return will be 'null'
         /// If the length is greater than 8, it is a strong name signed assembly
-        /// Otherwise, the key is the byte sequence
+        /// Otherwise, the key is the byte sequence.
         /// </summary>
         [SuppressMessage("Microsoft.Security.Cryptography", "CA5354:SHA1CannotBeUsed", Justification = "Public key tokens are calculated using a SHA-1 hash.")]
         private static string FormatPublicKeyToken(this MetadataReader metadataReader, BlobHandle handle)

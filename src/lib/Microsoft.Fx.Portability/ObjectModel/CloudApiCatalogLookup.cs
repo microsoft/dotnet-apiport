@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Microsoft.Fx.Portability.ObjectModel
 {
     /// <summary>
-    /// This represents an object that contains the precomputed set of all target APIs that we ever shipped in the framework
+    /// This represents an object that contains the precomputed set of all target APIs that we ever shipped in the framework.
     /// </summary>
     public class CloudApiCatalogLookup : IApiCatalogLookup
     {

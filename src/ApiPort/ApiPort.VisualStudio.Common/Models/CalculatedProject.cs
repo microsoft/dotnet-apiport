@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace ApiPortVS.Models
 {
     /// <summary>
-    /// Contains a VS Project with its calculated outputs
+    /// Contains a VS Project with its calculated outputs.
     /// </summary>
     public class CalculatedProject
     {

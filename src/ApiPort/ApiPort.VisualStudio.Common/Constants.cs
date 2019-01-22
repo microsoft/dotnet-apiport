@@ -33,7 +33,7 @@ namespace ApiPortVS.Common
             public const string FinalOutputPath = nameof(FinalOutputPath);
 
             /// <summary>
-            /// Metadata name for file output location
+            /// Metadata name for file output location.
             /// </summary>
             public const string OutputLocation = "OUTPUTLOC";
         }

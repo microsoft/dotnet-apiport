@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ApiPort
 {
     /// <summary>
-    /// Use this service implementation to output analyze requests to a json file
+    /// Use this service implementation to output analyze requests to a json file.
     /// </summary>
     internal class FileOutputApiPortService : IApiPortService
     {

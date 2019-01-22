@@ -97,8 +97,8 @@ namespace Microsoft.Cci.Extensions
         /// stream after the API is called (the stream contents will have been copied
         /// to unmanaged memory already).
         /// </summary>
-        /// <param name="location">The location to be exposed from IUnit</param>
-        /// <param name="stream">The data to be used as the unit</param>
+        /// <param name="location">The location to be exposed from IUnit.</param>
+        /// <param name="stream">The data to be used as the unit.</param>
         public IUnit LoadUnitFrom(string location, Stream stream)
         {
             var fileName = Path.GetFileName(location);
@@ -674,11 +674,11 @@ namespace Microsoft.Cci.Extensions
         }
 
         /// <summary>
-        /// Method that loads assemblies given a list of identities
+        /// Method that loads assemblies given a list of identities.
         /// </summary>
-        /// <param name="identities">Collection of identities to load</param>
-        /// <param name="logErrorOrWarningCallback">Callback method that takes a message(string), an error level(ErrorTreatment), and a flag for isVersionMismatch(bool)</param>
-        /// <returns>Collection of Assemblies</returns>
+        /// <param name="identities">Collection of identities to load.</param>
+        /// <param name="logErrorOrWarningCallback">Callback method that takes a message(string), an error level(ErrorTreatment), and a flag for isVersionMismatch(bool).</param>
+        /// <returns>Collection of Assemblies.</returns>
         public IEnumerable<IAssembly> LoadAssemblies(IEnumerable<AssemblyIdentity> identities, bool warnOnVersionMismatch, Action<string, ErrorTreatment> logErrorOrWarningCallback)
         {
             List<IAssembly> matchingAssemblies = new List<IAssembly>();

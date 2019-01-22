@@ -186,7 +186,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         /// <summary>
         /// Attempt to get a MetadataReader.  Call this method instead of directly on PEReader so that
-        /// exceptions thrown by it are caught and propagated as a known InvalidPEAssemblyException
+        /// exceptions thrown by it are caught and propagated as a known InvalidPEAssemblyException.
         /// </summary>
         private static MetadataReader GetMetadataReader(PEReader peReader)
         {

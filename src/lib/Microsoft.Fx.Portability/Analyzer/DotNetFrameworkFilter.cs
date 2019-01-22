@@ -12,7 +12,7 @@ namespace Microsoft.Fx.Portability.Analyzer
     {
         /// <summary>
         /// These keys are a collection of public key tokens derived from all the reference assemblies in
-        /// "%ProgramFiles%\Reference Assemblies\Microsoft" on a Windows 10 machine with VS 2015 installed
+        /// "%ProgramFiles%\Reference Assemblies\Microsoft" on a Windows 10 machine with VS 2015 installed.
         /// </summary>
         private static readonly ICollection<string> MicrosoftKeys = new HashSet<string>(new[]
         {

@@ -107,9 +107,9 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Returns a list of valid DocIds from the PortabilityService
+        /// Returns a list of valid DocIds from the PortabilityService.
         /// </summary>
-        /// <param name="docIds">Enumerable of DocIds</param>
+        /// <param name="docIds">Enumerable of DocIds.</param>
         public async Task<ServiceResponse<IReadOnlyCollection<ApiInformation>>> QueryDocIdsAsync(IEnumerable<string> docIds)
         {
             return await _client.CallAsync<IEnumerable<string>,
