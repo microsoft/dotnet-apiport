@@ -4,7 +4,7 @@
 namespace Microsoft.Fx.Portability.Proxy
 {
     /// <summary>
-    /// Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Configuration/Credential/CredentialRequestType.cs
+    /// Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Configuration/Credential/CredentialRequestType.cs.
     /// </summary>
     public enum CredentialRequestType
     {

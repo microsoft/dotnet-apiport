@@ -27,8 +27,8 @@ namespace Microsoft.Fx.Portability
         internal const SslProtocols SupportedSSLProtocols = SslProtocols.Tls12;
 #endif
 
-        /// <param name="productName">Product name that will be displayed in the User Agent string of requests</param>
-        /// <param name="productVersion">Product version that will be displayed in the User Agent string of requests</param>
+        /// <param name="productName">Product name that will be displayed in the User Agent string of requests.</param>
+        /// <param name="productVersion">Product version that will be displayed in the User Agent string of requests.</param>
         public CompressedHttpClient(ProductInformation info)
             : this(info, new HttpClientHandler
             {

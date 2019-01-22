@@ -161,7 +161,7 @@ namespace Microsoft.Fx.Portability.Analysis
         }
 
         /// <summary>
-        /// Identitifies the status of an API for all of the targets
+        /// Identitifies the status of an API for all of the targets.
         /// </summary>
         private MemberInfo ProcessMemberInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
         {
@@ -174,7 +174,7 @@ namespace Microsoft.Fx.Portability.Analysis
         }
 
         /// <summary>
-        /// Computes a list of strings that describe the status of the api on all the targets (not supported or version when it was introduced)
+        /// Computes a list of strings that describe the status of the api on all the targets (not supported or version when it was introduced).
         /// </summary>
         private static bool IsSupportedAcrossTargets(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets, out List<Version> targetStatus)
         {
@@ -197,7 +197,7 @@ namespace Microsoft.Fx.Portability.Analysis
         }
 
         /// <summary>
-        /// Finds out if the given <paramref name="docId"/> is supported on any target
+        /// Finds out if the given <paramref name="docId"/> is supported on any target.
         /// </summary>
         private static bool IsSupportedOnAnyTarget(IApiCatalogLookup catalog, string docId) => catalog.GetSupportedVersions(docId).Any();
 
@@ -269,7 +269,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
         /// <summary>
         /// Returns a set of assemblies that should be removed if NuGet packages
-        /// exist for all the targets
+        /// exist for all the targets.
         /// </summary>
         public IEnumerable<string> ComputeAssembliesToRemove(
             IEnumerable<AssemblyInfo> userAssemblies,

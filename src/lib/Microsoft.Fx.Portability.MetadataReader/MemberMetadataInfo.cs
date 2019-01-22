@@ -239,7 +239,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// Replace the non-safe characters (<>.,) in a method name with safe ones ({}#@)
+        /// Replace the non-safe characters (.<>.,) in a method name with safe ones ({}#@)
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>

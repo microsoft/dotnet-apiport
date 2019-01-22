@@ -83,7 +83,7 @@ namespace Microsoft.Fx.Portability.Analysis
         ///
         /// Try the following in order:
         ///   1. Check if the target specified uses the 'simple' name (i.e. Windows, .NET Framework) then get the latest version for it
-        ///   2. Try to parse it as a target name. If the target was not a valid FrameworkName, an ArgumentException will be thrown and passed down to user
+        ///   2. Try to parse it as a target name. If the target was not a valid FrameworkName, an ArgumentException will be thrown and passed down to user.
         /// <exception cref="UnknownTargetException">Thrown when a target is unknown</exception>
         /// </summary>
         /// <param name="skipNonExistent">true to suppress <see cref="UnknownTargetException"/>

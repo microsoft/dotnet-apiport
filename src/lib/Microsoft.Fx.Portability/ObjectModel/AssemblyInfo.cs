@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         }
 
         /// <summary>
-        /// Gets or sets the assembly location
+        /// Gets or sets the assembly location.
         /// </summary>
         /// <remarks>Do not serialize location and send it to service.</remarks>
         [JsonIgnore]

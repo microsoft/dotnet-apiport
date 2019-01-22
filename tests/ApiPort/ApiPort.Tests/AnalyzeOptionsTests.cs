@@ -12,7 +12,7 @@ namespace ApiPort.Tests
     {
         /// <summary>
         /// Test that 'ExplicitlySpecified' flag is correctly set up when a directory is passed
-        /// in command line for analyzing
+        /// in command line for analyzing.
         /// </summary>
         [Fact]
         public static void TestAssemblyFlag_Directory()

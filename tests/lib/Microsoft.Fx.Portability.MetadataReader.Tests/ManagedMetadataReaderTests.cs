@@ -196,7 +196,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         /// <summary>
-        /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42
+        /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42.
         /// </summary>
         [Fact]
         public void MultidimensionalPrimitiveArray()

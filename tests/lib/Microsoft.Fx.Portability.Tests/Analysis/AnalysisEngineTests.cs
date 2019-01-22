@@ -535,11 +535,11 @@ namespace Microsoft.Fx.Portability.Web.Analyze.Tests
         }
 
         /// <summary>
-        /// This method generates breaking changes recomendations for testing the ShowRetargettingIssues
+        /// This method generates breaking changes recomendations for testing the ShowRetargettingIssues.
         /// </summary>
-        /// <param name="numOfRetargettingIssues">Number of retargetting issues to put in the recommendations result</param>
-        /// <param name="numOfRuntimeIssues">Number of runtime issues to put in the recommendations result</param>
-        /// <returns>API recommendations result containing the number of issues to be included</returns>
+        /// <param name="numOfRetargettingIssues">Number of retargetting issues to put in the recommendations result.</param>
+        /// <param name="numOfRuntimeIssues">Number of runtime issues to put in the recommendations result.</param>
+        /// <returns>API recommendations result containing the number of issues to be included.</returns>
         private static IApiRecommendations GenerateTestRecommendationsForShowRetargetting(int numOfRetargettingIssues = 1,
                                                                                           int numOfRuntimeIssues = 1)
         {

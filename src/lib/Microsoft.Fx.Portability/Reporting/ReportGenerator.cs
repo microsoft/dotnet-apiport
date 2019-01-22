@@ -131,7 +131,7 @@ namespace Microsoft.Fx.Portability.Reporting
         /// <summary>
         /// Give a list of assemblies it will compute which name an assembly must have.
         /// For instance, if we have a single assembly, we will use the assembly simple name.
-        /// If we have more than one then we should use the full assembly name in order to distinguish betweeen them
+        /// If we have more than one then we should use the full assembly name in order to distinguish betweeen them.
         /// </summary>
         private static Dictionary<AssemblyInfo, string> ComputeAssemblyNames(IEnumerable<AssemblyUsageInfo> assemblyUsage)
         {

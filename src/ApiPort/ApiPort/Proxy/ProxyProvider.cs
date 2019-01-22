@@ -21,7 +21,7 @@ namespace Microsoft.Fx.Portability.Proxy
     /// for the configuration value to be set.
     /// </summary>
     /// <remarks>
-    /// Adapted from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Configuration/Proxy/ProxyCache.cs
+    /// Adapted from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Configuration/Proxy/ProxyCache.cs.
     /// </remarks>
     public class ProxyProvider : IProxyProvider
     {
@@ -221,7 +221,7 @@ namespace Microsoft.Fx.Portability.Proxy
         }
 
         /// <summary>
-        /// Return true or false if connecting through a proxy server
+        /// Return true or false if connecting through a proxy server.
         /// </summary>
         private static bool IsSystemProxySet(Uri uri)
         {

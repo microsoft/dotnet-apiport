@@ -209,7 +209,7 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         }
 
         /// <summary>
-        /// Creates a test IApiCatelog with some framework DocIds
+        /// Creates a test IApiCatelog with some framework DocIds.
         /// </summary>
         private static IApiCatalogLookup CreateApiCatalogLookup()
         {
@@ -229,10 +229,10 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         }
 
         /// <summary>
-        /// Adds a DocId to the catalog
+        /// Adds a DocId to the catalog.
         /// </summary>
-        /// <param name="docIDType">Type of Id to add (M, T, P, E, etc)</param>
-        /// <param name="catalog">The catalog to add to</param>
+        /// <param name="docIDType">Type of Id to add (M, T, P, E, etc).</param>
+        /// <param name="catalog">The catalog to add to.</param>
         private static void AddDocIdsForType(string docIDType, IApiCatalogLookup catalog)
         {
             for (int iCounter = 0; iCounter < MaxDocIdSetCount; iCounter++)
@@ -244,10 +244,10 @@ namespace Microsoft.Fx.Portability.Offline.Tests
         }
 
         /// <summary>
-        /// Adds a DocId with a parameter to the catalog
+        /// Adds a DocId with a parameter to the catalog.
         /// </summary>
-        /// <param name="docIDType">Type of ID to add (M, T, P, E, etc)</param>
-        /// <param name="catalog">The catalog to add to</param>
+        /// <param name="docIDType">Type of ID to add (M, T, P, E, etc).</param>
+        /// <param name="catalog">The catalog to add to.</param>
         private static void AddDocIdWithParameter(string docIDType, IApiCatalogLookup catalog)
         {
             var docId = $"{docIDType}:{ValidDocId}{ParamText}";

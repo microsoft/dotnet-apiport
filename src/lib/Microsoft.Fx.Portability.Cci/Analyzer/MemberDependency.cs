@@ -17,12 +17,12 @@ namespace Microsoft.Fx.Portability.Analyzer
         private string _typeDocId;
 
         /// <summary>
-        /// Gets or sets the assembly that is calling the member
+        /// Gets or sets the assembly that is calling the member.
         /// </summary>
         public AssemblyInfo CallingAssembly { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly in which the member is defined
+        /// Gets or sets the assembly in which the member is defined.
         /// </summary>
         public string DefinedInAssemblyIdentity
         {

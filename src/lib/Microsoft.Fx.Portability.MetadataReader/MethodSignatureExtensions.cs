@@ -12,9 +12,9 @@ namespace Microsoft.Fx.Portability
     {
         /// <summary>
         /// Marks all types in a method signature as enclosed.  This does not change any of the inputs; instead it will create a new
-        /// method signature from new parameters and return type
+        /// method signature from new parameters and return type.
         /// </summary>
-        /// <returns>MethodSignature with types marked as enclosed</returns>
+        /// <returns>MethodSignature with types marked as enclosed.</returns>
         public static MethodSignature<MemberMetadataInfo> MakeEnclosedType(this MethodSignature<MemberMetadataInfo> methodSignature)
         {
             var parameters = methodSignature.ParameterTypes
