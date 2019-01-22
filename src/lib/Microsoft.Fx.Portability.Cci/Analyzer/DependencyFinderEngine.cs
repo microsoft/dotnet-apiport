@@ -60,22 +60,30 @@ namespace Microsoft.Fx.Portability.Analyzer
                 {
                     foreach (var dep in GetDependencies(filename))
                     {
-                        MemberInfo m = new MemberInfo() { MemberDocId = dep.MemberDocId, TypeDocId = dep.TypeDocId, DefinedInAssemblyIdentity = dep.DefinedInAssemblyIdentity };
+                        var m = new MemberInfo
+                        {
+                            MemberDocId = dep.MemberDocId,
+                            TypeDocId = dep.TypeDocId,
+                            DefinedInAssemblyIdentity = dep.DefinedInAssemblyIdentity
+                        };
 
                         // Add this memberinfo
                         var newassembly = new HashSet<AssemblyInfo>
                         {
                             dep.CallingAssembly
                         };
-                        ICollection<AssemblyInfo> assemblies = dependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
-                                                                                                        {
-                                                                                                            lock (existingSet)
-                                                                                                            {
-                                                                                                                existingSet.Add(dep.CallingAssembly);
-                                                                                                            }
-                                                                                                            return existingSet;
-                                                                                                        });
+
+                        var assemblies = dependencies.AddOrUpdate(m, newassembly, (key, existingSet) =>
+                        {
+                            lock (existingSet)
+                            {
+                                existingSet.Add(dep.CallingAssembly);
+                            }
+
+                            return existingSet;
+                        });
                     }
+
                     progressTask.ReportUnitComplete();
                 });
 
@@ -99,16 +107,15 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                     }
 
-                    HashSet<string> newValue = new HashSet<string>
-                    {
-                        callingAssembly
-                    };
+                    var newValue = new HashSet<string> { callingAssembly };
+
                     _unresolvedAssemblies.AddOrUpdate(e.Unresolved.Format(), newValue, (key, existingHashSet) =>
                     {
                         lock (existingHashSet)
                         {
                             existingHashSet.Add(callingAssembly);
                         }
+
                         return existingHashSet;
                     });
                 };
@@ -123,7 +130,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 }
 
                 // Extract the fileversion and assembly version from the assembly.
-                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);
+                var fileInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);
 
                 var assemblyInfo = new AssemblyInfo
                 {

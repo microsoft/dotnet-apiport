@@ -89,6 +89,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                             {
                                 existingSet.Add(dependencies.CallingAssembly);
                             }
+
                             return existingSet;
                         });
                     }
