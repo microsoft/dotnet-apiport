@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 namespace ApiPortVS.Views
 {
     /// <summary>
-    /// Interaction logic for OptionPageControl.xaml
+    /// Interaction logic for OptionPageControl.xaml.
     /// </summary>
     public partial class OptionsPageControl : UserControl
     {
