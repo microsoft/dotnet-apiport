@@ -42,8 +42,6 @@
   <PropertyGroup>
     <IsTest>false</IsTest>
     <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
-    <IsVsix>false</IsVsix>
-    <IsVsix Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('vsix'))">true</IsVsix>
   </PropertyGroup>
 
   <!--NuGet properties-->

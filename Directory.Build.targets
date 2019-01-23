@@ -76,7 +76,7 @@
 
   <Target Name="CopyBuildOutputToRawDirectory"
           AfterTargets="AfterBuild"
-          Condition="!$(IsTest) AND !$(IsVsix)">
+          Condition="!$(IsTest) AND '$(IsPackage)' != 'true' ">
     <MakeDir Directories="$(RawBinariesDropDirectory)\$(TargetFramework)" />
     <Message Text="Copying $(OutDir)\$(TargetName)$(TargetExt) to $(RawBinariesDropDirectory)\$(TargetFramework)"
              Importance="low" />
