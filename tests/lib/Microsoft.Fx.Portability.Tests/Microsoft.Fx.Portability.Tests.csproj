@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
     <NonShipping>true</NonShipping>
+    <DefineConstants>$(DefineConstants);FEATURE_XML_SCHEMA</DefineConstants>
   </PropertyGroup>
 
   <!-- FxCop does not understand this target platform and will output the
@@ -12,7 +13,6 @@
     -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <DefineConstants>$(DefineConstants);FEATURE_XML_SCHEMA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
