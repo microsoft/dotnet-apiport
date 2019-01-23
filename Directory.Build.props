@@ -17,6 +17,8 @@
     <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE</FullLicenseFile>
     <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>
     <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(OutputFullPath)bin\$(Configuration)\</OutputDrop>
+    <RawBinariesDropDirectory Condition=" '$(RawBinariesDropDirectory)' == '' ">$(OutputDrop)\raw\binaries</RawBinariesDropDirectory>
+    <RawSymbolsDropDirectory Condition=" '$(RawSymbolsDropDirectory)' == '' ">$(OutputDrop)\raw\symbols</RawSymbolsDropDirectory>
     <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
     <DocumentationFile>$(OutputPath)$(MSBuildProjectName).xml</DocumentationFile>
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
