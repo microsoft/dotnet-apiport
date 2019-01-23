@@ -115,15 +115,22 @@ namespace ApiPort.Tests
         {
             var directoryPath = Directory.GetCurrentDirectory();
             var currentAssemblyPath = typeof(AnalyzeOptionsTests).GetTypeInfo().Assembly.Location;
+            var currentAssemblyDirectory = Path.GetDirectoryName(currentAssemblyPath);
+
+            // The scenario tested is when an assembly is passed in twice, once explicitly and once as part of the folder
+            // Assert that we test this scenario.
+            if (!string.Equals(currentAssemblyDirectory, directoryPath, StringComparison.OrdinalIgnoreCase))
+            {
+                Directory.SetCurrentDirectory(currentAssemblyDirectory);
+                directoryPath = Directory.GetCurrentDirectory();
+            }
 
             var options = GetOptions($"analyze -f {directoryPath} -f {currentAssemblyPath}");
 
             Assert.Equal(AppCommand.AnalyzeAssemblies, options.Command);
             Assert.NotEmpty(options.InputAssemblies);
 
-            // The scenario tested is when an assembly is passed in twice, once explicitly and once as part of the folder
-            // Assert that we test this scenario.
-            Assert.Equal(Path.GetDirectoryName(currentAssemblyPath), directoryPath, StringComparer.OrdinalIgnoreCase);
+            Assert.Equal(currentAssemblyDirectory, Directory.GetCurrentDirectory(), StringComparer.OrdinalIgnoreCase);
 
             foreach (var element in options.InputAssemblies)
             {

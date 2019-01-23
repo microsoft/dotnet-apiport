@@ -17,7 +17,15 @@ namespace Microsoft.Fx.Portability.Cci.Tests
     internal class TestAssembly
     {
         private const string TFM = @"[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.1"", FrameworkDisplayName = "".NET Framework 4.5.1"")]";
-        private static readonly string Mscorlib = typeof(object).GetTypeInfo().Assembly.Location;
+        private static readonly IEnumerable<string> DefaultReferences = new[]
+        {
+            typeof(object).Assembly.Location,
+            typeof(Console).Assembly.Location,
+
+            // Reference to System.Runtime.dll rather than System.Private.CoreLib on .NET Core
+            typeof(RuntimeReflectionExtensions).Assembly.Location
+        }.Distinct();
+
         private readonly string _path;
 
         private TestAssembly(string assemblyName, string text, IEnumerable<string> referencePaths)
@@ -56,7 +64,7 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             get
             {
                 var text = GetText("EmptyProject.cs");
-                return new TestAssembly("EmptyProject", text, new[] { Mscorlib }).Path;
+                return new TestAssembly("EmptyProject", text, DefaultReferences).Path;
             }
         }
 
@@ -65,7 +73,8 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             get
             {
                 var text = GetText("WithGenericsAndReference.cs");
-                return new TestAssembly("WithGenericsAndReference", text, new[] { Mscorlib, EmptyProject }).Path;
+                var references = DefaultReferences.Concat(new[] { EmptyProject });
+                return new TestAssembly("WithGenericsAndReference", text, references).Path;
             }
         }
 
@@ -76,9 +85,9 @@ namespace Microsoft.Fx.Portability.Cci.Tests
             using (var stream = typeof(TestAssembly).GetTypeInfo().Assembly.GetManifestResourceStream(name))
             {
                 using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+                {
+                    return reader.ReadToEnd();
+                }
             }
         }
     }
