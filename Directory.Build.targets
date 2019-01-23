@@ -70,8 +70,23 @@
   <Target Name="RemoveEmbeddedResources"
           BeforeTargets="CoreCompile">
     <ItemGroup>
-        <Compile Remove="@(EmbeddedResource-> '%(Identity)')" />
+      <Compile Remove="@(EmbeddedResource-> '%(Identity)')" />
     </ItemGroup>
+  </Target>
+
+  <Target Name="CopyBuildOutputToRawDirectory"
+          AfterTargets="AfterBuild"
+          Condition="!$(IsTest) AND !$(IsVsix)">
+    <MakeDir Directories="$(RawBinariesDropDirectory)\$(TargetFramework)" />
+    <Message Text="Copying $(OutDir)\$(TargetName)$(TargetExt) to $(RawBinariesDropDirectory)\$(TargetFramework)"
+             Importance="low" />
+    <Copy SourceFiles="$(OutDir)\$(TargetName)$(TargetExt)"
+          DestinationFolder="$(RawBinariesDropDirectory)\$(TargetFramework)" />
+    <MakeDir Directories="$(RawSymbolsDropDirectory)\$(TargetFramework)" />
+    <Message Text="Copying $(OutDir)\$(TargetName).pdb to $(RawSymbolsDropDirectory)\$(TargetFramework)"
+             Importance="low" />
+    <Copy SourceFiles="$(OutDir)\$(TargetName).pdb"
+          DestinationFolder="$(RawSymbolsDropDirectory)\$(TargetFramework)" />
   </Target>
 
 </Project>

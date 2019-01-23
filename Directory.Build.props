@@ -17,6 +17,8 @@
     <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE</FullLicenseFile>
     <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>
     <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(OutputFullPath)bin\$(Configuration)\</OutputDrop>
+    <RawBinariesDropDirectory Condition=" '$(RawBinariesDropDirectory)' == '' ">$(OutputDrop)\raw\binaries</RawBinariesDropDirectory>
+    <RawSymbolsDropDirectory Condition=" '$(RawSymbolsDropDirectory)' == '' ">$(OutputDrop)\raw\symbols</RawSymbolsDropDirectory>
     <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
     <DocumentationFile>$(OutputPath)$(MSBuildProjectName).xml</DocumentationFile>
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
@@ -40,6 +42,8 @@
   <PropertyGroup>
     <IsTest>false</IsTest>
     <IsTest Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('test'))">true</IsTest>
+    <IsVsix>false</IsVsix>
+    <IsVsix Condition="$(MSBuildProjectName.ToLowerInvariant().Contains('vsix'))">true</IsVsix>
   </PropertyGroup>
 
   <!--NuGet properties-->
