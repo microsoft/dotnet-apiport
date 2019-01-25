@@ -92,6 +92,9 @@ namespace Microsoft.Fx.Portability.Reports
         /// </summary>
         private static void ConfigureRazorViews(ApplicationPartManager partsManager, PhysicalFileProvider fileProvider)
         {
+            // Using StringComparison.OrdinalIgnoreCase because on .NET FX,
+            // binaries are output as .DLL sometimes rather than .dll, which
+            // leaves us unable to find the files.
             var comparison = StringComparison.OrdinalIgnoreCase;
 #if !NET461
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
