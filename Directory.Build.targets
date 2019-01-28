@@ -64,6 +64,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Work around an issue where portable PDB is not supported yet in Api scan tool.
+       This does not work in Directory.Build.props because $(TargetFramework) has not been set yet
+       when it is imported. -->
+  <PropertyGroup>
+    <DebugType Condition=" $(TargetFramework.StartsWith('net4')) ">Full</DebugType>
+  </PropertyGroup>
+
   <!-- In .NET Core SDK 1.0-rc3, all *.cs files are implicitly added for compiled.  This includes the test files we embed as resources.
        We explicitly remove them here so that they are not compiled.
        BUG: https://github.com/dotnet/sdk/issues/977 -->
