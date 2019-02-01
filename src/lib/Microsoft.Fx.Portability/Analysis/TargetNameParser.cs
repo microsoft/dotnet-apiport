@@ -19,7 +19,7 @@ namespace Microsoft.Fx.Portability.Analysis
             DefaultTargets = GetDefaultTargets(defaultTargets).ToList();
         }
 
-        public IEnumerable<FrameworkName> DefaultTargets { get; private set; }
+        public IEnumerable<FrameworkName> DefaultTargets { get; }
 
         /// <summary>
         /// Maps the list of targets specified as strings to a list of supported target names.
