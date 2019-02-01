@@ -89,7 +89,7 @@ namespace Microsoft.Fx.Portability.Analysis
         /// </summary>
         /// <param name="skipNonExistent">true to suppress <see cref="UnknownTargetException"/>
         /// when a target is not found. false, will not throw and skip that target instead.</param>
-        /// <exception cref="UnknownTargetException">Thrown when a target is unknown</exception>
+        /// <exception cref="UnknownTargetException">Thrown when a target is unknown.</exception>
         private ICollection<FrameworkName> ParseTargets(IEnumerable<string> targets, bool skipNonExistent)
         {
             bool TryParseFrameworkName(string targetName, out FrameworkName frameworkName)
