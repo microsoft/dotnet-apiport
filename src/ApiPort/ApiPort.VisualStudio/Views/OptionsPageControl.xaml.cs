@@ -33,7 +33,7 @@ namespace ApiPortVS.Views
             Unloaded += (s, e) => viewModel.Save();
         }
 
-        private void NavigateToPrivacyModel(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.About.OriginalString);
+        private void NavigateToPrivacyModel(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.PrivacyPolicy.OriginalString);
 
         private void NavigateToMoreInformation(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.About.OriginalString);
 
