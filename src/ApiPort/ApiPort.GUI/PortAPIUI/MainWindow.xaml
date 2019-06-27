@@ -1,0 +1,87 @@
+﻿<Window x:Class="PortAPIUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PortAPIUI"
+        mc:Ignorable="d"
+        Title=".NET Core 3.0 API Analyzer"
+        Width="900"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        FontWeight="Normal"
+        WindowState="Normal"
+        Height="1000"
+        FontStyle="Normal"
+        Topmost="True"
+        Background="White" 
+        MinHeight="900" 
+        MinWidth="900"
+        >
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width=" Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Margin="10" >
+            <Label Content= "Path to application folder: "  HorizontalAlignment="Stretch" />
+            <TextBox   Name="PathTextbox" Text = "{Binding SelectedPath}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="5" />
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                <Label Content="Build Configuration: " Width="140"/>
+                <ComboBox Width="165" SelectedIndex="0" SelectedItem="{Binding SelectedConfig}" ItemsSource="{Binding Config}" IsEnabled="{Binding ElementName=PathTextbox,Path=Text.Length}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                <Label Content="Build Platform: " Width="140"/>
+                <ComboBox x:Name="ComboBox" Width="165" SelectedIndex="0" SelectedItem="{Binding SelectedPlatform}" ItemsSource="{Binding Platform}" IsEnabled="{Binding ElementName=PathTextbox,Path=Text.Length}" />
+            </StackPanel>
+
+        </StackPanel>
+
+        <StackPanel  Grid.Row="2" Grid.Column="0" Orientation="Vertical" Margin="10"  >
+            <StackPanel Orientation="Vertical"  >
+                <Label  Content="Choose Assemblies: " />
+                <ComboBox  x:Name="AssemComboBox" IsEnabled="False"  SelectedItem="{Binding SelectedAssembly}" ItemsSource="{Binding Assemblies}"  />
+            </StackPanel>
+
+            <DataGrid IsEnabled="False"  x:Name="APIGrid" Grid.Row="2" Grid.Column="0"  BorderBrush="#FFABADB3" Margin="0,10,0,0"   >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="API" Width="*" FontFamily="Segoe UI"/>
+                    <DataGridTextColumn Header="Compatibility" Width="*"/>
+                    <DataGridCheckBoxColumn Header="Version" Width="*"/>
+                    <DataGridTextColumn Header="Additional Info" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="10">
+            <Button  x:Name="BrowseBtn" Content="Browse ..." Command="{Binding Browse}" Width =" 98" Margin="0,22,0,0" Height="30" HorizontalAlignment="Stretch"  />
+            <Button x:Name="AnalzeBtn" Click="BStart_Click" Command="{Binding Analyze}" IsEnabled="{Binding ElementName=PathTextbox,Path=Text.Length}" Content="Analyze"  Margin="0,12,0,0"  Height="30" HorizontalAlignment="Stretch"   />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10" VerticalAlignment="Bottom" >
+            <Button x:Name="ExportBtn" Command="{Binding Export}" Content="Export Analysis.." Width =" 98" Height="30" IsEnabled="False" HorizontalAlignment="Stretch"  />
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Stretch"  >
+             <Hyperlink Click="About_Click"> About this tool </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="3" Grid.Column="0"  HorizontalAlignment="Stretch" Margin="10">
+            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                <Run  Text= "Privacy &#x0a;The analyzer will send anonymous API usage information to microsoft to help us improve .NET Core.
+                    &#x0a;This way, we know which APIs are often used by customers who wish to target .NET Core. We won't submit any of your binaries or source code to Microsoft.
+                    &#x0a;For our full privacy statement visit: " >  </Run>
+                <Hyperlink Click="Privacy_Click"> https://privacy.microsoft.com/en-us/privacystatement </Hyperlink>
+            </TextBlock>
+        </Grid>
+
+    </Grid>
+
+</Window>

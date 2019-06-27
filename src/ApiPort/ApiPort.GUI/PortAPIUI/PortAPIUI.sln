@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28921.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortAPIUI", "PortAPIUI.csproj", "{84428575-22DB-4578-BF52-2B1CB72970AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF} = {D325BEFC-0712-4D0F-9D8F-B68371382DEF}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildcsprojtoMem", "..\BuildcsprojtoMem\BuildcsprojtoMem.csproj", "{D325BEFC-0712-4D0F-9D8F-B68371382DEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84428575-22DB-4578-BF52-2B1CB72970AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84428575-22DB-4578-BF52-2B1CB72970AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84428575-22DB-4578-BF52-2B1CB72970AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84428575-22DB-4578-BF52-2B1CB72970AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {820CBF24-F168-4BDD-B26E-979B3F4CA7AF}
+	EndGlobalSection
+EndGlobal
