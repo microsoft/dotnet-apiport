@@ -22,7 +22,7 @@ namespace MSBuildAnalyzer
 {
     public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             MSBuildLocator.RegisterDefaults();
             if (args.Length != 0)
@@ -41,6 +41,7 @@ namespace MSBuildAnalyzer
             }
         }
     }
+
     public class Temp
     {
         private static List<string> configurations;
