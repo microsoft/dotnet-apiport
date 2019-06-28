@@ -128,6 +128,7 @@ class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
+     
         /*
                 foreach(var assembly in Assemblies)
                 {
@@ -152,9 +153,17 @@ class MainViewModel : ViewModelBase
         Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
         Config = output.Configuration;
         Platform = output.Platform;
-        Assemblies = output.Assembly;
-   
+        List<string> assemblyNames = output.Assembly;
+        foreach (var assembly in assemblyNames)
+        {
+            string name = assembly.Substring(0, assembly.IndexOf(","));
 
+            Hyperlink link = new Hyperlink();
+            link.NavigateUri = new Uri(uriString: $"https://www.nuget.org/packages/{name}");
+            ProcessStartInfo psi = new ProcessStartInfo(link.NavigateUri.ToString());
+            psi.UseShellExecute = true;
+            Process.Start(psi);
+        }
     }
 
     private void ExecuteSaveFileDialog()

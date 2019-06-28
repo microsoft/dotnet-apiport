@@ -28,8 +28,6 @@ namespace BuildcsprojtoMem
                 {
                     var mypath = System.Reflection.Assembly.GetEntryAssembly().Location;
                     var targetPath = project.GetProperty("TargetPath");
-                    var exeName = project.GetProperty("TargetName");
-
                     var targetPathString = targetPath.EvaluatedValue;
                     var assembly = Assembly.LoadFrom(targetPathString);
                     foreach (var dependent in assembly.GetReferencedAssemblies())

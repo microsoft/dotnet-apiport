@@ -94,10 +94,10 @@ namespace MSBuildAnalyzer
                 var assembly = Assembly.LoadFrom(targetPathString);
                 foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
                 {
-                    Console.Write(" **" + Assembly.Load(assemblyName).Location);
+                    Console.Write(" **" + Assembly.Load(assemblyName));
                 }
 
-                Console.Write(" **" + assembly.Location);
+               // Console.Write(" **" + assembly);
             }
         }
     }
