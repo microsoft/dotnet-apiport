@@ -16,7 +16,9 @@ using System.Windows.Threading;
 class MainViewModel : ViewModelBase
 {
     public RelayCommand Browse { get; set; }
+
     public RelayCommand Export { get; set; }
+
     public RelayCommand Analyze { get; set; }
 
     private string _selectedPath;
@@ -114,27 +116,23 @@ class MainViewModel : ViewModelBase
 
 
     private void RegisterCommands()
-
     {
-
-
         Browse = new RelayCommand(ExecuteOpenFileDialog);
         Export = new RelayCommand(ExecuteSaveFileDialog);
         Analyze = new RelayCommand(AnalyzeAPI);
 
     }
 
-
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-     
+
         /*
                 foreach(var assembly in Assemblies)
                 {
                     AssemblyCollection.Add(new AssemblyModel(assembly));
                 }*/
-        //ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        // ApiAnalyzer.AnalyzeAssemblies(Assemblies);
     }
 
 
@@ -142,8 +140,6 @@ class MainViewModel : ViewModelBase
 
     private void ExecuteOpenFileDialog()
     {
-
-
         var dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.Filter = "Project File (*.csproj)|*.csproj|All files (*.*)|*.*";
         dialog.InitialDirectory = @"C:\";
@@ -154,15 +150,18 @@ class MainViewModel : ViewModelBase
         Config = output.Configuration;
         Platform = output.Platform;
         List<string> assemblyNames = output.Assembly;
+
         foreach (var assembly in assemblyNames)
         {
             string name = assembly.Substring(0, assembly.IndexOf(","));
-
-            Hyperlink link = new Hyperlink();
-            link.NavigateUri = new Uri(uriString: $"https://www.nuget.org/packages/{name}");
-            ProcessStartInfo psi = new ProcessStartInfo(link.NavigateUri.ToString());
-            psi.UseShellExecute = true;
-            Process.Start(psi);
+            if (!name.Equals("mcroslib"))
+            {
+                Hyperlink link = new Hyperlink();
+                link.NavigateUri = new Uri(uriString: $"https://www.nuget.org/packages/{name}");
+                ProcessStartInfo psi = new ProcessStartInfo(link.NavigateUri.ToString());
+                psi.UseShellExecute = true;
+                Process.Start(psi);
+            }
         }
     }
 
