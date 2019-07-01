@@ -1,17 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using PortAPIUI;
+using PortAPIUI.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 class MainViewModel : ViewModelBase
 {
@@ -28,9 +22,20 @@ class MainViewModel : ViewModelBase
     public static string _selectedConfig;
     public static string _selectedPlatform;
 
-   // public ObservableCollection<AssemblyModel> AssemblyCollection { get; set; } = new ObservableCollection<AssemblyModel>();
+    public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
 
     public static string _selectedAssembly;
+
+
+    public ObservableCollection<ApiViewModel> AssemblyCollection
+    {
+        get { return _assemblyCollection; }
+        set
+        {
+            _assemblyCollection = value;
+            RaisePropertyChanged("AssemblyCollection");
+        }
+    }
 
     public string SelectedPath
     {
@@ -107,54 +112,64 @@ class MainViewModel : ViewModelBase
         _assemblies = new List<string>();
         _config = new List<string>();
         _platform = new List<string>();
-
+        _assemblyCollection = new ObservableCollection<ApiViewModel>();
 
     }
 
-
-
     private void RegisterCommands()
-
     {
-
-
         Browse = new RelayCommand(ExecuteOpenFileDialog);
         Export = new RelayCommand(ExecuteSaveFileDialog);
         Analyze = new RelayCommand(AnalyzeAPI);
 
     }
 
-
+    
     private void AnalyzeAPI()
     {
-        Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        /*
-                foreach(var assembly in Assemblies)
-                {
-                    AssemblyCollection.Add(new AssemblyModel(assembly));
-                }*/
-        //ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        Assemblies = Rebuild.ChosenBuild(SelectedPath); 
+        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+
     }
+    
+    public void AssemblyCollectionUpdate(string assem)
+    {
+        AssemblyCollection.Clear();
+        foreach (var assembly in Assemblies)
+        {
+            if (assem.Equals(assembly))
+            {
+                AssemblyCollection.Add(new ApiViewModel(assembly, assembly+ " API Name ", true));
+            }
 
+        }
 
-
+    }
 
     private void ExecuteOpenFileDialog()
     {
-
-
         var dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.Filter = "Project File (*.csproj)|*.csproj|All files (*.*)|*.*";
         dialog.InitialDirectory = @"C:\";
-        dialog.ShowDialog();
-        SelectedPath = dialog.FileName;
-        ExportResult.InputPath = dialog.FileName;
-        Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
+       
+        Nullable<bool> result = dialog.ShowDialog();
+        if (result == true)
+        {
+            SelectedPath = dialog.FileName;
+        }
+        else {SelectedPath = null; }
+
+        if (SelectedPath != null)
+        {
+
+         ExportResult.InputPath = SelectedPath;
+
+        info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
+
         Config = output.Configuration;
         Platform = output.Platform;
         Assemblies = output.Assembly;
-   
-
+        }
     }
 
     private void ExecuteSaveFileDialog()
@@ -167,7 +182,7 @@ class MainViewModel : ViewModelBase
         if (result == true)
         {
             string fileExtension = Path.GetExtension(savedialog.FileName);
-            ExportResult.ExportApiResult(savedialog.FileName, fileExtension, false);
+            ExportResult.ExportApiResult(savedialog.FileName, fileExtension);
         }
 
     }
