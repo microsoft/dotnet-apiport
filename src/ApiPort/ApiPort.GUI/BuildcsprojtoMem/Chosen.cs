@@ -17,11 +17,11 @@ namespace BuildcsprojtoMem
                     { "Configuration", config },
                     { "Platform", plat }
                 };
-            ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
+            ProjectCollection p = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
 
-            var project = pc.LoadProject(path);
+            var project = p.LoadProject(path);
             project.Build();
-            if (project.IsBuildEnabled == true)
+            if (project.Build() == true)
             {
                 Console.Write("Assembly:");
                 if (project.Properties.Any(n => n.Name == "TargetPath"))
