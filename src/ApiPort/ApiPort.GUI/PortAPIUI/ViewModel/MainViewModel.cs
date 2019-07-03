@@ -130,11 +130,16 @@ class MainViewModel : ViewModelBase
 
     private void AnalyzeAPI()
     {
-       
-      
+        MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
+        if (msBuild.MessageBox.Equals(false))
+        {
+            MessageBox.Show("Error: Please build your project first.");
+        }
+        else
+        {
             Assemblies = Rebuild.ChosenBuild(SelectedPath);
             ApiAnalyzer.AnalyzeAssemblies(Assemblies);
-      
+        }
 
     }
     
@@ -167,12 +172,8 @@ class MainViewModel : ViewModelBase
 
         if (SelectedPath != null)
         {
-            MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
-            if (msBuild.MessageBox.Equals(false))
-            {
-                MessageBox.Show("wassup");
-            }
-            else
+           
+           // else
             {
                 ExportResult.InputPath = SelectedPath;
 
