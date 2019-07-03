@@ -176,13 +176,13 @@ class MainViewModel : ViewModelBase
 
         if (SelectedPath != null)
         {
-            MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
+           /* MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
             if (msBuild.MessageBox.Equals(false))
             {
                 MessageBox.Show("wassup");
             }
             else
-            {
+            {*/
                 ExportResult.InputPath = SelectedPath;
 
                 Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
@@ -191,8 +191,8 @@ class MainViewModel : ViewModelBase
                 Config = output.Configuration;
                 Platform = output.Platform;
 
-                List<string> assemblyNames = output.Assembly;
-            }
+                AssembliesPath = output.Assembly;
+           // }
         }
 
     }
