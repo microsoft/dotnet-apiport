@@ -12,7 +12,10 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
     {
         private readonly HashSet<AssemblyInfo> _usedInAssemblies;
 
-        public IEnumerable<AssemblyInfo> UsedIn { get; }
+        public IEnumerable<AssemblyInfo> UsedIn
+        {
+            get { return _usedInAssemblies; }
+        }
 
         public int Uses
         {
