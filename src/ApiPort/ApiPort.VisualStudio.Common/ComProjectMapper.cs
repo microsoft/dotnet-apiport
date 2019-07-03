@@ -16,7 +16,7 @@ using static Microsoft.Fx.Portability.Utils.FormattableStringHelper;
 namespace ApiPortVS
 {
     /// <summary>
-    /// You need to switch to the UI thread before calling any COM interfaces (e.g. IVsHierarchy) using
+    /// You need to switch to the UI thread before calling any COM interfaces (e.g. IVsHierarchy) using.
     /// </summary>
     [Export(typeof(IProjectMapper))]
     public class COMProjectMapper : IProjectMapper

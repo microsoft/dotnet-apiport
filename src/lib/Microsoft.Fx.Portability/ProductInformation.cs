@@ -37,7 +37,7 @@ namespace Microsoft.Fx.Portability
         public string Version { get; }
 
         /// <summary>
-        /// Verify strings/versions only contain letters, digits, '.', or '_'.  Otherwise, the user agent string may be created incorrectly
+        /// Verify strings/versions only contain letters, digits, '.', or '_'.  Otherwise, the user agent string may be created incorrectly.
         /// </summary>
         private static bool IsValid(string str)
         {

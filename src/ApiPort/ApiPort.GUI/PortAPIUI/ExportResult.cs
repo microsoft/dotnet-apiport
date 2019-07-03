@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 
-[assembly: System.Windows.Media.DisableDpiAwareness]
+
 
 namespace PortAPIUI
 {
@@ -21,8 +21,7 @@ namespace PortAPIUI
             {
                 ourPath = System.IO.Directory.GetParent(ourPath).FullName;
             }
-
-            string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
+            string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug","ApiPort", "netcoreapp2.1", "ApiPort.dll");
             string InputPathParent = System.IO.Directory.GetParent(InputPath).FullName;
 
             Process p = new Process();

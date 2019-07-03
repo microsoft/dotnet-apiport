@@ -16,7 +16,7 @@ using static Microsoft.Fx.Portability.Tests.TestData.TestFrameworks;
 namespace Microsoft.Fx.Portability.Tests.Analysis
 {
     /// <summary>
-    /// Tests GetNuGetPackageInfo for AnalysisEngine
+    /// Tests GetNuGetPackageInfo for AnalysisEngine.
     /// </summary>
     public class AnalysisEngineNuGetPackageInfoTests
     {

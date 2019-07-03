@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Microsoft.Fx.Portability.Proxy
 {
     /// <summary>
-    /// Coordinates the proxy settings and credentials
+    /// Coordinates the proxy settings and credentials.
     /// </summary>
     public interface IProxyProvider
     {

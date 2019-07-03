@@ -186,7 +186,7 @@
 
             <TextBlock Grid.Column="2"
                        HorizontalAlignment="Right">
-                <Hyperlink RequestNavigate="NavigateToMoreInformation"
+                <Hyperlink NavigateUri="DocumentationLinks.About" RequestNavigate="NavigateToMoreInformation"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutTool}">
                     <TextBlock Text="{x:Static const:LocalizedStrings.AboutTool}"
                                KeyboardNavigation.IsTabStop="True"
@@ -196,7 +196,7 @@
 
             <TextBlock Grid.Column="4"
                        HorizontalAlignment="Right">
-                <Hyperlink RequestNavigate="NavigateToPrivacyModel"
+                <Hyperlink NavigateUri="DocumentationLinks.PrivacyPolicy" RequestNavigate="NavigateToPrivacyModel"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutPrivacy}">
                     <TextBlock Text="{x:Static const:LocalizedStrings.AboutPrivacy}"
                                KeyboardNavigation.IsTabStop="True"

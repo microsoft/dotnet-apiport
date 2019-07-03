@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Fx.Portability
 {
@@ -21,7 +22,16 @@ namespace Microsoft.Fx.Portability
                 return y == null ? 0 : -1;
             }
 
-            return string.Compare(x.Name, y?.Name, StringComparison.Ordinal);
+            // Filenames are case insensitive on Windows.
+            var comparison = StringComparison.OrdinalIgnoreCase;
+
+#if !NET461
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                comparison = StringComparison.Ordinal;
+            }
+#endif
+            return string.Compare(x.Name, y?.Name, comparison);
         }
     }
 }

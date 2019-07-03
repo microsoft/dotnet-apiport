@@ -4,19 +4,19 @@
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reports
 {
     public class ExcelReportWriter : IReportWriter
     {
-        private readonly ResultFormatInformation _formatInformation;
         private readonly ITargetMapper _targetMapper;
 
         public ExcelReportWriter(ITargetMapper targetMapper)
         {
             _targetMapper = targetMapper;
 
-            _formatInformation = new ResultFormatInformation
+            Format = new ResultFormatInformation
             {
                 DisplayName = "Excel",
                 MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -24,13 +24,13 @@ namespace Microsoft.Fx.Portability.Reports
             };
         }
 
-        public ResultFormatInformation Format { get { return _formatInformation; } }
+        public ResultFormatInformation Format { get; }
 
-        public void WriteStream(Stream stream, AnalyzeResponse response)
+        public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
             var excelWriter = new ExcelOpenXmlOutputWriter(_targetMapper, response.ReportingResult, response.BreakingChanges, response.CatalogLastUpdated, description: null);
 
-            excelWriter.WriteTo(stream);
+            return excelWriter.WriteToAsync(stream);
         }
     }
 }

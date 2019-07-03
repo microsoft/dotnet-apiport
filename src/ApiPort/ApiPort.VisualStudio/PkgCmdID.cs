@@ -5,7 +5,7 @@ namespace ApiPortVS
 {
     /// <summary>
     /// Command ids for Visual Studio menu items
-    /// MUST match PkgCmdID.h
+    /// MUST match PkgCmdID.h.
     /// </summary>
     internal static class PkgCmdID
     {

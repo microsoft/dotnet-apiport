@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability
     public static class BreakingChangeParser
     {
         /// <summary>
-        /// Items that can show up in the breaking change 'Affected APIs' section that should be ignored
+        /// Items that can show up in the breaking change 'Affected APIs' section that should be ignored.
         /// </summary>
         private static readonly ICollection<string> IgnoredApis = new HashSet<string>(new[]
         {
@@ -38,10 +38,10 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Parses markdown files into BrekaingChange objects
+        /// Parses markdown files into BrekaingChange objects.
         /// </summary>
-        /// <param name="stream">The markdown to parse</param>
-        /// <returns>BreakingChanges parsed from the markdown</returns>
+        /// <param name="stream">The markdown to parse.</param>
+        /// <returns>BreakingChanges parsed from the markdown.</returns>
         public static IEnumerable<BreakingChange> FromMarkdown(Stream stream)
         {
             // Use a separate overload instead of a default parameter so that binaries built against the older version of
@@ -50,13 +50,13 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Parses markdown files into BrekaingChange objects
+        /// Parses markdown files into BrekaingChange objects.
         /// </summary>
-        /// <param name="stream">The markdown to parse</param>
+        /// <param name="stream">The markdown to parse.</param>
         /// <param name="allowedCategories">Valid category strings. Pass null
         /// to allow any category. A breaking change using an invalid category
         /// will throw an exception while parsing the breaking change.</param>
-        /// <returns>BreakingChanges parsed from the markdown</returns>
+        /// <returns>BreakingChanges parsed from the markdown.</returns>
         public static IEnumerable<BreakingChange> FromMarkdown(Stream stream, IEnumerable<string> allowedCategories)
         {
             var breakingChanges = new List<BreakingChange>();

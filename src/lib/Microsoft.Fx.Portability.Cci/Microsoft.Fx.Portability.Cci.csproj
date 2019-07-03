@@ -18,12 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Properties\version.txt">
-      <Pack>false</Pack>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\LocalizedStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

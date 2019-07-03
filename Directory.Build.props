@@ -14,9 +14,11 @@
 
   <PropertyGroup>
     <LicenseDocumentDirectory>$(MSBuildThisFileDirectory)\docs\LicenseTerms</LicenseDocumentDirectory>
-    <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE</FullLicenseFile>
+    <FullLicenseFile>$(MSBuildThisFileDirectory)\LICENSE.txt</FullLicenseFile>
     <OutputFullPath>$(MSBuildThisFileDirectory)</OutputFullPath>
     <OutputDrop Condition=" '$(OutputDrop)' == '' ">$(OutputFullPath)bin\$(Configuration)\</OutputDrop>
+    <RawBinariesDropDirectory Condition=" '$(RawBinariesDropDirectory)' == '' ">$(OutputDrop)\raw\binaries</RawBinariesDropDirectory>
+    <RawSymbolsDropDirectory Condition=" '$(RawSymbolsDropDirectory)' == '' ">$(OutputDrop)\raw\symbols</RawSymbolsDropDirectory>
     <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
     <DocumentationFile>$(OutputPath)$(MSBuildProjectName).xml</DocumentationFile>
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
@@ -45,12 +47,16 @@
   <!--NuGet properties-->
   <PropertyGroup>
     <Authors>Microsoft</Authors>
-    <PackageLicenseUrl>https://github.com/Microsoft/dotnet-apiport/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Microsoft/dotnet-apiport</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>.NET portability apiport</PackageTags>
     <Copyright>Copyright 2017</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\LICENSE.txt" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <!-- Some of the project types do not have a pack target. This creates a default empty pack target that will be overridden in supported project types -->
   <Target Name="Pack">

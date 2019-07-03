@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ApiPort": {
+      "commandName": "Project",
+      "commandLineArgs": "listTargets"
+    }
+  }
+}

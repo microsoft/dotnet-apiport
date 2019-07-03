@@ -16,7 +16,7 @@ namespace ApiPortVS
     /// Because the VSIX runs inside devenv.exe, the only configuration file that is used for redirects is
     /// devenv.exe.config.We don't want to modify this machine wide configuration so we are manually setting
     /// the redirects.
-    /// More info: http://stackoverflow.com/a/31248093/4220757
+    /// More info: http://stackoverflow.com/a/31248093/4220757.
     /// </summary>
     internal class AssemblyRedirectResolver
     {

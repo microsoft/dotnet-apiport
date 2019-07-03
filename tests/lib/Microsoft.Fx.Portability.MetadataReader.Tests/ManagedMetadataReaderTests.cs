@@ -31,12 +31,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("OpImplicitMethod2Parameter.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OpImplicit_Method_2Parameter`1.op_Implicit(`0,`0)")]
         [InlineData("OpExplicit.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit`1.op_Explicit(Microsoft.Fx.Portability.MetadataReader.Tests.Class2_OpExplicit{`0})~Microsoft.Fx.Portability.MetadataReader.Tests.Class1_OpExplicit{`0}")]
         [InlineData("NestedGenericTypesWithInvalidNames.cs", "M:Microsoft.Fx.Portability.MetadataReader.Tests.OtherClass.<GetValues>d__0`1.System#Collections#Generic#IEnumerable{System#Tuple{T@System#Int32}}#GetEnumerator")]
-        [InlineData("modopt.il", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
-        [InlineData("modopt.il", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerInnerClass.InnerInnerMethod(OuterClass{`3,`2}.InnerClass{System.Int32,`0}.InnerInnerClass)")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass{`1,`1})")]
         [InlineData("NestedGenericTypes.cs", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
-
+#if FEATURE_ILASM
         // IL can, bizarrely, define non-generic types that take generic paratmers
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.InnerClass.InnerMethod(OuterClass.InnerClass{`2,`2})")]
         [InlineData("NonGenericTypesWithGenericParameters.il", "M:OuterClass.OuterMethod(`0,OuterClass.InnerClass{`1,`0,System.Object,`0})")]
@@ -45,7 +43,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         // This is not possible to construct in C#, but was being encoded incorrectly by the metadata reader parser.
         [InlineData("NestedGenericTypes.il", "M:OuterClass`2.InnerClass`2.InnerMethod(OuterClass{`2,`2}.InnerClass`2)")]
         [InlineData("NestedGenericTypes.il", "M:OuterClass`2.OuterMethod(`0,OuterClass{`1,`0}.InnerClass{`1,`0})")]
-
+        [InlineData("modopt.il", "M:TestClass.Foo(System.Int32 optmod System.Runtime.CompilerServices.IsConst)")]
+        [InlineData("modopt.il", "M:TestClass.Bar(System.SByte optmod System.Runtime.CompilerServices.IsConst reqmod System.Runtime.CompilerServices.IsSignUnspecifiedByte*)")]
+#endif
         [Theory]
         public void TestForDocId(string source, string docid)
         {
@@ -140,7 +140,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             .OrderBy(x => x, StringComparer.Ordinal);
 
             var assemblyName = "FilterApis";
-            var filter = new AssemblyNameFilter(assemblyName);
+
+            // We want to recognize System.Console but not System.Uri.
+            var filter = new AssemblyNameFilter(assemblyName, new[] { "System.Console" });
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
@@ -196,7 +198,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         }
 
         /// <summary>
-        /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42
+        /// Regression testing for issue https://github.com/Microsoft/dotnet-apiport/issues/42.
         /// </summary>
         [Fact]
         public void MultidimensionalPrimitiveArray()
@@ -240,6 +242,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             Assert.IsType<SystemObjectNotFoundException>(exception.InnerException);
         }
 
+#if FEATURE_ILASM
         [Fact]
         public void AssemblyWithNoReferencesIsSkipped()
         {
@@ -257,6 +260,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
             Assert.Equal("NoReferences, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", assembly.AssemblyIdentity);
         }
+#endif
 
         private static IEnumerable<Tuple<string, int>> EmptyProjectMemberDocId()
         {
@@ -296,21 +300,37 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private class AssemblyNameFilter : IDependencyFilter
         {
-            private readonly string _assemblyName;
-
-            public AssemblyNameFilter(string assemblyName)
+            private static readonly HashSet<string> SystemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
             {
-                _assemblyName = assemblyName;
+                "mscorlib",
+                "netstandard",
+                "System.Private.CoreLib",
+                "System.Runtime"
+            };
+
+            private readonly string _assemblyName;
+            private readonly HashSet<string> _frameworkAssemblies;
+
+            public AssemblyNameFilter(string assemblyName, IEnumerable<string> frameworkAssemblies)
+            {
+                _assemblyName = assemblyName ?? throw new ArgumentNullException(nameof(assemblyName));
+                _frameworkAssemblies = new HashSet<string>(
+                    frameworkAssemblies ?? Enumerable.Empty<string>(),
+                    StringComparer.Ordinal);
             }
 
             public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)
             {
-                var comparison = StringComparison.Ordinal;
                 var name = assembly?.Name;
 
-                var result = string.Equals(_assemblyName, name, comparison)
-                    || string.Equals("mscorlib", name, comparison)
-                    || string.Equals("System.Runtime", name, comparison);
+                if (string.IsNullOrEmpty(name))
+                {
+                    return false;
+                }
+
+                var result = string.Equals(_assemblyName, name, StringComparison.Ordinal)
+                    || SystemObjectAssemblies.Contains(name)
+                    || _frameworkAssemblies.Contains(name);
 
                 return result;
             }

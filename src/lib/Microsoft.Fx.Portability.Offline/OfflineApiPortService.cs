@@ -73,7 +73,7 @@ namespace Microsoft.Fx.Portability
             {
                 using (var ms = new MemoryStream())
                 {
-                    writer.WriteStream(ms, response);
+                    await writer.WriteStreamAsync(ms, response);
 
                     result.Add(new ReportingResultWithFormat
                     {

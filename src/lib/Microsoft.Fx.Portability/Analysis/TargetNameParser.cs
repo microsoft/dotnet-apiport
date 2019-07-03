@@ -19,7 +19,7 @@ namespace Microsoft.Fx.Portability.Analysis
             DefaultTargets = GetDefaultTargets(defaultTargets).ToList();
         }
 
-        public IEnumerable<FrameworkName> DefaultTargets { get; private set; }
+        public IEnumerable<FrameworkName> DefaultTargets { get; }
 
         /// <summary>
         /// Maps the list of targets specified as strings to a list of supported target names.
@@ -65,46 +65,67 @@ namespace Microsoft.Fx.Portability.Analysis
         private IEnumerable<FrameworkName> GetDefaultTargets(string defaultTargets)
         {
             // The default targets are kept in a ';' separated string.
-            string[] defaultTargetsSplit = defaultTargets.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            // Trimming target names because "; .NET Core" is interpreted as
+            // " .NET Core", which does not exist, but ".NET Core" does.
+            var defaultTargetsSplit = defaultTargets?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim())
+                ?? Array.Empty<string>();
 
             // Create a hashset of all the targets specified in the configuration setting.
-            HashSet<FrameworkName> parsedDefaultTargets = new HashSet<FrameworkName>(ParseTargets(defaultTargetsSplit, skipNonExistent: true));
+            var parsedDefaultTargets = ParseTargets(defaultTargetsSplit, skipNonExistent: true);
 
-            // return all the public targets (their latest versions) as long as they also show up the default targets set.
-            return _catalog.GetPublicTargets()
-                .Select(plat => plat.Identifier)
-                .Distinct()
-                .Select(name => _catalog.GetLatestVersion(name))
-                .Where(plat => plat != null && parsedDefaultTargets.Contains(plat));
+            // Verify that any default targets returned are part of the public interface.
+            var publicTargets = new HashSet<FrameworkName>(_catalog.GetPublicTargets());
+
+            return parsedDefaultTargets.Where(x => publicTargets.Contains(x));
         }
 
         /// <summary>
         /// Parse a string containing target names into FrameworkNames.
         ///
         /// Try the following in order:
-        ///   1. Check if the target specified uses the 'simple' name (i.e. Windows, .NET Framework) then get the latest version for it
-        ///   2. Try to parse it as a target name. If the target was not a valid FrameworkName, an ArgumentException will be thrown and passed down to user
-        /// <exception cref="UnknownTargetException">Thrown when a target is unknown</exception>
+        ///   1. Check if the target specified uses a FrameworkName (ie. .NET Core, Version=1.0)
+        ///   2. Check if the target specified uses the 'simple' name (i.e. Windows, .NET Framework)
+        ///      then get the latest version for it.
         /// </summary>
         /// <param name="skipNonExistent">true to suppress <see cref="UnknownTargetException"/>
         /// when a target is not found. false, will not throw and skip that target instead.</param>
+        /// <exception cref="UnknownTargetException">Thrown when a target is unknown.</exception>
         private ICollection<FrameworkName> ParseTargets(IEnumerable<string> targets, bool skipNonExistent)
         {
-            var list = new List<FrameworkName>();
-
-            foreach (var target in targets.Distinct(StringComparer.OrdinalIgnoreCase))
+            bool TryParseFrameworkName(string targetName, out FrameworkName frameworkName)
             {
                 try
                 {
-                    list.Add(_catalog.GetLatestVersion(target) ?? new FrameworkName(target));
+                    frameworkName = new FrameworkName(targetName);
+                    return true;
                 }
                 catch (ArgumentException)
                 {
                     // Catch ArgumentException because FrameworkName does not have a TryParse method
-                    if (!skipNonExistent)
-                    {
-                        throw new UnknownTargetException(target);
-                    }
+                    frameworkName = null;
+                    return false;
+                }
+            }
+
+            var list = new List<FrameworkName>();
+
+            foreach (var target in targets.Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                var framework = TryParseFrameworkName(target, out var name)
+                    ? name
+                    : _catalog.GetLatestVersion(target);
+
+                if (framework != null)
+                {
+                    list.Add(framework);
+                }
+                else if (!skipNonExistent)
+                {
+                    throw new UnknownTargetException(target);
+                }
+                else
+                {
+                    // Trace.TraceWarning("Could not resolve target: {0}", target);
                 }
             }
 

@@ -33,7 +33,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// identity in the input. If the IgnoreAssemblyInfoList already contains IgnoreAssemblyInfos, the new ones will
         /// be merged with the existing list.
         /// </summary>
-        /// <param name="inputs">The initial set of IgnoreAssemblyInfos to remove duplicate assembly identities from</param>
+        /// <param name="inputs">The initial set of IgnoreAssemblyInfos to remove duplicate assembly identities from.</param>
         public void Load(IEnumerable<IgnoreAssemblyInfo> inputs)
         {
             List<IgnoreAssemblyInfo> merged = new List<IgnoreAssemblyInfo>();
