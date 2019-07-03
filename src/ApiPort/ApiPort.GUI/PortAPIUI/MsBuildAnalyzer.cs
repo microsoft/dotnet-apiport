@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Microsoft.Build;
 
 namespace PortAPIUI
 {
@@ -26,6 +27,7 @@ namespace PortAPIUI
             process.BeginOutputReadLine();
             process.WaitForExit();
             process.Close();
+
 
             var consoleOutput = output.ToString();
             if (!string.IsNullOrEmpty(consoleOutput))
@@ -61,7 +63,6 @@ namespace PortAPIUI
             }
             return null;
         }
-
 
         private static void SortOutputHandler(object sendingProcess,
             DataReceivedEventArgs outLine)

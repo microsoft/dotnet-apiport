@@ -32,6 +32,7 @@ namespace MSBuildAnalyzer
                 {
                     Temp.BuildIt(csProjPath);
                 }
+
                 if (args.Length > 1)
                 {
                     string chosenConfig = args[1];
@@ -40,8 +41,7 @@ namespace MSBuildAnalyzer
                 }
             }
         }
-    } 
-
+    }
 
     internal class Temp
     {
@@ -51,7 +51,6 @@ namespace MSBuildAnalyzer
         public static List<string> Configurations { get => configurations; set => configurations = value; }
 
         public static List<string> Platforms { get => platforms; set => platforms = value; }
-       
 
         public static void BuildIt(string csProjPath)
         {
@@ -70,7 +69,6 @@ namespace MSBuildAnalyzer
 
             if (project.Build() == true)
             {
-
                 Configurations = project.ConditionedProperties[box1];
                 Platforms = project.ConditionedProperties[box2];
                 var con = new string[0];
@@ -104,11 +102,10 @@ namespace MSBuildAnalyzer
                     }
 
                     // Console.Write(" **" + assembly);
-
                 }
             }
-        
         }
+
         public static bool Message(Project project)
         {
             return project.Build();

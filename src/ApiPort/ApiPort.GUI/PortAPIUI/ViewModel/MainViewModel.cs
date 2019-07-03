@@ -150,6 +150,8 @@ class MainViewModel : ViewModelBase
         Config = output.Configuration;
         Platform = output.Platform;
         List<string> assemblyNames = output.Assembly;
+
+    //    bool popUp = MsBuildAnalyzer.Message(SelectedPath);
     }
 
     private void ExecuteSaveFileDialog()
