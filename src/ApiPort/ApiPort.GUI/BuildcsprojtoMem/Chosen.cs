@@ -17,19 +17,17 @@ namespace BuildcsprojtoMem
                     { "Configuration", config },
                     { "Platform", plat }
                 };
-            ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
+            ProjectCollection p = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
 
-            var project = pc.LoadProject(path);
+            var project = p.LoadProject(path);
             project.Build();
-            if (project.IsBuildEnabled == true)
+            if (project.Build() == true)
             {
                 Console.Write("Assembly:");
                 if (project.Properties.Any(n => n.Name == "TargetPath"))
                 {
                     var mypath = System.Reflection.Assembly.GetEntryAssembly().Location;
                     var targetPath = project.GetProperty("TargetPath");
-                    var exeName = project.GetProperty("TargetName");
-
                     var targetPathString = targetPath.EvaluatedValue;
                     var assembly = Assembly.LoadFrom(targetPathString);
                     foreach (var dependent in assembly.GetReferencedAssemblies())
