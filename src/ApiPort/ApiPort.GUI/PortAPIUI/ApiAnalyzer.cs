@@ -18,6 +18,7 @@ namespace PortAPIUI
         public static void AnalyzeAssemblies(List<string> assemblies)
         {
             MessageBox.Show("Hi from Katie");
+          
             //    string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             //    string apiDllPath = System.IO.Path.Combine(ourPath, "ApiPort", "netcoreapp2.1", "ApiPort.dll");
             //    string InputPathParent = System.IO.Directory.GetParent(InputPath).FullName;

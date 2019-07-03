@@ -69,13 +69,14 @@ namespace PortAPIUI
     class MsBuildAnalyzer
     {
         private static StringBuilder output = null;
+
         public static PortAPIUI.info GetAssemblies(string path)
         {
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
-            var AnalyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
+            var analyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
             Process process = new Process();
-            process.StartInfo.FileName = AnalyzerPath;
+            process.StartInfo.FileName = analyzerPath;
             process.StartInfo.Arguments = path;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -86,25 +87,25 @@ namespace PortAPIUI
             process.WaitForExit();
             process.Close();
 
-            var ConsoleOutput = output.ToString();
-            var start = ConsoleOutput.IndexOf("Plat:");
-            var end = ConsoleOutput.IndexOf("Assembly:");
-            var _configurations = ConsoleOutput.Substring(ConsoleOutput.IndexOf("Config:"), start).Split(" **");
+            var consoleOutput = output.ToString();
+            var start = consoleOutput.IndexOf("Plat:");
+            var end = consoleOutput.IndexOf("Assembly:");
+            var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start).Split(" **");
             List<string> config = new List<string>();
-            for (int i = 1; i < _configurations.Length; i++)
+            for (int i = 1; i < configurations.Length; i++)
 
             {
-                config.Add(_configurations[i]);
+                config.Add(configurations[i]);
             }
 
-            var _platforms = ConsoleOutput.Substring(start, end - start).Split(" **");
+            var platforms = consoleOutput.Substring(start, end - start).Split(" **");
 
             List<string> plat = new List<string>();
-            for (int i = 1; i < _platforms.Length; i++)
+            for (int i = 1; i < platforms.Length; i++)
             {
-                plat.Add(_platforms[i]);
+                plat.Add(platforms[i]);
             }
-            var _assemblies = ConsoleOutput.Substring(end).Split(" **");
+            var _assemblies = consoleOutput.Substring(end).Split(" **");
             List<string> assem = new List<string>();
             for (int i = 1; i < _assemblies.Length; i++)
             {

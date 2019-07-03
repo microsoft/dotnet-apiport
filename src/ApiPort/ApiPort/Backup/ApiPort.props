@@ -1,0 +1,65 @@
+<Project>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>ApiPort</AssemblyName>
+    <RootNamespace>ApiPort</RootNamespace>
+    <!--
+      netcoreapp target must be first to avoid a ResXFileCodeGenerator issue
+      (tracked at https://github.com/dotnet/project-system/issues/1519)
+    -->
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+    <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
+    <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac.Configuration" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.CommandLine" Version="0.1.0-e171125-2" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BinPlaceContent Include=".\Assets\KnownSafeBreaks.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(FullLicenseFile)" >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Prerelease License Terms.txt" >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Privacy Statement.txt" >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Third Party Notices.txt" >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+  </ItemGroup>
+
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
