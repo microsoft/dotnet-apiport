@@ -5,15 +5,12 @@ using System.IO;
 using System.Text;
 using System.Windows;
 
-[assembly: System.Windows.Media.DisableDpiAwareness]
-
 namespace PortAPIUI
 {
     class ExportResult
     {
         public static string InputPath;
-        //returns location of the portabitlity analyzer result
-        public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
+        public static void ExportApiResult(string exportPath, string fileExtension)
         {
             MessageBox.Show("Hi from Katie");
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
@@ -22,10 +19,7 @@ namespace PortAPIUI
 
             Process p = new Process();
             p.StartInfo.FileName = "dotnet.exe";
-            if (generateOwnExportPath)
-            {
-                exportPath = GenerateReportPath(fileExtension);
-            }
+            string reportPath = GenerateReportPath(fileExtension);
 
             string specifyExportOption = "";
             switch (fileExtension)
@@ -97,13 +91,12 @@ namespace PortAPIUI
             };
             p.Start();
             p.BeginOutputReadLine();
-            return exportPath;
         }
         private static string GenerateReportPath(string fileExtension)
         {
             var outputDirectory = System.IO.Path.GetTempPath();
             var outputName = "PortabilityReport";
-            var outputExtension = fileExtension;
+            var outputExtension = "fileExtension";
             var counter = 1;
             var outputPath = System.IO.Path.Combine(outputDirectory, outputName + outputExtension);
 
