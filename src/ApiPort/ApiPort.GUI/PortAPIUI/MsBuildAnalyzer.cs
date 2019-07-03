@@ -9,9 +9,13 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
 using System.Text;
+
+using Microsoft.Build;
+
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Threading;
+
 
 namespace PortAPIUI
 {
@@ -75,8 +79,10 @@ namespace PortAPIUI
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
             var AnalyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
             Process process = new Process();
-            process.StartInfo.FileName = AnalyzerPath;
-            process.StartInfo.Arguments = path;
+
+            process.StartInfo.FileName = analyzerPath;
+            process.StartInfo.Arguments = $"{path}";
+
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             output = new StringBuilder();
@@ -86,33 +92,42 @@ namespace PortAPIUI
             process.WaitForExit();
             process.Close();
 
-            var ConsoleOutput = output.ToString();
-            var start = ConsoleOutput.IndexOf("Plat:");
-            var end = ConsoleOutput.IndexOf("Assembly:");
-            var _configurations = ConsoleOutput.Substring(ConsoleOutput.IndexOf("Config:"), start).Split(" **");
-            List<string> config = new List<string>();
-            for (int i = 1; i < _configurations.Length; i++)
 
+            var consoleOutput = output.ToString();
+            if (!string.IsNullOrEmpty(consoleOutput))
             {
-                config.Add(_configurations[i]);
-            }
 
-            var _platforms = ConsoleOutput.Substring(start, end - start).Split(" **");
+                var start = consoleOutput.IndexOf("Plat:");
+                var end = consoleOutput.IndexOf("Assembly:");
+                var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start).Split(" **");
+                List<string> config = new List<string>();
+                for (int i = 1; i < configurations.Length; i++)
 
-            List<string> plat = new List<string>();
-            for (int i = 1; i < _platforms.Length; i++)
-            {
-                plat.Add(_platforms[i]);
-            }
-            var _assemblies = ConsoleOutput.Substring(end).Split(" **");
-            List<string> assem = new List<string>();
-            for (int i = 1; i < _assemblies.Length; i++)
-            {
-                assem.Add(_assemblies[i]);
-            }
-            PortAPIUI.info info = new PortAPIUI.info(config, plat, assem);
+                {
+                    config.Add(configurations[i]);
+                }
 
-            return info;
+                var platforms = consoleOutput.Substring(start, end - start).Split(" **");
+
+                List<string> plat = new List<string>();
+                for (int i = 1; i < platforms.Length; i++)
+                {
+                    plat.Add(platforms[i]);
+                }
+
+                var assemblies = consoleOutput.Substring(end).Split(" **");
+                List<string> assem = new List<string>();
+                for (int i = 1; i < assemblies.Length; i++)
+                {
+                    assem.Add(assemblies[i]);
+                }
+
+                PortAPIUI.Info info = new PortAPIUI.Info(config, plat, assem);
+
+                return info;
+            }
+            return null;
+
         }
         private static void SortOutputHandler(object sendingProcess,
             DataReceivedEventArgs outLine)

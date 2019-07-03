@@ -10,7 +10,9 @@ using System.IO;
 class MainViewModel : ViewModelBase
 {
     public RelayCommand Browse { get; set; }
+
     public RelayCommand Export { get; set; }
+
     public RelayCommand Analyze { get; set; }
 
     private string _selectedPath;
@@ -124,11 +126,12 @@ class MainViewModel : ViewModelBase
 
     }
 
-    
+
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath); 
         ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+
 
     }
     
@@ -168,8 +171,9 @@ class MainViewModel : ViewModelBase
 
         Config = output.Configuration;
         Platform = output.Platform;
-        Assemblies = output.Assembly;
-        }
+
+        List<string> assemblyNames = output.Assembly;
+
     }
 
     private void ExecuteSaveFileDialog()
