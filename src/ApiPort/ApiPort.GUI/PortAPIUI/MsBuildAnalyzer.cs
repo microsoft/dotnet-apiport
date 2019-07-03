@@ -32,12 +32,17 @@ namespace PortAPIUI
             var consoleOutput = output.ToString();
             if (!string.IsNullOrEmpty(consoleOutput))
             {
+
+                var popUp = consoleOutput.Substring(consoleOutput.IndexOf("Build:"), consoleOutput.IndexOf("Config:"));
+                string[] array = popUp.Split(" ");
+                string answer = array[1];
+                bool result = Message(answer);
+
                 var start = consoleOutput.IndexOf("Plat:");
                 var end = consoleOutput.IndexOf("Assembly:");
                 var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start).Split(" **");
                 List<string> config = new List<string>();
                 for (int i = 1; i < configurations.Length; i++)
-
                 {
                     config.Add(configurations[i]);
                 }
@@ -61,11 +66,19 @@ namespace PortAPIUI
 
                 return info;
             }
+
             return null;
         }
 
-        private static void SortOutputHandler(object sendingProcess,
-            DataReceivedEventArgs outLine)
+        public static bool Message(string answer)
+        {
+            if (answer.Equals("True"))
+            {
+                return true;
+            }
+            else return false;
+        }
+        private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             if (!string.IsNullOrEmpty(outLine.Data))
             {

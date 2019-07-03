@@ -64,8 +64,9 @@ namespace MSBuildAnalyzer
             ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
 
             var project = pc.LoadProject(csProjPath);
-            Message(project);
+            
             project.Build();
+            Message(csProjPath);
 
             if (project.Build() == true)
             {
@@ -106,9 +107,17 @@ namespace MSBuildAnalyzer
             }
         }
 
-        public static bool Message(Project project)
+        public static void Message(string csProjPath)
         {
-            return project.Build();
+            Dictionary<string, string> dic = new Dictionary<string, string>
+                {
+                    { "Configuration", "Debug" },
+                    { "Platform", "AnyCPU" }
+                };
+            ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
+
+            var project = pc.LoadProject(csProjPath);
+            Console.WriteLine("Build: {0}",project.Build());
         }
     }
 }
