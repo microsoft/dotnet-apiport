@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 
 class MainViewModel : ViewModelBase
 {
@@ -129,9 +130,11 @@ class MainViewModel : ViewModelBase
 
     private void AnalyzeAPI()
     {
-        Assemblies = Rebuild.ChosenBuild(SelectedPath); 
-        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
-
+       
+      
+            Assemblies = Rebuild.ChosenBuild(SelectedPath);
+            ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+      
 
     }
     
@@ -154,29 +157,38 @@ class MainViewModel : ViewModelBase
         var dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.Filter = "Project File (*.csproj)|*.csproj|All files (*.*)|*.*";
         dialog.InitialDirectory = @"C:\";
-       
+
         Nullable<bool> result = dialog.ShowDialog();
         if (result == true)
         {
             SelectedPath = dialog.FileName;
         }
-        else {SelectedPath = null; }
+        else { SelectedPath = null; }
 
         if (SelectedPath != null)
         {
+            MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
+            if (msBuild.MessageBox.Equals(false))
+            {
+                MessageBox.Show("wassup");
+            }
+            else
+            {
+                ExportResult.InputPath = SelectedPath;
 
-         ExportResult.InputPath = SelectedPath;
+                Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
 
-        info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
 
-        Config = output.Configuration;
-        Platform = output.Platform;
+                Config = output.Configuration;
+                Platform = output.Platform;
 
-        List<string> assemblyNames = output.Assembly;
+                List<string> assemblyNames = output.Assembly;
+            }
+        }
 
     }
 
-    private void ExecuteSaveFileDialog()
+        private void ExecuteSaveFileDialog()
     {
         var savedialog = new Microsoft.Win32.SaveFileDialog();
         savedialog.FileName = "PortablityAnalysisReoprt";
@@ -185,6 +197,7 @@ class MainViewModel : ViewModelBase
         Nullable<bool> result = savedialog.ShowDialog();
         if (result == true)
         {
+            
             string fileExtension = Path.GetExtension(savedialog.FileName);
             ExportResult.ExportApiResult(savedialog.FileName, fileExtension);
         }

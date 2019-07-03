@@ -64,11 +64,11 @@ namespace MSBuildAnalyzer
             ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
 
             var project = pc.LoadProject(csProjPath);
-            Message(project);
-            project.Build();
 
-            if (project.Build() == true)
-            {
+            project.Build();
+            Message(csProjPath);
+
+       
                 Configurations = project.ConditionedProperties[box1];
                 Platforms = project.ConditionedProperties[box2];
                 var con = new string[0];
@@ -104,11 +104,18 @@ namespace MSBuildAnalyzer
                     // Console.Write(" **" + assembly);
                 }
             }
-        }
-
-        public static bool Message(Project project)
+ 
+        public static void Message(string csProjPath)
         {
-            return project.Build();
+            Dictionary<string, string> dic = new Dictionary<string, string>
+                {
+                    { "Configuration", "Debug" },
+                    { "Platform", "AnyCPU" }
+                };
+            ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
+
+            var project = pc.LoadProject(csProjPath);
+            Console.WriteLine("Build: {0}",project.Build());
         }
     }
 }
