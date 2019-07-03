@@ -2,23 +2,53 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
+using System.Runtime.CompilerServices;
 using System.Text;
+
 using Microsoft.Build;
 
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Threading;
+
+
 namespace PortAPIUI
+
 {
+    public class Info
+    {
+        public List<string> Configuration { get; set; }
+
+        public List<string> Platform { get; set; }
+
+        public List<string> Assembly { get; set; }
+
+        public Info(List<string> configuration, List<string> platform, List<string> assembly)
+        {
+            Configuration = configuration;
+            Platform = platform;
+            Assembly = assembly;
+        }
+    }
     internal class MsBuildAnalyzer
     {
         private static StringBuilder output = null;
-
+        public bool MessageBox { get; set; }
         public static PortAPIUI.Info GetAssemblies(string path)
         {
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
             var analyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
             Process process = new Process();
+
             process.StartInfo.FileName = analyzerPath;
             process.StartInfo.Arguments = $"{path}";
+
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             output = new StringBuilder();
@@ -32,15 +62,14 @@ namespace PortAPIUI
             var consoleOutput = output.ToString();
             if (!string.IsNullOrEmpty(consoleOutput))
             {
-
                 var popUp = consoleOutput.Substring(consoleOutput.IndexOf("Build:"), consoleOutput.IndexOf("Config:"));
                 string[] array = popUp.Split(" ");
                 string answer = array[1];
-                bool result = Message(answer);
-
+                MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
+                msBuild.Message(answer);
                 var start = consoleOutput.IndexOf("Plat:");
                 var end = consoleOutput.IndexOf("Assembly:");
-                var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start).Split(" **");
+                var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start- consoleOutput.IndexOf("Config:")).Split(" **");
                 List<string> config = new List<string>();
                 for (int i = 1; i < configurations.Length; i++)
                 {
@@ -70,20 +99,23 @@ namespace PortAPIUI
             return null;
         }
 
-        public static bool Message(string answer)
+        public void Message(string answer)
         {
             if (answer.Equals("True"))
             {
-                return true;
+                MessageBox = true;
             }
-            else return false;
+            MessageBox = false;
         }
+
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
+
             if (!string.IsNullOrEmpty(outLine.Data))
             {
                 output.Append(outLine.Data);
             }
         }
     }
-}
+} 
+

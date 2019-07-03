@@ -1,40 +1,58 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Reflection;
-using System.Text;
 
 namespace PortAPIUI.ViewModel
 {
     internal class ApiViewModel : ViewModelBase
     {
-        public string _name;
+        public string _assemblyName;
+        public string _apiName;
         public Boolean _compatibility;
 
-
-        public override string ToString()
+        public ApiViewModel(string name, string apiName, Boolean compatibility)
         {
-            return _name;
+            _assemblyName = name;
+            _apiName = apiName;
+            _compatibility = compatibility;
         }
 
-        public ApiViewModel(string assembly)
-        {
-            _name = assembly;
-        }
-
-        public string Name
+        public string AssemblyName
         {
             get
             {
-                return _name;
+                return _assemblyName;
             }
             set
             {
-                _name = value;
-                RaisePropertyChanged("Name");
+                _assemblyName = value;
+                RaisePropertyChanged("AssemblyName");
             }
         }
-        
+        public string APIName
+        {
+            get
+            {
+                return _apiName;
+            }
+            set
+            {
+                _apiName = value;
+                RaisePropertyChanged("APIName");
+            }
+        }
+        public Boolean Compatibility
+        {
+            get
+            {
+                return _compatibility;
+            }
+            set
+            {
+                _compatibility = value;
+                RaisePropertyChanged("Compatibility");
+            }
+        }
+
+
     }
 }

@@ -1,25 +1,13 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security.Cryptography;
 using System.Text;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Threading;
 
 namespace PortAPIUI
 {
     public static class Rebuild
     {
-
         private static StringBuilder outputConsole = null;
-
         public static List<string> ChosenBuild(string path)
         {
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
@@ -43,32 +31,14 @@ namespace PortAPIUI
             {
                 assemblies.Add(splitAssembly[i]);
             }
-
             return assemblies;
         }
-
         private static void OutputHandler(object sendingProcess, DataReceivedEventArgs line)
         {
             if (!string.IsNullOrEmpty(line.Data))
             {
                 outputConsole.Append(line.Data);
             }
-        }
-    }
-
-    public class Info
-    {
-        public List<string> Configuration { get; set; }
-
-        public List<string> Platform { get; set; }
-
-        public List<string> Assembly { get; set; }
-
-        public Info(List<string> configuration, List<string> platform, List<string> assembly)
-        {
-   Configuration = configuration;
-            Platform = platform;
-            Assembly = assembly;
         }
     }
 }
