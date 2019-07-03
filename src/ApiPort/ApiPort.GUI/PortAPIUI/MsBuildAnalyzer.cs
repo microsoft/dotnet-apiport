@@ -45,10 +45,8 @@ namespace PortAPIUI
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
             var analyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
             Process process = new Process();
-
             process.StartInfo.FileName = analyzerPath;
             process.StartInfo.Arguments = $"{path}";
-
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             output = new StringBuilder();
@@ -57,8 +55,6 @@ namespace PortAPIUI
             process.BeginOutputReadLine();
             process.WaitForExit();
             process.Close();
-
-
             var consoleOutput = output.ToString();
             if (!string.IsNullOrEmpty(consoleOutput))
             {

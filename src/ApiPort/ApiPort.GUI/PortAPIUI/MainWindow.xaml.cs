@@ -1,24 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Windows;
-using Microsoft.Win32;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Drawing.Imaging;
 using System.ComponentModel;
-
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+[assembly: System.Windows.Media.DisableDpiAwareness]
 namespace PortAPIUI
 {
     public partial class MainWindow : Window
@@ -42,7 +28,6 @@ namespace PortAPIUI
 
         // Opens hyperlink to Microsoft Privacy Statement
         private void Privacy_Click(object sender, RoutedEventArgs e)
-
         {
             Hyperlink link = new Hyperlink();
             link.NavigateUri = new Uri("https://privacy.microsoft.com/en-us/privacystatement");
@@ -57,12 +42,9 @@ namespace PortAPIUI
             ExportBtn.IsEnabled = true;
             APIGrid.IsEnabled = true;
             AssemComboBox.IsEnabled = true;
-            AssemCompatibility.Visibility =Visibility.Visible;
-
         }
-        
 
-        //Removes IsInDesignMode Column from datagrid
+        // Removes IsInDesignMode Column from datagrid
         private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             PropertyDescriptor propertyDescriptor = (PropertyDescriptor)e.PropertyDescriptor;
@@ -73,14 +55,14 @@ namespace PortAPIUI
             }
         }
 
-        //Populates datagrid based on selected assembly 
+        // Populates datagrid based on selected assembly 
         private void AssemComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            AssemCompatibility.Visibility = Visibility.Visible;
             var vm = this.DataContext as MainViewModel;
             var assem = vm.SelectedAssembly;
             vm.AssemblyCollectionUpdate(assem);
 
         }
     }
-    
 }

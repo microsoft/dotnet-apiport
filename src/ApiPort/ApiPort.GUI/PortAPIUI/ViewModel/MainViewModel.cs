@@ -19,6 +19,7 @@ class MainViewModel : ViewModelBase
     private string _selectedPath;
 
     private List<string> _assemblies;
+    private List<string> _assembliesPath;
     public static List<string> _config;
     public static List<string> _platform;
 
@@ -79,6 +80,15 @@ class MainViewModel : ViewModelBase
             RaisePropertyChanged("Assemblies");
         }
     }
+    public List<string> AssembliesPath
+    {
+        get { return _assembliesPath; }
+        set
+        {
+            _assembliesPath = value;
+            RaisePropertyChanged("AssembliesPath");
+        }
+    }
 
     public string SelectedConfig
     {
@@ -130,18 +140,17 @@ class MainViewModel : ViewModelBase
 
     private void AnalyzeAPI()
     {
-       
-      
+
             Assemblies = Rebuild.ChosenBuild(SelectedPath);
             ApiAnalyzer.AnalyzeAssemblies(Assemblies);
-      
+
 
     }
     
     public void AssemblyCollectionUpdate(string assem)
     {
         AssemblyCollection.Clear();
-        foreach (var assembly in Assemblies)
+        foreach (var assembly in AssembliesPath)
         {
             if (assem.Equals(assembly))
             {
