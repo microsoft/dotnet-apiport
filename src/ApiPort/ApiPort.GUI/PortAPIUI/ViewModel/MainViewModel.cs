@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
 using System;
@@ -22,6 +23,7 @@ class MainViewModel : ViewModelBase
     private List<string> _assembliesPath;
     public static List<string> _config;
     public static List<string> _platform;
+    public static string ExeFile;
 
     public static string _selectedConfig;
     public static string _selectedPlatform;
@@ -161,13 +163,11 @@ class MainViewModel : ViewModelBase
         }
 
     }
-
     private void ExecuteOpenFileDialog()
     {
         var dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.Filter = "Project File (*.csproj)|*.csproj|All files (*.*)|*.*";
         dialog.InitialDirectory = @"C:\";
-
         Nullable<bool> result = dialog.ShowDialog();
         if (result == true)
         {
@@ -178,19 +178,18 @@ class MainViewModel : ViewModelBase
         if (SelectedPath != null)
         {
             ExportResult.InputPath = SelectedPath;
-
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
                 MessageBox.Show("error");
             }
-
             Info output = msBuild.GetAssemblies(SelectedPath);
             if (output != null)
             {
                 Config = output.Configuration;
                 Platform = output.Platform;
                 AssembliesPath = output.Assembly;
+                ExeFile = output.Location;
             }
         }
 

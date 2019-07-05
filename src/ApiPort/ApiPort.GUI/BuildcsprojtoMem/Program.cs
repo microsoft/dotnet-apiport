@@ -9,6 +9,7 @@ using System.Reflection;
 using Newtonsoft;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using PortAPI.Shared;
 
 namespace MSBuildAnalyzer
 {
@@ -64,46 +65,53 @@ namespace MSBuildAnalyzer
             {
                 Configurations = project.ConditionedProperties[box1];
                 Platforms = project.ConditionedProperties[box2];
-                //JsonSerializer serializer = new JsonSerializer();
-                //serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                //serializer.NullValueHandling = NullValueHandling.Ignore;
-                //using (StreamWriter sw = new StreamWriter(@"c\json.txt"))
+
+                //var con = new string[0];
+                //var pla = new string[0];
+                //Console.Write("Config:");
+                //foreach (var config in Configurations)
                 //{
-                //    using (JsonWriter writer = new JsonTextWriter(sw))
-                //    {
-                //        serializer.Serialize(writer, configurations);
-                //    }
+                //    con.Append(config);
+                //    Console.Write(" **" + config);
                 //}
-                var con = new string[0];
-                var pla = new string[0];
-                Console.Write("Config:");
-                foreach (var config in Configurations)
-                {
-                    con.Append(config);
-                    Console.Write(" **" + config);
-                }
-                Console.WriteLine(" ");
-                Console.Write("Plat:");
-                foreach (var plat in Platforms)
-                {
-                    pla.Append(plat);
-                    Console.Write(" **" + plat);
-                }
-                Console.WriteLine(" ");
-                Console.Write("Assembly:");
+                //Console.WriteLine(" ");
+                //Console.Write("Plat:");
+                //foreach (var plat in Platforms)
+                //{
+                //    pla.Append(plat);
+                //    Console.Write(" **" + plat);
+                //}
+                //Console.WriteLine(" ");
+                //Console.Write("Assembly:");
                 if (project.Properties.Any(n => n.Name == "TargetPath"))
                 {
+
                     var myPath = System.Reflection.Assembly.GetEntryAssembly().Location;
                     var targetPath = project.GetProperty("TargetPath");
                     var targetPathString = project.GetProperty("TargetPath").EvaluatedValue.ToString();
-                    var assembly = Assembly.LoadFrom(targetPathString);
-                    foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
+                    var assembly = Assembly.ReflectionOnlyLoadFrom(targetPathString);
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                    serializer.NullValueHandling = NullValueHandling.Ignore;
+                    using (StreamWriter sw = new StreamWriter(@"C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug\netcoreapp3.0\json.txt"
+))
                     {
-                        Console.Write(" **" + Assembly.Load(assemblyName));
+                        using (JsonWriter writer = new JsonTextWriter(sw))
+                        {
+                                //Console.Write(" **" + targetPathString);
+                                List<string> assemblyCode = new List<string>();
+                                foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
+                                {
+                                    assemblyCode.Add(assemblyName.Name);
+                                }
+                                Info info = new Info(string.Format("{0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString())), Configurations, Platforms, targetPathString, assemblyCode, assembly.Location);
+                                serializer.Serialize(writer, info);
+                
+                        }
                     }
                 }
-            }
-                  //  Console.Write(" **" + assembly);
+
             }
         }
     }
+}
