@@ -1,0 +1,690 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Fx.Portability</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.Fx.Portability.Analysis.AnalysisEngine.ProcessMemberInfo(Microsoft.Fx.Portability.ObjectModel.IApiCatalogLookup,System.Collections.Generic.IEnumerable{System.Runtime.Versioning.FrameworkName},Microsoft.Fx.Portability.ObjectModel.MemberInfo)">
+            <summary>
+            Identitifies the status of an API for all of the targets
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analysis.AnalysisEngine.IsSupportedAcrossTargets(Microsoft.Fx.Portability.ObjectModel.IApiCatalogLookup,System.String,System.Collections.Generic.IEnumerable{System.Runtime.Versioning.FrameworkName},System.Collections.Generic.List{System.Version}@)">
+            <summary>
+            Computes a list of strings that describe the status of the api on all the targets (not supported or version when it was introduced)
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analysis.AnalysisEngine.IsSupportedOnAnyTarget(Microsoft.Fx.Portability.ObjectModel.IApiCatalogLookup,System.String)">
+            <summary>
+            Finds out if the given <paramref name="docId"/> is supported on any target
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analysis.AnalysisEngine.ComputeAssembliesToRemove(System.Collections.Generic.IEnumerable{Microsoft.Fx.Portability.ObjectModel.AssemblyInfo},System.Collections.Generic.IEnumerable{System.Runtime.Versioning.FrameworkName},System.Collections.Generic.IEnumerable{Microsoft.Fx.Portability.ObjectModel.NuGetPackageInfo})">
+            <summary>
+            Returns a set of assemblies that should be removed if NuGet packages
+            exist for all the targets
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analysis.TargetNameParser.MapTargetsToExplicitVersions(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Maps the list of targets specified as strings to a list of supported target names.
+            </summary>
+            <remarks>
+            If no targets are specified, return the list of all public targets with their latest version.
+             - From the list of public targets, filter out the ones that are NOT in the configuration setting described by 'DefaultTargets'
+               Note: This allows us to support Mono targets without having them automatically show up in the default target list.
+            If targets are specified, parse them like this:
+             - If just the target name is specified and not the version, use the latest version for that target
+             - if both target name and version are specified, use them
+            If an unknown target is found, throw an UnknownTargetException.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analysis.TargetNameParser.GetDefaultTargets(System.String)">
+            <summary>
+            Returns list of all public targets with their latest version.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analysis.TargetNameParser.ParseTargets(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+             <summary>
+             Parse a string containing target names into FrameworkNames.
+            
+             Try the following in order:
+               1. Check if the target specified uses the 'simple' name (i.e. Windows, .NET Framework) then get the latest version for it
+               2. Try to parse it as a target name. If the target was not a valid FrameworkName, an ArgumentException will be thrown and passed down to user
+             <exception cref="T:Microsoft.Fx.Portability.UnknownTargetException">Thrown when a target is unknown</exception>
+             </summary>
+             <param name="skipNonExistent">true to suppress <see cref="T:Microsoft.Fx.Portability.UnknownTargetException"/>
+             when a target is not found. false, will not throw and skip that target instead.</param>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.Analyzer.DotNetFrameworkFilter.MicrosoftKeys">
+            <summary>
+            These keys are a collection of public key tokens derived from all the reference assemblies in
+            "%ProgramFiles%\Reference Assemblies\Microsoft" on a Windows 10 machine with VS 2015 installed
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.ApiDefinition.Parent">
+            <summary>
+            Gets or sets the docId of Api's parent
+            </summary>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.ApiPortClient.MaxNumberOfTargets">
+            <summary>
+            Maximum number of targets that can be submitted to the service at
+            a time.
+            </summary>
+            <remarks>OpenXML supports a maximum of 26 columns.</remarks>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.GetTargetsAsync">
+            <summary>
+            Retrieve a list of targets available from the service
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.WriteAnalysisReportsAsync(Microsoft.Fx.Portability.IApiPortOptions)">
+            <summary>
+            Writes analysis reports to path supplied by options
+            </summary>
+            <returns>Output paths to the reports that were successfully written.</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.WriteAnalysisReportsAsync(Microsoft.Fx.Portability.IApiPortOptions,System.Boolean)">
+            <summary>
+            Writes analysis reports to path supplied by options
+            </summary>
+            <returns>Output paths to the reports that were successfully written.</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.CreateReport(System.Byte[],System.String,System.String,System.Boolean)">
+            <summary>
+            Writes a report given the output format and filename.
+            </summary>
+            <returns>null if unable to write the report otherwise, will return the full path to the report.</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.GetAnalysisResultAsync(Microsoft.Fx.Portability.IApiPortOptions)">
+            <summary>
+            Gets an analysis report based on the options supplied
+            </summary>
+            <param name="options">Options to generate report</param>
+            <returns>A collection of reports</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.CheckEndpointStatus(Microsoft.Fx.Portability.EndpointStatus)">
+            <summary>
+            Verifies that the service is alive.  If the service is not alive, then an issue is logged
+            that will be reported back to the user.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.TryAddJsonToOptions(Microsoft.Fx.Portability.IApiPortOptions,Microsoft.Fx.Portability.IApiPortOptions@)">
+            <summary>
+            Add JSON to the options object if it is not there. This is used in cases where an analysis
+            doesn't request the JSON result, but the result is needed for analysis (ie source line mapping)
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortClient.ValidateOptions(Microsoft.Fx.Portability.IApiPortOptions)">
+            <summary>
+            Ensures that the analysis options are valid.  If they are not,
+            throws a <see cref="T:Microsoft.Fx.Portability.InvalidApiPortOptionsException"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ApiPortService.QueryDocIdsAsync(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Returns a list of valid DocIds from the PortabilityService
+            </summary>
+            <param name="docIds">Enumerable of DocIds</param>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.BreakingChangeParser.IgnoredApis">
+            <summary>
+            Items that can show up in the breaking change 'Affected APIs' section that should be ignored
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.BreakingChangeParser.FromMarkdown(System.IO.Stream)">
+            <summary>
+            Parses markdown files into BrekaingChange objects
+            </summary>
+            <param name="stream">The markdown to parse</param>
+            <returns>BreakingChanges parsed from the markdown</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.BreakingChangeParser.FromMarkdown(System.IO.Stream,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Parses markdown files into BrekaingChange objects
+            </summary>
+            <param name="stream">The markdown to parse</param>
+            <param name="allowedCategories">Valid category strings. Pass null
+            to allow any category. A breaking change using an invalid category
+            will throw an exception while parsing the breaking change.</param>
+            <returns>BreakingChanges parsed from the markdown</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.CompressedHttpClient.#ctor(Microsoft.Fx.Portability.ProductInformation)">
+            <param name="productName">Product name that will be displayed in the User Agent string of requests</param>
+            <param name="productVersion">Product version that will be displayed in the User Agent string of requests</param>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.DataExtensions.Serialize``1(``0,System.IO.Stream,System.Boolean)">
+            <summary>
+            Serializes an object to Json and writes the output to the given stream.
+            </summary>
+            <param name="data">object to serialize</param>
+            <param name="outputStream">Stream to write Json to</param>
+            <param name="leaveOpen">true to leave the stream open; false otherwise</param>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.DataExtensions.CompressAsync(System.IO.Stream,System.IO.Stream,System.Boolean)">
+            <summary>
+            Given the input stream, will take its contents and compress them into the output stream.
+            </summary>
+            <param name="inputStream">Input stream to read contents from</param>
+            <param name="outputStream">Stream to write contents to</param>
+            <param name="leaveOpen">Whether to leave the input and output streams open after reading/writing to/from them.</param>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.IApiPortOptions.InputAssemblies">
+            <summary>
+            Gets a dictionary of input assembly files and whether or not they
+            were specified.
+            Key: IAssemblyFile
+            Value: true if the file was explicitly specified and false otherwise.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.InvalidApiPortOptionsException">
+            <summary>
+            Thrown when <see cref="T:Microsoft.Fx.Portability.IApiPortOptions"/> is invalid.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ITargetNameParser.MapTargetsToExplicitVersions(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Maps the list of targets specified as strings to a list of supported target names.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.ObjectModel.ApiInfoStorage.Parent">
+            <summary>
+            Gets or sets docId of the parent. Null if the Api does not have a parent.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.ObjectModel.AssemblyInfo.Location">
+            <summary>
+            Gets or sets the assembly location
+            </summary>
+            <remarks>Do not serialize location and send it to service.</remarks>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.ObjectModel.CloudApiCatalogLookup">
+            <summary>
+            This represents an object that contains the precomputed set of all target APIs that we ever shipped in the framework
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.CloudApiCatalogLookup.GetApiDefinition(System.String)">
+            <summary>
+            Gets the ApiDefinition for a docId.
+            </summary>
+            <returns>The corresponding ApiDefinition if it exists.
+            If docId is null/empty or does not exist, returns null.</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.CloudApiCatalogLookup.GetAncestors(System.String)">
+            <summary>
+            Retrieves the ancestors for a given docId.
+            This retrieves the Api's parent first and then the parent's ancestor
+            until it reaches the root.
+            If the docId does not exist or is null, it will return an empty
+            Enumerable.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.DiagnosticAnalyzerInfo.GetIdNumber">
+            <summary>
+            Returns the integer number value from the Id string property or a
+            -1 if an integer value cannot be returned.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.IApiCatalogLookup.GetAncestors(System.String)">
+            <summary>
+            Retrieves the ancestors for a given docId
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.IgnoreAssemblyInfoList.Load(System.Collections.Generic.IEnumerable{Microsoft.Fx.Portability.ObjectModel.IgnoreAssemblyInfo})">
+            <summary>
+            Loads a collection of IgnoreAssemblyInfos such that each assembly identity is represented once, with a
+            combined set of targets ignored representing the union of all ignored targets for each instance of that assembly
+            identity in the input. If the IgnoreAssemblyInfoList already contains IgnoreAssemblyInfos, the new ones will
+            be merged with the existing list.
+            </summary>
+            <param name="inputs">The initial set of IgnoreAssemblyInfos to remove duplicate assembly identities from</param>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.IPackageFinder.TryFindPackages(System.String,System.Collections.Generic.IEnumerable{System.Runtime.Versioning.FrameworkName},System.Collections.Immutable.ImmutableList{Microsoft.Fx.Portability.ObjectModel.NuGetPackageInfo}@)">
+            <summary>
+            Retrieves the list of possible NuGet packages that contain a given assembly.
+            </summary>
+            <param name="assemblyInfo">assembly identity</param>
+            <param name="targets">framework supporrted by package.</param>
+            <param name="packages">dictionary of framework/list of packages (packages found that support the given framework)</param>
+            <returns>
+            Returns true if packages exist for that assembly (for any target), false if there are no packages
+            If 'true' is returned, but no packages in the list, it means the package is not supported on the given framework.
+            If 'false' is returned, it means we don't have any info about that assembly.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ObjectModel.IPackageFinder.TryFindSupportedVersions(System.String,System.Collections.Generic.IEnumerable{System.Runtime.Versioning.FrameworkName},System.Collections.Immutable.ImmutableDictionary{System.Runtime.Versioning.FrameworkName,System.String}@)">
+            <summary>
+            Find supported versions of a given package
+            </summary>
+            <param name="package">the package the application uses</param>
+            <param name="targets">frameworks that we need to support</param>
+            <param name="versions">dictionary of package version and supported frameworks</param>
+            <returns>
+            If 'false' is returned, it means we don't have any info about that package, don't know if it is supported or not
+            </returns>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.ObjectModel.MemberInfo.DefinedInAssemblyIdentity">
+            <summary>
+            Gets or sets the assembly in which the member is defined
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.ProductInformation.IsValid(System.String)">
+            <summary>
+            Verify strings/versions only contain letters, digits, '.', or '_'.  Otherwise, the user agent string may be created incorrectly
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.CredentialRequestType">
+            <summary>
+            Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Configuration/Credential/CredentialRequestType.cs
+            </summary>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.Proxy.CredentialRequestType.Proxy">
+            <summary>
+            Indicates that the request credentials are to be used to access a proxy.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.Proxy.CredentialRequestType.Unauthorized">
+            <summary>
+            Indicates that the remote server rejected the previous request as unauthorized. This
+            suggests that the server does not know who the caller is (i.e. the caller is not
+            authenticated).
+            </summary>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.Proxy.CredentialRequestType.Forbidden">
+            <summary>
+            Indicates that the remote server rejected the previous request as forbidden. This
+            suggests that the server knows who the caller is (i.e. the caller is authorized) but
+            is not allowed to access the request resource. A different set of credentials could
+            solve this failure.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.ICredentialProvider">
+            <summary>
+            Provides NetworkCredentials for a given address and proxy.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Proxy.ICredentialProvider.GetCredentialsAsync(System.Uri,System.Net.IWebProxy,Microsoft.Fx.Portability.Proxy.CredentialRequestType,System.Threading.CancellationToken)">
+            <summary>
+            Fetches credentials for the given uri and proxy.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.IProxyProvider">
+            <summary>
+            Coordinates the proxy settings and credentials
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Proxy.IProxyProvider.CanUpdateCredentials">
+            <summary>
+            Gets a value indicating whether it can get updated credentials (if
+            the existing ones for the proxy are not sufficient).
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Proxy.IProxyProvider.GetProxy(System.Uri)">
+            <summary>
+            The resolved proxy based on the destination Uri.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Proxy.IProxyProvider.TryUpdateCredentialsAsync(System.Uri,System.Net.IWebProxy,Microsoft.Fx.Portability.Proxy.CredentialRequestType,System.Threading.CancellationToken)">
+            <summary>
+            True if it was possible to update the credentials and false otherwise.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.ProxyAuthenticationHandler">
+            <summary>
+            DelegatingHandler that coordinates passing in credentials and fetching
+            new credentials from user when authorization is required.
+            </summary>
+            <remarks>
+            Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Protocol.Core.v3/HttpSource/ProxyAuthenticationHandler.cs
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.ProxyAuthenticationRequiredException">
+            <summary>
+            Thrown when trying to call the <see cref="P:Microsoft.Fx.Portability.ProxyAuthenticationRequiredException.Endpoint"/> resulted in <see cref="F:System.Net.HttpStatusCode.ProxyAuthenticationRequired"/>
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.ProxyAuthenticationRequiredException.Endpoint">
+            <summary>
+            Gets the endpoint that was accessed when thrown.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.ReadWriteApiPortOptions">
+            <summary>
+            Provides an implementation of IApiPortOptions that allows for reading and writing properties
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Reporting.IFileWriter.WriteReportAsync(System.Byte[],System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Writes a report.
+            </summary>
+            <param name="report">Contents of the report</param>
+            <param name="extension">File extension of the report</param>
+            <param name="outputDirectory">Directory for the output</param>
+            <param name="filename">File name for report</param>
+            <param name="overwrite">true to overwrite file; otherwise will find a file name that is not conflicting by adding a numerical suffix to the filename</param>
+            <returns>The fully qualified name to the report or null if unable to write report.</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Reporting.ReportGenerator.ComputeAssemblyNames(System.Collections.Generic.IEnumerable{Microsoft.Fx.Portability.Reporting.ObjectModel.AssemblyUsageInfo})">
+            <summary>
+            Give a list of assemblies it will compute which name an assembly must have.
+            For instance, if we have a single assembly, we will use the assembly simple name.
+            If we have more than one then we should use the full assembly name in order to distinguish betweeen them
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Resources.LocalizedStrings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.AliasCannotBeEqualToTargetNameError">
+            <summary>
+              Looks up a localized string similar to Alias cannot be equal to a target name: &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.AliasMappedToMultipleNamesInvalidAliases">
+            <summary>
+              Looks up a localized string similar to Only single mappings between name and alias are supported.  The following aliases are invalid: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.AliasShouldBeSeparated">
+            <summary>
+              Looks up a localized string similar to An alias should be separated from names by &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.AnalyzingCompatibility">
+            <summary>
+              Looks up a localized string similar to Analyzing compatibility.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.AssemblyReferenceInformation">
+            <summary>
+              Looks up a localized string similar to {0}, Version={1}, Culture={2}, PublicKeyToken={3}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.BadRequestMessage">
+            <summary>
+              Looks up a localized string similar to Bad request. Please make sure you have the most up-to-date version of this tool..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.CannotAddToRunningQueryPath">
+            <summary>
+              Looks up a localized string similar to Cannot add to the path once a query has begun.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ChangingFileExtension">
+            <summary>
+              Looks up a localized string similar to The given filename [{0}] has a different extension than the output format extension. Changed extension &apos;{1}&apos; to &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ComputingReport">
+            <summary>
+              Looks up a localized string similar to Computing report..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.CouldNotWriteReport">
+            <summary>
+              Looks up a localized string similar to Could not write report to directory &apos;{0}&apos; with file name &apos;{1}&apos; and extension &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.DuplicateAliasError">
+            <summary>
+              Looks up a localized string similar to Duplicate alias: &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.FrameworkNameHeader">
+            <summary>
+              Looks up a localized string similar to Framework.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.FullAssemblyIdentity">
+            <summary>
+              Looks up a localized string similar to {0}, FileVersion:{1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.HowToSpecifyVersion">
+            <summary>
+              Looks up a localized string similar to In order to specify a version, please use the following format with the &apos;-targets&apos; option:
+            (Target Name), Version=(Version).
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.HttpExceptionMessage">
+            <summary>
+              Looks up a localized string similar to There was an unknown error attempting to reach the service.  Please try again..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.IdentifyAssembliesToScan">
+            <summary>
+              Looks up a localized string similar to Identifying assemblies to scan..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidAssembly">
+            <summary>
+              Looks up a localized string similar to {0} is an invalid assembly..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidBreakingChangeParserState">
+            <summary>
+              Looks up a localized string similar to Unhandled breaking change parse state: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidCategoryDetected">
+            <summary>
+              Looks up a localized string similar to Invalid category detected: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidDataMessage">
+            <summary>
+              Looks up a localized string similar to Invalid data.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.InvalidFileName">
+            <summary>
+              Looks up a localized string similar to Invalid file name: &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.MalformedMap">
+            <summary>
+              Looks up a localized string similar to Malformed map: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.MemberShouldBeDefinedOnTypeException">
+            <summary>
+              Looks up a localized string similar to Member should be defined on a type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.MustBeValidEndpoint">
+            <summary>
+              Looks up a localized string similar to Must be a valid endpoint.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.NoFilesToAnalyze">
+            <summary>
+              Looks up a localized string similar to No files were found to upload..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.NotFoundException">
+            <summary>
+              Looks up a localized string similar to Resource was not found for {0} {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.NotSupported">
+            <summary>
+              Looks up a localized string similar to Not supported.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.OverwriteFile">
+            <summary>
+              Looks up a localized string similar to File &apos;{0}&apos; already exists and will be overwritten..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ProcessedFiles">
+            <summary>
+              Looks up a localized string similar to Processed {0}/{1} files..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ProcessedItems">
+            <summary>
+              Looks up a localized string similar to Processed {0} items..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ProductInformationInvalidArgument">
+            <summary>
+              Looks up a localized string similar to Must only contain letters or digits.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ProgressReportDone">
+            <summary>
+              Looks up a localized string similar to [Done].
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ProgressReportFailed">
+            <summary>
+              Looks up a localized string similar to [Failed].
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ProxyAuthenticationRequiredMessage">
+            <summary>
+              Looks up a localized string similar to Proxy authentication required to access: {0}. To resolve, try setting proxy in config.json..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.RequestTooLargeMessage">
+            <summary>
+              Looks up a localized string similar to Request to service is too large. Send fewer assemblies for analysis. Content length: {0} bytes.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.RetrievingOutputFormats">
+            <summary>
+              Looks up a localized string similar to Retrieving output formats..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.RetrievingTargets">
+            <summary>
+              Looks up a localized string similar to Retrieving targets.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ServerEndpointDeprecated">
+            <summary>
+              Looks up a localized string similar to Warning: A newer version of the application is available. Please update to the latest version to continue using this service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.ServerEndpointMovedPermanently">
+            <summary>
+              Looks up a localized string similar to Error: The service endpoint has been deprecated. Please update the application to the latest version..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.SupportedOn">
+            <summary>
+              Looks up a localized string similar to Supported: {0}+.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.TargetInformationGroups">
+            <summary>
+              Looks up a localized string similar to {0} ({1}).
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.Targets">
+            <summary>
+              Looks up a localized string similar to Targets.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.TooManyTargetsMessage">
+            <summary>
+              Looks up a localized string similar to Excel output format supports up to {0} targets for analysis at a time..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.UnauthorizedAccess">
+            <summary>
+              Looks up a localized string similar to Endpoint requires an authentication token..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.UnknownErrorCodeMessage">
+            <summary>
+              Looks up a localized string similar to There was an unknown error code from the service: &apos;{0}&apos;.  Please make sure you have the most up-to-date version..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.UnknownResultFormat">
+            <summary>
+              Looks up a localized string similar to Unknown output format: &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.UnknownTarget">
+            <summary>
+              Looks up a localized string similar to Unknown target &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.VersionHeader">
+            <summary>
+              Looks up a localized string similar to Version.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Resources.LocalizedStrings.WritingReport">
+            <summary>
+              Looks up a localized string similar to Writing {0} report.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.TargetMapper">
+            <summary>
+            Provides a mapping from one target to another via aliases defined in a config xml file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.TargetMapper.LoadFromConfig(System.String)">
+            <summary>
+            Loads a config file into the target mapper
+            </summary>
+            <param name="path">Path to XML config.  If null, a config file is expected next to the assembly with the name "TargetMap.xml"</param>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.TargetMapper.GetNames(System.String)">
+            <summary>
+            Performs alias to name mapping
+            </summary>
+            <param name="aliasName">target alias</param>
+            <returns>target name</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.TargetMapper.GetTargetNames(System.Collections.Generic.IEnumerable{System.Runtime.Versioning.FrameworkName},System.Boolean)">
+            <summary>
+            Returns the identifies for the target names. If multiple targets have the same name, keep the version as well
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.TargetMapper.GetAlias(System.String)">
+             <summary>
+             Performs name to grouped-target (alias) mapping
+             </summary>
+             <example>
+             If there are Grouped Targets, like:
+             Available Grouped Targets:
+             - Mobile (Windows, Windows Phone, Xamarin.Android, Xamarin.iOS)
+            
+             Then:
+             GetAlias(".NET Framework") will return ".NET Framework"
+             GetAlias("Windows") will return "Mobile"
+             GetAlias("Windows Phone") will return "Mobile"
+            
+             </example>
+             <param name="targetName">Official target name</param>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.TargetMapper.ParseAliasString(System.String,System.Boolean)">
+             <summary>
+             Parses a JSON-like string for aliases and targets
+             </summary>
+             <param name="aliasString">
+             Expected input similar to the following:
+            
+             alias1: target1, target2; alias2: target1, target2, target3
+             </param>
+             <param name="validate">if true, and exception will be thrown if format is not correct</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Microsoft.Fx.Portability.Utils.JsonConverters.JsonMultiDictionaryConverter`2" -->
+    </members>
+</doc>

@@ -145,7 +145,7 @@ class MainViewModel : ViewModelBase
 
 
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-       // ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }
@@ -178,7 +178,7 @@ class MainViewModel : ViewModelBase
         if (SelectedPath != null)
         {
 
-            ExportResult.InputPath = SelectedPath;
+            //ExportResult.InputPath = SelectedPath;
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
