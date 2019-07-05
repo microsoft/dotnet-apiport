@@ -145,7 +145,7 @@ class MainViewModel : ViewModelBase
 
 
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+       // ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }
@@ -157,7 +157,7 @@ class MainViewModel : ViewModelBase
         {
             if (assem.Equals(assembly))
             {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
+                AssemblyCollection.Add(new ApiViewModel(assembly, assembly+ " API Name ", true));
             }
 
         }

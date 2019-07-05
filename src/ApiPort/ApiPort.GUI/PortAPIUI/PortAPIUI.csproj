@@ -20,6 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="check.png" />
+    <None Remove="x.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Build.Locator" Version="1.2.2" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
     <PackageReference Include="MvvmLightStd10" Version="5.4.1.2" />
@@ -31,6 +36,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="check.png" />
+    <Resource Include="x.png" />
   </ItemGroup>
 
   
