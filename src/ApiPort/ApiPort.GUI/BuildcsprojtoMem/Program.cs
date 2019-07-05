@@ -41,9 +41,9 @@ namespace MSBuildAnalyzer
         private static List<string> configurations;
         private static List<string> platforms;
 
-        public static List<string> Configurations { get => configurations; set => configurations = value; }
+        public static List<string> Configurations { get; set; }
 
-        public static List<string> Platforms { get => platforms; set => platforms = value; }
+        public static List<string> Platforms { get; set; }
 
         public static void BuildIt(string csProjPath)
         {
@@ -58,9 +58,9 @@ namespace MSBuildAnalyzer
 
             var project = pc.LoadProject(csProjPath);
 
-            Console.WriteLine("Build: {0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()));
+            //Console.WriteLine("Build: {0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()));
 
-            Console.WriteLine(" ??");
+            //Console.WriteLine(" ??");
             if (File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()))
             {
                 Configurations = project.ConditionedProperties[box1];
@@ -86,29 +86,27 @@ namespace MSBuildAnalyzer
                 if (project.Properties.Any(n => n.Name == "TargetPath"))
                 {
 
-                    var myPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+                   
                     var targetPath = project.GetProperty("TargetPath");
                     var targetPathString = project.GetProperty("TargetPath").EvaluatedValue.ToString();
                     var assembly = Assembly.ReflectionOnlyLoadFrom(targetPathString);
                     JsonSerializer serializer = new JsonSerializer();
                     serializer.Converters.Add(new JavaScriptDateTimeConverter());
                     serializer.NullValueHandling = NullValueHandling.Ignore;
-                    using (StreamWriter sw = new StreamWriter(@"C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug\netcoreapp3.0\json.txt"
-))
-                    {
-                        using (JsonWriter writer = new JsonTextWriter(sw))
+                    using (StreamWriter sw = new StreamWriter(@"C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug\netcoreapp3.0\MsBuildAnalyzer\json.txt"))
+                    using (JsonWriter writer = new JsonTextWriter(sw))
                         {
-                                //Console.Write(" **" + targetPathString);
+                                //Console.Write(" * *" + targetPathString);
                                 List<string> assemblyCode = new List<string>();
-                                foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
+                                foreach (var assemblyName in assembly.GetReferencedAssemblies())
                                 {
-                                    assemblyCode.Add(assemblyName.Name);
+                                    assemblyCode.Add(Assembly.Load(assemblyName).ToString());
                                 }
                                 Info info = new Info(string.Format("{0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString())), Configurations, Platforms, targetPathString, assemblyCode, assembly.Location);
                                 serializer.Serialize(writer, info);
-                
+
                         }
-                    }
+
                 }
 
             }

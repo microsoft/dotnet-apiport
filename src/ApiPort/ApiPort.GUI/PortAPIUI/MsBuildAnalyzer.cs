@@ -48,19 +48,16 @@ namespace PortAPIUI
             JsonSerializer se = new JsonSerializer();
             var pathOf = System.Reflection.Assembly.GetEntryAssembly().Location;
             var directory = System.IO.Path.GetDirectoryName(pathOf);
-            var read = System.IO.Path.Combine(directory, "json.txt");
+            var read = System.IO.Path.Combine(directory, "MSBuildAnalyzer\\json.txt");
             using (StreamReader r = new StreamReader(read))
             {
                 string json = r.ReadToEnd();
                 Info items = JsonConvert.DeserializeObject<Info>(json);
                 Message(items);
                 var consoleOutput = output.ToString();
-                if (consoleOutput.Length > 1)
-                {
-                    return items;
-                }
+                return items;
             }
-            return null;
+            
 
             //var consoleOutput = output.ToString();
             //if (consoleOutput.Length > 1)
