@@ -21,11 +21,7 @@
 
   <ItemGroup>
     <None Remove="check.png" />
-    <None Remove="not.jfif" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="not.jfif" />
+    <None Remove="x.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +36,7 @@
 
   <ItemGroup>
     <Resource Include="check.png" />
+    <Resource Include="x.png" />
   </ItemGroup>
 
   
