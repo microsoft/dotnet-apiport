@@ -39,16 +39,14 @@ namespace PortAPIUI
     {
         private static StringBuilder output = null;
         public bool MessageBox { get; set; }
-        public static PortAPIUI.Info GetAssemblies(string path)
+        public PortAPIUI.Info GetAssemblies(string path)
         {
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
             var analyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
             Process process = new Process();
-
             process.StartInfo.FileName = analyzerPath;
             process.StartInfo.Arguments = $"{path}";
-
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             output = new StringBuilder();
@@ -57,55 +55,56 @@ namespace PortAPIUI
             process.BeginOutputReadLine();
             process.WaitForExit();
             process.Close();
-
-
             var consoleOutput = output.ToString();
-            if (!string.IsNullOrEmpty(consoleOutput))
+            if (consoleOutput.Length > 1)
             {
-                var popUp = consoleOutput.Substring(consoleOutput.IndexOf("Build:"), consoleOutput.IndexOf("Config:"));
+                var popUp = consoleOutput.Substring(consoleOutput.IndexOf("Build:"), consoleOutput.IndexOf("??"));
                 string[] array = popUp.Split(" ");
                 string answer = array[1];
-                MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
-                msBuild.Message(answer);
-                var start = consoleOutput.IndexOf("Plat:");
-                var end = consoleOutput.IndexOf("Assembly:");
-                var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start- consoleOutput.IndexOf("Config:")).Split(" **");
-                List<string> config = new List<string>();
-                for (int i = 1; i < configurations.Length; i++)
+                Message(answer);
+                if (answer.Equals("True")) 
                 {
-                    config.Add(configurations[i]);
+                    var start = consoleOutput.IndexOf("Plat:");
+                    var end = consoleOutput.IndexOf("Assembly:");
+                    var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start - consoleOutput.IndexOf("Config:")).Split(" **");
+                    List<string> config = new List<string>();
+                    for (int i = 1; i < configurations.Length; i++)
+                    {
+                        config.Add(configurations[i]);
+                    }
+
+                    var platforms = consoleOutput.Substring(start, end - start).Split(" **");
+
+                    List<string> plat = new List<string>();
+                    for (int i = 1; i < platforms.Length; i++)
+                    {
+                        plat.Add(platforms[i]);
+                    }
+
+                    var assemblies = consoleOutput.Substring(end).Split(" **");
+                    List<string> assem = new List<string>();
+                    for (int i = 1; i < assemblies.Length; i++)
+                    {
+                        assem.Add(assemblies[i]);
+                    }
+
+                    PortAPIUI.Info info = new PortAPIUI.Info(config, plat, assem);
+
+                    return info;
                 }
-
-                var platforms = consoleOutput.Substring(start, end - start).Split(" **");
-
-                List<string> plat = new List<string>();
-                for (int i = 1; i < platforms.Length; i++)
-                {
-                    plat.Add(platforms[i]);
-                }
-
-                var assemblies = consoleOutput.Substring(end).Split(" **");
-                List<string> assem = new List<string>();
-                for (int i = 1; i < assemblies.Length; i++)
-                {
-                    assem.Add(assemblies[i]);
-                }
-
-                PortAPIUI.Info info = new PortAPIUI.Info(config, plat, assem);
-
-                return info;
             }
-
             return null;
         }
-
         public void Message(string answer)
         {
-            if (answer.Equals("True"))
+            if (answer.Equals("False"))
             {
                 MessageBox = true;
             }
-            MessageBox = false;
+            else
+            {
+                MessageBox = false;
+            }
         }
 
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)

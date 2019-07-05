@@ -19,6 +19,7 @@ class MainViewModel : ViewModelBase
     private string _selectedPath;
 
     private List<string> _assemblies;
+    private List<string> _assembliesPath;
     public static List<string> _config;
     public static List<string> _platform;
 
@@ -79,6 +80,15 @@ class MainViewModel : ViewModelBase
             RaisePropertyChanged("Assemblies");
         }
     }
+    public List<string> AssembliesPath
+    {
+        get { return _assembliesPath; }
+        set
+        {
+            _assembliesPath = value;
+            RaisePropertyChanged("AssembliesPath");
+        }
+    }
 
     public string SelectedConfig
     {
@@ -130,27 +140,22 @@ class MainViewModel : ViewModelBase
 
     private void AnalyzeAPI()
     {
-        MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
-        if (msBuild.MessageBox.Equals(false))
-        {
-            MessageBox.Show("Error: Please build your project first.");
-        }
-        else
-        {
-            Assemblies = Rebuild.ChosenBuild(SelectedPath);
-            ApiAnalyzer.AnalyzeAssemblies(Assemblies);
-        }
+
+
+        Assemblies = Rebuild.ChosenBuild(SelectedPath);
+        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+
 
     }
-    
+
     public void AssemblyCollectionUpdate(string assem)
     {
         AssemblyCollection.Clear();
-        foreach (var assembly in Assemblies)
+        foreach (var assembly in AssembliesPath)
         {
             if (assem.Equals(assembly))
             {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly+ " API Name ", true));
+                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
             }
 
         }
@@ -169,27 +174,30 @@ class MainViewModel : ViewModelBase
             SelectedPath = dialog.FileName;
         }
         else { SelectedPath = null; }
-
+        MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
-           
-           // else
+            ExportResult.InputPath = SelectedPath;
+
+            msBuild.GetAssemblies(SelectedPath);
+            if (msBuild.MessageBox == true)
             {
-                ExportResult.InputPath = SelectedPath;
+                MessageBox.Show("error");
+            }
 
-                Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
-
-
+            Info output = msBuild.GetAssemblies(SelectedPath);
+            if (output != null)
+            {
                 Config = output.Configuration;
                 Platform = output.Platform;
-
-                List<string> assemblyNames = output.Assembly;
+                AssembliesPath = output.Assembly;
             }
         }
 
     }
 
-        private void ExecuteSaveFileDialog()
+
+    private void ExecuteSaveFileDialog()
     {
         var savedialog = new Microsoft.Win32.SaveFileDialog();
         savedialog.FileName = "PortablityAnalysisReoprt";
@@ -198,7 +206,7 @@ class MainViewModel : ViewModelBase
         Nullable<bool> result = savedialog.ShowDialog();
         if (result == true)
         {
-            
+
             string fileExtension = Path.GetExtension(savedialog.FileName);
             ExportResult.ExportApiResult(savedialog.FileName, fileExtension);
         }

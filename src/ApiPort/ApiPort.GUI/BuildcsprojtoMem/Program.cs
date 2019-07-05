@@ -1,22 +1,14 @@
 ﻿using BuildcsprojtoMem;
-using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Framework;
 using Microsoft.Build.Locator;
-using Microsoft.Build.Logging;
-using Microsoft.Build.Tasks;
-using Microsoft.Build.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MSBuildAnalyzer
 {
@@ -65,12 +57,23 @@ namespace MSBuildAnalyzer
 
             var project = pc.LoadProject(csProjPath);
 
-            Message(csProjPath);
+            Console.WriteLine("Build: {0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()));
 
-
-            if (project.Build() == true) { 
-            Configurations = project.ConditionedProperties[box1];
+            Console.WriteLine(" ??");
+            if (File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()))
+            {
+                Configurations = project.ConditionedProperties[box1];
                 Platforms = project.ConditionedProperties[box2];
+                //JsonSerializer serializer = new JsonSerializer();
+                //serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                //serializer.NullValueHandling = NullValueHandling.Ignore;
+                //using (StreamWriter sw = new StreamWriter(@"c\json.txt"))
+                //{
+                //    using (JsonWriter writer = new JsonTextWriter(sw))
+                //    {
+                //        serializer.Serialize(writer, configurations);
+                //    }
+                //}
                 var con = new string[0];
                 var pla = new string[0];
                 Console.Write("Config:");
@@ -79,7 +82,6 @@ namespace MSBuildAnalyzer
                     con.Append(config);
                     Console.Write(" **" + config);
                 }
-
                 Console.WriteLine(" ");
                 Console.Write("Plat:");
                 foreach (var plat in Platforms)
@@ -87,35 +89,21 @@ namespace MSBuildAnalyzer
                     pla.Append(plat);
                     Console.Write(" **" + plat);
                 }
-
                 Console.WriteLine(" ");
                 Console.Write("Assembly:");
                 if (project.Properties.Any(n => n.Name == "TargetPath"))
                 {
                     var myPath = System.Reflection.Assembly.GetEntryAssembly().Location;
                     var targetPath = project.GetProperty("TargetPath");
-                    var targetPathString = targetPath.EvaluatedValue.ToString();
+                    var targetPathString = project.GetProperty("TargetPath").EvaluatedValue.ToString();
                     var assembly = Assembly.LoadFrom(targetPathString);
                     foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies())
                     {
                         Console.Write(" **" + Assembly.Load(assemblyName));
                     }
                 }
-                  //  Console.Write(" **" + assembly);
-                }
             }
- 
-        public static void Message(string csProjPath)
-        {
-            Dictionary<string, string> dic = new Dictionary<string, string>
-                {
-                    { "Configuration", "Debug" },
-                    { "Platform", "AnyCPU" }
-                };
-            ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
-
-            var project = pc.LoadProject(csProjPath);
-            Console.WriteLine("Build: {0}",project.Build());
+                  //  Console.Write(" **" + assembly);
+            }
         }
     }
-}
