@@ -177,6 +177,7 @@ class MainViewModel : ViewModelBase
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
+
             ExportResult.InputPath = SelectedPath;
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
@@ -191,6 +192,7 @@ class MainViewModel : ViewModelBase
                 AssembliesPath = output.Assembly;
                 ExeFile = output.Location;
             }
+
         }
 
     }
@@ -207,7 +209,7 @@ class MainViewModel : ViewModelBase
         {
 
             string fileExtension = Path.GetExtension(savedialog.FileName);
-            ExportResult.ExportApiResult(savedialog.FileName, fileExtension);
+            ExportResult.ExportApiResult(savedialog.FileName, fileExtension, false);
         }
 
     }
