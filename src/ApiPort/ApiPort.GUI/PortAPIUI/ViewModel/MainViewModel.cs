@@ -141,12 +141,12 @@ class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
 
-            Assemblies = Rebuild.ChosenBuild(SelectedPath);
-            ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        Assemblies = Rebuild.ChosenBuild(SelectedPath);
+        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }
-    
+
     public void AssemblyCollectionUpdate(string assem)
     {
         AssemblyCollection.Clear();
@@ -155,7 +155,6 @@ class MainViewModel : ViewModelBase
             if (assem.Equals(assembly))
             {
                 AssemblyCollection.Add(new ApiViewModel(assembly, assembly+ " API Name ", true));
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", false));
             }
 
         }
@@ -177,28 +176,28 @@ class MainViewModel : ViewModelBase
 
         if (SelectedPath != null)
         {
-           /* MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
-            if (msBuild.MessageBox.Equals(false))
-            {
-                MessageBox.Show("wassup");
-            }
-            else
-            {*/
-                ExportResult.InputPath = SelectedPath;
+            /* MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
+             if (msBuild.MessageBox.Equals(false))
+             {
+                 MessageBox.Show("wassup");
+             }
+             else
+             {*/
+            ExportResult.InputPath = SelectedPath;
 
-                Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
+            Info output = MsBuildAnalyzer.GetAssemblies(SelectedPath);
 
 
-                Config = output.Configuration;
-                Platform = output.Platform;
+            Config = output.Configuration;
+            Platform = output.Platform;
 
-                AssembliesPath = output.Assembly;
-           // }
+            AssembliesPath = output.Assembly;
+            // }
         }
 
     }
 
-        private void ExecuteSaveFileDialog()
+    private void ExecuteSaveFileDialog()
     {
         var savedialog = new Microsoft.Win32.SaveFileDialog();
         savedialog.FileName = "PortablityAnalysisReoprt";
@@ -207,9 +206,9 @@ class MainViewModel : ViewModelBase
         Nullable<bool> result = savedialog.ShowDialog();
         if (result == true)
         {
-            
+
             string fileExtension = Path.GetExtension(savedialog.FileName);
-            ExportResult.ExportApiResult(savedialog.FileName, fileExtension);
+            ExportResult.ExportApiResult(savedialog.FileName, fileExtension, false);
         }
 
     }
