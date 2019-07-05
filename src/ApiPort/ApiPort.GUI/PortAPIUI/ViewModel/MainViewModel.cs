@@ -145,7 +145,7 @@ class MainViewModel : ViewModelBase
 
 
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+       // ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }
