@@ -201,7 +201,7 @@ class MainViewModel : ViewModelBase
     private void ExecuteSaveFileDialog()
     {
         var savedialog = new Microsoft.Win32.SaveFileDialog();
-        savedialog.FileName = "PortablityAnalysisReoprt";
+        savedialog.FileName = "PortablityAnalysisReport";
         savedialog.DefaultExt = ".text";
         savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json| Excel (*.excel)|*.excel";
         Nullable<bool> result = savedialog.ShowDialog();
