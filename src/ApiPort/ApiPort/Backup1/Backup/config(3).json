@@ -1,8 +1,0 @@
-﻿{
-  "proxy": {
-    "isEnabled": "false",
-    "address": "http://localhost:8888",
-    "username": "1",
-    "password": "1"
-  }
-}
