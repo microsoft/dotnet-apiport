@@ -50,7 +50,6 @@ internal class MainViewModel : ViewModelBase
 
     public static string _selectedAssembly;
 
-
     public static JArray _analyzeAssem;
 
 
@@ -58,12 +57,16 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
+
             return _assemblyCollection;
+
         }
 
         set
         {
+
             _assemblyCollection = value;
+
             RaisePropertyChanged(nameof(AssemblyCollection));
         }
     }
@@ -79,6 +82,7 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+
     public JArray AnalyzeAssem
     {
         get { return _analyzeAssem; }
@@ -90,16 +94,21 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+
     public List<string> Config
     {
         get
         {
+
             return _config;
+
         }
 
         set
         {
+
             _config = value;
+
             RaisePropertyChanged(nameof(Config));
         }
     }
@@ -108,11 +117,14 @@ internal class MainViewModel : ViewModelBase
 
     {
 
+
         get { return _platform; }
+
 
         set
 
         {
+
 
             _platform = value;
 
@@ -149,11 +161,13 @@ internal class MainViewModel : ViewModelBase
 
     public string SelectedConfig
     {
+
         get => _selectedConfig;
 
         set
         {
             _selectedConfig = value;
+
             RaisePropertyChanged(nameof(SelectedConfig));
         }
     }
@@ -162,12 +176,14 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
+
             return _selectedPlatform;
+
         }
 
         set
         {
-            _selectedPlatform = value;
+            SelectedPlatform1 = value;
             RaisePropertyChanged("SelectedPlatfrom");
         }
     }
@@ -176,12 +192,16 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
+
             return _selectedAssembly;
+
         }
 
         set
         {
+
             _selectedAssembly = value;
+
             RaisePropertyChanged(nameof(SelectedAssembly));
         }
     }
@@ -192,8 +212,10 @@ internal class MainViewModel : ViewModelBase
     {
         RegisterCommands();
         _assemblies = new List<string>();
+
         _config = new List<string>();
         _platform = new List<string>();
+
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
     }
 
@@ -207,6 +229,7 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
+
         //AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
@@ -242,6 +265,7 @@ internal class MainViewModel : ViewModelBase
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
+
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {

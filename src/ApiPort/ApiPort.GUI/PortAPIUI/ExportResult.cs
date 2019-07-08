@@ -31,8 +31,6 @@ namespace PortAPIUI
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
             //string inputPathParent1 = System.IO.Directory.GetParent(inputPath).FullName;
-
-
            // string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
             //string inputPathParent = System.IO.Directory.GetParent(GetInputPath()).FullName;
             Process p = new Process();

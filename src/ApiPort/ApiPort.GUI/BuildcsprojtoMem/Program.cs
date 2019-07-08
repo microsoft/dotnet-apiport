@@ -104,14 +104,10 @@ namespace MSBuildAnalyzer
                     {
                         assemblyCode.Add(Assembly.Load(assemblyName).ToString());
                     }
-
-
                     Info info = new Info(string.Format("{0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString())), Configurations, Platforms, targetPathString, assemblyCode, assembly.Location);
                     serializer.Serialize(writer, info);
                     sw.Close();
                     writer.Close();
-
-
                     // }
                 }
             }
