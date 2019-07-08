@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.Collections.Generic;
 
 namespace PortAPI.Shared
@@ -6,6 +8,7 @@ namespace PortAPI.Shared
     public class Info
     {
         public string Build { get; set; }
+
         public List<string> Configuration { get; set; }
 
         public List<string> Platform { get; set; }

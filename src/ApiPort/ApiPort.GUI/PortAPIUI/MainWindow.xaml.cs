@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -17,7 +20,6 @@ namespace PortAPIUI
 
         // Opens hyperlink to Portablitity Analyzer documentation
         private void About_Click(object sender, RoutedEventArgs e)
-
         {
             Hyperlink link = new Hyperlink();
             link.NavigateUri = new Uri("https://docs.microsoft.com/en-us/dotnet/standard/analyzers/portability-analyzer");
@@ -36,7 +38,7 @@ namespace PortAPIUI
             Process.Start(psi);
         }
 
-        // Enables export button, and table wehn analyze button is clicked 
+        // Enables export button, and table wehn analyze button is clicked
         private void BStart_Click(object sender, RoutedEventArgs e)
         {
             ExportBtn.IsEnabled = true;
@@ -55,14 +57,13 @@ namespace PortAPIUI
             }
         }
 
-        // Populates datagrid based on selected assembly 
+        // Populates datagrid based on selected assembly
         private void AssemComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             AssemCompatibility.Visibility = Visibility.Visible;
             var vm = this.DataContext as MainViewModel;
             var assem = vm.SelectedAssembly;
             vm.AssemblyCollectionUpdate(assem);
-
         }
     }
 }
