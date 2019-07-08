@@ -17,7 +17,7 @@ namespace PortAPIUI
             {
                 return new JArray();
             }
-            ExportResult.InputPath = assemblies[assemblies.Count - 1];
+            ExportResult.SetInputPath( assemblies[assemblies.Count - 1]);
             MessageBox.Show("Hi from Katie");
             string reportLocation = ExportResult.ExportApiResult(string.Empty, ".json", true);
             string textFromFile = System.IO.File.ReadAllText(reportLocation);

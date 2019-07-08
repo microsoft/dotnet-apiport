@@ -6,11 +6,13 @@ using GalaSoft.MvvmLight.Command;
 using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using Newtonsoft.Json.Linq;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -22,26 +24,49 @@ internal class MainViewModel : ViewModelBase
 
     private string _selectedPath;
 
-    private List<string> _assemblies;
-    private List<string> _assembliesPath;
-    private List<string> config1;
-    private List<string> platform1;
-    private string exeFile;
 
-    private string selectedConfig1;
-    private string selectedPlatform1;
-    private string selectedAssembly1;
+
+    private List<string> _assemblies;
+
+    private List<string> _assembliesPath;
+
+    public static List<string> _config;
+
+    public static List<string> _platform;
+
+    public static string ExeFile;
+
+
+
+    public static string _selectedConfig;
+
+    public static string _selectedPlatform;
+
+
+
+    public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
+
+
+
+    public static string _selectedAssembly;
+
+    public static JArray _analyzeAssem;
+
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
     {
         get
         {
-            return AssemblyCollection;
+
+            return _assemblyCollection;
+
         }
 
         set
         {
-            AssemblyCollection = value;
+
+            _assemblyCollection = value;
+
             RaisePropertyChanged(nameof(AssemblyCollection));
         }
     }
@@ -57,32 +82,56 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+
+    public JArray AnalyzeAssem
+    {
+        get { return _analyzeAssem; }
+
+        set
+        {
+            _analyzeAssem = value;
+            RaisePropertyChanged(nameof(AnalyzeAssem));
+        }
+    }
+
+
     public List<string> Config
     {
         get
         {
-            return Config1;
+
+            return _config;
+
         }
 
         set
         {
-            Config1 = value;
+
+            _config = value;
+
             RaisePropertyChanged(nameof(Config));
         }
     }
 
     public List<string> Platform
+
     {
-        get
-        {
-            return Platform1;
-        }
+
+
+        get { return _platform; }
+
 
         set
+
         {
-            Platform1 = value;
+
+
+            _platform = value;
+
             RaisePropertyChanged(nameof(Platform));
+
         }
+
     }
 
     public List<string> Assemblies
@@ -112,11 +161,13 @@ internal class MainViewModel : ViewModelBase
 
     public string SelectedConfig
     {
-        get => SelectedConfig1;
+
+        get => _selectedConfig;
 
         set
         {
-            SelectedConfig1 = value;
+            _selectedConfig = value;
+
             RaisePropertyChanged(nameof(SelectedConfig));
         }
     }
@@ -125,7 +176,9 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
-            return SelectedPlatform1;
+
+            return _selectedPlatform;
+
         }
 
         set
@@ -139,34 +192,30 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
-            return SelectedAssembly1;
+
+            return _selectedAssembly;
+
         }
 
         set
         {
-            SelectedAssembly1 = value;
+
+            _selectedAssembly = value;
+
             RaisePropertyChanged(nameof(SelectedAssembly));
         }
     }
 
-    public List<string> Config1 { get => config1; set => config1 = value; }
 
-    public List<string> Platform1 { get => platform1; set => platform1 = value; }
-
-    public string ExeFile { get => exeFile; set => exeFile = value; }
-
-    public string SelectedConfig1 { get => selectedConfig1; set => selectedConfig1 = value; }
-
-    public string SelectedPlatform1 { get => selectedPlatform1; set => selectedPlatform1 = value; }
-
-    public string SelectedAssembly1 { get => selectedAssembly1; set => selectedAssembly1 = value; }
 
     public MainViewModel()
     {
         RegisterCommands();
         _assemblies = new List<string>();
-        Config1 = new List<string>();
-        Platform1 = new List<string>();
+
+        _config = new List<string>();
+        _platform = new List<string>();
+
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
     }
 
@@ -180,7 +229,10 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+
+        //AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+
+
     }
 
     public void AssemblyCollectionUpdate(string assem)
@@ -213,7 +265,7 @@ internal class MainViewModel : ViewModelBase
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
-            //ExportResult.InputPath = SelectedPath;
+
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
