@@ -93,7 +93,7 @@ namespace MSBuildAnalyzer
                     JsonSerializer serializer = new JsonSerializer();
                     serializer.Converters.Add(new JavaScriptDateTimeConverter());
                     serializer.NullValueHandling = NullValueHandling.Ignore;
-                    using (StreamWriter sw = new StreamWriter(@"C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug\netcoreapp3.0\MsBuildAnalyzer\json.txt"))
+                    using (StreamWriter sw = new StreamWriter(@"C:\Users\t-cihawk\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug\netcoreapp3.0\MsBuildAnalyzer\json.txt"))
                     using (JsonWriter writer = new JsonTextWriter(sw))
                         {
                                 //Console.Write(" * *" + targetPathString);
