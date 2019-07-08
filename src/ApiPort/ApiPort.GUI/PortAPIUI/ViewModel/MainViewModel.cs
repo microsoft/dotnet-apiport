@@ -145,7 +145,7 @@ class MainViewModel : ViewModelBase
 
 
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-       // ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }
@@ -178,7 +178,7 @@ class MainViewModel : ViewModelBase
         if (SelectedPath != null)
         {
 
-            ExportResult.InputPath = SelectedPath;
+            //ExportResult.InputPath = SelectedPath;
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
@@ -201,7 +201,7 @@ class MainViewModel : ViewModelBase
     private void ExecuteSaveFileDialog()
     {
         var savedialog = new Microsoft.Win32.SaveFileDialog();
-        savedialog.FileName = "PortablityAnalysisReoprt";
+        savedialog.FileName = "PortablityAnalysisReport";
         savedialog.DefaultExt = ".text";
         savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json| Excel (*.excel)|*.excel";
         Nullable<bool> result = savedialog.ShowDialog();

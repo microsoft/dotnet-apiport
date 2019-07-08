@@ -1,0 +1,424 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiPort</name>
+    </assembly>
+    <members>
+        <member name="M:ApiPort.ConsoleProgressReporter.Suspend">
+            <summary>
+            Suspends all progress tasks.
+            </summary>
+        </member>
+        <member name="M:ApiPort.ConsoleProgressReporter.Resume">
+            <summary>
+            Resumes all progress tasks.
+            </summary>
+        </member>
+        <member name="T:ApiPort.FileOutputApiPortService">
+            <summary>
+            Use this service implementation to output analyze requests to a json file
+            </summary>
+        </member>
+        <member name="M:ApiPort.FileOutputApiPortService.SendAnalysisAsync(Microsoft.Fx.Portability.ObjectModel.AnalyzeRequest,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Returns the analysis as <see cref="F:ApiPort.FileOutputApiPortService.Formats"/>. Input <paramref name="formats"/> is ignored.
+            </summary>
+        </member>
+        <member name="M:ApiPort.Program.IsWebSecurityFailureOnMono(System.Exception)">
+            <summary>
+            Mono does not come installed with root certificates.  If a user runs this without configuring them,
+            they will receive a Mono.Security.Protocol.Tls.TlsException.
+            </summary>
+        </member>
+        <member name="T:ApiPort.ConsoleCredentialProvider">
+            <summary>
+            Credential provider for console input.
+            Taken from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Clients/NuGet.CommandLine/Common/ConsoleCredentialProvider.cs
+            </summary>
+        </member>
+        <member name="M:ApiPort.ConsoleCredentialProvider.GetCredentialsAsync(System.Uri,System.Net.IWebProxy,Microsoft.Fx.Portability.Proxy.CredentialRequestType,System.Threading.CancellationToken)">
+            <summary>
+            Fetches credentials for the given uri and proxy.
+            </summary>
+        </member>
+        <member name="M:ApiPort.ConsoleCredentialProvider.ReadSecureStringFromConsole(System.Security.SecureString)">
+            <summary>
+            Using Console input, retrieves a SecureString
+            </summary>
+        </member>
+        <member name="M:ApiPort.ConsoleCredentialProvider.ReadUnsecureStringFromConsole">
+            <summary>
+            NOTE: Remove this when NetworkCredential.SecurePassword is
+            available in .NET Standard 2.0.
+            </summary>
+        </member>
+        <member name="T:ApiPort.Proxy.WebProxy">
+            <summary>
+            Internal implementation of <see cref="T:System.Net.IWebProxy"/> mirroring default desktop one.
+            </summary>
+            <remarks>Remove when WebProxy is brought to .NET Standard 2.0.</remarks>
+        </member>
+        <member name="T:ApiPort.Resources.LocalizedStrings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ApplicationName">
+            <summary>
+              Looks up a localized string similar to API Portability Analyzer.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.AvailableAliases">
+            <summary>
+              Looks up a localized string similar to Available Aliases:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.AvailableGroupedTargets">
+            <summary>
+              Looks up a localized string similar to Available Grouped Targets:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.AvailableOutputFormats">
+            <summary>
+              Looks up a localized string similar to Available output formats:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.AvailableTargets">
+            <summary>
+              Looks up a localized string similar to Available Targets:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeDescription">
+            <summary>
+              Looks up a localized string similar to Description of submission.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeFileInput">
+            <summary>
+              Looks up a localized string similar to Path to assembly file or directory of assemblies.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile">
+            <summary>
+              Looks up a localized string similar to Specifies a json file defining assemblies that should not be analyzed for specific targets while analyzing breaking changes. This can be useful for excluding assemblies that are known to not regress on certain .NET Framework versions due to breaking changes. Note that, currently, this parameter only affects breaking change analysis and not portability analysis[.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeMessage">
+            <summary>
+              Looks up a localized string similar to Analyzes specified files/directories for IL and determines the APIs that are used. This information is analyzed for portability concerns or known breaking changes (depending on input parameters) and returns a report that gives a summary of issues and possible steps forward..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeNoDefaultIgnoreFile">
+            <summary>
+              Looks up a localized string similar to Do not use the standard assembly ignore list when analyzing breaking changes. The default ignore list can be found at KnownSafeBreaks.json.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeOutputFileName">
+            <summary>
+              Looks up a localized string similar to Output file name.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeResultFormat">
+            <summary>
+              Looks up a localized string similar to Format to display output results.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeShowBreakingChanges">
+            <summary>
+              Looks up a localized string similar to Calculate breaking changes on full .NET Framework.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeShowNonPortableApis">
+            <summary>
+              Looks up a localized string similar to Calculate non-portable APIs.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeShowRetargettingIssues">
+            <summary>
+              Looks up a localized string similar to Include the retargetting issues in the reports.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeSuppressBreakingChange">
+            <summary>
+              Looks up a localized string similar to Specifies a breaking change (by ID) to suppress during breaking change analysis. Any breaking changes with IDs specified for suppression will not be reported..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeTarget">
+            <summary>
+              Looks up a localized string similar to The target against which to check portability.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdAnalyzeTargetMap">
+            <summary>
+              Looks up a localized string similar to Specifies a file to be use to map target names.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdDocId">
+            <summary>
+              Looks up a localized string similar to Provides an interactive console search for APIs. Useful to find the docid of a specific API.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdDumpAnalysis">
+            <summary>
+              Looks up a localized string similar to Write the analysis request to the output file without sending any data to the service.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.CmdEndpoint">
+            <summary>
+              Looks up a localized string similar to Portability service endpoint.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Credentials_ForbiddenCredentials">
+            <summary>
+              Looks up a localized string similar to The remote server indicated that the previous request was forbidden. Please provide credentials for: {0}.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Credentials_Password">
+            <summary>
+              Looks up a localized string similar to Password:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Credentials_ProxyCredentials">
+            <summary>
+              Looks up a localized string similar to Please provide proxy credentials:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Credentials_RequestCredentials">
+            <summary>
+              Looks up a localized string similar to Please provide credentials for: {0}.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Credentials_UserName">
+            <summary>
+              Looks up a localized string similar to Username:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.FileOutputServiceNotSupported">
+            <summary>
+              Looks up a localized string similar to Analyze request file output does not support this operation.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Header">
+             <summary>
+               Looks up a localized string similar to Microsoft (R) {0} v{1}
+            Copyright (C) Microsoft Corporation. All rights reserved.
+            
+            This tool analyzes .NET assemblies to determine possible problems moving between .NET platforms (such as
+            Windows Store, desktop, Mono, .NET Core, etc) as well as between .NET Framework versions (ie 4.x-&gt;4.y).
+            
+            To learn more about how this tool works, including the data we are collecting, visit {2}.
+            
+            For the full privacy statement, please visit {3}.
+             </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ListOutputFormats">
+            <summary>
+              Looks up a localized string similar to Use to see what output formats are supported for the generated report..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ListTargets">
+            <summary>
+              Looks up a localized string similar to Use to see the available targets against which you can validate your assemblies.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.MonoWebRequestsFailure">
+            <summary>
+              Looks up a localized string similar to If you are running on the mono runtime, you must configure root certificates before using this application.  Please see http://www.mono-project.com/docs/faq/security/.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.Number">
+            <summary>
+              Looks up a localized string similar to number.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.OutputWrittenTo">
+            <summary>
+              Looks up a localized string similar to Wrote output to file:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.OverwriteFile">
+            <summary>
+              Looks up a localized string similar to Replaced output file &quot;{0}&quot;.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ProgressReportDone">
+            <summary>
+              Looks up a localized string similar to [Done].
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ProgressReportFailed">
+            <summary>
+              Looks up a localized string similar to [Failed].
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ProgressReportInProgress">
+            <summary>
+              Looks up a localized string similar to [In Progress{0}].
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplEnterQuery">
+            <summary>
+              Looks up a localized string similar to Enter a search query to find possible docids..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplInvalidNumber">
+            <summary>
+              Looks up a localized string similar to Invalid number: &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplNoResultsFound">
+            <summary>
+              Looks up a localized string similar to Did not find anything for search &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplOptionCount">
+            <summary>
+              Looks up a localized string similar to #count=.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplOptionCount_Text">
+            <summary>
+              Looks up a localized string similar to Display [number] of search results..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplOptionExit">
+            <summary>
+              Looks up a localized string similar to #q.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplOptionExit_Text">
+            <summary>
+              Looks up a localized string similar to Exit the REPL..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplOptionsHeader">
+            <summary>
+              Looks up a localized string similar to Options:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.ReplUpdatedCount">
+            <summary>
+              Looks up a localized string similar to Updated count to {0}.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.TargetsDescription">
+            <summary>
+              Looks up a localized string similar to Description:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.TargetsListGrouped">
+            <summary>
+              Looks up a localized string similar to - {0} ({1}).
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.TargetsListNoVersion">
+            <summary>
+              Looks up a localized string similar to - {0}.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.TargetsName">
+            <summary>
+              Looks up a localized string similar to Name:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.TargetsVersion">
+            <summary>
+              Looks up a localized string similar to Versions:.
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.TargetUsage">
+             <summary>
+               Looks up a localized string similar to In order to specify a target, run the tool with the following command switch:
+                 ApiPort.exe analyze -t &quot;(Target Name)&quot; [other args]
+            
+            In order to specify a version, please specify a target and a version with the following switch:
+                 ApiPort.exe analyze -t &quot;(Target Name), Version=(Version)&quot; [other args]
+            
+            Versions marked with an asterisk (*) implies that these are default targets if none are submitted..
+             </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.UnknownException">
+            <summary>
+              Looks up a localized string similar to There was an unexpected error.  Please try again or contact apiport@microsoft.com for help..
+            </summary>
+        </member>
+        <member name="P:ApiPort.Resources.LocalizedStrings.VersionListJoin">
+            <summary>
+              Looks up a localized string similar to ; .
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.ProxyConstants">
+            <summary>
+            Constants used to fetch proxy settings.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.Proxy.ProxyConstants.HttpProxy">
+            <summary>
+            Environment variable key to specify the value to use as the HTTP proxy
+            for all connections.For example, HTTP_PROXY="http://proxy.mycompany.com:8080/"
+            </summary>
+            <remarks>
+            https://msdn.microsoft.com/en-us/library/hh272656(v=vs.120).aspx
+            </remarks>
+        </member>
+        <member name="F:Microsoft.Fx.Portability.Proxy.ProxyConstants.NoProxy">
+            <summary>
+            Environment variable key to determine hosts that should bypass the
+            proxy. For example, NO_PROXY="localhost,.mycompany.com,192.168.0.10:80"
+            </summary>
+            <remarks>
+            https://msdn.microsoft.com/en-us/library/hh272656(v=vs.120).aspx
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.ProxyProvider">
+             <summary>
+             Looks for a proxy in the following order:
+             1. From a configuration file <see cref="!:ProxyConstants.ConfigurationFile"/>
+             2. From an environment variable <see cref="F:Microsoft.Fx.Portability.Proxy.ProxyConstants.HttpProxy"/>
+             3. System provided proxy
+            
+             Looks for the one in the configuration file because the user would
+             explicitly want to override their current proxy settings in order
+             for the configuration value to be set.
+             </summary>
+             <remarks>
+             Adapted from: https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Configuration/Proxy/ProxyCache.cs
+             </remarks>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Proxy.ProxyProvider.GetUserConfiguredProxy">
+            <summary>
+            Tries to get user configured proxy in the following order:
+            1. Environment (configured in http_proxy, no proxy)
+            2. Configuration file passed in.
+            </summary>
+            <returns>A web proxy or null if none was found.</returns>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Proxy.ProxyProvider.GetWebProxyFromEnvironment">
+            <summary>
+            Gets the proxy from environment variables.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Proxy.ProxyProvider.GetWebProxyFromConfiguration">
+            <summary>
+            Tries to create a proxy by reading values from <see cref="F:Microsoft.Fx.Portability.Proxy.ProxyProvider._configuration"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Proxy.ProxyProvider.CredentialsWrapper">
+            <summary>
+            Helper class that wraps NetworkCredentials so the proxy always
+            has a reference to the same class.
+            </summary>
+        </member>
+    </members>
+</doc>
