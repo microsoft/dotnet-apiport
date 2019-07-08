@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Fx.Portability.MetadataReader</name>
+    </assembly>
+    <members>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.MemberDependency.CallingAssembly">
+            <summary>
+            Gets or sets the assembly that is calling the member
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.MemberDependency.DefinedInAssemblyIdentity">
+            <summary>
+            Gets or sets the assembly in which the member is defined
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.MemberDependency.IsPrimitive">
+            <summary>
+            Gets or sets a value indicating whether or not the dependency is a primitive type
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analyzer.MemberMetadataInfo.GetGenericDisplayNames(System.Collections.Generic.IList{System.String})">
+             <summary>
+             Add the type arguments for generic instances. Go through all type names, and if it is generic, such
+             as Hashtable`1, remove the `1. Look in the arguments list and put the list of arguments in between {}
+            
+             Example: Hashtable{`0}.KeyValuePair
+            
+             There are some interesting corner cases involving nested types -
+             First, generic argument indexes are counted over all types in the nested type hierarchy.
+             Therefore, OuterClass`2.InnerClass`2 should resolve as OuterClass{`0,`1}.InnerClass{`2,`3}.
+            
+             Secondly, it is not required that all generic arguments be made concrete.
+             For example, it's possible in IL to define nested generic types OuterClass`2.InnerClass`2 and
+             then pass only two generic types in GenericTypeArgs. In such cases, the type should resolve
+             as OuterClass{`0,`1}.InnerClass`2.
+             </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Microsoft.Fx.Portability.Analyzer.MemberMetadataInfo.GetDocIdSafeMemberName(System.String)" -->
+        <member name="M:Microsoft.Fx.Portability.Analyzer.ReflectionMetadataDependencyInfo.AddReferencedAssemblies(System.Reflection.Metadata.MetadataReader)">
+            <summary>
+            Add all assemblies that were referenced to the referenced assembly dictionary.  By default,
+            we add every referenced assembly and will remove the ones that are actually referenced when
+            all submitted assemblies are processed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analyzer.ReflectionMetadataDependencyInfo.GetMetadataReader(System.Reflection.PortableExecutable.PEReader)">
+            <summary>
+            Attempt to get a MetadataReader.  Call this method instead of directly on PEReader so that
+            exceptions thrown by it are caught and propagated as a known InvalidPEAssemblyException
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.DetectingAssemblyReferences">
+            <summary>
+              Looks up a localized string similar to Detecting assembly references.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.InfiniteTypeParentingRecursion">
+            <summary>
+              Looks up a localized string similar to Two types are defined which serve as each others&apos; scope. This may be the result of assembly obfuscation..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.InvalidAssembly">
+            <summary>
+              Looks up a localized string similar to Not a valid assembly.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.InvalidAttributeProlog">
+            <summary>
+              Looks up a localized string similar to Invalid custom attribute prolog..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.MetadataParsingExceptionMessage">
+            <summary>
+              Looks up a localized string similar to An unexpected error was encountered while parsing the metadata for the PE file located at {0}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.MissingSystemObjectAssembly">
+            <summary>
+              Looks up a localized string similar to Cannot locate assembly information for System.Object..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.MoreParametersWereRequired">
+            <summary>
+              Looks up a localized string similar to More parameters were required than are available.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.NonPrimitiveTypeNotDefinedInAssembly">
+            <summary>
+              Looks up a localized string similar to All non-primitive types should be defined in an assembly.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Fx.Portability.Analyzer.Resources.LocalizedStrings.UnsupportedKind">
+            <summary>
+              Looks up a localized string similar to This kind is not supported!.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.Analyzer.SystemObjectFinder.TryGetSystemRuntimeAssemblyInformation(System.Reflection.Metadata.MetadataReader,Microsoft.Fx.Portability.ObjectModel.AssemblyReferenceInformation@)">
+            <summary>
+            Tries to locate the assembly containing <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Fx.Portability.Analyzer.SystemObjectNotFoundException">
+            <summary>
+            Exception thrown when assembly containing <see cref="T:System.Object"/>
+            cannot be found.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.MetadataReaderExtensions.GetParameterValues(System.Reflection.Metadata.MetadataReader,System.Reflection.Metadata.CustomAttribute)">
+            <summary>
+            This method will return a list of parameter values for the custom attribute.
+            </summary>
+            <remarks>
+            Currently, this only works for string values
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.MetadataReaderExtensions.FormatPublicKeyToken(System.Reflection.Metadata.MetadataReader,System.Reflection.Metadata.BlobHandle)">
+             <summary>
+             Convert a blob referencing a public key token from a PE file into a human-readable string.
+            
+             If there are no bytes, the return will be 'null'
+             If the length is greater than 8, it is a strong name signed assembly
+             Otherwise, the key is the byte sequence
+             </summary>
+        </member>
+        <member name="M:Microsoft.Fx.Portability.MethodSignatureExtensions.MakeEnclosedType(System.Reflection.Metadata.MethodSignature{Microsoft.Fx.Portability.Analyzer.MemberMetadataInfo})">
+            <summary>
+            Marks all types in a method signature as enclosed.  This does not change any of the inputs; instead it will create a new
+            method signature from new parameters and return type
+            </summary>
+            <returns>MethodSignature with types marked as enclosed</returns>
+        </member>
+    </members>
+</doc>

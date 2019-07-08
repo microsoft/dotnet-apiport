@@ -1,0 +1,7 @@
+During the process of identifying the .NET APIs used by a binary Microsoft collects
+the list of .NET APIs used by the user submitted binaries. Microsoft also collects
+the names of various user created APIs. The tool does not collect the binary code, 
+only names of APIs are collected. Microsoft will also collect assembly information such 
+as assembly references for the binary & the Target Framework Moniker (TFM).
+
+Full privacy statement: https://privacy.microsoft.com/en-us/privacystatement

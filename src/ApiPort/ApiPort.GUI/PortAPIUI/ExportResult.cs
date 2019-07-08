@@ -17,12 +17,8 @@ namespace PortAPIUI
         {
             MessageBox.Show("Hi from Katie");
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            for (int i = 0; i < 7; ++i)
-            {
-                ourPath = System.IO.Directory.GetParent(ourPath).FullName;
-            }
-            string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug","ApiPort", "netcoreapp2.1", "ApiPort.dll");
-            string InputPathParent = System.IO.Directory.GetParent(InputPath).FullName;
+            string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
+            //string InputPathParent = System.IO.Directory.GetParent(InputPath).FullName;
 
             Process p = new Process();
             p.StartInfo.FileName = "dotnet.exe";
@@ -46,7 +42,7 @@ namespace PortAPIUI
                 default:
                     throw new ArgumentOutOfRangeException(fileExtension);
             }
-            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{InputPathParent}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
+            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{InputPath}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
             var Hello = p.StartInfo.Arguments;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.UseShellExecute = false;
