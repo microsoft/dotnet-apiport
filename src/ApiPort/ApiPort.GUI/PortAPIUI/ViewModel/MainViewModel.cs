@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using PortAPI.Shared;
 using PortAPIUI;
@@ -9,8 +12,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using Newtonsoft.Json.Linq;
 
-class MainViewModel : ViewModelBase
+internal class MainViewModel : ViewModelBase
 {
     public RelayCommand Browse { get; set; }
 
@@ -20,102 +24,147 @@ class MainViewModel : ViewModelBase
 
     private string _selectedPath;
 
+
+
     private List<string> _assemblies;
+
     private List<string> _assembliesPath;
+
     public static List<string> _config;
+
     public static List<string> _platform;
+
     public static string ExeFile;
 
+
+
     public static string _selectedConfig;
+
     public static string _selectedPlatform;
+
+
 
     public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
 
+
+
     public static string _selectedAssembly;
+
+
     public static JArray _analyzeAssem;
 
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
     {
-        get { return _assemblyCollection; }
+        get
+        {
+            return _assemblyCollection;
+        }
+
         set
         {
             _assemblyCollection = value;
-            RaisePropertyChanged("AssemblyCollection");
+            RaisePropertyChanged(nameof(AssemblyCollection));
         }
     }
 
     public string SelectedPath
     {
-        get { return _selectedPath; }
+        get => _selectedPath;
+
         set
         {
             _selectedPath = value;
-            RaisePropertyChanged("SelectedPath");
+            RaisePropertyChanged(nameof(SelectedPath));
         }
     }
+
     public JArray AnalyzeAssem
     {
         get { return _analyzeAssem; }
+
         set
         {
             _analyzeAssem = value;
-            RaisePropertyChanged("AnalyzeAssem");
+            RaisePropertyChanged(nameof(AnalyzeAssem));
         }
     }
 
     public List<string> Config
-
     {
-        get { return _config; }
+        get
+        {
+            return _config;
+        }
+
         set
         {
             _config = value;
-            RaisePropertyChanged("Config");
+            RaisePropertyChanged(nameof(Config));
         }
     }
 
     public List<string> Platform
+
     {
+
         get { return _platform; }
+
         set
+
         {
+
             _platform = value;
-            RaisePropertyChanged("Platform");
+
+            RaisePropertyChanged(nameof(Platform));
+
         }
+
     }
+
     public List<string> Assemblies
     {
-        get { return _assemblies; }
+        get
+        {
+            return _assemblies;
+        }
+
         set
         {
             _assemblies = value;
-            RaisePropertyChanged("Assemblies");
+            RaisePropertyChanged(nameof(Assemblies));
         }
     }
+
     public List<string> AssembliesPath
     {
-        get { return _assembliesPath; }
+        get => _assembliesPath;
+
         set
         {
             _assembliesPath = value;
-            RaisePropertyChanged("AssembliesPath");
+            RaisePropertyChanged(nameof(AssembliesPath));
         }
     }
 
     public string SelectedConfig
     {
-        get { return _selectedConfig; }
+        get => _selectedConfig;
+
         set
         {
             _selectedConfig = value;
-            RaisePropertyChanged("SelectedConfig");
+            RaisePropertyChanged(nameof(SelectedConfig));
         }
     }
 
     public string SelectedPlatform
     {
-        get { return _selectedPlatform; }
+        get
+        {
+            return _selectedPlatform;
+        }
+
         set
         {
             _selectedPlatform = value;
@@ -125,21 +174,27 @@ class MainViewModel : ViewModelBase
 
     public string SelectedAssembly
     {
-        get { return _selectedAssembly; }
+        get
+        {
+            return _selectedAssembly;
+        }
+
         set
         {
             _selectedAssembly = value;
-            RaisePropertyChanged("SelectedAssembly");
+            RaisePropertyChanged(nameof(SelectedAssembly));
         }
     }
+
+
+
     public MainViewModel()
     {
         RegisterCommands();
         _assemblies = new List<string>();
         _config = new List<string>();
         _platform = new List<string>();
-        _assemblyCollection = new ObservableCollection<ApiViewModel>();
-
+        AssemblyCollection = new ObservableCollection<ApiViewModel>();
     }
 
     private void RegisterCommands()
@@ -147,16 +202,12 @@ class MainViewModel : ViewModelBase
         Browse = new RelayCommand(ExecuteOpenFileDialog);
         Export = new RelayCommand(ExecuteSaveFileDialog);
         Analyze = new RelayCommand(AnalyzeAPI);
-
     }
-
 
     private void AnalyzeAPI()
     {
-
-
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        //AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }
@@ -168,33 +219,35 @@ class MainViewModel : ViewModelBase
         {
             if (assem.Equals(assembly))
             {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly+ " API Name ", true));
+                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
             }
-
         }
-
     }
+
     private void ExecuteOpenFileDialog()
     {
         var dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.Filter = "Project File (*.csproj)|*.csproj|All files (*.*)|*.*";
         dialog.InitialDirectory = @"C:\";
-        Nullable<bool> result = dialog.ShowDialog();
+        bool? result = dialog.ShowDialog();
         if (result == true)
         {
             SelectedPath = dialog.FileName;
         }
-        else { SelectedPath = null; }
+        else
+        {
+            SelectedPath = null;
+        }
+
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
-
-            //ExportResult.InputPath = SelectedPath;
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
                 MessageBox.Show("error");
             }
+
             Info output = msBuild.GetAssemblies(SelectedPath);
             if (output != null)
             {
@@ -203,11 +256,8 @@ class MainViewModel : ViewModelBase
                 AssembliesPath = output.Assembly;
                 ExeFile = output.Location;
             }
-
         }
-
     }
-
 
     private void ExecuteSaveFileDialog()
     {
@@ -215,14 +265,11 @@ class MainViewModel : ViewModelBase
         savedialog.FileName = "PortablityAnalysisReport";
         savedialog.DefaultExt = ".text";
         savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json| Excel (*.excel)|*.excel";
-        Nullable<bool> result = savedialog.ShowDialog();
+        bool? result = savedialog.ShowDialog();
         if (result == true)
         {
-
             string fileExtension = Path.GetExtension(savedialog.FileName);
             ExportResult.ExportApiResult(savedialog.FileName, fileExtension, false);
         }
-
     }
-
 }

@@ -1,25 +1,40 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
 
-
-
 namespace PortAPIUI
 {
-    class ExportResult
+    internal class ExportResult
     {
-        public static string InputPath;
-        //returns location of the portabitlity analyzer result
+        private static string inputPath;
+
+        public static string GetInputPath()
+        {
+            return inputPath;
+        }
+
+        public static void SetInputPath(string value)
+        {
+            inputPath = value;
+        }
+
+        // returns location of the portabitlity analyzer result
         public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
         {
             MessageBox.Show("Hi from Katie");
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
-            //string InputPathParent = System.IO.Directory.GetParent(InputPath).FullName;
+            //string inputPathParent1 = System.IO.Directory.GetParent(inputPath).FullName;
 
+
+           // string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
+            //string inputPathParent = System.IO.Directory.GetParent(GetInputPath()).FullName;
             Process p = new Process();
             p.StartInfo.FileName = "dotnet.exe";
             if (generateOwnExportPath)
@@ -27,7 +42,7 @@ namespace PortAPIUI
                 exportPath = GenerateReportPath(fileExtension);
             }
 
-            string specifyExportOption = "";
+            string specifyExportOption = string.Empty;
             switch (fileExtension)
             {
                 case ".html":
@@ -42,8 +57,9 @@ namespace PortAPIUI
                 default:
                     throw new ArgumentOutOfRangeException(fileExtension);
             }
-            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{InputPath}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
-            var Hello = p.StartInfo.Arguments;
+
+            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{inputPath}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
+            var hello = p.StartInfo.Arguments;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -55,23 +71,24 @@ namespace PortAPIUI
             {
                 if (o.Data != null)
                 {
-                    //Application.Current.Dispatcher.Invoke(() =>
-                    //{
+                    // Application.Current.Dispatcher.Invoke(() =>
+                    // {
                     //    msg.Add(o.Data);
-                    //});
+                    // });
                 }
-                //AnalzeBtn.IsEnabled = true;
+
+                // AnalzeBtn.IsEnabled = true;
             };
 
-            //p.Exited += delegate
-            //{
+            // p.Exited += delegate
+            // {
             //    Application.Current.Dispatcher.Invoke(() =>
             //    {
             //        string text;
             //        if (msg.Count != 17) // Was not successful
             //        {
 
-            //            if (msg.Count < 10) // Exception was thrown in the API console tool
+            // if (msg.Count < 10) // Exception was thrown in the API console tool
             //            {
             //                text = $"Unable to analyze. The access to the specified path might be denied.";
             //            }
@@ -92,14 +109,15 @@ namespace PortAPIUI
             //        }
             //    });
 
-            //};
-
+            // };
             p.Start();
-            //p.BeginOutputReadLine();
+
+            // p.BeginOutputReadLine();
             p.WaitForExit();
 
             return exportPath;
         }
+
         private static string GenerateReportPath(string fileExtension)
         {
             var outputDirectory = System.IO.Path.GetTempPath();
