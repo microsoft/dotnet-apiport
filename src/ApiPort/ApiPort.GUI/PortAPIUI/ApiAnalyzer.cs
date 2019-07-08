@@ -16,9 +16,8 @@ namespace PortAPIUI
 
          
             ExportResult.SetInputPath(exelocation);
-            MessageBox.Show("Hi from Katie");
             string reportLocation = ExportResult.ExportApiResult(string.Empty, ".json", true);
-            
+
             string textFromFile = System.IO.File.ReadAllText(reportLocation);
             dynamic dynobj = JsonConvert.DeserializeObject(textFromFile);
 

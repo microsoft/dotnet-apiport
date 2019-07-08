@@ -27,7 +27,6 @@ namespace PortAPIUI
         // returns location of the portabitlity analyzer result
         public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
         {
-            MessageBox.Show("Hi from Katie");
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
             //string inputPathParent1 = System.IO.Directory.GetParent(inputPath).FullName;
