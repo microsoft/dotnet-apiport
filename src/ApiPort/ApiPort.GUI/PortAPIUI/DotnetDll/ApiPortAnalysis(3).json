@@ -1,0 +1,53 @@
+{
+  "SubmissionId": "af422e75-6ea8-4500-94d4-9cd8abc5028f",
+  "ApplicationName": "",
+  "CatalogLastUpdated": "2019-03-05T15:08:38.9291813+00:00",
+  "MissingDependencies": [
+    {
+      "DefinedInAssemblyIdentity": "System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "T:System.Web.UI.Page",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web.Services, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "T:System.Web.Services.Protocols.WebClientProtocol",
+      "TypeDocId": null,
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web.Services, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "M:System.Web.Services.Protocols.WebClientProtocol.get_Url",
+      "TypeDocId": "T:System.Web.Services.Protocols.WebClientProtocol",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        null
+      ]
+    },
+    {
+      "DefinedInAssemblyIdentity": "System.Web.Services, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "MemberDocId": "M:System.Web.Services.Protocols.WebClientProtocol.set_Url(System.String)",
+      "TypeDocId": "T:System.Web.Services.Protocols.WebClientProtocol",
+      "RecommendedChanges": "",
+      "SourceCompatibleChange": "",
+      "TargetStatus": [
+        null
+      ]
+    }
+  ],
+  "UnresolvedUserAssemblies": [],
+  "Targets": [
+    ".NET Core,Version=v3.0"
+  ],
+  "BreakingChanges": [],
+  "BreakingChangeSkippedAssemblies": []
+}
