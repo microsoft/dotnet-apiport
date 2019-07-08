@@ -1,58 +1,70 @@
-﻿using GalaSoft.MvvmLight;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using GalaSoft.MvvmLight;
 using System;
 
 namespace PortAPIUI.ViewModel
 {
     internal class ApiViewModel : ViewModelBase
     {
-        public string _assemblyName;
-        public string _apiName;
-        public Boolean _compatibility;
+        private string assemblyName1;
+        private string apiName;
+        private bool compatibility1;
 
-        public ApiViewModel(string name, string apiName, Boolean compatibility)
+        public ApiViewModel(string name, string apiName, bool compatibility)
         {
-            _assemblyName = name;
-            _apiName = apiName;
-            _compatibility = compatibility;
+            AssemblyName1 = name;
+            ApiName = apiName;
+            Compatibility1 = compatibility;
         }
 
         public string AssemblyName
         {
             get
             {
-                return _assemblyName;
+                return AssemblyName1;
             }
+
             set
             {
-                _assemblyName = value;
-                RaisePropertyChanged("AssemblyName");
+                AssemblyName1 = value;
+                RaisePropertyChanged(nameof(AssemblyName));
             }
         }
+
         public string APIName
         {
             get
             {
-                return _apiName;
+                return ApiName;
             }
+
             set
             {
-                _apiName = value;
-                RaisePropertyChanged("APIName");
+                ApiName = value;
+                RaisePropertyChanged(nameof(APIName));
             }
         }
-        public Boolean Compatibility
+
+        public bool Compatibility
         {
             get
             {
-                return _compatibility;
+                return Compatibility1;
             }
+
             set
             {
-                _compatibility = value;
-                RaisePropertyChanged("Compatibility");
+                Compatibility1 = value;
+                RaisePropertyChanged(nameof(Compatibility));
             }
         }
 
+        public string AssemblyName1 { get => assemblyName1; set => assemblyName1 = value; }
 
+        public string ApiName { get => apiName; set => apiName = value; }
+
+        public bool Compatibility1 { get => compatibility1; set => compatibility1 = value; }
     }
 }
