@@ -12,6 +12,12 @@ namespace PortAPIUI
     {
         public static JArray AnalyzeAssemblies(List<string> assemblies)
         {
+
+            if (assemblies.Count == 0)
+            {
+                return new JArray();
+            }
+            ExportResult.InputPath = assemblies[assemblies.Count - 1];
             MessageBox.Show("Hi from Katie");
             string reportLocation = ExportResult.ExportApiResult(string.Empty, ".json", true);
             string textFromFile = System.IO.File.ReadAllText(reportLocation);
