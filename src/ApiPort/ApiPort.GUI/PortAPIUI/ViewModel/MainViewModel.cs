@@ -183,7 +183,7 @@ internal class MainViewModel : ViewModelBase
 
         set
         {
-            SelectedPlatform1 = value;
+            _selectedPlatform = value;
             RaisePropertyChanged("SelectedPlatfrom");
         }
     }
@@ -229,8 +229,7 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-
-        //AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(ExeFile);
 
 
     }

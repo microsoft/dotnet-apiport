@@ -3,6 +3,7 @@
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -10,16 +11,13 @@ namespace PortAPIUI
 {
     internal class ApiAnalyzer
     {
-        public static JArray AnalyzeAssemblies(List<string> assemblies)
+        public static JArray AnalyzeAssemblies(string exelocation)
         {
 
-            if (assemblies.Count == 0)
-            {
-                return new JArray();
-            }
-            ExportResult.SetInputPath( assemblies[assemblies.Count - 1]);
-            MessageBox.Show("Hi from Katie");
+         
+            ExportResult.SetInputPath(exelocation);
             string reportLocation = ExportResult.ExportApiResult(string.Empty, ".json", true);
+
             string textFromFile = System.IO.File.ReadAllText(reportLocation);
             dynamic dynobj = JsonConvert.DeserializeObject(textFromFile);
 

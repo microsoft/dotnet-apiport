@@ -27,7 +27,6 @@ namespace PortAPIUI
         // returns location of the portabitlity analyzer result
         public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
         {
-            MessageBox.Show("Hi from Katie");
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
             //string inputPathParent1 = System.IO.Directory.GetParent(inputPath).FullName;
@@ -69,48 +68,15 @@ namespace PortAPIUI
             {
                 if (o.Data != null)
                 {
-                    // Application.Current.Dispatcher.Invoke(() =>
-                    // {
-                    //    msg.Add(o.Data);
-                    // });
+
                 }
 
-                // AnalzeBtn.IsEnabled = true;
+
             };
 
-            // p.Exited += delegate
-            // {
-            //    Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        string text;
-            //        if (msg.Count != 17) // Was not successful
-            //        {
-
-            // if (msg.Count < 10) // Exception was thrown in the API console tool
-            //            {
-            //                text = $"Unable to analyze. The access to the specified path might be denied.";
-            //            }
-            //            else
-            //            {
-            //                text = msg.FindLast(o => !String.IsNullOrEmpty(o));
-            //                text = text.Trim(new char[] { '*', ' ' });
-            //                if (!text.Equals("No files were found to analyze.", StringComparison.InvariantCultureIgnoreCase))
-            //                {
-            //                    msg.RemoveRange(0, 10);
-            //                    var details = String.Join(Environment.NewLine, msg.ToArray());
-            //                    text = $"Unable to analyze.{Environment.NewLine}Details:{Environment.NewLine}{details}";
-            //                }
-            //            }
-            //        }
-            //        else // Was successful
-            //        {
-            //        }
-            //    });
-
-            // };
             p.Start();
 
-            // p.BeginOutputReadLine();
+
             p.WaitForExit();
 
             return exportPath;
