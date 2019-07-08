@@ -60,11 +60,8 @@ namespace MSBuildAnalyzer
 
             // Console.WriteLine("Build: {0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()));
             // Console.WriteLine(" ??");
-            if (!File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString()))
-            {
-                Info info = new Info("False", null, null, null, null, null);
-            }
-            else
+            System.IO.File.WriteAllText(jsonPath, string.Empty);
+            if (File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString()))
             {
                 Configurations = project.ConditionedProperties[box1];
                 Platforms = project.ConditionedProperties[box2];
@@ -104,13 +101,25 @@ namespace MSBuildAnalyzer
                     {
                         assemblyCode.Add(Assembly.Load(assemblyName).ToString());
                     }
-
                     Info info = new Info(string.Format("{0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString())), Configurations, Platforms, targetPathString, assemblyCode, assembly.Location);
                     serializer.Serialize(writer, info);
                     sw.Close();
                     writer.Close();
-
                     // }
+                }
+            }
+            else
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                using (StreamWriter sw = new StreamWriter(jsonPath, false))
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    Info info = new Info("False", null, null, null, null, null);
+                    serializer.Serialize(writer, info);
+                    sw.Close();
+                    writer.Close();
                 }
             }
         }
