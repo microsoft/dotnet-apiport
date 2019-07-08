@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +32,7 @@ class MainViewModel : ViewModelBase
     public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
 
     public static string _selectedAssembly;
+    public static JArray _analyzeAssem;
 
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
@@ -50,6 +52,15 @@ class MainViewModel : ViewModelBase
         {
             _selectedPath = value;
             RaisePropertyChanged("SelectedPath");
+        }
+    }
+    public JArray AnalyzeAssem
+    {
+        get { return _analyzeAssem; }
+        set
+        {
+            _analyzeAssem = value;
+            RaisePropertyChanged("AnalyzeAssem");
         }
     }
 
@@ -145,7 +156,7 @@ class MainViewModel : ViewModelBase
 
 
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        ApiAnalyzer.AnalyzeAssemblies(Assemblies);
+        AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(Assemblies);
 
 
     }

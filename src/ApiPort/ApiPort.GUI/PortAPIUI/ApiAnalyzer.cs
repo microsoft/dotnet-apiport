@@ -25,8 +25,7 @@ namespace PortAPIUI
             }
             ExportResult.InputPath = assemblies[assemblies.Count - 1];
             MessageBox.Show("Hi from Katie");
-            // string reportLocation = ExportResult.ExportApiResult("", ".json", true);
-            string reportLocation = "C:\\Users\\t-cihawk\\Downloads\\ApiPortAnalysis(1)";
+            string reportLocation = ExportResult.ExportApiResult("", ".json", true);
             string textFromFile = System.IO.File.ReadAllText(reportLocation);
             dynamic dynobj = JsonConvert.DeserializeObject(textFromFile);
 
