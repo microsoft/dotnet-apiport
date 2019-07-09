@@ -27,14 +27,19 @@ namespace PortAPIUI
         // returns location of the portabitlity analyzer result
         public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
         {
-            MessageBox.Show("Hi from Katie");
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
+<<<<<<< HEAD
             //string InputPathParent = System.IO.Directory.GetParent(InputPath).FullName;
 
 
-            string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
+         //   string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
             string inputPathParent = System.IO.Directory.GetParent(GetInputPath()).FullName;
+=======
+            //string inputPathParent1 = System.IO.Directory.GetParent(inputPath).FullName;
+           // string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
+            //string inputPathParent = System.IO.Directory.GetParent(GetInputPath()).FullName;
+>>>>>>> 30e515ac18110789e7d10e573bb4d5b1a42ded33
             Process p = new Process();
             p.StartInfo.FileName = "dotnet.exe";
             if (generateOwnExportPath)
@@ -58,7 +63,7 @@ namespace PortAPIUI
                     throw new ArgumentOutOfRangeException(fileExtension);
             }
 
-            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{inputPathParent}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
+            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{inputPath}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
             var hello = p.StartInfo.Arguments;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.UseShellExecute = false;
@@ -71,48 +76,15 @@ namespace PortAPIUI
             {
                 if (o.Data != null)
                 {
-                    // Application.Current.Dispatcher.Invoke(() =>
-                    // {
-                    //    msg.Add(o.Data);
-                    // });
+
                 }
 
-                // AnalzeBtn.IsEnabled = true;
+
             };
 
-            // p.Exited += delegate
-            // {
-            //    Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        string text;
-            //        if (msg.Count != 17) // Was not successful
-            //        {
-
-            // if (msg.Count < 10) // Exception was thrown in the API console tool
-            //            {
-            //                text = $"Unable to analyze. The access to the specified path might be denied.";
-            //            }
-            //            else
-            //            {
-            //                text = msg.FindLast(o => !String.IsNullOrEmpty(o));
-            //                text = text.Trim(new char[] { '*', ' ' });
-            //                if (!text.Equals("No files were found to analyze.", StringComparison.InvariantCultureIgnoreCase))
-            //                {
-            //                    msg.RemoveRange(0, 10);
-            //                    var details = String.Join(Environment.NewLine, msg.ToArray());
-            //                    text = $"Unable to analyze.{Environment.NewLine}Details:{Environment.NewLine}{details}";
-            //                }
-            //            }
-            //        }
-            //        else // Was successful
-            //        {
-            //        }
-            //    });
-
-            // };
             p.Start();
 
-            // p.BeginOutputReadLine();
+
             p.WaitForExit();
 
             return exportPath;
