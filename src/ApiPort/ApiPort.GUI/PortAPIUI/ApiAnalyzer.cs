@@ -1,4 +1,5 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
+
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Newtonsoft.Json;
@@ -13,35 +14,35 @@ namespace PortAPIUI
     {
         public static JArray AnalyzeAssemblies(string exelocation)
         {
-
-<<<<<<< HEAD
-            if (assemblies.Count == 0)
-            {
-                return new JArray();
-            }
-      //      ExportResult.InputPath = assemblies[assemblies.Count - 1];
-            MessageBox.Show("Hi from Katie");
-=======
-         
             ExportResult.SetInputPath(exelocation);
->>>>>>> 30e515ac18110789e7d10e573bb4d5b1a42ded33
-            string reportLocation = ExportResult.ExportApiResult(string.Empty, ".json", true);
 
+            string reportLocation = ExportResult.ExportApiResult(string.Empty, ".json", true);
             string textFromFile = System.IO.File.ReadAllText(reportLocation);
             dynamic dynobj = JsonConvert.DeserializeObject(textFromFile);
-
             // will contain a list of dictionaries with the following following;
+
             // {
+
             // "DefinedInAssemblyIdentity": "PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
+
             //  "MemberDocId": "M:System.Windows.Shapes.Shape.set_Stroke(System.Windows.Media.Brush)",
+
             //  "TypeDocId": "T:System.Windows.Shapes.Shape",
+
             //  "RecommendedChanges": "",
+
             //  "SourceCompatibleChange": "",
+
             //  "TargetStatus": [
+
             //    "3.0",
+
             //    null
+
             //  ]
+
             // }
+
             JArray apiList = dynobj.MissingDependencies;
             return apiList;
         }
