@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29018.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C991F5FC-04B5-420C-98A0-80974AA946F7}"
 	ProjectSection(SolutionItems) = preProject
@@ -85,6 +85,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Reports.DGML", "src\lib\Microsoft.Fx.Portability.Reports.DGML\Microsoft.Fx.Portability.Reports.DGML.csproj", "{1B6E53A7-9180-4D79-9556-E5CE59483EA1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.2019", "src\ApiPort\ApiPort.VisualStudio.2019\ApiPort.VisualStudio.2019.csproj", "{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildcsprojtoMem", "src\ApiPort\ApiPort.GUI\BuildcsprojtoMem\BuildcsprojtoMem.csproj", "{D325BEFC-0712-4D0F-9D8F-B68371382DEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortAPIUI", "src\ApiPort\ApiPort.GUI\PortAPIUI\PortAPIUI.csproj", "{C50E2897-D032-49AF-B283-452E62B287C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -184,6 +188,14 @@ Global
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C50E2897-D032-49AF-B283-452E62B287C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50E2897-D032-49AF-B283-452E62B287C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50E2897-D032-49AF-B283-452E62B287C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50E2897-D032-49AF-B283-452E62B287C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +228,8 @@ Global
 		{CB5759DE-9D7B-4B21-89BC-E81920D611BB} = {7DC7AA2C-0401-495B-B42C-32F44085EBE6}
 		{1B6E53A7-9180-4D79-9556-E5CE59483EA1} = {D66AC566-3B80-46F0-8687-3C5F4D203F1A}
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{D325BEFC-0712-4D0F-9D8F-B68371382DEF} = {D66AC566-3B80-46F0-8687-3C5F4D203F1A}
+		{C50E2897-D032-49AF-B283-452E62B287C2} = {0D1724F6-078E-4576-9680-6B9334D562DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E8B2DB2-4847-4909-8631-A995D50F10EF}
