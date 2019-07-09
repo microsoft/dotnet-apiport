@@ -58,7 +58,7 @@
                         AutomationProperties.Name="{x:Static const:LocalizedStrings.SelectDefaultOutputDirectory}"
                         KeyboardNavigation.TabIndex="0"
                         Grid.Column="4" Grid.Row="0" />
-                <TextBlock Text="{x:Static const:LocalizedStrings.DefaultFileName}"
+                <TextBlock Text="{x:Static const:LocalizedStrings.DefaultReportFilename}"
                            Grid.Column="0" Grid.Row="2" />
                 <TextBox Text="{Binding DefaultOutputName, Mode=TwoWay}"
                          AutomationProperties.Name="{x:Static const:LocalizedStrings.DefaultReportFilename}"
