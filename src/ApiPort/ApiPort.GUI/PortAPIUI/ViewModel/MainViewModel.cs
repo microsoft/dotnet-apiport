@@ -27,6 +27,7 @@ using System.IO;
 using System.Windows;
 
 using Newtonsoft.Json.Linq;
+using Microsoft.Fx.Portability;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -35,6 +36,7 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Export { get; set; }
 
     public RelayCommand Analyze { get; set; }
+    public IApiPortService Service { get; set; }
 
     private string _selectedPath;
 
@@ -184,6 +186,7 @@ internal class MainViewModel : ViewModelBase
         _config = new List<string>();
         _platform = new List<string>();
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
+
     }
 
     private void RegisterCommands()
