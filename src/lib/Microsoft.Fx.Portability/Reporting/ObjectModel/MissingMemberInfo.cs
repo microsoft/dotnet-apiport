@@ -14,7 +14,7 @@ namespace Microsoft.Fx.Portability.Reporting.ObjectModel
 
         public IEnumerable<AssemblyInfo> UsedIn
         {
-            get { return _usedInAssemblies; }
+            get { return _usedInAssemblies.ToList().AsReadOnly(); }
         }
 
         public int Uses
