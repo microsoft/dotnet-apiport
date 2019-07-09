@@ -22,21 +22,30 @@ namespace ApiPort
         internal const string ConfigurationFile = "config.json";
         internal const string DefaultOutputFormatInstanceName = "DefaultOutputFormat";
 
+#if FEATURE_WPF
+        public static IContainer Build(ProductInformation productInformation)
+#else
         public static IContainer Build(ICommandLineOptions options, ProductInformation productInformation)
+#endif
         {
             var builder = new ContainerBuilder();
 
             builder.RegisterType<TargetMapper>()
                 .As<ITargetMapper>()
+#if !FEATURE_WPF
                 .OnActivated(c => c.Instance.LoadFromConfig(options.TargetMapFile))
+#endif
                 .SingleInstance();
 
+
             builder.RegisterInstance<ProductInformation>(productInformation);
+#if !FEATURE_WPF
             builder.RegisterInstance<ICommandLineOptions>(options);
 
             builder.RegisterType<ConsoleCredentialProvider>()
                 .As<ICredentialProvider>()
                 .SingleInstance();
+
             builder.Register(context =>
             {
                 var directory = Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location);
@@ -48,7 +57,8 @@ namespace ApiPort
             })
             .As<IProxyProvider>()
             .SingleInstance();
-
+#endif
+#if !FEATURE_WPF
             if (options.Command == AppCommand.DumpAnalysis)
             {
                 builder.RegisterType<FileOutputApiPortService>()
@@ -65,6 +75,14 @@ namespace ApiPort
                     .As<IApiPortService>()
                     .SingleInstance();
             }
+#else
+            builder.Register(context =>
+                    new ApiPortService(
+                        "https://portability.dot.net",
+                         context.Resolve<ProductInformation>()))
+                .As<IApiPortService>()
+                    .SingleInstance();
+#endif
 
             builder.RegisterType<FileIgnoreAssemblyInfoList>()
                 .As<IEnumerable<IgnoreAssemblyInfo>>()
@@ -104,11 +122,15 @@ namespace ApiPort
                 .As<IAnalysisEngine>()
                 .SingleInstance();
 
-            builder.RegisterType<ConsoleApiPort>()
-                .SingleInstance();
-
             builder.RegisterType<SystemObjectFinder>()
                 .SingleInstance();
+#if FEATURE_WPF
+            builder.RegisterType<WPFApiPortClient>()
+                .SingleInstance();
+#else
+            builder.RegisterType<ConsoleApiPort>()
+                .SingleInstance();
+            
 
             builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
             {
@@ -137,6 +159,7 @@ namespace ApiPort
                     .As<IProgressReporter>()
                     .SingleInstance();
             }
+#endif
 
             RegisterOfflineModule(builder);
 
