@@ -35,7 +35,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     Assert.Equal("mscorlib", assemblyInfo.Name);
                     Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
                     Assert.Equal("neutral", assemblyInfo.Culture);
-                    Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
+                    Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken.ToString());
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     Assert.Equal("netstandard", assemblyInfo.Name);
                     Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
                     Assert.Equal("neutral", assemblyInfo.Culture);
-                    Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+                    Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken.ToString());
                 }
             }
         }

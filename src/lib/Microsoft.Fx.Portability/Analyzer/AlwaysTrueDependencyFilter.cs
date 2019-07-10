@@ -5,6 +5,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     public class AlwaysTrueDependencyFilter : IDependencyFilter
     {
-        public bool IsFrameworkAssembly(string name, string publicKeyToken) => true;
+        public bool IsFrameworkAssembly(string name, PublicKeyToken publicKeyToken) => true;
     }
 }

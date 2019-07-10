@@ -2,8 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.ObjectModel;
-using System;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
@@ -15,7 +13,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void NullIsTrue()
         {
-            Assert.True(_assemblyFilter.IsFrameworkAssembly(null, null));
+            Assert.True(_assemblyFilter.IsFrameworkAssembly(null, default));
         }
 
         // Microsoft public key token
@@ -30,11 +28,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("0738eb9F132ed756", true)]
 
         // Non-Microsoft public key token
+        [InlineData("1111111111111111", false)]
+
+        // Invalid key
         [InlineData("something", false)]
         [Theory]
         public void DotNetFrameworkFilterCheckPublicKeyToken(string publicKeyToken, bool succeed)
         {
-            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(string.Empty, publicKeyToken));
+            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(string.Empty, PublicKeyToken.Parse(publicKeyToken)));
         }
 
         [InlineData("System.something", true)]
@@ -53,7 +54,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void AssemblyNameStartsWithSpecifiedString(string name, bool succeed)
         {
-            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(name, string.Empty));
+            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(name, default));
         }
     }
 }

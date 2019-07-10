@@ -229,7 +229,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         public void ThrowsSystemObjectNotFoundException()
         {
             var dependencyFilter = Substitute.For<IDependencyFilter>();
-            dependencyFilter.IsFrameworkAssembly(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
+            dependencyFilter.IsFrameworkAssembly(Arg.Any<string>(), Arg.Any<PublicKeyToken>()).Returns(false);
             var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter, new SystemObjectFinder(dependencyFilter));
             var assemblyToTest = TestAssembly.Create("FilterApis.cs", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
@@ -247,7 +247,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         public void AssemblyWithNoReferencesIsSkipped()
         {
             var dependencyFilter = Substitute.For<IDependencyFilter>();
-            dependencyFilter.IsFrameworkAssembly(Arg.Any<string>(), Arg.Any<string>()).Returns(false);
+            dependencyFilter.IsFrameworkAssembly(Arg.Any<string>(), Arg.Any<PublicKeyToken>()).Returns(false);
             var dependencyFinder = new ReflectionMetadataDependencyFinder(dependencyFilter, new SystemObjectFinder(dependencyFilter));
             var file = TestAssembly.Create("ResourceAssembliesGetSkipped_NoReferences.il", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
@@ -319,7 +319,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     StringComparer.Ordinal);
             }
 
-            public bool IsFrameworkAssembly(string name, string publicKeyToken)
+            public bool IsFrameworkAssembly(string name, PublicKeyToken publicKeyToken)
             {
                 if (string.IsNullOrEmpty(name))
                 {
