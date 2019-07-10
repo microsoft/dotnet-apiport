@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,25 +36,19 @@ namespace Microsoft.Fx.Portability.Analyzer
             "Windows."
         };
 
-        public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)
+        public bool IsFrameworkAssembly(string name, string publicKeyToken)
         {
-            if (assembly == null)
-            {
-                // If we don't have the assembly, default to including the API
-                return true;
-            }
-
-            if (MicrosoftKeys.Contains(assembly.PublicKeyToken))
+            if (MicrosoftKeys.Contains(publicKeyToken))
             {
                 return true;
             }
 
-            if (FrameworkAssemblyNamePrefixes.Any(p => assembly.Name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            if (FrameworkAssemblyNamePrefixes.Any(p => name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
                 return true;
             }
 
-            if (string.Equals(assembly.Name, "mscorlib", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(name, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

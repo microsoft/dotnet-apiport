@@ -7,6 +7,6 @@ namespace Microsoft.Fx.Portability.Analyzer
 {
     public interface IDependencyFilter
     {
-        bool IsFrameworkAssembly(AssemblyReferenceInformation assembly);
+        bool IsFrameworkAssembly(string name, string publicKeyToken);
     }
 }

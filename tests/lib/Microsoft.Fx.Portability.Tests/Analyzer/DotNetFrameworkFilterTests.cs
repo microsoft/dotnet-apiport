@@ -15,7 +15,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void NullIsTrue()
         {
-            Assert.True(_assemblyFilter.IsFrameworkAssembly(null));
+            Assert.True(_assemblyFilter.IsFrameworkAssembly(null, null));
         }
 
         // Microsoft public key token
@@ -34,9 +34,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void DotNetFrameworkFilterCheckPublicKeyToken(string publicKeyToken, bool succeed)
         {
-            var assembly = new AssemblyReferenceInformation(string.Empty, Version.Parse("4.0"), string.Empty, publicKeyToken);
-
-            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(assembly));
+            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(string.Empty, publicKeyToken));
         }
 
         [InlineData("System.something", true)]
@@ -55,9 +53,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void AssemblyNameStartsWithSpecifiedString(string name, bool succeed)
         {
-            var assembly = new AssemblyReferenceInformation(name, Version.Parse("4.0"), string.Empty, string.Empty);
-
-            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(assembly));
+            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(name, string.Empty));
         }
     }
 }
