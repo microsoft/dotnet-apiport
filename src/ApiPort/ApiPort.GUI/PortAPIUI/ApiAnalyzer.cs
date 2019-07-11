@@ -23,13 +23,14 @@ namespace PortAPIUI
         private readonly IReportGenerator _reportGenerator;
         private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
         private readonly IFileWriter _writer;
+  
 
         public ApiAnalyzer()
         {
             _apiPortService = App.Resolve<IApiPortService>();
             _progressReport = App.Resolve<IProgressReporter>();
              _dependencyFinder = App.Resolve<IDependencyFinder>();
-
+           
         }
 
 
@@ -43,7 +44,7 @@ namespace PortAPIUI
 
            AnalyzeRequest request = GenerateRequest(dependencyInfo);
 
-           service.SendAnalysisAsync(request);
+           var result =   service.SendAnalysisAsync(request).Result;
         }
 
         private AnalyzeRequest GenerateRequest(IDependencyInfo dependencyInfo)
@@ -66,17 +67,9 @@ namespace PortAPIUI
             return new AnalyzeRequest
             {
                 // Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
+                Targets = new List<string> { ".NET Core, Version = 3.0" },
                 Dependencies = dependencyInfo.Dependencies,
 
-                // We pass along assemblies to ignore instead of filtering them from Dependencies at this point
-                // because breaking change analysis and portability analysis will likely want to filter dependencies
-                // in different ways for ignored assemblies.
-                // For breaking changes, we should show breaking changes for
-                // an assembly if it is un-ignored on any of the user-specified targets and we should hide breaking changes
-                // for an assembly if it ignored on all user-specified targets.
-                // For portability analysis, on the other hand, we will want to show portability for precisely those targets
-                // that a user specifies that are not on the ignore list. In this case, some of the assembly's dependency
-                // information will be needed.
                 AssembliesToIgnore = _assembliesToIgnore,
                 UnresolvedAssemblies = dependencyInfo.UnresolvedAssemblies.Keys.ToList(),
                 UnresolvedAssembliesDictionary = dependencyInfo.UnresolvedAssemblies,

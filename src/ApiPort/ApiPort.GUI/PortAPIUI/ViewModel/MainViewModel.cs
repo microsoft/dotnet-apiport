@@ -25,6 +25,7 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Export { get; set; }
 
     public RelayCommand Analyze { get; set; }
+
     public IApiPortService Service { get; set; }
 
 
@@ -255,7 +256,8 @@ internal class MainViewModel : ViewModelBase
     public void AssemblyCollectionUpdate(string assem)
     {
         
-                foreach (var assembly in AssembliesPath)
+
+        foreach (var assembly in AssembliesPath)
                 {
                     if (assem.Equals(assembly))
                     {
