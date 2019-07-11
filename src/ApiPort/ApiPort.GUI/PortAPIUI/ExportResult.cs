@@ -35,7 +35,6 @@ namespace PortAPIUI
         public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
 
         {
-
             string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
@@ -105,8 +104,12 @@ namespace PortAPIUI
                 if (o.Data != null)
 
                 {
+
                 }
+
+
             };
+
             p.Start();
             p.WaitForExit();
             return exportPath;

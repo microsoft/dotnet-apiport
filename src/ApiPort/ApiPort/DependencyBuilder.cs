@@ -37,6 +37,7 @@ namespace ApiPort
 #endif
                 .SingleInstance();
 
+
             builder.RegisterInstance<ProductInformation>(productInformation);
 #if !FEATURE_WPF
             builder.RegisterInstance<ICommandLineOptions>(options);

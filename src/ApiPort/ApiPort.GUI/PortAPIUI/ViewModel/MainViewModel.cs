@@ -9,11 +9,14 @@ using Newtonsoft.Json.Linq;
 using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using Newtonsoft.Json.Linq;
+using Microsoft.Fx.Portability;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -22,10 +25,13 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Export { get; set; }
 
     public RelayCommand Analyze { get; set; }
+    public IApiPortService Service { get; set; }
 
     public IApiPortService Service { get; set; }
 
     private string _selectedPath;
+
+
 
     private List<string> _assemblies;
 
@@ -37,9 +43,11 @@ internal class MainViewModel : ViewModelBase
 
     public static string ExeFile;
 
+
     public static string _selectedConfig;
 
     public static string _selectedPlatform;
+
 
     public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
 
@@ -47,16 +55,24 @@ internal class MainViewModel : ViewModelBase
 
     public static JArray _analyzeAssem;
 
+
+
     public ObservableCollection<ApiViewModel> AssemblyCollection
     {
         get
         {
+
             return _assemblyCollection;
+
         }
 
         set
         {
+
+
             _assemblyCollection = value;
+
+
             RaisePropertyChanged(nameof(AssemblyCollection));
         }
     }
@@ -71,6 +87,7 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+
     public JArray AnalyzeAssem
     {
         get { return _analyzeAssem; }
@@ -82,29 +99,48 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+
     public List<string> Config
     {
         get
         {
+
+
             return _config;
+
         }
 
         set
-       {
+        {
+
             _config = value;
+
+
             RaisePropertyChanged(nameof(Config));
         }
     }
 
     public List<string> Platform
+
     {
+
+
         get { return _platform; }
 
+
+
         set
+
         {
+
+
+
             _platform = value;
+
             RaisePropertyChanged(nameof(Platform));
+
         }
+
     }
 
     public List<string> Assemblies
@@ -134,11 +170,14 @@ internal class MainViewModel : ViewModelBase
 
     public string SelectedConfig
     {
-       get => _selectedConfig;
+
+        get => _selectedConfig;
+
 
        set
         {
             _selectedConfig = value;
+
             RaisePropertyChanged(nameof(SelectedConfig));
         }
     }
@@ -147,7 +186,10 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
+
+
             return _selectedPlatform;
+
         }
 
         set
@@ -161,23 +203,37 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
+
+
             return _selectedAssembly;
+
+
         }
 
         set
         {
+
+
             _selectedAssembly = value;
+
+
             RaisePropertyChanged(nameof(SelectedAssembly));
         }
     }
+
 
     public MainViewModel()
     {
         RegisterCommands();
         _assemblies = new List<string>();
+
+
         _config = new List<string>();
         _platform = new List<string>();
+
+
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
+
     }
 
     private void RegisterCommands()
@@ -190,8 +246,10 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
+
         ApiAnalyzer analyzer = new ApiAnalyzer();
         analyzer.AnalyzeAssemblies(ExeFile, Service);
+
     }
 
     public void AssemblyCollectionUpdate(string assem)
@@ -224,6 +282,7 @@ internal class MainViewModel : ViewModelBase
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
+
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
