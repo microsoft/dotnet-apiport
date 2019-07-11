@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Fx.Portability.Resources;
 using System;
 using System.Collections.Immutable;
 using System.Globalization;
@@ -16,6 +17,8 @@ namespace Microsoft.Fx.Portability
         {
             _token = bytes;
         }
+
+        public bool IsEmpty => _token.IsDefaultOrEmpty;
 
         public ImmutableArray<byte> Token => _token.IsDefault ? ImmutableArray<byte>.Empty : _token;
 
@@ -76,12 +79,13 @@ namespace Microsoft.Fx.Portability
 
         public static bool operator !=(PublicKeyToken left, PublicKeyToken right) => !(left == right);
 
-        public static implicit operator PublicKeyToken(ImmutableArray<byte> bytes) => new PublicKeyToken(bytes);
-
-        public static PublicKeyToken ToPublicKeyToken(ImmutableArray<byte> bytes) => new PublicKeyToken(bytes);
-
         private static ImmutableArray<byte> ParseString(string hex)
         {
+            if (hex.Length % 2 != 0)
+            {
+                throw new PortabilityAnalyzerException(string.Format(CultureInfo.InvariantCulture, LocalizedStrings.InvalidPublicKeyToken, hex));
+            }
+
             try
             {
                 var bytes = new byte[hex.Length / 2];
@@ -93,9 +97,9 @@ namespace Microsoft.Fx.Portability
 
                 return ImmutableArray.Create(bytes);
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                return ImmutableArray.Create<byte>();
+                throw new PortabilityAnalyzerException(string.Format(CultureInfo.InvariantCulture, LocalizedStrings.InvalidPublicKeyToken, hex), e);
             }
         }
     }

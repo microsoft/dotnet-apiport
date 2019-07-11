@@ -122,11 +122,11 @@ namespace Microsoft.Fx.Portability
                         count++;
                     }
 
-                    return ImmutableArray.Create(token);
+                    return new PublicKeyToken(ImmutableArray.Create(token));
                 }
             }
 
-            return ImmutableArray.Create(bytes);
+            return new PublicKeyToken(ImmutableArray.Create(bytes));
         }
 
         private static bool IsTargetFrameworkMonikerAttribute(this MetadataReader metadataReader, CustomAttributeHandle handle)

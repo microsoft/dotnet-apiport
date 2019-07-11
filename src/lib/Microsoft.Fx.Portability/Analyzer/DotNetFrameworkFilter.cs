@@ -54,12 +54,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 return true;
             }
 
-            if (FrameworkAssemblyNamePrefixes.Any(p => name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            if (string.Equals(name, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            if (string.Equals(name, "mscorlib", StringComparison.OrdinalIgnoreCase))
+            if (FrameworkAssemblyNamePrefixes.Any(p => name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
                 return true;
             }

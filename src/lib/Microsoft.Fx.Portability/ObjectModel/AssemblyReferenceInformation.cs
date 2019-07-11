@@ -3,7 +3,6 @@
 
 using Microsoft.Fx.Portability.Resources;
 using System;
-using System.Collections.Immutable;
 using System.Globalization;
 
 namespace Microsoft.Fx.Portability.ObjectModel

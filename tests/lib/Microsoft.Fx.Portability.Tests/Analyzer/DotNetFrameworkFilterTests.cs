@@ -29,13 +29,21 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         // Non-Microsoft public key token
         [InlineData("1111111111111111", false)]
-
-        // Invalid key
-        [InlineData("something", false)]
         [Theory]
         public void DotNetFrameworkFilterCheckPublicKeyToken(string publicKeyToken, bool succeed)
         {
             Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(string.Empty, PublicKeyToken.Parse(publicKeyToken)));
+        }
+
+        // Invalid characters
+        [InlineData("something")]
+
+        // Invalid length
+        [InlineData("111")]
+        [Theory]
+        public void InvalidPublicKeyToken(string publicKeyToken)
+        {
+            Assert.Throws<PortabilityAnalyzerException>(() => _assemblyFilter.IsFrameworkAssembly(string.Empty, PublicKeyToken.Parse(publicKeyToken)));
         }
 
         [InlineData("System.something", true)]
