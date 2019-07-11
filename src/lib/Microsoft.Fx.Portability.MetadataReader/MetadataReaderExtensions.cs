@@ -100,7 +100,7 @@ namespace Microsoft.Fx.Portability
         {
             if (handle.IsNil)
             {
-                return default;
+                return PublicKeyToken.Empty;
             }
 
             var bytes = metadataReader.GetBlobBytes(handle);

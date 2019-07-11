@@ -18,6 +18,8 @@ namespace Microsoft.Fx.Portability
             _token = bytes;
         }
 
+        public static PublicKeyToken Empty => default;
+
         public bool IsEmpty => _token.IsDefaultOrEmpty;
 
         public ImmutableArray<byte> Token => _token.IsDefault ? ImmutableArray<byte>.Empty : _token;
