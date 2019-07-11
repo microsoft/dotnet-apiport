@@ -9,7 +9,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+
     <OutputPath>bin\Debug\</OutputPath>
+
+    <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.2.2" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
@@ -32,10 +40,17 @@
 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NuGet.Core" Version="2.14.0" />
+    <PackageReference Include="NuGet.VisualStudio" Version="5.1.0" />
 
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\ApiPort\DependencyBuilder.cs" Link="DependencyBuilder.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
+    <ProjectReference Include="..\..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\..\ApiPort\ApiPort.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
