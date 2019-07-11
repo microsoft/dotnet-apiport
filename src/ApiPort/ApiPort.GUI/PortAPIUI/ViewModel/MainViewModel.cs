@@ -191,7 +191,7 @@ internal class MainViewModel : ViewModelBase
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
         ApiAnalyzer analyzer = new ApiAnalyzer();
-        analyzer.AnalyzeAssemblies(ExeFile, Service);
+     //   analyzer.AnalyzeAssemblies(ExeFile, Service);
     }
 
     public void AssemblyCollectionUpdate(string assem)
