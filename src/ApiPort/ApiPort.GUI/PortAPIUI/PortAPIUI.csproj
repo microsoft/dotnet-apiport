@@ -9,16 +9,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-<<<<<<< HEAD
     <OutputPath>C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug</OutputPath>
-=======
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
->>>>>>> 77d4e86bcdbc2474ce1626b8030ce4b00311ecb5
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,6 +41,7 @@
 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NuGet.Core" Version="2.14.0" />
+    <PackageReference Include="NuGet.VisualStudio" Version="5.1.0" />
 
   </ItemGroup>
 

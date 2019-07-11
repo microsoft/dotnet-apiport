@@ -35,7 +35,7 @@ namespace PortAPIUI
 
         public Info GetAssemblies(string path)
         {
-            //string packages = path.Substring(0,path.LastIndexOf(@"\"));
+            //string packages = path.Substring(0, path.LastIndexOf(@"\"));
             //string nuGet = packages + @"\packages.config";
             //var file = new PackageReferenceFile(nuGet);
             //List<string> packInfo = new List<string>();

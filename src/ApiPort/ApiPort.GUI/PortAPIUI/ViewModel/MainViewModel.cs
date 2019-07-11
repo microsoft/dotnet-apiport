@@ -1,33 +1,19 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
-
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
-
 using GalaSoft.MvvmLight;
-
 using GalaSoft.MvvmLight.Command;
-
-using PortAPI.Shared;
-
-using PortAPIUI;
-
-using PortAPIUI.ViewModel;
-
-using Newtonsoft.Json;
-
-using System;
-
-using System.Collections.Generic;
-
-using System.Collections.ObjectModel;
-
-using System.IO;
-
-using System.Windows;
-
-using Newtonsoft.Json.Linq;
 using Microsoft.Fx.Portability;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PortAPI.Shared;
+using PortAPIUI;
+using PortAPIUI.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -36,6 +22,7 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Export { get; set; }
 
     public RelayCommand Analyze { get; set; }
+
     public IApiPortService Service { get; set; }
 
     private string _selectedPath;
@@ -66,6 +53,7 @@ internal class MainViewModel : ViewModelBase
         {
             return _assemblyCollection;
         }
+
         set
         {
             _assemblyCollection = value;
@@ -86,6 +74,7 @@ internal class MainViewModel : ViewModelBase
     public JArray AnalyzeAssem
     {
         get { return _analyzeAssem; }
+
         set
         {
             _analyzeAssem = value;
@@ -99,6 +88,7 @@ internal class MainViewModel : ViewModelBase
         {
             return _config;
         }
+
         set
        {
             _config = value;
@@ -109,6 +99,7 @@ internal class MainViewModel : ViewModelBase
     public List<string> Platform
     {
         get { return _platform; }
+
         set
         {
             _platform = value;
@@ -129,7 +120,7 @@ internal class MainViewModel : ViewModelBase
             RaisePropertyChanged(nameof(Assemblies));
         } 
     }
-     
+
     public List<string> AssembliesPath
     {
         get => _assembliesPath;
@@ -145,7 +136,7 @@ internal class MainViewModel : ViewModelBase
     {
        get => _selectedConfig;
 
-        set
+       set
         {
             _selectedConfig = value;
             RaisePropertyChanged(nameof(SelectedConfig));
@@ -172,6 +163,7 @@ internal class MainViewModel : ViewModelBase
         {
             return _selectedAssembly;
         }
+
         set
         {
             _selectedAssembly = value;
@@ -186,7 +178,6 @@ internal class MainViewModel : ViewModelBase
         _config = new List<string>();
         _platform = new List<string>();
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
-
     }
 
     private void RegisterCommands()
@@ -199,7 +190,8 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-       // AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(ExeFile);
+        ApiAnalyzer analyzer = new ApiAnalyzer();
+        analyzer.AnalyzeAssemblies(ExeFile, Service);
     }
 
     public void AssemblyCollectionUpdate(string assem)
@@ -232,7 +224,6 @@ internal class MainViewModel : ViewModelBase
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
-
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
