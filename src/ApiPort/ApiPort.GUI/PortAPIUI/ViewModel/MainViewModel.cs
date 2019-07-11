@@ -236,14 +236,14 @@ internal class MainViewModel : ViewModelBase
 
     public void AssemblyCollectionUpdate(string assem)
     {
-        AssemblyCollection.Clear();
-        foreach (var assembly in AssembliesPath)
-        {
-            if (assem.Equals(assembly))
-            {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
-            }
-        }
+        
+                foreach (var assembly in AssembliesPath)
+                {
+                    if (assem.Equals(assembly))
+                    {
+                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
+                    }
+                }
     }
 
     private void ExecuteOpenFileDialog()

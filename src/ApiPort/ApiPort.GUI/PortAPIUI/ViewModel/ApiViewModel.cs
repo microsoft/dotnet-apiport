@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using GalaSoft.MvvmLight;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace PortAPIUI.ViewModel
@@ -11,12 +12,22 @@ namespace PortAPIUI.ViewModel
         private string assemblyName1;
         private string apiName;
         private bool compatibility1;
+        private JToken jToken;
+        private object p;
+        private bool v;
 
         public ApiViewModel(string name, string apiName, bool compatibility)
         {
             AssemblyName1 = name;
             ApiName = apiName;
             Compatibility1 = compatibility;
+        }
+
+        public ApiViewModel(JToken jToken, object p, bool v)
+        {
+            this.jToken = jToken;
+            this.p = p;
+            this.v = v;
         }
 
         public string AssemblyName
