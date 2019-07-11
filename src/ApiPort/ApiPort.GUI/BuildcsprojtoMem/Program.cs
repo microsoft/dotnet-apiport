@@ -55,36 +55,12 @@ namespace MSBuildAnalyzer
                     { "Platform", "AnyCPU" }
                 };
             ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
-
             var project = pc.LoadProject(csProjPath);
-
-            // Console.WriteLine("Build: {0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString()));
-            // Console.WriteLine(" ??");
             System.IO.File.WriteAllText(jsonPath, string.Empty);
             if (File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString()))
             {
                 Configurations = project.ConditionedProperties[box1];
                 Platforms = project.ConditionedProperties[box2];
-
-                // var con = new string[0];
-                // var pla = new string[0];
-                // Console.Write("Config:");
-                // foreach (var config in Configurations)
-                // {
-                //    con.Append(config);
-                //    Console.Write(" **" + config);
-                // }
-                // Console.WriteLine(" ");
-                // Console.Write("Plat:");
-                // foreach (var plat in Platforms)
-                // {
-                //    pla.Append(plat);
-                //    Console.Write(" **" + plat);
-                // }
-                // Console.WriteLine(" ");
-                // Console.Write("Assembly:");
-                // if (project.Properties.Any(n => n.Name == "TargetPath"))
-                // {
                 var targetPath = project.GetProperty("TargetPath");
                 var targetPathString = project.GetProperty("TargetPath").EvaluatedValue.ToString();
                 var assembly = Assembly.ReflectionOnlyLoadFrom(targetPathString);
@@ -95,17 +71,16 @@ namespace MSBuildAnalyzer
                 using (sw)
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
-                    // Console.Write(" * *" + targetPathString);
                     List<string> assemblyCode = new List<string>();
                     foreach (var assemblyName in assembly.GetReferencedAssemblies())
                     {
-                        assemblyCode.Add(Assembly.Load(assemblyName).ToString());
+                        assemblyCode.Add(assemblyName.ToString());
                     }
+
                     Info info = new Info(string.Format("{0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString())), Configurations, Platforms, targetPathString, assemblyCode, assembly.Location);
                     serializer.Serialize(writer, info);
                     sw.Close();
                     writer.Close();
-                    // }
                 }
             }
             else

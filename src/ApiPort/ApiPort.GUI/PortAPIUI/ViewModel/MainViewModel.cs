@@ -3,6 +3,9 @@
 
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Fx.Portability;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
@@ -24,6 +27,8 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Analyze { get; set; }
     public IApiPortService Service { get; set; }
 
+    public IApiPortService Service { get; set; }
+
     private string _selectedPath;
 
 
@@ -39,20 +44,17 @@ internal class MainViewModel : ViewModelBase
     public static string ExeFile;
 
 
-
     public static string _selectedConfig;
 
     public static string _selectedPlatform;
 
 
-
     public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
-
-
 
     public static string _selectedAssembly;
 
     public static JArray _analyzeAssem;
+
 
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
@@ -67,7 +69,9 @@ internal class MainViewModel : ViewModelBase
         set
         {
 
+
             _assemblyCollection = value;
+
 
             RaisePropertyChanged(nameof(AssemblyCollection));
         }
@@ -76,7 +80,6 @@ internal class MainViewModel : ViewModelBase
     public string SelectedPath
     {
         get => _selectedPath;
-
         set
         {
             _selectedPath = value;
@@ -102,6 +105,7 @@ internal class MainViewModel : ViewModelBase
         get
         {
 
+
             return _config;
 
         }
@@ -110,6 +114,7 @@ internal class MainViewModel : ViewModelBase
         {
 
             _config = value;
+
 
             RaisePropertyChanged(nameof(Config));
         }
@@ -123,9 +128,11 @@ internal class MainViewModel : ViewModelBase
         get { return _platform; }
 
 
+
         set
 
         {
+
 
 
             _platform = value;
@@ -144,10 +151,10 @@ internal class MainViewModel : ViewModelBase
         }
 
         set
-        {
+        { 
             _assemblies = value;
             RaisePropertyChanged(nameof(Assemblies));
-        }
+        } 
     }
 
     public List<string> AssembliesPath
@@ -155,7 +162,7 @@ internal class MainViewModel : ViewModelBase
         get => _assembliesPath;
 
         set
-        {
+       {
             _assembliesPath = value;
             RaisePropertyChanged(nameof(AssembliesPath));
         }
@@ -166,7 +173,8 @@ internal class MainViewModel : ViewModelBase
 
         get => _selectedConfig;
 
-        set
+
+       set
         {
             _selectedConfig = value;
 
@@ -178,6 +186,7 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
+
 
             return _selectedPlatform;
 
@@ -195,19 +204,22 @@ internal class MainViewModel : ViewModelBase
         get
         {
 
+
             return _selectedAssembly;
+
 
         }
 
         set
         {
 
+
             _selectedAssembly = value;
+
 
             RaisePropertyChanged(nameof(SelectedAssembly));
         }
     }
-
 
 
     public MainViewModel()
@@ -215,8 +227,10 @@ internal class MainViewModel : ViewModelBase
         RegisterCommands();
         _assemblies = new List<string>();
 
+
         _config = new List<string>();
         _platform = new List<string>();
+
 
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
 
@@ -232,8 +246,9 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-        AnalyzeAssem = ApiAnalyzer.AnalyzeAssemblies(ExeFile);
 
+        ApiAnalyzer analyzer = new ApiAnalyzer();
+        analyzer.AnalyzeAssemblies(ExeFile, Service);
 
     }
 
@@ -271,15 +286,18 @@ internal class MainViewModel : ViewModelBase
             msBuild.GetAssemblies(SelectedPath);
             if (msBuild.MessageBox == true)
             {
-                MessageBox.Show("error");
+                MessageBox.Show("Build your project first.");
             }
 
             Info output = msBuild.GetAssemblies(SelectedPath);
             if (output != null)
             {
                 Config = output.Configuration;
+
                 Platform = output.Platform;
+
                 AssembliesPath = output.Assembly;
+
                 ExeFile = output.Location;
             }
         }
