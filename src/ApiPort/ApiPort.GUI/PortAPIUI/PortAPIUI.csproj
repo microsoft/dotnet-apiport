@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+
     <OutputPath>C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug</OutputPath>
+
     <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
   </PropertyGroup>
 
