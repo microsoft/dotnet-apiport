@@ -4,6 +4,7 @@
 using Microsoft.Build;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NuGet;
 using PortAPI.Shared;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
@@ -33,13 +35,24 @@ namespace PortAPIUI
 
         public Info GetAssemblies(string path)
         {
+            //string packages = path.Substring(0,path.LastIndexOf(@"\"));
+            //string nuGet = packages + @"\packages.config";
+            //var file = new PackageReferenceFile(nuGet);
+            //List<string> packInfo = new List<string>();
+            //List<FrameworkName> packInfo1 = new List<FrameworkName>();
+            //foreach (PackageReference package in file.GetPackageReferences())
+            //{
+            //    packInfo.Add(package.Id);
+            //    packInfo1.Add(package.TargetFramework);
+            //}
+
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
             var analyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
             var jsonPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\j.txt");
             Process process = new Process();
             process.StartInfo.FileName = analyzerPath;
-            process.StartInfo.Arguments = $"{path} {jsonPath}";
+            process.StartInfo.Arguments = $"\"{path}\" \"{jsonPath}\"";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             output = new StringBuilder();
@@ -58,46 +71,6 @@ namespace PortAPIUI
             }
 
             return Items;
-
-            // var consoleOutput = output.ToString();
-            // if (consoleOutput.Length > 1)
-            // {
-            //    var popUp = consoleOutput.Substring(consoleOutput.IndexOf("Build:"), consoleOutput.IndexOf("??"));
-            //    string[] array = popUp.Split(" ");
-            //    string answer = array[1];
-            //    Message(answer);
-            //    if (answer.Equals("True"))
-            //    {
-            //        var start = consoleOutput.IndexOf("Plat:");
-            //        var end = consoleOutput.IndexOf("Assembly:");
-            //        var configurations = consoleOutput.Substring(consoleOutput.IndexOf("Config:"), start - consoleOutput.IndexOf("Config:")).Split(" **");
-            //        List<string> config = new List<string>();
-            //        for (int i = 1; i < configurations.Length; i++)
-            //        {
-            //            config.Add(configurations[i]);
-            //        }
-
-            // var platforms = consoleOutput.Substring(start, end - start).Split(" **");
-
-            // List<string> plat = new List<string>();
-            //        for (int i = 1; i < platforms.Length; i++)
-            //        {
-            //            plat.Add(platforms[i]);
-            //        }
-
-            // var assemblies = consoleOutput.Substring(end).Split(" **");
-            //        List<string> assem = new List<string>();
-            //        for (int i = 1; i < assemblies.Length; i++)
-            //        {
-            //            assem.Add(assemblies[i]);
-            //        }
-
-            // Info info = new Info(null, config, plat, null, assem,null);
-
-            // return info;
-            //    }
-            // }
-            // return null;
         }
 
         public void Message(Info answer)
