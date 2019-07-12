@@ -139,6 +139,7 @@ namespace ApiPort
                 return new ReadWriteApiPortOptions(opts);
             })
             .SingleInstance();
+
 #else
             builder.RegisterType<ConsoleApiPort>()
                 .SingleInstance();
