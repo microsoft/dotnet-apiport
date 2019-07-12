@@ -25,9 +25,10 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Export { get; set; }
 
     public RelayCommand Analyze { get; set; }
-    public IApiPortService Service { get; set; }
 
     public IApiPortService Service { get; set; }
+
+
 
     private string _selectedPath;
 
@@ -254,14 +255,15 @@ internal class MainViewModel : ViewModelBase
 
     public void AssemblyCollectionUpdate(string assem)
     {
-        AssemblyCollection.Clear();
+        
+
         foreach (var assembly in AssembliesPath)
-        {
-            if (assem.Equals(assembly))
-            {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
-            }
-        }
+                {
+                    if (assem.Equals(assembly))
+                    {
+                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
+                    }
+                }
     }
 
     private void ExecuteOpenFileDialog()

@@ -8,6 +8,7 @@ using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Reporting;
+using PortAPIUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -127,6 +128,18 @@ namespace ApiPort
 #if FEATURE_WPF
             builder.RegisterType<WPFApiPortClient>()
                 .SingleInstance();
+             builder.RegisterInstance<IProgressReporter>(new TextWriterProgressReporter(Console.Out));
+             builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
+            {
+                if (opts.OutputFormats?.Any() == true)
+                {
+                    return opts;
+                }
+
+                return new ReadWriteApiPortOptions(opts);
+            })
+            .SingleInstance();
+
 #else
             builder.RegisterType<ConsoleApiPort>()
                 .SingleInstance();
@@ -155,7 +168,7 @@ namespace ApiPort
             }
             else
             {
-                builder.RegisterType<ConsoleProgressReporter>()
+                builder.RegisterType<PortAPIProgressReporter>()
                     .As<IProgressReporter>()
                     .SingleInstance();
             }

@@ -33,6 +33,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F8292A68-AF7C-4B26-B1B8-B232548EF118}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiPort", "ApiPort", "{0D1724F6-078E-4576-9680-6B9334D562DC}"
+	ProjectSection(SolutionItems) = preProject
+		src\ApiPort\ApiPort.GUI\PortAPIUI\PortAPIProgressReporter.cs = src\ApiPort\ApiPort.GUI\PortAPIUI\PortAPIProgressReporter.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort", "src\ApiPort\ApiPort\ApiPort.csproj", "{5A2EAD0F-FF3E-4968-A865-7B29C4B10A72}"
 EndProject

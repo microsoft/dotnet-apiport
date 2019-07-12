@@ -57,7 +57,7 @@
                  <Hyperlink>How do I update an umsupported assembly?</Hyperlink>
             </TextBlock>
 
-            <Label Content="API Compatibility:"  Padding="0,5,5,5" ></Label>
+            <Label Content="Incompatibility API's:"  Padding="0,5,5,5" ></Label>
 
             <DataGrid IsEnabled="False"  x:Name="APIGrid" BorderBrush="#FFABADB3"  ItemsSource="{Binding Path= AssemblyCollection}" AutoGenerateColumns="False" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <DataGrid.Columns >
