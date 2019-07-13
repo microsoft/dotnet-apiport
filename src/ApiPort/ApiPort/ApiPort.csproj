@@ -2,6 +2,10 @@
 
   <Import Project="ApiPort.props" />
 
+  <PropertyGroup>
+    <HighEntropyVA>true</HighEntropyVA>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="DependencyBuilder.Offline.cs" />
   </ItemGroup>

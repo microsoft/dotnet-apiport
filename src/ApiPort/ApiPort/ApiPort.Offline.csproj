@@ -4,6 +4,7 @@
 
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);FEATURE_OFFLINE</DefineConstants>
+    <HighEntropyVA>true</HighEntropyVA>
   </PropertyGroup>
 
   <ItemGroup>
