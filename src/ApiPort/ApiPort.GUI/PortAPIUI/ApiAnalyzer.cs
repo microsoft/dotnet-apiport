@@ -56,11 +56,12 @@ namespace PortAPIUI
             _writer = writer;
         }
 
-        public async void AnalyzeAssemblies(string selectedPath, IApiPortService service)
+        public async Task<IList<MemberInfo>> AnalyzeAssemblies(string selectedPath, IApiPortService service)
         {
+            var parentDirectory = System.IO.Directory.GetParent(selectedPath).FullName;
             FilePathAssemblyFile name = new FilePathAssemblyFile(selectedPath);
             List<string> browserfile = new List<string>();
-            browserfile.Add(@"C:\Users\t-jaele\Downloads\Paint\Paint");
+            browserfile.Add(parentDirectory);
             //inputfiles has all the assembly location
             var (inputFiles, invalidFiles) = ProcessInputAssemblies(browserfile);
             var assemblies = inputFiles?.Keys ?? Array.Empty<IAssemblyFile>();
@@ -70,43 +71,70 @@ namespace PortAPIUI
             AnalyzeRequest request = GenerateRequest(dependencyInfo);
             bool jsonAdded = false;
             AnalyzeResponse response = null;
-            using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
+            List<string> exportFormat = new List<string>();
+            exportFormat.Add("json");
+            var results = await service.SendAnalysisAsync(request, exportFormat);
+            var myResult = results.Response;
+
+
+            foreach (var result in myResult)
             {
-                try
+                if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
                 {
-                    List<string> exportFormat = new List<string>();
-                    exportFormat.Add("json");
-                    var results = await service.SendAnalysisAsync(request, exportFormat);
-                    var myResult = results.Response;
-                   
-
-                    foreach (var result in myResult)
+                    response = result.Data?.Deserialize<AnalyzeResponse>();
+                    if (jsonAdded)
                     {
-                        if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
-                        {
-                            response = result.Data?.Deserialize<AnalyzeResponse>();
-                            if (jsonAdded)
-                            {
-                                continue;
-                            }
-                            
-                           
-                        }
-
-                        //var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
-
-                        //if (!string.IsNullOrEmpty(outputPath))
-                        //{
-                        //    outputPaths.Add(outputPath);
-                        //}
+                        continue;
                     }
+
+
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
+
+                //var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
+
+                //if (!string.IsNullOrEmpty(outputPath))
+                //{
+                //    outputPaths.Add(outputPath);
+                //}
             }
-            
+            return response.MissingDependencies;
+            //using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
+            //{
+            //    try
+            //    {
+            //        List<string> exportFormat = new List<string>();
+            //        exportFormat.Add("json");
+            //        var results = await service.SendAnalysisAsync(request, exportFormat);
+            //        var myResult = results.Response;
+
+
+            //        foreach (var result in myResult)
+            //        {
+            //            if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
+            //            {
+            //                response = result.Data?.Deserialize<AnalyzeResponse>();
+            //                if (jsonAdded)
+            //                {
+            //                    continue;
+            //                }
+
+
+            //            }
+
+            //            //var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
+
+            //            //if (!string.IsNullOrEmpty(outputPath))
+            //            //{
+            //            //    outputPaths.Add(outputPath);
+            //            //}
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(ex.ToString());
+            //    }
+            //}
+
 
         }
 
