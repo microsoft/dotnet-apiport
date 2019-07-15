@@ -17,6 +17,8 @@ using System.IO;
 using System.Windows;
 using Newtonsoft.Json.Linq;
 using Microsoft.Fx.Portability;
+using System.Threading.Tasks;
+using Microsoft.Fx.Portability.ObjectModel;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -249,7 +251,10 @@ internal class MainViewModel : ViewModelBase
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
 
         ApiAnalyzer analyzer = new ApiAnalyzer();
-     //   analyzer.AnalyzeAssemblies(ExeFile, Service);
+        var analyzeAssembliesTask = Task.Run<IList<MemberInfo>>(async () => { return await analyzer.AnalyzeAssemblies(ExeFile, Service); } );
+        analyzeAssembliesTask.Wait();
+        var result = analyzeAssembliesTask.Result;
+        //var hello = "";
     }
 
     public void AssemblyCollectionUpdate(string assem)
