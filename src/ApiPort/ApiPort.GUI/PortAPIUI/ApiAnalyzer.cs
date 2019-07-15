@@ -59,6 +59,7 @@ namespace PortAPIUI
         public async Task<IList<MemberInfo>> AnalyzeAssemblies(string selectedPath, IApiPortService service)
         {
             var parentDirectory = System.IO.Directory.GetParent(selectedPath).FullName;
+            //var parentDirectory = @"C:\Users\t-jaele\Downloads\Paint\Paint";
             FilePathAssemblyFile name = new FilePathAssemblyFile(selectedPath);
             List<string> browserfile = new List<string>();
             browserfile.Add(parentDirectory);
@@ -97,7 +98,7 @@ namespace PortAPIUI
                 //    outputPaths.Add(outputPath);
                 //}
             }
-            return response.MissingDependencies;
+            return response?.MissingDependencies ?? new List<MemberInfo>();
             //using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
             //{
             //    try
