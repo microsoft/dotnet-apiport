@@ -40,7 +40,8 @@ namespace PortAPIUI
                 assemblies = JsonConvert.DeserializeObject<Info>(json);              
                 r.Close();
             }
-            Message(assemblies);
+
+           Message(assemblies);
             return assemblies;
         }
 

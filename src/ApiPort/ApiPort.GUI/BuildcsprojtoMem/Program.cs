@@ -58,33 +58,23 @@ namespace MSBuildAnalyzer
 
         public static void BuildIt(string csProjPath, string jsonPath)
         {
-            const string box1 = "Configuration";
-            const string box2 = "Platform";
-
             ProjectCollection pc = new ProjectCollection(null, null, ToolsetDefinitionLocations.Default);
             var project = pc.LoadProject(csProjPath);
-
-            //string response = "";
-            //bool correct = false;
-            //var projectItems = project.Items;
-            //List<string> packInfo = new List<string>();
-            //List<FrameworkName> packInfo1 = new List<FrameworkName>();
-            //foreach (var count in projectItems)
-            //{
-            //    if (count.ItemType.Equals("PackageReference"))
-            //    {
-            //        response = "In correct format";
-            //        correct = true;
-            //    }
-            //}
-            //if (correct == false)
-            //{
-            //    response = "Wrong format";
-            //}
+            bool correct = false;
+            var projectItems = project.Items;
+            List<string> packInfo = new List<string>();
+            List<FrameworkName> packInfo1 = new List<FrameworkName>();
+            foreach (var count in projectItems)
+            {
+                if (count.ItemType.Equals("PackageReference"))
+                {
+                    correct = true;
+                }
+            }
 
             System.IO.File.WriteAllText(jsonPath, string.Empty);
-            Configurations = project.ConditionedProperties[box1];
-            Platforms = project.ConditionedProperties[box2];
+            Configurations = project.ConditionedProperties["Configuration"];
+            Platforms = project.ConditionedProperties["Platform"];
             JsonSerializer serializer = new JsonSerializer();
             StreamWriter sw = new StreamWriter(jsonPath, false);
             serializer.Converters.Add(new JavaScriptDateTimeConverter());
@@ -92,7 +82,7 @@ namespace MSBuildAnalyzer
             using (sw)
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
-                Info info = new Info(null, Configurations, Platforms, null, null, null);
+                Info info = new Info(null, Configurations, Platforms, null, null, null, correct);
                 serializer.Serialize(writer, info);
                 sw.Close();
                 writer.Close();

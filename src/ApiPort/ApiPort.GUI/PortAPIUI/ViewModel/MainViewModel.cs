@@ -4,21 +4,22 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Linq;
 using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
-using Newtonsoft.Json.Linq;
-using Microsoft.Fx.Portability;
 using System.Threading.Tasks;
-using Microsoft.Fx.Portability.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -29,8 +30,6 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Analyze { get; set; }
 
     public IApiPortService Service { get; set; }
-
-
 
     private string _selectedPath;
 
@@ -246,6 +245,7 @@ internal class MainViewModel : ViewModelBase
     public void AssemblyCollectionUpdate(string assem)
     {
 
+
         AssemblyCollection.Clear();
 
         foreach (var r in Members)
@@ -258,6 +258,7 @@ internal class MainViewModel : ViewModelBase
                  }
             }
          }
+
     }
 
     private void ExecuteOpenFileDialog()
@@ -281,6 +282,14 @@ internal class MainViewModel : ViewModelBase
             Info output = msBuild.GetAssemblies(SelectedPath);
             if (output != null)
             {
+                if (MsBuildAnalyzer.MessageBox1 == true)
+                {
+                    MainWindow mv = new MainWindow();
+                    mv.AssemCompatibility.Visibility = Visibility.Visible;
+                    mv.AssemCompatibility.Text ="Warning: In order to port to .NET Core," +
+                        "NuGet References need to be in PackageReference format, not Packages.config.";
+                }
+
                 Config = output.Configuration;
                 Platform = output.Platform;
                 ExeFile = output.Location;
