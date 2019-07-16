@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Build;
+using Microsoft.Fx.Portability.ObjectModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet;
@@ -21,31 +22,17 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Threading;
 
+
 namespace PortAPIUI
 {
     internal class MsBuildAnalyzer
     {
         private static StringBuilder output = null;
 
-        public bool MessageBox { get; set; }
-
-        public Info Items { get => items; set => items = value; }
-
-        private Info items;
+        private Info Items;
 
         public Info GetAssemblies(string path)
         {
-            //string packages = path.Substring(0, path.LastIndexOf(@"\"));
-            //string nuGet = packages + @"\packages.config";
-            //var file = new PackageReferenceFile(nuGet);
-            //List<string> packInfo = new List<string>();
-            //List<FrameworkName> packInfo1 = new List<FrameworkName>();
-            //foreach (PackageReference package in file.GetPackageReferences())
-            //{
-            //    packInfo.Add(package.Id);
-            //    packInfo1.Add(package.TargetFramework);
-            //}
-
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
             var analyzerPath = System.IO.Path.Combine(ourDirectory, "MSBuildAnalyzer\\BuildProj.exe");
@@ -65,24 +52,11 @@ namespace PortAPIUI
             {
                 string json = r.ReadToEnd();
                 Items = JsonConvert.DeserializeObject<Info>(json);
-                Message(Items);
                 var consoleOutput = output.ToString();
                 r.Close();
             }
 
             return Items;
-        }
-
-        public void Message(Info answer)
-        {
-            if (answer.Build.Equals("False"))
-            {
-                MessageBox = true;
-            }
-            else
-            {
-                MessageBox = false;
-            }
         }
 
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)

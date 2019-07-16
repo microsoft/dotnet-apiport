@@ -14,7 +14,9 @@ namespace PortAPIUI
     {
         private static StringBuilder outputConsole = null;
 
-        public static List<string> ChosenBuild(string path)
+        public static bool MessageBox { get; set; }
+
+        public static Info ChosenBuild(string path)
         {
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var ourDirectory = System.IO.Path.GetDirectoryName(ourPath);
@@ -31,14 +33,14 @@ namespace PortAPIUI
             process.BeginOutputReadLine();
             process.WaitForExit();
             process.Close();
-            List<string> assemblies = new List<string>();
+            Info assemblies;
             using (StreamReader r = new StreamReader(json1Path))
             {
                 string json = r.ReadToEnd();
-                assemblies = JsonConvert.DeserializeObject<Info>(json).Assembly;
+                assemblies = JsonConvert.DeserializeObject<Info>(json);              
                 r.Close();
             }
-
+            Message(assemblies);
             return assemblies;
         }
 
@@ -47,6 +49,18 @@ namespace PortAPIUI
             if (!string.IsNullOrEmpty(line.Data))
             {
                 outputConsole.Append(line.Data);
+            }
+        }
+
+        public static void Message(Info answer)
+        {
+            if (answer.Build.Equals("False"))
+            {
+                MessageBox = true;
+            }
+            else
+            {
+                MessageBox = false;
             }
         }
     }
