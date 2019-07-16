@@ -63,6 +63,7 @@ namespace PortAPIUI
         {
             AssemCompatibility.Visibility = Visibility.Visible;
             var vm = this.DataContext as MainViewModel;
+            vm.AssemblyCollection.Clear();
             var assem = vm.SelectedAssembly;
             vm.AssemblyCollectionUpdate(assem);
         }

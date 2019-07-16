@@ -38,7 +38,7 @@ internal class MainViewModel : ViewModelBase
 
     private List<string> _assemblies;
 
-    private List<string> _assembliesPath;
+    private HashSet<string> _assembliesPath;
 
     public static List<string> _config;
 
@@ -57,7 +57,7 @@ internal class MainViewModel : ViewModelBase
     public static string _selectedAssembly;
 
 
-
+    private IList<MemberInfo> members;
 
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
@@ -151,9 +151,9 @@ internal class MainViewModel : ViewModelBase
         } 
     }
 
-    public List<string> AssembliesPath
+    public HashSet<string> AssembliesPath
     {
-        get => _assembliesPath;
+        get { return _assembliesPath; }
 
         set
        {
@@ -215,6 +215,7 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+    public IList<MemberInfo> Members { get => members; set => members = value; }
 
     public MainViewModel()
     {
@@ -224,7 +225,7 @@ internal class MainViewModel : ViewModelBase
 
         _config = new List<string>();
         _platform = new List<string>();
-
+        _assembliesPath = new HashSet<string>();
 
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
 
@@ -240,25 +241,33 @@ internal class MainViewModel : ViewModelBase
     private void AnalyzeAPI()
     {
         Assemblies = Rebuild.ChosenBuild(SelectedPath);
-
         ApiAnalyzer analyzer = new ApiAnalyzer();
         var analyzeAssembliesTask = Task.Run<IList<MemberInfo>>(async () => { return await analyzer.AnalyzeAssemblies(ExeFile, Service); } );
         analyzeAssembliesTask.Wait();
-        var result = analyzeAssembliesTask.Result;
-        //var hello = "";
+        members = analyzeAssembliesTask.Result;
+        foreach (var r in members)
+        {
+            AssembliesPath.Add(r.DefinedInAssemblyIdentity);
+        }
+
     }
 
     public void AssemblyCollectionUpdate(string assem)
     {
-        
 
-        foreach (var assembly in AssembliesPath)
-                {
-                    if (assem.Equals(assembly))
-                    {
-                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", false, "Delete"));
-                    }
-                }
+        AssemblyCollection.Clear();
+
+        foreach (var r in members)
+        {
+            
+            foreach (var assembly in AssembliesPath)
+            {
+                if (assem.Equals(assembly))
+                 {
+                     AssemblyCollection.Add(new ApiViewModel(assembly, r.MemberDocId, false, r.RecommendedChanges));
+                   }
+            }
+         }
     }
 
     private void ExecuteOpenFileDialog()
@@ -293,7 +302,7 @@ internal class MainViewModel : ViewModelBase
 
                 Platform = output.Platform;
 
-                AssembliesPath = output.Assembly;
+                //AssembliesPath = output.Assembly;
 
                 ExeFile = output.Location;
             }
