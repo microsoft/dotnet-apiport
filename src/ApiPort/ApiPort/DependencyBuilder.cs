@@ -128,17 +128,17 @@ namespace ApiPort
 #if FEATURE_WPF
             builder.RegisterType<WPFApiPortClient>()
                 .SingleInstance();
-             builder.RegisterInstance<IProgressReporter>(new TextWriterProgressReporter(Console.Out));
-             builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
-            {
-                if (opts.OutputFormats?.Any() == true)
-                {
-                    return opts;
-                }
+            builder.RegisterInstance<IProgressReporter>(new TextWriterProgressReporter(Console.Out));
+            // builder.RegisterAdapter<ICommandLineOptions, IApiPortOptions>((ctx, opts) =>
+            //{
+            //    if (opts.OutputFormats?.Any() == true)
+            //    {
+            //        return opts;
+            //    }
 
-                return new ReadWriteApiPortOptions(opts);
-            })
-            .SingleInstance();
+            //    return new ReadWriteApiPortOptions(opts);
+            //})
+            //.SingleInstance();
 
 #else
             builder.RegisterType<ConsoleApiPort>()
@@ -168,7 +168,7 @@ namespace ApiPort
             }
             else
             {
-                builder.RegisterType<PortAPIProgressReporter>()
+                builder.RegisterType<ConsoleProgressReporter>()
                     .As<IProgressReporter>()
                     .SingleInstance();
             }
