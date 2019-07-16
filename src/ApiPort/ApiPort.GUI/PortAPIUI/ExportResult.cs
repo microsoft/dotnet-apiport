@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
+using Microsoft.Fx.Portability.Reporting;
+using Microsoft.Fx.Portability.Resources;
+using System;
 
 using System.Collections.Generic;
 
 using System.Diagnostics;
-
+using System.Globalization;
 using System.IO;
 
 using System.Text;
-
+using System.Threading.Tasks;
 using System.Windows;
 
 
@@ -25,94 +29,62 @@ namespace PortAPIUI
             return inputPath;
         }
 
+        private readonly IProgressReporter _progressReport;
+        private readonly IFileWriter _writer;
+
         public static void SetInputPath(string value)
         {
             inputPath = value;
         }
 
+        private const string Json = "json";
+
+        public ExportResult()
+        {
+            _progressReport = App.Resolve<IProgressReporter>();
+            _writer = App.Resolve<IFileWriter>();
+        }
+
         // returns location of the portabitlity analyzer result
 
-        public static string ExportApiResult(string exportPath, string fileExtension, bool generateOwnExportPath)
-
+        public async void ExportApiResult(string selectedPathToExport, IApiPortService service, string exportPath)
         {
-            string ourPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            string fileExtension = Path.GetExtension(exportPath);
+            ApiAnalyzer apiAnalyzerClass = new ApiAnalyzer();
+            AnalyzeRequest request = apiAnalyzerClass.GenerateRequestFromDepedencyInfo(selectedPathToExport, service);
+            bool jsonAdded = false;
+            AnalyzeResponse response = null;
+            List<string> exportFormat = new List<string>();
+            exportFormat.Add("json");
+            var results = await service.SendAnalysisAsync(request, exportFormat);
+            var myResult = results.Response;
 
-            string apiDllPath = Path.Combine(ourPath, "..\\..\\..", "DotnetDll", "ApiPort.dll");
-
-            //string inputPathParent1 = System.IO.Directory.GetParent(inputPath).FullName;
-
-            // string apiDllPath = System.IO.Path.Combine(ourPath, "bin", "Debug", "ApiPort", "netcoreapp2.1", "ApiPort.dll");
-
-            //string inputPathParent = System.IO.Directory.GetParent(GetInputPath()).FullName;
-
-            Process p = new Process();
-
-            p.StartInfo.FileName = "dotnet.exe";
-
-            if (generateOwnExportPath)
+            foreach (var result in myResult)
             {
-
-                exportPath = GenerateReportPath(fileExtension);
-            }
-
-            string specifyExportOption = string.Empty;
-
-            switch (fileExtension)
-            {
-
-                case ".html":
-
-                    specifyExportOption = " -r html";
-
-                    break;
-
-                case ".json":
-
-                    specifyExportOption = " -r json";
-
-                    break;
-
-                case ".excel":
-
-                    specifyExportOption = " -r excel";
-
-                    break;
-
-                default:
-
-                    throw new ArgumentOutOfRangeException(fileExtension);
-            }
-
-            p.StartInfo.Arguments = $"{apiDllPath} analyze -f \"{inputPath}\" -o \"{exportPath}\" -t \".NET Core, Version=3.0\"{specifyExportOption}";
-
-            var hello = p.StartInfo.Arguments;
-
-            p.StartInfo.CreateNoWindow = true;
-
-            p.StartInfo.UseShellExecute = false;
-
-            p.StartInfo.RedirectStandardOutput = true;
-
-            p.EnableRaisingEvents = true;
-
-            List<string> msg = new List<string>();
-
-            p.OutputDataReceived += (s, o) =>
-
-            {
-
-                if (o.Data != null)
-
+                if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
                 {
+                    response = result.Data?.Deserialize<AnalyzeResponse>();
+                    if (jsonAdded)
+                    {
+                        continue;
+                    }
+
 
                 }
 
+                var outputPath = await CreateReport(result.Data, @"C:\Users\t-jaele\Desktop\ApiPortResults", result.Format, true);
 
-            };
+                //if (!string.IsNullOrEmpty(outputPath))
+                //{
+                //    outputPaths.Add(outputPath);
+                //}
 
-            p.Start();
-            p.WaitForExit();
-            return exportPath;
+            }
+
+            return;
+
+
+
         }
 
         private static string GenerateReportPath(string fileExtension)
@@ -131,6 +103,57 @@ namespace PortAPIUI
             }
 
             return outputPath;
+        }
+
+        /// <summary>
+        /// Writes a report given the output format and filename.
+        /// </summary>
+        /// <returns>null if unable to write the report otherwise, will return the full path to the report.</returns>
+        private async Task<string> CreateReport(byte[] result, string suppliedOutputFileName, string outputFormat, bool overwriteFile)
+        {
+            string filePath = null;
+
+            using (var progressTask = _progressReport.StartTask(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.WritingReport, outputFormat)))
+            {
+                try
+                {
+                    filePath = Path.GetFullPath(suppliedOutputFileName);
+                }
+                catch (Exception ex)
+                {
+                    _progressReport.ReportIssue(string.Format(CultureInfo.InvariantCulture, ex.Message));
+                    progressTask.Abort();
+
+                    return null;
+                }
+
+                var outputDirectory = Path.GetDirectoryName(filePath);
+                var outputFileName = Path.GetFileName(filePath);
+                try
+                {
+                    //.html, .json
+                    var extension = ".html";
+
+                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwriteFile);
+
+                    if (string.IsNullOrEmpty(filename))
+                    {
+                        _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CouldNotWriteReport, outputDirectory, outputFileName, extension));
+                        progressTask.Abort();
+
+                        return null;
+                    }
+                    else
+                    {
+                        return filename;
+                    }
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
         }
     }
 }
