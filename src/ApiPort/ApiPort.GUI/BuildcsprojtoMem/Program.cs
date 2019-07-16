@@ -6,10 +6,19 @@ using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NuGet;
+using NuGet.Resources;
 using PortAPI.Shared;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.Versioning;
+using System.Text;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace MSBuildAnalyzer
 {
@@ -45,57 +54,48 @@ namespace MSBuildAnalyzer
 
         public static List<string> Platforms { get => platforms; set => platforms = value; }
 
+        public static StringBuilder output;
+
         public static void BuildIt(string csProjPath, string jsonPath)
         {
             const string box1 = "Configuration";
             const string box2 = "Platform";
-            Dictionary<string, string> dic = new Dictionary<string, string>
-                {
-                    { "Configuration", "Debug" },
-                    { "Platform", "AnyCPU" }
-                };
-            ProjectCollection pc = new ProjectCollection(dic, null, ToolsetDefinitionLocations.Default);
-            var project = pc.LoadProject(csProjPath);
-            System.IO.File.WriteAllText(jsonPath, string.Empty);
-            if (File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString()))
-            {
-                Configurations = project.ConditionedProperties[box1];
-                Platforms = project.ConditionedProperties[box2];
-                var targetPath = project.GetProperty("TargetPath");
-                var targetPathString = project.GetProperty("TargetPath").EvaluatedValue.ToString();
-                var assembly = Assembly.ReflectionOnlyLoadFrom(targetPathString);
-                JsonSerializer serializer = new JsonSerializer();
-                StreamWriter sw = new StreamWriter(jsonPath, false);
-                serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                serializer.NullValueHandling = NullValueHandling.Ignore;
-                using (sw)
-                using (JsonWriter writer = new JsonTextWriter(sw))
-                {
-                    List<string> assemblyCode = new List<string>();
-                    foreach (var assemblyName in assembly.GetReferencedAssemblies())
-                    {
-                        assemblyCode.Add(assemblyName.ToString());
-                    }
 
-                    Info info = new Info(string.Format("{0}", File.Exists(project.GetProperty("TargetPath").EvaluatedValue.ToString())), Configurations, Platforms, targetPathString, assemblyCode, assembly.Location);
-                    serializer.Serialize(writer, info);
-                    sw.Close();
-                    writer.Close();
-                }
-            }
-            else
+            ProjectCollection pc = new ProjectCollection(null, null, ToolsetDefinitionLocations.Default);
+            var project = pc.LoadProject(csProjPath);
+
+            //string response = "";
+            //bool correct = false;
+            //var projectItems = project.Items;
+            //List<string> packInfo = new List<string>();
+            //List<FrameworkName> packInfo1 = new List<FrameworkName>();
+            //foreach (var count in projectItems)
+            //{
+            //    if (count.ItemType.Equals("PackageReference"))
+            //    {
+            //        response = "In correct format";
+            //        correct = true;
+            //    }
+            //}
+            //if (correct == false)
+            //{
+            //    response = "Wrong format";
+            //}
+
+            System.IO.File.WriteAllText(jsonPath, string.Empty);
+            Configurations = project.ConditionedProperties[box1];
+            Platforms = project.ConditionedProperties[box2];
+            JsonSerializer serializer = new JsonSerializer();
+            StreamWriter sw = new StreamWriter(jsonPath, false);
+            serializer.Converters.Add(new JavaScriptDateTimeConverter());
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            using (sw)
+            using (JsonWriter writer = new JsonTextWriter(sw))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                serializer.NullValueHandling = NullValueHandling.Ignore;
-                using (StreamWriter sw = new StreamWriter(jsonPath, false))
-                using (JsonWriter writer = new JsonTextWriter(sw))
-                {
-                    Info info = new Info("False", null, null, null, null, null);
-                    serializer.Serialize(writer, info);
-                    sw.Close();
-                    writer.Close();
-                }
+                Info info = new Info(null, Configurations, Platforms, null, null, null);
+                serializer.Serialize(writer, info);
+                sw.Close();
+                writer.Close();
             }
         }
     }

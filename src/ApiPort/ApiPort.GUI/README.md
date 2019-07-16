@@ -10,7 +10,8 @@ Running the tool can do three things:
 
 The data we are collecting is the same as what is in the spreadsheet. None of your source code or binaries will be sent from your machine to Microsoft. 
 
-####Using the Portability Analyzer
+###Using the Portability Analyzer
+
 Use the following instructions to run Portability Analyzer.
 1.	Go to the GitHub repo for the portability analyzer.
 2.	Download the .zip file and unzip it, then run the .exe file.
@@ -21,12 +22,11 @@ Use the following instructions to run Portability Analyzer.
 7.	By pressing the **Export** button you can export the analysis to your computer in the desired format. 
 
 
-Troubleshooting
+###Troubleshooting
+
 If your project is not built, an error warning will pop up to remind you to build your project so that the .exe file can be found by the analyzer.
 
 
+###Summary
 
-Summary
 Please download the .zip file and use the Portability Analyzer .exe on your desktop applications. It will help you determine how compatible your apps are with .NET Core 3.0.
-
-s
