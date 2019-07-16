@@ -58,25 +58,13 @@ namespace PortAPIUI
 
         public async Task<IList<MemberInfo>> AnalyzeAssemblies(string selectedPath, IApiPortService service)
         {
-            var parentDirectory = System.IO.Directory.GetParent(selectedPath).FullName;
-            //var parentDirectory = @"C:\Users\t-jaele\Downloads\Paint\Paint";
-            FilePathAssemblyFile name = new FilePathAssemblyFile(selectedPath);
-            List<string> browserfile = new List<string>();
-            browserfile.Add(parentDirectory);
-            //inputfiles has all the assembly location
-            var (inputFiles, invalidFiles) = ProcessInputAssemblies(browserfile);
-            var assemblies = inputFiles?.Keys ?? Array.Empty<IAssemblyFile>();
-            //IAssemblyFile[] assemblies = new IAssemblyFile[] { };
-            var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
-            //run it and get error b/c dependencyInfo is null - we think b/c progressReport is null
-            AnalyzeRequest request = GenerateRequest(dependencyInfo);
+            AnalyzeRequest request = GenerateRequestFromDepedencyInfo(selectedPath, service);
             bool jsonAdded = false;
             AnalyzeResponse response = null;
             List<string> exportFormat = new List<string>();
             exportFormat.Add("json");
             var results = await service.SendAnalysisAsync(request, exportFormat);
             var myResult = results.Response;
-
 
             foreach (var result in myResult)
             {
@@ -91,70 +79,31 @@ namespace PortAPIUI
 
                 }
 
-                //var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
-
-                //if (!string.IsNullOrEmpty(outputPath))
-                //{
-                //    outputPaths.Add(outputPath);
-                //}
             }
             return response?.MissingDependencies ?? new List<MemberInfo>();
-            //using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
-            //{
-            //    try
-            //    {
-            //        List<string> exportFormat = new List<string>();
-            //        exportFormat.Add("json");
-            //        var results = await service.SendAnalysisAsync(request, exportFormat);
-            //        var myResult = results.Response;
 
+        }
 
-            //        foreach (var result in myResult)
-            //        {
-            //            if (string.Equals(Json, result.Format, StringComparison.OrdinalIgnoreCase))
-            //            {
-            //                response = result.Data?.Deserialize<AnalyzeResponse>();
-            //                if (jsonAdded)
-            //                {
-            //                    continue;
-            //                }
+        public AnalyzeRequest GenerateRequestFromDepedencyInfo(string selectedPath, IApiPortService service)
+        {
+            var parentDirectory = System.IO.Directory.GetParent(selectedPath).FullName;
 
+            // var parentDirectory = @"C:\Users\t-jaele\Downloads\Paint\Paint";
+            FilePathAssemblyFile name = new FilePathAssemblyFile(selectedPath);
+            List<string> browserfile = new List<string>();
+            browserfile.Add(parentDirectory);
 
-            //            }
+            // inputfiles has all the assembly location
+            var (inputFiles, invalidFiles) = ProcessInputAssemblies(browserfile);
+            var assemblies = inputFiles?.Keys ?? Array.Empty<IAssemblyFile>();
+            var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
 
-            //            //var outputPath = await CreateReport(result.Data, options.OutputFileName, result.Format, options.OverwriteOutputFile);
-
-            //            //if (!string.IsNullOrEmpty(outputPath))
-            //            //{
-            //            //    outputPaths.Add(outputPath);
-            //            //}
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show(ex.ToString());
-            //    }
-            //}
-
-
+            // run it and get error b/c dependencyInfo is null - we think b/c progressReport is null
+            return GenerateRequest(dependencyInfo);
         }
 
         private AnalyzeRequest GenerateRequest(IDependencyInfo dependencyInfo)
         {
-            // Match the dependencyInfo for each user assembly to the given
-            // input assemblies to see whether or not the assembly was explicitly
-            // specified.
-            foreach (var assembly in dependencyInfo.UserAssemblies)
-            {
-                // Windows's file paths are case-insensitive
-                // var matchingAssembly = options.InputAssemblies.FirstOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
-
-                // AssemblyInfo is explicitly specified if we found a matching
-                // assembly location in the input dictionary AND the value is
-                // true.
-                //  assembly.IsExplicitlySpecified = matchingAssembly.Key != default(IAssemblyFile)
-                //     && matchingAssembly.Value;
-            }
 
             return new AnalyzeRequest
             {
@@ -248,12 +197,5 @@ namespace PortAPIUI
 
             return (inputAssemblies.ToImmutableDictionary(), invalidInputFiles);
         }
-
-
-
-
-
-
-
     }
 }
