@@ -56,7 +56,7 @@ internal class MainViewModel : ViewModelBase
 
     public static string _selectedAssembly;
 
-    public static JArray _analyzeAssem;
+
 
 
 
@@ -91,16 +91,7 @@ internal class MainViewModel : ViewModelBase
     }
 
 
-    public JArray AnalyzeAssem
-    {
-        get { return _analyzeAssem; }
 
-        set
-        {
-            _analyzeAssem = value;
-            RaisePropertyChanged(nameof(AnalyzeAssem));
-        }
-    }
 
 
     public List<string> Config
@@ -265,7 +256,7 @@ internal class MainViewModel : ViewModelBase
                 {
                     if (assem.Equals(assembly))
                     {
-                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
+                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", false, "Delete"));
                     }
                 }
     }
