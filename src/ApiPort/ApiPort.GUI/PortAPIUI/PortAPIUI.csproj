@@ -14,7 +14,7 @@
 
     <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
 
-    <DocumentationFile>C:\Users\t-jaele\Desktop\dotnet-apiport\bin\Debug\PortAPIUI\PortAPIUI.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
