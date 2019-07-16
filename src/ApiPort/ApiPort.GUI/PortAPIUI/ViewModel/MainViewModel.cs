@@ -35,7 +35,9 @@ internal class MainViewModel : ViewModelBase
 
     private List<string> _assemblies;
 
-    private List<string> _assembliesPath;
+    private List <string> _assembliesPath;
+
+    private HashSet<string> _chooseAssemblies;
 
     public static List<string> _config;
 
@@ -51,7 +53,21 @@ internal class MainViewModel : ViewModelBase
 
     public static string _selectedAssembly;
 
-    public static JArray _analyzeAssem;
+    public IList<MemberInfo> _members;
+
+    public IList<MemberInfo> Members
+    {
+        get
+        {
+            return _members;
+        }
+
+        set
+        {
+            _members = value;
+            RaisePropertyChanged(nameof(Members));
+        }
+    }
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
     {
@@ -77,16 +93,8 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
-    public JArray AnalyzeAssem
-    {
-        get { return _analyzeAssem; }
 
-        set
-        {
-            _analyzeAssem = value;
-            RaisePropertyChanged(nameof(AnalyzeAssem));
-        }
-    }
+
 
     public List<string> Config
     {
@@ -129,12 +137,23 @@ internal class MainViewModel : ViewModelBase
 
     public List<string> AssembliesPath
     {
-        get => _assembliesPath;
+        get { return _assembliesPath; }
 
         set
         {
             _assembliesPath = value;
             RaisePropertyChanged(nameof(AssembliesPath));
+        }
+    }
+
+    public HashSet<string> ChooseAssemblies
+    {
+        get { return _chooseAssemblies; }
+
+        set
+        {
+            _chooseAssemblies = value;
+            RaisePropertyChanged(nameof(ChooseAssemblies));
         }
     }
 
@@ -177,12 +196,19 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+
+   
+
     public MainViewModel()
     {
         RegisterCommands();
         _assemblies = new List<string>();
         _config = new List<string>();
         _platform = new List<string>();
+        _chooseAssemblies = new HashSet<string>();
+        _assembliesPath = new List<string>();
+
+
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
     }
 
@@ -204,22 +230,35 @@ internal class MainViewModel : ViewModelBase
         Info info = Rebuild.ChosenBuild(SelectedPath);
         AssembliesPath = info.Assembly;
         ExeFile = info.Location;
+
         ApiAnalyzer analyzer = new ApiAnalyzer();
         var analyzeAssembliesTask = Task.Run<IList<MemberInfo>>(async () => { return await analyzer.AnalyzeAssemblies(ExeFile, Service); } );
         analyzeAssembliesTask.Wait();
-        var result = analyzeAssembliesTask.Result;
-        //var hello = "";
+        Members = analyzeAssembliesTask.Result;
+        foreach (var r in Members)
+        {
+            ChooseAssemblies.Add(r.DefinedInAssemblyIdentity);
+        }
+
     }
 
     public void AssemblyCollectionUpdate(string assem)
     {
-        foreach (var assembly in AssembliesPath)
-                {
-                    if (assem.Equals(assembly))
-                    {
-                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
-                    }
-        }
+
+
+        AssemblyCollection.Clear();
+
+        foreach (var r in Members)
+        {
+            foreach (var assembly in ChooseAssemblies)
+            {
+                if (assem.Equals(assembly))
+                 {
+                    AssemblyCollection.Add(new ApiViewModel(r.DefinedInAssemblyIdentity, r.MemberDocId, false, r.RecommendedChanges));
+                 }
+            }
+         }
+
     }
 
     private void ExecuteOpenFileDialog()
@@ -245,13 +284,16 @@ internal class MainViewModel : ViewModelBase
             {
                 if (MsBuildAnalyzer.MessageBox1 == true)
                 {
-                    //mention what type they are in - text line underneath the grid with a warning sign so that they know
-                    MessageBox.Show("Warning: In order to port to .NET Core," +
-                        "NuGet References need to be in PackageReference format, not Packages.config.");
+                    MainWindow mv = new MainWindow();
+                    mv.AssemCompatibility.Visibility = Visibility.Visible;
+                    mv.AssemCompatibility.Text ="Warning: In order to port to .NET Core," +
+                        "NuGet References need to be in PackageReference format, not Packages.config.";
                 }
 
                 Config = output.Configuration;
                 Platform = output.Platform;
+                ExeFile = output.Location;
+
             }
         }
     }

@@ -41,7 +41,7 @@ namespace PortAPIUI
                 r.Close();
             }
 
-            Message(assemblies);
+           Message(assemblies);
             return assemblies;
         }
 

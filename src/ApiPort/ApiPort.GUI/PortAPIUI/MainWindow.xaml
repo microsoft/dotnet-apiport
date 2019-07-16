@@ -50,20 +50,21 @@
         <StackPanel  Grid.Row="2" Grid.Column="0" Orientation="Vertical" Margin="10,10.16,10,10.32" Grid.ColumnSpan="2"  >
             <StackPanel Orientation="Vertical"  Margin="0,10,0,0" >
                 <Label  Content="Assembly to analyze: " Padding="0,5,5,5" />
-                <ComboBox  x:Name="AssemComboBox"  IsEnabled="False"  SelectedItem="{Binding SelectedAssembly}" ItemsSource="{Binding AssembliesPath}" SelectionChanged="AssemComboBox_SelectionChanged"  />
+                <ComboBox  x:Name="AssemComboBox"  IsEnabled="False"  SelectedItem="{Binding SelectedAssembly}" ItemsSource="{Binding ChooseAssemblies}" SelectionChanged="AssemComboBox_SelectionChanged"  />
             </StackPanel>
             <TextBlock x:Name="AssemCompatibility" Visibility="Hidden"  Margin="0,10,0,30"  >
-               <Run Text="This assembly is  #%# compatibile with the .NET Core framework.&#xA;"> </Run>
-                 <Hyperlink>How do I update an umsupported assembly?</Hyperlink>
+               
             </TextBlock>
 
             <Label Content="Incompatibility API's:"  Padding="0,5,5,5" ></Label>
 
-            <DataGrid IsEnabled="False"  x:Name="APIGrid" BorderBrush="#FFABADB3"  ItemsSource="{Binding Path= AssemblyCollection}" AutoGenerateColumns="False" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <DataGrid IsEnabled="False"  x:Name="APIGrid"  ScrollViewer.CanContentScroll="True"  ScrollViewer.VerticalScrollBarVisibility="Auto" BorderBrush="#FFABADB3"  ItemsSource="{Binding Path= AssemblyCollection}" AutoGenerateColumns="False" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" >
+       
                 <DataGrid.Columns >
+                    
                     <DataGridTextColumn Header="API" Width="*" Binding="{Binding APIName}" />
 
-                    <DataGridCheckBoxColumn Header="Compatibility" Width="*"  Binding="{Binding Compatibility}">
+                    <DataGridCheckBoxColumn Header="Compatibility" Width="Auto"  Binding="{Binding Compatibility}">
                         <DataGridCheckBoxColumn.ElementStyle>
                             <Style TargetType="{x:Type CheckBox}">
                                 <Setter Property="IsEnabled" Value="False" />
@@ -89,7 +90,7 @@
                             </Style>
                         </DataGridCheckBoxColumn.ElementStyle>
                     </DataGridCheckBoxColumn>
-
+                    <DataGridTextColumn Header="Recommended Changes" Width="Auto" Binding="{Binding Changes }" />
                 </DataGrid.Columns>
             </DataGrid>
 
