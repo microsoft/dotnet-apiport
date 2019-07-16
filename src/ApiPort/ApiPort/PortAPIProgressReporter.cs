@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PortAPIUI
 {
-    internal class PortAPIProgressReporter : IProgressReporter
+    class PortAPIProgressReporter : IProgressReporter
     {
         public IReadOnlyCollection<string> Issues => throw new NotImplementedException();
 

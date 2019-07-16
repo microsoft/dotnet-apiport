@@ -10,9 +10,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 
-    <OutputPath>C:\Users\t-lilawr\Documents\GitHub\dotnet-apiport\src\ApiPort\ApiPort.GUI\PortAPIUI\bin\Debug</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
 
     <DefineConstants>;FEATURE_STRONGNAMESIGNING;FEATURE_WPF</DefineConstants>
+
+    <DocumentationFile>C:\Users\t-jaele\Desktop\dotnet-apiport\bin\Debug\PortAPIUI\PortAPIUI.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -32,10 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\ApiPort\DependencyBuilder.cs" Link="DependencyBuilder.cs" />
-  </ItemGroup>
 
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.2.2" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
@@ -46,10 +45,14 @@
     <PackageReference Include="NuGet.VisualStudio" Version="5.1.0" />
 
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\ApiPort\DependencyBuilder.cs" Link="DependencyBuilder.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\lib\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
     <ProjectReference Include="..\..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
+    <ProjectReference Include="..\..\ApiPort\ApiPort.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 

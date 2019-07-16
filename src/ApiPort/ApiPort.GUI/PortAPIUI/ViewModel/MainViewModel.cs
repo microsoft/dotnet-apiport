@@ -17,6 +17,8 @@ using System.IO;
 using System.Windows;
 using Newtonsoft.Json.Linq;
 using Microsoft.Fx.Portability;
+using System.Threading.Tasks;
+using Microsoft.Fx.Portability.ObjectModel;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -27,6 +29,8 @@ internal class MainViewModel : ViewModelBase
     public RelayCommand Analyze { get; set; }
 
     public IApiPortService Service { get; set; }
+
+
 
     private string _selectedPath;
 
@@ -202,19 +206,23 @@ internal class MainViewModel : ViewModelBase
         AssembliesPath = info.Assembly;
         ExeFile = info.Location;
         ApiAnalyzer analyzer = new ApiAnalyzer();
-        //analyzer.AnalyzeAssemblies(ExeFile, Service);
+        var analyzeAssembliesTask = Task.Run<IList<MemberInfo>>(async () => { return await analyzer.AnalyzeAssemblies(ExeFile, Service); } );
+        analyzeAssembliesTask.Wait();
+        var result = analyzeAssembliesTask.Result;
+        //var hello = "";
     }
 
     public void AssemblyCollectionUpdate(string assem)
     {
-        AssemblyCollection.Clear();
+        
+
         foreach (var assembly in AssembliesPath)
-        {
-            if (assem.Equals(assembly))
-            {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
-            }
-        }
+                {
+                    if (assem.Equals(assembly))
+                    {
+                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
+                    }
+                }
     }
 
     private void ExecuteOpenFileDialog()
@@ -249,12 +257,12 @@ internal class MainViewModel : ViewModelBase
         var savedialog = new Microsoft.Win32.SaveFileDialog();
         savedialog.FileName = "PortablityAnalysisReport";
         savedialog.DefaultExt = ".text";
-        savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json| Excel (*.excel)|*.excel";
+        savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json|Csv (*.csv)|*.csv";
         bool? result = savedialog.ShowDialog();
         if (result == true)
         {
-            string fileExtension = Path.GetExtension(savedialog.FileName);
-            ExportResult.ExportApiResult(savedialog.FileName, fileExtension, false);
+            ExportResult exportClass= new ExportResult();
+            exportClass.ExportApiResult(_selectedPath, Service, savedialog.FileName);
         }
     }
 }
