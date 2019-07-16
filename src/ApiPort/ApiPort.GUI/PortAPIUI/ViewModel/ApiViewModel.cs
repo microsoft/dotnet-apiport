@@ -9,37 +9,32 @@ namespace PortAPIUI.ViewModel
 {
     internal class ApiViewModel : ViewModelBase
     {
-        private string assemblyName1;
+        private string assemblyName;
         private string apiName;
-        private bool compatibility1;
-        private JToken jToken;
-        private object p;
-        private bool v;
+        private bool compatibility;
+        private string changes;
 
-        public ApiViewModel(string name, string apiName, bool compatibility)
+
+        public ApiViewModel(string name, string apiName, bool compatibility, string changes)
         {
-            AssemblyName1 = name;
-            ApiName = apiName;
-            Compatibility1 = compatibility;
+            AssemblyName = name;
+            APIName = apiName;
+            Compatibility = compatibility;
+            Changes = changes;
         }
 
-        public ApiViewModel(JToken jToken, object p, bool v)
-        {
-            this.jToken = jToken;
-            this.p = p;
-            this.v = v;
-        }
+
 
         public string AssemblyName
         {
             get
             {
-                return AssemblyName1;
+                return assemblyName;
             }
 
             set
             {
-                AssemblyName1 = value;
+                assemblyName = value;
                 RaisePropertyChanged(nameof(AssemblyName));
             }
         }
@@ -48,12 +43,12 @@ namespace PortAPIUI.ViewModel
         {
             get
             {
-                return ApiName;
+                return apiName;
             }
 
             set
             {
-                ApiName = value;
+                apiName = value;
                 RaisePropertyChanged(nameof(APIName));
             }
         }
@@ -62,20 +57,28 @@ namespace PortAPIUI.ViewModel
         {
             get
             {
-                return Compatibility1;
+                return compatibility;
             }
 
             set
             {
-                Compatibility1 = value;
+                compatibility = value;
                 RaisePropertyChanged(nameof(Compatibility));
             }
         }
+        public string Changes
+        {
+            get
+            {
+                return changes;
+            }
 
-        public string AssemblyName1 { get => assemblyName1; set => assemblyName1 = value; }
+            set
+            {
+                changes = value;
+                RaisePropertyChanged(nameof(Changes));
+            }
+        }
 
-        public string ApiName { get => apiName; set => apiName = value; }
-
-        public bool Compatibility1 { get => compatibility1; set => compatibility1 = value; }
     }
 }
