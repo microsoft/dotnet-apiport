@@ -19,7 +19,9 @@ namespace PortAPI.Shared
 
         public string Location { get; set; }
 
-        public Info(string build, List<string> configuration, List<string> platform, string targetPath, List<string> assembly, string location)
+        public bool Package { get; set; }
+
+        public Info(string build, List<string> configuration, List<string> platform, string targetPath, List<string> assembly, string location, bool package)
         {
             Build = build;
             Configuration = configuration;
@@ -27,6 +29,7 @@ namespace PortAPI.Shared
             TargetPath = targetPath;
             Assembly = assembly;
             Location = location;
+            Package = package;
         }
     }
 }

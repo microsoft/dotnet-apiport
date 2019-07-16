@@ -238,6 +238,12 @@ internal class MainViewModel : ViewModelBase
             Info output = msBuild.GetAssemblies(SelectedPath);
             if (output != null)
             {
+                if (MsBuildAnalyzer.MessageBox1 == true)
+                {
+                    //mention what type they are in - text line underneath the grid with a warning sign so that they know
+                    MessageBox.Show("Warning: In order to port to .NET Core," +
+                        "NuGet References need to be in PackageReference format.");
+                }
                 Config = output.Configuration;
                 Platform = output.Platform;
             }

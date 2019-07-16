@@ -31,6 +31,8 @@ namespace PortAPIUI
 
         private Info Items;
 
+        public static bool MessageBox1 { get; private set; }
+
         public Info GetAssemblies(string path)
         {
             var ourPath = System.Reflection.Assembly.GetEntryAssembly().Location;
@@ -55,8 +57,20 @@ namespace PortAPIUI
                 var consoleOutput = output.ToString();
                 r.Close();
             }
-
+            Message(Items);
             return Items;
+        }
+
+        public static void Message(Info answer)
+        {
+            if (answer.Package == false)
+            {
+                MessageBox1 = true;
+            }
+            else
+            {
+                MessageBox1 = false;
+            }
         }
 
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)

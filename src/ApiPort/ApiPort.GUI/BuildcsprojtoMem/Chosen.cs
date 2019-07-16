@@ -40,7 +40,7 @@ namespace BuildcsprojtoMem
                         assemblyCode.Add(assemblyName.ToString());
                     }
 
-                    Info info = new Info(string.Format("{0}", File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString())), null, null, targetPathString, assemblyCode, assembly.Location);
+                    Info info = new Info(string.Format("{0}", File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString())), null, null, targetPathString, assemblyCode, assembly.Location,false);
                     serializer.Serialize(writer, info);
                     sw.Close();
                     writer.Close();
@@ -54,7 +54,7 @@ namespace BuildcsprojtoMem
                 using (StreamWriter sw = new StreamWriter(json1Path, false))
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
-                    Info info = new Info(string.Format("{0}", File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString())), null, null, null, null, null);
+                    Info info = new Info(string.Format("{0}", File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString())), null, null, null, null, null,false);
                     serializer.Serialize(writer, info);
                     sw.Close();
                     writer.Close();
