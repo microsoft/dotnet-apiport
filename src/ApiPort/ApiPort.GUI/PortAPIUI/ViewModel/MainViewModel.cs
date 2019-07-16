@@ -34,11 +34,11 @@ internal class MainViewModel : ViewModelBase
 
     private string _selectedPath;
 
-
-
     private List<string> _assemblies;
 
-    private HashSet<string> _assembliesPath;
+    private List <string> _assembliesPath;
+
+    private HashSet<string> _chooseAssemblies;
 
     public static List<string> _config;
 
@@ -46,36 +46,40 @@ internal class MainViewModel : ViewModelBase
 
     public static string ExeFile;
 
-
     public static string _selectedConfig;
 
     public static string _selectedPlatform;
-
 
     public ObservableCollection<ApiViewModel> _assemblyCollection { get; set; }
 
     public static string _selectedAssembly;
 
+    public IList<MemberInfo> _members;
 
-    private IList<MemberInfo> members;
+    public IList<MemberInfo> Members
+    {
+        get
+        {
+            return _members;
+        }
 
+        set
+        {
+            _members = value;
+            RaisePropertyChanged(nameof(Members));
+        }
+    }
 
     public ObservableCollection<ApiViewModel> AssemblyCollection
     {
         get
         {
-
             return _assemblyCollection;
-
         }
 
         set
         {
-
-
             _assemblyCollection = value;
-
-
             RaisePropertyChanged(nameof(AssemblyCollection));
         }
     }
@@ -93,48 +97,29 @@ internal class MainViewModel : ViewModelBase
 
 
 
-
     public List<string> Config
     {
         get
         {
-
-
             return _config;
-
         }
 
         set
         {
-
             _config = value;
-
-
             RaisePropertyChanged(nameof(Config));
         }
     }
 
     public List<string> Platform
-
     {
-
-
         get { return _platform; }
 
-
-
         set
-
         {
-
-
-
             _platform = value;
-
             RaisePropertyChanged(nameof(Platform));
-
         }
-
     }
 
     public List<string> Assemblies
@@ -145,33 +130,41 @@ internal class MainViewModel : ViewModelBase
         }
 
         set
-        { 
+        {
             _assemblies = value;
             RaisePropertyChanged(nameof(Assemblies));
-        } 
+        }
     }
 
-    public HashSet<string> AssembliesPath
+    public List<string> AssembliesPath
     {
         get { return _assembliesPath; }
 
         set
-       {
+        {
             _assembliesPath = value;
             RaisePropertyChanged(nameof(AssembliesPath));
         }
     }
 
+    public HashSet<string> ChooseAssemblies
+    {
+        get { return _chooseAssemblies; }
+
+        set
+        {
+            _chooseAssemblies = value;
+            RaisePropertyChanged(nameof(ChooseAssemblies));
+        }
+    }
+
     public string SelectedConfig
     {
-
         get => _selectedConfig;
 
-
-       set
+        set
         {
             _selectedConfig = value;
-
             RaisePropertyChanged(nameof(SelectedConfig));
         }
     }
@@ -180,10 +173,7 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
-
-
             return _selectedPlatform;
-
         }
 
         set
@@ -197,38 +187,30 @@ internal class MainViewModel : ViewModelBase
     {
         get
         {
-
-
             return _selectedAssembly;
-
-
         }
 
         set
         {
-
-
             _selectedAssembly = value;
-
-
             RaisePropertyChanged(nameof(SelectedAssembly));
         }
     }
 
-    public IList<MemberInfo> Members { get => members; set => members = value; }
+
+   
 
     public MainViewModel()
     {
         RegisterCommands();
         _assemblies = new List<string>();
-
-
         _config = new List<string>();
         _platform = new List<string>();
-        _assembliesPath = new HashSet<string>();
+        _chooseAssemblies = new HashSet<string>();
+        _assembliesPath = new List<string>();
+
 
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
-
     }
 
     private void RegisterCommands()
@@ -240,14 +222,23 @@ internal class MainViewModel : ViewModelBase
 
     private void AnalyzeAPI()
     {
-        Assemblies = Rebuild.ChosenBuild(SelectedPath);
+        Rebuild.ChosenBuild(SelectedPath);
+        if (Rebuild.MessageBox == true)
+        {
+            MessageBox.Show("Build your project first.");
+        }
+
+        Info info = Rebuild.ChosenBuild(SelectedPath);
+        AssembliesPath = info.Assembly;
+        ExeFile = info.Location;
+
         ApiAnalyzer analyzer = new ApiAnalyzer();
         var analyzeAssembliesTask = Task.Run<IList<MemberInfo>>(async () => { return await analyzer.AnalyzeAssemblies(ExeFile, Service); } );
         analyzeAssembliesTask.Wait();
-        members = analyzeAssembliesTask.Result;
-        foreach (var r in members)
+        Members = analyzeAssembliesTask.Result;
+        foreach (var r in Members)
         {
-            AssembliesPath.Add(r.DefinedInAssemblyIdentity);
+            ChooseAssemblies.Add(r.DefinedInAssemblyIdentity);
         }
 
     }
@@ -257,15 +248,14 @@ internal class MainViewModel : ViewModelBase
 
         AssemblyCollection.Clear();
 
-        foreach (var r in members)
+        foreach (var r in Members)
         {
-            
-            foreach (var assembly in AssembliesPath)
+            foreach (var assembly in ChooseAssemblies)
             {
                 if (assem.Equals(assembly))
                  {
-                     AssemblyCollection.Add(new ApiViewModel(assembly, r.MemberDocId, false, r.RecommendedChanges));
-                   }
+                    AssemblyCollection.Add(new ApiViewModel(r.DefinedInAssemblyIdentity, r.MemberDocId, false, r.RecommendedChanges));
+                 }
             }
          }
     }
@@ -288,23 +278,13 @@ internal class MainViewModel : ViewModelBase
         MsBuildAnalyzer msBuild = new MsBuildAnalyzer();
         if (SelectedPath != null)
         {
-
-            msBuild.GetAssemblies(SelectedPath);
-            if (msBuild.MessageBox == true)
-            {
-                MessageBox.Show("Build your project first.");
-            }
-
             Info output = msBuild.GetAssemblies(SelectedPath);
             if (output != null)
             {
                 Config = output.Configuration;
-
                 Platform = output.Platform;
-
-                //AssembliesPath = output.Assembly;
-
                 ExeFile = output.Location;
+
             }
         }
     }
