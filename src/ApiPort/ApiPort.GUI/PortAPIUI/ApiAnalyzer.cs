@@ -25,7 +25,7 @@ namespace PortAPIUI
         private readonly IDependencyFinder _dependencyFinder;
         private readonly IReportGenerator _reportGenerator;
         private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
-        private readonly IFileWriter _writer;
+        private readonly IFileWriter _writer;3
         private const string Json = "json";
 
         private ImmutableDictionary<IAssemblyFile, bool> InputAssemblies { get; }
