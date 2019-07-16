@@ -52,9 +52,9 @@
                 <Label  Content="Assembly to analyze: " Padding="0,5,5,5" />
                 <ComboBox  x:Name="AssemComboBox"  IsEnabled="False"  SelectedItem="{Binding SelectedAssembly}" ItemsSource="{Binding ChooseAssemblies}" SelectionChanged="AssemComboBox_SelectionChanged"  />
             </StackPanel>
-            <TextBlock x:Name="AssemCompatibility" Visibility="Hidden"  Margin="0,10,0,30"  >
-               
-            </TextBlock>
+            <TextBlock x:Name="AssemCompatibility"  Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,0,30" />
+
+
 
             <Label Content="Incompatibility API's:"  Padding="0,5,5,5" ></Label>
 

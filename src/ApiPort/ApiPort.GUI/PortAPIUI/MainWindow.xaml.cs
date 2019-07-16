@@ -61,7 +61,7 @@ namespace PortAPIUI
         // Populates datagrid based on selected assembly
         private void AssemComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //AssemCompatibility.Visibility = Visibility.Visible;
+            
             var vm = this.DataContext as MainViewModel;
             vm.AssemblyCollection.Clear();
             var assem = vm.SelectedAssembly;

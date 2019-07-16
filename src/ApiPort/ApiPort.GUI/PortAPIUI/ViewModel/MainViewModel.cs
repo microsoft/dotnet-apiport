@@ -55,6 +55,22 @@ internal class MainViewModel : ViewModelBase
 
     public IList<MemberInfo> _members;
 
+    private string _message;
+
+    public string Message
+    {
+        get
+        {
+            return _message;
+        }
+        set
+        {
+            _message = value;
+            RaisePropertyChanged(nameof(Message));
+        }
+
+    }
+
     public IList<MemberInfo> Members
     {
         get
@@ -208,7 +224,7 @@ internal class MainViewModel : ViewModelBase
         _chooseAssemblies = new HashSet<string>();
         _assembliesPath = new List<string>();
 
-
+        
         AssemblyCollection = new ObservableCollection<ApiViewModel>();
     }
 
@@ -239,6 +255,7 @@ internal class MainViewModel : ViewModelBase
         {
             ChooseAssemblies.Add(r.DefinedInAssemblyIdentity);
         }
+       
 
     }
 
@@ -284,10 +301,8 @@ internal class MainViewModel : ViewModelBase
             {
                 if (MsBuildAnalyzer.MessageBox1 == true)
                 {
-                    MainWindow mv = new MainWindow();
-                    mv.AssemCompatibility.Visibility = Visibility.Visible;
-                    mv.AssemCompatibility.Text ="Warning: In order to port to .NET Core," +
-                        "NuGet References need to be in PackageReference format, not Packages.config.";
+                    Message = "Warning: In order to port to .NET Core," +
+            "NuGet References need to be in PackageReference format, not Packages.config.";
                 }
 
                 Config = output.Configuration;
