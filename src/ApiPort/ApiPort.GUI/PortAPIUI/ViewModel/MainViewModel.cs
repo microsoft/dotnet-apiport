@@ -4,19 +4,22 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Linq;
 using PortAPI.Shared;
 using PortAPIUI;
 using PortAPIUI.ViewModel;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json.Linq;
-using Microsoft.Fx.Portability;
+using System.Windows.Controls;
 
 internal class MainViewModel : ViewModelBase
 {
@@ -202,18 +205,20 @@ internal class MainViewModel : ViewModelBase
         AssembliesPath = info.Assembly;
         ExeFile = info.Location;
         ApiAnalyzer analyzer = new ApiAnalyzer();
-        //analyzer.AnalyzeAssemblies(ExeFile, Service);
+        var analyzeAssembliesTask = Task.Run<IList<MemberInfo>>(async () => { return await analyzer.AnalyzeAssemblies(ExeFile, Service); } );
+        analyzeAssembliesTask.Wait();
+        var result = analyzeAssembliesTask.Result;
+        //var hello = "";
     }
 
     public void AssemblyCollectionUpdate(string assem)
     {
-        AssemblyCollection.Clear();
         foreach (var assembly in AssembliesPath)
-        {
-            if (assem.Equals(assembly))
-            {
-                AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
-            }
+                {
+                    if (assem.Equals(assembly))
+                    {
+                        AssemblyCollection.Add(new ApiViewModel(assembly, assembly + " API Name ", true));
+                    }
         }
     }
 
@@ -244,6 +249,7 @@ internal class MainViewModel : ViewModelBase
                     MessageBox.Show("Warning: In order to port to .NET Core," +
                         "NuGet References need to be in PackageReference format, not Packages.config.");
                 }
+
                 Config = output.Configuration;
                 Platform = output.Platform;
             }
@@ -255,12 +261,12 @@ internal class MainViewModel : ViewModelBase
         var savedialog = new Microsoft.Win32.SaveFileDialog();
         savedialog.FileName = "PortablityAnalysisReport";
         savedialog.DefaultExt = ".text";
-        savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json| Excel (*.excel)|*.excel";
+        savedialog.Filter = "HTML file (*.html)|*.html|Json (*.json)|*.json|Csv (*.csv)|*.csv";
         bool? result = savedialog.ShowDialog();
         if (result == true)
         {
-            string fileExtension = Path.GetExtension(savedialog.FileName);
-            ExportResult.ExportApiResult(savedialog.FileName, fileExtension, false);
+            ExportResult exportClass= new ExportResult();
+            exportClass.ExportApiResult(_selectedPath, Service, savedialog.FileName);
         }
     }
 }

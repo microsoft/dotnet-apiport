@@ -57,6 +57,7 @@ namespace PortAPIUI
                 var consoleOutput = output.ToString();
                 r.Close();
             }
+
             Message(Items);
             return Items;
         }

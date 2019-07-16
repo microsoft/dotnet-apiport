@@ -2,7 +2,7 @@
   "profiles": {
     "ApiPort": {
       "commandName": "Project",
-      "commandLineArgs": "listTargets"
+      "commandLineArgs": "analyze -f \"C:\\Users\\t-jaele\\Downloads\\Paint\\Paint\" -o \"C:\\Users\\t-jaele\\Desktop\\ApiPortResults\" -t \".NET Core, Version=3.0\" -r json"
     }
   }
 }
