@@ -242,7 +242,7 @@ internal class MainViewModel : ViewModelBase
                 {
                     //mention what type they are in - text line underneath the grid with a warning sign so that they know
                     MessageBox.Show("Warning: In order to port to .NET Core," +
-                        "NuGet References need to be in PackageReference format.");
+                        "NuGet References need to be in PackageReference format, not Packages.config.");
                 }
                 Config = output.Configuration;
                 Platform = output.Platform;
