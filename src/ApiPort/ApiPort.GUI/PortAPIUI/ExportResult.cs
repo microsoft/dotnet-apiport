@@ -23,21 +23,19 @@ namespace PortAPIUI
     internal class ExportResult
     {
         private static string inputPath;
+        private const string Json = "json";
+        private readonly IProgressReporter _progressReport;
+        private readonly IFileWriter _writer;
 
         public static string GetInputPath()
         {
             return inputPath;
         }
 
-        private readonly IProgressReporter _progressReport;
-        private readonly IFileWriter _writer;
-
         public static void SetInputPath(string value)
         {
             inputPath = value;
         }
-
-        private const string Json = "json";
 
         public ExportResult()
         {
@@ -46,18 +44,20 @@ namespace PortAPIUI
         }
 
         // returns location of the portabitlity analyzer result
-
         public async void ExportApiResult(string selectedPathToExport, IApiPortService service, string exportPath)
         {
+            selectedPathToExport = @"C:\Users\t-jaele\Downloads\Paint\Paint";
             string fileExtension = Path.GetExtension(exportPath);
             ApiAnalyzer apiAnalyzerClass = new ApiAnalyzer();
             AnalyzeRequest request = apiAnalyzerClass.GenerateRequestFromDepedencyInfo(selectedPathToExport, service);
             bool jsonAdded = false;
             AnalyzeResponse response = null;
             List<string> exportFormat = new List<string>();
-            exportFormat.Add("json");
+
+            exportFormat.Add(fileExtension.Substring(1));
             var results = await service.SendAnalysisAsync(request, exportFormat);
             var myResult = results.Response;
+            string outputPath = string.Empty;
 
             foreach (var result in myResult)
             {
@@ -69,22 +69,12 @@ namespace PortAPIUI
                         continue;
                     }
 
-
                 }
 
-                var outputPath = await CreateReport(result.Data, @"C:\Users\t-jaele\Desktop\ApiPortResults", result.Format, true);
-
-                //if (!string.IsNullOrEmpty(outputPath))
-                //{
-                //    outputPaths.Add(outputPath);
-                //}
-
+                outputPath = await CreateReport(result.Data, exportPath, fileExtension, true);
             }
 
             return;
-
-
-
         }
 
         private static string GenerateReportPath(string fileExtension)
@@ -113,6 +103,7 @@ namespace PortAPIUI
         {
             string filePath = null;
 
+            // string has format has writing html report
             using (var progressTask = _progressReport.StartTask(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.WritingReport, outputFormat)))
             {
                 try
@@ -128,17 +119,14 @@ namespace PortAPIUI
                 }
 
                 var outputDirectory = Path.GetDirectoryName(filePath);
-                var outputFileName = Path.GetFileName(filePath);
+                var outputFileName = Path.GetFileNameWithoutExtension(filePath);
                 try
                 {
-                    //.html, .json
-                    var extension = ".html";
-
-                    var filename = await _writer.WriteReportAsync(result, extension, outputDirectory, outputFileName, overwriteFile);
+                    var filename = await _writer.WriteReportAsync(result, outputFormat, outputDirectory, outputFileName, overwriteFile);
 
                     if (string.IsNullOrEmpty(filename))
                     {
-                        _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CouldNotWriteReport, outputDirectory, outputFileName, extension));
+                        _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.CouldNotWriteReport, outputDirectory, outputFileName, outputFormat));
                         progressTask.Abort();
 
                         return null;
