@@ -226,7 +226,7 @@ internal class MainViewModel : ViewModelBase
         {
             MessageBox.Show("Build your project first.");
         }
-
+ 
         Info info = Rebuild.ChosenBuild(SelectedPath);
         AssembliesPath = info.Assembly;
         ExeFile = info.Location;
@@ -285,15 +285,14 @@ internal class MainViewModel : ViewModelBase
                 if (MsBuildAnalyzer.MessageBox1 == true)
                 {
                     MainWindow mv = new MainWindow();
+                    mv.AssemCompatibility.Text = "Warning: In order to port to .NET Core," +
+                       "NuGet References need to be in PackageReference format, not Packages.config.";
                     mv.AssemCompatibility.Visibility = Visibility.Visible;
-                    mv.AssemCompatibility.Text ="Warning: In order to port to .NET Core," +
-                        "NuGet References need to be in PackageReference format, not Packages.config.";
                 }
 
                 Config = output.Configuration;
                 Platform = output.Platform;
                 ExeFile = output.Location;
-
             }
         }
     }

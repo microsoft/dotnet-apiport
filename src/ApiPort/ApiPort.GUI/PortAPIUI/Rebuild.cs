@@ -27,6 +27,7 @@ namespace PortAPIUI
             process.StartInfo.Arguments = $"{path} {"blank"} {MainViewModel._selectedConfig} {MainViewModel._selectedPlatform} {json1Path}";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
             outputConsole = new StringBuilder();
             process.OutputDataReceived += OutputHandler;
             process.Start();
