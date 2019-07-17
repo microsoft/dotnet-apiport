@@ -55,7 +55,7 @@ internal class MainViewModel : ViewModelBase
 
     public IList<MemberInfo> _members;
 
-    private string _message;
+    private static string _message;
 
     public string Message
     {
