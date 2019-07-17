@@ -24,7 +24,7 @@ namespace BuildcsprojtoMem
             var project = p.LoadProject(path);
             project.Build();
             if (File.Exists(path: project.GetProperty("TargetPath").EvaluatedValue.ToString()))
-            { //fix
+            {
                 var targetPath = project.GetProperty("TargetPath");
                 var targetPathString = project.GetProperty("TargetPath").EvaluatedValue.ToString();
                 var assembly = Assembly.ReflectionOnlyLoadFrom(targetPathString);

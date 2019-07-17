@@ -43,6 +43,7 @@ namespace PortAPIUI
             process.StartInfo.FileName = analyzerPath;
             process.StartInfo.Arguments = $"\"{path}\" \"{jsonPath}\"";
             process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardOutput = true;
             output = new StringBuilder();
             process.OutputDataReceived += SortOutputHandler;
