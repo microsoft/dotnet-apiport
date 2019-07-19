@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <RootNamespace>ApiPortVS</RootNamespace>
     <DefineConstants>$(DefineConstants);VS2017</DefineConstants>
   </PropertyGroup>
