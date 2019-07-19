@@ -43,7 +43,6 @@ namespace PortAPIUI
         // returns location of the portabitlity analyzer result
         public async void ExportApiResult(string selectedPathToExport, IApiPortService service, string exportPath)
         {
-            selectedPathToExport = @"C:\Users\t-jaele\Downloads\Paint\Paint";
             string fileExtension = Path.GetExtension(exportPath);
             bool isCSV = false;
 
