@@ -80,6 +80,21 @@ namespace PortAPIUI
                 }
 
             }
+
+            foreach (var dependency in response?.MissingDependencies)
+            {
+                if (dependency.MemberDocId != "")
+                {
+                    if (dependency.MemberDocId[0] == 'T')
+                    {
+                        dependency.MemberDocId = "Type" + dependency.MemberDocId.Substring(1);
+                    } else
+                    {
+                        dependency.MemberDocId = "Member" + dependency.MemberDocId.Substring(1);
+                    }
+                } 
+            }
+
             return response?.MissingDependencies ?? new List<MemberInfo>();
 
         }
