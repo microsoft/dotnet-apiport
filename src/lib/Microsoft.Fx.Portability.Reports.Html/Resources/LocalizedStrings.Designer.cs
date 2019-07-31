@@ -439,6 +439,15 @@ namespace Microsoft.Fx.Portability.Reports.Html.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Portability Details.
+        /// </summary>
+        public static string PortabilityDetails {
+            get {
+                return ResourceManager.GetString("PortabilityDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portability Summary.
         /// </summary>
         public static string PortabilitySummaryPageTitle {

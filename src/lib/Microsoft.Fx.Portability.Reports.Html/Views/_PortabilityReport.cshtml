@@ -22,7 +22,7 @@
 </svg>
 
 <h2 id="@LocalizedStrings.PortabilitySummaryPageTitle" tabindex="0">@LocalizedStrings.PortabilitySummaryPageTitle</h2>
-<table>
+<table aria-labelledby="@LocalizedStrings.PortabilitySummaryPageTitle">
     <tbody>
         <tr>
             <th>@LocalizedStrings.AssemblyHeader</th>
@@ -114,7 +114,7 @@
         var usedUnresolvedAssembly = Model.GetUnresolvedAssemblies(assembly);
         if (usedUnresolvedAssembly.Count > 0)
         {
-            <table>
+            <table aria-labelledby="@assembly.SourceAssembly">
                 <tbody>
                     <tr><th>@LocalizedStrings.MissingAssemblies</th></tr>
                     @foreach (var name in usedUnresolvedAssembly)
@@ -126,7 +126,7 @@
             <a>&nbsp;</a> @*insert a blank line for readability*@
         }
 
-        <table class="table_portability_details">
+        <table class="table_portability_details" title="@LocalizedStrings.PortabilityDetails">
             <tbody>
                 <tr>
                     @foreach (var header in detailColumnHeaders)
@@ -193,7 +193,7 @@
             }
         }
 
-        <table>
+        <table title="@LocalizedStrings.AvailableNuGetPackages">
             <tbody>
                 <tr>
                     @foreach (var header in nugetColumnHeaders)

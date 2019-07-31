@@ -304,4 +304,7 @@
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="PortabilityDetails" xml:space="preserve">
+    <value>Portability Details</value>
+  </data>
 </root>
