@@ -279,4 +279,7 @@
   <data name="NotSupported" xml:space="preserve">
     <value>Not supported</value>
   </data>
+  <data name="InvalidPublicKeyToken" xml:space="preserve">
+    <value>Could not parse public key token '{0}'</value>
+  </data>
 </root>

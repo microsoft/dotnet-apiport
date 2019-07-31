@@ -13,7 +13,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         private readonly string _string;
 
-        public AssemblyReferenceInformation(string name, Version version, string culture, string publicKeyToken)
+        public AssemblyReferenceInformation(string name, Version version, string culture, PublicKeyToken publicKeyToken)
         {
             Name = name;
             Version = version;
@@ -29,7 +29,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public Version Version { get; }
 
-        public string PublicKeyToken { get; }
+        public PublicKeyToken PublicKeyToken { get; }
 
         public override string ToString() => _string;
 

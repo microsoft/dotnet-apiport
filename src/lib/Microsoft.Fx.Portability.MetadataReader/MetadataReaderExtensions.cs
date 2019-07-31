@@ -93,52 +93,40 @@ namespace Microsoft.Fx.Portability
                 ? "neutral"
                 : metadataReader.GetString(cultureHandle);
 
-            var publicKeyToken = publicKeyTokenHandle.IsNil
-                ? "null"
-                : metadataReader.FormatPublicKeyToken(publicKeyTokenHandle);
-
-            return new AssemblyReferenceInformation(name, version, culture, publicKeyToken);
+            return new AssemblyReferenceInformation(name, version, culture, metadataReader.GetPublicKeyToken(publicKeyTokenHandle));
         }
 
-        /// <summary>
-        /// Convert a blob referencing a public key token from a PE file into a human-readable string.
-        ///
-        /// If there are no bytes, the return will be 'null'
-        /// If the length is greater than 8, it is a strong name signed assembly
-        /// Otherwise, the key is the byte sequence.
-        /// </summary>
-        [SuppressMessage("Microsoft.Security.Cryptography", "CA5354:SHA1CannotBeUsed", Justification = "Public key tokens are calculated using a SHA-1 hash.")]
-        private static string FormatPublicKeyToken(this MetadataReader metadataReader, BlobHandle handle)
+        public static PublicKeyToken GetPublicKeyToken(this MetadataReader metadataReader, BlobHandle handle)
         {
-            byte[] bytes = metadataReader.GetBlobBytes(handle);
-
-            if (bytes == null || bytes.Length <= 0)
+            if (handle.IsNil)
             {
-                return "null";
+                return PublicKeyToken.Empty;
             }
 
+            var bytes = metadataReader.GetBlobBytes(handle);
+
             // Strong named assembly
-            if (bytes.Length > 8)
+            if (bytes != null && bytes.Length > 8)
             {
                 // Get the public key token, which is the last 8 bytes of the SHA-1 hash of the public key
                 using (var sha1 = SHA1.Create())
                 {
-                    var token = sha1.ComputeHash(bytes);
+                    var hash = sha1.ComputeHash(bytes);
 
-                    bytes = new byte[8];
+                    var token = new byte[8];
                     int count = 0;
-                    for (int i = token.Length - 1; i >= token.Length - 8; i--)
+
+                    for (int i = hash.Length - 1; i >= hash.Length - 8; i--)
                     {
-                        bytes[count] = token[i];
+                        token[count] = hash[i];
                         count++;
                     }
+
+                    return new PublicKeyToken(ImmutableArray.Create(token));
                 }
             }
 
-            // Convert bytes to string, but we don't want the '-' characters and need it to be lower case
-            return BitConverter.ToString(bytes)
-                .Replace("-", string.Empty)
-                .ToLowerInvariant();
+            return new PublicKeyToken(ImmutableArray.Create(bytes));
         }
 
         private static bool IsTargetFrameworkMonikerAttribute(this MetadataReader metadataReader, CustomAttributeHandle handle)

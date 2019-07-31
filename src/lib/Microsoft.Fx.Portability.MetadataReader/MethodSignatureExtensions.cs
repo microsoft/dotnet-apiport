@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
+using Microsoft.Fx.Portability.ObjectModel;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -28,6 +29,11 @@ namespace Microsoft.Fx.Portability
                 methodSignature.RequiredParameterCount,
                 methodSignature.GenericParameterCount,
                 parameters);
+        }
+
+        public static bool IsFrameworkAssembly(this IDependencyFilter filter, AssemblyReferenceInformation assembly)
+        {
+            return filter.IsFrameworkAssembly(assembly.Name, assembly.PublicKeyToken);
         }
     }
 }
