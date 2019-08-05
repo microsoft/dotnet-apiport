@@ -18,8 +18,8 @@
 
 <h2 id="@LocalizedStrings.CompatibilityPageTitle" tabindex="0">@LocalizedStrings.CompatibilityPageTitle</h2>
 <div id="summary-compat-byassembly">
-    <h3 class="compat-subheader" id="compat-byassembly-subheader">@LocalizedStrings.PerAssemblyOverview</h3>
-    <table aria-labelledby="compat-byassembly-subheader">
+    <table>
+        <caption class="compat-subheader">@LocalizedStrings.PerAssemblyOverview</caption>
         <tbody>
             <tr>
                 <th rowspan="2">@LocalizedStrings.AssemblyHeader</th>
@@ -81,8 +81,8 @@
 @if (Model.OrderedBreakingChangeSkippedAssemblies.Count() > 0)
 {
     <div id="summary-compat-skippedassemblies">
-        <h3 class="compat-subheader" id="compat-skippedassemblies-subheader">@LocalizedStrings.IgnoredAssemblies</h3>
-        <table aria-labelledby="compat-skippedassemblies-subheader">
+        <table>
+            <caption class="compat-subheader">@LocalizedStrings.IgnoredAssemblies</caption>
             <tr>
                 <th>@LocalizedStrings.Assembly</th>
             </tr>
