@@ -13,9 +13,5 @@ namespace Microsoft.Fx.Portability.ObjectModel
         Task<AnalyzeRequest> RetrieveRequestAsync(string uniqueId);
 
         Task<IEnumerable<string>> RetrieveSubmissionIdsAsync();
-
-        Task AddJobToQueueAsync(string submissionId);
-
-        IEnumerable<ProjectSubmission> GetProjectSubmissions();
     }
 }
