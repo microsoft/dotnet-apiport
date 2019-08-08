@@ -106,7 +106,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             if (!_hashComputed)
             {
-                _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString()).GetHashCode() ^ CallingAssembly.GetHashCode();
+                _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString((IFormatProvider)CultureInfo.CurrentUICulture)).GetHashCode() ^ CallingAssembly.GetHashCode();
                 _hashComputed = true;
             }
 

@@ -609,7 +609,7 @@ namespace Microsoft.Cci.Extensions
 
         public static string MapPublicKeyTokenToName(string publicKeyToken)
         {
-            if (!TokenNames.TryGetValue(publicKeyToken.ToLower(), out var name))
+            if (!TokenNames.TryGetValue(publicKeyToken.ToLowerInvariant(), out var name))
             {
                 name = publicKeyToken;
             }

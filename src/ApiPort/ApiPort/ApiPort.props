@@ -3,20 +3,29 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>ApiPort</AssemblyName>
     <RootNamespace>ApiPort</RootNamespace>
-    <!--
-      netcoreapp target must be first to avoid a ResXFileCodeGenerator issue
-      (tracked at https://github.com/dotnet/project-system/issues/1519)
-    -->
-    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
-    <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
-    <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
-  </PropertyGroup>
+  <Choose>
+    <!-- build as global tool if GlobalTool is specified-->
+    <When Condition="'$(GlobalTool)' == 'true'">
+      <PropertyGroup>
+      <PackAsTool>true</PackAsTool>
+      <ToolCommandName>ApiPort</ToolCommandName>
+     <!-- <PackageOutputPath>./nupkg</PackageOutputPath> -->
+        </PropertyGroup>
+    </When>
+    <!-- build as standardalone .NET Core app by default-->
+    <Otherwise>
+      <PropertyGroup>
+        <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
+        <!--TODO: These constants was defined when building as 461 app, looks out of date. Do we still need to define these constants?
+        <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
+        -->
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
 
   <PropertyGroup>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
