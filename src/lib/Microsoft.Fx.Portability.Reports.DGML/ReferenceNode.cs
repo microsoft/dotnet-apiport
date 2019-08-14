@@ -105,6 +105,12 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 
             foreach (var item in Nodes)
             {
+                if (item.UsageData == null)
+                {
+                    // skip the Node with no UsageData
+                    continue;
+                }
+
                 if (!item.TryGetAPICountFromReferences(target, out int refCountAvail, out int refCountUnavail))
                 {
                     // Cycle!
