@@ -3,26 +3,26 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>ApiPort</AssemblyName>
     <RootNamespace>ApiPort</RootNamespace>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
   </PropertyGroup>
   <Choose>
-    <!-- build as global tool if GlobalTool is specified-->
+    <!-- build as global tool if GlobalTool is specified when targettting .NET Core-->
     <When Condition="'$(GlobalTool)' == 'true'">
       <PropertyGroup>
-      <PackAsTool>true</PackAsTool>
-      <ToolCommandName>ApiPort</ToolCommandName>
-     <!-- <PackageOutputPath>./nupkg</PackageOutputPath> -->
-        </PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>ApiPort</ToolCommandName>
+      </PropertyGroup>
     </When>
-    <!-- build as standardalone .NET Core app by default-->
     <Otherwise>
       <PropertyGroup>
+        <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
         <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
-        <!--TODO: These constants was defined when building as 461 app, looks out of date. Do we still need to define these constants?
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
         <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
-        -->
       </PropertyGroup>
     </Otherwise>
   </Choose>
