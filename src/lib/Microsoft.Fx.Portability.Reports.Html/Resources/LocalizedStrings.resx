@@ -208,7 +208,7 @@
   <data name="PackageIdHeader" xml:space="preserve">
     <value>PackageId</value>
   </data>
-  <data name="PortabilitySummaryPageTitle" xml:space="preserve">
+  <data name="PortabilitySummary" xml:space="preserve">
     <value>Portability Summary</value>
   </data>
   <data name="RecommendedChanges" xml:space="preserve">
@@ -303,5 +303,8 @@
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
+  </data>
+  <data name="PortabilityDetails" xml:space="preserve">
+    <value>Portability Details</value>
   </data>
 </root>
