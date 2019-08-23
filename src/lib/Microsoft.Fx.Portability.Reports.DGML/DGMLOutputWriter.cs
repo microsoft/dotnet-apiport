@@ -58,7 +58,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                     dgml.AddNode(nodeGuid, nodeTitle,
                         nodeCategory,
                         portabilityIndex,
-                        group: missingTypes.Length == 0 ? null : "Collapsed");
+                        group: string.IsNullOrEmpty(missingTypes) ? null : "Collapsed");
 
                     if (dgml.TryGetId(tfm, out Guid frameworkGuid))
                     {
