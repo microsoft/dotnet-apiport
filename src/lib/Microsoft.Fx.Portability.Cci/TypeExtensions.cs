@@ -598,7 +598,7 @@ namespace Microsoft.Cci.Extensions
             return assembly.AssemblyAttributes.Any(a => a.Type.FullName() == "System.Runtime.CompilerServices.ReferenceAssemblyAttribute");
         }
 
-        private static readonly Dictionary<string, string> TokenNames = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> TokenNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "b77a5c561934e089", "ECMA" },
             { "b03f5f7f11d50a3a", "DEVDIV" },
@@ -609,7 +609,7 @@ namespace Microsoft.Cci.Extensions
 
         public static string MapPublicKeyTokenToName(string publicKeyToken)
         {
-            if (!TokenNames.TryGetValue(publicKeyToken.ToLower(), out var name))
+            if (!TokenNames.TryGetValue(publicKeyToken, out var name))
             {
                 name = publicKeyToken;
             }

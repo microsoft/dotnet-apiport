@@ -79,7 +79,8 @@ namespace Microsoft.Cci.Extensions
                 return assembly.DocId();
             }
 
-            Contract.Assert(false, string.Format(CultureInfo.CurrentUICulture, LocalizedStrings.FellThroughCasesIn, "DocIdExtensions.RefDocId()", reference.GetType()));
+            Contract.Assert(false,
+                            string.Format((IFormatProvider)CultureInfo.CurrentUICulture, LocalizedStrings.FellThroughCasesIn, "DocIdExtensions.RefDocId()", reference.GetType()));
             return LocalizedStrings.UnknownReferenceType;
         }
 
