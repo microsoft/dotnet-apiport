@@ -26,6 +26,7 @@ namespace Microsoft.Fx.Portability
                 new JsonMultiDictionaryConverter<MemberInfo, AssemblyInfo>(),
                 new JsonToStringConverter<FrameworkName>(s => new FrameworkName(s)),
                 new JsonToStringConverter<Version>(s => new Version(s)),
+                new JsonPublicKeyTokenConverter(),
             }
         };
 
