@@ -6,6 +6,7 @@
 
   <PropertyGroup>
     <Description>A JSON formatter for ApiPort reports</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
