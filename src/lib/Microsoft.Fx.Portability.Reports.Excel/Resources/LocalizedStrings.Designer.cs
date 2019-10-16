@@ -106,7 +106,7 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to See &apos;http://go.microsoft.com/fwlink/?LinkId=397652&apos; to learn how to read this table.
+        ///   Looks up a localized string similar to See &apos;https://aka.ms/dotnet-portabilityanalyzer&apos; to learn how to read this table.
         /// </summary>
         internal static string HowToReadTheExcelTable {
             get {
