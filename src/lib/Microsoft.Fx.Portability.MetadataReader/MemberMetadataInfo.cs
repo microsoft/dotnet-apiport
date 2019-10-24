@@ -239,10 +239,10 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// Replace the non-safe characters (.<>.,) in a method name with safe ones ({}#@)
+        /// Replace the non-safe characters (&lt;&gt;.,) in a method name with safe ones ({}#@).
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name">DocId.</param>
+        /// <returns>DocId with safe Characters.</returns>
         private static string GetDocIdSafeMemberName(string name)
         {
             char[] newName = new char[name.Length];
