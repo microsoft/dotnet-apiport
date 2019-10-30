@@ -66,6 +66,9 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             if (Nodes.Count == 0)
                 return 1;
 
+            // reset all the nodes in the reference graph as not be searched.
+            ResetReferenceSearchGraph();
+
             // sum up the number of calls to available APIs and the ones for not available APIs for references.
             if (!TryGetAPICountFromReferences(target, out int availableApis, out int unavailableApis))
             {
@@ -74,10 +77,6 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             }
             else
             {
-                // remove the calls from the current node.
-                availableApis -= UsageData[target].GetAvailableAPICalls();
-                unavailableApis -= UsageData[target].GetUnavailableAPICalls();
-
                 // prevent Div/0
                 if (availableApis == 0 && unavailableApis == 0)
                     return 0;
@@ -88,43 +87,56 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 
         public bool TryGetAPICountFromReferences(int target, out int availAPIs, out int unavailAPIs)
         {
-            availAPIs = UsageData[target].GetAvailableAPICalls();
-            unavailAPIs = UsageData[target].GetUnavailableAPICalls();
-
-            // We are going to use a flag on the object to detect if we have a reference cycle while computing the APIs for the references.
-            if (_searchInGraph == true)
-            {
-                // Cycle!!!
-                _searchInGraph = false; // Reset this flag
-                return false;
-            }
-            else
-            {
-                _searchInGraph = true;
-            }
+            availAPIs = 0;
+            unavailAPIs = 0;
 
             foreach (var item in Nodes)
             {
-                if (item.UsageData == null)
+                // We are going to use the flag on the object to detect if we have run into this node in the reference graph while computing the APIs for the references,
+                // because we want to only count a reference node once if it is referenced in the graph more than once.
+                if (item._searchInGraph == true)
                 {
-                    // skip the Node with no UsageData
-                    continue;
+                    return false;
+                }
+                else
+                {
+                    item._searchInGraph = true;
+                }
+
+                if (item.UsageData != null)
+                {
+                    availAPIs += item.UsageData[target].GetAvailableAPICalls();
+                    unavailAPIs += item.UsageData[target].GetUnavailableAPICalls();
                 }
 
                 if (!item.TryGetAPICountFromReferences(target, out int refCountAvail, out int refCountUnavail))
                 {
-                    // Cycle!
-                    _searchInGraph = false; // Reset this flag
-
-                    return false;
+                    // Skip the current node's references APIcounts since we have counted the references of this item before in the reference graph, continue counting the remaining nodes in the reference Nodes.
+                    continue;
                 }
 
                 availAPIs += refCountAvail;
                 unavailAPIs += refCountUnavail;
             }
 
-            _searchInGraph = false;
             return true;
+        }
+
+        /// <summary>
+        /// reset all the nodes in the reference graph as not be searched.
+        /// </summary>
+        private void ResetReferenceSearchGraph()
+        {
+            // if we don't have any outgoing references, done reset with this node
+            if (Nodes.Count == 0)
+                return;
+            foreach (var item in Nodes)
+            {
+                item._searchInGraph = false;
+                item.ResetReferenceSearchGraph();
+            }
+
+            return;
         }
     }
 }

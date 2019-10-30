@@ -22,10 +22,12 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             FileExtension = ".dgml"
         };
 
-        private readonly DGMLManager dgml = new DGMLManager();
+        private DGMLManager dgml;
 
         public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
+            // Create a new dgml every time write to a new stream.
+            dgml = new DGMLManager();
             ReferenceGraph rg = ReferenceGraph.CreateGraph(response);
 
             ReportingResult analysisResult = response.ReportingResult;
