@@ -10,8 +10,6 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 {
     internal class ReferenceNode
     {
-        private bool _searchInGraph = false;
-
         public List<TargetUsageInfo> UsageData { get; set; }
 
         public string Assembly { get; }
@@ -66,11 +64,11 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             if (Nodes.Count == 0)
                 return 1;
 
-            // reset all the nodes in the reference graph as not be searched.
-            ResetReferenceSearchGraph();
+            // HashSet keep track of the node went through to prevent duplicated counting in the reference graph and circular reference
+            HashSet<ReferenceNode> searchedNodes = new HashSet<ReferenceNode>();
 
             // sum up the number of calls to available APIs and the ones for not available APIs for references.
-            GetAPICountFromReferences(target, out int availableApis, out int unavailableApis);
+            GetAPICountFromReferences(target, searchedNodes, out int availableApis, out int unavailableApis);
 
             // prevent Div/0. When availableApis is 0 and unavailableApis is 0, it likely means that it's references are all not resulted assemblies, return 0.
             if (availableApis == 0 && unavailableApis == 0)
@@ -79,52 +77,36 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             return availableApis / ((double)availableApis + unavailableApis);
         }
 
-        private void GetAPICountFromReferences(int target, out int availAPIs, out int unavailAPIs)
+        private void GetAPICountFromReferences(int target, HashSet<ReferenceNode> searchedNodes, out int availAPIs, out int unavailAPIs)
         {
             availAPIs = 0;
             unavailAPIs = 0;
 
             foreach (var item in Nodes)
             {
-                // We are going to use the flag on the object to detect if we have run into this node in the reference graph while computing the APIs for the references,
-                // because we want to only count a reference node once if it is referenced in the graph more than once.
-                if (item._searchInGraph == true)
+                // searchedNodes.Add(item) return false if the same node has been added before, which means its ApiCounts has been counted as well, we should keep the node,
+                // because we want to only count a reference node once if it is referenced in the graph more than once. This also avoids cycular reference as well.
+                if (searchedNodes.Add(item))
                 {
-                    continue;
-                }
-                else
-                {
-                    item._searchInGraph = true;
-                }
+                    if (item.UsageData != null)
+                    {
+                        try
+                        {
+                            availAPIs += item.UsageData[target].GetAvailableAPICalls();
+                            unavailAPIs += item.UsageData[target].GetUnavailableAPICalls();
+                        }
+                        catch (Exception)
+                        {
+                            // for any exception like item.UsageData[target] is null or item.UsageData[target] throws IndexOutOfRangeException. Ignore it and continue.
+                        }
+                    }
 
-                if (item.UsageData != null)
-                {
-                    availAPIs += item.UsageData[target].GetAvailableAPICalls();
-                    unavailAPIs += item.UsageData[target].GetUnavailableAPICalls();
+                    item.GetAPICountFromReferences(target, searchedNodes, out int refCountAvail, out int refCountUnavail);
+
+                    availAPIs += refCountAvail;
+                    unavailAPIs += refCountUnavail;
                 }
-
-                item.GetAPICountFromReferences(target, out int refCountAvail, out int refCountUnavail);
-
-                availAPIs += refCountAvail;
-                unavailAPIs += refCountUnavail;
             }
-        }
-
-        /// <summary>
-        /// reset all the nodes in the reference graph as not be searched.
-        /// </summary>
-        private void ResetReferenceSearchGraph()
-        {
-            // if we don't have any outgoing references, done reset with this node
-            if (Nodes.Count == 0)
-                return;
-            foreach (var item in Nodes)
-            {
-                item._searchInGraph = false;
-                item.ResetReferenceSearchGraph();
-            }
-
-            return;
         }
     }
 }
