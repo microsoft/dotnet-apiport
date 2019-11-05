@@ -10,8 +10,6 @@ namespace Microsoft.Fx.Portability.Reports.DGML
 {
     internal class ReferenceNode
     {
-        private bool _searchInGraph = false;
-
         public List<TargetUsageInfo> UsageData { get; set; }
 
         public string Assembly { get; }
@@ -66,65 +64,49 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             if (Nodes.Count == 0)
                 return 1;
 
+            // HashSet keep track of the node went through to prevent duplicated counting in the reference graph and circular reference
+            HashSet<ReferenceNode> searchedNodes = new HashSet<ReferenceNode>();
+
             // sum up the number of calls to available APIs and the ones for not available APIs for references.
-            if (!TryGetAPICountFromReferences(target, out int availableApis, out int unavailableApis))
-            {
-                // Cycle detected
-                return 1;
-            }
-            else
-            {
-                // remove the calls from the current node.
-                availableApis -= UsageData[target].GetAvailableAPICalls();
-                unavailableApis -= UsageData[target].GetUnavailableAPICalls();
+            GetAPICountFromReferences(target, searchedNodes, out int availableApis, out int unavailableApis);
 
-                // prevent Div/0
-                if (availableApis == 0 && unavailableApis == 0)
-                    return 0;
+            // prevent Div/0. When availableApis is 0 and unavailableApis is 0, it likely means that it's references are all not resulted assemblies, return 0.
+            if (availableApis == 0 && unavailableApis == 0)
+                return 0;
 
-                return availableApis / ((double)availableApis + unavailableApis);
-            }
+            return availableApis / ((double)availableApis + unavailableApis);
         }
 
-        public bool TryGetAPICountFromReferences(int target, out int availAPIs, out int unavailAPIs)
+        private void GetAPICountFromReferences(int target, HashSet<ReferenceNode> searchedNodes, out int availAPIs, out int unavailAPIs)
         {
-            availAPIs = UsageData[target].GetAvailableAPICalls();
-            unavailAPIs = UsageData[target].GetUnavailableAPICalls();
-
-            // We are going to use a flag on the object to detect if we have a reference cycle while computing the APIs for the references.
-            if (_searchInGraph == true)
-            {
-                // Cycle!!!
-                _searchInGraph = false; // Reset this flag
-                return false;
-            }
-            else
-            {
-                _searchInGraph = true;
-            }
+            availAPIs = 0;
+            unavailAPIs = 0;
 
             foreach (var item in Nodes)
             {
-                if (item.UsageData == null)
+                // searchedNodes.Add(item) return false if the same node has been added before, which means its ApiCounts has been counted as well, we should keep the node,
+                // because we want to only count a reference node once if it is referenced in the graph more than once. This also avoids cycular reference as well.
+                if (searchedNodes.Add(item))
                 {
-                    // skip the Node with no UsageData
-                    continue;
+                    if (item.UsageData != null)
+                    {
+                        try
+                        {
+                            availAPIs += item.UsageData[target].GetAvailableAPICalls();
+                            unavailAPIs += item.UsageData[target].GetUnavailableAPICalls();
+                        }
+                        catch (Exception)
+                        {
+                            // for any exception like item.UsageData[target] is null or item.UsageData[target] throws IndexOutOfRangeException. Ignore it and continue.
+                        }
+                    }
+
+                    item.GetAPICountFromReferences(target, searchedNodes, out int refCountAvail, out int refCountUnavail);
+
+                    availAPIs += refCountAvail;
+                    unavailAPIs += refCountUnavail;
                 }
-
-                if (!item.TryGetAPICountFromReferences(target, out int refCountAvail, out int refCountUnavail))
-                {
-                    // Cycle!
-                    _searchInGraph = false; // Reset this flag
-
-                    return false;
-                }
-
-                availAPIs += refCountAvail;
-                unavailAPIs += refCountUnavail;
             }
-
-            _searchInGraph = false;
-            return true;
         }
     }
 }
