@@ -9,7 +9,7 @@ using System.Net;
 namespace Microsoft.Fx.Portability
 {
     /// <summary>
-    /// Thrown when trying to call the <see cref="Endpoint"/> resulted in <see cref="HttpStatusCode.ProxyAuthenticationRequired"/>
+    /// Thrown when trying to call the <see cref="Endpoint"/> resulted in <see cref="HttpStatusCode.ProxyAuthenticationRequired"/>.
     /// </summary>
     public class ProxyAuthenticationRequiredException : Exception
     {

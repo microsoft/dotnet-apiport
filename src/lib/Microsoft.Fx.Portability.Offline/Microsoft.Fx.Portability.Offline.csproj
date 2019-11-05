@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>The core data structures for .NET Portability Analyzer in Offline mode</Description>
   </PropertyGroup>
 
@@ -28,12 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability.Reports.Json\Microsoft.Fx.Portability.Reports.Json.csproj" />
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Properties\version.txt">
-      <Pack>false</Pack>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

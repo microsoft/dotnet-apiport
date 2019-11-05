@@ -47,7 +47,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Retrieve a list of targets available from the service
+        /// Retrieve a list of targets available from the service.
         /// </summary>
         public async Task<IEnumerable<AvailableTarget>> GetTargetsAsync()
         {
@@ -70,7 +70,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Writes analysis reports to path supplied by options
+        /// Writes analysis reports to path supplied by options.
         /// </summary>
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<IEnumerable<string>> WriteAnalysisReportsAsync(IApiPortOptions options)
@@ -81,7 +81,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Writes analysis reports to path supplied by options
+        /// Writes analysis reports to path supplied by options.
         /// </summary>
         /// <returns>Output paths to the reports that were successfully written.</returns>
         public async Task<ReportingResultPaths> WriteAnalysisReportsAsync(IApiPortOptions options, bool includeResponse)
@@ -198,10 +198,10 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Gets an analysis report based on the options supplied
+        /// Gets an analysis report based on the options supplied.
         /// </summary>
-        /// <param name="options">Options to generate report</param>
-        /// <returns>A collection of reports</returns>
+        /// <param name="options">Options to generate report.</param>
+        /// <returns>A collection of reports.</returns>
         private async Task<MultipleFormatAnalysis> GetAnalysisResultAsync(IApiPortOptions options)
         {
             var assemblies = options.InputAssemblies?.Keys ?? Array.Empty<IAssemblyFile>();
@@ -346,7 +346,7 @@ namespace Microsoft.Fx.Portability
 
         /// <summary>
         /// Add JSON to the options object if it is not there. This is used in cases where an analysis
-        /// doesn't request the JSON result, but the result is needed for analysis (ie source line mapping)
+        /// doesn't request the JSON result, but the result is needed for analysis (ie source line mapping).
         /// </summary>
         private bool TryAddJsonToOptions(IApiPortOptions options, out IApiPortOptions other)
         {
@@ -372,7 +372,7 @@ namespace Microsoft.Fx.Portability
 
         /// <summary>
         /// Ensures that the analysis options are valid.  If they are not,
-        /// throws a <see cref="InvalidApiPortOptionsException"/>
+        /// throws a <see cref="InvalidApiPortOptionsException"/>.
         /// </summary>
         private static void ValidateOptions(IApiPortOptions options)
         {

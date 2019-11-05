@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Microsoft.Fx.Portability.Cci</RootNamespace>
     <Description>Metadata reader for binaries using Microsoft.CCI</Description>
   </PropertyGroup>
@@ -15,12 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Properties\version.txt">
-      <Pack>false</Pack>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

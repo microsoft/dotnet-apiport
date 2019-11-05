@@ -2,8 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.ObjectModel;
-using System;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.MetadataReader.Tests
@@ -15,7 +13,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void NullIsTrue()
         {
-            Assert.True(_assemblyFilter.IsFrameworkAssembly(null));
+            Assert.True(_assemblyFilter.IsFrameworkAssembly(null, default));
         }
 
         // Microsoft public key token
@@ -30,13 +28,22 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("0738eb9F132ed756", true)]
 
         // Non-Microsoft public key token
-        [InlineData("something", false)]
+        [InlineData("1111111111111111", false)]
         [Theory]
         public void DotNetFrameworkFilterCheckPublicKeyToken(string publicKeyToken, bool succeed)
         {
-            var assembly = new AssemblyReferenceInformation(string.Empty, Version.Parse("4.0"), string.Empty, publicKeyToken);
+            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(string.Empty, PublicKeyToken.Parse(publicKeyToken)));
+        }
 
-            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(assembly));
+        // Invalid characters
+        [InlineData("something")]
+
+        // Invalid length
+        [InlineData("111")]
+        [Theory]
+        public void InvalidPublicKeyToken(string publicKeyToken)
+        {
+            Assert.Throws<PortabilityAnalyzerException>(() => _assemblyFilter.IsFrameworkAssembly(string.Empty, PublicKeyToken.Parse(publicKeyToken)));
         }
 
         [InlineData("System.something", true)]
@@ -55,9 +62,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Theory]
         public void AssemblyNameStartsWithSpecifiedString(string name, bool succeed)
         {
-            var assembly = new AssemblyReferenceInformation(name, Version.Parse("4.0"), string.Empty, string.Empty);
-
-            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(assembly));
+            Assert.Equal(succeed, _assemblyFilter.IsFrameworkAssembly(name, default));
         }
     }
 }

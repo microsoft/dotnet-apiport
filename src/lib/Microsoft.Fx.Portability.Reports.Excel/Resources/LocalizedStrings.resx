@@ -134,7 +134,7 @@
     <value>Details</value>
   </data>
   <data name="HowToReadTheExcelTable" xml:space="preserve">
-    <value>See 'http://go.microsoft.com/fwlink/?LinkId=397652' to learn how to read this table</value>
+    <value>See 'https://aka.ms/dotnet-portabilityanalyzer' to learn how to read this table</value>
   </data>
   <data name="MissingAssembliesPageTitle" xml:space="preserve">
     <value>Missing assemblies</value>

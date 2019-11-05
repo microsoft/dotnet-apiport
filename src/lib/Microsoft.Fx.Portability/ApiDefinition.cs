@@ -38,7 +38,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Gets or sets the docId of Api's parent
+        /// Gets or sets the docId of Api's parent.
         /// </summary>
         public string Parent
         {

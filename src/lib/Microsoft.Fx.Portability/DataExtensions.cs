@@ -26,6 +26,7 @@ namespace Microsoft.Fx.Portability
                 new JsonMultiDictionaryConverter<MemberInfo, AssemblyInfo>(),
                 new JsonToStringConverter<FrameworkName>(s => new FrameworkName(s)),
                 new JsonToStringConverter<Version>(s => new Version(s)),
+                new JsonPublicKeyTokenConverter(),
             }
         };
 
@@ -77,9 +78,9 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Serializes an object to Json and writes the output to the given stream.
         /// </summary>
-        /// <param name="data">object to serialize</param>
-        /// <param name="outputStream">Stream to write Json to</param>
-        /// <param name="leaveOpen">true to leave the stream open; false otherwise</param>
+        /// <param name="data">object to serialize.</param>
+        /// <param name="outputStream">Stream to write Json to.</param>
+        /// <param name="leaveOpen">true to leave the stream open; false otherwise.</param>
         public static void Serialize<T>(this T data, Stream outputStream, bool leaveOpen)
         {
             using (var writer = new StreamWriter(outputStream, DefaultEncoding, DefaultBufferSize, leaveOpen))
@@ -119,8 +120,8 @@ namespace Microsoft.Fx.Portability
         /// <summary>
         /// Given the input stream, will take its contents and compress them into the output stream.
         /// </summary>
-        /// <param name="inputStream">Input stream to read contents from</param>
-        /// <param name="outputStream">Stream to write contents to</param>
+        /// <param name="inputStream">Input stream to read contents from.</param>
+        /// <param name="outputStream">Stream to write contents to.</param>
         /// <param name="leaveOpen">Whether to leave the input and output streams open after reading/writing to/from them.</param>
         public static async Task CompressAsync(this Stream inputStream, Stream outputStream, bool leaveOpen)
         {

@@ -202,7 +202,7 @@ namespace Microsoft.Fx.Portability.Tests.ObjectModel
         }
 
         /// <summary>
-        /// Provides an easy mock to inject breaking changes into AncestorApiRecommendations
+        /// Provides an easy mock to inject breaking changes into AncestorApiRecommendations.
         /// </summary>
         private class BreakingChangeRecommendationsMock : AncestorApiRecommendations
         {

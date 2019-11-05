@@ -18,6 +18,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             _output = output;
         }
 
+#if FEATURE_ILASM
         [Fact]
         public void MultipleMscorlibReferencesFound()
         {
@@ -34,14 +35,14 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     Assert.Equal("mscorlib", assemblyInfo.Name);
                     Assert.Equal("4.0.0.0", assemblyInfo.Version.ToString());
                     Assert.Equal("neutral", assemblyInfo.Culture);
-                    Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken);
+                    Assert.Equal("b77a5c561934e089", assemblyInfo.PublicKeyToken.ToString());
                 }
             }
         }
 
         /// <summary>
         /// Test that SystemObjectFinder works even for netstandard facade
-        /// assemblies that may not have references to mscorlib or system.runtime
+        /// assemblies that may not have references to mscorlib or system.runtime.
         /// </summary>
         [Fact]
         public void NetstandardReferencesOnly()
@@ -59,7 +60,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                     Assert.Equal("netstandard", assemblyInfo.Name);
                     Assert.Equal("2.0.0.0", assemblyInfo.Version.ToString());
                     Assert.Equal("neutral", assemblyInfo.Culture);
-                    Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken);
+                    Assert.Equal("cc7b13ffcd2ddd51", assemblyInfo.PublicKeyToken.ToString());
                 }
             }
         }
@@ -114,5 +115,6 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 }
             }
         }
+#endif
     }
 }

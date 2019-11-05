@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -58,7 +59,7 @@ namespace Microsoft.Fx.Portability.Reports
             _catalogLastUpdated = catalogLastUpdated;
         }
 
-        public void WriteTo(Stream outputStream)
+        public async Task WriteToAsync(Stream outputStream)
         {
             // Writing directly to the stream can cause problems if it is a BufferedStream (as seen when writing a multipart response)
             // This will write the spreadsheet to a temporary stream, and then copy it to the expected stream afterward
@@ -91,7 +92,7 @@ namespace Microsoft.Fx.Portability.Reports
                 }
 
                 ms.Position = 0;
-                ms.CopyTo(outputStream);
+                await ms.CopyToAsync(outputStream);
             }
         }
 
@@ -344,9 +345,9 @@ namespace Microsoft.Fx.Portability.Reports
                     breakingChange.DependantAssembly.ToString(),
                     breakingChange.Break.Title,
                     breakingChange.Break.ImpactScope.ToString(),
-                    breakingChange.Break.IsQuirked.ToString(),
-                    breakingChange.Break.IsRetargeting.ToString(),
-                    breakingChange.Break.IsBuildTime.ToString(),
+                    breakingChange.Break.IsQuirked.ToString((IFormatProvider)CultureInfo.CurrentUICulture),
+                    breakingChange.Break.IsRetargeting.ToString((IFormatProvider)CultureInfo.CurrentUICulture),
+                    breakingChange.Break.IsBuildTime.ToString((IFormatProvider)CultureInfo.CurrentUICulture),
                     breakingChange.Break.VersionBroken.ToString(),
                     breakingChange.Break.VersionFixed?.ToString() ?? string.Empty,
                     breakingChange.Break.Details,

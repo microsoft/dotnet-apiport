@@ -17,7 +17,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private string _typeDocId;
 
         /// <summary>
-        /// Gets or sets the assembly in which the member is defined
+        /// Gets or sets the assembly in which the member is defined.
         /// </summary>
         public string DefinedInAssemblyIdentity
         {

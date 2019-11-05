@@ -144,7 +144,7 @@ namespace ApiPort
         }
 
         /// <summary>
-        /// Used to register offline mode in the offline build
+        /// Used to register offline mode in the offline build.
         /// </summary>
         static partial void RegisterOfflineModule(ContainerBuilder builder);
     }

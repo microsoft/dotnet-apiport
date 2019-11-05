@@ -8,37 +8,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Microsoft.Fx.Portability.Reports.Html.Tests
 {
     public class HtmlReportWriterTests
     {
-        /// <summary>
-        /// Tests that the templates are embedded into the assembly.
-        /// </summary>
-        [InlineData("_PortabilityReport.cshtml")]
-        [InlineData("ReportTemplate.cshtml")]
-        [InlineData("_Scripts.cshtml")]
-        [InlineData("_Styles.cshtml")]
-        [InlineData("_BreakingChangesReport.cshtml")]
-        [InlineData("_CompatibilityResults.cshtml")]
-        [InlineData("_CompatibilitySummary.cshtml")]
-        [Theory]
-        public static void CanFindTemplates(string templateName)
-        {
-            var fullName = FormattableString.Invariant($"{typeof(HtmlReportWriter).Assembly.GetName().Name}.Resources.{templateName}");
-
-            var stream = typeof(HtmlReportWriter).Assembly.GetManifestResourceStream(fullName);
-
-            Assert.NotNull(stream);
-        }
-
         [Fact]
-        public static void CreatesHtmlReport()
+        public static async Task CreatesHtmlReport()
         {
             var mapper = Substitute.For<ITargetMapper>();
-            var writer = new HtmlReportWriter(mapper);
+            var writer = new HtmlRazorReportWriter(mapper);
 
             var response = GetAnalyzeResponse();
 
@@ -57,7 +38,7 @@ namespace Microsoft.Fx.Portability.Reports.Html.Tests
             {
                 using (var file = File.OpenWrite(tempFile))
                 {
-                    writer.WriteStream(file, response);
+                    await writer.WriteStreamAsync(file, response);
                 }
 
                 Assert.True(File.Exists(tempFile));

@@ -23,7 +23,7 @@ namespace ApiPortVS.Tests
     {
         /// <summary>
         /// Assert that the error only shows up when the excel format is selected
-        /// and there are > 15 targets
+        /// and there are > 15 targets.
         /// </summary>
         [Fact]
         public void OptionsViewModel_TargetCount_Excel()

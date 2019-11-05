@@ -96,7 +96,7 @@ namespace Microsoft.Fx.Portability
 
                 if (stream == null)
                 {
-                    throw new PortabilityAnalyzerException(string.Format(CultureInfo.CurrentUICulture, LocalizedStrings.DataFileNotFound, path));
+                    throw new PortabilityAnalyzerException(string.Format((IFormatProvider)CultureInfo.CurrentUICulture, LocalizedStrings.DataFileNotFound, path));
                 }
 
                 return stream;

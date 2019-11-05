@@ -372,9 +372,14 @@ namespace Microsoft.Fx.Portability.Tests
 ...
 </runtime>
 </configuration>
-```".Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture)
+```"
+#if NET461
+    .Replace(Environment.NewLine, "\n"),
+#else
+    .Replace(Environment.NewLine, "\n", StringComparison.InvariantCulture),
+#endif
         };
 
-        #endregion
+#endregion
     }
 }

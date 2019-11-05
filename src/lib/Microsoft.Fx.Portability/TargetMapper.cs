@@ -26,9 +26,9 @@ namespace Microsoft.Fx.Portability
         private readonly IDictionary<string, ICollection<string>> _map = new Dictionary<string, ICollection<string>>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Loads a config file into the target mapper
+        /// Loads a config file into the target mapper.
         /// </summary>
-        /// <param name="path">Path to XML config.  If null, a config file is expected next to the assembly with the name "TargetMap.xml"</param>
+        /// <param name="path">Path to XML config.  If null, a config file is expected next to the assembly with the name "TargetMap.xml".</param>
         public bool LoadFromConfig(string path = null)
         {
             var configPath = GetPossibleFileLocations(path)
@@ -155,10 +155,10 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Performs alias to name mapping
+        /// Performs alias to name mapping.
         /// </summary>
-        /// <param name="aliasName">target alias</param>
-        /// <returns>target name</returns>
+        /// <param name="aliasName">target alias.</param>
+        /// <returns>target name.</returns>
         public ICollection<string> GetNames(string aliasName)
         {
             if (_map.TryGetValue(aliasName, out var result))
@@ -177,7 +177,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Returns the identifies for the target names. If multiple targets have the same name, keep the version as well
+        /// Returns the identifies for the target names. If multiple targets have the same name, keep the version as well.
         /// </summary>
         public IEnumerable<string> GetTargetNames(IEnumerable<FrameworkName> targets, bool includeVersion)
         {
@@ -211,7 +211,7 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Performs name to grouped-target (alias) mapping
+        /// Performs name to grouped-target (alias) mapping.
         /// </summary>
         /// <example>
         /// If there are Grouped Targets, like:
@@ -221,10 +221,10 @@ namespace Microsoft.Fx.Portability
         /// Then:
         /// GetAlias(".NET Framework") will return ".NET Framework"
         /// GetAlias("Windows") will return "Mobile"
-        /// GetAlias("Windows Phone") will return "Mobile"
+        /// GetAlias("Windows Phone") will return "Mobile".
         ///
         /// </example>
-        /// <param name="targetName">Official target name</param>
+        /// <param name="targetName">Official target name.</param>
         public string GetAlias(string targetName)
         {
             var pair = _map.FirstOrDefault(i => i.Value.Contains(targetName));
@@ -250,14 +250,14 @@ namespace Microsoft.Fx.Portability
         }
 
         /// <summary>
-        /// Parses a JSON-like string for aliases and targets
+        /// Parses a JSON-like string for aliases and targets.
         /// </summary>
         /// <param name="aliasString">
         /// Expected input similar to the following:
         ///
-        /// alias1: target1, target2; alias2: target1, target2, target3
+        /// alias1: target1, target2; alias2: target1, target2, target3.
         /// </param>
-        /// <param name="validate">if true, and exception will be thrown if format is not correct</param>
+        /// <param name="validate">if true, and exception will be thrown if format is not correct.</param>
         public void ParseAliasString(string aliasString, bool validate = false)
         {
             const char GroupSeparator = ';';

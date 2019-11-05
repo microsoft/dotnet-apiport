@@ -18,12 +18,12 @@ namespace Microsoft.Fx.Portability.Analyzer
         private bool _isPrimitive;
 
         /// <summary>
-        /// Gets or sets the assembly that is calling the member
+        /// Gets or sets the assembly that is calling the member.
         /// </summary>
         public AssemblyInfo CallingAssembly { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly in which the member is defined
+        /// Gets or sets the assembly in which the member is defined.
         /// </summary>
         public AssemblyReferenceInformation DefinedInAssemblyIdentity
         {
@@ -40,7 +40,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not the dependency is a primitive type
+        /// Gets or sets a value indicating whether or not the dependency is a primitive type.
         /// </summary>
         public bool IsPrimitive
         {
@@ -106,7 +106,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             if (!_hashComputed)
             {
-                _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString()).GetHashCode() ^ CallingAssembly.GetHashCode();
+                _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString((IFormatProvider)CultureInfo.InvariantCulture)).GetHashCode() ^ CallingAssembly.GetHashCode();
                 _hashComputed = true;
             }
 

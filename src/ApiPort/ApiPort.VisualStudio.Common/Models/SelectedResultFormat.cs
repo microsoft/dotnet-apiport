@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 namespace ApiPortVS
 {
     /// <summary>
-    /// The report output format
+    /// The report output format.
     /// </summary>
     public class SelectedResultFormat : ResultFormatInformation, INotifyPropertyChanged
     {

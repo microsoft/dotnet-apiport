@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
     <Description>A JSON formatter for ApiPort reports</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,12 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Properties\version.txt">
-      <Pack>false</Pack>
-    </Content>
   </ItemGroup>
 
 </Project>

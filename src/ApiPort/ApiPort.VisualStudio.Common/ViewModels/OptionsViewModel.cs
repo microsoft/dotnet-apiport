@@ -204,9 +204,9 @@ namespace ApiPortVS.ViewModels
         }
 
         /// <summary>
-        /// Matches targets with what is available on the server and updates the options model
+        /// Matches targets with what is available on the server and updates the options model.
         /// </summary>
-        /// <returns>Targets that were removed</returns>
+        /// <returns>Targets that were removed.</returns>
         private async Task UpdateTargetsAsync()
         {
             var targets = await GetTargetsAsync().ConfigureAwait(false);

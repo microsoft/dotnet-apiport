@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +11,20 @@ namespace Microsoft.Fx.Portability.Analyzer
     {
         /// <summary>
         /// These keys are a collection of public key tokens derived from all the reference assemblies in
-        /// "%ProgramFiles%\Reference Assemblies\Microsoft" on a Windows 10 machine with VS 2015 installed
+        /// "%ProgramFiles%\Reference Assemblies\Microsoft" on a Windows 10 machine with VS 2015 installed.
         /// </summary>
-        private static readonly ICollection<string> MicrosoftKeys = new HashSet<string>(new[]
+        private static readonly HashSet<PublicKeyToken> MicrosoftKeys = new HashSet<PublicKeyToken>(new[]
         {
-            "b77a5c561934e089", // ECMA
-            "b03f5f7f11d50a3a", // DEVDIV
-            "7cec85d7bea7798e", // SLPLAT
-            "31bf3856ad364e35", // SILVERLIGHT
-            "24eec0d8c86cda1e", // PHONE
-            "0738eb9f132ed756", // MONO
-            "cc7b13ffcd2ddd51" // NetStandard
-        }, StringComparer.OrdinalIgnoreCase);
+            PublicKeyToken.Parse("b77a5c561934e089"), // ECMA
+            PublicKeyToken.Parse("b03f5f7f11d50a3a"), // DEVDIV
+            PublicKeyToken.Parse("7cec85d7bea7798e"), // SLPLAT
+            PublicKeyToken.Parse("31bf3856ad364e35"), // SILVERLIGHT
+            PublicKeyToken.Parse("24eec0d8c86cda1e"), // PHONE
+            PublicKeyToken.Parse("0738eb9f132ed756"), // MONO
+            PublicKeyToken.Parse("cc7b13ffcd2ddd51") // NetStandard
+        });
 
-        private static readonly IEnumerable<string> FrameworkAssemblyNamePrefixes = new[]
+        private static readonly string[] FrameworkAssemblyNamePrefixes = new[]
         {
             "System.",
             "Microsoft.AspNet.",
@@ -37,25 +36,30 @@ namespace Microsoft.Fx.Portability.Analyzer
             "Windows."
         };
 
-        public bool IsFrameworkAssembly(AssemblyReferenceInformation assembly)
+        public bool IsFrameworkAssembly(string name, PublicKeyToken publicKeyToken)
         {
-            if (assembly == null)
+            return IsKnownPublicKeyToken(publicKeyToken) || IsKnownName(name);
+        }
+
+        private static bool IsKnownPublicKeyToken(PublicKeyToken publicKeyToken)
+        {
+            return MicrosoftKeys.Contains(publicKeyToken);
+        }
+
+        private static bool IsKnownName(string name)
+        {
+            // Name is null, default to submitting the API
+            if (name is null)
             {
-                // If we don't have the assembly, default to including the API
                 return true;
             }
 
-            if (MicrosoftKeys.Contains(assembly.PublicKeyToken))
+            if (string.Equals(name, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            if (FrameworkAssemblyNamePrefixes.Any(p => assembly.Name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-            {
-                return true;
-            }
-
-            if (string.Equals(assembly.Name, "mscorlib", StringComparison.OrdinalIgnoreCase))
+            if (FrameworkAssemblyNamePrefixes.Any(p => name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
                 return true;
             }

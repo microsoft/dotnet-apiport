@@ -17,19 +17,19 @@ namespace Microsoft.Fx.Portability.Proxy
 
         /// <summary>
         /// Environment variable key to specify the value to use as the HTTP proxy
-        /// for all connections.For example, HTTP_PROXY="http://proxy.mycompany.com:8080/"
+        /// for all connections.For example, HTTP_PROXY="http://proxy.mycompany.com:8080/".
         /// </summary>
         /// <remarks>
-        /// https://msdn.microsoft.com/en-us/library/hh272656(v=vs.120).aspx
+        /// https://msdn.microsoft.com/en-us/library/hh272656(v=vs.120).aspx.
         /// </remarks>
         public const string HttpProxy = "http_proxy";
 
         /// <summary>
         /// Environment variable key to determine hosts that should bypass the
-        /// proxy. For example, NO_PROXY="localhost,.mycompany.com,192.168.0.10:80"
+        /// proxy. For example, NO_PROXY="localhost,.mycompany.com,192.168.0.10:80".
         /// </summary>
         /// <remarks>
-        /// https://msdn.microsoft.com/en-us/library/hh272656(v=vs.120).aspx
+        /// https://msdn.microsoft.com/en-us/library/hh272656(v=vs.120).aspx.
         /// </remarks>
         public const string NoProxy = "no_proxy";
     }

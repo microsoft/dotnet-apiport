@@ -9,7 +9,7 @@ using System.Linq;
 namespace Microsoft.Fx.Portability.Utils.JsonConverters
 {
     /// <summary>
-    /// Json.NET does not handle IDictionary<TKey,TValue> when TKey is a type other than string.  This provides
+    /// Json.NET does not handle <see cref="IDictionary&lt;TKey, TValue&gt;"/> when TKey is a type other than string.  This provides
     /// a wrapper for these types to serialize in a Key/Value system (like DCJS).
     /// </summary>
     internal class JsonMultiDictionaryConverter<TKey, TValue> : JsonConverter<IDictionary<TKey, ICollection<TValue>>>
