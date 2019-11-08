@@ -46,6 +46,9 @@ namespace Microsoft.Fx.Portability
 
         public override int GetHashCode()
         {
+            if (Token.IsEmpty)
+                return 0;
+
             int hash = 19;
             unchecked
             {
@@ -83,6 +86,9 @@ namespace Microsoft.Fx.Portability
 
         private static ImmutableArray<byte> ParseString(string hex)
         {
+            if (string.Compare(hex, "null", true, CultureInfo.InvariantCulture) ==0)
+                return ImmutableArray<byte>.Empty;
+
             if (hex.Length % 2 != 0)
             {
                 throw new PortabilityAnalyzerException(string.Format(CultureInfo.InvariantCulture, LocalizedStrings.InvalidPublicKeyToken, hex));
