@@ -86,7 +86,7 @@ namespace Microsoft.Fx.Portability
 
         private static ImmutableArray<byte> ParseString(string hex)
         {
-            if (string.Compare(hex, "null", true, CultureInfo.InvariantCulture) ==0)
+            if ((string.Compare(hex, "null", true, CultureInfo.InvariantCulture) == 0) || hex == null)
                 return ImmutableArray<byte>.Empty;
 
             if (hex.Length % 2 != 0)
