@@ -18,17 +18,10 @@
         </FilesToSign>
       </ItemGroup>
     </When>
-    <When Condition="'$(OutputType)' == 'Exe' OR '$(OutputType)' == 'Library'">
-      <ItemGroup>
-        <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
-          <Authenticode>Microsoft</Authenticode>
-        </FilesToSign>
-      </ItemGroup>
-    </When>
     <Otherwise>
       <ItemGroup>
         <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
-          <Authenticode>MicrosoftSHA1</Authenticode>
+          <Authenticode>Microsoft400</Authenticode>
         </FilesToSign>
       </ItemGroup>
     </Otherwise>
