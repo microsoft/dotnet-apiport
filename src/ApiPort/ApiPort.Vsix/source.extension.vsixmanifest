@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="55d15546-28ca-40dc-af23-dfa503e9c5fe" Version="1.4.0" Language="en-US" Publisher="Microsoft" />
+        <Identity Id="2bc14703-9481-4270-a399-2a5ea0bdfd53" Version="1.5.0" Language="en-US" Publisher="Microsoft" />
         <DisplayName>.NET Portability Analyzer</DisplayName>
         <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms</Description>
-        <MoreInfo>http://go.microsoft.com/fwlink/?LinkId=506955</MoreInfo>
+        <MoreInfo>https://aka.ms/dotnet-portabilityanalyzer</MoreInfo>
         <License>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt</License>
         <Icon>Resources\Package.ico</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
         <Tags>code analysis, cross-platform, .NET Framework, .NET, portable, cross platform, Portable Library</Tags>
+        <Preview>true</Preview>
     </Metadata>
     <Installation>
         <InstallationTarget Version="[15.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
