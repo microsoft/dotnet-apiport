@@ -1,6 +1,6 @@
 # .NET Portability Analyzer (Console application)
 
-The console tool helps you determine how flexible your application.  The tool
+The console tool helps you determine how flexible your application is.  The tool
 understands the following commands:
 
 | Command | Description | Example |
