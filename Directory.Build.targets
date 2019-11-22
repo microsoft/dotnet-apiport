@@ -18,6 +18,13 @@
         </FilesToSign>
       </ItemGroup>
     </When>
+    <When Condition="'$(TargetExt)'=='.nupkg'">
+      <ItemGroup>
+        <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
+          <Authenticode>NuGet</Authenticode>
+        </FilesToSign>
+      </ItemGroup>
+    </When>
     <Otherwise>
       <ItemGroup>
         <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
