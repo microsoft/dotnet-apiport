@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <!-- Depending on whether it is a VSIX or MSIL, choose the correct certificate.
+  <!-- Depending on whether it is a VSIX, MSIL or nupkg, choose the correct certificate.
        1) By default, the VSIX project just packages the contents, so
        CopyBuildOutputToOutputDirectory/IncludeAssemblyInVSIXContainer will be
        false. But if you have a VSIX that builds a DLL as well, it will have both
@@ -18,17 +18,17 @@
         </FilesToSign>
       </ItemGroup>
     </When>
-    <When Condition="'$(TargetExt)'=='.nupkg'">
+    <When Condition="'$(TargetExt)'!='.nupkg'">
       <ItemGroup>
         <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
-          <Authenticode>NuGet</Authenticode>
+          <Authenticode>Microsoft400</Authenticode>
         </FilesToSign>
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
-        <FilesToSign Include="$(OutDir)\$(TargetName)$(TargetExt)">
-          <Authenticode>Microsoft400</Authenticode>
+        <FilesToSign Include="$(OutDir)\$(TargetName).nupkg">
+          <Authenticode>NuGet</Authenticode>
         </FilesToSign>
       </ItemGroup>
     </Otherwise>
