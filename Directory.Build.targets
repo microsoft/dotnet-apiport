@@ -27,7 +27,8 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <FilesToSign Include="$(OutDir)\$(TargetName).nupkg">
+        <!-- try to sign all nupkg files under $(OutDir)-->
+        <FilesToSign Include="$(OutDir)\**\%(Filename).nupkg">
           <Authenticode>NuGet</Authenticode>
         </FilesToSign>
       </ItemGroup>
