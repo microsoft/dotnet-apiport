@@ -72,7 +72,7 @@
     <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 
-  <Target Name="SignOutputPackage" BeforeTargets="AfterBuild">
+  <Target Name="SignOutputPackage" AfterTargets="AfterBuild">
     <ItemGroup>
       <FilesToSign Include="$(TargetDir)**\%(Filename)*.nupkg">
         <Authenticode>NuGet</Authenticode>
