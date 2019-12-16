@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>ApiPortVS</RootNamespace>
     <DefineConstants>$(DefineConstants);VS2019</DefineConstants>
   </PropertyGroup>
@@ -11,12 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="16.0.189-g83e7c53a57">
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="16.2.45">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="16.0.374-pre">
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="16.2.133-pre">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="16.2.29122.156" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

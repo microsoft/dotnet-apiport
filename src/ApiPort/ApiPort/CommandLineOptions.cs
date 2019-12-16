@@ -143,7 +143,7 @@ namespace ApiPort
             return requestFlags;
         }
 
-        private static (ImmutableDictionary<IAssemblyFile, bool>, IReadOnlyCollection<string>) ProcessInputAssemblies(IEnumerable<string> files)
+        private static (ImmutableDictionary<IAssemblyFile, bool> InputAssemblies, IReadOnlyCollection<string> InvalidInputFiles) ProcessInputAssemblies(IEnumerable<string> files)
         {
             var s_ValidExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {

@@ -36,13 +36,13 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
     <!-- Enforcing the same compiler toolset to be used on desktop builds.
       https://github.com/dotnet/roslyn-analyzers/issues/1533#issuecomment-358733030 -->
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.10.0" Condition="'$(OS)' == 'Windows_NT'">
+    <PackageReference Include="Microsoft.Net.Compilers" Version="3.3.1" Condition="'$(OS)' == 'Windows_NT'">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
