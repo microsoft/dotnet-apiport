@@ -96,5 +96,5 @@
     <Copy SourceFiles="$(OutDir)\$(TargetName).pdb"
           DestinationFolder="$(RawSymbolsDropDirectory)\$(TargetFramework)" />
   </Target>
-
+  <Import Project="$(MicrobuildSigningPluginDirectory)build\Microbuild.Plugins.Signing.targets" Condition="Exists('$(MicrobuildSigningPluginDirectory)build\Microbuild.Plugins.Signing.targets')" />
 </Project>
