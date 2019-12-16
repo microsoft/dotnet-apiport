@@ -18,7 +18,7 @@ function DownloadFile($url, $outputPath) {
 		New-Item -Type File $OutputPath -Force | Out-Null
 
 		# Attempt to download.  If fails, placeholder remains so msbuild won't complain
-		Invoke-WebRequest $url -OutFile $OutputPath | Out-Null
+		(New-Object System.Net.WebClient).DownloadFile($url, $OutputPath) | Out-Null
 
 		Write-Host "Downloaded $OutputPath"
 	} catch {
