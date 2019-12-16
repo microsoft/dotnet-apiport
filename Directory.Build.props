@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-
+  <Import Project="$(MicrobuildSigningPluginDirectory)build\Microbuild.Plugins.Signing.props" Condition="'$(SigningType)' == 'Real' " />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
