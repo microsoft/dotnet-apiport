@@ -72,12 +72,6 @@
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
 
-  <Target Name="GetSignNuGetPackFiles" BeforeTargets="SignNuGetPackage">
-    <ItemGroup>
-      <SignNuGetPackFiles Include="$(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg" />
-    </ItemGroup>
-  </Target>
-
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
