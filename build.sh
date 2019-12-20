@@ -64,7 +64,7 @@ installSDK() {
 
 tryGetTargetFramework() {
 	local file=$1
-	local targetFramework=$(awk -F: '/<TargetFramework(s)?>.*netcoreapp[1-9]\.[0-9].*<\/TargetFramework(s)?>/ { print $0 }' $file | sed 's/.*\(netcoreapp[1-9]\.[0-9]\).*/\1/')
+	local targetFramework=$(awk -F: '/<TargetFramework(s)?>.*netcoreapp[1-9]\.[0-9].*<\/TargetFramework(s)?>/ { print $0 }' $file | sed 's/.*\(netcoreapp[1-9]\.[0-9]\).*/\1/' | tail -n 1)
 	echo $targetFramework
 }
 
