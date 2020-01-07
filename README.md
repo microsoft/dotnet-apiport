@@ -27,8 +27,13 @@ Download and build for yourself:
 
 1. Install [.NET Core SDK](https://www.microsoft.com/net/core)
 2. Execute: `build.sh`
-3. Go to: `bin/Debug/ApiPort/netcoreapp2.1`
-4. Run ApiPort by executing: `dotnet ApiPort.dll`
+3. Execute: `analyze.sh <path-to-assembly>`
+  * Example: `./analyze.sh ~/src/project1/bin/Release/classlibrary.dll`
+  * Example: `./analyze.sh /usr/local/bin/app.exe`
+
+Other ApiPort commands:
+4. Go to: `bin/Debug/ApiPort/netcoreapp2.1`
+5. Run ApiPort by executing: `dotnet ApiPort.dll`
   * Example: `dotnet ApiPort.dll listTargets`
   * Example: `dotnet ApiPort.dll analyze -f Foo.dll -r HTML`
 5. For convenience, create an alias command adding the following to your `~/.bash_profile`. Replace `{dotnet-apiport-folder}` with the path where you cloned the repo.
