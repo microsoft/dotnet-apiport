@@ -36,11 +36,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             // we want to recreate the fast look-up data structures.
             _apiMapping = catalog.Apis.AsParallel()
                 .ToDictionary(key => key.DocId,
-#if NETSTANDARD1_3
-                                value => value.Targets.ToDictionary(innerkey => innerkey.Identifier,
-#else
                                 value => value.Targets.ToDictionary(innerkey => string.Intern(innerkey.Identifier),
-#endif
                                                                         innervalue => innervalue.Version, StringComparer.OrdinalIgnoreCase));
 
             _apiMetadata = catalog.Apis.AsParallel()
@@ -70,11 +66,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             {
                 DocId = key.DocId,
                 Name = key.Name,
-#if NETSTANDARD1_3
-                ReturnType = key.Type,
-#else
                 ReturnType = string.Intern(key.Type),
-#endif
                 FullName = key.FullName,
                 Parent = key.Parent
             });
