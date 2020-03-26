@@ -25,7 +25,7 @@ Download and build for yourself:
 
 ### Linux/Mac
 
-1. Install [.NET Core SDK](https://www.microsoft.com/net/core)
+1. Install [.NET Core SDK](https://dotnet.microsoft.com/download)
 2. Execute: `build.sh`
 3. Go to: `bin/Debug/ApiPort/netcoreapp2.1`
 4. Run ApiPort by executing: `dotnet ApiPort.dll`
@@ -105,5 +105,5 @@ This project is licensed under the [MIT license](LICENSE).
 [PR-Open]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr
 [myget]: https://dotnet.myget.org/gallery/dotnet-apiport
 [System.Reflection.Metadata]: https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata
-[Visual Studio 2017]: https://www.microsoft.com/net/core#windowsvs2017
+[Visual Studio 2017]: https://docs.microsoft.com/dotnet/core/install/sdk?pivots=os-windows#install-with-visual-studio
 [VSIX Gallery]: http://vsixgallery.com/extension/55d15546-28ca-40dc-af23-dfa503e9c5fe
