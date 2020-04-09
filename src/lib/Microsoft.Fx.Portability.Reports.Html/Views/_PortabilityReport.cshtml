@@ -142,12 +142,13 @@
                 {
                     var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);
                     <tr>
-                        <td>@name</td>
+                        @*Make type name row to have different background color with member row for nicer looking*@
+                        <td style="background:#E7E7E8">@name</td>
                         @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(type.TargetVersionStatus))
                         {
-                            @Html.TargetSupportCell(version)
+                            @Html.TargetSupportCell(version, "background:#E7E7E8");
                         }
-                        <td>@type.RecommendedChanges</td>
+                        <td style="background:#E7E7E8">@type.RecommendedChanges</td>
                     </tr>
                     @*write a row for each of the type's missing members*@
                     foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
@@ -162,12 +163,6 @@
                             <td>@member.RecommendedChanges</td>
                         </tr>
                     }
-                    <tr>
-                        @foreach (var column in detailColumnHeaders)
-                        {
-                            <td>&nbsp;</td>
-                        }
-                    </tr>
                 }
             </tbody>
         </table>

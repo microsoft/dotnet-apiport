@@ -24,6 +24,11 @@ namespace Microsoft.Fx.Portability.Reports
 
         public static IHtmlContent TargetSupportCell<T>(this IHtmlHelper<T> helper, TargetSupportedIn supportStatus)
         {
+            return TargetSupportCell<T>(helper, supportStatus, string.Empty);
+        }
+
+        public static IHtmlContent TargetSupportCell<T>(this IHtmlHelper<T> helper, TargetSupportedIn supportStatus, string style)
+        {
             var supported = supportStatus.SupportedIn != null
                          && supportStatus.Target.Version >= supportStatus.SupportedIn;
 
@@ -31,7 +36,7 @@ namespace Microsoft.Fx.Portability.Reports
             var title = supported ? LocalizedStrings.Supported : LocalizedStrings.NotSupported;
             var icon = $"<svg class=\"support-icon\"><use href=#{imageId}></use></svg>";
 
-            return helper.Raw(Invariant($"<td class=\"textCentered\" title=\"{title}\">{icon}</td>"));
+            return helper.Raw(Invariant($"<td style=\"{style}\" class=\"textCentered\" title=\"{title}\">{icon} </td>"));
         }
 
         public static IHtmlContent BreakingChangeCountCell<T>(this IHtmlHelper<T> helper, int breaks, int warningThreshold, int errorThreshold)
