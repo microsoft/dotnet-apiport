@@ -34,6 +34,9 @@ namespace ApiPort
             builder.RegisterInstance<ProductInformation>(productInformation);
             builder.RegisterInstance<ICommandLineOptions>(options);
 
+            builder.RegisterType<DependencyOrderer>()
+                .As<IDependencyOrderer>();
+
             builder.RegisterType<ConsoleCredentialProvider>()
                 .As<ICredentialProvider>()
                 .SingleInstance();

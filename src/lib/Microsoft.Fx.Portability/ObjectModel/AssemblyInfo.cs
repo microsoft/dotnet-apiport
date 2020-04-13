@@ -6,10 +6,12 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public sealed class AssemblyInfo : IComparable
+    public sealed class AssemblyInfo : IComparable, IComparable<AssemblyInfo>
     {
         private bool _hashComputed;
         private int _hashCode;
@@ -31,6 +33,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashComputed = false;
             }
         }
+
+        public AssemblyName GetAssemblyName() => new AssemblyName(AssemblyIdentity);
 
         /// <summary>
         /// Gets or sets the assembly location.
@@ -103,11 +107,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return string.Format(CultureInfo.InvariantCulture, LocalizedStrings.FullAssemblyIdentity, AssemblyIdentity, FileVersion);
         }
 
-        public int CompareTo(object obj)
-        {
-            var obj2 = obj as AssemblyInfo;
+        public int CompareTo(object obj) => CompareTo(obj as AssemblyInfo);
 
-            return string.Compare(AssemblyIdentity, obj2.AssemblyIdentity, StringComparison.Ordinal);
+        public int CompareTo(AssemblyInfo other)
+        {
+            if (other is null)
+            {
+                return -1;
+            }
+
+            return string.Compare(AssemblyIdentity, other.AssemblyIdentity, StringComparison.Ordinal);
         }
     }
 }

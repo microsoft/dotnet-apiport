@@ -101,6 +101,23 @@ namespace ApiPort
             }
         }
 
+        public async Task DetermineOrderAsync()
+        {
+            var order = await _apiPortClient.DetermineDependencyOrderAsync(_options);
+
+            Console.WriteLine();
+
+            if (order.Any())
+            {
+                Console.WriteLine("Order porting should be addressed:");
+
+                foreach (var assembly in order)
+                {
+                    Console.WriteLine(LocalizedStrings.TargetsListNoVersion, assembly.GetAssemblyName());
+                }
+            }
+        }
+
         public async Task AnalyzeAssembliesAsync()
         {
             var outputPaths = await _apiPortClient.WriteAnalysisReportsAsync(_options);

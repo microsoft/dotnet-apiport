@@ -34,9 +34,10 @@ namespace ApiPortVS.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var orderer = Substitute.For<IDependencyOrderer>();
             var writer = Substitute.For<IFileWriter>();
 
-            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer, orderer);
             var options = Substitute.For<IApiPortOptions>();
 
             var resultFormats = Enumerable.Range(0, 5)
@@ -121,9 +122,10 @@ namespace ApiPortVS.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var orderer = Substitute.For<IDependencyOrderer>();
             var writer = Substitute.For<IFileWriter>();
 
-            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer, orderer);
             var options = Substitute.For<IApiPortOptions>();
 
             var resultFormats = Enumerable.Range(0, 5)
@@ -196,9 +198,10 @@ namespace ApiPortVS.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var orderer = Substitute.For<IDependencyOrderer>();
             var writer = Substitute.For<IFileWriter>();
 
-            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer, orderer);
             var options = Substitute.For<IApiPortOptions>();
 
             var platforms = Enumerable.Range(0, 20).Select(platform =>

@@ -52,6 +52,8 @@ namespace Microsoft.Fx.Portability.Tests
 
             public IEnumerable<string> ReferencedNuGetPackages { get; }
 
+            public string EntryPoint { get; } = GetRandomString();
+
             private static IEnumerable<string> GenerateRandomList(int length)
             {
                 return Enumerable.Range(0, length)

@@ -34,8 +34,17 @@ namespace Microsoft.Fx.Portability
         private readonly IReportGenerator _reportGenerator;
         private readonly IEnumerable<IgnoreAssemblyInfo> _assembliesToIgnore;
         private readonly IFileWriter _writer;
+        private readonly IDependencyOrderer _orderer;
 
-        public ApiPortClient(IApiPortService apiPortService, IProgressReporter progressReport, ITargetMapper targetMapper, IDependencyFinder dependencyFinder, IReportGenerator reportGenerator, IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore, IFileWriter writer)
+        public ApiPortClient(
+            IApiPortService apiPortService,
+            IProgressReporter progressReport,
+            ITargetMapper targetMapper,
+            IDependencyFinder dependencyFinder,
+            IReportGenerator reportGenerator,
+            IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore,
+            IFileWriter writer,
+            IDependencyOrderer orderer)
         {
             _apiPortService = apiPortService;
             _progressReport = progressReport;
@@ -44,6 +53,7 @@ namespace Microsoft.Fx.Portability
             _reportGenerator = reportGenerator;
             _assembliesToIgnore = assembliesToIgnore;
             _writer = writer;
+            _orderer = orderer;
         }
 
         /// <summary>
@@ -80,6 +90,27 @@ namespace Microsoft.Fx.Portability
             return result.Paths;
         }
 
+        public Task<IEnumerable<AssemblyInfo>> DetermineDependencyOrderAsync(IApiPortOptions options)
+        {
+            ValidateOptions(options);
+
+            return HandleDependenciesAsync(
+                options,
+                dependencyInfo =>
+                {
+                    var entryPoint = dependencyInfo.UserAssemblies.FirstOrDefault(u => string.Equals(Path.GetFileName(u.Location), options.EntryPoint, StringComparison.OrdinalIgnoreCase));
+
+                    if (entryPoint is null)
+                    {
+                        _progressReport.ReportIssue($"Entrypoint {options.EntryPoint} could not be found");
+                        return Task.FromResult(Enumerable.Empty<AssemblyInfo>());
+                    }
+
+                    return Task.FromResult(_orderer.GetOrder(entryPoint, dependencyInfo.UserAssemblies));
+                },
+                Enumerable.Empty<AssemblyInfo>);
+        }
+
         /// <summary>
         /// Writes analysis reports to path supplied by options.
         /// </summary>
@@ -89,11 +120,6 @@ namespace Microsoft.Fx.Portability
             ValidateOptions(options);
 
             var jsonAdded = includeResponse ? TryAddJsonToOptions(options, out options) : false;
-
-            foreach (var errorInput in options.InvalidInputFiles)
-            {
-                _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidFileName, errorInput));
-            }
 
             var results = await GetAnalysisResultAsync(options);
             var outputPaths = new List<string>();
@@ -197,52 +223,62 @@ namespace Microsoft.Fx.Portability
             }
         }
 
-        /// <summary>
-        /// Gets an analysis report based on the options supplied.
-        /// </summary>
-        /// <param name="options">Options to generate report.</param>
-        /// <returns>A collection of reports.</returns>
-        private async Task<MultipleFormatAnalysis> GetAnalysisResultAsync(IApiPortOptions options)
+        private Task<T> HandleDependenciesAsync<T>(IApiPortOptions options, Func<IDependencyInfo, Task<T>> found, Func<T> notFound)
         {
             var assemblies = options.InputAssemblies?.Keys ?? Array.Empty<IAssemblyFile>();
             var dependencyInfo = _dependencyFinder.FindDependencies(assemblies, _progressReport);
 
             if (dependencyInfo.UserAssemblies.Any())
             {
-                AnalyzeRequest request = GenerateRequest(options, dependencyInfo);
-
-                // Create the progress reporter here (instead of within GetResultFromServiceAsync) since the reporter does not work well when run in parallel
-                using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
-                {
-                    try
-                    {
-                        var results = await _apiPortService.SendAnalysisAsync(request, options.OutputFormats);
-
-                        CheckEndpointStatus(results.Headers.Status);
-
-                        return new MultipleFormatAnalysis
-                        {
-                            Info = dependencyInfo,
-                            Request = request,
-                            Results = results.Response
-                        };
-                    }
-                    catch (Exception)
-                    {
-                        progressTask.Abort();
-                        throw;
-                    }
-                }
+                return found(dependencyInfo);
             }
             else
             {
                 _progressReport.ReportIssue(LocalizedStrings.NoFilesToAnalyze);
+                return Task.FromResult(notFound());
+            }
+        }
 
-                return new MultipleFormatAnalysis
+        /// <summary>
+        /// Gets an analysis report based on the options supplied.
+        /// </summary>
+        /// <param name="options">Options to generate report.</param>
+        /// <returns>A collection of reports.</returns>
+        private Task<MultipleFormatAnalysis> GetAnalysisResultAsync(IApiPortOptions options)
+        {
+            return HandleDependenciesAsync(
+                options,
+                async dependencyInfo =>
+                {
+                    var request = GenerateRequest(options, dependencyInfo);
+
+                    // Create the progress reporter here (instead of within GetResultFromServiceAsync) since the reporter does not work well when run in parallel
+                    using (var progressTask = _progressReport.StartTask(LocalizedStrings.AnalyzingCompatibility))
+                    {
+                        try
+                        {
+                            var results = await _apiPortService.SendAnalysisAsync(request, options.OutputFormats);
+
+                            CheckEndpointStatus(results.Headers.Status);
+
+                            return new MultipleFormatAnalysis
+                            {
+                                Info = dependencyInfo,
+                                Request = request,
+                                Results = results.Response
+                            };
+                        }
+                        catch (Exception)
+                        {
+                            progressTask.Abort();
+                            throw;
+                        }
+                    }
+                },
+                () => new MultipleFormatAnalysis
                 {
                     Results = Enumerable.Empty<ReportingResultWithFormat>()
-                };
-            }
+                });
         }
 
         private async Task<string> GetExtensionForFormat(string format)
@@ -374,7 +410,7 @@ namespace Microsoft.Fx.Portability
         /// Ensures that the analysis options are valid.  If they are not,
         /// throws a <see cref="InvalidApiPortOptionsException"/>.
         /// </summary>
-        private static void ValidateOptions(IApiPortOptions options)
+        private void ValidateOptions(IApiPortOptions options)
         {
             if (options == null)
             {
@@ -384,6 +420,11 @@ namespace Microsoft.Fx.Portability
             if (options.Targets.Count() > MaxNumberOfTargets && options.OutputFormats.Contains(Excel, StringComparer.OrdinalIgnoreCase))
             {
                 throw new InvalidApiPortOptionsException(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.TooManyTargetsMessage, MaxNumberOfTargets));
+            }
+
+            foreach (var errorInput in options.InvalidInputFiles)
+            {
+                _progressReport.ReportIssue(string.Format(CultureInfo.CurrentCulture, LocalizedStrings.InvalidFileName, errorInput));
             }
         }
 

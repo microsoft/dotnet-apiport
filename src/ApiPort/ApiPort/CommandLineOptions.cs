@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.CommandLine;
 using System.IO;
+using System.Linq;
 
 namespace ApiPort
 {
@@ -32,6 +33,7 @@ namespace ApiPort
             IReadOnlyList<string> suppressBreakingChange = Array.Empty<string>();
             string targetMap = string.Empty;
             string endpoint = "https://portability.dot.net";
+            string entryPoint = null;
             AppCommand command = default;
 
             ArgumentSyntax argSyntax = default;
@@ -56,6 +58,11 @@ namespace ApiPort
                     syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile);
                     syntax.DefineOptionList("s|suppressBreakingChange", ref suppressBreakingChange, LocalizedStrings.CmdAnalyzeSuppressBreakingChange);
                     syntax.DefineOption("targetMap", ref targetMap, LocalizedStrings.CmdAnalyzeTargetMap);
+
+                    syntax.DefineCommand("order", ref command, AppCommand.Order, LocalizedStrings.CmdOrder);
+                    syntax.DefineOptionList("f|file", ref file, LocalizedStrings.CmdAnalyzeFileInput);
+                    syntax.DefineOption("e|entryPoint", ref entryPoint, requireValue: true, LocalizedStrings.CmdEntryPointAssembly);
+                    syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile);
 
 #if !FEATURE_OFFLINE
                     syntax.DefineCommand("dump", ref command, AppCommand.DumpAnalysis, LocalizedStrings.CmdDumpAnalysis);
@@ -95,7 +102,7 @@ namespace ApiPort
                 overwriteOutput = true;
             }
 
-            var (inputFiles, invalidFiles) = ProcessInputAssemblies(file);
+            var (inputFiles, invalidFiles) = ProcessInputAssemblies(file, entryPoint);
 
             return new ConsoleApiPortOptions(command)
             {
@@ -111,6 +118,7 @@ namespace ApiPort
                 ServiceEndpoint = endpoint,
                 TargetMapFile = targetMap,
                 Targets = target,
+                EntryPoint = entryPoint,
             };
         }
 
@@ -143,7 +151,7 @@ namespace ApiPort
             return requestFlags;
         }
 
-        private static (ImmutableDictionary<IAssemblyFile, bool>, IReadOnlyCollection<string>) ProcessInputAssemblies(IEnumerable<string> files)
+        private static (ImmutableDictionary<IAssemblyFile, bool>, IReadOnlyCollection<string>) ProcessInputAssemblies(IEnumerable<string> files, string entryPoint)
         {
             var s_ValidExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -203,6 +211,11 @@ namespace ApiPort
             foreach (var file in files)
             {
                 ProcessInputAssemblies(file, isExplicitlySpecified: true);
+            }
+
+            if (!string.IsNullOrEmpty(entryPoint))
+            {
+                ProcessInputAssemblies(entryPoint, isExplicitlySpecified: true);
             }
 
             return (inputAssemblies.ToImmutableDictionary(), invalidInputFiles);

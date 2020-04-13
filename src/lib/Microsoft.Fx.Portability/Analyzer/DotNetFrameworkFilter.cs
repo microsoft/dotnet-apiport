@@ -31,6 +31,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             "Microsoft.AspNetCore.",
             "Microsoft.CSharp.",
             "Microsoft.EntityFrameworkCore.",
+            "Microsoft.Extensions.",
             "Microsoft.Win32.",
             "Microsoft.VisualBasic.",
             "Windows."

@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Fx.Portability.Analyzer;
 using Xunit;
 
-namespace Microsoft.Fx.Portability.MetadataReader.Tests
+namespace Microsoft.Fx.Portability.Analyzer.Tests
 {
     public class DotNetFrameworkFilterTests
     {
@@ -53,6 +52,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [InlineData("Microsoft.AspNetCore.Http", true)]
         [InlineData("microsoft.aspnetcore.http", true)]
         [InlineData("Microsoft.Win32.VisualBasic", true)]
+        [InlineData("Microsoft.Extensions.Configuration", true)]
         [InlineData("mono.something", false)]
         [InlineData("Mono.something", false)]
         [InlineData("mscorlib", true)]

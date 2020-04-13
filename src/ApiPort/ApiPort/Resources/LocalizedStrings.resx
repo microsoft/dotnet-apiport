@@ -295,4 +295,10 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="CmdDumpAnalysis" xml:space="preserve">
     <value>Write the analysis request to the output file without sending any data to the service</value>
   </data>
+  <data name="CmdEntryPointAssembly" xml:space="preserve">
+    <value>Entrypoint assembly. Used to identify order of dependencies to address any porting activities.</value>
+  </data>
+  <data name="CmdOrder" xml:space="preserve">
+    <value>Identify the order of supplied assemblies to be ported.</value>
+  </data>
 </root>

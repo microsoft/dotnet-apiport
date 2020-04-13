@@ -10,7 +10,6 @@
 
 namespace ApiPort.Resources {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -20,7 +19,7 @@ namespace ApiPort.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class LocalizedStrings {
@@ -40,7 +39,7 @@ namespace ApiPort.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -247,6 +246,24 @@ namespace ApiPort.Resources {
         internal static string CmdEndpoint {
             get {
                 return ResourceManager.GetString("CmdEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entrypoint assembly. Used to identify order of dependencies to address any porting activities..
+        /// </summary>
+        internal static string CmdEntryPointAssembly {
+            get {
+                return ResourceManager.GetString("CmdEntryPointAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identify the order of supplied assemblies to be ported..
+        /// </summary>
+        internal static string CmdOrder {
+            get {
+                return ResourceManager.GetString("CmdOrder", resourceCulture);
             }
         }
         

@@ -56,5 +56,7 @@ namespace ApiPortVS
         public bool OverwriteOutputFile { get; }
 
         public IEnumerable<string> ReferencedNuGetPackages { get; } = Enumerable.Empty<string>();
+
+        public string EntryPoint => string.Empty;
     }
 }

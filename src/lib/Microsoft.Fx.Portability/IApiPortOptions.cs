@@ -38,5 +38,7 @@ namespace Microsoft.Fx.Portability
         bool OverwriteOutputFile { get; }
 
         IEnumerable<string> ReferencedNuGetPackages { get; }
+
+        string EntryPoint { get; }
     }
 }
