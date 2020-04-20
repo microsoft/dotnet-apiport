@@ -20,7 +20,7 @@
     <RawBinariesDropDirectory Condition=" '$(RawBinariesDropDirectory)' == '' ">$(OutputDrop)\raw\binaries</RawBinariesDropDirectory>
     <RawSymbolsDropDirectory Condition=" '$(RawSymbolsDropDirectory)' == '' ">$(OutputDrop)\raw\symbols</RawSymbolsDropDirectory>
     <OutputPath>$(OutputDrop)\$(MSBuildProjectName)\</OutputPath>
-    <DocumentationFile>$(OutputPath)$(MSBuildProjectName).xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
