@@ -1,3 +1,7 @@
 {
-    "sources": [ "src" ]
-}
+    "sdk": {
+      "version": "2.1.513",
+      "rollForward": "patch",
+      "allowPrerelease": false
+    }
+  }

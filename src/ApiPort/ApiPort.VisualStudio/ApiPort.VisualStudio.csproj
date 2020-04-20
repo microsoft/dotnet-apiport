@@ -31,7 +31,6 @@
     <!-- Most projects will just inherit this from Directory.Build.props, but since this contains WPF, a temp project is created which causes issues with MSBuildProjectName -->
     <OutputPath>$(OutputDrop)\$(AssemblyName)\</OutputPath>
     <BaseIntermediateOutputPath>$(OutputFullPath)obj\$(AssemblyName)\</BaseIntermediateOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
