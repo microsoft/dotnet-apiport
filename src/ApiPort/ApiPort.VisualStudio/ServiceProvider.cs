@@ -15,6 +15,7 @@ using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Proxy;
 using Microsoft.Fx.Portability.Reporting;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -172,20 +173,14 @@ namespace ApiPortVS
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (outputWindow.GetPane(ref _outputWindowGuid, out var windowPane) == S_OK)
+            if (ErrorHandler.Succeeded(outputWindow.GetPane(ref _outputWindowGuid, out var windowPane)))
             {
                 return windowPane;
             }
 
-            if (outputWindow.CreatePane(ref _outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0) == S_OK)
-            {
-                if (outputWindow.GetPane(ref _outputWindowGuid, out windowPane) == S_OK)
-                {
-                    return windowPane;
-                }
-            }
-
-            throw new InvalidOperationException("Could not create pane");
+            ErrorHandler.ThrowOnFailure(outputWindow.CreatePane(ref _outputWindowGuid, LocalizedStrings.PortabilityOutputTitle, 1, 0));
+            ErrorHandler.ThrowOnFailure(outputWindow.GetPane(ref _outputWindowGuid, out windowPane));
+            return windowPane;
         }
 
         private static OutputViewModel GetOutputViewModel(IComponentContext context)

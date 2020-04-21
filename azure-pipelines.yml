@@ -63,16 +63,6 @@ jobs:
   - script: dotnet publish src/ApiPort/ApiPort/ApiPort.csproj -r win7-x86 -f netcoreapp2.1 --self-contained true
     displayName: publish self-contained apiport - win7-x86
 
-  - powershell: |
-      # Extract rule Ids into a plaintext file that is expected by the Roslyn Analyzer build task
-      $xdoc = [xml](Get-Content ".\rules.ruleset")
-      $xdoc.RuleSet.Rules.Rule.Id | Out-File "bin\RoslynAnalyzerSuppressions.txt"
-
-      # Add NoWarn Ids
-      $xdoc = [xml](Get-Content ".\Directory.Build.props")
-      $xdoc.Project.PropertyGroup.NoWarn -split "," | Select -skip 1 | Where {$_} | Add-Content ".\bin\RoslynAnalyzerSuppressions.txt"
-    displayName: Extract suppression ids for Roslyn Analyzer task
-
   - task: VSTest@2
     displayName: Test with VSTest
     inputs:
@@ -118,11 +108,6 @@ jobs:
       Contents: '**\*.pdb'
       TargetFolder: $(Build.StagingDirectory)\symbols
 
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-roslynanalyzers.RoslynAnalyzers@2
-    displayName: Run Roslyn Analyzers
-    inputs:
-      suppressionFileForCompilerWarnings: bin\RoslynAnalyzerSuppressions.txt
-
   - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
     displayName: Component Detection
 
@@ -130,17 +115,6 @@ jobs:
     displayName: Publish drop
     artifact: drop-$(Agent.JobName)
     enabled: false
-
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-fxcop.FxCop@2
-    displayName: 'Run FxCop'
-    inputs:
-      inputType: Basic
-      targets: 'bin\$(BuildConfiguration)\ApiPort*\net4*\**\ApiPort*.*;bin\$(BuildConfiguration)\ApiPort.Offline\net4*\**\Microsoft.Fx.*.dll;'
-      recursive: false
-      directory: 'C:\Windows\Microsoft.NET\Framework\v4.0.30319'
-      verbose: true
-    enabled: false
-    continueOnError: true
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
     displayName: 'Run BinSkim '
