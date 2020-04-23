@@ -10,7 +10,7 @@ using System.Windows;
 namespace ApiPortVS.Views
 {
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [Guid("1D9ECCF3-5D2F-4112-9B25-264596873DC9")] // identifies this as a custom dialog pane
+    [Guid("6D5D3696-1D53-43B9-B848-67B23747A254")] // Every options page should have a unique one
     internal class OptionsPage : UIElementDialogPage
     {
         private readonly Owned<OptionsPageControl> _optionsPageControl;
