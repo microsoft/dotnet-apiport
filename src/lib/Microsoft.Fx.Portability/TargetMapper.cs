@@ -95,9 +95,7 @@ namespace Microsoft.Fx.Portability
                 IgnoreComments = true,
                 IgnoreWhitespace = true,
                 DtdProcessing = DtdProcessing.Prohibit,
-#if !NETSTANDARD1_3
                 XmlResolver = null
-#endif
             };
 
             try
