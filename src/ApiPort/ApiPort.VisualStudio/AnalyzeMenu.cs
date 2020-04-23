@@ -71,7 +71,9 @@ namespace ApiPortVS
                 _output.WriteLine();
                 _output.WriteLine(ex.Message);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 _output.WriteLine();
                 _output.WriteLine(LocalizedStrings.UnknownError);
@@ -140,7 +142,9 @@ namespace ApiPortVS
                 _output.WriteLine();
                 _output.WriteLine(ex.Message);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 _output.WriteLine();
                 _output.WriteLine(LocalizedStrings.UnknownError);
