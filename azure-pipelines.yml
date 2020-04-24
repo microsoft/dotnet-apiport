@@ -17,7 +17,7 @@ jobs:
   - checkout: self
     clean: true
 
-  - powershell: .\init.ps1
+  - powershell: .\init.ps1 -UpgradePrerequisites -NoRestore
     displayName: init.ps1 script
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
@@ -169,6 +169,7 @@ jobs:
         tests/**/*[Tt]ests/*.csproj
         !tests/**/*/ApiPortVS.Tests.csproj
       arguments: '--configuration $(BuildConfiguration) --framework $(BuildNetCoreAppTarget) --no-build'
+    enabled: false # it wasn't testing anything anyway.
 
   - task: DotNetCoreCLI@2
     displayName: dotnet publish

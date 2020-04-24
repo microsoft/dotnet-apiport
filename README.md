@@ -3,39 +3,38 @@
 This repository contains the source code for .NET Portability Analyzer tools and
 dependencies.
 
-|Branch|Build Status|
-|---|---|
-|master|[![][BuildStatus-Master]][myget]|
-|dev|[![][BuildStatus-Dev]][myget]|
+|Branch|Build Status
+|---|---|---|
+|master|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=master)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=master)
+|dev|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=dev)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=dev)
 
 For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
 
 [<img src="https://sec.ch9.ms/ch9/031c/f3d7672b-dd71-4a18-a8b4-37573c08031c/DotNetPortabilityAnalyzer_960.jpg" width="480" />][Channel 9 Video]
 
+There is a Visual Studio extension available for VS 2017 and VS 2019: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
+
 ## Using this Repository
 
-### Windows
-There is a Visual Studio extension available for VS2017: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
+See our [contributing guide](CONTRIBUTING.md) for instructions to
+build and run from the source code in this repo.
 
-Download and build for yourself:
-1. Install [Visual Studio 2017 with .NET Core Workload][Visual Studio 2017]
-2. Building:
-   * Visual Studio: `PortabilityTools.sln`
-   * Powershell: `.\build.ps1 -Configuration Debug -Platform AnyCPU`
+Sample usage to run the analysis from the command line:
 
-### Linux/Mac
-
-1. Install [.NET Core SDK](https://dotnet.microsoft.com/download)
-2. Execute: `build.sh`
-3. Go to: `bin/Debug/ApiPort/netcoreapp2.1`
-4. Run ApiPort by executing: `dotnet ApiPort.dll`
-  * Example: `dotnet ApiPort.dll listTargets`
-  * Example: `dotnet ApiPort.dll analyze -f Foo.dll -r HTML`
-5. For convenience, create an alias command adding the following to your `~/.bash_profile`. Replace `{dotnet-apiport-folder}` with the path where you cloned the repo.
+```ps1
+./init.ps1
+dotnet build src/ApiPort/ApiPort/ApiPort.csproj
+dotnet bin/Debug/ApiPort/netcoreapp2.1/ApiPort.dll -- listTargets
+dotnet bin/Debug/ApiPort/netcoreapp2.1/ApiPort.dll -- analyze -f Foo.dll -r HTML
 ```
+
+If using bash for your shell, for convenience you may create an alias command adding the following to your `~/.bash_profile`. Replace `{dotnet-apiport-folder}` with the path where you cloned the repo.
+
+```bash
 alias apiport="dotnet {dotnet-apiport-folder}/bin/Debug/ApiPort/netcoreapp2.1/ApiPort.dll"
 ```
-This will alow you to use apiport globally from the command line: `apiport analyze -f Foo.dll -r HTML`
+
+This will allow you to use apiport globally from the command line: `apiport analyze -f Foo.dll -r HTML`
 
 ## Documentation
 
@@ -43,7 +42,7 @@ This will alow you to use apiport globally from the command line: `apiport analy
 * [Platform Portability](docs/HowTo/PlatformPortability.md)
 * [Breaking Changes](docs/HowTo/BreakingChanges.md)
 * [.NET Portability Analyzer (Console application)](docs/Console)
-    * [.NET Core application](docs/Console/README.md#using-net-core-application)
+  * [.NET Core application](docs/Console/README.md#using-net-core-application)
 * [.NET Portability Analyzer (Visual Studio extension)](docs/VSExtension)
 
 ## Projects
@@ -93,8 +92,6 @@ For an overview of all the .NET related projects, have a look at the
 
 This project is licensed under the [MIT license](LICENSE).
 
-[BuildStatus-Master]: https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/484/badge
-[BuildStatus-Dev]: https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/7913/badge
 [Channel 9 Video]: https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer
 [Contributing Guide]: https://github.com/dotnet/corefx/wiki/Contributing
 [Developer Guide]: https://github.com/dotnet/corefx/wiki/Developer-Guide
@@ -105,5 +102,4 @@ This project is licensed under the [MIT license](LICENSE).
 [PR-Open]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr
 [myget]: https://dotnet.myget.org/gallery/dotnet-apiport
 [System.Reflection.Metadata]: https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata
-[Visual Studio 2017]: https://docs.microsoft.com/dotnet/core/install/sdk?pivots=os-windows#install-with-visual-studio
 [VSIX Gallery]: http://vsixgallery.com/extension/55d15546-28ca-40dc-af23-dfa503e9c5fe
