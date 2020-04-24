@@ -45,7 +45,7 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build solution PortabilityTools.sln'
     inputs:
-      msbuildArgs: '/m /t:build /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog /p:DeployExtension=False'
+      msbuildArgs: '/m /t:build;pack /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog /p:DeployExtension=False'
       platform: $(BuildPlatform)
       configuration: $(BuildConfiguration)
 
