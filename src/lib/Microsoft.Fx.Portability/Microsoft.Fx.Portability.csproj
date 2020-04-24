@@ -9,7 +9,6 @@
     <Description>The core data structures and network calls for .NET Portability Analyzer</Description>
     <!-- Adding this to properly suppress CA3053. -->
     <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'== 'netstandard2.0' ">

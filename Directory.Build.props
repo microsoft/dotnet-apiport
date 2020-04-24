@@ -64,7 +64,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <!-- Some of the project types do not have a pack target. This creates a default empty pack target that will be overridden in supported project types -->
-  <Target Name="Pack">
-  </Target>
 </Project>
