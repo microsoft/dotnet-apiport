@@ -14,6 +14,7 @@
         <TargetFramework>netcoreapp2.1</TargetFramework>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>ApiPort</ToolCommandName>
+        <PackageId>Microsoft.ApiPort</PackageId>
       </PropertyGroup>
     </When>
     <Otherwise>
@@ -71,12 +72,6 @@
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.MetadataReader\Microsoft.Fx.Portability.MetadataReader.csproj" />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
   </ItemGroup>
-
-  <Target Name="GetSignNuGetPackFiles" BeforeTargets="SignNuGetPackage">
-    <ItemGroup>
-      <SignNuGetPackFiles Include="$(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg" />
-    </ItemGroup>
-  </Target>
 
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(BinPlaceContent)" DestinationFiles="@(BinPlaceContent->'$(TargetDir)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />

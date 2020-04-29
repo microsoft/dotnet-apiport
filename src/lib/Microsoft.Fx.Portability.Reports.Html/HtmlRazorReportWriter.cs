@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +16,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+
+#if NETSTANDARD2_0
+using Microsoft.AspNetCore.Hosting.Internal;
+#endif
 
 namespace Microsoft.Fx.Portability.Reports
 {
@@ -58,6 +61,7 @@ namespace Microsoft.Fx.Portability.Reports
             var services = new ServiceCollection();
             var fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
 
+#if NETSTANDARD2_0
             services.AddSingleton<IHostingEnvironment>(new HostingEnvironment
             {
                 ApplicationName = Assembly.GetEntryAssembly()?.GetName().Name ?? string.Empty,
@@ -69,8 +73,15 @@ namespace Microsoft.Fx.Portability.Reports
                 options.FileProviders.Clear();
                 options.FileProviders.Add(fileProvider);
             });
+#endif
 
-            services.AddSingleton<DiagnosticSource>(new DiagnosticListener("Microsoft.AspNetCore.Mvc.Razor"));
+            var listener = new DiagnosticListener("Microsoft.AspNetCore.Mvc.Razor");
+
+            services.AddSingleton<DiagnosticSource>(listener);
+
+#if NETCOREAPP3_1
+            services.AddSingleton<DiagnosticListener>(listener);
+#endif
 
             services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
             services.AddLogging();

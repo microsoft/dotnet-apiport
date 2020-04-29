@@ -48,19 +48,7 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
 
-    <!-- Enforcing the same compiler toolset to be used on desktop builds.
-      https://github.com/dotnet/roslyn-analyzers/issues/1533#issuecomment-358733030 -->
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.10.0" Condition="'$(OS)' == 'Windows_NT'">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" Condition=" '$(IsPackage)' != 'true' ">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-
-    <!-- GitVersionTask is not compiled against .NET Core, so importing the targets will
-         result in a failure because it will try to resolve Microsoft.Build.Utilities v4.0 -->
-    <PackageReference Include="GitVersionTask" Version="4.0.0" Condition=" '$(MSBuildRuntimeType)' != 'Core' AND Exists('$(MSBuildThisFileDirectory)\.git') ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>

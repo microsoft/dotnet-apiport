@@ -29,7 +29,7 @@ namespace ApiPortVS.Reporting
 
         public async Task ViewAsync(IEnumerable<string> urls)
         {
-            foreach (var url in urls)
+            foreach (var url in urls ?? throw new ArgumentNullException(nameof(urls)))
             {
                 if (IsHtml(url))
                 {

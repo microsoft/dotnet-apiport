@@ -172,17 +172,12 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock HorizontalAlignment="Left"
-                       Visibility="{Binding UpdatingPlatforms, Converter={StaticResource HideWhenTrue}}"
-                       Grid.Column="0">
-               <Hyperlink Click="RefreshRequested"
-                          AutomationProperties.Name="{x:Static const:LocalizedStrings.Refresh}">
-                  <TextBlock Text="{x:Static const:LocalizedStrings.Refresh}"
-                             ToolTip="{x:Static const:LocalizedStrings.Refresh}"
-                             KeyboardNavigation.IsTabStop="True"
-                             KeyboardNavigation.TabIndex="1" />
-               </Hyperlink>
-            </TextBlock>
+            <Button
+                        Content="{x:Static const:LocalizedStrings.Refresh}"
+                        Click="RefreshRequested"
+                        AutomationProperties.Name="{x:Static const:LocalizedStrings.Refresh}"
+                        KeyboardNavigation.TabIndex="1"
+                        Grid.Column="0" Grid.Row="0" />
 
             <TextBlock Grid.Column="2"
                        HorizontalAlignment="Right">

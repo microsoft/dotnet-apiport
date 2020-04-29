@@ -129,19 +129,21 @@
 
         <table class="table_portability_details">
             <caption>@LocalizedStrings.PortabilityDetails</caption>
-            <tbody>
+            <thead>
                 <tr>
                     @foreach (var header in detailColumnHeaders)
                     {
                         <th>@header</th>
                     }
                 </tr>
-                @*  IsMissing  => the type is entirely unsupported
-                    !IsMissing => only some members are unsupported *@
-                @foreach (var type in Model.MatchingMissingTypes(assembly))
-                {
-                    var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);
+            </thead>
+            @*  IsMissing  => the type is entirely unsupported
+                !IsMissing => only some members are unsupported *@
+            @foreach (var type in Model.MatchingMissingTypes(assembly))
+            {
+                <tbody>
                     <tr>
+                        @{var name = Model.RemoveTypeOrMemberPrefix(type.TypeName);}
                         <td>@name</td>
                         @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(type.TargetVersionStatus))
                         {
@@ -150,26 +152,20 @@
                         <td>@type.RecommendedChanges</td>
                     </tr>
                     @*write a row for each of the type's missing members*@
-                    foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
+                    @foreach (var member in type.MissingMembers.OrderBy(y => y.MemberName).ToList())
                     {
-                        var formattedName = member.MemberName.Substring(type.TypeName.Length + 1);
-                        <tr>
-                            <td style="padding-left:2em">@formattedName</td>
-                            @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(member.TargetVersionStatus))
-                            {
-                                @Html.TargetSupportCell(version)
-                            }
-                            <td>@member.RecommendedChanges</td>
-                        </tr>
-                    }
+                            var formattedName = member.MemberName.Substring(type.TypeName.Length + 1);
                     <tr>
-                        @foreach (var column in detailColumnHeaders)
+                        <td style="padding-left:2em">@formattedName</td>
+                        @foreach (var version in Model.GetMatchingTargetsAndSupportedVersions(member.TargetVersionStatus))
                         {
-                            <td>&nbsp;</td>
+                            @Html.TargetSupportCell(version)
                         }
+                        <td>@member.RecommendedChanges</td>
                     </tr>
-                }
-            </tbody>
+                    }
+                </tbody>
+            }
         </table>
 
         <p>

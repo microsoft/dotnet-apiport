@@ -24,7 +24,7 @@ namespace ApiPortVS
         public OutputWindowWriter(DTE dte, IVsOutputWindowPane outputWindow)
             : base(CultureInfo.CurrentCulture)
         {
-            _outputWindow = outputWindow;
+            _outputWindow = outputWindow ?? throw new ArgumentNullException(nameof(outputWindow));
             _dte = dte;
 
             _outputWindow.Clear();
@@ -43,7 +43,9 @@ namespace ApiPortVS
                 Window window = _dte.Windows.Item(Constants.VsWindowKindOutput);
                 window.Activate();
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
             }
         }

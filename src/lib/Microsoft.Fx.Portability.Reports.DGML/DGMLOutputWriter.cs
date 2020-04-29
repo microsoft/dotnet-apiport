@@ -22,17 +22,16 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             FileExtension = ".dgml"
         };
 
-        private DGMLManager dgml;
-
         public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
             // Create a new dgml every time write to a new stream.
-            dgml = new DGMLManager();
-            ReferenceGraph rg = ReferenceGraph.CreateGraph(response);
+            var dgml = new DGMLManager();
+            var rg = ReferenceGraph.CreateGraph(response);
 
-            ReportingResult analysisResult = response.ReportingResult;
+            var analysisResult = response.ReportingResult;
             var targets = analysisResult.Targets;
-            GenerateTargetContainers(targets);
+
+            GenerateTargetContainers(dgml, targets);
             dgml.SetTitle(response.ApplicationName);
 
             // For each target, let's generate the assemblies
@@ -111,7 +110,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             return string.Join("\n", missingTypesForFramework);
         }
 
-        private void GenerateTargetContainers(IList<FrameworkName> targets)
+        private static void GenerateTargetContainers(DGMLManager dgml, IList<FrameworkName> targets)
         {
             for (int i = 0; i < targets.Count; i++)
             {
