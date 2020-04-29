@@ -4,7 +4,7 @@ This repository contains the source code for .NET Portability Analyzer tools and
 dependencies.
 
 |Branch|Build Status
-|---|---|---|
+|---|---
 |master|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=master)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=master)
 |dev|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=dev)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=dev)
 
