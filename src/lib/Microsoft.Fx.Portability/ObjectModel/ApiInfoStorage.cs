@@ -25,5 +25,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public IReadOnlyCollection<FrameworkName> Targets { get; set; }
 
         public IReadOnlyCollection<ApiMetadataStorage> Metadata { get; set; }
+
+        public IReadOnlyCollection<ApiExceptionStorage> Exceptions { get; set; }
     }
 }

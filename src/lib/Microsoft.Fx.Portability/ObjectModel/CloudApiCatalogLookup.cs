@@ -22,6 +22,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private readonly string _builtBy;
         private readonly Dictionary<string, Dictionary<string, Version>> _apiMapping;
         private readonly Dictionary<string, Dictionary<string, string>> _apiMetadata;
+        private readonly Dictionary<string, Dictionary<string, string>> _apiExceptions;
         private readonly Dictionary<string, FrameworkName> _latestTargetVersion;
         private readonly ICollection<string> _frameworkAssemblies;
         private readonly IReadOnlyCollection<FrameworkName> _publicTargets;
@@ -50,6 +51,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
                                 value => value.Metadata.ToDictionary(
                                             innerKey => innerKey.MetadataKey,
                                             innerValue => innerValue.Value,
+                                            StringComparer.Ordinal),
+                                StringComparer.Ordinal);
+
+            _apiExceptions = catalog.Apis.AsParallel()
+                            .Where(api => api.Exceptions != null)
+                            .ToDictionary(
+                                key => key.DocId,
+                                value => value.Exceptions.ToDictionary(
+                                            innerKey => innerKey.Exception,
+                                            innerValue => innerValue.TFRIDS,
                                             StringComparer.Ordinal),
                                 StringComparer.Ordinal);
 
@@ -143,6 +154,18 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
 
             return metadataValue;
+        }
+
+        public virtual string GetApiException(string docId, string exceptionType)
+        {
+            string exceptionTFRIDs = null;
+
+            if (_apiExceptions.TryGetValue(docId, out var exceptions))
+            {
+                exceptions.TryGetValue(exceptionType, out exceptionTFRIDs);
+            }
+
+            return exceptionTFRIDs;
         }
 
         public virtual string GetRecommendedChange(string docId)
