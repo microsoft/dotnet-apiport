@@ -146,6 +146,34 @@ namespace Microsoft.Fx.Portability.Analysis
             return missingMembers;
         }
 
+        public IList<MemberInfo> FindMembersMayThrow(IEnumerable<FrameworkName> targets, ICollection<string> submittedAssemblies, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        {
+            // Trace.TraceInformation("Computing members not in target");
+            var sw = new Stopwatch();
+            sw.Start();
+
+            if (dependencies == null || dependencies.Keys == null || targets == null)
+            {
+                return new List<MemberInfo>();
+            }
+
+            // Find the missing members by:
+            //  -- Find the members that are defined in framework assemblies AND which are framework members.
+            //  -- For each member, identity which is the status for that docId for each of the targets.
+            //  -- Keep only the members that may throw exceptions
+            var mayThrowMembers = dependencies.Keys
+                .Where(m => MemberIsInFramework(m, submittedAssemblies) && IsSupportedOnAnyTarget(_catalog, m.MemberDocId))
+                .AsParallel()
+                .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
+                .Where(memberInfo => memberInfo.ExceptionsThrown != null)
+                .ToList();
+
+            sw.Stop();
+
+            // Trace.TraceInformation("Computing members not in target took '{0}'", sw.Elapsed);
+            return mayThrowMembers;
+        }
+
         private bool MemberIsInFramework(MemberInfo dep, ICollection<string> submittedAssemblies)
         {
             if (submittedAssemblies.Contains(dep.DefinedInAssemblyIdentity))
@@ -169,8 +197,14 @@ namespace Microsoft.Fx.Portability.Analysis
             member.TargetStatus = targetStatus;
             member.RecommendedChanges = _recommendations.GetRecommendedChanges(member.MemberDocId);
             member.SourceCompatibleChange = _recommendations.GetSourceCompatibleChanges(member.MemberDocId);
+            member.ExceptionsThrown = ThrownExceptions(catalog, member.MemberDocId);
 
             return member;
+        }
+
+        private static Dictionary<string, string> ThrownExceptions(IApiCatalogLookup catalog, string memberDocId)
+        {
+            return catalog.GetApiExceptions(memberDocId);
         }
 
         /// <summary>

@@ -43,6 +43,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IList<AssemblyInfo> BreakingChangeSkippedAssemblies { get; set; }
 
+        public IList<MemberInfo> ThrowingMembers { get; set; }
+
         public int CompareTo(object obj)
         {
             var analyzeObject = obj as AnalyzeResponse;

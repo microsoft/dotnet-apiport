@@ -81,6 +81,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, userAssemblies, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
                 : new List<BreakingChangeDependency>();
 
+            var apiPotentialExceptions = _analysisEngine.FindMembersMayThrow(targets, userAssemblies, dependencies);
+
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,
@@ -104,6 +106,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 BreakingChanges = breakingChanges,
                 BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies,
                 NuGetPackages = nugetPackages,
+                ThrowingMembers = apiPotentialExceptions,
                 Request = request
             };
         }

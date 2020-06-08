@@ -4,6 +4,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Runtime.ExceptionServices;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -69,6 +71,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         [JsonIgnore]
         public bool IsSupportedAcrossTargets { get; set; }
+
+        public Dictionary<string, string> ExceptionsThrown { get; set; }
 
         public override string ToString()
         {

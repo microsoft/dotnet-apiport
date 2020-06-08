@@ -156,16 +156,14 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return metadataValue;
         }
 
-        public virtual string GetApiException(string docId, string exceptionType)
+        public virtual Dictionary<string, string> GetApiExceptions(string docId)
         {
-            string exceptionTFRIDs = null;
-
             if (_apiExceptions.TryGetValue(docId, out var exceptions))
             {
-                exceptions.TryGetValue(exceptionType, out exceptionTFRIDs);
+                return exceptions;
             }
 
-            return exceptionTFRIDs;
+            return null;
         }
 
         public virtual string GetRecommendedChange(string docId)
