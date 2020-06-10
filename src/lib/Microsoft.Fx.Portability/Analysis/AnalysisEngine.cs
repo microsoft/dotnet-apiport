@@ -165,7 +165,7 @@ namespace Microsoft.Fx.Portability.Analysis
                 .Where(m => MemberIsInFramework(m, submittedAssemblies) && IsSupportedOnAnyTarget(_catalog, m.MemberDocId))
                 .AsParallel()
                 .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
-                .Where(memberInfo => memberInfo.ExceptionsThrown != null)
+                .Where(memberInfo => memberInfo.ExceptionsThrown != null && memberInfo.ExceptionsThrown.Count > 0)
                 .ToList();
 
             sw.Stop();
@@ -197,14 +197,20 @@ namespace Microsoft.Fx.Portability.Analysis
             member.TargetStatus = targetStatus;
             member.RecommendedChanges = _recommendations.GetRecommendedChanges(member.MemberDocId);
             member.SourceCompatibleChange = _recommendations.GetSourceCompatibleChanges(member.MemberDocId);
-            member.ExceptionsThrown = ThrownExceptions(catalog, member.MemberDocId);
+            member.ExceptionsThrown = GetThrownExceptions(catalog, member.MemberDocId, targets);
 
             return member;
         }
 
-        private static Dictionary<string, string> ThrownExceptions(IApiCatalogLookup catalog, string memberDocId)
+        private static List<ApiExceptionStorage> GetThrownExceptions(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets)
         {
-            return catalog.GetApiExceptions(memberDocId);
+            List<ApiExceptionStorage> excepts;
+            if ((excepts = catalog.GetApiExceptions(memberDocId)) != null)
+            {
+                return excepts.Where(exc => !exc.Equals(null) && targets.Any(tg => tg.Equals(new FrameworkName(exc.Platform, Version.Parse(exc.Version))))).ToList();
+            }
+
+            return null;
         }
 
         /// <summary>

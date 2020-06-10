@@ -72,7 +72,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         [JsonIgnore]
         public bool IsSupportedAcrossTargets { get; set; }
 
-        public Dictionary<string, string> ExceptionsThrown { get; set; }
+        public List<ApiExceptionStorage> ExceptionsThrown { get; set; }
 
         public override string ToString()
         {

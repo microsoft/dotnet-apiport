@@ -22,7 +22,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private readonly string _builtBy;
         private readonly Dictionary<string, Dictionary<string, Version>> _apiMapping;
         private readonly Dictionary<string, Dictionary<string, string>> _apiMetadata;
-        private readonly Dictionary<string, Dictionary<string, string>> _apiExceptions;
+        private readonly Dictionary<string, List<ApiExceptionStorage>> _apiExceptions;
         private readonly Dictionary<string, FrameworkName> _latestTargetVersion;
         private readonly ICollection<string> _frameworkAssemblies;
         private readonly IReadOnlyCollection<FrameworkName> _publicTargets;
@@ -58,11 +58,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                             .Where(api => api.Exceptions != null)
                             .ToDictionary(
                                 key => key.DocId,
-                                value => value.Exceptions.ToDictionary(
-                                            innerKey => innerKey.Exception,
-                                            innerValue => innerValue.TFRIDS,
-                                            StringComparer.Ordinal),
-                                StringComparer.Ordinal);
+                                value => value.Exceptions.ToList());
 
             _publicTargets = catalog.SupportedTargets
                                                 .Where(sp => sp.IsReleased)
@@ -156,7 +152,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
             return metadataValue;
         }
 
-        public virtual Dictionary<string, string> GetApiExceptions(string docId)
+        public virtual List<ApiExceptionStorage> GetApiExceptions(string docId)
         {
             if (_apiExceptions.TryGetValue(docId, out var exceptions))
             {

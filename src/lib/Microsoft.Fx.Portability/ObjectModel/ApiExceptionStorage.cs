@@ -7,6 +7,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
     {
         public string Exception { get; set; }
 
-        public string TFRIDS { get; set; }
+        public string RID { get; set; }
+
+        public string Platform { get; set; }
+
+        public string Version { get; set; }
     }
 }
