@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
-    public class ApiExceptionStorage
+    public class AdditionalDataCatalog
     {
-        public string DocId { get; set; }
-
-        public IEnumerable<ApiException> Exceptions { get; set; }
+        public IEnumerable<ApiExceptionStorage> Exceptions { get; set; }
     }
 }

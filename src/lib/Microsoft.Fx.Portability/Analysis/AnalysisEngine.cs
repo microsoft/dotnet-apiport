@@ -202,9 +202,9 @@ namespace Microsoft.Fx.Portability.Analysis
             return member;
         }
 
-        private static List<ApiExceptionStorage> GetThrownExceptions(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets)
+        private static List<ApiException> GetThrownExceptions(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets)
         {
-            List<ApiExceptionStorage> excepts;
+            List<ApiException> excepts;
             if ((excepts = catalog.GetApiExceptions(memberDocId)) != null)
             {
                 return excepts.Where(exc => !exc.Equals(null) && targets.Any(tg => tg.Equals(new FrameworkName(exc.Platform, Version.Parse(exc.Version))))).ToList();

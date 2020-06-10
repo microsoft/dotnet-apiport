@@ -19,7 +19,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         IEnumerable<TargetInfo> GetAllTargets();
 
-        List<ApiExceptionStorage> GetApiExceptions(string docId);
+        List<ApiException> GetApiExceptions(string docId);
 
         string GetRecommendedChange(string docId);
 
