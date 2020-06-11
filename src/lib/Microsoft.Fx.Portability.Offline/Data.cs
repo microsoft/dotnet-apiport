@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
 namespace Microsoft.Fx.Portability
@@ -32,10 +33,12 @@ namespace Microsoft.Fx.Portability
                     catalog.Exceptions = stream.DecompressToObject<List<ApiExceptionStorage>>();
                 }
             }
+            catch (PortabilityAnalyzerException e) { }
             catch
             {
-                return null;
+                throw;
             }
+
             return catalog;
         }
 
