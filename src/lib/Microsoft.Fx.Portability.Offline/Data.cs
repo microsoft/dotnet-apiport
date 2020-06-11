@@ -26,6 +26,7 @@ namespace Microsoft.Fx.Portability
         public static AdditionalDataCatalog LoadAdditionalData()
         {
             var catalog = new AdditionalDataCatalog();
+
             try
             {
                 using (var stream = OpenFileOrResource($"exceptions.bin"))
@@ -34,10 +35,6 @@ namespace Microsoft.Fx.Portability
                 }
             }
             catch (PortabilityAnalyzerException e) { }
-            catch
-            {
-                throw;
-            }
 
             return catalog;
         }
