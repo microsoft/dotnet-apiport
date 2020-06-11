@@ -10,7 +10,7 @@ namespace Microsoft.Fx.Portability
     public class OfflineApiCatalogLookup : CloudApiCatalogLookup
     {
         public OfflineApiCatalogLookup(IProgressReporter progressReporter)
-            : base(GetData(progressReporter))
+            : base(GetData(progressReporter), GetAdditionalData(progressReporter))
         { }
 
         private static DotNetCatalog GetData(IProgressReporter progressReporter)
@@ -20,6 +20,22 @@ namespace Microsoft.Fx.Portability
                 try
                 {
                     return Data.LoadCatalog();
+                }
+                catch (Exception)
+                {
+                    progressTask.Abort();
+                    throw;
+                }
+            }
+        }
+
+        private static AdditionalDataCatalog GetAdditionalData(IProgressReporter progressReporter)
+        {
+            using (var progressTask = progressReporter.StartTask("Loading Additional Data"))
+            {
+                try
+                {
+                    return Data.LoadAdditionalData();
                 }
                 catch (Exception)
                 {

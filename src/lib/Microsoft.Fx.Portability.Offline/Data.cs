@@ -22,6 +22,23 @@ namespace Microsoft.Fx.Portability
             }
         }
 
+        public static AdditionalDataCatalog LoadAdditionalData()
+        {
+            var catalog = new AdditionalDataCatalog();
+            try
+            {
+                using (var stream = OpenFileOrResource($"exceptions.bin"))
+                {
+                    catalog.Exceptions = stream.DecompressToObject<List<ApiExceptionStorage>>();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return catalog;
+        }
+
         public static IEnumerable<BreakingChange> LoadBreakingChanges()
         {
             // Prefer a local 'BreakingChanges' directory to embedded breaking changes

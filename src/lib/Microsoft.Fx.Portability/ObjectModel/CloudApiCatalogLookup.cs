@@ -89,7 +89,10 @@ namespace Microsoft.Fx.Portability.ObjectModel
                      key => key.DocId,
                      value => value.Exceptions.ToList());
             }
-            else _apiExceptions = new Dictionary<string, List<ApiException>>();
+            else
+            {
+                _apiExceptions = new Dictionary<string, List<ApiException>>();
+            }
         }
 
         public virtual IEnumerable<string> DocIds
