@@ -26,7 +26,7 @@ namespace Microsoft.Fx.Portability
             IEnumerable<AssemblyInfo> userAssemblies,
             IEnumerable<IgnoreAssemblyInfo> assembliesToIgnore);
 
-        public IList<MemberInfo> FindMembersMayThrow(IEnumerable<FrameworkName> targets,
+        public IList<ExceptionInfo> FindMembersMayThrow(IEnumerable<FrameworkName> targets,
             ICollection<string> submittedAssemblies,
             IDictionary<MemberInfo,
             ICollection<AssemblyInfo>> dependencies);

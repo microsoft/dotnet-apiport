@@ -72,8 +72,6 @@ namespace Microsoft.Fx.Portability.ObjectModel
         [JsonIgnore]
         public bool IsSupportedAcrossTargets { get; set; }
 
-        public List<ApiException> ExceptionsThrown { get; set; }
-
         public override string ToString()
         {
             return MemberDocId;

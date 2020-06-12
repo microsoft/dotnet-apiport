@@ -43,7 +43,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IList<AssemblyInfo> BreakingChangeSkippedAssemblies { get; set; }
 
-        public IList<MemberInfo> ThrowingMembers { get; set; }
+        public IList<ExceptionInfo> ThrowingMembers { get; set; }
 
         public int CompareTo(object obj)
         {

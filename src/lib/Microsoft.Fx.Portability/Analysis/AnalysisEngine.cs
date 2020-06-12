@@ -146,7 +146,7 @@ namespace Microsoft.Fx.Portability.Analysis
             return missingMembers;
         }
 
-        public IList<MemberInfo> FindMembersMayThrow(IEnumerable<FrameworkName> targets, ICollection<string> submittedAssemblies, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
+        public IList<ExceptionInfo> FindMembersMayThrow(IEnumerable<FrameworkName> targets, ICollection<string> submittedAssemblies, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
             // Trace.TraceInformation("Computing members not in target");
             var sw = new Stopwatch();
@@ -154,7 +154,7 @@ namespace Microsoft.Fx.Portability.Analysis
 
             if (dependencies == null || dependencies.Keys == null || targets == null)
             {
-                return new List<MemberInfo>();
+                return new List<ExceptionInfo>();
             }
 
             // Find the missing members by:
@@ -164,7 +164,7 @@ namespace Microsoft.Fx.Portability.Analysis
             var mayThrowMembers = dependencies.Keys
                 .Where(m => MemberIsInFramework(m, submittedAssemblies) && IsSupportedOnAnyTarget(_catalog, m.MemberDocId))
                 .AsParallel()
-                .Select(memberInfo => ProcessMemberInfo(_catalog, targets, memberInfo))
+                .Select(memberInfo => ProcessExceptionInfo(_catalog, targets, memberInfo))
                 .Where(memberInfo => memberInfo.ExceptionsThrown != null && memberInfo.ExceptionsThrown.Count > 0)
                 .ToList();
 
@@ -197,9 +197,22 @@ namespace Microsoft.Fx.Portability.Analysis
             member.TargetStatus = targetStatus;
             member.RecommendedChanges = _recommendations.GetRecommendedChanges(member.MemberDocId);
             member.SourceCompatibleChange = _recommendations.GetSourceCompatibleChanges(member.MemberDocId);
-            member.ExceptionsThrown = GetThrownExceptions(catalog, member.MemberDocId, targets);
 
             return member;
+        }
+
+        /// <summary>
+        /// Identitifies the status of an API Exception for all of the targets.
+        /// </summary>
+        private ExceptionInfo ProcessExceptionInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
+        {
+            var exceptionHold = new ExceptionInfo();
+            exceptionHold.MemberDocId = member.MemberDocId;
+            exceptionHold.DefinedInAssemblyIdentity = member.DefinedInAssemblyIdentity;
+            exceptionHold.IsSupportedAcrossTargets = IsSupportedAcrossTargets(catalog, member.MemberDocId, targets, out var ignore);
+            exceptionHold.ExceptionsThrown = GetThrownExceptions(catalog, member.MemberDocId, targets);
+
+            return exceptionHold;
         }
 
         private static List<ApiException> GetThrownExceptions(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets)

@@ -83,7 +83,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             var apiPotentialExceptions = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowExceptionApis)
                 ? _analysisEngine.FindMembersMayThrow(targets, userAssemblies, dependencies)
-                : Array.Empty<MemberInfo>();
+                : Array.Empty<ExceptionInfo>();
 
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
