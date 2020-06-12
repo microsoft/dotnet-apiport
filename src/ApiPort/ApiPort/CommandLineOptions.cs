@@ -27,6 +27,7 @@ namespace ApiPort
             bool showNonPortableApis = true;
             bool showBreakingChanges = false;
             bool showRetargettingIssues = false;
+            bool showExceptionApis = false;
             bool noDefaultIgnoreFile = false;
             IReadOnlyList<string> ignoreAssemblyFile = Array.Empty<string>();
             IReadOnlyList<string> suppressBreakingChange = Array.Empty<string>();
@@ -51,6 +52,7 @@ namespace ApiPort
                     syntax.DefineOption("p|showNonPortableApis", ref showNonPortableApis, LocalizedStrings.CmdAnalyzeShowNonPortableApis);
                     syntax.DefineOption("b|showBreakingChanges", ref showBreakingChanges, LocalizedStrings.CmdAnalyzeShowBreakingChanges);
                     syntax.DefineOption("u|showRetargettingIssues", ref showRetargettingIssues, LocalizedStrings.CmdAnalyzeShowRetargettingIssues);
+                    syntax.DefineOption("x|showExceptionApis", ref showExceptionApis, LocalizedStrings.CmdAnalyzeShowRetargettingIssues);
                     syntax.DefineOption("force", ref overwriteOutput, LocalizedStrings.OverwriteFile);
                     syntax.DefineOption("noDefaultIgnoreFile", ref noDefaultIgnoreFile, LocalizedStrings.CmdAnalyzeNoDefaultIgnoreFile);
                     syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile);
@@ -107,14 +109,14 @@ namespace ApiPort
                 OutputFileName = outFile,
                 OutputFormats = result,
                 OverwriteOutputFile = overwriteOutput,
-                RequestFlags = GetRequestFlags(showBreakingChanges, showRetargettingIssues, showNonPortableApis),
+                RequestFlags = GetRequestFlags(showBreakingChanges, showRetargettingIssues, showNonPortableApis, showExceptionApis),
                 ServiceEndpoint = endpoint,
                 TargetMapFile = targetMap,
                 Targets = target,
             };
         }
 
-        private static AnalyzeRequestFlags GetRequestFlags(bool showBreakingChanges, bool showRetargettingIssues, bool showNonPortableApis)
+        private static AnalyzeRequestFlags GetRequestFlags(bool showBreakingChanges, bool showRetargettingIssues, bool showNonPortableApis, bool showExceptionApis)
         {
             var requestFlags = default(AnalyzeRequestFlags);
 
@@ -132,6 +134,11 @@ namespace ApiPort
             if (showNonPortableApis)
             {
                 requestFlags |= AnalyzeRequestFlags.ShowNonPortableApis;
+            }
+
+            if (showExceptionApis)
+            {
+                requestFlags |= AnalyzeRequestFlags.ShowExceptionApis;
             }
 
             // If nothing is set, default to ShowNonPortableApis
