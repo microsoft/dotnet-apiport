@@ -146,6 +146,13 @@ namespace Microsoft.Fx.Portability.Analysis
             return missingMembers;
         }
 
+        /// <summary>
+        /// Finds the members that could throw an exception on the specified targets.
+        /// </summary>
+        /// <param name="targets">Frameworks to check for exceptions on.</param>
+        /// <param name="submittedAssemblies">Assemblies submitted for checking if the member is a part of the assemblies.</param>
+        /// <param name="dependencies">Dictionary of members with their corresponding assembly information.</param>
+        /// <returns>A list of ExceptionInfo providing necessary information on each member that may throw.</returns>
         public IList<ExceptionInfo> FindMembersMayThrow(IEnumerable<FrameworkName> targets, ICollection<string> submittedAssemblies, IDictionary<MemberInfo, ICollection<AssemblyInfo>> dependencies)
         {
             // Trace.TraceInformation("Computing members not in target");
@@ -213,17 +220,6 @@ namespace Microsoft.Fx.Portability.Analysis
             exceptionHold.ExceptionsThrown = GetThrownExceptions(catalog, member.MemberDocId, targets);
 
             return exceptionHold;
-        }
-
-        private static List<ApiException> GetThrownExceptions(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets)
-        {
-            List<ApiException> excepts;
-            if ((excepts = catalog.GetApiExceptions(memberDocId)) != null)
-            {
-                return excepts.Where(exc => !exc.Equals(null) && targets.Any(tg => tg.Equals(new FrameworkName(exc.Platform, Version.Parse(exc.Version))))).ToList();
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -421,6 +417,24 @@ namespace Microsoft.Fx.Portability.Analysis
             {
                 return obj.Item1.GetHashCode();
             }
+        }
+
+        /// <summary>
+        /// Gets the exceptions thrown by the <paramref name="memberDocId"/> for each <paramref name="targets"/>.
+        /// </summary>
+        /// <param name="catalog">Catalog to lookup from.</param>
+        /// <param name="memberDocId">DocId to find exceptions for.</param>
+        /// <param name="targets">Targets to find exceptions for.</param>
+        /// <returns>A list of the ApiExceptions for the <paramref name="memberDocId"/>. Returns null if no exceptions were found.</returns>
+        private static List<ApiException> GetThrownExceptions(IApiCatalogLookup catalog, string memberDocId, IEnumerable<FrameworkName> targets)
+        {
+            List<ApiException> excepts;
+            if ((excepts = catalog.GetApiExceptions(memberDocId)) != null)
+            {
+                return excepts.Where(exc => !exc.Equals(null) && targets.Any(tg => tg.Equals(new FrameworkName(exc.Platform, Version.Parse(exc.Version))))).ToList();
+            }
+
+            return null;
         }
     }
 }

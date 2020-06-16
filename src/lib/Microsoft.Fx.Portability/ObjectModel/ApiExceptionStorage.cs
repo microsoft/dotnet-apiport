@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
+    /// <summary>
+    /// Holds a DocId with corresponding Exceptions for easy storage of the exceptions thrown by Apis.
+    /// </summary>
     public class ApiExceptionStorage
     {
         public string DocId { get; set; }

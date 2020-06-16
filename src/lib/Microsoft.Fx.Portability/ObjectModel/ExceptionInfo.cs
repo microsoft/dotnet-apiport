@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
+    /// <summary>
+    /// Model used to pass exception data through the Analyze response.
+    /// Includes the Apis assembly, DocId, and the list of exceptions that it throws.
+    /// </summary>
     public class ExceptionInfo
     {
         public string DefinedInAssemblyIdentity { get; set; }

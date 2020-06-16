@@ -23,6 +23,10 @@ namespace Microsoft.Fx.Portability
             }
         }
 
+        /// <summary>
+        /// Location for loading in the Additional Data when ApiPort is being run in offline mode.
+        /// </summary>
+        /// <returns>An AdditionalDataCatalog containing found additional data.</returns>
         public static AdditionalDataCatalog LoadAdditionalData()
         {
             var catalog = new AdditionalDataCatalog();
@@ -34,7 +38,7 @@ namespace Microsoft.Fx.Portability
                     catalog.Exceptions = stream.DecompressToObject<List<ApiExceptionStorage>>();
                 }
             }
-            catch (PortabilityAnalyzerException e) { }
+            catch (PortabilityAnalyzerException) { }
 
             return catalog;
         }

@@ -81,6 +81,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 Parent = key.Parent
             });
 
+            // Populate the exception list if the additional data catalog contains exceptions.
             if (extra != null && extra.Exceptions != null)
             {
                 _apiExceptions = extra.Exceptions.AsParallel()

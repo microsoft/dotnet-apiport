@@ -3,6 +3,10 @@
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
+    /// <summary>
+    /// A single ApiException used for holding the data of the single exception.
+    /// Includes override methods for Equals and ToString.
+    /// </summary>
     public class ApiException
     {
         public string Exception { get; set; }
@@ -26,6 +30,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public virtual bool Equals(ApiException exc)
         {
             return exc != null && ToString().Equals(exc.ToString(), System.StringComparison.Ordinal);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
         }
     }
 }
