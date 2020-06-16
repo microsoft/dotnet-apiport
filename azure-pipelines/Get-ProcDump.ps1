@@ -4,7 +4,7 @@ Downloads 32-bit and 64-bit procdump executables and returns the path to where t
 #>
 $version = '0.0.1'
 $baseDir = "$PSScriptRoot\..\obj\tools"
-$procDumpToolPath = "$baseDir\procdump.$version\bin"
+$procDumpToolPath = "$baseDir\Procdump.$version\bin"
 if (-not (Test-Path $procDumpToolPath)) {
     if (-not (Test-Path $baseDir)) { New-Item -Type Directory -Path $baseDir | Out-Null }
     $baseDir = (Resolve-Path $baseDir).Path # Normalize it
