@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Fx.OpenXmlExtensions;
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Microsoft.Fx.Portability.Reports.Excel.Resources;
 using System;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
 namespace Microsoft.Fx.Portability.Reports
@@ -44,12 +47,14 @@ namespace Microsoft.Fx.Portability.Reports
         private readonly ReportingResult _analysisReport;
         private readonly IEnumerable<BreakingChangeDependency> _breakingChanges;
         private readonly DateTimeOffset _catalogLastUpdated;
+        private readonly IList<ExceptionInfo> _throwingMembers;
 
         public ExcelOpenXmlOutputWriter(
             ITargetMapper mapper,
             ReportingResult analysisReport,
             IEnumerable<BreakingChangeDependency> breakingChanges,
             DateTimeOffset catalogLastUpdated,
+            IList<ExceptionInfo> throwingMembers = null,
             string description = null)
         {
             _mapper = mapper;
@@ -57,6 +62,7 @@ namespace Microsoft.Fx.Portability.Reports
             _breakingChanges = breakingChanges;
             _description = description ?? string.Empty;
             _catalogLastUpdated = catalogLastUpdated;
+            _throwingMembers = throwingMembers;
         }
 
         public async Task WriteToAsync(Stream outputStream)
@@ -88,6 +94,11 @@ namespace Microsoft.Fx.Portability.Reports
                     if (_analysisReport.NuGetPackages?.Any() ?? false)
                     {
                         GenerateNuGetInfoPage(spreadsheet.AddWorksheet(LocalizedStrings.SupportedPackages), _analysisReport);
+                    }
+
+                    if (_throwingMembers.Any())
+                    {
+                        GenerateExceptionsPage(spreadsheet.AddWorksheet("Exceptions"), _throwingMembers, _analysisReport.Targets);
                     }
                 }
 
@@ -404,6 +415,86 @@ namespace Microsoft.Fx.Portability.Reports
 
             page.AddTable(1, rowCount, 1, header.ToArray());
             page.AddColumnWidth(70, 40, 30, 30);
+        }
+
+        private void GenerateExceptionsPage(Worksheet worksheet, IList<ExceptionInfo> throwingMembers, IList<FrameworkName> targets)
+        {
+            List<string> exceptionsPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.TargetMemberHeader, "Exception Thrown" };
+
+            exceptionsPageHeader.AddRange(_mapper.GetTargetNames(targets, alwaysIncludeVersion: true));
+
+            int exceptionRows = 0;
+            worksheet.AddRow(exceptionsPageHeader.ToArray());
+            exceptionRows++;
+
+            foreach (var member in throwingMembers.OrderBy(info => info.MemberDocId))
+            {
+                var exceptionsByType = member.ExceptionsThrown.GroupBy(exc => exc.Exception, (exception, exceptionList) => new { Key = exception, exceptions = exceptionList });
+                foreach (var grouping in exceptionsByType)
+                {
+                    var rowContent = new List<object> { member.DefinedInAssemblyIdentity, member.MemberDocId, grouping.Key };
+                    var groupsByTarget = grouping.exceptions.GroupBy(exc => new FrameworkName(exc.Platform, Version.Parse(exc.Version)), (framework, exceptionList) => new { Key = framework, exceptionsByPlatform = exceptionList });
+                    foreach (var target in targets)
+                    {
+                        foreach (var exceptionsByTarget in groupsByTarget)
+                        {
+                            if (exceptionsByTarget.Key.Equals(target))
+                            {
+                                string resourceIDHolder = string.Empty;
+                                foreach (var exception in exceptionsByTarget.exceptionsByPlatform)
+                                {
+                                    resourceIDHolder = string.Concat(resourceIDHolder, exception.RID + ";");
+                                }
+
+                                if (resourceIDHolder.Length > 0)
+                                {
+                                    rowContent.Add(resourceIDHolder);
+                                }
+                                else
+                                {
+                                    rowContent.Add("No Notable Exceptions");
+                                }
+                            }
+                        }
+                    }
+
+                    worksheet.AddRow(rowContent.ToArray());
+                    exceptionRows++;
+                }
+            }
+
+        /*foreach (var api in throwingMembers)
+        {
+            foreach (var exception in api.ExceptionsThrown)
+            {
+                var rowContent = new object[]
+                {
+                api.DefinedInAssemblyIdentity,
+                api.MemberDocId,
+                exception.Exception,
+                exception.RID,
+                exception.Platform,
+                exception.Version,
+                string.Empty
+                };
+
+                worksheet.AddRow(rowContent);
+                exceptionRows++;
+            }
+        }*/
+
+            worksheet.AddTable(1, exceptionRows, 1, exceptionsPageHeader.ToArray());
+
+            // Generate the columns
+            var columnWidths = new List<double>
+            {
+                ColumnWidths.DetailsPage.AssemblyName, // Assembly name
+                ColumnWidths.DetailsPage.TargetMember, // Target member
+                40 // Exception Width
+            };
+            columnWidths.AddRange(Enumerable.Repeat(ColumnWidths.Targets, targets.Count)); // Targets
+
+            worksheet.AddColumnWidth(columnWidths);
         }
 
         private object CreateHyperlink(string displayString, string link)
