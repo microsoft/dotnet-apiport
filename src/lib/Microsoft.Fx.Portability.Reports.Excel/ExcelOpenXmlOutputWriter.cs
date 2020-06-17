@@ -441,7 +441,7 @@ namespace Microsoft.Fx.Portability.Reports
                             if (exceptionsByTarget.Key.Equals(target))
                             {
                                 string resourceIDHolder = string.Empty;
-                                foreach (var exception in exceptionsByTarget.exceptionsByPlatform)
+                                foreach (var exception in exceptionsByTarget.exceptionsByPlatform.OrderBy(exc => exc.RID))
                                 {
                                     resourceIDHolder = string.Concat(resourceIDHolder, exception.RID + ";");
                                 }
