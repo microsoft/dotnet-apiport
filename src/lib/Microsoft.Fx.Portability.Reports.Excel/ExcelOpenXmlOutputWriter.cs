@@ -436,10 +436,12 @@ namespace Microsoft.Fx.Portability.Reports
                     var groupsByTarget = grouping.exceptions.GroupBy(exc => new FrameworkName(exc.Platform, Version.Parse(exc.Version)), (framework, exceptionList) => new { Key = framework, exceptionsByPlatform = exceptionList });
                     foreach (var target in targets)
                     {
+                        bool hasExceptions = false;
                         foreach (var exceptionsByTarget in groupsByTarget)
                         {
                             if (exceptionsByTarget.Key.Equals(target))
                             {
+                                hasExceptions = true;
                                 string resourceIDHolder = string.Empty;
                                 foreach (var exception in exceptionsByTarget.exceptionsByPlatform.OrderBy(exc => exc.RID))
                                 {
@@ -455,6 +457,11 @@ namespace Microsoft.Fx.Portability.Reports
                                     rowContent.Add("No Notable Exceptions");
                                 }
                             }
+                        }
+
+                        if (!hasExceptions)
+                        {
+                            rowContent.Add("No Notable Exceptions");
                         }
                     }
 
