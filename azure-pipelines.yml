@@ -124,7 +124,7 @@ jobs:
       AnalyzeSymPath: $(Build.StagingDirectory)\symbols
     continueOnError: true
 
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@1
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
     displayName: 'Run APIScan net461'
     inputs:
       softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\net461'
