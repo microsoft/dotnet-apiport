@@ -125,5 +125,10 @@ namespace Microsoft.Fx.Portability.TestData
         {
             throw new NotImplementedException();
         }
+
+        public List<ApiException> GetApiExceptions(string docId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -54,7 +54,6 @@ namespace Microsoft.Fx.Portability.ObjectModel
                                             StringComparer.Ordinal),
                                 StringComparer.Ordinal);
 
-
             _publicTargets = catalog.SupportedTargets
                                                 .Where(sp => sp.IsReleased)
                                                 .Select(sp => sp.DisplayName)

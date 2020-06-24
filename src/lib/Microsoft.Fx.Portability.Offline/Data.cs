@@ -38,7 +38,10 @@ namespace Microsoft.Fx.Portability
                     catalog.Exceptions = stream.DecompressToObject<List<ApiExceptionStorage>>();
                 }
             }
-            catch (PortabilityAnalyzerException) { }
+            catch (PortabilityAnalyzerException)
+            {
+                Console.WriteLine("Unable to find exceptions.bin so exceptions will not be included in report.");
+            }
 
             return catalog;
         }

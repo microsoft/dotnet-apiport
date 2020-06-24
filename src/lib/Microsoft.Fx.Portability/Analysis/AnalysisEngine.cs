@@ -211,7 +211,7 @@ namespace Microsoft.Fx.Portability.Analysis
         /// <summary>
         /// Identitifies the status of an API Exception for all of the targets.
         /// </summary>
-        private ExceptionInfo ProcessExceptionInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
+        private static ExceptionInfo ProcessExceptionInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
         {
             var exceptionHold = new ExceptionInfo();
             exceptionHold.MemberDocId = member.MemberDocId;
