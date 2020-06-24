@@ -22,13 +22,14 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private readonly string _builtBy;
         private readonly Dictionary<string, Dictionary<string, Version>> _apiMapping;
         private readonly Dictionary<string, Dictionary<string, string>> _apiMetadata;
+        private readonly Dictionary<string, List<ApiException>> _apiExceptions;
         private readonly Dictionary<string, FrameworkName> _latestTargetVersion;
         private readonly ICollection<string> _frameworkAssemblies;
         private readonly IReadOnlyCollection<FrameworkName> _publicTargets;
         private readonly IReadOnlyCollection<TargetInfo> _allTargets;
         private readonly IDictionary<string, ApiDefinition> _docIdToApi;
 
-        public CloudApiCatalogLookup(DotNetCatalog catalog)
+        public CloudApiCatalogLookup(DotNetCatalog catalog, AdditionalDataCatalog extra = null)
         {
             _lastModified = catalog.LastModified;
             _builtBy = catalog.BuiltBy;
@@ -52,6 +53,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
                                             innerValue => innerValue.Value,
                                             StringComparer.Ordinal),
                                 StringComparer.Ordinal);
+
 
             _publicTargets = catalog.SupportedTargets
                                                 .Where(sp => sp.IsReleased)
@@ -78,6 +80,20 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 FullName = key.FullName,
                 Parent = key.Parent
             });
+
+            // Populate the exception list if the additional data catalog contains exceptions.
+            if (extra != null && extra.Exceptions != null)
+            {
+                _apiExceptions = extra.Exceptions.AsParallel()
+                 .Where(api => api.Exceptions != null)
+                 .ToDictionary(
+                     key => key.DocId,
+                     value => value.Exceptions.ToList());
+            }
+            else
+            {
+                _apiExceptions = new Dictionary<string, List<ApiException>>();
+            }
         }
 
         public virtual IEnumerable<string> DocIds
@@ -143,6 +159,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
             }
 
             return metadataValue;
+        }
+
+        public virtual List<ApiException> GetApiExceptions(string docId)
+        {
+            if (_apiExceptions.TryGetValue(docId, out var exceptions))
+            {
+                return exceptions;
+            }
+
+            return null;
         }
 
         public virtual string GetRecommendedChange(string docId)

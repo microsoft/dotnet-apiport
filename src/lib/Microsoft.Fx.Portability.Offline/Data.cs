@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
 namespace Microsoft.Fx.Portability
@@ -20,6 +21,26 @@ namespace Microsoft.Fx.Portability
             {
                 return stream.DecompressToObject<DotNetCatalog>();
             }
+        }
+
+        /// <summary>
+        /// Location for loading in the Additional Data when ApiPort is being run in offline mode.
+        /// </summary>
+        /// <returns>An AdditionalDataCatalog containing found additional data.</returns>
+        public static AdditionalDataCatalog LoadAdditionalData()
+        {
+            var catalog = new AdditionalDataCatalog();
+
+            try
+            {
+                using (var stream = OpenFileOrResource($"exceptions.bin"))
+                {
+                    catalog.Exceptions = stream.DecompressToObject<List<ApiExceptionStorage>>();
+                }
+            }
+            catch (PortabilityAnalyzerException) { }
+
+            return catalog;
         }
 
         public static IEnumerable<BreakingChange> LoadBreakingChanges()
