@@ -142,7 +142,7 @@ jobs:
       command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
-      publishVstsFeed: '0bdbc590-a062-4c3f-b0f6-9383f67865ee/1fff9f67-af3b-4871-8fc9-070c877b33d6'
+      publishVstsFeed: '4e73bcb0-523f-4cc0-9274-610b687d95fe'
       allowPackageConflicts: true
 
 - job: Linux
