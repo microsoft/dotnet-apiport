@@ -140,8 +140,9 @@ jobs:
   - task: NuGetCommand@2
     inputs:
       command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
-      publishVstsFeed: '4e73bcb0-523f-4cc0-9274-610b687d95fe'
+      publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
       allowPackageConflicts: true
 
 - job: Linux
