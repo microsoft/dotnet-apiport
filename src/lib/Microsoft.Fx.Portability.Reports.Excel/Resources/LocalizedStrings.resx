@@ -178,4 +178,13 @@
   <data name="TooManyColumns" xml:space="preserve">
     <value>Only 26 colums supported overall!!</value>
   </data>
+  <data name="ExceptionColumnHeader" xml:space="preserve">
+    <value>Exception Thrown</value>
+  </data>
+  <data name="ExceptionsWorksheetTitle" xml:space="preserve">
+    <value>Exceptions</value>
+  </data>
+  <data name="NoExceptionNoted" xml:space="preserve">
+    <value>No Notable Exceptions</value>
+  </data>
 </root>
