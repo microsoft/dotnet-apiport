@@ -99,6 +99,11 @@ jobs:
         ApiPort.Vsix\*.vsix
         raw\**\*
         *.binlog
+        Microsoft.Fx.Portability\**\*
+        Microsoft.Fx.Portability.Reports.DGML\**\*
+        Microsoft.Fx.Portability.Reports.Excel\**\*
+        Microsoft.Fx.Portability.Reports.Html\**\*
+        Microsoft.Fx.Portability.Reports.Json\**\*
       TargetFolder: $(Build.StagingDirectory)\drop
 
   - task: CopyFiles@2
