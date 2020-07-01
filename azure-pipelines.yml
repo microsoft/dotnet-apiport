@@ -137,6 +137,14 @@ jobs:
     displayName: 'Publish Security Analysis Logs'
     condition: succeededOrFailed()
 
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
+      allowPackageConflicts: true
+
 - job: Linux
   pool:
     vmImage: Ubuntu 18.04
