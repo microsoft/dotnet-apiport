@@ -13,6 +13,7 @@
     <DataPath>$(OutputFullPath)\.data\</DataPath>
     <BreakingChangePath>$(OutputFullPath)\docs\BreakingChanges\</BreakingChangePath>
     <CatalogDataFile>$(DataPath)catalog.bin</CatalogDataFile>
+    <ExceptionDataFile>$(DataPath)exceptions.bin</ExceptionDataFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,9 @@
     <EmbeddedResource Include="$(BreakingChangePath)*.md">
       <Link>data\%(Filename)%(Extension)</Link>
       <BreakingChange>true</BreakingChange>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(ExceptionDataFile)" Condition="Exists($(ExceptionDataFile))">
+	  <Link>data\exceptions.bin</Link>
     </EmbeddedResource>
   </ItemGroup>
 

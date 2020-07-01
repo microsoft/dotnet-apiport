@@ -14,5 +14,6 @@ namespace Microsoft.Fx.Portability.ObjectModel
         ShowBreakingChanges = 1 << 2,
         NoDefaultIgnoreFile = 1 << 3,
         ShowRetargettingIssues = 1 << 4,
+        ShowExceptionApis = 1 << 5
     }
 }
