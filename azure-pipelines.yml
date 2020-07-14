@@ -99,6 +99,11 @@ jobs:
         ApiPort.Vsix\*.vsix
         raw\**\*
         *.binlog
+        Microsoft.Fx.Portability\**\*
+        Microsoft.Fx.Portability.Reports.DGML\**\*
+        Microsoft.Fx.Portability.Reports.Excel\**\*
+        Microsoft.Fx.Portability.Reports.Html\**\*
+        Microsoft.Fx.Portability.Reports.Json\**\*
       TargetFolder: $(Build.StagingDirectory)\drop
 
   - task: CopyFiles@2
@@ -124,7 +129,7 @@ jobs:
       AnalyzeSymPath: $(Build.StagingDirectory)\symbols
     continueOnError: true
 
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@1
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
     displayName: 'Run APIScan net461'
     inputs:
       softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\net461'
@@ -136,6 +141,14 @@ jobs:
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
     displayName: 'Publish Security Analysis Logs'
     condition: succeededOrFailed()
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
+      allowPackageConflicts: true
 
 - job: Linux
   pool:
@@ -153,7 +166,7 @@ jobs:
       command: restore
       projects: $(RestoreBuildProjects)
       feedsToUse: config
-      nugetConfigPath: NuGet.config
+      nugetConfigPath: NuGet.Config
 
   - task: DotNetCoreCLI@2
     displayName: dotnet build

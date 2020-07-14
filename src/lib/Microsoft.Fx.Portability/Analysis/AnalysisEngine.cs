@@ -172,7 +172,7 @@ namespace Microsoft.Fx.Portability.Analysis
                 .Where(m => MemberIsInFramework(m, submittedAssemblies) && IsSupportedOnAnyTarget(_catalog, m.MemberDocId))
                 .AsParallel()
                 .Select(memberInfo => ProcessExceptionInfo(_catalog, targets, memberInfo))
-                .Where(memberInfo => memberInfo.ExceptionsThrown != null && memberInfo.ExceptionsThrown.Count > 0)
+                .Where(memberInfo => memberInfo != null && memberInfo.ExceptionsThrown != null && memberInfo.ExceptionsThrown.Count > 0)
                 .ToList();
 
             sw.Stop();
@@ -211,13 +211,20 @@ namespace Microsoft.Fx.Portability.Analysis
         /// <summary>
         /// Identitifies the status of an API Exception for all of the targets.
         /// </summary>
-        private ExceptionInfo ProcessExceptionInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
+        /// <returns>ExceptionInfo will be null if no exceptions are thrown.</returns>
+        private static ExceptionInfo ProcessExceptionInfo(IApiCatalogLookup catalog, IEnumerable<FrameworkName> targets, MemberInfo member)
         {
+            var exceptionsThrownList = GetThrownExceptions(catalog, member.MemberDocId, targets);
+            if (exceptionsThrownList == null)
+            {
+                return null;
+            }
+
             var exceptionHold = new ExceptionInfo();
             exceptionHold.MemberDocId = member.MemberDocId;
             exceptionHold.DefinedInAssemblyIdentity = member.DefinedInAssemblyIdentity;
             exceptionHold.IsSupportedAcrossTargets = IsSupportedAcrossTargets(catalog, member.MemberDocId, targets, out var ignore);
-            exceptionHold.ExceptionsThrown = GetThrownExceptions(catalog, member.MemberDocId, targets);
+            exceptionHold.ExceptionsThrown = exceptionsThrownList;
 
             return exceptionHold;
         }

@@ -106,6 +106,24 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception Thrown.
+        /// </summary>
+        internal static string ExceptionColumnHeader {
+            get {
+                return ResourceManager.GetString("ExceptionColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exceptions.
+        /// </summary>
+        internal static string ExceptionsWorksheetTitle {
+            get {
+                return ResourceManager.GetString("ExceptionsWorksheetTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to See &apos;https://aka.ms/dotnet-portabilityanalyzer&apos; to learn how to read this table.
         /// </summary>
         internal static string HowToReadTheExcelTable {
@@ -129,6 +147,15 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         internal static string MissingAssemblyStatus {
             get {
                 return ResourceManager.GetString("MissingAssemblyStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Notable Exceptions.
+        /// </summary>
+        internal static string NoExceptionNoted {
+            get {
+                return ResourceManager.GetString("NoExceptionNoted", resourceCulture);
             }
         }
         

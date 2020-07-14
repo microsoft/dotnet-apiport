@@ -98,7 +98,7 @@ namespace Microsoft.Fx.Portability.Reports
 
                     if (_throwingMembers.Any())
                     {
-                        GenerateExceptionsPage(spreadsheet.AddWorksheet("Exceptions"), _throwingMembers, _analysisReport.Targets);
+                        GenerateExceptionsPage(spreadsheet.AddWorksheet(LocalizedStrings.ExceptionsWorksheetTitle), _throwingMembers, _analysisReport.Targets);
                     }
                 }
 
@@ -419,7 +419,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         private void GenerateExceptionsPage(Worksheet worksheet, IList<ExceptionInfo> throwingMembers, IList<FrameworkName> targets)
         {
-            List<string> exceptionsPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.TargetMemberHeader, "Exception Thrown" };
+            List<string> exceptionsPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.TargetMemberHeader, LocalizedStrings.ExceptionColumnHeader };
 
             exceptionsPageHeader.AddRange(_mapper.GetTargetNames(targets, alwaysIncludeVersion: true));
 
@@ -454,14 +454,14 @@ namespace Microsoft.Fx.Portability.Reports
                                 }
                                 else
                                 {
-                                    rowContent.Add("No Notable Exceptions");
+                                    rowContent.Add(LocalizedStrings.NoExceptionNoted);
                                 }
                             }
                         }
 
                         if (!hasExceptions)
                         {
-                            rowContent.Add("No Notable Exceptions");
+                            rowContent.Add(LocalizedStrings.NoExceptionNoted);
                         }
                     }
 
@@ -470,26 +470,6 @@ namespace Microsoft.Fx.Portability.Reports
                 }
             }
 
-        /*foreach (var api in throwingMembers)
-        {
-            foreach (var exception in api.ExceptionsThrown)
-            {
-                var rowContent = new object[]
-                {
-                api.DefinedInAssemblyIdentity,
-                api.MemberDocId,
-                exception.Exception,
-                exception.RID,
-                exception.Platform,
-                exception.Version,
-                string.Empty
-                };
-
-                worksheet.AddRow(rowContent);
-                exceptionRows++;
-            }
-        }*/
-
             worksheet.AddTable(1, exceptionRows, 1, exceptionsPageHeader.ToArray());
 
             // Generate the columns
@@ -497,7 +477,7 @@ namespace Microsoft.Fx.Portability.Reports
             {
                 ColumnWidths.DetailsPage.AssemblyName, // Assembly name
                 ColumnWidths.DetailsPage.TargetMember, // Target member
-                40 // Exception Width
+                ColumnWidths.DetailsPage.TargetMember // Exception Width
             };
             columnWidths.AddRange(Enumerable.Repeat(ColumnWidths.Targets, targets.Count)); // Targets
 
