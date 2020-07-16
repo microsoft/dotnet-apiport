@@ -52,7 +52,7 @@ namespace ApiPort
                     syntax.DefineOption("p|showNonPortableApis", ref showNonPortableApis, LocalizedStrings.CmdAnalyzeShowNonPortableApis);
                     syntax.DefineOption("b|showBreakingChanges", ref showBreakingChanges, LocalizedStrings.CmdAnalyzeShowBreakingChanges);
                     syntax.DefineOption("u|showRetargettingIssues", ref showRetargettingIssues, LocalizedStrings.CmdAnalyzeShowRetargettingIssues);
-                    syntax.DefineOption("x|showExceptionApis", ref showExceptionApis, LocalizedStrings.CmdAnalyzeShowRetargettingIssues);
+                    syntax.DefineOption("x|showExceptionApis", ref showExceptionApis, LocalizedStrings.CmdAnalyzeShowExceptionApis);
                     syntax.DefineOption("force", ref overwriteOutput, LocalizedStrings.OverwriteFile);
                     syntax.DefineOption("noDefaultIgnoreFile", ref noDefaultIgnoreFile, LocalizedStrings.CmdAnalyzeNoDefaultIgnoreFile);
                     syntax.DefineOptionList("i|ignoreAssemblyFile", ref ignoreAssemblyFile, LocalizedStrings.CmdAnalyzeIgnoreAssembliesFile);
