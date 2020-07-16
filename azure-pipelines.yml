@@ -143,6 +143,7 @@ jobs:
     condition: succeededOrFailed()
 
   - task: NuGetCommand@2
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
     inputs:
       command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
