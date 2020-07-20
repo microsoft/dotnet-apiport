@@ -58,11 +58,11 @@ This will allow you to use apiport globally from the command line: `apiport anal
 | Microsoft.Fx.Portability.Reporting.Html | Provides support for an HTML report for ApiPort |
 | Microsoft.Fx.Portability.Reporting.Json | Provides support for a JSON reporter for ApiPort |
 
-### Builds
+### Downloads
 
 |     | Location |
 | :--- | :--- |
-| Libraries | [MyGet][myget] |
+| ApiPort CLI | [ApiPort Download][ApiPort Download] |
 | Visual Studio Extension |  [Open VSIX Gallery][VSIX Gallery] |
 
 ## How to Engage, Contribute and Provide Feedback
@@ -100,6 +100,6 @@ This project is licensed under the [MIT license](LICENSE).
 [PR]: https://github.com/Microsoft/dotnet-apiport/pulls
 [PR-Closed]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Apr+is%3Aclosed
 [PR-Open]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr
-[myget]: https://dotnet.myget.org/gallery/dotnet-apiport
+[ApiPort Download]: https://aka.ms/apiportdownload
 [System.Reflection.Metadata]: https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata
 [VSIX Gallery]: http://vsixgallery.com/extension/55d15546-28ca-40dc-af23-dfa503e9c5fe
