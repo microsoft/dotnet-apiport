@@ -69,6 +69,19 @@ The `-p` flag will highlight any APIs that are not portable against the default
 target .NET platforms. (No explicit `-t` arguments were specified, so we use the
 default targets.)
 
+**Analyzing a directory and show APIs that may cause PlatformNotSupportedException or NotImplementedException**
+
+```
+ApiPort.exe analyze -f C:\git\Application\bin\Debug -x
+```
+
+The `-x` flag or `--showExceptionApis` will give a list of APIs currently being used that may throw on
+the target .NET Platforms. In JSON reports, this list will be labeled "ThrowingMembers" and contain
+information on which platforms throw which exceptions and group them together by DocID. In Excel reports,
+a tab labeled "Exceptions" will be added if there are exception throwing APIs found and will include information on assembly
+name, throwing API DocID, the exception thrown, and the corresponding target platforms that are thrown on. Currently this
+this argument is only supported with remotely generated JSON and Excel reports.
+
 ## Using .NET Core application
 
 The portability analyzer has a version that targets .NET Core. Possible reasons
