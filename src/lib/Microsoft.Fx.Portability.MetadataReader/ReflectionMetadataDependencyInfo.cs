@@ -22,6 +22,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly ConcurrentDictionary<string, ICollection<string>> _unresolvedAssemblies = new ConcurrentDictionary<string, ICollection<string>>(StringComparer.Ordinal);
         private readonly ICollection<string> _assembliesWithError = new ConcurrentHashSet<string>(StringComparer.Ordinal);
         private readonly ICollection<AssemblyInfo> _userAssemblies = new ConcurrentHashSet<AssemblyInfo>();
+        private readonly ICollection<AssemblyInfo> _nonUserAssemblies = new ConcurrentHashSet<AssemblyInfo>();
         private readonly ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>> _cachedDependencies = new ConcurrentDictionary<MemberInfo, ICollection<AssemblyInfo>>();
 
         private ReflectionMetadataDependencyInfo(IEnumerable<IAssemblyFile> inputAssemblies, IDependencyFilter assemblyFilter, SystemObjectFinder objectFinder)
@@ -35,32 +36,22 @@ namespace Microsoft.Fx.Portability.Analyzer
         {
             var engine = new ReflectionMetadataDependencyInfo(inputAssemblies, assemblyFilter, objectFinder);
 
-            engine.FindDependencies(progressReport);
+            engine.FindDependencies();
 
             return engine;
         }
 
-        public IDictionary<MemberInfo, ICollection<AssemblyInfo>> Dependencies
-        {
-            get { return _cachedDependencies; }
-        }
+        public IDictionary<MemberInfo, ICollection<AssemblyInfo>> Dependencies => _cachedDependencies;
 
-        public IEnumerable<string> AssembliesWithErrors
-        {
-            get { return _assembliesWithError; }
-        }
+        public IEnumerable<string> AssembliesWithErrors => _assembliesWithError;
 
-        public IDictionary<string, ICollection<string>> UnresolvedAssemblies
-        {
-            get { return _unresolvedAssemblies; }
-        }
+        public IDictionary<string, ICollection<string>> UnresolvedAssemblies => _unresolvedAssemblies;
 
-        public IEnumerable<AssemblyInfo> UserAssemblies
-        {
-            get { return _userAssemblies; }
-        }
+        public IEnumerable<AssemblyInfo> UserAssemblies => _userAssemblies;
 
-        private void FindDependencies(IProgressReporter progressReport)
+        public IEnumerable<AssemblyInfo> NonUserAssemblies => _nonUserAssemblies;
+
+        private void FindDependencies()
         {
             _inputAssemblies.AsParallel().ForAll(file =>
             {
@@ -123,15 +114,24 @@ namespace Microsoft.Fx.Portability.Analyzer
                     {
                         var metadataReader = GetMetadataReader(peFile);
 
-                        AddReferencedAssemblies(metadataReader);
-
                         var helper = new DependencyFinderEngineHelper(_assemblyFilter, metadataReader, file, _objectFinder);
-                        helper.ComputeData();
 
-                        // Remember this assembly as a user assembly.
-                        _userAssemblies.Add(helper.CallingAssembly);
+                        if (_assemblyFilter.IsFrameworkAssembly(metadataReader.FormatAssemblyInfo()))
+                        {
+                            _nonUserAssemblies.Add(helper.CallingAssembly);
+                            return Enumerable.Empty<MemberDependency>();
+                        }
+                        else
+                        {
+                            AddReferencedAssemblies(metadataReader);
 
-                        return helper.MemberDependency;
+                            helper.ComputeData();
+
+                            // Remember this assembly as a user assembly.
+                            _userAssemblies.Add(helper.CallingAssembly);
+
+                            return helper.MemberDependency;
+                        }
                     }
                 }
             }

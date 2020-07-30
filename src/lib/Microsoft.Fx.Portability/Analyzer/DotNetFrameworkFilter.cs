@@ -36,15 +36,14 @@ namespace Microsoft.Fx.Portability.Analyzer
             "Windows."
         };
 
-        public bool IsFrameworkAssembly(string name, PublicKeyToken publicKeyToken)
-        {
-            return IsKnownPublicKeyToken(publicKeyToken) || IsKnownName(name);
-        }
+        public virtual bool IsFrameworkMember(string name, PublicKeyToken publicKeyToken)
+            => IsFrameworkAssembly(name, publicKeyToken);
+
+        public virtual bool IsFrameworkAssembly(string name, PublicKeyToken publicKeyToken)
+            => IsKnownPublicKeyToken(publicKeyToken) || IsKnownName(name);
 
         private static bool IsKnownPublicKeyToken(PublicKeyToken publicKeyToken)
-        {
-            return MicrosoftKeys.Contains(publicKeyToken);
-        }
+            => MicrosoftKeys.Contains(publicKeyToken);
 
         private static bool IsKnownName(string name)
         {

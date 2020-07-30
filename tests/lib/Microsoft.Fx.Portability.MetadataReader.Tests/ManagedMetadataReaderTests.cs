@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Analyzer;
-using Microsoft.Fx.Portability.ObjectModel;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -75,9 +74,9 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private void TestForDocIdHelper(string source, string docid, bool allowUnsafe)
         {
-            var filter = new AlwaysTrueDependencyFilter();
-            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var assemblyToTest = TestAssembly.Create(source, _output, allowUnsafe);
+            var filter = new AssemblyFileFrameworkFilter(assemblyToTest);
+            var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
@@ -136,15 +135,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
                 "T:Microsoft.Bar.Test`1",
                 "T:Other.Test`1"
             }
-            .Concat(FilterApisDocIds)
             .OrderBy(x => x, StringComparer.Ordinal);
 
-            var assemblyName = "FilterApis";
-
-            // We want to recognize System.Console but not System.Uri.
-            var filter = new AssemblyNameFilter(assemblyName, new[] { "System.Console" });
+            var assemblyToTest = TestAssembly.Create($"FilterApis.cs", _output);
+            var filter = new AssemblyFileFrameworkFilter(assemblyToTest);
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
-            var assemblyToTest = TestAssembly.Create($"{assemblyName}.cs", _output);
             var progressReporter = Substitute.For<IProgressReporter>();
 
             var dependencies = dependencyFinder.FindDependencies(new[] { assemblyToTest }, progressReporter);
@@ -169,7 +164,7 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             var assemblyToTest = TestAssembly.Create("EmptyProject.cs", _output);
             var expected = EmptyProjectMemberDocId();
 
-            var filter = new AlwaysTrueDependencyFilter();
+            var filter = new DotNetFrameworkFilter();
             var dependencyFinder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
             var progressReporter = Substitute.For<IProgressReporter>();
 
@@ -297,41 +292,5 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             "T:System.RuntimeTypeHandle",
             "T:System.Type"
         };
-
-        private class AssemblyNameFilter : IDependencyFilter
-        {
-            private static readonly HashSet<string> SystemObjectAssemblies = new HashSet<string>(StringComparer.Ordinal)
-            {
-                "mscorlib",
-                "netstandard",
-                "System.Private.CoreLib",
-                "System.Runtime"
-            };
-
-            private readonly string _assemblyName;
-            private readonly HashSet<string> _frameworkAssemblies;
-
-            public AssemblyNameFilter(string assemblyName, IEnumerable<string> frameworkAssemblies)
-            {
-                _assemblyName = assemblyName ?? throw new ArgumentNullException(nameof(assemblyName));
-                _frameworkAssemblies = new HashSet<string>(
-                    frameworkAssemblies ?? Enumerable.Empty<string>(),
-                    StringComparer.Ordinal);
-            }
-
-            public bool IsFrameworkAssembly(string name, PublicKeyToken publicKeyToken)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    return false;
-                }
-
-                var result = string.Equals(_assemblyName, name, StringComparison.Ordinal)
-                    || SystemObjectAssemblies.Contains(name)
-                    || _frameworkAssemblies.Contains(name);
-
-                return result;
-            }
-        }
     }
 }

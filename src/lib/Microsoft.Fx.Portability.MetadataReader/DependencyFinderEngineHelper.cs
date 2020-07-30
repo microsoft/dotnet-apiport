@@ -145,7 +145,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         private MemberDependency CreateMemberDependency(MemberMetadataInfo type, AssemblyReferenceInformation definedInAssembly)
         {
             // Apply heuristic to determine if API is most likely defined in a framework assembly
-            if (!_assemblyFilter.IsFrameworkAssembly(definedInAssembly))
+            if (!_assemblyFilter.IsFrameworkMember(definedInAssembly))
             {
                 return null;
             }
@@ -178,7 +178,7 @@ namespace Microsoft.Fx.Portability.Analyzer
             }
 
             // Apply heuristic to determine if API is most likely defined in a framework assembly
-            if (!_assemblyFilter.IsFrameworkAssembly(definedInAssemblyIdentity))
+            if (!_assemblyFilter.IsFrameworkMember(definedInAssemblyIdentity))
             {
                 return null;
             }
