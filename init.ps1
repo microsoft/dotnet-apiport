@@ -53,6 +53,7 @@ if (!$NoPrerequisites) {
 }
 
 & "$PSScriptRoot\tools\Get-CatalogBin.ps1"
+& "$PSScriptRoot\tools\Get-AdditionalDataBin.ps1"
 
 # Workaround nuget credential provider bug that causes very unreliable package restores on Azure Pipelines
 $env:NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS=20
