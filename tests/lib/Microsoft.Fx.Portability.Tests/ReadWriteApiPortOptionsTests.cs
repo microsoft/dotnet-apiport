@@ -28,6 +28,8 @@ namespace Microsoft.Fx.Portability.Tests
 
         public class TestOptions : IApiPortOptions
         {
+            public string Entrypoint { get; } = GetRandomString();
+
             public IEnumerable<string> BreakingChangeSuppressions { get; } = GenerateRandomList(5);
 
             public string Description { get; } = GetRandomString();

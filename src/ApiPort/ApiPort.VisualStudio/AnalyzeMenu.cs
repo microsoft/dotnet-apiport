@@ -39,16 +39,16 @@ namespace ApiPortVS
         {
             var projects = GetSelectedProjects();
 
-            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects).ConfigureAwait(false);
+            await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects, projects.FirstOrDefault()).ConfigureAwait(false);
         }
 
         public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
             await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList()).ConfigureAwait(false);
+            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList(), null).ConfigureAwait(false);
         }
 
-        private async Task AnalyzeProjectsAsync(ICollection<Project> projects)
+        private async Task AnalyzeProjectsAsync(ICollection<Project> projects, Project entrypoint)
         {
             if (!projects.Any())
             {
@@ -63,7 +63,7 @@ namespace ApiPortVS
                 {
                     var projectAnalyzer = innerScope.Resolve<ProjectAnalyzer>();
 
-                    await projectAnalyzer.AnalyzeProjectAsync(projects).ConfigureAwait(false);
+                    await projectAnalyzer.AnalyzeProjectAsync(projects, entrypoint).ConfigureAwait(false);
                 }
             }
             catch (PortabilityAnalyzerException ex)

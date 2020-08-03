@@ -15,13 +15,20 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly IAnalysisEngine _analysisEngine;
         private readonly ITargetMapper _targetMapper;
         private readonly IReportGenerator _reportGenerator;
+        private readonly IDependencyOrderer _orderer;
 
-        public RequestAnalyzer(ITargetNameParser targetNameParser, IAnalysisEngine analysisEngine, ITargetMapper targetMapper, IReportGenerator reportGenerator)
+        public RequestAnalyzer(
+            ITargetNameParser targetNameParser,
+            IAnalysisEngine analysisEngine,
+            ITargetMapper targetMapper,
+            IReportGenerator reportGenerator,
+            IDependencyOrderer orderer)
         {
             _targetNameParser = targetNameParser;
             _analysisEngine = analysisEngine;
             _targetMapper = targetMapper;
             _reportGenerator = reportGenerator;
+            _orderer = orderer;
         }
 
         public AnalyzeResponse AnalyzeRequest(AnalyzeRequest request, string submissionId)
@@ -104,6 +111,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 UnresolvedUserAssemblies = missingUserAssemblies,
                 Targets = targets,
                 ReportingResult = reportingResult,
+                RecommendedOrder = _orderer.GetOrder(request.Entrypoint, request.UserAssemblies),
                 SubmissionId = submissionId,
                 BreakingChanges = breakingChanges,
                 BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies,

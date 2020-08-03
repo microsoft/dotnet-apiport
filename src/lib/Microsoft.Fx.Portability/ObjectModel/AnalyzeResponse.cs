@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -29,6 +30,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public IList<string> UnresolvedUserAssemblies { get; set; }
 
         public IList<FrameworkName> Targets { get; set; }
+
+        public IEnumerable<string> RecommendedOrder { get; set; } = Enumerable.Empty<string>();
 
         [JsonIgnore]
         public AnalyzeRequest Request { get; set; }

@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Fx.OpenXmlExtensions;
@@ -43,6 +42,7 @@ namespace Microsoft.Fx.Portability.Reports
         // This is the second item added in AddStylesheet.  Update accordingly
         private const int _hyperlinkFontIndex = 1;
         private readonly ITargetMapper _mapper;
+        private readonly AnalyzeResponse _response;
         private readonly string _description;
         private readonly ReportingResult _analysisReport;
         private readonly IEnumerable<BreakingChangeDependency> _breakingChanges;
@@ -51,6 +51,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         public ExcelOpenXmlOutputWriter(
             ITargetMapper mapper,
+            AnalyzeResponse response,
             ReportingResult analysisReport,
             IEnumerable<BreakingChangeDependency> breakingChanges,
             DateTimeOffset catalogLastUpdated,
@@ -58,6 +59,7 @@ namespace Microsoft.Fx.Portability.Reports
             string description = null)
         {
             _mapper = mapper;
+            _response = response;
             _analysisReport = analysisReport;
             _breakingChanges = breakingChanges;
             _description = description ?? string.Empty;
@@ -84,6 +86,11 @@ namespace Microsoft.Fx.Portability.Reports
                     if (_analysisReport.GetUnresolvedAssemblies().Any())
                     {
                         GenerateUnreferencedAssembliesPage(spreadsheet.AddWorksheet(LocalizedStrings.MissingAssembliesPageTitle), _analysisReport);
+                    }
+
+                    if (_response.RecommendedOrder.Any())
+                    {
+                        GenerateOrderPage(spreadsheet.AddWorksheet(LocalizedStrings.RecommendedOrderHeader), _response);
                     }
 
                     if (_breakingChanges.Any())
@@ -228,6 +235,27 @@ namespace Microsoft.Fx.Portability.Reports
             // Generate the pretty table
             missingAssembliesPage.AddTable(1, detailsRows, 1, missingAssembliesPageHeader.ToArray());
             missingAssembliesPage.AddColumnWidth(40, 40, 30);
+        }
+
+        private static void GenerateOrderPage(Worksheet page, AnalyzeResponse response)
+        {
+            page.AddRow(new[] { LocalizedStrings.RecommendedOrderDetails });
+            page.AddRow();
+
+            var header = new[] { LocalizedStrings.AssemblyHeader };
+            page.AddRow(header);
+
+            int detailsRows = 1;
+
+            foreach (var assembly in response.RecommendedOrder)
+            {
+                page.AddRow(assembly);
+                detailsRows++;
+            }
+
+            // Generate the pretty table
+            page.AddTable(3, detailsRows, 1, header.ToArray());
+            page.AddColumnWidth(100);
         }
 
         private void GenerateDetailsPage(Worksheet detailsPage, ReportingResult analysisResult)

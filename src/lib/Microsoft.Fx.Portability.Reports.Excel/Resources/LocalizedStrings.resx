@@ -187,4 +187,10 @@
   <data name="NoExceptionNoted" xml:space="preserve">
     <value>No Notable Exceptions</value>
   </data>
+  <data name="RecommendedOrderDetails" xml:space="preserve">
+    <value>Migration is much easier by following a bottom up approach. Projects with less dependencies should be migrated to .NET Standard or .NET Core first, followed by the ones that may depend on that. For this submission, the following is the recommended order:</value>
+  </data>
+  <data name="RecommendedOrderHeader" xml:space="preserve">
+    <value>Recommended Order</value>
+  </data>
 </root>

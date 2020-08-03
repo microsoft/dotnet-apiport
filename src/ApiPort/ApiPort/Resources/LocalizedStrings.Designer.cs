@@ -259,6 +259,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application that will be run after porting.
+        /// </summary>
+        internal static string CmdEntrypoint {
+            get {
+                return ResourceManager.GetString("CmdEntrypoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The remote server indicated that the previous request was forbidden. Please provide credentials for: {0}.
         /// </summary>
         internal static string Credentials_ForbiddenCredentials {

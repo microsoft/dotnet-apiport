@@ -196,6 +196,24 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Migration is much easier by following a bottom up approach. Projects with less dependencies should be migrated to .NET Standard or .NET Core first, followed by the ones that may depend on that. For this submission, the following is the recommended order:.
+        /// </summary>
+        internal static string RecommendedOrderDetails {
+            get {
+                return ResourceManager.GetString("RecommendedOrderDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommended Order.
+        /// </summary>
+        internal static string RecommendedOrderHeader {
+            get {
+                return ResourceManager.GetString("RecommendedOrderHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submission Id.
         /// </summary>
         internal static string SubmissionId {

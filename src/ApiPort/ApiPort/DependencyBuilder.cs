@@ -70,6 +70,10 @@ namespace ApiPort
                 .As<IEnumerable<IgnoreAssemblyInfo>>()
                 .SingleInstance();
 
+            builder.RegisterType<DependencyOrderer>()
+                .As<IDependencyOrderer>()
+                .SingleInstance();
+
             builder.RegisterType<ReflectionMetadataDependencyFinder>()
                 .As<IDependencyFinder>()
                 .SingleInstance();

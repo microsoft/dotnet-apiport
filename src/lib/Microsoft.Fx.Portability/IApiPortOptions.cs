@@ -23,6 +23,8 @@ namespace Microsoft.Fx.Portability
 
         AnalyzeRequestFlags RequestFlags { get; }
 
+        string Entrypoint { get; }
+
         IEnumerable<string> Targets { get; }
 
         IEnumerable<string> OutputFormats { get; }
