@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -31,6 +32,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _hashComputed = false;
             }
         }
+
+        public AssemblyName GetAssemblyName() => new AssemblyName(AssemblyIdentity);
 
         /// <summary>
         /// Gets or sets the assembly location.
