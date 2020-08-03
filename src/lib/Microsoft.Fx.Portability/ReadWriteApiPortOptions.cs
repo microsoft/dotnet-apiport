@@ -18,6 +18,7 @@ namespace Microsoft.Fx.Portability
         {
             BreakingChangeSuppressions = other.BreakingChangeSuppressions;
             Description = other.Description;
+            Entrypoint = other.Entrypoint;
             IgnoredAssemblyFiles = other.IgnoredAssemblyFiles;
             InputAssemblies = other.InputAssemblies;
             OutputFormats = other.OutputFormats;
@@ -33,6 +34,8 @@ namespace Microsoft.Fx.Portability
         public virtual IEnumerable<string> BreakingChangeSuppressions { get; set; }
 
         public virtual string Description { get; set; }
+
+        public virtual string Entrypoint { get; set; }
 
         public virtual IEnumerable<string> IgnoredAssemblyFiles { get; set; }
 

@@ -22,6 +22,7 @@ namespace ApiPort
             IReadOnlyList<string> file = Array.Empty<string>();
             string outFile = DefaultName;
             string description = string.Empty;
+            string entrypoint = string.Empty;
             IReadOnlyList<string> target = Array.Empty<string>();
             IReadOnlyList<string> result = Array.Empty<string>();
             bool showNonPortableApis = true;
@@ -47,6 +48,7 @@ namespace ApiPort
                     syntax.DefineOption("o|out", ref outFile, LocalizedStrings.CmdAnalyzeOutputFileName);
                     syntax.DefineOption("d|description", ref description, LocalizedStrings.CmdAnalyzeDescription);
                     syntax.DefineOption("e|endpoint", ref endpoint, LocalizedStrings.CmdEndpoint);
+                    syntax.DefineOption("entrypoint", ref entrypoint, LocalizedStrings.CmdEntrypoint);
                     syntax.DefineOptionList("t|target", ref target, LocalizedStrings.CmdAnalyzeTarget);
                     syntax.DefineOptionList("r|resultFormat", ref result, LocalizedStrings.CmdAnalyzeResultFormat);
                     syntax.DefineOption("p|showNonPortableApis", ref showNonPortableApis, LocalizedStrings.CmdAnalyzeShowNonPortableApis);
@@ -103,6 +105,7 @@ namespace ApiPort
             {
                 BreakingChangeSuppressions = suppressBreakingChange,
                 Description = description,
+                Entrypoint = entrypoint,
                 IgnoredAssemblyFiles = ignoreAssemblyFile,
                 InputAssemblies = inputFiles,
                 InvalidInputFiles = invalidFiles,
