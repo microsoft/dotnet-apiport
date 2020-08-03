@@ -131,7 +131,7 @@ jobs:
   pool:
     vmImage: Ubuntu 18.04
   variables:
-    BuildNetCoreAppTarget: netcoreapp2.1
+    BuildNetCoreAppTarget: netcoreapp3.1
     RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
   steps:
   - powershell: .\init.ps1
