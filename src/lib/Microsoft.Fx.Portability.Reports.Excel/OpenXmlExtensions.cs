@@ -325,6 +325,5 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
             return (uint)(result + 1);
         }
-
     }
 }
