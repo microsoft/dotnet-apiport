@@ -79,13 +79,9 @@ namespace ApiPort.Proxy
 
         private static string WildcardToRegex(string pattern)
         {
-            string Replace(string content, string oldValue, string newValue)
+            static string Replace(string content, string oldValue, string newValue)
             {
-#if NETCOREAPP2_1
                 return content.Replace(oldValue, newValue, StringComparison.Ordinal);
-#else
-                return content.Replace(oldValue, newValue);
-#endif
             }
 
             return Replace(
