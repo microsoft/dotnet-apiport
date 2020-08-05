@@ -259,6 +259,24 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entrypoint assembly. Used to identify order of dependencies to address any porting activities..
+        /// </summary>
+        internal static string CmdEntryPointAssembly {
+            get {
+                return ResourceManager.GetString("CmdEntryPointAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identify the order of supplied assemblies to be ported..
+        /// </summary>
+        internal static string CmdOrder {
+            get {
+                return ResourceManager.GetString("CmdOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The remote server indicated that the previous request was forbidden. Please provide credentials for: {0}.
         /// </summary>
         internal static string Credentials_ForbiddenCredentials {

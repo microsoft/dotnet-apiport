@@ -52,6 +52,9 @@ namespace ApiPort
                         case AppCommand.ListOutputFormats:
                             await client.ListOutputFormatsAsync();
                             break;
+                        case AppCommand.Order:
+                            await client.DetermineOrderAsync();
+                            break;
                     }
 
                     return 0;

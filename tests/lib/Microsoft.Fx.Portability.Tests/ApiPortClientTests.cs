@@ -33,12 +33,13 @@ namespace Microsoft.Fx.Portability.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var orderer = Substitute.For<IDependencyOrderer>();
             var writer = Substitute.For<IFileWriter>();
 
             var apiPortService = Substitute.For<IApiPortService>();
             apiPortService.GetTargetsAsync().Returns(CreateResponse<IEnumerable<AvailableTarget>>(targets.AsReadOnly()));
 
-            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var client = new ApiPortClient(apiPortService, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer, orderer);
 
             var actualTargets = await client.GetTargetsAsync();
 
@@ -54,9 +55,10 @@ namespace Microsoft.Fx.Portability.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var orderer = Substitute.For<IDependencyOrderer>();
             var writer = Substitute.For<IFileWriter>();
 
-            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer, orderer);
             var options = Substitute.For<IApiPortOptions>();
             options.Targets.Returns(Enumerable.Range(0, 16).Select(x => x.ToString(CultureInfo.CurrentCulture)));
             options.OutputFormats.Returns(new[] { "HTML", "Excel" });
@@ -162,12 +164,13 @@ namespace Microsoft.Fx.Portability.Tests
             var dependencyFinder = Substitute.For<IDependencyFinder>();
             var reportGenerator = Substitute.For<IReportGenerator>();
             var ignoreAssemblyInfoList = Substitute.For<IEnumerable<IgnoreAssemblyInfo>>();
+            var orderer = Substitute.For<IDependencyOrderer>();
             var writer = Substitute.For<IFileWriter>();
 
             service.SendAnalysisAsync(Arg.Any<AnalyzeRequest>(), Arg.Any<IEnumerable<string>>()).Returns(
                 ServiceResponse.Create(Enumerable.Empty<ReportingResultWithFormat>()));
 
-            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer);
+            var client = new ApiPortClient(service, progressReporter, targetMapper, dependencyFinder, reportGenerator, ignoreAssemblyInfoList, writer, orderer);
             var options = Substitute.For<IApiPortOptions>();
 
             IAssemblyFile CreateAssemblyFile(AssemblyInfo assemblyInfo)
