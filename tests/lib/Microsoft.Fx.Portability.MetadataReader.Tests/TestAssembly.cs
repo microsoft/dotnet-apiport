@@ -126,9 +126,12 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
 
         private class ResourceStreamAssemblyFile : IAssemblyFile
         {
+            private readonly string _sourceName;
+
             public ResourceStreamAssemblyFile(string fileName, ITestOutputHelper output)
             {
-                Name = fileName;
+                _sourceName = fileName;
+                Name = Path.GetFileNameWithoutExtension(fileName);
                 Output = output;
             }
 
@@ -143,11 +146,11 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             public virtual Stream OpenRead()
             {
                 var names = Assembly.GetManifestResourceNames();
-                var name = names.Single(n => n.EndsWith(Name, StringComparison.Ordinal));
+                var name = names.Single(n => n.EndsWith(_sourceName, StringComparison.Ordinal));
 
                 if (name == null)
                 {
-                    Output.WriteLine($"'{Name}' not found. Available names:");
+                    Output.WriteLine($"'{_sourceName}' not found. Available names:");
 
                     foreach (var available in names)
                     {

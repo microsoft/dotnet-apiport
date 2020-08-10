@@ -35,5 +35,10 @@ namespace Microsoft.Fx.Portability
         {
             return filter.IsFrameworkAssembly(assembly.Name, assembly.PublicKeyToken);
         }
+
+        public static bool IsFrameworkMember(this IDependencyFilter filter, AssemblyReferenceInformation assembly)
+        {
+            return filter.IsFrameworkMember(assembly.Name, assembly.PublicKeyToken);
+        }
     }
 }
