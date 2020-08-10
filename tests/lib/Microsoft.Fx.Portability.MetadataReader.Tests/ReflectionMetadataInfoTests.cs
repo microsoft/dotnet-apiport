@@ -25,16 +25,16 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
         [Fact]
         public void UnresolvedAssemblyTest()
         {
-            var filter = new AlwaysTrueDependencyFilter();
-            var finder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
-            var progressReport = Substitute.For<IProgressReporter>();
-
             var path = this.GetType().GetTypeInfo().Assembly.Location;
             var referencedAssemblies = this.GetType().GetTypeInfo().Assembly.GetReferencedAssemblies()
                 .Select(a => a.ToString())
                 .OrderBy(a => a)
                 .ToList();
             var testInfo = new FilePathAssemblyFile(path);
+
+            var filter = new AssemblyFileFrameworkFilter(testInfo);
+            var finder = new ReflectionMetadataDependencyFinder(filter, new SystemObjectFinder(filter));
+            var progressReport = Substitute.For<IProgressReporter>();
 
             var dependencies = finder.FindDependencies(new[] { testInfo }, progressReport);
             var actual = dependencies.UnresolvedAssemblies
@@ -68,9 +68,10 @@ namespace Microsoft.Fx.Portability.MetadataReader.Tests
             public FilePathAssemblyFile(string path)
             {
                 _path = path;
+                Name = Path.GetFileNameWithoutExtension(path);
             }
 
-            public string Name => _path;
+            public string Name { get; }
 
             public bool Exists => File.Exists(_path);
 

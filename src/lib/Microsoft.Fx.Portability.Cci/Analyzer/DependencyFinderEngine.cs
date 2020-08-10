@@ -33,25 +33,15 @@ namespace Microsoft.Fx.Portability.Analyzer
             return engine;
         }
 
-        public IDictionary<MemberInfo, ICollection<AssemblyInfo>> Dependencies
-        {
-            get { return _cachedDependencies; }
-        }
+        public IDictionary<MemberInfo, ICollection<AssemblyInfo>> Dependencies => _cachedDependencies;
 
-        public IEnumerable<string> AssembliesWithErrors
-        {
-            get { return _assembliesWithError; }
-        }
+        public IEnumerable<string> AssembliesWithErrors => _assembliesWithError;
 
-        public IDictionary<string, ICollection<string>> UnresolvedAssemblies
-        {
-            get { return _unresolvedAssemblies; }
-        }
+        public IDictionary<string, ICollection<string>> UnresolvedAssemblies => _unresolvedAssemblies;
 
-        public IEnumerable<AssemblyInfo> UserAssemblies
-        {
-            get { return _userAssemblies; }
-        }
+        public IEnumerable<AssemblyInfo> UserAssemblies => _userAssemblies;
+
+        public IEnumerable<AssemblyInfo> NonUserAssemblies => Enumerable.Empty<AssemblyInfo>();
 
         private void FindDependencies(IProgressTask progressTask)
         {
