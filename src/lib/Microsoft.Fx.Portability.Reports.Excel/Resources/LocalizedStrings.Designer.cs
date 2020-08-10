@@ -192,6 +192,10 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         internal static string RecommendedOrderHeader {
             get {
                 return ResourceManager.GetString("RecommendedOrderHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skipped Assembly.
         /// </summary>
         internal static string SkippedAssembly {
