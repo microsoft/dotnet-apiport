@@ -41,30 +41,16 @@ namespace Microsoft.Fx.Portability.Reports
 
         // This is the second item added in AddStylesheet.  Update accordingly
         private const int _hyperlinkFontIndex = 1;
+
         private readonly ITargetMapper _mapper;
         private readonly AnalyzeResponse _response;
         private readonly string _description;
-        private readonly ReportingResult _analysisReport;
-        private readonly IEnumerable<BreakingChangeDependency> _breakingChanges;
-        private readonly DateTimeOffset _catalogLastUpdated;
-        private readonly IList<ExceptionInfo> _throwingMembers;
 
-        public ExcelOpenXmlOutputWriter(
-            ITargetMapper mapper,
-            AnalyzeResponse response,
-            ReportingResult analysisReport,
-            IEnumerable<BreakingChangeDependency> breakingChanges,
-            DateTimeOffset catalogLastUpdated,
-            IList<ExceptionInfo> throwingMembers = null,
-            string description = null)
+        public ExcelOpenXmlOutputWriter(ITargetMapper mapper, AnalyzeResponse response, string description)
         {
             _mapper = mapper;
             _response = response;
-            _analysisReport = analysisReport;
-            _breakingChanges = breakingChanges;
             _description = description ?? string.Empty;
-            _catalogLastUpdated = catalogLastUpdated;
-            _throwingMembers = throwingMembers;
         }
 
         public async Task WriteToAsync(Stream outputStream)
@@ -80,12 +66,12 @@ namespace Microsoft.Fx.Portability.Reports
 
                     AddStylesheet(spreadsheet.WorkbookPart);
 
-                    GenerateSummaryPage(spreadsheet.AddWorksheet(LocalizedStrings.PortabilitySummaryPageTitle), _analysisReport);
-                    GenerateDetailsPage(spreadsheet.AddWorksheet(LocalizedStrings.DetailsPageTitle), _analysisReport);
+                    GenerateSummaryPage(spreadsheet.AddWorksheet(LocalizedStrings.PortabilitySummaryPageTitle), _response.ReportingResult);
+                    GenerateDetailsPage(spreadsheet.AddWorksheet(LocalizedStrings.DetailsPageTitle), _response.ReportingResult);
 
-                    if (_analysisReport.GetUnresolvedAssemblies().Any())
+                    if (_response.ReportingResult.GetUnresolvedAssemblies().Any())
                     {
-                        GenerateUnreferencedAssembliesPage(spreadsheet.AddWorksheet(LocalizedStrings.MissingAssembliesPageTitle), _analysisReport);
+                        GenerateUnreferencedAssembliesPage(spreadsheet.AddWorksheet(LocalizedStrings.UnresolvedUsedAssembly), _response);
                     }
 
                     if (_response.RecommendedOrder.Any())
@@ -93,19 +79,19 @@ namespace Microsoft.Fx.Portability.Reports
                         GenerateOrderPage(spreadsheet.AddWorksheet(LocalizedStrings.RecommendedOrderHeader), _response);
                     }
 
-                    if (_breakingChanges.Any())
+                    if (_response.BreakingChanges.Any())
                     {
-                        GenerateBreakingChangesPage(spreadsheet.AddWorksheet(LocalizedStrings.BreakingChanges), _breakingChanges);
+                        GenerateBreakingChangesPage(spreadsheet.AddWorksheet(LocalizedStrings.BreakingChanges), _response.BreakingChanges);
                     }
 
-                    if (_analysisReport.NuGetPackages?.Any() ?? false)
+                    if (_response.ReportingResult.NuGetPackages?.Any() ?? false)
                     {
-                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet(LocalizedStrings.SupportedPackages), _analysisReport);
+                        GenerateNuGetInfoPage(spreadsheet.AddWorksheet(LocalizedStrings.SupportedPackages), _response.ReportingResult);
                     }
 
-                    if (_throwingMembers.Any())
+                    if (_response.ThrowingMembers.Any())
                     {
-                        GenerateExceptionsPage(spreadsheet.AddWorksheet(LocalizedStrings.ExceptionsWorksheetTitle), _throwingMembers, _analysisReport.Targets);
+                        GenerateExceptionsPage(spreadsheet.AddWorksheet(LocalizedStrings.ExceptionsWorksheetTitle), _response.ThrowingMembers, _response.ReportingResult.Targets);
                     }
                 }
 
@@ -180,11 +166,11 @@ namespace Microsoft.Fx.Portability.Reports
 
                 foreach (var item in analysisResult.GetAssemblyUsageInfo().OrderBy(a => a.SourceAssembly.AssemblyIdentity))
                 {
-                    var summaryData = new List<object>() { analysisResult.GetNameForAssemblyInfo(item.SourceAssembly), item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
+                    var summaryData = new List<object> { analysisResult.GetNameForAssemblyInfo(item.SourceAssembly), item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
 
                     // TODO: figure out how to add formatting to cells to show percentages.
                     summaryData.AddRange(item.UsageData.Select(pui => (object)Math.Round(pui.PortabilityIndex * 100.0, 2)));
-                    summaryPage.AddRow(summaryData.ToArray());
+                    summaryPage.AddRow(summaryData);
                     tableRowCount++;
                 }
 
@@ -203,18 +189,18 @@ namespace Microsoft.Fx.Portability.Reports
             }
 
             summaryPage.AddRow();
-            summaryPage.AddRow(LocalizedStrings.CatalogLastUpdated, _catalogLastUpdated.ToString("D", CultureInfo.CurrentCulture));
+            summaryPage.AddRow(LocalizedStrings.CatalogLastUpdated, _response.CatalogLastUpdated.ToString("D", CultureInfo.CurrentCulture));
             summaryPage.AddRow(LocalizedStrings.HowToReadTheExcelTable);
         }
 
-        private static void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, ReportingResult analysisResult)
+        private static void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, AnalyzeResponse response)
         {
-            List<string> missingAssembliesPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.UsedBy, LocalizedStrings.MissingAssemblyStatus };
+            var missingAssembliesPageHeader = new[] { LocalizedStrings.AssemblyHeader, LocalizedStrings.UsedBy, LocalizedStrings.UnresolvedAssemblyStatus };
             int detailsRows = 0;
             missingAssembliesPage.AddRow(missingAssembliesPageHeader.ToArray());
             detailsRows++;
 
-            var unresolvedAssembliesMap = analysisResult.GetUnresolvedAssemblies();
+            var unresolvedAssembliesMap = response.ReportingResult.GetUnresolvedAssemblies();
 
             foreach (var unresolvedAssemblyPair in unresolvedAssembliesMap.OrderBy(asm => asm.Key))
             {
@@ -229,11 +215,18 @@ namespace Microsoft.Fx.Portability.Reports
                 else
                 {
                     missingAssembliesPage.AddRow(unresolvedAssemblyPair.Key, string.Empty, LocalizedStrings.UnresolvedUsedAssembly);
+                    detailsRows++;
                 }
             }
 
+            foreach (var unresolvedAssemblyPair in response.Request.NonUserAssemblies.OrderBy(asm => asm.AssemblyIdentity))
+            {
+                missingAssembliesPage.AddRow(unresolvedAssemblyPair.AssemblyIdentity, string.Empty, LocalizedStrings.SkippedAssembly);
+                detailsRows++;
+            }
+
             // Generate the pretty table
-            missingAssembliesPage.AddTable(1, detailsRows, 1, missingAssembliesPageHeader.ToArray());
+            missingAssembliesPage.AddTable(1, detailsRows, 1, missingAssembliesPageHeader);
             missingAssembliesPage.AddColumnWidth(40, 40, 30);
         }
 
@@ -262,7 +255,7 @@ namespace Microsoft.Fx.Portability.Reports
         {
             var showAssemblyColumn = analysisResult.GetAssemblyUsageInfo().Any();
 
-            List<string> detailsPageHeader = new List<string>() { LocalizedStrings.TargetTypeHeader, LocalizedStrings.TargetMemberHeader };
+            var detailsPageHeader = new List<string>() { LocalizedStrings.TargetTypeHeader, LocalizedStrings.TargetMemberHeader };
 
             if (showAssemblyColumn)
             {
@@ -298,7 +291,7 @@ namespace Microsoft.Fx.Portability.Reports
                             string assemblyName = analysisResult.GetNameForAssemblyInfo(assemblies);
 
                             // for a missing type we are going to dump the type name for both the target type and target member columns
-                            List<object> rowContent = new List<object> { AddLink(item.TypeName), AddLink(item.TypeName), assemblyName };
+                            var rowContent = new List<object> { AddLink(item.TypeName), AddLink(item.TypeName), assemblyName };
                             rowContent.AddRange(item.TargetStatus);
                             rowContent.Add(item.RecommendedChanges);
                             detailsPage.AddRow(rowContent.ToArray());
@@ -447,7 +440,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         private void GenerateExceptionsPage(Worksheet worksheet, IList<ExceptionInfo> throwingMembers, IList<FrameworkName> targets)
         {
-            List<string> exceptionsPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.TargetMemberHeader, LocalizedStrings.ExceptionColumnHeader };
+            var exceptionsPageHeader = new List<string>() { LocalizedStrings.AssemblyHeader, LocalizedStrings.TargetMemberHeader, LocalizedStrings.ExceptionColumnHeader };
 
             exceptionsPageHeader.AddRange(_mapper.GetTargetNames(targets, alwaysIncludeVersion: true));
 

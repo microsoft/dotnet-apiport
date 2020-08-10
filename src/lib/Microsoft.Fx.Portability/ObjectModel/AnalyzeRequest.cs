@@ -22,6 +22,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         [JsonIgnore]
         public IDictionary<string, ICollection<string>> UnresolvedAssembliesDictionary { get; set; }
 
+        public ICollection<AssemblyInfo> NonUserAssemblies { get; set; }
+
         public ICollection<AssemblyInfo> UserAssemblies { get; set; }
 
         public ICollection<string> AssembliesWithErrors { get; set; }

@@ -133,24 +133,6 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing assemblies.
-        /// </summary>
-        internal static string MissingAssembliesPageTitle {
-            get {
-                return ResourceManager.GetString("MissingAssembliesPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reason.
-        /// </summary>
-        internal static string MissingAssemblyStatus {
-            get {
-                return ResourceManager.GetString("MissingAssemblyStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No Notable Exceptions.
         /// </summary>
         internal static string NoExceptionNoted {
@@ -210,6 +192,11 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         internal static string RecommendedOrderHeader {
             get {
                 return ResourceManager.GetString("RecommendedOrderHeader", resourceCulture);
+        ///   Looks up a localized string similar to Skipped Assembly.
+        /// </summary>
+        internal static string SkippedAssembly {
+            get {
+                return ResourceManager.GetString("SkippedAssembly", resourceCulture);
             }
         }
         
@@ -264,6 +251,15 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         internal static string TooManyColumns {
             get {
                 return ResourceManager.GetString("TooManyColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reason.
+        /// </summary>
+        internal static string UnresolvedAssemblyStatus {
+            get {
+                return ResourceManager.GetString("UnresolvedAssemblyStatus", resourceCulture);
             }
         }
         

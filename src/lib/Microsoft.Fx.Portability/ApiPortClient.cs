@@ -294,6 +294,7 @@ namespace Microsoft.Fx.Portability
                 UnresolvedAssemblies = dependencyInfo.UnresolvedAssemblies.Keys.ToList(),
                 UnresolvedAssembliesDictionary = dependencyInfo.UnresolvedAssemblies,
                 UserAssemblies = dependencyInfo.UserAssemblies.ToList(),
+                NonUserAssemblies = dependencyInfo.NonUserAssemblies.ToList(),
                 AssembliesWithErrors = dependencyInfo.AssembliesWithErrors.ToList(),
                 ApplicationName = options.Description,
                 Version = AnalyzeRequest.CurrentVersion,

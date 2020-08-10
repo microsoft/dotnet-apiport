@@ -15,5 +15,7 @@ namespace Microsoft.Fx.Portability.Analyzer
         IDictionary<string, ICollection<string>> UnresolvedAssemblies { get; }
 
         IEnumerable<AssemblyInfo> UserAssemblies { get; }
+
+        IEnumerable<AssemblyInfo> NonUserAssemblies { get; }
     }
 }

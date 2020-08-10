@@ -111,14 +111,14 @@ namespace ApiPort
         {
             var result = Formats.Select(f => new ReportingResultWithFormat
             {
-                Data = SendAnalysisAsync(a, f.DisplayName),
+                Data = SerializeRequest(a),
                 Format = f.DisplayName
             });
 
             return Task.FromResult(new ServiceResponse<IEnumerable<ReportingResultWithFormat>>(result.ToList()));
         }
 
-        private byte[] SendAnalysisAsync(AnalyzeRequest a, string format)
+        private byte[] SerializeRequest(AnalyzeRequest a)
         {
             var sortedAnalyzeRequest = new AnalyzeRequest
             {
@@ -131,6 +131,7 @@ namespace ApiPort
                 UnresolvedAssembliesDictionary = a.UnresolvedAssembliesDictionary
                     .OrderBy(t => t.Key)
                     .ToDictionary(t => t.Key, t => new SortedSet<string>(t.Value) as ICollection<string>),
+                NonUserAssemblies = new SortedSet<AssemblyInfo>(a.NonUserAssemblies),
                 UserAssemblies = new SortedSet<AssemblyInfo>(a.UserAssemblies),
                 AssembliesWithErrors = new SortedSet<string>(a.AssembliesWithErrors, StringComparer.Ordinal),
                 Targets = new SortedSet<string>(a.Targets, StringComparer.Ordinal),

@@ -136,12 +136,6 @@
   <data name="HowToReadTheExcelTable" xml:space="preserve">
     <value>See 'https://aka.ms/dotnet-portabilityanalyzer' to learn how to read this table</value>
   </data>
-  <data name="MissingAssembliesPageTitle" xml:space="preserve">
-    <value>Missing assemblies</value>
-  </data>
-  <data name="MissingAssemblyStatus" xml:space="preserve">
-    <value>Reason</value>
-  </data>
   <data name="NotSupported" xml:space="preserve">
     <value>Not supported</value>
   </data>
@@ -192,5 +186,11 @@
   </data>
   <data name="RecommendedOrderHeader" xml:space="preserve">
     <value>Recommended Order</value>
+  </data>
+  <data name="SkippedAssembly" xml:space="preserve">
+    <value>Skipped Assembly</value>
+  </data>
+  <data name="UnresolvedAssemblyStatus" xml:space="preserve">
+    <value>Reason</value>
   </data>
 </root>
