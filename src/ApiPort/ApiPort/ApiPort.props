@@ -1,5 +1,9 @@
- <Project>
+<Project>
   <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>ApiPort</ToolCommandName>
+    <PackageId>Microsoft.ApiPort</PackageId>
     <OutputType>Exe</OutputType>
     <AssemblyName>ApiPort</AssemblyName>
     <RootNamespace>ApiPort</RootNamespace>
@@ -7,26 +11,6 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
   </PropertyGroup>
-  <Choose>
-    <!-- build as global tool if GlobalTool is specified when targettting .NET Core-->
-    <When Condition="'$(GlobalTool)' == 'true'">
-      <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>ApiPort</ToolCommandName>
-        <PackageId>Microsoft.ApiPort</PackageId>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
-        <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
-      </PropertyGroup>
-      <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
-        <DefineConstants>$(DefineConstants);FEATURE_SYSTEM_PROXY;FEATURE_NETWORK_CREDENTIAL</DefineConstants>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
 
   <PropertyGroup>
     <!-- Projects default to being signed, but Microsoft.Configuration.* assemblies are not signed -->
@@ -44,7 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.CommandLine" Version="0.1.0-e171125-2" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
