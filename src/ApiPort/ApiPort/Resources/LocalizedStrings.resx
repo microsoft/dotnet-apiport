@@ -298,4 +298,7 @@ Versions marked with an asterisk (*) implies that these are default targets if n
   <data name="CmdAnalyzeShowExceptionApis" xml:space="preserve">
     <value>Include the Apis that may throw PlatformNotSupported or NotImplemented exceptions</value>
   </data>
+  <data name="CmdEntrypoint" xml:space="preserve">
+    <value>Application that will be run after porting</value>
+  </data>
 </root>

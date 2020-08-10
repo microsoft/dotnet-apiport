@@ -5,9 +5,11 @@ using ApiPortVS.Contracts;
 using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using Microsoft.Fx.Portability;
+using Microsoft.Fx.Portability.ObjectModel;
 using Microsoft.Fx.Portability.Reporting;
 using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -38,6 +40,7 @@ namespace ApiPortVS.Analyze
         }
 
         public async Task<ReportingResult> WriteAnalysisReportsAsync(
+            string entrypoint,
             IEnumerable<string> assemblyPaths,
             IEnumerable<string> installedPackages,
             IFileWriter reportWriter,
@@ -53,7 +56,7 @@ namespace ApiPortVS.Analyze
             var outputFormats = _optionsViewModel.Formats.Where(f => f.IsSelected).Select(f => f.DisplayName);
             var reportFileName = _optionsViewModel.DefaultOutputName;
 
-            var analysisOptions = await GetOptionsAsync(assemblyPaths, outputFormats, installedPackages, Path.Combine(reportDirectory, reportFileName));
+            var analysisOptions = await GetOptionsAsync(entrypoint, assemblyPaths, outputFormats, installedPackages, Path.Combine(reportDirectory, reportFileName));
             var issuesBefore = _reporter.Issues.Count;
 
             var result = await _client.WriteAnalysisReportsAsync(analysisOptions, includeJson);
@@ -73,7 +76,12 @@ namespace ApiPortVS.Analyze
             return result.Result;
         }
 
-        private async Task<IApiPortOptions> GetOptionsAsync(IEnumerable<string> assemblyPaths, IEnumerable<string> formats, IEnumerable<string> referencedNugetPackages, string reportFileName)
+        private async Task<IApiPortOptions> GetOptionsAsync(
+            string entrypoint,
+            IEnumerable<string> assemblyPaths,
+            IEnumerable<string> formats,
+            IEnumerable<string> referencedNugetPackages,
+            string reportFileName)
         {
             await _optionsViewModel.UpdateAsync().ConfigureAwait(false);
             await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -98,21 +106,26 @@ namespace ApiPortVS.Analyze
                 _outputWindow.WriteLine(LocalizedStrings.TargetSelectionGuidance);
             }
 
-            // TODO: Allow setting description
-            string description = null;
+            var flags = AnalyzeRequestFlags.ShowNonPortableApis;
 
-            // NuGet packages referenced in the project system are not
-            // explicitly passed in, so we'll not want to see their portability
-            // statistics.
-            return new AnalysisOptions(
-                description,
-                assemblyPaths,
-                targets,
-                formats,
-                referencedNugetPackages,
-                !_optionsViewModel.SaveMetadata,
-                reportFileName,
-                isAssemblySpecified: false);
+            if (!_optionsViewModel.SaveMetadata)
+            {
+                flags |= AnalyzeRequestFlags.NoTelemetry;
+            }
+
+            return new ReadWriteApiPortOptions
+            {
+                Entrypoint = entrypoint,
+                OutputFileName = reportFileName,
+                InputAssemblies = assemblyPaths.Select(target => new KeyValuePair<IAssemblyFile, bool>(new AssemblyFile(target), false)).ToImmutableDictionary(),
+                Targets = targets,
+                OutputFormats = formats,
+                RequestFlags = flags,
+                ReferencedNuGetPackages = referencedNugetPackages ?? Enumerable.Empty<string>(),
+                IgnoredAssemblyFiles = Enumerable.Empty<string>(),
+                BreakingChangeSuppressions = Enumerable.Empty<string>(),
+                InvalidInputFiles = Enumerable.Empty<string>(),
+            };
         }
     }
 }

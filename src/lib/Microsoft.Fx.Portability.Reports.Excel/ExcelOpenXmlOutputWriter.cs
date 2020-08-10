@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Fx.OpenXmlExtensions;
@@ -73,6 +72,11 @@ namespace Microsoft.Fx.Portability.Reports
                     if (_response.ReportingResult.GetUnresolvedAssemblies().Any())
                     {
                         GenerateUnreferencedAssembliesPage(spreadsheet.AddWorksheet(LocalizedStrings.UnresolvedUsedAssembly), _response);
+                    }
+
+                    if (_response.RecommendedOrder.Any())
+                    {
+                        GenerateOrderPage(spreadsheet.AddWorksheet(LocalizedStrings.RecommendedOrderHeader), _response);
                     }
 
                     if (_response.BreakingChanges.Any())
@@ -224,6 +228,27 @@ namespace Microsoft.Fx.Portability.Reports
             // Generate the pretty table
             missingAssembliesPage.AddTable(1, detailsRows, 1, missingAssembliesPageHeader);
             missingAssembliesPage.AddColumnWidth(40, 40, 30);
+        }
+
+        private static void GenerateOrderPage(Worksheet page, AnalyzeResponse response)
+        {
+            page.AddRow(new[] { LocalizedStrings.RecommendedOrderDetails });
+            page.AddRow();
+
+            var header = new[] { LocalizedStrings.AssemblyHeader };
+            page.AddRow(header);
+
+            int detailsRows = 1;
+
+            foreach (var assembly in response.RecommendedOrder)
+            {
+                page.AddRow(assembly);
+                detailsRows++;
+            }
+
+            // Generate the pretty table
+            page.AddTable(3, detailsRows, 1, header.ToArray());
+            page.AddColumnWidth(100);
         }
 
         private void GenerateDetailsPage(Worksheet detailsPage, ReportingResult analysisResult)

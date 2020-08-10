@@ -63,6 +63,16 @@
         }
     </tbody>
 </table>
+<div id="order">
+    <h3>@LocalizedStrings.RecommendedOrderHeader</h3>
+    <p>@LocalizedStrings.RecommendedOrderDetails</p>
+    <ol>
+        @foreach(var item in Model.Response.RecommendedOrder)
+        {
+            <li>@item</li>
+        }
+    </ol>
+</div>
 <div id="details">
     <h3>@LocalizedStrings.HideRows</h3>
     <input type="checkbox" id="row_visibility_checkbox" onchange="ToggleRowVisibility(this)">
