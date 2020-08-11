@@ -196,6 +196,15 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No entrypoint was provided. If a submission includes an entrypoint, a recommendation for what order to migrate projects can be provided..
+        /// </summary>
+        internal static string RecommendedOrderMissing {
+            get {
+                return ResourceManager.GetString("RecommendedOrderMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skipped Assembly.
         /// </summary>
         internal static string SkippedAssembly {

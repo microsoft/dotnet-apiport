@@ -166,7 +166,7 @@ namespace Microsoft.Fx.Portability.Reports
 
                 foreach (var item in analysisResult.GetAssemblyUsageInfo().OrderBy(a => a.SourceAssembly.AssemblyIdentity))
                 {
-                    var summaryData = new List<object> { analysisResult.GetNameForAssemblyInfo(item.SourceAssembly), item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
+                    var summaryData = new List<object> { item.SourceAssembly.AssemblyIdentity, item.SourceAssembly.TargetFrameworkMoniker ?? string.Empty };
 
                     // TODO: figure out how to add formatting to cells to show percentages.
                     summaryData.AddRange(item.UsageData.Select(pui => (object)Math.Round(pui.PortabilityIndex * 100.0, 2)));
@@ -191,6 +191,12 @@ namespace Microsoft.Fx.Portability.Reports
             summaryPage.AddRow();
             summaryPage.AddRow(LocalizedStrings.CatalogLastUpdated, _response.CatalogLastUpdated.ToString("D", CultureInfo.CurrentCulture));
             summaryPage.AddRow(LocalizedStrings.HowToReadTheExcelTable);
+
+            if (!_response.RecommendedOrder.Any())
+            {
+                summaryPage.AddRow();
+                summaryPage.AddRow(LocalizedStrings.RecommendedOrderMissing);
+            }
         }
 
         private static void GenerateUnreferencedAssembliesPage(Worksheet missingAssembliesPage, AnalyzeResponse response)
