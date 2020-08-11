@@ -193,4 +193,7 @@
   <data name="UnresolvedAssemblyStatus" xml:space="preserve">
     <value>Reason</value>
   </data>
+  <data name="RecommendedOrderMissing" xml:space="preserve">
+    <value>No entrypoint was provided. If a submission includes an entrypoint, a recommendation for what order to migrate projects can be provided.</value>
+  </data>
 </root>

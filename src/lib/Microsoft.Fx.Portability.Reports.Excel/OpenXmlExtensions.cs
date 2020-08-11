@@ -145,6 +145,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
         }
 
         public static void AddRow(this Worksheet ws, params object[] data)
+            => ws.AddRow((IEnumerable<object>)data);
+
+        public static void AddRow(this Worksheet ws, IEnumerable<object> data)
         {
             var sd = ws.GetFirstChild<SheetData>();
             if (sd == null)
