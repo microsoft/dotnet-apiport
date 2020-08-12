@@ -299,6 +299,6 @@ Versions marked with an asterisk (*) implies that these are default targets if n
     <value>Include the Apis that may throw PlatformNotSupported or NotImplemented exceptions</value>
   </data>
   <data name="CmdEntrypoint" xml:space="preserve">
-    <value>Application that will be run after porting</value>
+    <value>Application that will be run after porting in the form of file name without extension</value>
   </data>
 </root>
