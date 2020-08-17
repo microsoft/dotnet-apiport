@@ -277,7 +277,7 @@ namespace Microsoft.Fx.Portability
 
             return new AnalyzeRequest
             {
-                Entrypoint = options.Entrypoint,
+                Entrypoints = new[] { options.Entrypoint },
                 Targets = options.Targets.SelectMany(_targetMapper.GetNames).ToList(),
                 Dependencies = dependencyInfo.Dependencies,
 

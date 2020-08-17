@@ -15,7 +15,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IDictionary<MemberInfo, ICollection<AssemblyInfo>> Dependencies { get; set; }
 
-        public string Entrypoint { get; set; }
+        public IReadOnlyCollection<string> Entrypoints { get; set; } = Array.Empty<string>();
 
         public ICollection<string> UnresolvedAssemblies { get; set; }
 

@@ -111,7 +111,7 @@ namespace Microsoft.Fx.Portability.Analyzer
                 UnresolvedUserAssemblies = missingUserAssemblies,
                 Targets = targets,
                 ReportingResult = reportingResult,
-                RecommendedOrder = _orderer.GetOrder(request.Entrypoint, request.UserAssemblies),
+                RecommendedOrder = _orderer.GetOrder(request.Entrypoints.FirstOrDefault(), request.UserAssemblies),
                 SubmissionId = submissionId,
                 BreakingChanges = breakingChanges,
                 BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies,
