@@ -136,12 +136,6 @@
   <data name="HowToReadTheExcelTable" xml:space="preserve">
     <value>See 'https://aka.ms/dotnet-portabilityanalyzer' to learn how to read this table</value>
   </data>
-  <data name="MissingAssembliesPageTitle" xml:space="preserve">
-    <value>Missing assemblies</value>
-  </data>
-  <data name="MissingAssemblyStatus" xml:space="preserve">
-    <value>Reason</value>
-  </data>
   <data name="NotSupported" xml:space="preserve">
     <value>Not supported</value>
   </data>
@@ -177,5 +171,29 @@
   </data>
   <data name="TooManyColumns" xml:space="preserve">
     <value>Only 26 colums supported overall!!</value>
+  </data>
+  <data name="ExceptionColumnHeader" xml:space="preserve">
+    <value>Exception Thrown</value>
+  </data>
+  <data name="ExceptionsWorksheetTitle" xml:space="preserve">
+    <value>Exceptions</value>
+  </data>
+  <data name="NoExceptionNoted" xml:space="preserve">
+    <value>No Notable Exceptions</value>
+  </data>
+  <data name="RecommendedOrderDetails" xml:space="preserve">
+    <value>Migration is much easier by following a bottom up approach. Projects with less dependencies should be migrated to .NET Standard or .NET Core first, followed by the ones that may depend on that. For this submission, the following is the recommended order:</value>
+  </data>
+  <data name="RecommendedOrderHeader" xml:space="preserve">
+    <value>Recommended Order</value>
+  </data>
+  <data name="SkippedAssembly" xml:space="preserve">
+    <value>Skipped Assembly</value>
+  </data>
+  <data name="UnresolvedAssemblyStatus" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="RecommendedOrderMissing" xml:space="preserve">
+    <value>No entrypoint was provided. If a submission includes an entrypoint, a recommendation for what order to migrate projects can be provided.</value>
   </data>
 </root>

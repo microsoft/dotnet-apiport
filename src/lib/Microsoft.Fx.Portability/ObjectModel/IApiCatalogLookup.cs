@@ -19,6 +19,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         IEnumerable<TargetInfo> GetAllTargets();
 
+        List<ApiException> GetApiExceptions(string docId);
+
         string GetRecommendedChange(string docId);
 
         string GetSourceCompatibilityEquivalent(string docId);

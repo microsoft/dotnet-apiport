@@ -106,6 +106,24 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception Thrown.
+        /// </summary>
+        internal static string ExceptionColumnHeader {
+            get {
+                return ResourceManager.GetString("ExceptionColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exceptions.
+        /// </summary>
+        internal static string ExceptionsWorksheetTitle {
+            get {
+                return ResourceManager.GetString("ExceptionsWorksheetTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to See &apos;https://aka.ms/dotnet-portabilityanalyzer&apos; to learn how to read this table.
         /// </summary>
         internal static string HowToReadTheExcelTable {
@@ -115,20 +133,11 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing assemblies.
+        ///   Looks up a localized string similar to No Notable Exceptions.
         /// </summary>
-        internal static string MissingAssembliesPageTitle {
+        internal static string NoExceptionNoted {
             get {
-                return ResourceManager.GetString("MissingAssembliesPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reason.
-        /// </summary>
-        internal static string MissingAssemblyStatus {
-            get {
-                return ResourceManager.GetString("MissingAssemblyStatus", resourceCulture);
+                return ResourceManager.GetString("NoExceptionNoted", resourceCulture);
             }
         }
         
@@ -165,6 +174,42 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         internal static string RecommendedChanges {
             get {
                 return ResourceManager.GetString("RecommendedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migration is much easier by following a bottom up approach. Projects with less dependencies should be migrated to .NET Standard or .NET Core first, followed by the ones that may depend on that. For this submission, the following is the recommended order:.
+        /// </summary>
+        internal static string RecommendedOrderDetails {
+            get {
+                return ResourceManager.GetString("RecommendedOrderDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommended Order.
+        /// </summary>
+        internal static string RecommendedOrderHeader {
+            get {
+                return ResourceManager.GetString("RecommendedOrderHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No entrypoint was provided. If a submission includes an entrypoint, a recommendation for what order to migrate projects can be provided..
+        /// </summary>
+        internal static string RecommendedOrderMissing {
+            get {
+                return ResourceManager.GetString("RecommendedOrderMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipped Assembly.
+        /// </summary>
+        internal static string SkippedAssembly {
+            get {
+                return ResourceManager.GetString("SkippedAssembly", resourceCulture);
             }
         }
         
@@ -219,6 +264,15 @@ namespace Microsoft.Fx.Portability.Reports.Excel.Resources {
         internal static string TooManyColumns {
             get {
                 return ResourceManager.GetString("TooManyColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reason.
+        /// </summary>
+        internal static string UnresolvedAssemblyStatus {
+            get {
+                return ResourceManager.GetString("UnresolvedAssemblyStatus", resourceCulture);
             }
         }
         

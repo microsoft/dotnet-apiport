@@ -15,10 +15,6 @@ namespace Microsoft.Fx.OpenXmlExtensions
 {
     internal static class OpenXmlExtensions
     {
-        private static uint _globalId = 1;
-
-        private static uint IncrementalUniqueId { get { return _globalId++; } }
-
         public static Worksheet AddWorksheet(this SpreadsheetDocument spreadsheet, string name)
         {
             var sheets = spreadsheet.WorkbookPart.Workbook.GetFirstChild<Sheets>();
@@ -52,7 +48,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
                 rowCount++;
             }
 
-            string range = ComputeRange(rowStart, rowCount, columnStart, headers.Length);
+            var range = ComputeRange(rowStart, rowCount, columnStart, headers.Length);
 
             var sheetViews = worksheet.GetFirstChild<SheetViews>();
             if (sheetViews == null)
@@ -69,9 +65,6 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
             var tableDefPart = worksheet.WorksheetPart.AddNewPart<TableDefinitionPart>();
 
-            // use unique ids for tables.
-            uint tableID = IncrementalUniqueId;
-
             var tp = new TablePart
             {
                 Id = worksheet.WorksheetPart.GetIdOfPart(tableDefPart)
@@ -84,6 +77,8 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
             tableParts.AppendChild(tp);
 
+            var tableID = GetNextTableId(worksheet);
+
             tableDefPart.Table = new Table()
             {
                 Id = tableID,
@@ -92,7 +87,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
             };
             tableDefPart.Table.Reference = range;
 
-            uint columnCount = (uint)headers.Length;
+            var columnCount = (uint)headers.Length;
             var tc = tableDefPart.Table.AppendChild(new TableColumns() { Count = columnCount });
             for (uint i = 0; i < columnCount; i++)
             {
@@ -116,23 +111,23 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         public static void AddConditionalFormatting(this Worksheet worksheet, int rowStart, int rowCount, int columnStart, int columnCount)
         {
-            string range = ComputeRange(rowStart, rowCount, columnStart, columnCount);
+            var range = ComputeRange(rowStart, rowCount, columnStart, columnCount);
 
-            ConditionalFormatting conditionalFormatting1 = new ConditionalFormatting()
+            var conditionalFormatting1 = new ConditionalFormatting()
             {
                 SequenceOfReferences = new ListValue<StringValue>() { InnerText = range }
             };
 
-            ConditionalFormattingRule conditionalFormattingRule1 =
+            var conditionalFormattingRule1 =
                 new ConditionalFormattingRule() { Type = ConditionalFormatValues.ColorScale, Priority = 1 };
 
-            ColorScale colorScale1 = new ColorScale();
-            ConditionalFormatValueObject conditionalFormatValueObject1 = new ConditionalFormatValueObject() { Type = ConditionalFormatValueObjectValues.Number, Val = "0" };
-            ConditionalFormatValueObject conditionalFormatValueObject2 = new ConditionalFormatValueObject() { Type = ConditionalFormatValueObjectValues.Percentile, Val = "50" };
-            ConditionalFormatValueObject conditionalFormatValueObject3 = new ConditionalFormatValueObject() { Type = ConditionalFormatValueObjectValues.Number, Val = "100" };
-            Color color1 = new Color() { Rgb = "FFF8696B" };
-            Color color2 = new Color() { Rgb = "FFFFEB84" };
-            Color color3 = new Color() { Rgb = "FF63BE7B" };
+            var colorScale1 = new ColorScale();
+            var conditionalFormatValueObject1 = new ConditionalFormatValueObject() { Type = ConditionalFormatValueObjectValues.Number, Val = "0" };
+            var conditionalFormatValueObject2 = new ConditionalFormatValueObject() { Type = ConditionalFormatValueObjectValues.Percentile, Val = "50" };
+            var conditionalFormatValueObject3 = new ConditionalFormatValueObject() { Type = ConditionalFormatValueObjectValues.Number, Val = "100" };
+            var color1 = new Color() { Rgb = "FFF8696B" };
+            var color2 = new Color() { Rgb = "FFFFEB84" };
+            var color3 = new Color() { Rgb = "FF63BE7B" };
 
             colorScale1.Append(conditionalFormatValueObject1);
             colorScale1.Append(conditionalFormatValueObject2);
@@ -150,6 +145,9 @@ namespace Microsoft.Fx.OpenXmlExtensions
         }
 
         public static void AddRow(this Worksheet ws, params object[] data)
+            => ws.AddRow((IEnumerable<object>)data);
+
+        public static void AddRow(this Worksheet ws, IEnumerable<object> data)
         {
             var sd = ws.GetFirstChild<SheetData>();
             if (sd == null)
@@ -242,12 +240,12 @@ namespace Microsoft.Fx.OpenXmlExtensions
 
         public static void AddColumnWidth(this Worksheet ws, IEnumerable<double> columnWidths)
         {
-            Columns columns = new Columns();
+            var columns = new Columns();
 
             uint pos = 1;
             foreach (var width in columnWidths)
             {
-                Column column = new Column()
+                var column = new Column()
                 {
                     Min = (UInt32Value)pos,
                     Max = (UInt32Value)pos,
@@ -260,7 +258,7 @@ namespace Microsoft.Fx.OpenXmlExtensions
                 pos++;
             }
 
-            SheetData sd = ws.GetFirstChild<SheetData>();
+            var sd = ws.GetFirstChild<SheetData>();
 
             if (sd != null)
             {
@@ -307,6 +305,28 @@ namespace Microsoft.Fx.OpenXmlExtensions
             }
 
             return string.Format(CultureInfo.CurrentCulture, "{0}{1}:{2}{3}", (char)(((uint)'A') + columnStart - 1), rowStart, (char)(((uint)'A') + columnStart + columnCount - 2), rowStart + rowCount - 1);
+        }
+
+        // Table ids must be unique for the whole document
+        private static uint GetNextTableId(Worksheet w)
+        {
+            var result = 0L;
+            var spreadsheet = (SpreadsheetDocument)w.WorksheetPart.OpenXmlPackage;
+
+            foreach (var wp in spreadsheet.WorkbookPart.WorksheetParts)
+            {
+                foreach (var part in wp.GetPartsOfType<TableDefinitionPart>())
+                {
+                    var value = part.Table?.Id;
+
+                    if (value != null && value.HasValue)
+                    {
+                        result = Math.Max(result, value.Value);
+                    }
+                }
+            }
+
+            return (uint)(result + 1);
         }
     }
 }

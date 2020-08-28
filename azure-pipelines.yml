@@ -45,23 +45,9 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build solution PortabilityTools.sln'
     inputs:
-      msbuildArgs: '/m /t:build;pack /bl:$(Build.SourcesDirectory)\bin\$(BuildConfiguration)\msbuild.binlog /p:DeployExtension=False'
+      msbuildArgs: '/m /t:build;pack /p:DeployExtension=False'
       platform: $(BuildPlatform)
       configuration: $(BuildConfiguration)
-
-  - task: VSBuild@1
-    displayName: Build apiport global tool
-    inputs:
-      solution: src/ApiPort/ApiPort/ApiPort.csproj
-      msbuildArgs: '-t:pack -p:GlobalTool=true'
-      platform: $(BuildPlatform)
-      configuration: $(BuildConfiguration)
-
-  - script: dotnet publish src/ApiPort/ApiPort/ApiPort.csproj -r win7-x64 -f netcoreapp2.1 --self-contained true
-    displayName: publish self-contained apiport - win7-x64
-
-  - script: dotnet publish src/ApiPort/ApiPort/ApiPort.csproj -r win7-x86 -f netcoreapp2.1 --self-contained true
-    displayName: publish self-contained apiport - win7-x86
 
   - task: VSTest@2
     displayName: Test with VSTest
@@ -98,7 +84,11 @@ jobs:
         ApiPort.Offline\**\*
         ApiPort.Vsix\*.vsix
         raw\**\*
-        *.binlog
+        Microsoft.Fx.Portability\**\*
+        Microsoft.Fx.Portability.Reports.DGML\**\*
+        Microsoft.Fx.Portability.Reports.Excel\**\*
+        Microsoft.Fx.Portability.Reports.Html\**\*
+        Microsoft.Fx.Portability.Reports.Json\**\*
       TargetFolder: $(Build.StagingDirectory)\drop
 
   - task: CopyFiles@2
@@ -124,24 +114,33 @@ jobs:
       AnalyzeSymPath: $(Build.StagingDirectory)\symbols
     continueOnError: true
 
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@1
-    displayName: 'Run APIScan net461'
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
+    displayName: 'Run APIScan netcoreapp3.1'
     inputs:
-      softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\net461'
+      softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\netcoreapp3.1'
       softwareName: 'API Port'
       softwareVersionNum: 4.XX
-      symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\net461'
+      symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\netcoreapp3.1'
       isLargeApp: false
-
+  
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
     displayName: 'Publish Security Analysis Logs'
     condition: succeededOrFailed()
+
+  - task: NuGetCommand@2
+    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
+      allowPackageConflicts: true
 
 - job: Linux
   pool:
     vmImage: Ubuntu 18.04
   variables:
-    BuildNetCoreAppTarget: netcoreapp2.1
+    BuildNetCoreAppTarget: netcoreapp3.1
     RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
   steps:
   - powershell: .\init.ps1
@@ -153,7 +152,7 @@ jobs:
       command: restore
       projects: $(RestoreBuildProjects)
       feedsToUse: config
-      nugetConfigPath: NuGet.config
+      nugetConfigPath: NuGet.Config
 
   - task: DotNetCoreCLI@2
     displayName: dotnet build

@@ -15,13 +15,20 @@ namespace Microsoft.Fx.Portability.Analyzer
         private readonly IAnalysisEngine _analysisEngine;
         private readonly ITargetMapper _targetMapper;
         private readonly IReportGenerator _reportGenerator;
+        private readonly IDependencyOrderer _orderer;
 
-        public RequestAnalyzer(ITargetNameParser targetNameParser, IAnalysisEngine analysisEngine, ITargetMapper targetMapper, IReportGenerator reportGenerator)
+        public RequestAnalyzer(
+            ITargetNameParser targetNameParser,
+            IAnalysisEngine analysisEngine,
+            ITargetMapper targetMapper,
+            IReportGenerator reportGenerator,
+            IDependencyOrderer orderer)
         {
             _targetNameParser = targetNameParser;
             _analysisEngine = analysisEngine;
             _targetMapper = targetMapper;
             _reportGenerator = reportGenerator;
+            _orderer = orderer;
         }
 
         public AnalyzeResponse AnalyzeRequest(AnalyzeRequest request, string submissionId)
@@ -81,6 +88,10 @@ namespace Microsoft.Fx.Portability.Analyzer
                 ? _analysisEngine.FindBreakingChanges(targets, request.Dependencies, breakingChangeSkippedAssemblies, request.BreakingChangesToSuppress, userAssemblies, request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowRetargettingIssues)).ToList()
                 : new List<BreakingChangeDependency>();
 
+            var apiPotentialExceptions = request.RequestFlags.HasFlag(AnalyzeRequestFlags.ShowExceptionApis)
+                ? _analysisEngine.FindMembersMayThrow(targets, userAssemblies, dependencies)
+                : Array.Empty<ExceptionInfo>();
+
             var reportingResult = _reportGenerator.ComputeReport(
                 targets,
                 submissionId,
@@ -100,10 +111,12 @@ namespace Microsoft.Fx.Portability.Analyzer
                 UnresolvedUserAssemblies = missingUserAssemblies,
                 Targets = targets,
                 ReportingResult = reportingResult,
+                RecommendedOrder = _orderer.GetOrder(request.Entrypoints.FirstOrDefault(), request.UserAssemblies),
                 SubmissionId = submissionId,
                 BreakingChanges = breakingChanges,
                 BreakingChangeSkippedAssemblies = breakingChangeSkippedAssemblies,
                 NuGetPackages = nugetPackages,
+                ThrowingMembers = apiPotentialExceptions,
                 Request = request
             };
         }

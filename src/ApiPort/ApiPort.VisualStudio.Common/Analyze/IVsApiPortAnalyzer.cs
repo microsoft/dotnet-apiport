@@ -11,6 +11,7 @@ namespace ApiPortVS.Analyze
     public interface IVsApiPortAnalyzer
     {
         Task<ReportingResult> WriteAnalysisReportsAsync(
+            string entrypoint,
             IEnumerable<string> inputAssemblyPaths,
             IEnumerable<string> installedPackages,
             IFileWriter reportWriter,

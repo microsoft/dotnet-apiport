@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
@@ -17,6 +18,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         private string _assemblyIdentity;
         private string _targetFrameworkVersion;
         private string _fileVersion;
+        private string _name;
 
         public string AssemblyIdentity
         {
@@ -30,6 +32,16 @@ namespace Microsoft.Fx.Portability.ObjectModel
                 _assemblyIdentity = value;
                 _hashComputed = false;
             }
+        }
+
+        public string GetAssemblyName()
+        {
+            if (_name is null)
+            {
+                _name = new AssemblyName(AssemblyIdentity).Name;
+            }
+
+            return _name;
         }
 
         /// <summary>

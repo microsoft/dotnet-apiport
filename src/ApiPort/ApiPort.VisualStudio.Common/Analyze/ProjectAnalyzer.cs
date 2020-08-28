@@ -13,6 +13,7 @@ using NuGet.VisualStudio;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace ApiPortVS.Analyze
             _outputWindowWriter = outputWindowWriter;
         }
 
-        public async Task AnalyzeProjectAsync(ICollection<Project> projects, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task AnalyzeProjectAsync(ICollection<Project> projects, Project entryproject, CancellationToken cancellationToken = default(CancellationToken))
         {
             var buildSucceeded = await _builder.BuildAsync(projects).ConfigureAwait(false);
 
@@ -61,6 +62,8 @@ namespace ApiPortVS.Analyze
 
             // TODO: Add option to include everything in output, not just build artifacts
             var targetAssemblies = new ConcurrentBag<string>();
+            var projectName = entryproject?.Name;
+            var entrypoint = default(string);
 
             var referencedNuGetPackages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var project in projects)
@@ -73,9 +76,14 @@ namespace ApiPortVS.Analyze
                     continue;
                 }
 
+                if (string.Equals(projectName, project.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    entrypoint = output.FirstOrDefault();
+                }
+
                 foreach (var file in output)
                 {
-                    targetAssemblies.Add(file);
+                    targetAssemblies.Add(Path.GetFileName(file));
                 }
 
                 referencedNuGetPackages.UnionWith(GetPackageReferences(project));
@@ -86,7 +94,7 @@ namespace ApiPortVS.Analyze
                 throw new PortabilityAnalyzerException(LocalizedStrings.FailedToLocateBuildOutputDir);
             }
 
-            var result = await _analyzer.WriteAnalysisReportsAsync(targetAssemblies, referencedNuGetPackages, _reportWriter, true).ConfigureAwait(false);
+            var result = await _analyzer.WriteAnalysisReportsAsync(entrypoint, targetAssemblies, referencedNuGetPackages, _reportWriter, true).ConfigureAwait(false);
             var sourceItems = await Task.Run(() => _sourceLineMapper.GetSourceInfo(targetAssemblies, result)).ConfigureAwait(false);
 
             var dictionary = new ConcurrentBag<CalculatedProject>();

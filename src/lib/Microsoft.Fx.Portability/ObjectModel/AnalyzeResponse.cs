@@ -5,6 +5,7 @@ using Microsoft.Fx.Portability.Reporting.ObjectModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.ObjectModel
@@ -30,6 +31,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IList<FrameworkName> Targets { get; set; }
 
+        public IEnumerable<string> RecommendedOrder { get; set; } = Enumerable.Empty<string>();
+
         [JsonIgnore]
         public AnalyzeRequest Request { get; set; }
 
@@ -42,6 +45,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         public IList<BreakingChangeDependency> BreakingChanges { get; set; }
 
         public IList<AssemblyInfo> BreakingChangeSkippedAssemblies { get; set; }
+
+        public IList<ExceptionInfo> ThrowingMembers { get; set; }
 
         public int CompareTo(object obj)
         {

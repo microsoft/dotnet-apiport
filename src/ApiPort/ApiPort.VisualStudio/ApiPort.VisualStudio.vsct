@@ -83,7 +83,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Analyze Assembly Portability</ButtonText>
+          <ButtonText>Analyze Solution Portability</ButtonText>
         </Strings>
       </Button>
 

@@ -15,10 +15,14 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public IDictionary<MemberInfo, ICollection<AssemblyInfo>> Dependencies { get; set; }
 
+        public IReadOnlyCollection<string> Entrypoints { get; set; } = Array.Empty<string>();
+
         public ICollection<string> UnresolvedAssemblies { get; set; }
 
         [JsonIgnore]
         public IDictionary<string, ICollection<string>> UnresolvedAssembliesDictionary { get; set; }
+
+        public ICollection<AssemblyInfo> NonUserAssemblies { get; set; }
 
         public ICollection<AssemblyInfo> UserAssemblies { get; set; }
 

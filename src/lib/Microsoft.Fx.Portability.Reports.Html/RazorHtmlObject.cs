@@ -43,8 +43,11 @@ namespace Microsoft.Fx.Portability.Reports
 
         public IEnumerable<NuGetPackageInfo> NuGetPackages { get; private set; }
 
+        public AnalyzeResponse Response { get; }
+
         public RazorHtmlObject(AnalyzeResponse response, ITargetMapper targetMapper)
         {
+            Response = response;
             CatalogBuiltOn = response.CatalogLastUpdated;
             _targetMapper = targetMapper;
             RequestFlags = response.ReportingResult.RequestFlags;

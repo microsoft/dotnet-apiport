@@ -28,7 +28,7 @@ namespace Microsoft.Fx.Portability.Reports
 
         public Task WriteStreamAsync(Stream stream, AnalyzeResponse response)
         {
-            var excelWriter = new ExcelOpenXmlOutputWriter(_targetMapper, response.ReportingResult, response.BreakingChanges, response.CatalogLastUpdated, description: null);
+            var excelWriter = new ExcelOpenXmlOutputWriter(_targetMapper, response, description: null);
 
             return excelWriter.WriteToAsync(stream);
         }

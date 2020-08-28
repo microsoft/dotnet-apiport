@@ -59,8 +59,7 @@ namespace ApiPort
                 string username = Console.ReadLine();
                 Console.Write(LocalizedStrings.Credentials_Password);
 
-#if FEATURE_NETWORK_CREDENTIAL
-                using (SecureString password = new SecureString())
+                using (var password = new SecureString())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     ReadSecureStringFromConsole(password);
@@ -73,17 +72,6 @@ namespace ApiPort
 
                     return Task.FromResult(credentials);
                 }
-#else
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var credentials = new NetworkCredential
-                {
-                    UserName = username,
-                    Password = ReadUnsecureStringFromConsole()
-                };
-
-                return Task.FromResult(credentials);
-#endif
             }
             finally
             {
@@ -120,42 +108,5 @@ namespace ApiPort
 
             Console.WriteLine();
         }
-
-#if !FEATURE_NETWORK_CREDENTIAL
-        /// <summary>
-        /// NOTE: Remove this when NetworkCredential.SecurePassword is
-        /// available in .NET Standard 2.0.
-        /// </summary>
-        private static string ReadUnsecureStringFromConsole()
-        {
-            var builder = new System.Text.StringBuilder();
-
-            ConsoleKeyInfo keyInfo;
-            while ((keyInfo = Console.ReadKey(intercept: true)).Key != ConsoleKey.Enter)
-            {
-                if (keyInfo.Key == ConsoleKey.Backspace)
-                {
-                    if (builder.Length < 1)
-                    {
-                        continue;
-                    }
-
-                    Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                    Console.Write(' ');
-                    Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                    builder.Remove(builder.Length - 1, 1);
-                }
-                else
-                {
-                    builder.Append(keyInfo.KeyChar);
-                    Console.Write('*');
-                }
-            }
-
-            Console.WriteLine();
-
-            return builder.ToString();
-        }
-#endif
     }
 }

@@ -10,7 +10,6 @@
 
 namespace ApiPort.Resources {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -20,7 +19,7 @@ namespace ApiPort.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class LocalizedStrings {
@@ -40,7 +39,7 @@ namespace ApiPort.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiPort.Resources.LocalizedStrings", typeof(LocalizedStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -179,6 +178,15 @@ namespace ApiPort.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include the Apis that may throw PlatformNotSupported or NotImplemented exceptions.
+        /// </summary>
+        internal static string CmdAnalyzeShowExceptionApis {
+            get {
+                return ResourceManager.GetString("CmdAnalyzeShowExceptionApis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate non-portable APIs.
         /// </summary>
         internal static string CmdAnalyzeShowNonPortableApis {
@@ -247,6 +255,15 @@ namespace ApiPort.Resources {
         internal static string CmdEndpoint {
             get {
                 return ResourceManager.GetString("CmdEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application that will be run after porting.
+        /// </summary>
+        internal static string CmdEntrypoint {
+            get {
+                return ResourceManager.GetString("CmdEntrypoint", resourceCulture);
             }
         }
         
