@@ -120,7 +120,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             {
                 file.Save(ms);
                 ms.Position = 0;
-                ms.CopyTo(stream);
+                ms.CopyToAsync(stream);
             }
         }
 
