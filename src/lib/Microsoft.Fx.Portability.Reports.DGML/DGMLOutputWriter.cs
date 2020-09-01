@@ -92,9 +92,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                 }
             }
 
-            dgml.Save(stream);
-
-            return Task.CompletedTask;
+            return dgml.SaveAsync(stream);
         }
 
         private static string GenerateMissingTypes(string assembly, ReportingResult response, int i)

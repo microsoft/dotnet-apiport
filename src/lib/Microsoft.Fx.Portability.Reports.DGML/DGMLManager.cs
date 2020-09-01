@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Microsoft.Fx.Portability.Reports.DGML
@@ -114,13 +115,13 @@ namespace Microsoft.Fx.Portability.Reports.DGML
             nodes.Add(element);
         }
 
-        internal void Save(Stream stream)
+        internal async Task SaveAsync(Stream stream)
         {
             using (var ms = new MemoryStream())
             {
                 file.Save(ms);
                 ms.Position = 0;
-                ms.CopyToAsync(stream);
+                await ms.CopyToAsync(stream);
             }
         }
 
