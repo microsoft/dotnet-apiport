@@ -101,7 +101,7 @@ namespace Microsoft.Fx.Portability.Reports
         /// not added to the ApplicationPartsManager by default.
         /// For more information: https://github.com/aspnet/Razor/issues/2262.
         /// </summary>
-        private static void ConfigureRazorViews(ApplicationPartManager partsManager, PhysicalFileProvider fileProvider)
+        private static void ConfigureRazorViews(ApplicationPartManager partsManager, IFileProvider fileProvider)
         {
             // Using StringComparison.OrdinalIgnoreCase because on .NET FX,
             // binaries are output as .DLL sometimes rather than .dll, which
