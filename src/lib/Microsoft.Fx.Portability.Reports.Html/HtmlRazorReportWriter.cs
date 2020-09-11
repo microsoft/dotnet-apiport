@@ -59,7 +59,7 @@ namespace Microsoft.Fx.Portability.Reports
         private static ServiceProvider BuildProvider()
         {
             var services = new ServiceCollection();
-            var fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
+            var fileProvider = new PhysicalFileProvider(Path.GetDirectoryName(typeof(HtmlRazorReportWriter).Assembly.Location));
 
 #if NETSTANDARD2_0
             services.AddSingleton<IHostingEnvironment>(new HostingEnvironment
@@ -101,7 +101,7 @@ namespace Microsoft.Fx.Portability.Reports
         /// not added to the ApplicationPartsManager by default.
         /// For more information: https://github.com/aspnet/Razor/issues/2262.
         /// </summary>
-        private static void ConfigureRazorViews(ApplicationPartManager partsManager, PhysicalFileProvider fileProvider)
+        private static void ConfigureRazorViews(ApplicationPartManager partsManager, IFileProvider fileProvider)
         {
             // Using StringComparison.OrdinalIgnoreCase because on .NET FX,
             // binaries are output as .DLL sometimes rather than .dll, which
@@ -120,14 +120,14 @@ namespace Microsoft.Fx.Portability.Reports
                 return;
             }
 
-            var applicationParts = new DirectoryInfo(fileProvider.Root)
-                .EnumerateFiles()
+            var applicationParts = fileProvider.GetDirectoryContents(string.Empty)
                 .Where(x => x.Exists
-                    && x.Extension.Equals(".dll", comparison)
+                    && Path.GetExtension(x.Name).Equals(".dll", comparison)
                     && x.Name.StartsWith(assemblyName, comparison))
                 .SelectMany(file =>
                 {
-                    var assembly = Assembly.LoadFrom(file.FullName);
+                    var assembly = Assembly.LoadFrom(file.PhysicalPath);
+
                     return file.Name.EndsWith("Views.dll", comparison)
                         ? CompiledRazorAssemblyApplicationPartFactory.GetDefaultApplicationParts(assembly)
                         : new[] { new AssemblyPart(assembly) };
