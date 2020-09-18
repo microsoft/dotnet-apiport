@@ -9,6 +9,7 @@ variables:
   BuildConfiguration: Release
   BuildPlatform: Any CPU
   NUGET_PACKAGES: $(Agent.TempDirectory)/.nuget/packages
+  SigningType: Real
 
 jobs:
 - job: Windows
@@ -19,6 +20,17 @@ jobs:
 
   - powershell: .\init.ps1 -UpgradePrerequisites -NoRestore
     displayName: init.ps1 script
+
+  - task: ms-vseng.MicroBuildTasks.30666190-6959-11e5-9f96-f56098202fef.MicroBuildSigningPlugin@2
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    displayName: 'Install Signing Plugin'
+    inputs:
+    signType: '$(SigningType)'
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
+    displayName: 'Run AutoApplicability'
+    inputs:
+      ExternalRelease: true
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
     displayName: Run PoliCheck
@@ -122,6 +134,11 @@ jobs:
       softwareVersionNum: 4.XX
       symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\netcoreapp3.1'
       isLargeApp: false
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-roslynanalyzers.RoslynAnalyzers@2
+    displayName: 'Run Roslyn Analyzers'
+    inputs:
+      suppressionFileForCompilerWarnings: 'bin\RoslynAnalyzerSuppressions.txt'
   
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
     displayName: 'Publish Security Analysis Logs'
@@ -135,6 +152,23 @@ jobs:
       nuGetFeedType: 'internal'
       publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
       allowPackageConflicts: true
+
+  - task: PowerShell@1
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    displayName: 'Push VSIX'
+    inputs:
+      scriptType: inlineScript
+      workingFolder: 'bin\$(BuildConfiguration)'
+      inlineScript: |
+        # Setting these environment variables because they are used in the script for the upload endpoint: 
+     
+        $env:APPVEYOR_REPO_PROVIDER = "github"
+        $env:APPVEYOR_REPO_NAME = "microsoft/dotnet-apiport"
+     
+        Invoke-WebRequest "https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1" -UseBasicParsing | Invoke-Expression
+        $vsix = gci -Recurse -Include ApiPort.vsix -File
+        $vsix
+        Vsix-PublishToGallery -path $vsix 
 
 - job: Linux
   pool:
