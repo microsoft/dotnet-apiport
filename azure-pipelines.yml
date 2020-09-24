@@ -25,7 +25,7 @@ jobs:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Install Signing Plugin'
     inputs:
-    signType: '$(SigningType)'
+      signType: $(SigningType)
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
     displayName: 'Run AutoApplicability'
@@ -158,15 +158,14 @@ jobs:
     displayName: 'Push VSIX'
     inputs:
       scriptType: inlineScript
-      workingFolder: 'bin\$(BuildConfiguration)'
       inlineScript: |
         # Setting these environment variables because they are used in the script for the upload endpoint: 
      
         $env:APPVEYOR_REPO_PROVIDER = "github"
         $env:APPVEYOR_REPO_NAME = "microsoft/dotnet-apiport"
      
-        Invoke-WebRequest "https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1" -UseBasicParsing | Invoke-Expression
-        $vsix = gci -Recurse -Include ApiPort.vsix -File
+        "tools\AppVeyor\vsix.ps1" | Invoke-Expression
+        $vsix = gci -path bin\$(BuildConfiguration) -Recurse -Include ApiPort.vsix -File
         $vsix
         Vsix-PublishToGallery -path $vsix 
 
