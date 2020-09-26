@@ -2,16 +2,15 @@ trigger:
   branches:
     include:
     - master
-    - dev
 
 parameters:
 - name: SignTypeSelection
   displayName: Sign type
   type: string
-  default: Test
+  default: Real
   values: [ 'Test', 'Real' ]
 
-variables:
+  variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   BuildConfiguration: Release
   BuildPlatform: Any CPU
@@ -23,6 +22,16 @@ jobs:
   pool: VSEng-MicroBuildVS2019
   steps:
  - template: azure-pipelines-common-windows.yml
+ - task: PowerShell@1
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    displayName: 'Push VSIX'
+    inputs:
+      scriptType: inlineScript
+      inlineScript: |
+        # Setting these environment variables because they are used in the script for the upload endpoint: 
+     
+        $env:APPVEYOR_REPO_PROVIDER = "github"
+        $env:APPVEYOR_REPO_NAME = "microsoft/dotnet-apiport"
 
 - job: Linux
   pool:
@@ -31,4 +40,3 @@ jobs:
     BuildNetCoreAppTarget: netcoreapp3.1
     RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
    - template: azure-pipelines-common-linux.yml
-

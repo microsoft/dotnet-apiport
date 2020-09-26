@@ -1,0 +1,40 @@
+  steps:
+  - powershell: .\init.ps1
+    displayName: init.ps1 script
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet restore
+    inputs:
+      command: restore
+      projects: $(RestoreBuildProjects)
+      feedsToUse: config
+      nugetConfigPath: NuGet.Config
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build
+    inputs:
+      projects: $(RestoreBuildProjects)
+      arguments: '--configuration $(BuildConfiguration) -f $(BuildNetCoreAppTarget) --no-restore'
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: test
+      projects: |
+        tests/**/*[Tt]ests/*.csproj
+        !tests/**/*/ApiPortVS.Tests.csproj
+      arguments: '--configuration $(BuildConfiguration) --framework $(BuildNetCoreAppTarget) --no-build'
+    enabled: false # it wasn't testing anything anyway.
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: $(RestoreBuildProjects)
+      arguments: '--configuration $(BuildConfiguration) -f $(BuildNetCoreAppTarget) --output $(Build.StagingDirectory) --no-build'
+      zipAfterPublish: True
+
+  - publish: $(Build.StagingDirectory)
+    displayName: Publish apiport
+    artifact: drop-$(Agent.JobName)

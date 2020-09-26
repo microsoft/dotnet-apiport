@@ -9,10 +9,8 @@ $vsixUploadEndpoint = "https://www.vsixgallery.com/api/upload"
 function Vsix-GetRepoUrl{
     [cmdletbinding()]
     param ()
-    if ($env:APPVEYOR_REPO_PROVIDER -contains "github"){
-        $repoUrl = "https://github.com/" + $env:APPVEYOR_REPO_NAME + "/"
-    } elseif ($env:APPVEYOR_REPO_PROVIDER -contains "bitbucket"){
-        $repoUrl = "https://bitbucket.org/" + $env:APPVEYOR_REPO_NAME + "/"
+    if ($(Build.Repository.Provider) -contains "github"){
+        $repoUrl = "https://github.com/" + $(Build.Repository.Name) + "/"
     } else {
         $repoUrl = ""
     }
