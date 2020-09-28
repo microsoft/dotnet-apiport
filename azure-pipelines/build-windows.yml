@@ -1,0 +1,90 @@
+steps:
+- checkout: self
+  clean: true
+
+- template: install-dependencies.yml
+
+- powershell: '& (./azure-pipelines/Get-nbgv.ps1) cloud'
+  displayName: Set build number
+
+- ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
+  - template: microbuild.before.yml
+
+- script: dotnet restore
+  displayName: dotnet restore
+
+- task: VSBuild@1
+  displayName: 'Build solution PortabilityTools.sln'
+  inputs:
+    msbuildArgs: '/m /t:build;pack /p:DeployExtension=False'
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+
+- task: VSTest@2
+  displayName: Test with VSTest
+  inputs:
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\obj\**
+      !**\PortabilityServiceIntegrationTests.dll
+    runOnlyImpactedTests: false
+    vsTestVersion: '16.0'
+    runInParallel: false
+    runTestsInIsolation: false
+    codeCoverageEnabled: false
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    diagnosticsEnabled: True
+
+- task: DotNetCoreCLI@2
+  displayName: Test with dotnet test
+  inputs:
+    command: test
+    projects: |
+      tests/**/*[Tt]ests/*.csproj
+      !tests/ApiPort/ApiPortVS.Tests/ApiPortVS.Tests.csproj
+      !**\PortabilityServiceIntegrationTests.dll
+    arguments: --configuration $(BuildConfiguration) --no-build
+
+- task: CopyFiles@2
+  displayName: Copy Analysis files to Staging
+  inputs:
+    SourceFolder: bin\$(BuildConfiguration)
+    Contents: |
+      ApiPort\**\*
+      ApiPort.Offline\**\*
+      ApiPort.Vsix\*.vsix
+      raw\**\*
+      Microsoft.Fx.Portability\**\*
+      Microsoft.Fx.Portability.Reports.DGML\**\*
+      Microsoft.Fx.Portability.Reports.Excel\**\*
+      Microsoft.Fx.Portability.Reports.Html\**\*
+      Microsoft.Fx.Portability.Reports.Json\**\*
+    TargetFolder: $(Build.StagingDirectory)\drop
+
+- task: CopyFiles@2
+  displayName: Collection symbol files
+  inputs:
+    SourceFolder: bin\$(BuildConfiguration)
+    Contents: '**\*.pdb'
+    TargetFolder: $(Build.StagingDirectory)\symbols
+
+- publish: $(Build.StagingDirectory)\drop
+  displayName: Publish drop
+  artifact: drop-$(Agent.JobName)
+
+- publish: bin/$(BuildConfiguration)/ApiPort.Vsix/ApiPort.vsix
+  artifact: vsix
+  displayName: Publishing VSIX
+
+- ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
+  - template: microbuild.after.yml
+
+- task: NuGetCommand@2
+  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
+    allowPackageConflicts: true

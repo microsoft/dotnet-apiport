@@ -1,0 +1,62 @@
+steps:
+
+- powershell: |
+    mkdir $(Build.StagingDirectory)\vsix
+    copy $(Build.SourcesDirectory)\bin\$(BuildConfiguration)\ApiPort.Vsix\ApiPort.vsix $(Build.StagingDirectory)\vsix
+  displayName: Copying VSIX
+
+- task: ms-vseng.MicroBuildShipTasks.7c429315-71ba-4cb3-94bb-f829c95f7915.MicroBuildCodesignVerify@2
+  displayName: Verify Signed Files
+  inputs:
+    TargetFolders: |
+      $(Build.StagingDirectory)\vsix
+    WhiteListPathForCerts: $(Build.SourcesDirectory)\azure-pipelines\no_authenticode.txt
+
+- task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+  displayName: Component Detection
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
+  displayName: 'Run AutoApplicability'
+  inputs:
+    ExternalRelease: true
+
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
+  displayName: Run PoliCheck
+  inputs:
+    targetType: F
+    optionsFC: 0
+    optionsXS: 0
+    optionsHMENABLE: 0
+  continueOnError: true
+
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
+  displayName: Run CredScan
+  inputs:
+    debugMode: false
+  continueOnError: true
+
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
+  displayName: 'Run BinSkim '
+  inputs:
+    InputType: Basic
+    AnalyzeTarget: '$(Build.StagingDirectory)\drop\Microsoft.Fx.*.dll;$(Build.StagingDirectory)\drop\ApiPor*.dll;$(Build.StagingDirectory)\drop\ApiPor*.exe'
+    AnalyzeSymPath: $(Build.StagingDirectory)\symbols
+  continueOnError: true
+
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
+  displayName: 'Run APIScan netcoreapp3.1'
+  inputs:
+    softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\netcoreapp3.1'
+    softwareName: 'API Port'
+    softwareVersionNum: 4.XX
+    symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\netcoreapp3.1'
+    isLargeApp: false
+
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
+  displayName: 'Publish Security Analysis Logs'
+  condition: succeededOrFailed()
+
+- task: MicroBuildCleanup@1
+  condition: succeededOrFailed()
+  displayName: MicroBuild Cleanup

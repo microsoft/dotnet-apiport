@@ -6,25 +6,26 @@ $vsixUploadEndpoint = "https://www.vsixgallery.com/api/upload"
 #$vsixUploadEndpoint = "https://localhost:44372/api/upload"
 
 
-function Vsix-GetRepoUrl{
+function Vsix-GetRepoUrl {
     [cmdletbinding()]
     param ()
-    if ($(Build.Repository.Provider) -contains "github"){
-        $repoUrl = "https://github.com/" + $(Build.Repository.Name) + "/"
-    } else {
+    if ($env:BUILD_REPOSITORY_PROVIDER -contains "github") {
+        $repoUrl = "https://github.com/" + $env:BUILD_REPOSITORY_NAME + "/"
+    }
+    else {
         $repoUrl = ""
     }
     return $repoUrl
 }
 
-function Vsix-PublishToGallery{
+function Vsix-PublishToGallery {
     [cmdletbinding()]
     param (
-        [Parameter(Position=0, Mandatory=0,ValueFromPipeline=$true)]
+        [Parameter(Position = 0, Mandatory = 0, ValueFromPipeline = $true)]
         [string[]]$path = "./*.vsix"
     )
-    foreach($filePath in $path){
-        if ($env:APPVEYOR_PULL_REQUEST_NUMBER){
+    foreach ($filePath in $path) {
+        if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
             return
         }
 
@@ -42,24 +43,19 @@ function Vsix-PublishToGallery{
 
         $fileNames = (Get-ChildItem $filePath -Recurse)
 
-        foreach($vsixFile in $fileNames)
-        {
+        foreach ($vsixFile in $fileNames) {
             [string]$url = ($vsixUploadEndpoint + "?repo=" + $repo + "&issuetracker=" + $issueTracker)
             [byte[]]$bytes = [System.IO.File]::ReadAllBytes($vsixFile)
-             
+
             try {
                 $webclient = New-Object System.Net.WebClient
                 $webclient.UploadFile($url, $vsixFile) | Out-Null
                 'OK' | Write-Host -ForegroundColor Green
             }
-            catch{
+            catch {
                 'FAIL' | Write-Error
                 $_.Exception.Response.Headers["x-error"] | Write-Error
             }
         }
     }
 }
-
-$vsix = gci -path bin\$(BuildConfiguration) -Recurse -Include ApiPort.vsix -File
-$vsix
-Vsix-PublishToGallery -path $vsix 
