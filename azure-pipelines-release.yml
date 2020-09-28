@@ -22,16 +22,8 @@ jobs:
   pool: VSEng-MicroBuildVS2019
   steps:
  - template: azure-pipelines-common-windows.yml
- - task: PowerShell@1
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+ - powershell: tools/appveyor/publishvsix.ps1
     displayName: 'Push VSIX'
-    inputs:
-      scriptType: inlineScript
-      inlineScript: |
-        # Setting these environment variables because they are used in the script for the upload endpoint: 
-     
-        $env:APPVEYOR_REPO_PROVIDER = "github"
-        $env:APPVEYOR_REPO_NAME = "microsoft/dotnet-apiport"
 
 - job: Linux
   pool:
@@ -39,4 +31,5 @@ jobs:
   variables:
     BuildNetCoreAppTarget: netcoreapp3.1
     RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
+  steps:
    - template: azure-pipelines-common-linux.yml

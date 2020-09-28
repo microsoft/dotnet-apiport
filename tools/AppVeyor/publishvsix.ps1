@@ -60,3 +60,6 @@ function Vsix-PublishToGallery{
     }
 }
 
+$vsix = gci -path bin\$(BuildConfiguration) -Recurse -Include ApiPort.vsix -File
+$vsix
+Vsix-PublishToGallery -path $vsix 

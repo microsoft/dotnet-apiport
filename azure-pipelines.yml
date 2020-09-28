@@ -30,5 +30,6 @@ jobs:
   variables:
     BuildNetCoreAppTarget: netcoreapp3.1
     RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
+  steps:
    - template: azure-pipelines-common-linux.yml
 
