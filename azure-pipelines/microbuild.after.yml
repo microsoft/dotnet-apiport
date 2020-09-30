@@ -11,6 +11,7 @@ steps:
     TargetFolders: |
       $(Build.StagingDirectory)\vsix
     WhiteListPathForCerts: $(Build.SourcesDirectory)\azure-pipelines\no_authenticode.txt
+  condition: and(succeeded(), ne(variables['System.PullRequest.IsFork'], 'true'))
 
 - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
   displayName: Component Detection
