@@ -4,7 +4,7 @@ pr: none
 resources:
   pipelines:
   - pipeline: CI
-    source: AArnott.dotnet-apiport # The name of your CI pipeline
+    source: dotnet-apiport-yaml # The name of your CI pipeline
     trigger:
       tags:
       - auto-release
