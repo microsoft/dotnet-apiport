@@ -3,6 +3,7 @@ trigger:
     include:
     - master
     - dev
+    - 'validate/*'
 
 parameters:
 - name: SignTypeSelection
@@ -16,20 +17,17 @@ variables:
   BuildConfiguration: Release
   BuildPlatform: Any CPU
   NUGET_PACKAGES: $(Agent.TempDirectory)/.nuget/packages
-  SigningType: ${{ parameters.SignTypeSelection }}
+  SignTypeSelection: ${{ parameters.SignTypeSelection }}
+  DeployExtension: false
 
 jobs:
 - job: Windows
   pool: VSEng-MicroBuildVS2019
   steps:
- - template: azure-pipelines-common-windows.yml
+  - template: azure-pipelines/build-windows.yml
 
 - job: Linux
   pool:
     vmImage: Ubuntu 18.04
-  variables:
-    BuildNetCoreAppTarget: netcoreapp3.1
-    RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
   steps:
-   - template: azure-pipelines-common-linux.yml
-
+  - template: azure-pipelines/build-linux.yml

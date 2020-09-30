@@ -1,0 +1,22 @@
+trigger: none # We only want to trigger manually or based on resources
+pr: none
+
+resources:
+  pipelines:
+  - pipeline: CI
+    source: AArnott.dotnet-apiport # The name of your CI pipeline
+    trigger:
+      tags:
+      - auto-release
+
+jobs:
+- job: Windows
+  pool: VSEng-ReleasePool
+  steps:
+  - download: CI
+    artifact: vsix
+    displayName: Download vsix artifact
+  - powershell: |
+      azure-pipelines/VSMarketplaceTools.ps1
+      Vsix-PublishToGallery -path $(Pipeline.Workspace)/vsix/ApiPort.vsix
+    displayName: Push VSIX
