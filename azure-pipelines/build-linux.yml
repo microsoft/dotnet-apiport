@@ -1,0 +1,40 @@
+steps:
+- checkout: self
+  clean: true
+
+- powershell: .\init.ps1
+  displayName: init.ps1 script
+
+- script: |
+    dotnet restore src/ApiPort/ApiPort/ApiPort.csproj
+    dotnet restore src/ApiPort/ApiPort/ApiPort.Offline.csproj
+  displayName: dotnet restore
+
+- script: dotnet build --no-restore -c $(BuildConfiguration) -f netcoreapp3.1 src/ApiPort/ApiPort/ApiPort.csproj
+  displayName: dotnet build ApiPort.csproj
+
+- script: dotnet build --no-restore -c $(BuildConfiguration) -f netcoreapp3.1 src/ApiPort/ApiPort/ApiPort.Offline.csproj
+  displayName: dotnet build ApiPort.Offline.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: test
+    projects: |
+      tests/**/*[Tt]ests/*.csproj
+      !tests/**/*/ApiPortVS.Tests.csproj
+    arguments: '--configuration $(BuildConfiguration) --framework netcoreapp3.1 --no-build'
+  enabled: false # it wasn't testing anything anyway.
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/ApiPort/ApiPort/*.csproj
+    arguments: '--configuration $(BuildConfiguration) -f netcoreapp3.1 --output $(Build.StagingDirectory) --no-build'
+    zipAfterPublish: True
+
+- publish: $(Build.StagingDirectory)
+  displayName: Publish apiport
+  artifact: drop-$(Agent.JobName)
