@@ -3,182 +3,31 @@ trigger:
     include:
     - master
     - dev
+    - 'validate/*'
+
+parameters:
+- name: SignTypeSelection
+  displayName: Sign type
+  type: string
+  default: Test
+  values: [ 'Test', 'Real' ]
 
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   BuildConfiguration: Release
   BuildPlatform: Any CPU
   NUGET_PACKAGES: $(Agent.TempDirectory)/.nuget/packages
+  SignTypeSelection: ${{ parameters.SignTypeSelection }}
+  DeployExtension: false
 
 jobs:
 - job: Windows
   pool: VSEng-MicroBuildVS2019
   steps:
-  - checkout: self
-    clean: true
-
-  - powershell: .\init.ps1 -UpgradePrerequisites -NoRestore
-    displayName: init.ps1 script
-
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
-    displayName: Run PoliCheck
-    inputs:
-      targetType: F
-      optionsFC: 0
-      optionsXS: 0
-      optionsHMENABLE: 0
-    continueOnError: true
-
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
-    displayName: Run CredScan
-    inputs:
-      debugMode: false
-    continueOnError: true
-
-  - task: VSBuild@1
-    displayName: Restore packages
-    inputs:
-      msbuildArgs: '/m /t:restore'
-      platform: $(BuildPlatform)
-      configuration: $(BuildConfiguration)
-
-  - task: VSBuild@1
-    displayName: 'Build solution PortabilityTools.sln'
-    inputs:
-      msbuildArgs: '/m /t:build;pack /p:DeployExtension=False'
-      platform: $(BuildPlatform)
-      configuration: $(BuildConfiguration)
-
-  - task: VSTest@2
-    displayName: Test with VSTest
-    inputs:
-      testAssemblyVer2: |
-        **\*test*.dll
-        !**\obj\**
-        !**\PortabilityServiceIntegrationTests.dll
-      runOnlyImpactedTests: false
-      vsTestVersion: '16.0'
-      runInParallel: false
-      runTestsInIsolation: false
-      codeCoverageEnabled: false
-      platform: $(BuildPlatform)
-      configuration: $(BuildConfiguration)
-      diagnosticsEnabled: True
-
-  - task: DotNetCoreCLI@2
-    displayName: Test with dotnet test
-    inputs:
-      command: test
-      projects: |
-        tests/**/*[Tt]ests/*.csproj
-        !tests/ApiPort/ApiPortVS.Tests/ApiPortVS.Tests.csproj
-        !**\PortabilityServiceIntegrationTests.dll
-      arguments: --configuration $(BuildConfiguration) --no-build
-
-  - task: CopyFiles@2
-    displayName: Copy Analysis files to Staging
-    inputs:
-      SourceFolder: bin\$(BuildConfiguration)
-      Contents: |
-        ApiPort\**\*
-        ApiPort.Offline\**\*
-        ApiPort.Vsix\*.vsix
-        raw\**\*
-        Microsoft.Fx.Portability\**\*
-        Microsoft.Fx.Portability.Reports.DGML\**\*
-        Microsoft.Fx.Portability.Reports.Excel\**\*
-        Microsoft.Fx.Portability.Reports.Html\**\*
-        Microsoft.Fx.Portability.Reports.Json\**\*
-      TargetFolder: $(Build.StagingDirectory)\drop
-
-  - task: CopyFiles@2
-    displayName: Collection symbol files
-    inputs:
-      SourceFolder: bin\$(BuildConfiguration)
-      Contents: '**\*.pdb'
-      TargetFolder: $(Build.StagingDirectory)\symbols
-
-  - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-    displayName: Component Detection
-
-  - publish: $(Build.StagingDirectory)\drop
-    displayName: Publish drop
-    artifact: drop-$(Agent.JobName)
-    enabled: false
-
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
-    displayName: 'Run BinSkim '
-    inputs:
-      InputType: Basic
-      AnalyzeTarget: '$(Build.StagingDirectory)\drop\Microsoft.Fx.*.dll;$(Build.StagingDirectory)\drop\ApiPor*.dll;$(Build.StagingDirectory)\drop\ApiPor*.exe'
-      AnalyzeSymPath: $(Build.StagingDirectory)\symbols
-    continueOnError: true
-
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
-    displayName: 'Run APIScan netcoreapp3.1'
-    inputs:
-      softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\netcoreapp3.1'
-      softwareName: 'API Port'
-      softwareVersionNum: 4.XX
-      symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\netcoreapp3.1'
-      isLargeApp: false
-  
-  - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
-    displayName: 'Publish Security Analysis Logs'
-    condition: succeededOrFailed()
-
-  - task: NuGetCommand@2
-    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    inputs:
-      command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-      nuGetFeedType: 'internal'
-      publishVstsFeed: '2cac8390-d7aa-4320-b481-1a32c53de85b'
-      allowPackageConflicts: true
+  - template: azure-pipelines/build-windows.yml
 
 - job: Linux
   pool:
     vmImage: Ubuntu 18.04
-  variables:
-    BuildNetCoreAppTarget: netcoreapp3.1
-    RestoreBuildProjects: src/ApiPort/ApiPort/*.csproj
   steps:
-  - powershell: .\init.ps1
-    displayName: init.ps1 script
-
-  - task: DotNetCoreCLI@2
-    displayName: dotnet restore
-    inputs:
-      command: restore
-      projects: $(RestoreBuildProjects)
-      feedsToUse: config
-      nugetConfigPath: NuGet.Config
-
-  - task: DotNetCoreCLI@2
-    displayName: dotnet build
-    inputs:
-      projects: $(RestoreBuildProjects)
-      arguments: '--configuration $(BuildConfiguration) -f $(BuildNetCoreAppTarget) --no-restore'
-
-  - task: DotNetCoreCLI@2
-    displayName: dotnet test
-    inputs:
-      command: test
-      projects: |
-        tests/**/*[Tt]ests/*.csproj
-        !tests/**/*/ApiPortVS.Tests.csproj
-      arguments: '--configuration $(BuildConfiguration) --framework $(BuildNetCoreAppTarget) --no-build'
-    enabled: false # it wasn't testing anything anyway.
-
-  - task: DotNetCoreCLI@2
-    displayName: dotnet publish
-    inputs:
-      command: publish
-      publishWebProjects: false
-      projects: $(RestoreBuildProjects)
-      arguments: '--configuration $(BuildConfiguration) -f $(BuildNetCoreAppTarget) --output $(Build.StagingDirectory) --no-build'
-      zipAfterPublish: True
-
-  - publish: $(Build.StagingDirectory)
-    displayName: Publish apiport
-    artifact: drop-$(Agent.JobName)
+  - template: azure-pipelines/build-linux.yml

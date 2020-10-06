@@ -40,17 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MicroBuild.Core" Version="0.2.0" Condition="!$(IsTest)">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" Condition=" '$(IsPackage)' != 'true' ">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="0.4.1" Condition="!$(IsTest)" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" Condition=" '$(IsPackage)' != 'true' " PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Work around an issue where portable PDB is not supported yet in Api scan tool.
@@ -84,5 +76,4 @@
     <Copy SourceFiles="$(OutDir)\$(TargetName).pdb"
           DestinationFolder="$(RawSymbolsDropDirectory)\$(TargetFramework)" />
   </Target>
-  <Import Project="$(MicrobuildSigningPluginDirectory)build\Microbuild.Plugins.Signing.targets" Condition="Exists('$(MicrobuildSigningPluginDirectory)build\Microbuild.Plugins.Signing.targets')" />
 </Project>
