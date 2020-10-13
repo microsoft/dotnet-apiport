@@ -17,6 +17,6 @@ jobs:
     artifact: vsix
     displayName: Download vsix artifact
   - powershell: |
-      azure-pipelines/vsixgallerytools.ps1
-      Vsix-PublishToGallery -path $(Pipeline.Workspace)/vsix/ApiPort.vsix
+      . azure-pipelines/vsixgallerytools.ps1
+      Vsix-PublishToGallery -path $(Pipeline.Workspace)/ApiPort.vsix/ApiPort.vsix
     displayName: Push VSIX
