@@ -1,0 +1,35 @@
+trigger:
+  branches:
+    include:
+    - master
+
+parameters:
+- name: SignTypeSelection
+  displayName: Sign type
+  type: string
+  default: Real
+  values: [ 'Test', 'Real' ]
+
+variables:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+  NUGET_PACKAGES: $(Agent.TempDirectory)/.nuget/packages
+  SignTypeSelection: ${{ parameters.SignTypeSelection }}
+  DeployExtension: false
+
+jobs:
+- job: Windows
+  pool: VSEng-MicroBuildVS2019
+  steps:
+  - template: azure-pipelines/build-windows.yml
+  - powershell: |
+      . azure-pipelines/vsixgallerytools.ps1
+      Vsix-PublishToGallery -path bin/$(BuildConfiguration)/ApiPort.Vsix/ApiPort.vsix
+    displayName: Push VSIX
+
+- job: Linux
+  pool:
+    vmImage: Ubuntu 18.04
+  steps:
+  - template: azure-pipelines/build-linux.yml
