@@ -83,7 +83,7 @@ namespace ApiPortVS.Analyze
 
                 foreach (var file in output)
                 {
-                    targetAssemblies.Add(Path.GetFileName(file));
+                    targetAssemblies.Add(file);
                 }
 
                 referencedNuGetPackages.UnionWith(GetPackageReferences(project));
