@@ -225,10 +225,13 @@ namespace Microsoft.Fx.Portability.Reports
                 }
             }
 
-            foreach (var unresolvedAssemblyPair in response.Request.NonUserAssemblies.OrderBy(asm => asm.AssemblyIdentity))
+            if (response.Request.NonUserAssemblies != null)
             {
-                missingAssembliesPage.AddRow(unresolvedAssemblyPair.AssemblyIdentity, string.Empty, LocalizedStrings.SkippedAssembly);
-                detailsRows++;
+                foreach (var unresolvedAssemblyPair in response.Request.NonUserAssemblies.OrderBy(asm => asm.AssemblyIdentity))
+                {
+                    missingAssembliesPage.AddRow(unresolvedAssemblyPair.AssemblyIdentity, string.Empty, LocalizedStrings.SkippedAssembly);
+                    detailsRows++;
+                }
             }
 
             // Generate the pretty table
