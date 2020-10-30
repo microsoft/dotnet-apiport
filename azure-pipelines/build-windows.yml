@@ -78,8 +78,8 @@ steps:
     arguments: '--configuration $(BuildConfiguration) -f netcoreapp3.1 --output $(Build.StagingDirectory) --no-build'
     zipAfterPublish: True
 
-- publish: $(Build.StagingDirectory)\drop
-  displayName: Publish drop
+- publish: $(Build.StagingDirectory)
+  displayName: Publish
   artifact: drop-$(Agent.JobName)
 
 - publish: bin/$(BuildConfiguration)/ApiPort.Vsix/ApiPort.vsix
