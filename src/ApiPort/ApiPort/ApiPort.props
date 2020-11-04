@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>ApiPort</ToolCommandName>
-    <PackageId>Microsoft.ApiPort</PackageId>
+    <PackageId>ApiPort</PackageId>
     <OutputType>Exe</OutputType>
     <AssemblyName>ApiPort</AssemblyName>
     <RootNamespace>ApiPort</RootNamespace>
