@@ -69,13 +69,22 @@ steps:
     Contents: '**\*.pdb'
     TargetFolder: $(Build.StagingDirectory)\symbols
 
-- publish: $(Build.StagingDirectory)\drop
-  displayName: Publish drop
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/ApiPort/ApiPort/*.csproj
+    arguments: '--configuration $(BuildConfiguration) -f netcoreapp3.1 --output $(Build.StagingDirectory) --no-build'
+    zipAfterPublish: True
+
+- publish: $(Build.StagingDirectory)
+  displayName: Publish
   artifact: drop-$(Agent.JobName)
 
 - publish: bin/$(BuildConfiguration)/ApiPort.Vsix/ApiPort.vsix
-  artifact: vsix
   displayName: Publishing VSIX
+  artifact: vsix
 
 - ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
   - template: microbuild.after.yml

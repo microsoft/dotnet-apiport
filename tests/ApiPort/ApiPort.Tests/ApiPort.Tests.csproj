@@ -5,11 +5,6 @@
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <!-- Projects default to being signed, but ApiPort cannot be signed at the moment -->
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.5.0" />
