@@ -50,7 +50,10 @@
     <PackageProjectUrl>https://github.com/Microsoft/dotnet-apiport</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>.NET portability apiport</PackageTags>
-    <Copyright>Copyright 2017</Copyright>
+    <Copyright>Microsoft Corporation. All rights reserved.</Copyright>
+    <RepositoryUrl>https://github.com/Microsoft/dotnet-apiport</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Description>The .NET Portability Analyzer (ApiPort) is a tool that analyzes assemblies and provides a detailed report on .NET APIs that are missing for the applications or libraries to be portable on your specified targeted .NET platforms.</Description>
   </PropertyGroup>
 
   <ItemGroup>
