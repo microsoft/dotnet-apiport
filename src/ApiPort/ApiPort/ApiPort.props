@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>ApiPort</ToolCommandName>
-    <PackageId>Microsoft.ApiPort</PackageId>
+    <PackageId>ApiPort</PackageId>
     <OutputType>Exe</OutputType>
     <AssemblyName>ApiPort</AssemblyName>
     <RootNamespace>ApiPort</RootNamespace>
@@ -32,13 +32,10 @@
     <Content Include="$(FullLicenseFile)" >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Prerelease License Terms.txt" >
+    <Content Include="$(LicenseDocumentDirectory)\MicrosoftDOTNETPortabilityAnalyzerCLIPrivacyStatement.txt" >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Privacy Statement.txt" >
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer CLI Third Party Notices.txt" >
+    <Content Include="$(LicenseDocumentDirectory)\MicrosoftDOTNETPortabilityAnalyzerCLIThirdPartyNotices.txt" >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
