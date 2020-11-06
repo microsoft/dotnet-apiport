@@ -48,7 +48,7 @@
     <Authors>Microsoft</Authors>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Microsoft/dotnet-apiport</PackageProjectUrl>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>.NET portability apiport</PackageTags>
     <Copyright>Microsoft Corporation. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/Microsoft/dotnet-apiport</RepositoryUrl>
