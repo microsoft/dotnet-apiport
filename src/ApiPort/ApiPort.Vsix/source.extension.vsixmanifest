@@ -5,7 +5,7 @@
         <DisplayName>.NET Portability Analyzer</DisplayName>
         <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms</Description>
         <MoreInfo>https://aka.ms/dotnet-portabilityanalyzer</MoreInfo>
-        <License>MIT</License>
+        <License>LICENSE.txt</License>
         <Icon>Resources\Package.ico</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
         <Tags>code analysis, cross-platform, .NET Framework, .NET, portable, cross platform, Portable Library</Tags>

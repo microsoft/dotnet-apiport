@@ -90,8 +90,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(LicenseDocumentDirectory)\Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt">
-      <Link>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt</Link>
+    <Content Include="C:\Repos\dotnet-apiport\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
