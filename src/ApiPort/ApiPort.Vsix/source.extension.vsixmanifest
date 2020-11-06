@@ -4,8 +4,8 @@
         <Identity Id="55d15546-28ca-40dc-af23-dfa503e9c5fe" Version="1.4.0" Language="en-US" Publisher="Microsoft" />
         <DisplayName>.NET Portability Analyzer</DisplayName>
         <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms</Description>
-        <MoreInfo>http://go.microsoft.com/fwlink/?LinkId=506955</MoreInfo>
-        <License>Microsoft .NET Portability Analyzer Visual Studio Extension Prerelease License Terms.txt</License>
+        <MoreInfo>https://aka.ms/dotnet-portabilityanalyzer</MoreInfo>
+        <License>MIT</License>
         <Icon>Resources\Package.ico</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
         <Tags>code analysis, cross-platform, .NET Framework, .NET, portable, cross platform, Portable Library</Tags>
