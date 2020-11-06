@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Fx.Portability.Resources;
@@ -33,6 +33,8 @@ namespace Microsoft.Fx.Portability.Proxy
             _proxyProvider = proxyProvider ?? throw new ArgumentNullException(nameof(proxyProvider));
         }
 
+        public HttpStatusCode LastStatusCode { get; private set; }
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             int attempts = 0;
@@ -41,7 +43,10 @@ namespace Microsoft.Fx.Portability.Proxy
             {
                 try
                 {
-                    return await base.SendAsync(request, cancellationToken);
+                    HttpResponseMessage result = await base.SendAsync(request, cancellationToken);
+                    this.LastStatusCode = result.StatusCode;
+                    result.EnsureSuccessStatusCode();
+                    return result;
                 }
                 catch (Exception ex) when (ProxyAuthenticationRequired(ex))
                 {
@@ -72,6 +77,14 @@ namespace Microsoft.Fx.Portability.Proxy
             if (ex is ProxyAuthenticationRequiredException)
             {
                 return true;
+            }
+
+            if (ex is HttpRequestException)
+            {
+                if (LastStatusCode == HttpStatusCode.ProxyAuthenticationRequired)
+                {
+                    return true;
+                }
             }
 
 #if FEATURE_WEBEXCEPTION
