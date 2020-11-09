@@ -50,7 +50,7 @@
     <PackageProjectUrl>https://github.com/Microsoft/dotnet-apiport</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>.NET portability apiport</PackageTags>
-    <Copyright>Microsoft Corporation. All rights reserved.</Copyright>
+    <Copyright>&#169; Microsoft Corporation. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/Microsoft/dotnet-apiport</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <Description>Evaluates portability of assemblies across .NET platforms</Description>
