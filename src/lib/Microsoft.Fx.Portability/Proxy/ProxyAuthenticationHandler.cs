@@ -44,7 +44,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     HttpResponseMessage result = await base.SendAsync(request, cancellationToken);
                     if (result.StatusCode == HttpStatusCode.ProxyAuthenticationRequired)
                     {
-                        throw new ProxyAuthenticationRequiredException(request.RequestUri);
+                        throw new ProxyAuthenticationRequiredException(request.ur);
                     }
 
                     return result;
