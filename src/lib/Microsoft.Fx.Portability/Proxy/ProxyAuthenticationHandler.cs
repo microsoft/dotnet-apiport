@@ -33,8 +33,6 @@ namespace Microsoft.Fx.Portability.Proxy
             _proxyProvider = proxyProvider ?? throw new ArgumentNullException(nameof(proxyProvider));
         }
 
-        public HttpStatusCode LastStatusCode { get; private set; }
-
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             int attempts = 0;
@@ -44,8 +42,11 @@ namespace Microsoft.Fx.Portability.Proxy
                 try
                 {
                     HttpResponseMessage result = await base.SendAsync(request, cancellationToken);
-                    this.LastStatusCode = result.StatusCode;
-                    result.EnsureSuccessStatusCode();
+                    if (result.StatusCode == HttpStatusCode.ProxyAuthenticationRequired)
+                    {
+                        throw new ProxyAuthenticationRequiredException(request.RequestUri);
+                    }
+
                     return result;
                 }
                 catch (Exception ex) when (ProxyAuthenticationRequired(ex))
@@ -77,14 +78,6 @@ namespace Microsoft.Fx.Portability.Proxy
             if (ex is ProxyAuthenticationRequiredException)
             {
                 return true;
-            }
-
-            if (ex is HttpRequestException)
-            {
-                if (LastStatusCode == HttpStatusCode.ProxyAuthenticationRequired)
-                {
-                    return true;
-                }
             }
 
 #if FEATURE_WEBEXCEPTION
