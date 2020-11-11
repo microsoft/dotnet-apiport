@@ -46,6 +46,7 @@ namespace Microsoft.Fx.Portability.Proxy
                     {
                         throw new ProxyAuthenticationRequiredException(request.RequestUri);
                     }
+
                     return result;
                 }
                 catch (Exception ex) when (ProxyAuthenticationRequired(ex))
