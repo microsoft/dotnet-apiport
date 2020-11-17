@@ -12,6 +12,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
 {
     public sealed class AssemblyInfo : IComparable
     {
+        // BUG: There is the potential for a race in the management of this. The complexity is also unlikely to be worth the small perf gain
         private bool _hashComputed;
         private int _hashCode;
 
@@ -61,6 +62,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
             set
             {
                 _fileVersion = value;
+
+                // NOTE: file version doesn't participate in GetHashCode(), so this isn't necessary
                 _hashComputed = false;
             }
         }
@@ -83,9 +86,11 @@ namespace Microsoft.Fx.Portability.ObjectModel
 
         public bool IsExplicitlySpecified { get; set; } = true;
 
+        public string BinHash { get; set; }
+
         public override bool Equals(object obj)
         {
-            if (!(obj is AssemblyInfo other))
+            if (obj is not AssemblyInfo other)
             {
                 return false;
             }
@@ -119,6 +124,8 @@ namespace Microsoft.Fx.Portability.ObjectModel
         {
             var obj2 = obj as AssemblyInfo;
 
+            // BUG: This implementation of CompareTo is inconsistent with the type's equality
+            // BUG: obj2 may be null at this point, which will NRE below
             return string.Compare(AssemblyIdentity, obj2.AssemblyIdentity, StringComparison.Ordinal);
         }
     }

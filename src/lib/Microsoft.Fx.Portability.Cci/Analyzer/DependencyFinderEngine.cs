@@ -82,98 +82,97 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         private IEnumerable<MemberDependency> GetDependencies(string assemblyLocation)
         {
-            using (var host = new HostEnvironment())
+            using var host = new HostEnvironment();
+            host.UnableToResolve += (s, e) =>
             {
-                host.UnableToResolve += (s, e) =>
+                string callingAssembly = e.Referrer.FullName();
+
+                // Try to get better information about the referrer. This may throw, but we don't want to crash even if we do.
+                try
                 {
-                    string callingAssembly = e.Referrer.FullName();
+                    callingAssembly = e.Referrer.GetAssemblyReference().AssemblyIdentity.Format();
+                }
+                catch
+                {
+                }
 
-                    // Try to get better information about the referrer. This may throw, but we don't want to crash even if we do.
-                    try
+                var newValue = new HashSet<string> { callingAssembly };
+
+                _unresolvedAssemblies.AddOrUpdate(e.Unresolved.Format(), newValue, (key, existingHashSet) =>
+                {
+                    lock (existingHashSet)
                     {
-                        callingAssembly = e.Referrer.GetAssemblyReference().AssemblyIdentity.Format();
+                        existingHashSet.Add(callingAssembly);
                     }
-                    catch
-                    {
-                    }
 
-                    var newValue = new HashSet<string> { callingAssembly };
+                    return existingHashSet;
+                });
+            };
 
-                    _unresolvedAssemblies.AddOrUpdate(e.Unresolved.Format(), newValue, (key, existingHashSet) =>
-                    {
-                        lock (existingHashSet)
-                        {
-                            existingHashSet.Add(callingAssembly);
-                        }
+            // TODO: calculate and assign binhash
+            host.UnifyToLibPath = true;
+            var cciAssembly = host.LoadAssembly(assemblyLocation);
 
-                        return existingHashSet;
-                    });
+            if (cciAssembly == null)
+            {
+                _assembliesWithError.Add(assemblyLocation);
+                yield break;
+            }
+
+            // Extract the fileversion and assembly version from the assembly.
+            var fileInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);
+
+            var assemblyInfo = new AssemblyInfo
+            {
+                Location = cciAssembly.Location,
+                AssemblyIdentity = cciAssembly.AssemblyIdentity.Format(),
+                FileVersion = fileInfo.FileVersion ?? string.Empty,
+                TargetFrameworkMoniker = cciAssembly.GetTargetFrameworkMoniker()
+            };
+
+            // remember this assembly as a user assembly.
+            _userAssemblies.Add(assemblyInfo);
+
+            // Identify references to members (generic and non-generic)
+            foreach (var reference in cciAssembly.GetTypeMemberReferences())
+            {
+                if (reference.ContainingType.GetAssemblyReference() == null)
+                {
+                    continue;
+                }
+
+                string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
+
+                // return the type
+                yield return new MemberDependency()
+                {
+                    CallingAssembly = assemblyInfo,
+                    MemberDocId = reference.ContainingType.DocId(),
+                    DefinedInAssemblyIdentity = definedIn
                 };
 
-                host.UnifyToLibPath = true;
-                var cciAssembly = host.LoadAssembly(assemblyLocation);
-
-                if (cciAssembly == null)
+                // return the member
+                yield return new MemberDependency()
                 {
-                    _assembliesWithError.Add(assemblyLocation);
-                    yield break;
-                }
-
-                // Extract the fileversion and assembly version from the assembly.
-                var fileInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);
-
-                var assemblyInfo = new AssemblyInfo
-                {
-                    Location = cciAssembly.Location,
-                    AssemblyIdentity = cciAssembly.AssemblyIdentity.Format(),
-                    FileVersion = fileInfo.FileVersion ?? string.Empty,
-                    TargetFrameworkMoniker = cciAssembly.GetTargetFrameworkMoniker()
+                    CallingAssembly = assemblyInfo,
+                    MemberDocId = reference.DocId(),
+                    TypeDocId = reference.ContainingType.DocId(),
+                    DefinedInAssemblyIdentity = definedIn
                 };
+            }
 
-                // remember this assembly as a user assembly.
-                _userAssemblies.Add(assemblyInfo);
+            // Identify references to types
+            foreach (var refence in cciAssembly.GetTypeReferences())
+            {
+                string definedIn = refence.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
 
-                // Identify references to members (generic and non-generic)
-                foreach (var reference in cciAssembly.GetTypeMemberReferences())
+                // return the type
+                yield return new MemberDependency()
                 {
-                    if (reference.ContainingType.GetAssemblyReference() == null)
-                    {
-                        continue;
-                    }
-
-                    string definedIn = reference.ContainingType.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
-
-                    // return the type
-                    yield return new MemberDependency()
-                    {
-                        CallingAssembly = assemblyInfo,
-                        MemberDocId = reference.ContainingType.DocId(),
-                        DefinedInAssemblyIdentity = definedIn
-                    };
-
-                    // return the member
-                    yield return new MemberDependency()
-                    {
-                        CallingAssembly = assemblyInfo,
-                        MemberDocId = reference.DocId(),
-                        TypeDocId = reference.ContainingType.DocId(),
-                        DefinedInAssemblyIdentity = definedIn
-                    };
-                }
-
-                // Identify references to types
-                foreach (var refence in cciAssembly.GetTypeReferences())
-                {
-                    string definedIn = refence.GetAssemblyReference().ContainingAssembly.AssemblyIdentity.Format();
-
-                    // return the type
-                    yield return new MemberDependency()
-                    {
-                        CallingAssembly = assemblyInfo,
-                        MemberDocId = refence.DocId(),
-                        DefinedInAssemblyIdentity = definedIn
-                    };
-                }
+                    CallingAssembly = assemblyInfo,
+                    MemberDocId = refence.DocId(),
+                    DefinedInAssemblyIdentity = definedIn
+                };
             }
         }
     }

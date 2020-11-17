@@ -24,6 +24,8 @@ namespace Microsoft.Fx.Portability.Analyzer
             _objectFinder = objectFinder;
 
             MemberDependency = new List<MemberDependency>();
+
+            // TODO: calculate and assign binhash
             CallingAssembly = new AssemblyInfo
             {
                 Location = file.Name,

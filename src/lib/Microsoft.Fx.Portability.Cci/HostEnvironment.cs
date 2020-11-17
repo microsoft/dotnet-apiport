@@ -106,7 +106,7 @@ namespace Microsoft.Cci.Extensions
             var document = new StreamDocument(location, name, stream);
             var unit = _reader.OpenModule(document);
 
-            this.RegisterAsLatest(unit);
+            RegisterAsLatest(unit);
             return unit;
         }
 
@@ -129,7 +129,7 @@ namespace Microsoft.Cci.Extensions
                 path = ProbeLibPaths(assemblyNameOrPath + extension);
                 if (path != null)
                 {
-                    var assembly = this.LoadAssembly(path);
+                    var assembly = LoadAssembly(path);
                     if (assembly == null)
                     {
                         continue;
@@ -146,7 +146,7 @@ namespace Microsoft.Cci.Extensions
         {
             foreach (var libPath in LibPaths)
             {
-                AssemblyIdentity probedIdentity = this.Probe(libPath, identity);
+                AssemblyIdentity probedIdentity = Probe(libPath, identity);
                 if (probedIdentity != null)
                 {
                     return probedIdentity;
@@ -260,7 +260,7 @@ namespace Microsoft.Cci.Extensions
             AssemblyIdentity baseCoreAssemblyIdentity = base.GetCoreAssemblySymbolicIdentity();
 
             // Try to find the assembly which believes itself is the core assembly
-            foreach (var assembly in this.LoadedUnits.OfType<IAssembly>())
+            foreach (var assembly in LoadedUnits.OfType<IAssembly>())
             {
                 if (assembly.AssemblyIdentity.Equals(assembly.CoreAssemblySymbolicIdentity))
                 {
@@ -302,7 +302,7 @@ namespace Microsoft.Cci.Extensions
             Contract.Assert(this.UnifyToLibPath);
 #endif
             // Find exact assembly match
-            IAssembly asm = this.FindAssembly(identity);
+            IAssembly asm = FindAssembly(identity);
 
             if (asm != null && !(asm is Dummy))
             {
@@ -310,7 +310,7 @@ namespace Microsoft.Cci.Extensions
             }
 
             // Find assembly match based on simple name only. (It might be worth caching these results if we find them to be too expensive)
-            foreach (var loadedAssembly in this.LoadedUnits.OfType<IAssembly>())
+            foreach (var loadedAssembly in LoadedUnits.OfType<IAssembly>())
             {
                 if (loadedAssembly.AssemblyIdentity.Name.UniqueKeyIgnoringCase == identity.Name.UniqueKeyIgnoringCase)
                 {
@@ -334,10 +334,10 @@ namespace Microsoft.Cci.Extensions
         {
             if (ShouldUnifyToCoreAssembly(assemblyIdentity))
             {
-                return this.CoreAssemblySymbolicIdentity;
+                return CoreAssemblySymbolicIdentity;
             }
 
-            if (this.UnifyToLibPath)
+            if (UnifyToLibPath)
             {
                 assemblyIdentity = FindUnifiedAssemblyIdentity(assemblyIdentity);
             }
@@ -358,10 +358,10 @@ namespace Microsoft.Cci.Extensions
         public bool ShouldUnifyToCoreAssembly(AssemblyIdentity assemblyIdentity)
         {
             // Unify any other potential versions of this core assembly to itself.
-            if (assemblyIdentity.Name.UniqueKeyIgnoringCase == this.CoreAssemblySymbolicIdentity.Name.UniqueKeyIgnoringCase)
+            if (assemblyIdentity.Name.UniqueKeyIgnoringCase == CoreAssemblySymbolicIdentity.Name.UniqueKeyIgnoringCase)
             {
                 if (assemblyIdentity.PublicKeyToken == null ||
-                   !assemblyIdentity.PublicKeyToken.SequenceEqual(this.CoreAssemblySymbolicIdentity.PublicKeyToken))
+                   !assemblyIdentity.PublicKeyToken.SequenceEqual(CoreAssemblySymbolicIdentity.PublicKeyToken))
                 {
                     return false;
                 }
@@ -404,7 +404,7 @@ namespace Microsoft.Cci.Extensions
 
             AssemblyIdentity result = null;
 
-            if (this.ResolveInReferringUnitLocation)
+            if (ResolveInReferringUnitLocation)
             {
                 // NOTE: When probing for the core assembly, the referring unit is a dummy unit and thus does not have
                 //       a location.
@@ -421,16 +421,16 @@ namespace Microsoft.Cci.Extensions
             }
 
             // Probe in the libPaths directories
-            foreach (string libPath in this.LibPaths)
+            foreach (string libPath in LibPaths)
             {
-                result = this.Probe(libPath, referencedAssembly);
+                result = Probe(libPath, referencedAssembly);
                 if (result != null)
                 {
                     return result;
                 }
             }
 
-            if (this.ResolveAgainstRunningFramework)
+            if (ResolveAgainstRunningFramework)
             {
                 // Call base probe which has logic to check the frameworks installed on the machine
                 result = base.ProbeAssemblyReference(referringUnit, referencedAssembly);
@@ -567,11 +567,11 @@ namespace Microsoft.Cci.Extensions
                 {
                     if (value)
                     {
-                        this.UnableToResolve += TraceResolveErrorAsLoadError;
+                        UnableToResolve += TraceResolveErrorAsLoadError;
                     }
                     else
                     {
-                        this.UnableToResolve -= TraceResolveErrorAsLoadError;
+                        UnableToResolve -= TraceResolveErrorAsLoadError;
                     }
 
                     _traceResolutionErrorsAsLoadErrors = value;
@@ -685,12 +685,12 @@ namespace Microsoft.Cci.Extensions
             foreach (var unmappedIdentity in identities)
             {
                 // Remap the name and clear the location.
-                var identity = new AssemblyIdentity(this.NameTable.GetNameFor(unmappedIdentity.Name.Value),
+                var identity = new AssemblyIdentity(NameTable.GetNameFor(unmappedIdentity.Name.Value),
                     unmappedIdentity.Culture, unmappedIdentity.Version, unmappedIdentity.PublicKeyToken, string.Empty);
 
-                var matchingIdentity = this.ProbeLibPaths(identity);
+                var matchingIdentity = ProbeLibPaths(identity);
 
-                var matchingAssembly = this.LoadAssembly(matchingIdentity);
+                var matchingAssembly = LoadAssembly(matchingIdentity);
                 if ((matchingAssembly == null || matchingAssembly == Dummy.Assembly) && logErrorOrWarningCallback != null)
                 {
                     var message = string.Format(CultureInfo.CurrentCulture, "Failed to find or load matching assembly '{0}'.", identity.Name.Value);
@@ -775,7 +775,7 @@ namespace Microsoft.Cci.Extensions
 
         private IEnumerable<string> GetFilePathsAndAddResolvedDirectoriesToLibPaths(IEnumerable<string> paths)
         {
-            return GetFilePaths(paths, (resolvedPath) => this.LibPaths.Add(resolvedPath));
+            return GetFilePaths(paths, (resolvedPath) => LibPaths.Add(resolvedPath));
         }
 
         private static IEnumerable<string> GetFilePaths(IEnumerable<string> paths, Action<string> perResolvedPathAction, bool recursive = false)
@@ -878,8 +878,8 @@ namespace Microsoft.Cci.Extensions
     {
         public UnresolvedReference(TReferrer referrer, TUnresolved unresolvedReference)
         {
-            this.Referrer = referrer;
-            this.Unresolved = unresolvedReference;
+            Referrer = referrer;
+            Unresolved = unresolvedReference;
         }
 
         public TReferrer Referrer { get; private set; }
