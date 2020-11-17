@@ -109,7 +109,11 @@ namespace Microsoft.Fx.Portability.Analyzer
                 });
             };
 
-            // TODO: calculate and assign binhash
+            // In order to help identify assemblies for package analysis, generate the "binhash" of the assembly.
+            // TODO: make sure there is no perf impact here
+            // TODO: only do this if package analysis has been requested
+            var binHash = Utils.Hasher.GetBinHash(assemblyLocation);
+
             host.UnifyToLibPath = true;
             var cciAssembly = host.LoadAssembly(assemblyLocation);
 
@@ -127,7 +131,8 @@ namespace Microsoft.Fx.Portability.Analyzer
                 Location = cciAssembly.Location,
                 AssemblyIdentity = cciAssembly.AssemblyIdentity.Format(),
                 FileVersion = fileInfo.FileVersion ?? string.Empty,
-                TargetFrameworkMoniker = cciAssembly.GetTargetFrameworkMoniker()
+                TargetFrameworkMoniker = cciAssembly.GetTargetFrameworkMoniker(),
+                BinHash = binHash,
             };
 
             // remember this assembly as a user assembly.

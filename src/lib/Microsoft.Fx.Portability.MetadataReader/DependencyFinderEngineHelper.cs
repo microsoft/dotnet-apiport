@@ -25,14 +25,17 @@ namespace Microsoft.Fx.Portability.Analyzer
 
             MemberDependency = new List<MemberDependency>();
 
-            // TODO: calculate and assign binhash
             CallingAssembly = new AssemblyInfo
             {
                 Location = file.Name,
                 AssemblyIdentity = metadataReader.FormatAssemblyInfo().ToString(),
                 FileVersion = file.Version ?? string.Empty,
                 TargetFrameworkMoniker = metadataReader.GetTargetFrameworkMoniker() ?? string.Empty,
-                AssemblyReferences = ComputeAssemblyReferences(metadataReader)
+                AssemblyReferences = ComputeAssemblyReferences(metadataReader),
+
+                // TODO: perf?
+                // TODO: only do this is package analysis is requested
+                BinHash = Utils.Hasher.GetBinHash(file.Name),
             };
 
             // Get assembly info
