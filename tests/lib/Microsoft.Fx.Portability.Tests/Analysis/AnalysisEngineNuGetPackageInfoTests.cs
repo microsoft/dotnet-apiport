@@ -50,7 +50,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
                         })
                     };
 
-            packageFinder.TryFindPackages(nugetPackageAssembly.AssemblyIdentity, targets, out var packages)
+            packageFinder.TryFindPackages(nugetPackageAssembly, targets, out var packages)
                     .Returns(x =>
                     {
                         // return this value in `out var packages`
@@ -61,7 +61,7 @@ namespace Microsoft.Fx.Portability.Tests.Analysis
             var engine = new AnalysisEngine(Substitute.For<IApiCatalogLookup>(), Substitute.For<IApiRecommendations>(), packageFinder);
 
             // Act
-            var nugetPackageResult = engine.GetNuGetPackagesInfoFromAssembly(inputAssemblies.Select(x => x.AssemblyIdentity), targets).ToArray();
+            var nugetPackageResult = engine.GetNuGetPackagesInfoFromAssembly(inputAssemblies, targets).ToArray();
 
             // Assert
             Assert.Single(nugetPackageResult);

@@ -1,12 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.Versioning;
 
 namespace Microsoft.Fx.Portability.ObjectModel
 {
+    /// <summary>
+    /// This interface is part of a partially-implemented feature to provide some context for assemblies that originated from
+    /// NuGet packages. This interface may not be sufficient to implement the feature fully, but it's a start.
+    /// </summary>
     public interface IPackageFinder
     {
         /// <summary>
@@ -20,7 +25,7 @@ namespace Microsoft.Fx.Portability.ObjectModel
         /// If 'true' is returned, but no packages in the list, it means the package is not supported on the given framework.
         /// If 'false' is returned, it means we don't have any info about that assembly.
         /// </returns>
-        bool TryFindPackages(string assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableList<NuGetPackageInfo> packages);
+        bool TryFindPackages(AssemblyInfo assemblyInfo, IEnumerable<FrameworkName> targets, out ImmutableList<NuGetPackageInfo> packages);
 
         /// <summary>
         /// Find supported versions of a given package.

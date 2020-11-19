@@ -288,7 +288,7 @@ namespace Microsoft.Fx.Portability.Analysis
             }
         }
 
-        public IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfoFromAssembly(IEnumerable<string> assemblies, IEnumerable<FrameworkName> targets)
+        public IEnumerable<NuGetPackageInfo> GetNuGetPackagesInfoFromAssembly(IEnumerable<AssemblyInfo> assemblies, IEnumerable<FrameworkName> targets)
         {
             foreach (var assembly in assemblies)
             {
@@ -299,7 +299,9 @@ namespace Microsoft.Fx.Portability.Analysis
                         // Check if the assembly is set
                         if (nuGetPackageInfo.AssemblyInfo == null)
                         {
-                            yield return new NuGetPackageInfo(nuGetPackageInfo.PackageId, nuGetPackageInfo.SupportedVersions, assembly);
+                            // TODO: is .AssemblyIdentity what we want here? or do we want "full" identity? or something else?
+                            // Presumably, it should be whatever was being passed before the signature change.
+                            yield return new NuGetPackageInfo(nuGetPackageInfo.PackageId, nuGetPackageInfo.SupportedVersions, assembly.AssemblyIdentity);
                         }
                         else
                         {
@@ -335,7 +337,7 @@ namespace Microsoft.Fx.Portability.Analysis
             foreach (var assembly in userAssemblies)
             {
                 // If the user specified this assembly, we want to skip it.
-                if (assembly == default(AssemblyInfo) || assembly.IsExplicitlySpecified)
+                if (assembly is null || assembly.IsExplicitlySpecified)
                 {
                     continue;
                 }

@@ -29,85 +29,83 @@ namespace ApiPort
 
             Console.WriteLine();
 
-            using (var container = DependencyBuilder.Build(options, productInformation))
+            using var container = DependencyBuilder.Build(options, productInformation);
+            var progressReport = container.Resolve<IProgressReporter>();
+
+            try
             {
-                var progressReport = container.Resolve<IProgressReporter>();
+                var client = container.Resolve<ConsoleApiPort>();
 
-                try
+                switch (options.Command)
                 {
-                    var client = container.Resolve<ConsoleApiPort>();
+                    case AppCommand.ListTargets:
+                        await client.ListTargetsAsync();
+                        break;
+                    case AppCommand.AnalyzeAssemblies:
+                    case AppCommand.DumpAnalysis:
+                        await client.AnalyzeAssembliesAsync();
+                        break;
+                    case AppCommand.DocIdSearch:
+                        await client.RunDocIdSearchAsync();
+                        break;
+                    case AppCommand.ListOutputFormats:
+                        await client.ListOutputFormatsAsync();
+                        break;
+                }
 
-                    switch (options.Command)
+                return 0;
+            }
+            catch (Autofac.Core.DependencyResolutionException ex) when (GetPortabilityException(ex) is PortabilityAnalyzerException p)
+            {
+                Trace.TraceError(ex.ToString());
+
+                WriteException(p);
+            }
+            catch (PortabilityAnalyzerException ex)
+            {
+                WriteException(ex);
+            }
+            catch (ProxyAuthenticationRequiredException ex)
+            {
+                WriteException(ex);
+            }
+            catch (AggregateException ex)
+            {
+                Trace.TraceError(ex.ToString());
+
+                // If the exception is known, display the message as it has already been localized
+                if (GetRecursiveInnerExceptions(ex).Any(x => x is PortabilityAnalyzerException))
+                {
+                    foreach (PortabilityAnalyzerException portEx in GetRecursiveInnerExceptions(ex).Where(x => x is PortabilityAnalyzerException))
                     {
-                        case AppCommand.ListTargets:
-                            await client.ListTargetsAsync();
-                            break;
-                        case AppCommand.AnalyzeAssemblies:
-                        case AppCommand.DumpAnalysis:
-                            await client.AnalyzeAssembliesAsync();
-                            break;
-                        case AppCommand.DocIdSearch:
-                            await client.RunDocIdSearchAsync();
-                            break;
-                        case AppCommand.ListOutputFormats:
-                            await client.ListOutputFormatsAsync();
-                            break;
-                    }
-
-                    return 0;
-                }
-                catch (Autofac.Core.DependencyResolutionException ex) when (GetPortabilityException(ex) is PortabilityAnalyzerException p)
-                {
-                    Trace.TraceError(ex.ToString());
-
-                    WriteException(p);
-                }
-                catch (PortabilityAnalyzerException ex)
-                {
-                    WriteException(ex);
-                }
-                catch (ProxyAuthenticationRequiredException ex)
-                {
-                    WriteException(ex);
-                }
-                catch (AggregateException ex)
-                {
-                    Trace.TraceError(ex.ToString());
-
-                    // If the exception is known, display the message as it has already been localized
-                    if (GetRecursiveInnerExceptions(ex).Any(x => x is PortabilityAnalyzerException))
-                    {
-                        foreach (PortabilityAnalyzerException portEx in GetRecursiveInnerExceptions(ex).Where(x => x is PortabilityAnalyzerException))
-                        {
-                            WriteException(portEx);
-                        }
-                    }
-                    else if (!IsWebSecurityFailureOnMono(ex))
-                    {
-                        WriteError(LocalizedStrings.UnknownException);
+                        WriteException(portEx);
                     }
                 }
-                catch (Exception ex)
+                else if (!IsWebSecurityFailureOnMono(ex))
                 {
-                    Trace.TraceError(ex.ToString());
-
                     WriteError(LocalizedStrings.UnknownException);
                 }
-                finally
-                {
-                    if (progressReport != null)
-                    {
-                        Console.WriteLine();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
 
-                        foreach (var issue in progressReport.Issues)
-                        {
-                            WriteWarning("* " + issue);
-                        }
+                WriteError(LocalizedStrings.UnknownException);
+            }
+            finally
+            {
+                if (progressReport != null)
+                {
+                    Console.WriteLine();
+
+                    foreach (var issue in progressReport.Issues)
+                    {
+                        WriteWarning("* " + issue);
                     }
                 }
-
-                return -1;
             }
+
+            return -1;
         }
 
         private static void WriteException(Exception ex)

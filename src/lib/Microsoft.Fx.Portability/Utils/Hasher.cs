@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,6 +10,10 @@ using System.Text;
 
 namespace Microsoft.Fx.Portability.Utils
 {
+    /// <summary>
+    /// Some utility functions for creating hashes useful for providing a usefully-strong content identity for assemblies.
+    /// Collisions are unlikely, but acceptable.
+    /// </summary>
     public static class Hasher
     {
         public static string GetBinHash(string path)
@@ -38,6 +45,5 @@ namespace Microsoft.Fx.Portability.Utils
 
             return builder.ToString();
         }
-
     }
 }

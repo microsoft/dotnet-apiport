@@ -91,7 +91,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override bool Equals(object obj)
         {
-            if (!(obj is MemberDependency other))
+            if (obj is not MemberDependency other)
             {
                 return false;
             }
@@ -104,6 +104,7 @@ namespace Microsoft.Fx.Portability.Analyzer
 
         public override int GetHashCode()
         {
+            // TODO: find out whether this complexity is necessary for perf
             if (!_hashComputed)
             {
                 _hashCode = ((DefinedInAssemblyIdentity?.ToString() ?? string.Empty) + (MemberDocId ?? string.Empty) + IsPrimitive.ToString((IFormatProvider)CultureInfo.InvariantCulture)).GetHashCode() ^ CallingAssembly.GetHashCode();

@@ -12,6 +12,10 @@ using System.Text;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
+    /// <summary>
+    /// This appears to be a type used for signature parsing to identify types.
+    /// TODO: A quick look indicates it has a naive view of some things. It's unclear whether they have any bearing on results.
+    /// </summary>
     internal class MemberMetadataInfo
     {
         public MemberMetadataInfo()

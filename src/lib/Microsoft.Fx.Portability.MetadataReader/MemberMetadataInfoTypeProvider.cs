@@ -12,6 +12,10 @@ using System.Text;
 
 namespace Microsoft.Fx.Portability.Analyzer
 {
+    /// <summary>
+    /// This is used for signature parsing.
+    /// TODO: This contains some bugs. Apparently it handles most cases fine, but it might benefit from some improvement.
+    /// </summary>
     internal class MemberMetadataInfoTypeProvider : ISignatureTypeProvider<MemberMetadataInfo, object>
     {
         private readonly SignatureDecoder<MemberMetadataInfo, object> _methodDecoder;

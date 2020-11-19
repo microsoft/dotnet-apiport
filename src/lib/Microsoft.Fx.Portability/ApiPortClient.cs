@@ -88,7 +88,7 @@ namespace Microsoft.Fx.Portability
         {
             ValidateOptions(options);
 
-            var jsonAdded = includeResponse ? TryAddJsonToOptions(options, out options) : false;
+            var jsonAdded = includeResponse && TryAddJsonToOptions(options, out options);
 
             foreach (var errorInput in options.InvalidInputFiles)
             {
@@ -266,12 +266,14 @@ namespace Microsoft.Fx.Portability
             foreach (var assembly in dependencyInfo.UserAssemblies)
             {
                 // Windows's file paths are case-insensitive
+                // TODO: Linux file paths aren't. Should this change?
+                // TODO: matching assembly could be null after this
                 var matchingAssembly = options.InputAssemblies.FirstOrDefault(x => x.Key.Name.Equals(assembly.Location, StringComparison.OrdinalIgnoreCase));
 
                 // AssemblyInfo is explicitly specified if we found a matching
                 // assembly location in the input dictionary AND the value is
                 // true.
-                assembly.IsExplicitlySpecified = matchingAssembly.Key != default(IAssemblyFile)
+                assembly.IsExplicitlySpecified = matchingAssembly.Key is not null
                     && matchingAssembly.Value;
             }
 
