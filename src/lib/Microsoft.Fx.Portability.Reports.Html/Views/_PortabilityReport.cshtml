@@ -114,7 +114,7 @@
         }
 
         var assemblyName = reportingResult.GetNameForAssemblyInfo(assembly.SourceAssembly);
-        <h3 id="@assembly.SourceAssembly" tabindex="0">
+        <h3 id="@assembly.SourceAssembly" Focusable="False">
             <span class="assembly-name">@assembly.SourceAssembly</span>
             @if (!string.IsNullOrEmpty(@assembly.SourceAssembly.TargetFrameworkMoniker))
             {
