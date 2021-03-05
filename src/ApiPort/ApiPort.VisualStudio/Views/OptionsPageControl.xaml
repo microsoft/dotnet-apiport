@@ -179,21 +179,29 @@
                         KeyboardNavigation.TabIndex="1"
                         Grid.Column="0" Grid.Row="0" />
 
-            <TextBlock Grid.Column="2"
+
+
+            <TextBlock AutomationProperties.LabeledBy="{Binding ElementName=AboutToolLabel}"
+                       Grid.Column="2"
                        HorizontalAlignment="Right">
                 <Hyperlink NavigateUri="DocumentationLinks.About" RequestNavigate="NavigateToMoreInformation"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutTool}">
-                    <TextBlock Text="{x:Static const:LocalizedStrings.AboutTool}"
+                    <TextBlock Name="AboutToolLabel"
+                               Text="{x:Static const:LocalizedStrings.AboutTool}"
                                KeyboardNavigation.IsTabStop="True"
                                KeyboardNavigation.TabIndex="0"/>
                 </Hyperlink>
             </TextBlock>
 
-            <TextBlock Grid.Column="4"
+
+
+            <TextBlock AutomationProperties.LabeledBy="{Binding ElementName=AboutPrivacyLabel}" 
+                       Grid.Column="4"
                        HorizontalAlignment="Right">
                 <Hyperlink NavigateUri="DocumentationLinks.PrivacyPolicy" RequestNavigate="NavigateToPrivacyModel"
                            AutomationProperties.Name="{x:Static const:LocalizedStrings.AboutPrivacy}">
-                    <TextBlock Text="{x:Static const:LocalizedStrings.AboutPrivacy}"
+                    <TextBlock Name="AboutPrivacyLabel"
+                               Text="{x:Static const:LocalizedStrings.AboutPrivacy}"
                                KeyboardNavigation.IsTabStop="True"
                                KeyboardNavigation.TabIndex="0"/>
                 </Hyperlink>
