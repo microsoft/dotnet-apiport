@@ -11,9 +11,11 @@ steps:
     TargetFolders: |
       $(Build.StagingDirectory)\vsix
     WhiteListPathForCerts: $(Build.SourcesDirectory)\azure-pipelines\no_authenticode.txt
+  condition: and(succeeded(), ne(variables['System.PullRequest.IsFork'], 'true'))
 
 - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
   displayName: Component Detection
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-autoapplicability.AutoApplicability@1
   displayName: 'Run AutoApplicability'
