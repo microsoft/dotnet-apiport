@@ -12,6 +12,9 @@ steps:
 
 - script: dotnet restore
   displayName: dotnet restore
+  
+- script: dir \\mmitche1\public\darcwithmultibuild
+  displayName: dotnet restore
 
 - task: VSBuild@1
   displayName: 'Build solution PortabilityTools.sln'
