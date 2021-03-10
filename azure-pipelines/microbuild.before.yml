@@ -3,4 +3,3 @@ steps:
   displayName: Install Signing Plugin
   inputs:
     signType: $(SignType)
-  condition: and(succeeded(), ne(variables['System.PullRequest.IsFork'], 'true'))
