@@ -22,7 +22,7 @@ variables:
 
 jobs:
 - job: Windows
-  pool: VSEng-MicroBuildVS2019
+  pool: DotNet-Build
   steps:
   - template: azure-pipelines/build-windows.yml
 
