@@ -25,7 +25,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Name ="AvailabelReportsLabel"
+        <TextBlock Name ="AvailableReportsLabel"
                    Text="{x:Static const:LocalizedStrings.AvailableReports}"
                    Style="{DynamicResource ToolWindowTextBlockStyle}"
                    Margin="5"
@@ -37,7 +37,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
                           HorizontalScrollBarVisibility="Auto"
                           Background="Transparent"
                           IsTabStop="False">
-                <ListView AutomationProperties.LabeledBy="{Binding ElementName=AvailabelReportsLabel}" 
+                <ListView AutomationProperties.LabeledBy="{Binding ElementName=AvailableReportsLabel}" 
                           ItemsSource="{Binding Paths}"
                           HorizontalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
