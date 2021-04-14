@@ -65,6 +65,10 @@ This will allow you to use apiport globally from the command line: `apiport anal
 | ApiPort CLI | [ApiPort Download][ApiPort Download] |
 | Visual Studio Extension |  [Open VSIX Gallery][VSIX Gallery] |
 
+
+### Privacy:
+We only send .NET APIs and its caller user assembly names to the service to analyze for portability and generate report. For more information, check out our [privacy policy](https://privacy.microsoft.com/en-us/privacystatement).
+
 ## How to Engage, Contribute and Provide Feedback
 
 Here are some ways to contribute:
