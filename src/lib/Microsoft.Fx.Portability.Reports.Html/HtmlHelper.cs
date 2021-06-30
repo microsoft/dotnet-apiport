@@ -29,7 +29,7 @@ namespace Microsoft.Fx.Portability.Reports
 
             var imageId = supported ? "icon-supported" : "icon-unsupported";
             var title = supported ? LocalizedStrings.Supported : LocalizedStrings.NotSupported;
-            var icon = $"<svg class=\"support-icon\"><use href=#{imageId}></use></svg>";
+            var icon = $"<svg class=\"support-icon\" title=\"{title}\"><use href=#{imageId}></use></svg>";
 
             return helper.Raw(Invariant($"<td class=\"textCentered\" title=\"{title}\">{icon}</td>"));
         }

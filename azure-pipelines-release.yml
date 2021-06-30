@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-    - master
+    - main
 
 parameters:
 - name: SignTypeSelection
@@ -17,6 +17,7 @@ variables:
   NUGET_PACKAGES: $(Agent.TempDirectory)/.nuget/packages
   SignTypeSelection: ${{ parameters.SignTypeSelection }}
   DeployExtension: false
+  NugetSecurityAnalysisWarningLevel: warn
 
 jobs:
 - job: Windows

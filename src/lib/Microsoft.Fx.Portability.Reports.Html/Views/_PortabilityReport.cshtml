@@ -83,14 +83,14 @@
         detailColumnHeaders.AddRange(Model.TargetHeaders);
         detailColumnHeaders.Add(LocalizedStrings.RecommendedChanges);
 
-        <h3>@LocalizedStrings.HideColumns</h3>
+        <h3 id="hidecolumnsId">@LocalizedStrings.HideColumns</h3>
         <form>
             @* It doesn't make sense to hide the first column (Target type), which lists
                 names of the types and members that have possible problems in porting. *@
             @for (int i = 1; i < detailColumnHeaders.Count; i++)
             {
                 var id = "checkbox" + i.ToString();
-                <input type="checkbox" id="@id" onchange='onToggleColumnVisibility(this)'>
+                <input type="checkbox" id="@id" aria-labelledby="hidecolumnsId @id" onchange='onToggleColumnVisibility(this)'>
                 <label for="@id">@detailColumnHeaders[i]</label>
             }
         </form>
@@ -114,7 +114,7 @@
         }
 
         var assemblyName = reportingResult.GetNameForAssemblyInfo(assembly.SourceAssembly);
-        <h3 id="@assembly.SourceAssembly" tabindex="0">
+        <h3 id="@assembly.SourceAssembly" Focusable="False">
             <span class="assembly-name">@assembly.SourceAssembly</span>
             @if (!string.IsNullOrEmpty(@assembly.SourceAssembly.TargetFrameworkMoniker))
             {
