@@ -85,14 +85,16 @@
 
         <h3 id="hidecolumnsId">@LocalizedStrings.HideColumns</h3>
         <form>
+            <fieldset aria-labelldby="hidecolumnsId">
             @* It doesn't make sense to hide the first column (Target type), which lists
                 names of the types and members that have possible problems in porting. *@
             @for (int i = 1; i < detailColumnHeaders.Count; i++)
             {
                 var id = "checkbox" + i.ToString();
-                <input type="checkbox" id="@id" aria-labelledby="hidecolumnsId @id" onchange='onToggleColumnVisibility(this)'>
+                <input type="checkbox" id="@id" onchange='onToggleColumnVisibility(this)'>
                 <label for="@id">@detailColumnHeaders[i]</label>
             }
+            </fieldset>
         </form>
     }
 
