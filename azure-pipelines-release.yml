@@ -21,7 +21,7 @@ variables:
 
 jobs:
 - job: Windows
-  pool: VSEngSS-MicroBuild2019
+  pool: VSEngSS-MicroBuild2019-1ES
   steps:
   - template: azure-pipelines/build-windows.yml
   - powershell: |
