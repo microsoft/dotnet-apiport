@@ -45,14 +45,14 @@ steps:
     AnalyzeSymPath: $(Build.StagingDirectory)\symbols
   continueOnError: true
 
-- task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
-  displayName: 'Run APIScan netcoreapp3.1'
-  inputs:
-    softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\netcoreapp3.1'
-    softwareName: 'API Port'
-    softwareVersionNum: 4.XX
-    symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\netcoreapp3.1'
-    isLargeApp: false
+#- task: securedevelopmentteam.vss-secure-development-tools.build-task-apiscan.APIScan@2
+#  displayName: 'Run APIScan netcoreapp3.1'
+#  inputs:
+#    softwareFolder: '$(Build.StagingDirectory)\drop\raw\binaries\netcoreapp3.1'
+#    softwareName: 'API Port'
+#    softwareVersionNum: 4.XX
+#    symbolsFolder: '$(Build.StagingDirectory)\drop\raw\symbols\netcoreapp3.1'
+#    isLargeApp: false
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@2
   displayName: 'Publish Security Analysis Logs'
