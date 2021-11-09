@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+    <Metadata>
+        <Identity Id="72c17f80-cdec-4df6-8cfb-577a823cbcd9" Version="2.0.0" Language="en-US" Publisher="Microsoft" />
+        <DisplayName>.NET Portability Analyzer - Visual Studio 2022</DisplayName>
+        <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms</Description>
+        <MoreInfo>https://aka.ms/dotnet-portabilityanalyzer</MoreInfo>
+        <License>LICENSE.txt</License>
+        <Icon>Resources\Package.ico</Icon>
+        <PreviewImage>Resources\Preview.png</PreviewImage>
+        <Tags>code analysis, cross-platform, .NET Framework, .NET, portable, cross platform, Portable Library</Tags>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="ApiPort.VisualStudio.Package.2022" Path="|ApiPort.VisualStudio.Package.2022;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ApiPort.VisualStudio.Common.2022" Path="|ApiPort.VisualStudio.Common.2022|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ApiPort.VisualStudio.Project.2022" Path="|ApiPort.VisualStudio.Project.2022|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ApiPort.VisualStudio.Package.2022" Path="|ApiPort.VisualStudio.Package.2022|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.Roslyn.LanguageServices" Version="[17.0,)" DisplayName="C# and Visual Basic" />
+    </Prerequisites>
+</PackageManifest>

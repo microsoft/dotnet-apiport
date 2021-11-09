@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>ApiPortVS</RootNamespace>
     <DefineConstants>$(DefineConstants);VS2019</DefineConstants>
   </PropertyGroup>
@@ -11,17 +11,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="16.0.189-g83e7c53a57">
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="17.0.487">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="16.0.374-pre">
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="17.0.1313-pre">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApiPort.VisualStudio.Common.2022\ApiPort.VisualStudio.Common.2022.csproj" />
     <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability\Microsoft.Fx.Portability.csproj" />
-    <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj" />
  </ItemGroup>
 
 </Project>

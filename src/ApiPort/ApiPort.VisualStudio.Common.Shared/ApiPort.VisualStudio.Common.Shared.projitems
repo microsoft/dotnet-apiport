@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>121ea441-7b82-4b66-923a-9a22a871d4d0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ApiPort.VisualStudio.Common.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\LocalizedStrings.resx">
+      <LastGenOutput>LocalizedStrings.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>ApiPortVS.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Analyze\ApiPortVsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analyze\FileListAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analyze\IVsApiPortAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analyze\ProjectAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AssemblyFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuildServices.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComProjectMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\IErrorListProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\IOutputWindowWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\IProjectBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\IProjectMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\IReportViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\ISourceLineMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\ISourceMappedItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DefaultProjectBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorListProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IBuildServices.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IVsHierarchyExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CalculatedProject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\OptionsModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SelectedResultFormat.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TargetPlatform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TargetPlatformVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NotifyPropertyBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reporting\IResultToolbar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources\LocalizedStrings.Designer.cs">
+      <DependentUpon>$(MSBuildThisFileDirectory)Resources\LocalizedStrings.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SourceLineMapperExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SourceMapping\CciMetadataTraverser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SourceMapping\CciSourceLineMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SourceMapping\CodeDocumentNavigator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SourceMapping\SourceLineMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\OptionsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\OutputViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VisualStudioProxyProvider.cs" />
+  </ItemGroup>
+</Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29926.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31827.257
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C991F5FC-04B5-420C-98A0-80974AA946F7}"
 	ProjectSection(SolutionItems) = preProject
@@ -85,7 +85,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Fx.Portability.Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.2019", "src\ApiPort\ApiPort.VisualStudio.2019\ApiPort.VisualStudio.2019.csproj", "{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ApiPort.VisualStudio.Shared", "src\ApiPort\ApiPort.VisualStudio.Shared\ApiPort.VisualStudio.Shared.shproj", "{00D82EBF-8D87-4EB0-91BE-931AB00B49A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort.Vsix.2022", "src\ApiPort\ApiPort.Vsix.2022\ApiPort.Vsix.2022.csproj", "{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPort.VisualStudio.Package.2022", "src\ApiPort\ApiPort.VisualStudio.Package.2022\ApiPort.VisualStudio.Package.2022.csproj", "{A573E8CC-079B-4A4B-A62A-11B4DDC884C6}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ApiPort.VisualStudio.Common.Shared", "src\ApiPort\ApiPort.VisualStudio.Common.Shared\ApiPort.VisualStudio.Common.Shared.shproj", "{121EA441-7B82-4B66-923A-9A22A871D4D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.Common.2022", "src\ApiPort\ApiPort.VisualStudio.Common.2022\ApiPort.VisualStudio.Common.2022.csproj", "{F5539DBD-BED0-4E65-A461-7F7932FC3447}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPort.VisualStudio.Project.2022", "src\ApiPort\ApiPort.VisualStudio.Project.2022\ApiPort.VisualStudio.Project.2022.csproj", "{104051B7-0EEF-4CD7-A918-496AAF8A3900}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\ApiPort\ApiPort.VisualStudio.Shared\ApiPort.VisualStudio.Shared.projitems*{00d82ebf-8d87-4eb0-91be-931ab00b49a9}*SharedItemsImports = 13
+		src\ApiPort\ApiPort.VisualStudio.Common.Shared\ApiPort.VisualStudio.Common.Shared.projitems*{121ea441-7b82-4b66-923a-9a22a871d4d0}*SharedItemsImports = 13
+		src\ApiPort\ApiPort.VisualStudio.Common.Shared\ApiPort.VisualStudio.Common.Shared.projitems*{60798b82-b273-4d39-aa52-021c7228a0ad}*SharedItemsImports = 5
+		src\ApiPort\ApiPort.VisualStudio.Shared\ApiPort.VisualStudio.Shared.projitems*{a573e8cc-079b-4a4b-a62a-11b4ddc884c6}*SharedItemsImports = 4
+		src\ApiPort\ApiPort.VisualStudio.Shared\ApiPort.VisualStudio.Shared.projitems*{d15030d8-cfc5-4f05-8987-784326856e90}*SharedItemsImports = 4
+		src\ApiPort\ApiPort.VisualStudio.Common.Shared\ApiPort.VisualStudio.Common.Shared.projitems*{f5539dbd-bed0-4e65-a461-7f7932fc3447}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -183,6 +203,22 @@ Global
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A573E8CC-079B-4A4B-A62A-11B4DDC884C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A573E8CC-079B-4A4B-A62A-11B4DDC884C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A573E8CC-079B-4A4B-A62A-11B4DDC884C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A573E8CC-079B-4A4B-A62A-11B4DDC884C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5539DBD-BED0-4E65-A461-7F7932FC3447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5539DBD-BED0-4E65-A461-7F7932FC3447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5539DBD-BED0-4E65-A461-7F7932FC3447}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5539DBD-BED0-4E65-A461-7F7932FC3447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{104051B7-0EEF-4CD7-A918-496AAF8A3900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{104051B7-0EEF-4CD7-A918-496AAF8A3900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{104051B7-0EEF-4CD7-A918-496AAF8A3900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{104051B7-0EEF-4CD7-A918-496AAF8A3900}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -215,6 +251,12 @@ Global
 		{CB5759DE-9D7B-4B21-89BC-E81920D611BB} = {7DC7AA2C-0401-495B-B42C-32F44085EBE6}
 		{1B6E53A7-9180-4D79-9556-E5CE59483EA1} = {D66AC566-3B80-46F0-8687-3C5F4D203F1A}
 		{7A3B2571-82C2-4306-ADCB-8B67DBA395BC} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{00D82EBF-8D87-4EB0-91BE-931AB00B49A9} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{A573E8CC-079B-4A4B-A62A-11B4DDC884C6} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{121EA441-7B82-4B66-923A-9A22A871D4D0} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{F5539DBD-BED0-4E65-A461-7F7932FC3447} = {0D1724F6-078E-4576-9680-6B9334D562DC}
+		{104051B7-0EEF-4CD7-A918-496AAF8A3900} = {0D1724F6-078E-4576-9680-6B9334D562DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E8B2DB2-4847-4909-8631-A995D50F10EF}

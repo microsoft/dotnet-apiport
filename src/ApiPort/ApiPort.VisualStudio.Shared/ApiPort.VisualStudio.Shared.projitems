@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>00d82ebf-8d87-4eb0-91be-931ab00b49a9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ApiPort.VisualStudio.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AnalyzeMenu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ApiPortVSPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AssemblyRedirectResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AutofacComRegisterExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DteProjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Guids.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OutputWindowWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PkgCmdID.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reporting\ToolbarListReportViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reporting\VsBrowserReportViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServiceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StatusBarProgressReporter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\HideWhenTrueBoolConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\PathToFileNameConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\TargetInformationStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\TargetPlatformDisplayNameConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\AnalysisOutputToolWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\AnalysisOutputToolWindowControl.xaml.cs">
+      <DependentUpon>AnalysisOutputToolWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\OptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\OptionsPageControl.xaml.cs">
+      <DependentUpon>OptionsPageControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Resources\Images.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\OptionsPage.resx">
+      <DependentUpon>OptionsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Resources\ResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Resources\UtilsResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\AnalysisOutputToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\OptionsPageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

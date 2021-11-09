@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using System;
 
+#if DEV15
+using TaskListItem = Microsoft.VisualStudio.Shell.Task;
+#endif
+
 namespace ApiPortVS.SourceMapping
 {
     internal static class CodeDocumentNavigator
@@ -15,7 +19,7 @@ namespace ApiPortVS.SourceMapping
 
         public static void Navigate(object sender, EventArgs e)
         {
-            if (sender is Task task)
+            if (sender is TaskListItem task)
             {
                 OpenDocumentTo(task.Document, task.Line, task.Column);
             }

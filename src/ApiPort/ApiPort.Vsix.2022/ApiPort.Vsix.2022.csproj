@@ -1,17 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
-    <TargetVsixContainerName>ApiPort.vsix</TargetVsixContainerName>
+    <TargetVsixContainerName>ApiPort.2022.vsix</TargetVsixContainerName>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C4301817-D6F9-43A4-9E24-5446C0A2C15C}</ProjectGuid>
+    <ProjectGuid>{430942D4-0FF0-4DE2-8D70-55DAC1F6A6D4}</ProjectGuid>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ApiPort.Vsix</RootNamespace>
     <AssemblyName>ApiPort.Vsix</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
@@ -60,31 +63,22 @@
     <None Include="UpdateVsixVersion.targets" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK.VsixSuppression" Version="14.1.33" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.9.1050" />
+    <PackageReference Include="Microsoft.VisualStudio.Sdk" Version="17.0.31902.203" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApiPort.VisualStudio.2017\ApiPort.VisualStudio.2017.csproj">
-      <Project>{C0629A8D-7107-46CF-83B8-408E1886AB36}</Project>
-      <Name>ApiPort.VisualStudio.2017</Name>
+    <ProjectReference Include="..\ApiPort.VisualStudio.Project.2022\ApiPort.VisualStudio.Project.2022.csproj">
+      <Name>ApiPort.VisualStudio.Project.2022</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
-    <ProjectReference Include="..\ApiPort.VisualStudio.2019\ApiPort.VisualStudio.2019.csproj">
-      <Project>{0A48BC2C-3421-4E8F-B7BC-4E584D821AA3}</Project>
-      <Name>ApiPort.VisualStudio.2019</Name>
+    <ProjectReference Include="..\ApiPort.VisualStudio.Common.2022\ApiPort.VisualStudio.Common.2022.csproj">
+      <Name>ApiPort.VisualStudio.Common.2022</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
-    <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
-      <Project>{60798B82-B273-4D39-AA52-021C7228A0AD}</Project>
-      <Name>ApiPort.VisualStudio.Common</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
-    <ProjectReference Include="..\ApiPort.VisualStudio\ApiPort.VisualStudio.csproj">
-      <Project>{d15030d8-cfc5-4f05-8987-784326856e90}</Project>
-      <Name>ApiPort.VisualStudio</Name>
+    <ProjectReference Include="..\ApiPort.VisualStudio.Package.2022\ApiPort.VisualStudio.Package.2022.csproj">
+      <Name>ApiPort.VisualStudio.Package.2022</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>

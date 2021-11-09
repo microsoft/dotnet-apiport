@@ -27,6 +27,7 @@ namespace ApiPortVS
             _outputWindow = outputWindow ?? throw new ArgumentNullException(nameof(outputWindow));
             _dte = dte;
 
+            VisualStudio.ThreadHelper.ThrowIfNotOnUIThread();
             _outputWindow.Clear();
         }
 
@@ -58,6 +59,8 @@ namespace ApiPortVS
 
         public override void Write(char text)
         {
+            VisualStudio.ThreadHelper.ThrowIfNotOnUIThread();
+
             var errCode = _outputWindow.OutputStringThreadSafe(text.ToString(CultureInfo.CurrentCulture));
 
             if (ErrorHandler.Failed(errCode))

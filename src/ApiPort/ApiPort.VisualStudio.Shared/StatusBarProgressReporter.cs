@@ -3,6 +3,7 @@
 
 using ApiPortVS.Resources;
 using Microsoft.Fx.Portability;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
 
@@ -35,14 +36,17 @@ namespace ApiPortVS
             public StatusBarProgressTask(TextWriter writer, string task, IVsStatusbar statusBar)
                 : base(writer, task)
             {
-                _statusBar = statusBar;
+                ThreadHelper.ThrowIfNotOnUIThread();
 
+                _statusBar = statusBar;
                 _statusBar.SetText(task);
             }
 
             public override void Abort()
             {
                 base.Abort();
+
+                ThreadHelper.ThrowIfNotOnUIThread();
                 _statusBar.SetText(LocalizedStrings.AnalysisFailed);
             }
         }

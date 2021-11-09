@@ -37,6 +37,7 @@ namespace ApiPortVS
 
         public async Task AnalyzeSelectedProjectsAsync(bool includeDependencies)
         {
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var projects = GetSelectedProjects();
 
             await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects, projects.FirstOrDefault()).ConfigureAwait(false);
@@ -87,11 +88,13 @@ namespace ApiPortVS
 
         public void ProjectContextMenuItemBeforeQueryStatus(object sender, EventArgs e)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             ContextMenuItemBeforeQueryStatus(sender, GetSelectedProjects(), false);
         }
 
         public void ProjectContextMenuDependenciesItemBeforeQueryStatus(object sender, EventArgs e)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             ContextMenuItemBeforeQueryStatus(sender, GetSelectedProjects(), true);
         }
 
