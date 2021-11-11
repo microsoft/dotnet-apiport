@@ -33,15 +33,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\OptionsPageControl.xaml.cs">
-      <DependentUpon>OptionsPageControl.xaml</DependentUpon>
+      <DependentUpon>$(MSBuildThisFileDirectory)Views\OptionsPageControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Resources\Images.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\OptionsPage.resx">
-      <DependentUpon>OptionsPage.cs</DependentUpon>
+      <DependentUpon>$(MSBuildThisFileDirectory)Views\OptionsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">
       <SubType>Designer</SubType>

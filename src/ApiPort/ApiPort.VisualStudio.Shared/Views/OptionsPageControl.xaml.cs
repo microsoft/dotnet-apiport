@@ -4,12 +4,15 @@
 using ApiPortVS.Resources;
 using ApiPortVS.ViewModels;
 using Microsoft.Fx.Portability;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+
+using Task = System.Threading.Tasks.Task;
 
 namespace ApiPortVS.Views
 {
@@ -29,7 +32,7 @@ namespace ApiPortVS.Views
 
             _statusBar = statusBar;
 
-            Loaded += async (s, e) => await UpdateModelAsync(false).ConfigureAwait(false);
+            Loaded += (s, e) => UpdateModelAsync(false).FileAndForget(ApiPortVSPackage.FaultEventName);
             Unloaded += (s, e) => viewModel.Save();
         }
 
@@ -37,7 +40,7 @@ namespace ApiPortVS.Views
 
         private void NavigateToMoreInformation(object sender, RequestNavigateEventArgs e) => Process.Start(DocumentationLinks.About.OriginalString);
 
-        private async void RefreshRequested(object sender, RoutedEventArgs e) => await UpdateModelAsync(true).ConfigureAwait(false);
+        private void RefreshRequested(object sender, RoutedEventArgs e) => UpdateModelAsync(true).FileAndForget(ApiPortVSPackage.FaultEventName);
 
         private async Task UpdateModelAsync(bool force)
         {

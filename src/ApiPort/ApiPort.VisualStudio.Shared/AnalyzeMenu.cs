@@ -8,6 +8,7 @@ using ApiPortVS.Resources;
 using Autofac;
 using EnvDTE;
 using Microsoft.Fx.Portability;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+
+using Task = System.Threading.Tasks.Task;
 
 namespace ApiPortVS
 {
@@ -37,16 +40,19 @@ namespace ApiPortVS
 
         public async Task AnalyzeSelectedProjectsAsync(bool includeDependencies)
         {
-            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var projects = GetSelectedProjects();
 
             await AnalyzeProjectsAsync(includeDependencies ? GetTransitiveReferences(projects, new HashSet<Project>()) : projects, projects.FirstOrDefault()).ConfigureAwait(false);
         }
 
-        public async void SolutionContextMenuItemCallback(object sender, EventArgs e)
+        public void SolutionContextMenuItemCallback(object sender, EventArgs e)
         {
-            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList(), null).ConfigureAwait(false);
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await AnalyzeProjectsAsync(_dte.Solution.GetProjects().Where(x => x.IsDotNetProject()).ToList(), null).ConfigureAwait(false);
+            }).FileAndForget(ApiPortVSPackage.FaultEventName);
         }
 
         private async Task AnalyzeProjectsAsync(ICollection<Project> projects, Project entrypoint)
@@ -112,6 +118,7 @@ namespace ApiPortVS
                 return;
             }
 
+            ThreadHelper.ThrowIfNotOnUIThread();
             menuItem.Visible = projects.Any(p => p.IsDotNetProject());
 
             // Only need to check dependents if menuItem is still visible
@@ -121,7 +128,12 @@ namespace ApiPortVS
             }
         }
 
-        public async void AnalyzeMenuItemCallback(object sender, EventArgs e)
+        public void AnalyzeMenuItemCallback(object sender, EventArgs e)
+        {
+            this.AnalyzeProjectsAsync().FileAndForget(ApiPortVSPackage.FaultEventName);
+        }
+
+        public async Task AnalyzeProjectsAsync()
         {
             var inputAssemblyPaths = PromptForAssemblyPaths();
             if (inputAssemblyPaths == null)
@@ -191,15 +203,19 @@ namespace ApiPortVS
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
+#pragma warning disable VSTHRD010 // It is being checked above.
             return _dte.SelectedItems
                 .OfType<SelectedItem>()
                 .Select(i => i.Project)
                 .Distinct()
                 .ToList();
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
         }
 
         private ICollection<Project> GetTransitiveReferences(IEnumerable<Project> projects, HashSet<Project> expandedProjects)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             foreach (var project in projects)
             {
                 if (expandedProjects.Add(project))

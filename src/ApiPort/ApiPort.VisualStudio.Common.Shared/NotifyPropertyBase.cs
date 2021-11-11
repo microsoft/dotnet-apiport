@@ -45,7 +45,9 @@ namespace ApiPortVS
             }
             else
             {
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
                 Context.Post(_ => propertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName)), null);
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
             }
         }
     }

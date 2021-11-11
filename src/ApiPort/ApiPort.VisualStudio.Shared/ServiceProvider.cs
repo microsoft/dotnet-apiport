@@ -11,6 +11,7 @@ using ApiPortVS.ViewModels;
 using ApiPortVS.Views;
 using Autofac;
 using EnvDTE;
+using Microsoft;
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Proxy;
@@ -161,6 +162,7 @@ namespace ApiPortVS
             builder.RegisterCom<DTE>(await serviceProvider.GetServiceAsync(typeof(DTE)));
 
             var componentModel = await serviceProvider.GetServiceAsync(typeof(SComponentModel)) as IComponentModel;
+            Assumes.Present(componentModel);
 
             builder.RegisterInstance(componentModel.GetService<IProjectBuilder>());
             builder.RegisterInstance(componentModel.GetService<IProjectMapper>());
