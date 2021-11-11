@@ -27,8 +27,11 @@ namespace ApiPortVS
             _outputWindow = outputWindow ?? throw new ArgumentNullException(nameof(outputWindow));
             _dte = dte;
 
-            VisualStudio.ThreadHelper.ThrowIfNotOnUIThread();
-            _outputWindow.Clear();
+            VisualStudio.ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                _outputWindow.Clear();
+            });
         }
 
         public override Encoding Encoding { get { return Encoding.UTF8; } }
@@ -36,7 +39,6 @@ namespace ApiPortVS
         public async Task ShowWindowAsync()
         {
             await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
             _outputWindow.Activate();
 
             try
@@ -59,18 +61,20 @@ namespace ApiPortVS
 
         public override void Write(char text)
         {
-            VisualStudio.ThreadHelper.ThrowIfNotOnUIThread();
-
-            var errCode = _outputWindow.OutputStringThreadSafe(text.ToString(CultureInfo.CurrentCulture));
-
-            if (ErrorHandler.Failed(errCode))
+            VisualStudio.ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                Debug.WriteLine("Failed to write on the Output window");
-            }
-            else
-            {
-                _outputWindow.Activate();
-            }
+                await VisualStudio.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                var errCode = _outputWindow.OutputString(text.ToString(CultureInfo.CurrentCulture));
+
+                if (ErrorHandler.Failed(errCode))
+                {
+                    Debug.WriteLine("Failed to write on the Output window");
+                }
+                else
+                {
+                    _outputWindow.Activate();
+                }
+            });
         }
 
         /// <summary>

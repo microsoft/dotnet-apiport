@@ -27,7 +27,11 @@ jobs:
   - powershell: |
       . azure-pipelines/vsixgallerytools.ps1
       Vsix-PublishToGallery -path bin/$(BuildConfiguration)/ApiPort.Vsix/ApiPort.vsix
-    displayName: Push VSIX
+    displayName: Push VSIX - VS 2019 and earlier
+  - powershell: |
+      . azure-pipelines/vsixgallerytools.ps1
+      Vsix-PublishToGallery -path bin/$(BuildConfiguration)/ApiPort.Vsix.2022/ApiPort.2022.vsix
+    displayName: Push VSIX - VS 2022
 
 - job: Linux
   pool:

@@ -36,18 +36,18 @@ namespace ApiPortVS
             public StatusBarProgressTask(TextWriter writer, string task, IVsStatusbar statusBar)
                 : base(writer, task)
             {
-                ThreadHelper.ThrowIfNotOnUIThread();
-
                 _statusBar = statusBar;
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
                 _statusBar.SetText(task);
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
             }
 
             public override void Abort()
             {
                 base.Abort();
-
-                ThreadHelper.ThrowIfNotOnUIThread();
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
                 _statusBar.SetText(LocalizedStrings.AnalysisFailed);
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
             }
         }
     }
