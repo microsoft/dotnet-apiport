@@ -8,7 +8,7 @@ dependencies.
 |master|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=master)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=master)
 |dev|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=dev)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=dev)
 
-For a quick introduction, check out [this video on Channel 9][Shows Video]:
+For a quick introduction, check out [this video on Shows][Shows Video]:
 
 [<img src="https://sec.ch9.ms/ch9/031c/f3d7672b-dd71-4a18-a8b4-37573c08031c/DotNetPortabilityAnalyzer_960.jpg" width="480" />][Shows Video]
 
