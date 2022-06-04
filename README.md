@@ -8,9 +8,9 @@ dependencies.
 |master|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=master)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=master)
 |dev|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=dev)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=dev)
 
-For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
+For a quick introduction, check out [this video on Channel 9][Shows Video]:
 
-[<img src="https://sec.ch9.ms/ch9/031c/f3d7672b-dd71-4a18-a8b4-37573c08031c/DotNetPortabilityAnalyzer_960.jpg" width="480" />][Channel 9 Video]
+[<img src="https://sec.ch9.ms/ch9/031c/f3d7672b-dd71-4a18-a8b4-37573c08031c/DotNetPortabilityAnalyzer_960.jpg" width="480" />][Shows Video]
 
 There is a Visual Studio extension available for VS 2017 and VS 2019: [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
 
@@ -92,7 +92,7 @@ For an overview of all the .NET related projects, have a look at the
 
 This project is licensed under the [MIT license](LICENSE).
 
-[Channel 9 Video]: https://channel9.msdn.com/Blogs/Seth-Juarez/A-Brief-Look-at-the-NET-Portability-Analyzer
+[Channel 9 Video]: https://docs.microsoft.com/en-us/shows/seth-juarez/brief-look-net-portability-analyzer
 [Contributing Guide]: https://github.com/dotnet/corefx/wiki/Contributing
 [Developer Guide]: https://github.com/dotnet/corefx/wiki/Developer-Guide
 [DocId]: https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx
