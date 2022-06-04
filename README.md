@@ -92,7 +92,7 @@ For an overview of all the .NET related projects, have a look at the
 
 This project is licensed under the [MIT license](LICENSE).
 
-[Channel 9 Video]: https://docs.microsoft.com/en-us/shows/seth-juarez/brief-look-net-portability-analyzer
+[Shows Video]: https://docs.microsoft.com/en-us/shows/seth-juarez/brief-look-net-portability-analyzer
 [Contributing Guide]: https://github.com/dotnet/corefx/wiki/Contributing
 [Developer Guide]: https://github.com/dotnet/corefx/wiki/Developer-Guide
 [DocId]: https://msdn.microsoft.com/en-us/library/fsbx0t7x.aspx
