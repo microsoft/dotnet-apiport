@@ -1,5 +1,7 @@
 # .NET API Portability
 
+> ***Note:** We're in the process of deprecating API Port in favor of integrating binary analysis directly into [.NET Upgrade Assistant](https://github.com/dotnet/upgrade-assistant). In the upcoming months, we're going to shutdown the backend service of API Port which will require to use the tool in offline mode. The instructions to use API Port in offline mode can be found [here](docs/Console/README.md#run-the-tool-in-an-offline-mode).*
+
 This repository contains the source code for .NET Portability Analyzer tools and
 dependencies.
 
