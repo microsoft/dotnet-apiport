@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="AssemblyRedirectResolver.cs" />
     <Compile Include="AutofacComRegisterExtensions.cs" />
+    <Compile Include="DependencyBuilder.Offline.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="StatusBarProgressReporter.cs" />
@@ -122,6 +123,10 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.csproj">
+      <Project>{f3d148ca-d49d-4315-9cd6-ae7b0eea9549}</Project>
+      <Name>Microsoft.Fx.Portability.Offline</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
       <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
       <Name>ApiPort.VisualStudio.Common</Name>
