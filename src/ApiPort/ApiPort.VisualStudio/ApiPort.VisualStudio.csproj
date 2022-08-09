@@ -130,6 +130,14 @@
       <Project>{f3d148ca-d49d-4315-9cd6-ae7b0eea9549}</Project>
       <Name>Microsoft.Fx.Portability.Offline</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.DGML\Microsoft.Fx.Portability.Reports.DGML.csproj">
+      <Project>{1b6e53a7-9180-4d79-9556-e5ce59483ea1}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.DGML</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj">
+      <Project>{47008779-1d31-4e0c-b21a-5f4fb84470a0}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.Excel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
       <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
       <Name>ApiPort.VisualStudio.Common</Name>
