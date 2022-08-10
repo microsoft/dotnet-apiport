@@ -65,13 +65,17 @@
     <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
     <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="15.4.27004" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.6.170" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.3.2092">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="VSLangProj140" Version="14.0.25030" />
     <PackageReference Include="VSLangProj150" Version="15.0.26229" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyRedirectResolver.cs" />
     <Compile Include="AutofacComRegisterExtensions.cs" />
+    <Compile Include="DependencyBuilder.Offline.cs" />
     <Compile Include="Properties\Properties.cs" />
     <Compile Include="Reporting\ToolbarListReportViewer.cs" />
     <Compile Include="StatusBarProgressReporter.cs" />
@@ -122,6 +126,18 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Offline\Microsoft.Fx.Portability.Offline.csproj">
+      <Project>{f3d148ca-d49d-4315-9cd6-ae7b0eea9549}</Project>
+      <Name>Microsoft.Fx.Portability.Offline</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.DGML\Microsoft.Fx.Portability.Reports.DGML.csproj">
+      <Project>{1b6e53a7-9180-4d79-9556-e5ce59483ea1}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.DGML</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\Microsoft.Fx.Portability.Reports.Excel\Microsoft.Fx.Portability.Reports.Excel.csproj">
+      <Project>{47008779-1d31-4e0c-b21a-5f4fb84470a0}</Project>
+      <Name>Microsoft.Fx.Portability.Reports.Excel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ApiPort.VisualStudio.Common\ApiPort.VisualStudio.Common.csproj">
       <Project>{60798b82-b273-4d39-aa52-021c7228a0ad}</Project>
       <Name>ApiPort.VisualStudio.Common</Name>
