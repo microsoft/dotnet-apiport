@@ -34,7 +34,7 @@ namespace Microsoft.Fx.Portability.Reports.DGML
                 }
 
                 // create nodes for all the references, if non platform.
-                if (userAsem.AssemblyReferences is not null)
+                if (userAsem.AssemblyReferences != null)
                 {
                     foreach (var reference in userAsem.AssemblyReferences)
                     {
