@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using ApiPort;
+
 using ApiPortVS.Analyze;
 using ApiPortVS.Contracts;
 using ApiPortVS.Models;
@@ -9,8 +11,11 @@ using ApiPortVS.Resources;
 using ApiPortVS.SourceMapping;
 using ApiPortVS.ViewModels;
 using ApiPortVS.Views;
+
 using Autofac;
+
 using EnvDTE;
+
 using Microsoft.Fx.Portability;
 using Microsoft.Fx.Portability.Analyzer;
 using Microsoft.Fx.Portability.Proxy;
@@ -19,13 +24,12 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
-using static Microsoft.VisualStudio.VSConstants;
 
 using Tasks = System.Threading.Tasks;
 
@@ -66,10 +70,9 @@ namespace ApiPortVS
             builder.RegisterType<VisualStudioProxyProvider>()
                 .As<IProxyProvider>()
                 .SingleInstance();
-            builder.RegisterType<ApiPortService>()
-                .As<IApiPortService>()
-                .WithParameter(TypedParameter.From(DefaultEndpoint))
-                .SingleInstance();
+
+            builder.RegisterOfflineModule();
+
             builder.RegisterType<ApiPortClient>()
                 .AsSelf()
                 .SingleInstance();
