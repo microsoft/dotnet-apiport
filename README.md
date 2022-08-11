@@ -5,7 +5,7 @@ dependencies.
 
 |Branch|Build Status
 |---|---
-|main|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=main)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=main)
+|main|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/DotNet-Apiport-Release-yml?branchName=main)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=14946&branchName=main)
 |dev|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=dev)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=dev)
 
 For a quick introduction, check out [this video on Channel 9][Channel 9 Video]:
