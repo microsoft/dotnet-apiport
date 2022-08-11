@@ -2,6 +2,16 @@
 
 There are changes to each version of the .NET Portability Analyzer that has been released on [Visual Studio extension gallery](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)
 
+## 2.8.0
+
+__August 10, 2022__
+
+* Server-side analysis disabled 
+    * Due to a regression in our legacy backend service, this and any future versions will work only in Offline mode
+    * HTML output disabled (Visual Studio limitation which server-side analysis worked around)
+    * Large projects may experience memory exhaustion, especially on 32-bit machines, but we did not see this in our testing
+* Related, take note of [the deprecation announcement](../../README.md) on the main page of this repo
+
 ## 2.5.0
 
 __May 30, 2018__
