@@ -7,7 +7,7 @@ dependencies.
 
 |Branch|Build Status
 |---|---
-|master|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=master)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=master)
+|main|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/DotNet-Apiport-Release-yml?branchName=main)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=14946&branchName=main)
 |dev|[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/CoreFxTools/dotnet-apiport-yaml?branchName=dev)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=12912&branchName=dev)
 
 For a quick introduction, check out [this video on Shows][Shows Video]:
@@ -107,5 +107,5 @@ This project is licensed under the [MIT license](LICENSE).
 [PR-Closed]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Apr+is%3Aclosed
 [PR-Open]: https://github.com/Microsoft/dotnet-apiport/pulls?q=is%3Aopen+is%3Apr
 [ApiPort Download]: https://aka.ms/apiportdownload
-[System.Reflection.Metadata]: https://github.com/dotnet/corefx/tree/master/src/System.Reflection.Metadata
+[System.Reflection.Metadata]: https://github.com/dotnet/runtime/tree/main/src/libraries/System.Reflection.Metadata
 [VSIX Gallery]: http://vsixgallery.com/extension/55d15546-28ca-40dc-af23-dfa503e9c5fe
