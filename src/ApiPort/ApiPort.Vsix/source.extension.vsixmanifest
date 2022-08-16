@@ -6,8 +6,7 @@
         <Description xml:space="preserve">Evaluates portability of assemblies across .NET platforms
 
 [IMPORTANT]
-Due to an ongoing issue, this update is required to continue using Portability Analysis within Visual Studio while Engineering investigates.
-This version will execute in offline mode which removes capability for HTML report output and runs the entire analysis in-memory.</Description>
+See the changelog/repo for an important announcement!</Description>
         <MoreInfo>https://aka.ms/dotnet-portabilityanalyzer</MoreInfo>
         <License>LICENSE.txt</License>
         <Icon>Resources\Package.ico</Icon>
